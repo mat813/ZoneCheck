@@ -389,11 +389,21 @@ class Param
 	    # Select local resolver
 	    if @local.nil?
 		@local = if @local_name.nil?
-				NResolv::DNS::DefaultResolver
-			    else 
-				cfg = NResolv::DNS::Config::new(@local_name)
-				NResolv::DNS::Client::Classic::new(cfg)
-			    end
+			     # Use default resolver
+			     NResolv::DNS::DefaultResolver
+			 else 
+			     # Check that we can resolv the resolver
+			     unless Address.is_valid(@local_name)
+				 dft = NResolv::DNS::DefaultResolver
+				 if dft.getaddresses(@local_name).empty?
+				     raise ParamError, 
+					 $mc.get("xcp_param_local_resolver") % @local_name
+				 end
+			     end
+			     # Build new resolver
+			     cfg = NResolv::DNS::Config::new(@local_name)
+			     NResolv::DNS::Client::Classic::new(cfg)
+			 end
 	    end
 
 	    $dbg.msg(DBG::AUTOCONF, "Resolver " + 

@@ -26,6 +26,35 @@ module Publisher
     class GTK < Template
 	Mime		= nil
 
+	class LeaveButton < Gtk::Button
+	    QUIT  = 1
+	    ABORT = 2
+	    def initialize
+                hbox  = Gtk::HBox::new(false)
+                hbox.pack_start(Gtk::Image::new(Gtk::Stock::QUIT), 
+				false, false, 2)
+                hbox.pack_start(Gtk::Label::new($mc.get("w_quit").capitalize),
+				false, false, 0)
+		@quit = Gtk::Alignment::new(0.5, 0.5, 0, 0)
+		@quit.child = hbox
+
+                hbox = Gtk::HBox::new(false)
+                hbox.pack_start(Gtk::Image::new(Gtk::Stock::CANCEL), 
+				false, false, 2)
+                hbox.pack_start(Gtk::Label::new($mc.get("w_abort").capitalize),
+				false, false, 0)
+		@abort = Gtk::Alignment::new(0.5, 0.5, 0, 0)
+		@abort.child = hbox
+
+		super()
+		self.child = @quit
+		self
+	    end
+	    
+	    def set_face(face)
+	    end
+	end
+
 	class PixmapAlbum
 	    def initialize
 		@pixmap = {}
@@ -346,7 +375,7 @@ module Publisher
 
 
 	    #
-	    @quit   = Gtk::Button::new($mc.get("w_abort"))
+	    @quit   = LeaveButton::new
 	    @quit_sigclicked = @quit.signal_connect("clicked") { 
 		exit EXIT_ABORTED 
 	    }
@@ -587,7 +616,8 @@ module Publisher
 
 	    # Change "Abort" to "Quit"
 	    @quit.signal_handler_disconnect(@quit_sigclicked)
-	    @quit.child.text = $mc.get("w_quit")
+	    @quit.set_face(LeaveButton::QUIT)
+#	    @quit.child.text = $mc.get("w_quit")
 	    @quit.signal_connect("clicked") { q.push("end") }
 
 	    # Wait...

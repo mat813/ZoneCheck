@@ -98,7 +98,7 @@ require 'socket'
 
 # External libraries
 require 'nresolv'
-require 'ext'
+require 'ext/array'
 
 # ZoneCheck component
 require 'dbg'

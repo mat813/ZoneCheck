@@ -11,16 +11,11 @@
 #
 #
 
-
-#
-# TODO:
-#  - having the local resolver changed working
-#
-
 require 'getoptlong'
 require 'thread'
 
 require 'gtk2'
+require 'ext/gtk'
 require 'data/xpm'
 
 Gtk.init
@@ -82,15 +77,15 @@ module Input
 		@o_tag   = Gtk::CheckButton::new("tag only")
 
 		menu = Gtk::Menu::new
-		menu.append(Gtk::MenuItem.new("plain text"))
-		menu.append(Gtk::MenuItem.new("HTML"))
-		menu.append(Gtk::MenuItem.new("GTK"))
+		menu.append(Gtk::MenuItem::new("plain text"))
+		menu.append(Gtk::MenuItem::new("HTML"))
+		menu.append(Gtk::MenuItem::new("GTK"))
 		@o_type = Gtk::OptionMenu::new
 		@o_type.set_menu(menu)
 
 		menu = Gtk::Menu::new
-		menu.append(Gtk::MenuItem.new("straight"))
-		menu.append(Gtk::MenuItem.new("consolidation"))
+		menu.append(Gtk::MenuItem::new("straight"))
+		menu.append(Gtk::MenuItem::new("consolidation"))
 		@o_process = Gtk::OptionMenu::new
 		@o_process.set_menu(menu)
 
@@ -111,7 +106,7 @@ module Input
 		    @a_resolver.set_sensitive(w.active?)
 		    @a_resolver.set_text("")
 		}
-		@a_useresolver.set_sensitive(false)
+#		@a_useresolver.set_sensitive(false)
 		@a_resolver = Gtk::Entry::new
 		@a_resolver.set_sensitive(false)
 		
@@ -193,7 +188,7 @@ module Input
 		@o_details = Gtk::CheckButton::new(l10n_output_details)
 		@o_zone.active = @o_explain.active = @o_details.active = true
 		
-		@o_prog    = Gtk::RadioButton::new(nil,    l10n_output_progbar)
+		@o_prog    = Gtk::RadioButton::new(        l10n_output_progbar)
 		@o_desc    = Gtk::RadioButton::new(@o_prog,l10n_output_desc)
 		@o_nothing = Gtk::RadioButton::new(@o_prog,l10n_output_nothing)
 		@o_prog.active = true
@@ -211,9 +206,9 @@ module Input
 		# Error
 		error_f = Gtk::Frame::new(l10n_error)
 
-		@ed = Gtk::RadioButton::new(nil, l10n_error_default)
+		@ed = Gtk::RadioButton::new(     l10n_error_default)
 		@aw = Gtk::RadioButton::new(@ed, l10n_error_allwarning)
-		@af = Gtk::RadioButton::new(@ed,l10n_error_allfatal)
+		@af = Gtk::RadioButton::new(@ed, l10n_error_allfatal)
 		@sf = Gtk::CheckButton::new(l10n_error_on_first)
 		@sf.active = true
 
@@ -259,7 +254,7 @@ module Input
 		    @ipv4.active = true if !@ipv4.active? && !@ipv6.active?
 		}
 
-		@std = Gtk::RadioButton::new(nil,  "STD")
+		@std = Gtk::RadioButton::new(      "STD")
 		@udp = Gtk::RadioButton::new(@std, "UDP")
 		@tcp = Gtk::RadioButton::new(@std, "TCP")
 
@@ -377,9 +372,9 @@ module Input
 		ns_f.add(tbl)
 		
 		# Buttons
-		@check = Gtk::Button::new(l10n_check)
-		@guess = Gtk::Button::new(l10n_guess)
-		@clear = Gtk::Button::new(l10n_clear)
+		@check = Gtk::Button::new(Gtk::Stock::EXECUTE, l10n_check)
+		@guess = Gtk::Button::new(Gtk::Stock::REFRESH, l10n_guess)
+		@clear = Gtk::Button::new(Gtk::Stock::CLEAR,   l10n_clear)
 
 		@hbbox  = Gtk::HButtonBox::new
 		@hbbox.pack_start(@check)
@@ -581,8 +576,8 @@ module Input
 		@p.rflag.quiet	= @expert.quiet
 		@p.output	= @expert.output
 		@p.test.tests	= @expert.testname
-#		@p.resolver.local = @expert.resolver
-#		@p.resolver.autoconf
+		@p.resolver.local = @expert.resolver
+		@p.resolver.autoconf
 	    end
 
 	    def set_options
