@@ -149,9 +149,10 @@
     <success>Delagation response fit in a 512 byte UDP packet</success>
     <failure>Delegation response won't fit in a 512 byte UDP packet</failure>
     <explanation/>
-    <details><para>For a query of <zcconst name="delegation_query_size"/> 
-      bytes, it won't be possible to send all the nameserver
-      (<zcvar name="excess"/> bytes in excess).</para></details>
+    <details><para>Pour une requête de <zcconst name="delegation_query_size"/> 
+      octets, il n'est pas possible d'envoyer la liste complete des 
+      serveurs de noms (<zcvar name="excess"/> octets en 
+      trop).</para></details>
   </check>
 
 
@@ -160,10 +161,10 @@
     <success>Delagation response with additional fit in a 512 byte UDP packet</success>
     <failure>Delegation response with additional won't fit in a 512 byte UDP packet</failure>
     <explanation/>
-    <details><para>For a query of <zcconst name="delegation_query_size"/>
-      bytes, it won't be possible to send all the nameserver with the
-      corresponding glues (<zcvar name="excess"/> bytes in excess).
-      </para></details>
+    <details><para>Pour une requête de <zcconst name="delegation_query_size"/>
+      octets, il n'est pas possible d'envoyer la liste complete des serveurs
+      de noms avec leurs glues correspondantes (<zcvar name="excess"/> 
+      octets en trop).</para></details>
   </check>
 
   <!-- Local Variables: -->
