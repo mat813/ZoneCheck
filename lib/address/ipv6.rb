@@ -5,8 +5,8 @@
 # CREATED  : 2002/07/19 07:28:13
 #
 # COPYRIGHT: AFNIC (c) 2003
-# CONTACT  : 
 # LICENSE  : RUBY
+# CONTACT  : 
 #
 # $Revision$ 
 # $Date$
@@ -184,21 +184,16 @@ class Address
 	end
 
 	def to_s
-	    address = sprintf("%X:%X:%X:%X:%X:%X:%X:%X", 
-			      *@address.unpack("nnnnnnnn"))
+	    address = "%X:%X:%X:%X:%X:%X:%X:%X" % @address.unpack("nnnnnnnn")
 	    unless address.sub!(/(^|:)0(:0)+(:|$)/, '::')
 		address.sub!(/(^|:)0(:|$)/, '::')
 	    end
-	    return address
-	end
-	
-	def inspect
-	    return "#<#{self.class} #{self.to_s}>"
+	    address
 	end
 	
 	def to_name
-	    return (@address.unpack("H32")[0].split(//).reverse +
-		    ['ip6', 'arpa', '']).join(".")
+	    (@address.unpack("H32")[0].split(//).reverse + 
+	     ['ip6', 'arpa', '']).join(".")
 	end
 
 	def protocol
@@ -206,6 +201,9 @@ class Address
 	end
 
 
+	##
+	##
+	##
 	class Compatibility < IPv6
 	    def self.create(arg, opt=IPv6LooseRegex)
 		IPv6::create(arg, opt)

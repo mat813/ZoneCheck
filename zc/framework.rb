@@ -5,8 +5,8 @@
 # CREATED  : 2002/08/02 13:58:17
 #
 # COPYRIGHT: AFNIC (c) 2003
-# CONTACT  : zonecheck@nic.fr
 # LICENSE  : GPL v2.0
+# CONTACT  : zonecheck@nic.fr
 #
 # $Revision$ 
 # $Date$

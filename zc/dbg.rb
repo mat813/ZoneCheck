@@ -5,8 +5,8 @@
 # CREATED  : 2002/09/16 13:31:29
 #
 # COPYRIGHT: AFNIC (c) 2003
-# CONTACT  : zonecheck@nic.fr
 # LICENSE  : GPL v2.0
+# CONTACT  : zonecheck@nic.fr
 #
 # $Revision$ 
 # $Date$
@@ -48,14 +48,6 @@ class DBG
 	CACHE_INFO	=> "cache",
 	DBG		=> "dbg",
 	PARSER		=> "parser"
-    }
-
-    #
-    # CrazyDebug procedure
-    #  (executed for every method call)
-    #
-    CrazyDebug_Proc =  proc { |event, file, line, id, binding, classname|
-	printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
     }
 
 
@@ -103,8 +95,13 @@ class DBG
 	msg(DBG, "Setting level to 0x%0x" % [ lvl ])
 
 	# enable/disable CrazyDebug
-	if    enabled?(CRAZYDEBUG) then set_trace_func(CrazyDebug_Proc)
-	elsif oldcrazy             then set_trace_func(nil)
+	if    enabled?(CRAZYDEBUG)
+	    set_trace_func(proc { |event, file, line, id, binding, classname|
+			       @output.printf "%8s %s:%-2d %10s %8s\n", 
+				   event, file, line, id, classname
+			   })
+	elsif oldcrazy
+	    set_trace_func(nil)
 	end
     end
 

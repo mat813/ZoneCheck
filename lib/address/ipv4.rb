@@ -5,8 +5,8 @@
 # CREATED  : 2002/07/19 07:28:13
 #
 # COPYRIGHT: AFNIC (c) 2003
-# CONTACT  : 
 # LICENSE  : RUBY
+# CONTACT  : 
 #
 # $Revision$ 
 # $Date$
@@ -87,16 +87,11 @@ class Address
 	end
 
 	def to_s
-	    return sprintf("%d.%d.%d.%d", *@address.unpack("CCCC"))
-	end
-	
-	def inspect
-	    return "#<#{self.class} #{self.to_s}>"
+	    "%d.%d.%d.%d" % @address.unpack("CCCC")
 	end
 	
 	def to_name
-	    return '%d.%d.%d.%d.in-addr.arpa.' % 
-		@address.unpack('CCCC').reverse
+	    "%d.%d.%d.%d.in-addr.arpa." % @address.unpack('CCCC').reverse
 	end
 
 	def protocol
