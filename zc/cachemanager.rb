@@ -20,14 +20,12 @@
 
 require 'sync'
 
-require 'cache'
+require 'cache_attr'
 
 ##
 ## The CacheManager
 ##
 class CacheManager
-    Nothing = Object::new
-
     ##
     ## Proxy an NResolv::DNS::Resource class
     ##
@@ -82,16 +80,7 @@ class CacheManager
     attr_reader :all_caches, :all_caches_m, :root
 
     def clear
-	@attrcache_mutex.synchronize {
-	    @address	= {}
-	    @soa	= {}
-	    @any	= {}
-	    @ns		= {}
-	    @mx		= {}
-	    @cname	= {}
-	    @ptr	= {}
-	    @rec	= {}
-	}
+	cache_clear
     end
 
 
@@ -108,8 +97,8 @@ class CacheManager
 	raise "FUCK" if client.nil?
 
 	# Cached attributs
-	@attrcache_mutex= Sync::new
-	clear
+	cache_init
+	cache_attr :address, :soa, :any, :ns, :mx, :cname, :ptr, :rec
     end
     
     def get_resources(name, resource, rec=true, exception=false)
@@ -167,7 +156,7 @@ class CacheManager
 	when Address::IPv4, Address::IPv6
 	    [ host ]
 	when NResolv::DNS::Name
-	    cache_attribute("@address", host) {
+	    cache_use(:address, host) {
 		begin
 		    @dns.addresses(host, order)
 		rescue NResolv::NoEntryError
@@ -181,7 +170,7 @@ class CacheManager
 
     # ANY records
     def any(domainname, resource=nil, force=nil)
-	res = cache_attribute("@any", domainname, force) {
+	res = cache_use(:any, domainname, force) {
 	    get_resources(domainname, NResolv::DNS::Resource::IN::ANY)
 	}
 	if resource.nil?
@@ -195,35 +184,35 @@ class CacheManager
 
     # SOA record
     def soa(domainname, force=nil)
-	cache_attribute("@soa", domainname, force) {
+	cache_use(:soa, domainname, force) {
 	    get_resource(domainname,  NResolv::DNS::Resource::IN::SOA)
 	}
     end
 
     # NS records
     def ns(domainname, force=nil)
-	cache_attribute("@ns", domainname, force) {
+	cache_use(:ns, domainname, force) {
 	    get_resources(domainname, NResolv::DNS::Resource::IN::NS)
 	}
     end
     
     # MX record
     def mx(domainname, force=nil)
-	cache_attribute("@mx", domainname, force) {
+	cache_use(:mx, domainname, force) {
 	    get_resources(domainname, NResolv::DNS::Resource::IN::MX)
 	}
     end
     
     # CNAME record
     def cname(name, force=nil)
-	cache_attribute("@cname", name, force) {
+	cache_use(:cname, name, force) {
 	    get_resource(name,        NResolv::DNS::Resource::IN::CNAME)
 	}
     end
 
     # PTR records
     def ptr(name, force=nil)
-	cache_attribute("@ptr", name, force) {
+	cache_use(:ptr, name, force) {
 	    get_resources(name,       NResolv::DNS::Resource::IN::PTR)
 	}
     end	
@@ -231,7 +220,7 @@ class CacheManager
     
     #-- Shortcuts ----------------------------------------------------
     def rec(domainname, force=nil)
-	cache_attribute("@rec", domainname, force) {
+	cache_use(:rec, domainname, force) {
 	    soa(domainname, force).ra
 	}
     end

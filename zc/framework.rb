@@ -11,7 +11,7 @@
 #
 #
 
-require 'cache'
+require 'cache_attr'
 require 'cachemanager'
 
 ##
@@ -168,10 +168,11 @@ class Test
     end
 
     def initialize(config, cm, domain)
-	@attrcache_mutex	= Sync::new
 	@config			= config
 	@cm			= cm
 	@domain			= domain
+
+	cache_init
     end
 
 

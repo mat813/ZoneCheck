@@ -1,17 +1,14 @@
 # $Id$
 
 - test loopback v6
-- verifier que certains test ne sont fait que si recursif
 - cachemanager destroy method (and use it)
 - check for SOA not necessary in NS
 - try to remove the need of a tagonly_supported in Report
-- implement tree based inference for Report
 - more checking in is_cname? (framework.rb)
 - cache status is wrong
 - finish implementing nresolv (Bitstring, DNSSEC, unknown records)
 - try removing give_testlist give_testdesc from the zc.rb start method
 - do translation in french ;)
-- finish localisation
 - try zonecheck with the native thread ruby implementation
 - check name from_s methode
 - escape HTML code
@@ -40,3 +37,8 @@ NOT ABLE TODO?
 
 2002-12-03 tigeot@nic.fr
 	Verifier sur kame.net
+
+2002-12-23 sdalu@nic.fr
+	allow choosing the local resolver in GTK input
+	GTK publisher
+

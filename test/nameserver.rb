@@ -27,12 +27,13 @@ module CheckNameServer
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
 	    super(*args)
-	    @ip = { }
+
+	    cache_attr :ip
 	end
 
 	#-- Shortcuts -----------------------------------------------
 	def ip(ns)
-	    cache_attribute("@ip", ns) {
+	    cache_use(:ip, ns) {
 		@domain.ns.assoc(ns)[1]
 	    }
 	end

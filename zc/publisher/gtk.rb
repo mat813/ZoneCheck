@@ -12,8 +12,10 @@
 #
     
 require 'thread'
-require 'gtk'
+require 'gtk2'
 require 'publisher/xpm_data'
+
+Gtk.init
 
 
 module Publisher
@@ -26,7 +28,7 @@ module Publisher
 	##
 	##
 	##
-	class Output < Gtk::CTree
+	class Output < Gtk::TreeView
 	    L_H1      = "h1"
 	    L_H2      = "h2"
 	    L_Zone    = "zone"
@@ -40,13 +42,25 @@ module Publisher
 	    L_None    = "none"
 	    L_Ref     = "reference"
 
-	    def initialize(*args)
-		super(*args)
+	    def initialize
+		@model = Gtk::TreeStore.new( String )
+
+		super(@model)
+
+# Create the renderer and set properties
+render = Gtk::CellRendererText.new
+render.set_property( "background", "black" )
+render.set_property( "foreground", "green" )
+
+# Create the columns
+@c1 = Gtk::TreeViewColumn.new( "Headings", render, {:text => 0} )
+
+append_column( @c1 )
 
 		@hh = Hash::new
 		
 		# Build Pixmap
-		winroot = Gdk::Window::foreign_new(Gdk::Window::root_window)
+		winroot = Gdk::Window::default_root_window
 		make_pixmap = Proc::new { |pixmap_data|
 		    Gdk::Pixmap::create_from_xpm_d(winroot, style.white,
 						   pixmap_data) 
@@ -94,10 +108,12 @@ module Publisher
 			   end
 
 		
-		parent2 = insert_node(pparent2, sibling, [ str ], 5,
-				     xpm_open[0],   xpm_open[1], 
-				     xpm_closed[0], xpm_closed[1],
-				     is_leaf, expanded)
+#		parent2 = insert_node(pparent2, sibling, [ str ], 5,
+#				     xpm_open[0],   xpm_open[1], 
+#				     xpm_closed[0], xpm_closed[1],
+#				     is_leaf, expanded)
+		parent2 = @model.append(pparent2)
+		parent2.set_value(0, str)
 
 		case lvl
 		when NilClass
@@ -136,8 +152,7 @@ module Publisher
 		@tests = Gtk::Label::new("???")
 		@speed = Gtk::Label::new("???")
 		@eta   = Gtk::Label::new("???")
-		adj    = Gtk::Adjustment::new(0, 1, 100, 0, 0, 0)
-		@pbar  = Gtk::ProgressBar::new(adj)
+		@pbar  = Gtk::ProgressBar::new
 		@tname = Gtk::Label::new("???").set_alignment(0, 0.5)
 
 		attach(lbl_progress, 0, 2, 0, 1, 0, Gtk::SHRINK)
@@ -219,7 +234,7 @@ module Publisher
 		    @tname.set_text("#{desc} #{xtra}")
 		    @pct  .set_text("%3d%%" % [ pct ])
 		    @tests.set_text(@processed.to_s)
-		    @pbar .set_value(pct)
+		    @pbar .adjustment.set_value(pct)
 		end
 
 		# Test description
@@ -292,11 +307,9 @@ module Publisher
 
 
 
-	    scrolled_window = Gtk::ScrolledWindow::new
-	    scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC,
-				       Gtk::POLICY_ALWAYS)
-	    scrolled_window.add_with_viewport(@output);
-	    @output.set_focus_vadjustment(scrolled_window.get_vadjustment)
+	    scroller = Gtk::ScrolledWindow::new
+	    scroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
+
 
 
 	    #
@@ -308,34 +321,28 @@ module Publisher
 	    @hbbox  = Gtk::HButtonBox::new
 	    @hbbox.pack_start(@quit)
 
-	    @o = Output::new([ "Tree" ], 0)
-	    @o.set_row_height(18) # XXX: pixmap / font size
-	    @o.column_titles_hide
-	    @o.line_style = Gtk::CTree::LINES_NONE
-	    @o.set_expander_style(Gtk::CTree::EXPANDER_TRIANGLE)
+	    @o = Output::new
+
+
 
 	    @progress	= Progress::new(self)
 
 	    toto = Gtk::VBox::new(false)
 	    toto.pack_start(@progress)
-	    toto.pack_start(scrolled_window)
+	    toto.pack_start(scroller)
 	    toto.pack_start(@hbbox)
-	    scrolled_window.set_usize(500, 400)
+	    scroller.set_size_request(500, 400)
 
 
 	    window.add(toto)
 
-
-
-
-
-
-	    @output.pack_start(@o)
+#	    @output.pack_start(@o)
 
 
 	    window.show_all
 	    
 	    Thread::new { Gtk::main() }
+
 	end
 
 
@@ -503,7 +510,7 @@ module Publisher
 	    q = Queue::new	# Semaphore
 
 	    # Change "Abort" to "Quit"
-	    @quit.signal_disconnect(@quit_sigclicked)
+	    @quit.signal_handler_disconnect(@quit_sigclicked)
 	    @quit.child.text = $mc.get("w_quit")
 	    @quit.signal_connect("clicked") { q.push("end") }
 

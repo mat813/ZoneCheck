@@ -14,7 +14,7 @@
 require 'thread'
 require 'framework'
 require 'report'
-require 'cache'
+require 'cache_attr'
 
 ##
 ##
@@ -81,7 +81,7 @@ class TestManager
 	@tests		= {}	# Hash of test  method name (tst_*)
 	@checks		= {}	# Hash of check method name (chk_*)
 	@classes	= []	# List of classes used by the methods above
- 	@attrcache_mutex= Sync::new
+	cache_init
    end
 
 
@@ -188,8 +188,9 @@ class TestManager
 	@publisher	= @param.publisher.engine
 	@objects	= {}
 	@cm		= cm
-	@cached_tst	= {}
 	@do_preeval	= do_preeval
+
+	cache_attr :cached_tst
 
 	@iterer = { 
 	    CheckExtra          => proc { |bl| bl.call },
@@ -273,7 +274,7 @@ class TestManager
     #
     def test1(testname, ns=nil, ip=nil)
 	$dbg.msg(DBG::TESTS, "test: #{testname}")
-	cache_attribute("@cached_tst", [ testname, ns, ip ]) {
+	cache_use(:cached_tst, [ testname, ns, ip ]) {
 	    # Retrieve the method representing the check
 	    klass   = @tests[testname]
 	    object  = @objects[klass]
