@@ -192,7 +192,8 @@ class Test
 	else
 	    ip = nil
 	end
-	@cm[ip].cname(name)
+	res = @cm[ip].cname(name)
+	res.nil? ? nil : res.cname
     end
 
     def is_resolvable?(name, ip=nil, domain=@domain.name)
