@@ -138,7 +138,7 @@ module Report
 		rtest = nil
 		rtest, severity = @fatal.one,   @fatal.severity   unless rtest
 		rtest, severity = @warning.one, @warning.severity unless rtest
-		rtest, severity = @info.one,    @info.severity    unless rtest
+#		rtest, severity = @info.one,    @info.severity    unless rtest
 
 		@publish.diagnostic1(@domain.name, 
 				     @info.count,    @info.has_error?,

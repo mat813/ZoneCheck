@@ -84,7 +84,7 @@ function zc_pgr_setlocale(tprogress, progress, test, speed, time) {
 /**
  * quiet mode (no titles)
  */
-function zc_pgr_quiet(quiet) {
+function zc_pgr_setquiet(quiet) {
   zc_pgr_quiet = quiet;
 }
 
@@ -231,7 +231,7 @@ function zc_pgr_finish() {
   clearTimeout(zc_pgr_timeoutid);
 
   // remove progress bar
-  if (zc_pgr_l_title_progress != null) {
+  if (! zc_pgr_quiet) {
     zc_element_off("zc_pgr_title");
     zc_element_clear_id("zc_pgr_title"   );
   }

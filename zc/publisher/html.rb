@@ -73,7 +73,7 @@ module Publisher
 			pgr_start_param  = count
 
 			str  = 'zc_pgr_setlocale("%s", "%s", "%s", "%s", "%s");' % pgr_locale_param
-			str += 'zc_pgr_quiet(%s);' % pgr_quiet_param
+			str += 'zc_pgr_setquiet(%s);' % pgr_quiet_param
 			str += 'zc_pgr_start(%d);' % pgr_start_param
 			str
 		    }
@@ -261,17 +261,23 @@ EOT
 		f_tag, f_count ]
 
 
-	    if @rflag.tagonly
-		msg = res.testname
-	    else
-		msg = res.desc.msg
-	    end
-
 	    @o.puts "<DIV class=\"zc_diag1\">"
 	    @o.puts "<TABLE width=\"100%\">"
 	    @o.puts "<TR class=\"zc_title\"><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
-	    @o.puts "<TR><TD colspan=\"2\">#{severity}: #{res.tag}</TD></TR>"
-	    @o.puts "<TR><TD colspan=\"2\">#{msg}</TD></TR>"
+	    if res.nil?
+		l10n_perfect = $mc.get("w_perfect").capitalize
+		@o.puts "<TR><TD colspan=\"2\"><B>#{l10n_perfect}</B></TD></TR>"
+		@o.puts "<TR><TD colspan=\"2\">&nbsp;</TD></TR>"
+
+	    else
+		msg = if @rflag.tagonly
+		      then res.testname
+		      else res.desc.msg
+		      end
+		@o.puts "<TR><TD colspan=\"2\">#{severity}: #{res.tag}</TD></TR>"
+		@o.puts "<TR><TD colspan=\"2\">#{msg}</TD></TR>"
+	    end
+
 	    @o.puts "</TABLE>"
 	    @o.puts "</DIV>"
 	end

@@ -26,6 +26,7 @@ w_info		: info
 w_unexpected	: unexpected
 w_line          : line
 w_error		: error
+w_perfect	: perfect
 
 w_quit		: quit
 w_abort		: abort

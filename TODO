@@ -12,8 +12,16 @@ version = 1.0.0
 	Cache status is wrong
 	Check for meaningfull exit code
 	Translation in french
-	More checking in is_cname? (framework.rb)
 	Check name from_s methode
+
+        revoir la presentation des pages html au niveau du formulaire web
+	base de donnees reseau (RIPE) 
+ 	test de connectivite pour les serveurs qui ont plusieurs adresses IP 
+	traitement des exceptions
+	portage sous windows (recuperer le resolver par defaut, ...)
+	pour le . et les TLDs ne pas faire les test des MX
+	pour les sous zones (asso.fr , ....) ne pas faire les tests des MX
+	integration avec la chaine de production
 
 	Document the class hierarchy with graphics if possible
 	Include sample code to show how to use the DBG class
