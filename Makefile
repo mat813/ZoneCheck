@@ -42,6 +42,7 @@ HTML_PATH ?= /zc
 
 LIBEXEC=$(PREFIX)/libexec
 BINDIR=$(PREFIX)/bin
+MANDIR=$(PREFIX)/man
 DOCDIR=$(PREFIX)/share/doc
 ETCDIR=$(PREFIX)/etc
 CGIDIR=$(LIBEXEC)/zc/cgi-bin
@@ -142,6 +143,9 @@ install-cli:
 	@echo "==> Installing CLI"
 	$(INSTALL) -d $(BINDIR)
 	$(LN) -f $(LIBEXEC)/zc/zc/zc.rb $(BINDIR)/zc
+	$(LN) -f $(LIBEXEC)/zc/zc/zc.rb $(BINDIR)/zonecheck
+	$(INSTALL) -m 0644 man/zonecheck.1 $(MANDIR)/man1/zc.1
+	$(INSTALL) -m 0644 man/zonecheck.1 $(MANDIR)/man1/zonecheck.1
 	@echo
 
 install-doc:
