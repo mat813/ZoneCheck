@@ -22,15 +22,25 @@ module Input
     ##
     ## Processing parameters from CGI (Common Gateway Interface)
     ##
-    ## For obvious security reason the following parameters shouldn't
+    ## For obvious security reasons the following parameters shouldn't
     ## be set through the CGI:
     ##  - configfile
     ##  - testdir
     ##  - debug
     ##  - resolver
     ##
+    ## parameters:
+    ##  - lang
+    ##  - quiet
+    ##  - one
+    ##  - verbose [ intro, explain, details, testdesc, counter ]
+    ##      - intro    = true|false
+    ##      - explain  = true|false
+    ##      - details  = true|false
+    ##      - progress = testdesc|counter
+    ##
     class CGI
-	MaxNS = 8
+	MaxNS = 8	# Maximum number of NS taken into account
 
 	def initialize
 	    @cgi  = ::CGI::new
