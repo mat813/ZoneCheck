@@ -4,7 +4,6 @@ version = 2.0.0
 	Tests:	- Implement AXFR tests (only framework exists)
 		- base de donnees reseau (RIPE) 
 		- test connectivite avec plusieurs adresses IP 
-		- test CNAME on postmaster and hostmaster
 
 	portage sous windows (recuperer le resolver par defaut, ...)
 	integration avec la chaine de production
@@ -16,6 +15,8 @@ BEURK:
 
 version = 2.1.0
 	IDN
+	special timeout return code
+	Tests:	- check coherence between parent glue and domain
 
 version = 3.0.0
 	add checking of message catalog and test set

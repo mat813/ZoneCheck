@@ -1,4 +1,10 @@
 # $Id$
 	
+2003-03-21  Stephane D'Alu  <sdalu@nic.fr>
+	* test: added chk_mail_hostmaster_mx_cname
+	* zc: IPv4 stack detection
+	* i18n/10n: french translation of web pages
+	* nresolv: skip unknown dns record
+	
 2003-03-18  Stephane D'Alu  <sdalu@nic.fr>
 	* i18n/l10n: UTF-8 output support, locale in UTF8

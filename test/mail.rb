@@ -125,7 +125,6 @@ module CheckExtra
 	    rname = soa(bestresolverip).rname
 	    mdom  = rname.domain
 	    mhost = bestmx(mdom)
-	    puts mhost
 	    return true if mhost.nil?	# No MX
 	    ! is_cname?(mhost) 
 	end
