@@ -184,7 +184,8 @@ module Input
 	    end
 
 	    # Zone/Domain
-	    zone = @cgi.params["zone"]
+	    zone = @cgi["zone"]
+	    zone.strip! if zone
 	    return false if zone.nil? || zone.empty?
 	    p.domain.name = zone
 

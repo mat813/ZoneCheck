@@ -27,6 +27,7 @@ function zc_formvalid(form) {
 function zc_formcheck(form) {
   if (zc_formvalid(form))
     form.submit();
+  return 0;
 }	  
 
 function zc_formguess(form) {
@@ -34,6 +35,7 @@ function zc_formguess(form) {
   form.method="get";
   if (zc_formvalid(form))
     form.submit();
+  return 0;
 }
 
 function zc_formclear(form) {
@@ -45,4 +47,6 @@ function zc_formclear(form) {
     form["ns" +i].value = "";
   for (i = 0 ; form["ips"+i] ; i++)
     form["ips" +i].value = "";
+
+  return 0;
 }
