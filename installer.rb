@@ -17,6 +17,7 @@ class Installer
     def initialize
 	interpreter = ENV['_']
 	if RUBY_PLATFORM =~ /mswin32/ 
+	    require 'Win32API'
 	    getcli = Win32API::new('kernel32', "GetCommandLine", [], 'P')
 	    getcli.call() =~ /^\"([^\"]+)\"/
 	    interpreter = $1
