@@ -21,13 +21,6 @@
 module NResolv
     class DNS
 	class Message
-
-	    class EncodingError < NResolvError
-	    end
-	    
-	    class DecodeError < NResolvError
-	    end
-
 	    attr_reader :msgid, :opcode
 
 	    @@genid = rand 0xffff
@@ -88,9 +81,9 @@ module NResolv
 		end
 
 		def question=(q)
-		    unless q.nil? || q.type == Section::Q
+		    unless q.nil? || q.class == Section::Q
 			raise ArgumentError,
-			    "expected type NResolv::DNS::Section::Section::Q"
+			    "expected type NResolv::DNS::Section::Q"
 		    end
 		    @question = q
 		end
@@ -164,19 +157,15 @@ module NResolv
 	class Section
 	    def initialize
 		if self.class == Section
-		    raise RuntimeError, "Abstract Class"
+		    raise RuntimeError, "#{self.class} is an abstract class"
 		end
 
 		@record = []
 	    end
 
-	    def length
-		@record.length
-	    end
-
-	    def empty?
-		@record.empty?
-	    end
+	    def length  ; @record.length ; end
+	    def empty?  ; @record.empty? ; end
+	    def [](idx) ; @record[idx]   ; end
 
 	    def each(&block)
 		@record.each &block
@@ -195,9 +184,6 @@ module NResolv
 		self
 	    end
 
-	    def [](idx) 
-		@record[idx]
-	    end
 
 
 	    ##

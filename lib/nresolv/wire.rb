@@ -19,15 +19,19 @@
 #
 
 #
-# This file provide encoding/decoding faility for the 'wire' format
+# This file provide encoding/decoding facilities for the 'wire' format
 # with the respective methods:
 #  - message component: self.wire_decode, self.wire_encode
 #  - message itself   : self.from_wire, to_wire
 #
 
+require 'nresolv/dbg'
 
 module NResolv
     class DNS
+	##
+	## provide encoding/decoding methodes for DNS records
+	##
 	class Resource
 	    module Generic
 		class TXT
@@ -101,6 +105,10 @@ module NResolv
 	    end
 	end
 
+
+	##
+	## provide encoding/decoding methodes for DNS name
+	##
 	class Name
 	    class Label
 		def wire_encode(encoder)
@@ -124,7 +132,8 @@ module NResolv
 		    when 192..255
 			idx = decoder.unpack('n')[0] & 0x3fff
 			if start_idx <= idx
-			    raise Message::DecodeError, "foreward name pointer"
+			    raise Message::DecodingError,
+				"foreward name pointer in global14"
 			end
 			
 			origin = decoder.inside(start_idx - idx, idx) {
@@ -158,12 +167,21 @@ module NResolv
 	end
 	
 	class Message
+	    class EncodingError < NResolvError
+	    end
+	    
+	    class DecodingError < NResolvError
+		class NoMoreData < DecodingError
+		end
+	    end
+
+
 	    class Encoder
 		attr_reader :data, :global14
 
 		def initialize
-		    @data = ""
-		    @global14 = { }
+		    @data	= ""
+		    @global14	= { }
 		end
 		
 		def <<(obj)
@@ -183,11 +201,19 @@ module NResolv
 
 	    class Decoder
 		attr_reader :data, :index, :global14
+		attr_reader :msg_can_be_truncated
+		attr_writer :msg_can_be_truncated
 
+
+		def remaining
+		    @limit - @index
+		end
+		
 		def initialize(data)
-		    @data  = data
-		    @limit = data.length
-		    @index = 0
+		    @data	= data
+		    @limit	= data.length
+		    @index	= 0
+		    @msg_can_be_truncated	= false
 		end
 
 		def look(template)
@@ -202,14 +228,14 @@ module NResolv
 
 		def get_string
 		    len = @data[@index]
-		    raise DecodeError, "limit exceeded" if @limit<@index+1+len
+		    raise DecodingError::NoMoreData, "limit exceeded" if @limit<@index+1+len
 		    index, @index = @index, @index + 1 + len
 		    @data[index + 1, len]
 		end
 
 		def skip(size)
 		    if @limit < @index + size
-			raise DecodeError, "limit exceeded" 
+			raise DecodingError::NoMoreData, "limit exceeded" 
 		    end
 		    @index += size
 		end
@@ -222,13 +248,17 @@ module NResolv
 			@index = offset if offset
 
 			if @limit < @index + size
-			    raise DecodeError, "limit exceeded" 
+			    raise DecodingError::NoMoreData, "limit exceeded" 
 			end
 			
 			saved_offset += size unless offset
 
 			@limit = @index + size
 			return yield
+
+			if @limit != @index
+			    Dbg.msg(DBG::WIRE, "junk")
+			end
 		    ensure
 			@limit = saved_limit
 			@index = saved_offset
@@ -242,17 +272,17 @@ module NResolv
 			       when ?c, ?C then 1
 			       when ?n     then 2
 			       when ?N     then 4
-			       else
-				   raise StandardError, "unsupported template"
+			       else raise RuntimeError, "unsupported template"
 			       end
 		    }
-		    raise DecodeError, "limit exceeded" if @limit < @index+len
-		    if lookonly
-			index = @index
-		    else
-			index, @index = @index, @index + len
+		    if @limit < @index+len
+			raise DecodingError::NoMoreData, "limit exceeded" 
 		    end
-		    @data.unpack("@#{index}#{template}") # XXX: segfault
+		    if lookonly
+		    then index = @index
+		    else index, @index = @index, @index + len
+		    end
+		    @data.unpack("@#{index}#{template}")
 		end
 	    end
 
@@ -261,18 +291,21 @@ module NResolv
 		id, flags                          = decoder.unpack("nn")
 		qdcount, ancount, nscount, arcount = decoder.unpack("nnnn")
 
-		msg = Message::Answer::new(id)
-		msg.qr         = ((flags >> 15) & 1) == 1
-		msg.opcode     = OpCode::fetch_by_value((flags >> 11) & 15)
-		msg.aa         = ((flags >> 10) & 1) == 1
-		msg.tc         = ((flags >>  9) & 1) == 1
-		msg.rd         = ((flags >>  8) & 1) == 1
-		msg.ra         = ((flags >>  7) & 1) == 1
-		msg.rcode      = RCode::fetch_by_value(flags & 15)
-		msg.question   = Section::Q::wire_decode(decoder, qdcount)
-		msg.answer     = Section::A::wire_decode(decoder, ancount)
-		msg.authority  = Section::A::wire_decode(decoder, nscount)
-		msg.additional = Section::A::wire_decode(decoder, arcount)
+		msg		= Message::Answer::new(id)
+		msg.qr		= ((flags >> 15) & 1) == 1
+		msg.opcode	= OpCode::fetch_by_value((flags >> 11) & 15)
+		msg.aa		= ((flags >> 10) & 1) == 1
+		msg.tc		= ((flags >>  9) & 1) == 1
+		msg.rd		= ((flags >>  8) & 1) == 1
+		msg.ra		= ((flags >>  7) & 1) == 1
+		msg.rcode	= RCode::fetch_by_value(flags & 15)
+
+		decoder.msg_can_be_truncated = msg.tc
+
+		msg.question	= Section::Q::wire_decode(decoder, qdcount)
+		msg.answer	= Section::A::wire_decode(decoder, ancount)
+		msg.authority	= Section::A::wire_decode(decoder, nscount)
+		msg.additional	= Section::A::wire_decode(decoder, arcount)
 		msg
 	    end
 
@@ -305,28 +338,51 @@ module NResolv
 		    asection = self::new
 		    
 		    (1..count).each {
-			name = Name::wire_decode(decoder)
-			t, c = decoder.unpack("nn")
-			ttl  = decoder.unpack("N")[0]
-			res  = begin
-				   rc	= RClass.fetch_by_value(c)
-				   rt	= RType .fetch_by_value(t)
-				   res	= Resource.fetch_class(rc, rt)
-			       rescue IndexError => e
-				   nil
-			       end
-					
-			rrsize = decoder.unpack("n")[0]
-			if res.nil?
-			    $stderr.puts "NResolver: Skipping record (#{e})"
-			    decoder.skip(rrsize)
-			else
-			    rr = decoder.inside(rrsize) {
-				res::wire_decode(decoder)
-			    }
-			    asection.add(name, rr, ttl)
+			begin 
+			    # Get information about the record 
+			    name  = Name::wire_decode(decoder)
+			    t, c  = decoder.unpack("nn")
+			    ttl   = decoder.unpack("N")[0]
+			    res	  = begin
+					rc	= RClass.fetch_by_value(c)
+					rt	= RType .fetch_by_value(t)
+					Resource.fetch_class(rc, rt)
+				    rescue IndexError => e
+					nil
+				    end
+			    rrsize = decoder.unpack("n")[0]
+
+			    # Decode the resource inside the record
+			    if res.nil?
+				# Don't know how to decode (skip it)
+				Dbg.msg(DBG::WIRE, "Skipping record (#{e})")
+				decoder.skip(rrsize)
+			    else
+				# Decode the resource
+				#  XXX: recovering gracefully in case of
+				#       truncated resource (perhaps not a
+				#       good idea)
+				begin
+				    rr = decoder.inside(rrsize) {
+					res::wire_decode(decoder) }
+				    asection.add(name, rr, ttl)
+				rescue Message::DecodingError::NoMoreData
+				    Dbg.msg(DBG::WIRE, 
+					    "Skipping record (data missing)")
+				end
+			    end
+			rescue Message::DecodingError::NoMoreData
+			    # Nicely handle truncated message
+			    # Recover gracessfully if it wasn't expected
+			    #  (perhaps not a good idea)
+			    if (!decoder.msg_can_be_truncated ||
+				 decoder.remaining > 0)
+				Dbg.msg(DBG::WIRE, "Salvaging previous records (unexpected end of data)")
+			    end
+			    break
 			end
 		    }
+
 		    asection
 		end
 	    end
@@ -338,9 +394,19 @@ module NResolv
 		    (1..count).each {
 			name = Name::wire_decode(decoder)
 			t, c = decoder.unpack("nn")
-			res  = Resource.fetch_class(RClass.fetch_by_value(c),
-						    RType .fetch_by_value(t))
-			qsection.add(name, res)
+			res  = begin
+				   rc	= RClass.fetch_by_value(c)
+				   rt	= RType .fetch_by_value(t)
+				   Resource.fetch_class(rc, rt)
+			       rescue IndexError => e
+				   nil
+			       end
+			if res.nil?
+			    # Don't know how to decode (skip it)
+			    Dbg.msg(DBG::WIRE, "Skipping query record (#{e})")
+			else
+			    qsection.add(name, res)
+			end
 		    }
 		    qsection
 		end

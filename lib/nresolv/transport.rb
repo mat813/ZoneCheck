@@ -26,7 +26,8 @@ require 'fcntl'
 require 'timeout'
 
 require 'nresolv/dns'
-
+require 'nresolv/wire'
+require 'nresolv/dbg'
 
 #
 # requester = Requester::ConnectedUDP::new(address)
@@ -144,10 +145,11 @@ module NResolv
 		    if q = @queries[msg.msgid]
 			q.recv msg
 		    else
-			$stderr.puts("non-handled DNS message id=#{msg.msgid}")
+			Dbg.msg(DBG::TRANSPORT,
+				"unhandled message (id=#{msg.msgid})")
 		    end
-		rescue Message::DecodeError => e
-		    $stderr.puts "DNS message decoding error: #{e}"
+		rescue Message::DecodingError => e
+		    Dbg.msg(DBG::TRANSPORT, "Ignoring packet (#{e})")
 		rescue Exception => e
 		    $stderr.puts "Host: #{@host}"
 		    $stderr.puts "Unexpected exception while decoding: #{e}"
@@ -221,7 +223,7 @@ module NResolv
 
 
 	    ##
-            ##
+            ## TCP requester
             ##
             class TCP < Requester
                 def initialize(host, port=Port, keepconnect=false)
@@ -270,7 +272,7 @@ module NResolv
                         @rawmsg    = msg.to_wire
 			@msgid     = msg.msgid
 			@pktlen    = [@rawmsg.length].pack('n')
-			@dflttout  = 5
+			@dflttout  = TCPTimeout
                     end
                     
                     def send
@@ -285,7 +287,7 @@ module NResolv
             
 
             ##
-	    ##
+	    ## UDP requester
             ##
             class UDP < Requester
                 def initialize(host, port=Port, keepconnect=true)
@@ -306,7 +308,11 @@ module NResolv
                     @thread = Thread::new {
                         DNSThreadGroup.add Thread.current
                         loop {
-			    reply = @sock.recv(UDPSize)
+			    reply = @sock.recv(UDPSize+1)
+			    if ! reply.slice!(UDPSize).nil?
+				Dbg.msg(DBG::TRANSPORT,
+				   "packet bigger than expected (>#{UDPSize})")
+			    end
 			    dispatch(reply)
                         }
                     }

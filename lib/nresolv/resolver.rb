@@ -21,25 +21,35 @@
 require 'nresolv/dns'
 require 'nresolv/transport'
 require 'nresolv/config'
+require 'nresolv/dbg'
 
 module NResolv
-    class NoEntryError < NResolvError
+    class NoEntryError  < NResolvError
     end
 
     class NoDomainError < NoEntryError
     end
 
-    class ReplyError < NResolvError
+    class ReplyError    < NResolvError
     end
     
-    class RefusedError < NResolvError
+    class RefusedError  < NResolvError
     end
 
+
     class DNS
+	##
+	## Abstract client class
+	##  - support multiple servers
+	##  - protocol layer is selected using Requester
+	##
 	class Client
 	    attr_reader :config
 
 	    def initialize(config=DefaultConfig)
+		if self.class == Client
+		    raise RuntimeError, "#{self.class} is an abstract class"
+		end
 		@config = config
 	    end
 
@@ -169,12 +179,17 @@ module NResolv
 	    end
 
 
+	    ##
+	    ## UDP only client
+	    ##  (support multiple DNS servers)
+	    ##
+	    ## WARN: this could result dealing later with truncated messages
+	    ##
 	    class UDP < Client
 		def initialize(config=DefaultConfig)
 		    super(config)
 		    @requester = config.nameserver.collect { |ns|
-			NResolv::DNS::Requester::UDP::new(ns)
-		    }
+			NResolv::DNS::Requester::UDP::new(ns) }
 		end
 
 		def close
@@ -185,9 +200,14 @@ module NResolv
 		    exception = nil
 		    @requester.each { |r|
 			begin
-			    return r.query(msg).send.wait
+			    nmsg = r.query(msg).send.wait
+			    if nmsg.tc
+				Dbg.msg(DBG::RESOLVER, 
+					"truncated message due to UDP")
+			    end
+			    return nmsg
 			rescue NResolv::TimeoutError, 
-				NResolv::NetworkError => exception
+			       NResolv::NetworkError => exception
 			end
 		    }
 		    raise exception
@@ -195,12 +215,15 @@ module NResolv
 	    end
 
 
+	    ##
+	    ## TCP only client
+	    ##  (support multiple DNS servers)
+	    ##
 	    class TCP < Client
 		def initialize(config=DefaultConfig)
 		    super(config)
 		    @requester = config.nameserver.collect { |ns|
-			NResolv::DNS::Requester::TCP::new(ns)
-		    }
+			NResolv::DNS::Requester::TCP::new(ns) }
 		end
 
 		def close
@@ -211,24 +234,32 @@ module NResolv
 		    exception = nil
 		    @requester.each { |r|
 			begin
-			    return r.query(msg).send.wait
+			    nmsg = r.query(msg).send.wait
+			    if nmsg.tc
+				Dbg.msg(DBG::RESOLVER,
+					"truncated message impossible in TCP")
+
+			    end
+			    return nmsg
 			rescue NResolv::TimeoutError, 
-				NResolv::NetworkError => exception
+			       NResolv::NetworkError => exception
 			end
 		    }
 		    raise exception
 		end
-
 	    end
 
-   
+
+	    ##
+	    ## UDP with TCP fallback client
+	    ##  (support multiple DNS servers)
+	    ##
 	    class Classic < Client
 		def initialize(config=DefaultConfig)
 		    super(config)
 		    @requester = config.nameserver.collect { |ns|
 			[ NResolv::DNS::Requester::UDP::new(ns),
-			  NResolv::DNS::Requester::TCP::new(ns) ]
-		    }
+			  NResolv::DNS::Requester::TCP::new(ns) ] }
 		end
 
 		def close
@@ -240,10 +271,17 @@ module NResolv
 		    @requester.each { |udp, tcp|
 			begin
 			    nmsg = udp.query(msg).send.wait
-			    nmsg = tcp.query(msg).send.wait if nmsg.tc
+			    if nmsg.tc
+				Dbg.msg(DBG::RESOLVER, "falling back to TCP")
+				nmsg = tcp.query(msg).send.wait
+				if nmsg.tc
+				    Dbg.msg(DBG::RESOLVER,
+					 "truncated message impossible in TCP")
+				end
+			    end
 			    return nmsg
 			rescue NResolv::TimeoutError, 
-				NResolv::NetworkError => exception
+			       NResolv::NetworkError => exception
 			end
 		    }
 		    raise exception

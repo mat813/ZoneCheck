@@ -1,0 +1,69 @@
+# $Id$
+
+# 
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2003/03/27 13:16:29
+#
+# COPYRIGHT: AFNIC (c) 2003
+# LICENSE  : RUBY
+# CONTACT  : 
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS: (see also CREDITS file)
+#
+#
+
+
+module NResolv
+    ##
+    ## Debugging
+    ##
+    class DBG
+	# Debugging types
+	WIRE		= 0x0002	# encoding/decoding
+	TRANSPORT	= 0x0004	# raw handling of messages
+	RESOLVER	= 0x0008	# resolver behaviour
+	
+	# Tag associated with some types
+	Tag = { 
+	    WIRE	=> "wire",
+	    TRANSPORT	=> "transport",
+	    RESOLVER	=> "resolver"
+	}
+	
+	# Initializer
+	def initialize(lvl, output=$stderr)
+	    @output = output
+	    @lvl    = lvl
+	end
+
+	# Test if debug is enabled for that type
+	def enabled?(type) 
+	    @lvl & type != 0
+	end
+	alias [] enabled?
+	
+	# Enable debugging for the specified type
+	def []=(type, enable)
+	    self.level = enable ? @lvl | type : @lvl & ~type
+	end
+	
+	# Change debugging level
+	def level=(lvl)
+	    case lvl
+	    when String then @lvl = lvl =~ /^0x/ ? lvl.hex : lvl.to_i
+	    when Fixnum then @lvl = lvl
+	    else raise ArgumentError, "unable to interprete: #{lvl}"
+	    end
+	end
+	
+	# Print debugging message
+	def msg(type, str)
+	    @output.puts "NResolv[#{Tag[type]}]: #{str}" if enabled?(type)
+	end
+    end
+
+    Dbg = DBG::new(0xffff)
+end
