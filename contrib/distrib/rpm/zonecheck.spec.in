@@ -40,7 +40,7 @@ Provide a web service interface for ZoneCheck.
 %{__rm} -rf %{buildroot}
 
 %install
-ruby ./installer.rb cli cgi		\
+ruby ./installer.rb common cli cgi	\
 	-DPREFIX="%{_prefix}"		\
 	-DETCDIR="%{_sysconfdir}"	\
 	-DLIBEXEC="%{_libexecdir}"	\

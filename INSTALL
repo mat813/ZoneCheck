@@ -31,10 +31,11 @@ To install ZoneCheck you need to execute the following command:
  ruby ./installer.rb target [-Dparam=value]
 
 where target can have one of the following values
- - all: install everything
- - cgi: install the necessary to run ZoneCheck as a cgi
- - cli: install the necessary to run ZoneCheck as a command line
- - doc: install extra documentation 
+ - all:    install everything
+ - common: install common part of ZoneCheck
+ - cgi:    install the necessary files for cgi (requires: common)
+ - cli:    install the necessary files for command line (requires: common)
+ - doc:    install extra documentation 
 
 the -D option allow to define one of the installation parameters
 for exemple:

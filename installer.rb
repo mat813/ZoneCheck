@@ -225,12 +225,14 @@ EOT
 	true
     end
     def rule_cli
-	inst_common ; patch_common
 	inst_cli
 	true
     end
-    def rule_cgi
+    def rule_common
 	inst_common ; patch_common
+	true
+    end
+    def rule_cgi
 	inst_cgi    ; patch_cgi
 	true
     end

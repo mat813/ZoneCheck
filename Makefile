@@ -30,10 +30,10 @@ install-all:
 	@$(ZC_INSTALLER) all
 
 install-cli:
-	@$(ZC_INSTALLER) cli
+	@$(ZC_INSTALLER) common cli
 
 install-cgi:
-	@$(ZC_INSTALLER) cgi
+	@$(ZC_INSTALLER) common cgi
 
 install-doc:
 	@$(ZC_INSTALLER) doc
