@@ -18,32 +18,35 @@
 #
 #
 
+require 'address/common'
 require 'address/ipv4'
 require 'address/ipv6'
 
 
 ##
-##
+## All addresses object are immutables
 ##
 class Address
+    #
+    # Address detection order (between IPv4/IPv6)
+    #
     OrderStrict        = [ Address::IPv4, Address::IPv6 ]
     OrderCompatibility = [ Address::IPv6::Compatibility ]
     OrderIPv6Only      = [ Address::IPv6 ]
     OrderIPv4Only      = [ Address::IPv4 ]
     OrderDefault       = OrderStrict
 
-    class InvalidAddress < ArgumentError
-    end
 
-    attr_reader :address
-
+    # Check if a string as a valid address representation 
+    #  and respect the address priority order
     def self.is_valid(addr, order=OrderDefault)
 	order.each { |klass|
-	    return true if addr =~ klass::Regex
-	}
+	    return true if addr =~ klass::Regex }
 	false
     end
 
+    # Try to convert a string into any address (and respect the
+    #  address priority order)
     def self.create(arg, order=OrderDefault)
 	order.each { |klass|
 	    begin
@@ -51,13 +54,8 @@ class Address
 	    rescue InvalidAddress
 	    end
 	}
-	raise InvalidAddress, "can't interpret as address: #{arg.inspect}"
+	raise InvalidAddress, "can't interpret '#{arg.inspect}' as address"
     end
-
-    def inspect     ; "#<#{self.class} #{self.to_s}>" ; end
-    def hash        ; @address.hash                   ; end
-    def eql?(other) ; @address == other.address       ; end
-    alias == eql?
 end
 
 

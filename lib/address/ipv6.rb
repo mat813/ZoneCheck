@@ -19,10 +19,13 @@
 #
 
 require 'socket'
+require 'address/common'
+require 'address/ipv4'
+
 
 class Address
     ##
-    ##
+    ## IPv6 address
     ##
     class IPv6 < Address
 	private
@@ -150,7 +153,7 @@ class Address
 		end
 
 		# Return new address
-		return IPv6::new(address.untaint)
+		return IPv6::new(address.untaint.freeze)
 	    else
 		raise InvalidAddress,
 		    "can't interprete as IPv6 address: #{arg.inspect}"
@@ -158,10 +161,13 @@ class Address
 	end
 	
 	def initialize(address)
-	    unless address.kind_of?(String) && address.length == 16
-		raise InvalidAddress, "IPv6 address must be 16 bytes"
+	    unless (address.instance_of?(String) && 
+		    address.length == 16 && address.frozen?)
+		raise Argument,
+		    "IPv6 raw address must be a 16 byte frozen string"
 	    end
 	    @address = address
+	    freeze
 	end
 	
 	def private?
@@ -173,13 +179,13 @@ class Address
 		prefix(64)
 	    else
 		if size > @address.size * 8
-		    raise StandardError, "prefix size too big"
+		    raise ArgumentError, "prefix size too big"
 		end
 		bytes, bits_shift = size / 8, 8 - (size % 8)
 		address = @address.slice(0, bytes) + 
 		    ("\0" * (@address.size - bytes))
 		address[bytes] = (@address[bytes] >> bits_shift) << bits_shift
-		IPv6::new(address)
+		IPv6::new(address.freeze)
 	    end
 	end
 
@@ -202,7 +208,8 @@ class Address
 
 
 	##
-	##
+	## IPv6 address
+	##  (allow creation of IPv4 mapped address by default)
 	##
 	class Compatibility < IPv6
 	    def self.create(arg, opt=IPv6LooseRegex)
@@ -210,6 +217,9 @@ class Address
 	    end
 	end
 
+	##
+	## IPv6 Loopback
+	## 
 	Loopback = IPv6::create("::1")
     end
 end

@@ -15,10 +15,22 @@
 #
 #
 
+
+#
+# 
+#
+#
+#
+#
+
 module NResolv
     class DNS
 	class Name
 	    class Label
+		##
+		## Ordinary DNS Label
+		##  (String are not case sensitive)
+		##
 		class Ordinary < Label
 		    attr_reader :downcase
 
@@ -159,9 +171,7 @@ module NResolv
 	    end
 
 	    def depth
-		d = 0
-		@labels.each { |lbl| d += lbl.depth }
-		d
+		d = 0 ; @labels.each { |lbl| d += lbl.depth } ; d
 	    end
 
 	    def length
@@ -169,9 +179,7 @@ module NResolv
 	    end
 
 	    def hash
-		h = 0
-		@labels.each { |lbl| h ^= lbl.hash }
-		h
+		h = 0 ; @labels.each { |lbl| h ^= lbl.hash } ; h
 	    end
 
 	    def eql?(other)

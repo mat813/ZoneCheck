@@ -16,3 +16,6 @@
 2003-03-18	sdalu@nic.fr
 - Konqueror failed using right click menu
 - Konqueror has problems interpreting the CSS for the "Zone Information"
+
+2003-03-25	sdalu@nic.fr
+- pl. failed for dig @ns3.ikp.pl ns3.ikp.pl cname

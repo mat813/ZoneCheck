@@ -11,9 +11,6 @@
 # $Revision$ 
 # $Date$
 #
-# INSPIRED BY:
-#   - the ruby file: resolv.rb 
-#
 # CONTRIBUTORS: (see also CREDITS file)
 #
 #
@@ -27,9 +24,14 @@ module NResolv
 	@@hash_by_value = {}
 
 	def initialize(name, value)
+	    # Sanity check
+	    if ! name.instance_of?(String)
+		raise ArgumentError, "Constant name should be a String"
+	    end
+
 	    klass = self.class
 
-	    @name  = name.dup.freeze
+	    @name  = name.frozen? ? name : name.dup.freeze
 	    @value = value
 
 	    @@hash_by_name [klass] = {} unless @@hash_by_name [klass]
@@ -57,16 +59,16 @@ module NResolv
 	def self.fetch_by_name(name)
 	    begin
 		@@hash_by_name[self].fetch(name)
-	    rescue IndexError => e
-		raise IndexError, "#{e} for #{self}/#{name}"
+	    rescue IndexError
+		raise IndexError, "key #{name} not found in #{self}"
 	    end
 	end
 	
 	def self.fetch_by_value(value)
 	    begin
 		@@hash_by_value[self].fetch(value)
-	    rescue IndexError => e
-		raise IndexError, "#{e} for #{self}/#{value}"
+	    rescue IndexError
+		raise IndexError, "key #{name} not found in #{self}"
 	    end
 	end
 	
@@ -92,6 +94,7 @@ module NResolv
 	    NOTIFY	= OpCode::new("NOTIDY", 4)
 	    UPDATE	= OpCode::new("UPDATE", 5)
 	end
+
 
 	##
 	## Return code

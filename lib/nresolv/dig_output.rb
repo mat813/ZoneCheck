@@ -11,16 +11,13 @@
 # $Revision$ 
 # $Date$
 #
-# INSPIRED BY:
-#   - the ruby file: resolv.rb 
-#
 # CONTRIBUTORS: (see also CREDITS file)
 #
 #
 
 
 #
-# Add dig like formated output
+# Add a dig-like formated output
 #
 
 module NResolv
@@ -80,13 +77,13 @@ module NResolv
 		    name     = entry[0]
 		    dispname = prevname == name ? nil : name
 		    prevname = name
-		    output << entry_to_s([entry[0], *entry[1..-1]], align)
+		    output << entry_to_dig_s([entry[0], *entry[1..-1]], align)
 		}
 	    end
 
 	    class A
 		private
-		def entry_to_s(entry, align)
+		def entry_to_dig_s(entry, align)
 		    name, rr, ttl = entry
 		    "%-*s  %6d  %-*s  %-*s  %s\n" % [
 			align-7, name,
@@ -99,7 +96,7 @@ module NResolv
 	
 	    class Q
 		private
-		def entry_to_s(entry, maxlen)
+		def entry_to_dig_s(entry, maxlen)
 		    name, rr = entry
 		    ";%-*s  %-*s  %-*s\n" % [
 			align, name,

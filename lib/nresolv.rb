@@ -29,6 +29,9 @@ require 'nresolv/dig_output'
 require 'address'
 
 module NResolv
+    # 
+    # Ensure that 'arg' will be an Address or a DNS Name object,
+    # raise the ArgumentError exception if conversion failed
     def self.to_name(arg)
         case arg
         when Address::IPv4, Address::IPv6, NResolv::DNS::Name
@@ -38,12 +41,12 @@ module NResolv
                 Address::create(arg)
             rescue Address::InvalidAddress
                 unless arg[-1] == ?.
-                    puts "WARNING: #{arg} is not fully qualified"
+                    $stderr.puts "WARNING: #{arg} is not fully qualified"
                 end
                 DNS::Name::create(arg)
             end
         else
-            raise ArgumentError, "IP or DNS Name expected"
+            raise ArgumentError, "IP address or DNS Name expected"
         end
     end
 end

@@ -87,13 +87,15 @@ module NResolv
 	    module IN
 		class A
 		    def self.wire_decode(decoder)
-			self::new(Address::IPv4::new(decoder.get_bytes(4)))
+			addr = Address::IPv4::new(decoder.get_bytes(4).freeze)
+			self::new(addr)
 		    end
 		end
 
 		class AAAA
 		    def self.wire_decode(decoder)
-			self::new(Address::IPv6::new(decoder.get_bytes(16)))
+			addr = Address::IPv6::new(decoder.get_bytes(16).freeze)
+			self::new(addr)
 		    end
 		end
 	    end

@@ -19,10 +19,11 @@
 #
 
 require 'socket'
+require 'address/common'
 
 class Address
     ##
-    ##
+    ## IPv4 address
     ##
     class IPv4 < Address
 	Proto = Socket::AF_INET
@@ -42,7 +43,7 @@ class Address
 		   (0..255) === (b = $2.to_i) &&
 		   (0..255) === (c = $3.to_i) &&
 		   (0..255) === (d = $4.to_i)
-		    return self.new([a, b, c, d].pack("CCCC").untaint)
+		    return self::new([a, b, c, d].pack("CCCC").untaint.freeze)
 		else
 		    raise InvalidAddress, 
 			"IPv4 address with invalid value: #{arg}"
@@ -54,16 +55,19 @@ class Address
 	end
 	
 	def initialize(address)
-	    unless address.kind_of?(String) && address.length == 4
-		raise InvalidAddress, "IPv4 address must be 4 bytes"
+	    unless (address.instance_of?(String) && 
+		    address.length == 4 && address.frozen?)
+		raise ArgumentError,
+		    "IPv4 raw address must be a 4 byte frozen string"
 	    end
 	    @address = address
+	    freeze
 	end
 	
 	def private?
-	    # 10.0.0.0        -   10.255.255.255  (10/8 prefix)
-	    # 172.16.0.0      -   172.31.255.255  (172.16/12 prefix)
-	    # 192.168.0.0     -   192.168.255.255 (192.168/16 prefix)
+	    # 10.0.0.0     -  10.255.255.255   (10/8       prefix)
+	    # 172.16.0.0   -  172.31.255.255   (172.16/12  prefix)
+	    # 192.168.0.0  -  192.168.255.255  (192.168/16 prefix)
 	    bytes = @address.unpack("CCCC")
 	    return (((bytes[0] == 10))                            ||
 		    ((bytes[0] == 172) && (bytes[1]&0xf0 == 16))  ||
@@ -82,7 +86,7 @@ class Address
 		address = @address.slice(0, bytes) + 
 		    ("\0" * (@address.size - bytes))
 		address[bytes] = (@address[bytes] >> bits_shift) << bits_shift
-		IPv4::new(address)
+		IPv4::new(address.freeze)
 	    end
 	end
 
@@ -98,6 +102,10 @@ class Address
 	    Socket::AF_INET
 	end
 
+
+	##
+	## IPv4 Loopback
+	##
 	Loopback = IPv4::create("127.0.0.1")
     end
 end
