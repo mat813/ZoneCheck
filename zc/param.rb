@@ -486,7 +486,9 @@ class Param
 	    @ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
 	    @ipv4 = false        if @ipv4.nil? || !$ipv4_stack
 	    @ipv6 = false        if @ipv6.nil? || !$ipv6_stack
-	    raise 'Why are you using this program!' if !@ipv4 && !@ipv6
+	    if !@ipv4 && !@ipv6
+		raise 'Why are you using this program! (No IP stack selected)' 
+	    end
 	    # Debug
 	    $dbg.msg(DBG::AUTOCONF) { 
 		routing = [ ]
