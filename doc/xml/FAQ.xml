@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding='ISO-8859-1'?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" 
+ "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" 
+[
+<!ENTITY version "0.01">
+<!ENTITY supercopy "SUPERCOPYRIGHT &copy;&reg;">
+<!ENTITY faq SYSTEM "common/faq.xml">
+]>
+
+<article>
+  <section>
+    <title>FAQ</title>
+    &faq;
+  </section>
+</article>

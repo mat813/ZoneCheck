@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding='ISO-8859-1'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" 
+ "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" 
+[
+<!ENTITY version "0.01">
+<!ENTITY supercopy "SUPERCOPYRIGHT &copy;&reg;">
+<!ENTITY faq SYSTEM "faq.xml">
+]>
+
+
+<book>
+  <bookinfo>
+    <title>ZoneCheck II</title>
+    <author>
+      <firstname>Stephane</firstname>
+      <surname>D'Alu</surname>
+    </author>
+    <copyright>
+      <year>2002</year>
+      <holder role="mailto:nic@nic.fr">AFNIC</holder>
+    </copyright>
+    <legalnotice>
+      <para>This legal mumbo jumbo will stop evil. It even has &supercopy;.</para>
+    </legalnotice>
+
+    <releaseinfo>ZORG</releaseinfo>
+
+    <abstract>
+      <para>This is a simple XML sample version &version;. It is good for nothing but processing.</para>
+    </abstract>
+  </bookinfo>
+  
+  <chapter>
+    <title>Installation</title>
+    <section>
+      <title>Requirement</title>
+  
+      <itemizedlist>
+	<listitem>
+	  <para>Ruby</para>
+	</listitem>
+	
+	<listitem>
+	  <para>GTK binding to Ruby</para>
+	</listitem>
+      </itemizedlist>
+  
+      <para><ulink url="http://www.ruby-lang.org/">Ruby</ulink> </para>
+    </section>
+
+
+    <section>
+      <title>Directory layout</title>
+      <screen>PREFIX
+|-- bin
+|   `-- zc                      # Command line
+|-- etc
+|   `-- zc.conf                 # Configuration file
+|-- libexec
+|   `--zc
+|      |-- cgi-bin
+|      |   `-- zc.cgi           # CGI
+|      |-- html                 # HTML directory (javascript, css, pics, ...)
+|      |   |-- en               #   English version
+|      |   |-- ...              #   ...
+|      |   `-- fr               #   French version
+|      |-- locale               # Localisation files
+|      |-- test                 # test set
+|      |-- lib                  # Extra libraries (NResolv, Address, ...)
+|      `-- zc                   # core component
+`-- share
+    `-- doc
+        `-- zc                  # Documentation</screen>
+    </section>
+
+
+    <section>
+      <title>HTML</title>
+      <para>toto</para>
+    </section>
+
+  </chapter>
+
+
+  <chapter>
+    <title>Configuration</title>
+      <para>toto</para>
+  </chapter>
+
+  <chapter>
+    <title>Overview</title>
+
+    <para>
+    information
+    warning
+    fatal
+    error
+</para>
+
+    <para>
+    test description
+    error message
+    detailed error
+    explanation
+    referer
+</para>
+  </chapter>
+
+  <chapter>
+    <title>Internal</title>
+      <para>toto</para>
+  </chapter>
+
+
+  <chapter>
+    <title>Using ZoneCheck</title>
+    
+    <section>
+      <title>Input</title>
+
+      <section>
+	<title>Command Line Interface (CLI)</title>
+
+	<screen>% <userinput>zc -4 -v c,x,d,i afnic.fr</userinput>
+ZONE  : afnic.fr.
+NS <= : ns1.nic.fr. [192.93.0.1]
+NS    : ns2.nic.fr. [192.93.0.4]
+NS    : ns3.nic.fr. [192.134.0.49, 2001:660:1180:1:192:134::49]
+
+==> SUCCED
+</screen>
+      </section>
+      
+      <section>
+	<title>Common Gateway Interface (CGI)</title>
+      <para>toto</para>
+      </section>
+      
+      <section>
+	<title>Graphical User Interface (GUI)</title>
+      <para>toto</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Output</title>
+      
+      <section>
+	<title>Text</title>
+      <para>toto</para>
+      </section>
+
+      <section>
+	<title>HTML</title>
+      <para>toto</para>
+      </section>
+
+      <section>
+	<title>Graphical Interface</title>
+      <para>toto</para>
+      </section>
+    </section>
+
+  </chapter>
+
+
+  <chapter>
+    <title>FAQ</title>
+      
+ &faq;  
+
+  </chapter>
+
+  <chapter>
+    <title>About this book</title> 
+    <para>
+      This book was hard
+      work if you look at the history and momentum behind the LDP and
+      DocBook and SGML and XML and....and....and...</para>
+    
+    <section><title>Copyrights and Trademarks</title> <para>Copyright
+	&copy; 2001 John Doe</para>
+    </section>
+
+    <section><title>Purpose/Scope</title> 
+      <para>This guide is tightly scoped with one purpose; to process.</para>
+    </section>
+  </chapter>
+  
+
+  <appendix>
+    <title>Implemented tests</title>
+      <para>toto</para>
+  </appendix>
+</book>

@@ -31,6 +31,17 @@ LN=ln			# Doesn't cross partition boundary
 CP=cp
 CHMOD=chmod
 
+XML2TEX =jade -t tex -d 
+XML2HTML=jade -t xml -d ../mystyle.dsl\#html /usr/local/share/sgml/docbook/dsssl/modular/dtds/decls/xml.dcl ../zc.xml
+HTML2TXT=lynx -nolist -dump
+
+ifndef SGML_CATALOG_FILES
+SGML_CATALOG_FILES=/usr/local/share/sgml/catalog:/usr/local/share/xml/docbook/catalog:/usr/local/share/sgml/docbook/dsssl/modular/catalog
+export SGML_CATALOG_FILES
+endif
+
+TOPDIR := $(shell if [ "$$PWD" != "" ]; then echo $$PWD; else pwd; fi)
+
 all: zc-bin
 
 zc-bin: 
@@ -107,3 +118,13 @@ install-doc:
 	$(INSTALL) -d $(DOCDIR)/zc
 	$(INSTALL) -m 0644 README TODO INSTALL BUGS $(DOCDIR)/zc
 	@echo
+
+realclean:
+	find . -type f -name '*~' -exec rm {} \;
+
+FAQ: doc/xml/FAQ.xml doc/xml/common/faq.xml doc/misc/style.dsl
+	rm -Rf $(TOPDIR)/doc/tmp/FAQ
+	mkdir -p $(TOPDIR)/doc/tmp/FAQ
+	sed 3d < doc/xml/FAQ.xml > doc/xml/_fix_FAQ.xml
+	(cd $(TOPDIR)/doc/tmp/FAQ && jade -t xml -d $(TOPDIR)/doc/misc/style.dsl\#html /usr/local/share/sgml/docbook/dsssl/modular/dtds/decls/xml.dcl $(TOPDIR)/doc/xml/_fix_FAQ.xml)
+	$(HTML2TXT) doc/tmp/FAQ/* > FAQ
