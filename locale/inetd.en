@@ -106,7 +106,7 @@ Arguments for Options
 
 Example
   preset classic
-  zone foorbar.com
+  zone foobar.com
   check
 </tag>
 
@@ -120,7 +120,7 @@ For more information visit about ZoneCheck visit the following URL:
 </tag>
 
     <tag name="what">I didn't understand, try asking for help!</tag>
-    <tag name="unknwon_preset">Unknown preset value '%s'</tag>
+    <tag name="unknown_preset">Unknown preset value '%s'</tag>
   </section>
 
   <!-- Local Variables: -->
