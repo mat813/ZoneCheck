@@ -89,7 +89,21 @@ module CheckGeneric
 	#-- Tests ---------------------------------------------------
 	# DESC: Addresses should be distincts
 	def chk_distinct_ip
-	    ip == ip.uniq
+	    # Ok all addresses are distincts
+	    return true if ip == ip.uniq
+	    
+	    # Create data for failure handling
+	    hosts = {}
+	    @domain.ns.each { |ns, ips|
+		ips.each { |i| 
+		    hosts[i] = [ ] unless hosts.has_key?(i)
+		    hosts[i] << ns
+		}
+	    }
+	    hosts.delete_if { |k, v| v.size < 2 }
+	    hosts.each { |k, v|	# Got at least 1 entry as ip != ip.uniq
+		return { "ip" => k.to_s, "ns" => v.join(", ") }
+	    }
 	end
 
 	# DESC: Addresses should avoid belonging to the same network

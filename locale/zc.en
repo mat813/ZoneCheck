@@ -154,6 +154,7 @@ explain : [none]
 testname: identical addresses
 error   : All addresses should be distinct
 explain : [none]
+details : The nameservers %{ns} are using the same IP address (%{ip}).
 
 [chk_same_net]
 testname: nameserver addresses on same subnet
