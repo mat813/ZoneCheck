@@ -39,6 +39,7 @@
 #  - only load javascript when needed
 #
 
+require 'cgi'
 require 'config'
 
 module Publisher

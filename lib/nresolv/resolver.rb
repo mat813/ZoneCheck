@@ -113,7 +113,7 @@ class NResolv
 
 		count = 0
 		extract_resource(rpl, name, resource) { |n, r, t|
-		    yield r, t, n, rpl
+		    yield [r, t, n, rpl]
 		    count += 1
 		}
 
@@ -128,15 +128,15 @@ class NResolv
 		case resource.rtype 
 		when RType::AXFR
 		    msg.answer.each { |n, r, t|
-			yield n, r, t
+			yield [n, r, t]
 		    }
 		when RType::ANY
 		    msg.answer.each { |n, r, t|
-			yield n, r, t if n == name
+			yield [n, r, t] if n == name
 		    }
 		when RType::CNAME
 		    msg.answer.each { |n, r, t|
-			yield n, r, t if (n == name) && (r.class == resource)
+			yield [n, r, t] if (n == name) && (r.class == resource)
 		    }
 		else
 		    msg.answer.each { |n, r, t| 
@@ -146,7 +146,7 @@ class NResolv
 			end
 		    }
 		    msg.answer.each { |n, r, t|
-			yield n, r, t if (n == name) && (r.class == resource)
+			yield [n, r, t] if (n == name) && (r.class == resource)
 		    }
 		end
 	    end
