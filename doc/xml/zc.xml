@@ -105,19 +105,20 @@
 <?dbhtml list-presentation="table"?>
 <segtitle>Code</segtitle>
 <segtitle>Description</segtitle>
-<seglistitem><seg>0x0001</seg><seg>Loading tests</seg></seglistitem>
+<seglistitem><seg>0x0001</seg><seg>Initialisation</seg></seglistitem>
 <seglistitem><seg>0x0002</seg><seg>Localization / Internationalisation</seg></seglistitem>
 <seglistitem><seg>0x0004</seg><seg>Configuration</seg></seglistitem>
-<seglistitem><seg>0x0008</seg><seg>Parser</seg></seglistitem>
-<seglistitem><seg>0x0010</seg><seg>Tests performed</seg></seglistitem>
-<seglistitem><seg>0x0100</seg><seg>Autoconf</seg></seglistitem>
-<seglistitem><seg>0x0200</seg><seg>Debugging messages from tests</seg></seglistitem>
+<seglistitem><seg>0x0008</seg><seg>Autoconf</seg></seglistitem>
+<seglistitem><seg>0x0010</seg><seg>Loading tests</seg></seglistitem>
+<seglistitem><seg>0x0020</seg><seg>Tests performed</seg></seglistitem>
+<seglistitem><seg>0x0040</seg><seg>Debugging messages from tests</seg></seglistitem>
+<seglistitem><seg>0x0400</seg><seg>Information about cached object</seg></seglistitem>
 <seglistitem><seg>0x0800</seg><seg>Debugger itself</seg></seglistitem>
-<seglistitem><seg>0x1000</seg><seg>Information about cached object</seg></seglistitem>
 
-<seglistitem><seg>0x2000</seg><seg>Disable caching</seg></seglistitem>
-<seglistitem><seg>0x4000</seg><seg>Don't try to rescue exceptions</seg></seglistitem>
-<seglistitem><seg>0x8000</seg><seg>Crazy Debug, don't try this at home!</seg></seglistitem>
+<seglistitem><seg>0x1000</seg><seg>Crazy Debug, don't try this at home!</seg></seglistitem>
+<seglistitem><seg>0x2000</seg><seg>NResolv module debugging messages</seg></seglistitem>
+<seglistitem><seg>0x4000</seg><seg>Disable caching</seg></seglistitem>
+<seglistitem><seg>0x8000</seg><seg>Don't try to rescue exceptions</seg></seglistitem>
 </segmentedlist>
 
             </para>

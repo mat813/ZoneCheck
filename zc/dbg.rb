@@ -42,33 +42,34 @@ class DBG
     #
     # Debugging types
     #
-    LOADING	 = 0x0001	# Loading tests
-    LOCALE       = 0x0002	# Localization / Internationalisation
-    CONFIG       = 0x0004	# Configuration
-    INIT         = 0x0008	# Initialisation
-    TESTS        = 0x0010	# Tests performed
-    AUTOCONF     = 0x0100       # Autoconf
-    TESTDBG      = 0x0200	# Debugging messages from tests
-    DBG          = 0x0800	# Debugger itself
-    CACHE_INFO   = 0x1000	# Information about cached object
+    INIT	= 0x0001	# Initialisation
+    LOCALE	= 0x0002	# Localization / Internationalisation
+    CONFIG	= 0x0004	# Configuration
+    AUTOCONF	= 0x0008	# Autoconf
+    LOADING	= 0x0010	# Loading tests
+    TESTS	= 0x0020	# Tests performed
+    TESTDBG	= 0x0040	# Debugging messages from tests
+    CACHE_INFO	= 0x0400	# Information about cached object
+    DBG		= 0x0800	# Debugger itself
 
-    NOCACHE      = 0x2000	# Disable caching
-    DONT_RESCUE  = 0x4000	# Don't try to rescue exceptions
-    CRAZYDEBUG   = 0x8000	# Crazy Debug, don't try it...
+    CRAZYDEBUG	= 0x1000	# Crazy Debug, don't try it...
+    NRESOLV	= 0x2000	# NResolv debugging messages
+    NOCACHE	= 0x4000	# Disable caching
+    DONT_RESCUE	= 0x8000	# Don't try to rescue exceptions
 
     #
     # Tag associated with some types
     #
     Tag = { 
-	LOADING		=> 'loading',
+	INIT		=> 'init',
 	LOCALE		=> 'locale',
 	CONFIG		=> 'config',
-	INIT		=> 'init',
-	TESTS		=> 'tests',
 	AUTOCONF	=> 'autoconf',
+	LOADING		=> 'loading',
+	TESTS		=> 'tests',
 	TESTDBG		=> 'testdbg',
-	DBG		=> 'dbg',
-	CACHE_INFO	=> 'cache'
+	CACHE_INFO	=> 'cache',
+	DBG		=> 'dbg'
     }
 
 
@@ -104,7 +105,8 @@ class DBG
     # Change debugging level
     #
     def level=(lvl)
-	oldcrazy = enabled?(CRAZYDEBUG)
+	old_crazydebug	= enabled?(CRAZYDEBUG)
+	old_nresolv	= enabled?(NRESOLV)
 
 	# parsing
 	case lvl
@@ -116,14 +118,22 @@ class DBG
 	# message
 	msg(DBG) { "Setting level to 0x%0x" % lvl }
 
+
+	# enable/disable NResolv
+	if enabled?(NRESOLV) ^ old_nresolv
+	    $nresolv_dbg = enabled?(NRESOLV) ? 0xffff : 0x0000
+	end
+
 	# enable/disable CrazyDebug
-	if    enabled?(CRAZYDEBUG)
-	    set_trace_func(proc { |event, file, line, id, binding, classname|
-			       @output.printf "%8s %s:%-2d %10s %8s\n", 
-				   event, file, line, id, classname
-			   })
-	elsif oldcrazy
-	    set_trace_func(nil)
+	if enabled?(CRAZYDEBUG) ^ old_crazydebug
+	    dbgfunc = if enabled?(CRAZYDEBUG)
+			  proc { |event, file, line, id, binding, classname|
+				@output.printf "%8s %s:%-2d %10s %8s\n", 
+    				event, file, line, id, classname }
+		      else
+			  nil
+		      end
+	    set_trace_func(dbgfunc)
 	end
     end
 
