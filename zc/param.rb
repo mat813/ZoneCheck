@@ -121,11 +121,27 @@ class Param
 	def clear
 	    @name	= nil
 	    @ns		= nil
+	    @ns_input	= nil
 	    @addresses	= nil
 	    @cache	= true
 	end
 
-	def can_cache? ; true ; end
+	# 
+	# The policy for caching is (stop on first match):
+	#   - the NS have been guessed           => false
+	#   - a necessary glue is missing        => false
+	#   - an unecessary glue has been given  => false
+	#   - everything else                    => true
+	#
+	def can_cache?
+	    # purely guessed information
+	    return false if @ns_input.nil?
+	    # glue misused
+	    @ns_input.each { |ns, ips|
+		return false unless ns.in_domain?(@name) ^ !ips.empty? }
+	    # ok
+	    true
+	end
 
 	def name=(domain)
 	    domain = NResolv::DNS::Name::create(domain, true)
@@ -136,9 +152,10 @@ class Param
 	end
 	
 	def ns=(ns)
-	    return @ns = nil if ns.nil?
+	    return @ns = @ns_input = nil if ns.nil?
 
-	    @ns = [ ]
+	    # Parse inputed NS (and IPs)
+	    @ns_input = [ ]
 	    ns.split(/\s*;\s*/).each { |entry|
 		ips  = []
 		if entry =~ /^(.*)=(.*)$/
@@ -150,8 +167,15 @@ class Param
 		else
 		    host = NResolv::DNS::Name::create(entry, true)
 		end
-		@ns << [ host, ips ]
+		@ns_input << [ host, ips ]
 	    }
+
+	    # Do a deep copy
+	    @ns = [ ]
+	    @ns_input.each { |host, ips| @ns << [ host, ips.dup ] }
+
+	    # 
+	    @ns
 	end
 
 	def autoconf(dns)
@@ -160,17 +184,16 @@ class Param
 		$dbg.msg(DBG::AUTOCONF, "Retrieving NS for #{@name}")
 		begin
 		    primary = dns.primary(@name)
+		    $dbg.msg(DBG::AUTOCONF,
+			     "Identified NS primary as #{primary}")
 		rescue NResolv::NResolvError
 		    raise ParamError, $mc.get("xcp_param_primary_soa")
 		end
-		
+
 		begin
-		    @ns = [ nil ]
+		    @ns = [ [ primary, [] ] ]
 		    dns.nameservers(@name).each { |n|
-			if n == primary
-			then @ns[0] = [ n, [] ]
-			else @ns  <<  [ n, [] ]
-			end
+			@ns <<  [ n, [] ] unless n == primary
 		    }
 		rescue NResolv::NResolvError
 		    raise ParamError, $mc.get("xcp_param_nameservers_ns")
@@ -183,8 +206,8 @@ class Param
 	
 	    # Set cache status
 	    if @cache
-		$dbg.msg(DBG::AUTOCONF, "Setting cache status")
 		@cache &&= can_cache?
+		$dbg.msg(DBG::AUTOCONF, "Cache status set to #{@cache}")
 	    end
 	    
 	    # Guess Nameservers IP addresses
