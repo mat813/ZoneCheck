@@ -320,7 +320,7 @@ class ZoneCheck
 	    batchio = case @param.batch
 		      when "-"                   then $stdin
 		      when String                then File::open(@param.batch) 
-		      when Param::CGI::BatchData then @param.batch
+		      when Input::CGI::BatchData then @param.batch
 		      end
 	    batchio.each_line { |line|
 		next if line =~ /^\s*$/

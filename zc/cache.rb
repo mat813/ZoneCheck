@@ -12,7 +12,6 @@
 #
 
 require 'sync'
-
 require 'dbg'
 
 
@@ -27,6 +26,12 @@ class Cache
 	@name  = name
 	@mutex = Sync::new
 	@list  = {}
+    end
+
+
+    # Is caching enabled?
+    def enabled?
+	! $dbg.enabled?(DBG::NOCACHE)
     end
 
 
@@ -49,12 +54,6 @@ class Cache
 	    # Create item
 	    @list[item] = {}
 	}
-    end
-
-
-    # Is caching enabled?
-    def enabled?
-	! $dbg.enabled?(DBG::NOCACHE)
     end
 
 

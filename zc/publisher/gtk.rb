@@ -13,7 +13,8 @@
     
 require 'thread'
 require 'gtk2'
-require 'publisher/xpm_data'
+require 'textfmt'
+require 'data/xpm'
 
 Gtk.init
 
@@ -24,6 +25,103 @@ module Publisher
     ##
     class GTK < Template
 	Mime		= nil
+
+	class PixmapAlbum
+	    def initialize
+		@pixmap = {}
+	    end
+
+	    def put(name, xpm_data)
+		winroot = Gdk::Window::default_root_window
+		@pixmap[name] = Gdk::Pixmap::create_from_xpm_d(winroot, nil,
+							       xpm_data)
+	    end
+
+	    def [](name)
+		@pixmap[name]
+	    end
+	end
+
+
+	class Intro < Gtk::Table
+	    def initialize(main, domain)
+		# Initialize widget
+		super(2, 3, false)
+		set_col_spacings(5)
+		set_row_spacings(2)
+		
+		# Zone
+		img      = Gtk::Image::new(*main.pixmap[:zone])
+		zone_str = Gtk::Label::new(domain.name.to_s)
+		zone_str .set_alignment(0, 0.5)
+		attach(img,      0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK)
+		attach(zone_str, 1, 3, 0, 1, Gtk::FILL,   Gtk::SHRINK)
+
+		# DNS (Primary / Secondary)
+		domain.ns.each_index { |idx| 
+		    ns_ip = domain.ns[idx]
+		    img   = if idx == 0
+			    then Gtk::Image::new(*main.pixmap[:primary])
+			    else Gtk::Image::new(*main.pixmap[:secondary])
+			    end
+		    name_str = Gtk::Label::new(ns_ip[0].to_s)
+		    name_str .set_alignment(0, 0.5)
+		    ips_str  = Gtk::Label::new(ns_ip[1].join(", "))
+		    ips_str  .set_alignment(0, 0.5)
+
+		    attach(img,      0, 1, idx+1, idx+2, 
+			   Gtk::SHRINK, Gtk::SHRINK)
+		    attach(name_str, 1, 2, idx+1, idx+2,
+			   Gtk::FILL,   Gtk::SHRINK)
+		    attach(ips_str,  2, 3, idx+1, idx+2,
+			   Gtk::FILL,   Gtk::SHRINK)
+		}
+
+		#
+		show_all
+	    end
+	end
+
+	class ItemList < Gtk::Table
+	    def initialize(main)
+		@main = main
+		super(0, 2, false)
+		set_col_spacings(5)
+		set_row_spacings(2)
+		show
+		@idx = 0
+	    end
+
+	    def add_item(str)
+		img = Gtk::Image::new(*@main.pixmap[:element])
+		lbl = Gtk::Label::new(str)
+		lbl.set_alignment(0, 0.5)
+		img.show
+		lbl.show
+		attach(img, 0, 1, @idx, @idx+1, Gtk::SHRINK, Gtk::SHRINK)
+		attach(lbl, 1, 2, @idx, @idx+1, Gtk::FILL,   Gtk::SHRINK)
+		@idx += 1
+	    end
+	end
+
+
+
+	class Out < Gtk::VBox
+	    def initialize
+		super(false)
+		
+	    end
+	    def add(child)
+		pack_start(child)
+		set_child_packing(child, false, false, 5, Gtk::PACK_START)
+	    end
+		
+	    def add_node(*args)
+	    end
+	    def forget_level(*args)
+	    end
+	end
+
 
 	##
 	##
@@ -41,87 +139,6 @@ module Publisher
 	    L_Fatal   = "fatal"
 	    L_None    = "none"
 	    L_Ref     = "reference"
-
-	    def initialize
-		@model = Gtk::TreeStore.new( String )
-
-		super(@model)
-
-# Create the renderer and set properties
-render = Gtk::CellRendererText.new
-render.set_property( "background", "black" )
-render.set_property( "foreground", "green" )
-
-# Create the columns
-@c1 = Gtk::TreeViewColumn.new( "Headings", render, {:text => 0} )
-
-append_column( @c1 )
-
-		@hh = Hash::new
-		
-		# Build Pixmap
-		winroot = Gdk::Window::default_root_window
-		make_pixmap = Proc::new { |pixmap_data|
-		    Gdk::Pixmap::create_from_xpm_d(winroot, style.white,
-						   pixmap_data) 
-		}
-		
-		@xpm_book_o	= make_pixmap.call(XPM::Book_closed)
-		@xpm_book_c	= make_pixmap.call(XPM::Book_open)
-		@xpm_minipage	= make_pixmap.call(XPM::Minipage)
-		@xpm_element	= make_pixmap.call(XPM::Element)
-		@xpm_reference	= make_pixmap.call(XPM::Reference)
-		@xpm_info	= make_pixmap.call(XPM::Info)
-		@xpm_warning	= make_pixmap.call(XPM::Warning)
-		@xpm_fatal	= make_pixmap.call(XPM::Fatal)
-		@xpm_zone	= make_pixmap.call(XPM::Zone)
-		@xpm_primary	= make_pixmap.call(XPM::Primary)
-		@xpm_secondary	= make_pixmap.call(XPM::Secondary)
-		@xpm_none	= [ nil, nil ]
-	    end
-
-	    def forget_level(*lvl)
-		lvl.each { |l| @hh.delete(l) }
-	    end
-
-	    def add_node(type, lvl, str, is_leaf, expanded)
-		xpm_open, xpm_closed = 
-		    case type
-		    when L_Zone    then [ @xpm_zone,      @xpm_zone      ]
-		    when L_Prim    then [ @xpm_primary,   @xpm_primary   ]
-		    when L_Sec     then [ @xpm_secondary, @xpm_secondary ]
-		    when L_Element then [ @xpm_element,   @xpm_element   ]
-		    when L_Info    then [ @xpm_info,      @xpm_info      ]
-		    when L_Warning then [ @xpm_warning,   @xpm_warning   ]
-		    when L_Fatal   then [ @xpm_fatal,     @xpm_fatal     ]
-		    when L_H1      then [ @xpm_book_o,    @xpm_book_c    ]
-		    when L_H2      then [ @xpm_book_o,    @xpm_book_c    ]
-		    when L_None    then [ @xpm_none,      @xpm_none      ]
-		    when L_Ref     then [ @xpm_reference, @xpm_reference ]
-		    else                [ @xpm_book_o,    @xpm_book_c    ]
-		    end
-		sibling = nil
-
-		pparent2 = if lvl.nil? || !@hh.has_key?(lvl)
-			   then @parent2
-			   else @hh[lvl]
-			   end
-
-		
-#		parent2 = insert_node(pparent2, sibling, [ str ], 5,
-#				     xpm_open[0],   xpm_open[1], 
-#				     xpm_closed[0], xpm_closed[1],
-#				     is_leaf, expanded)
-		parent2 = @model.append(pparent2)
-		parent2.set_value(0, str)
-
-		case lvl
-		when NilClass
-		when String
-		    @hh[lvl] = pparent2
-		    @parent2 = is_leaf ? pparent2 : parent2
-		end
-	    end
 	end
 	
 	##
@@ -191,6 +208,8 @@ append_column( @c1 )
 		    if ! @publisher.rflag.quiet
 			@node = @o.add_node(Output::L_H1, "h1", 
 					$mc.get("title_progress"), false, true)
+			@il = ItemList::new(@publisher)
+			@o.add(@il)
 		    end
 		end
 	    end
@@ -212,7 +231,7 @@ append_column( @c1 )
 
 		# Test description
 		if @publisher.rflag.testdesc && !@node.nil?
-		    @o.collapse(@node)
+#		    @o.collapse(@node)
 		end
 
 		hide_all
@@ -239,8 +258,8 @@ append_column( @c1 )
 
 		# Test description
 		if @publisher.rflag.testdesc
-		    @o.add_node(Output::L_Element, "testdesc",
-					      "#{desc}#{xtra}", true, false)
+		    puts "#{desc}#{xtra}"
+		    @il.add_item("#{desc}#{xtra}")
 		end
 	    end
 
@@ -273,9 +292,8 @@ append_column( @c1 )
 		min = sec / 60;   sec %= 60;
 		
 		if (hrs > 0)
-		    return sprintf("%2d:%02d:%02d", hrs, min, sec)
-		else
-		    return sprintf("%2d:%02d", min, sec)
+		then sprintf("%2d:%02d:%02d", hrs, min, sec)
+		else sprintf("%2d:%02d", min, sec)
 		end
 	    end
 	end
@@ -283,14 +301,29 @@ append_column( @c1 )
 
 	#------------------------------------------------------------
 
-	attr_reader :parent
-	attr_reader :xpm_element
+
+	attr_reader :pixmap
 
 	def initialize(rflag, ostream=$stdout)
 	    super(rflag, ostream)
 
-	    # Create default style
-	    style = Gtk::Style::new
+	    #
+	    Thread::new { Gtk::main() }
+
+	    # Create pixmap album
+	    @pixmap = PixmapAlbum::new
+	    @pixmap.put(:book_closed,	XPM::Book_closed)
+	    @pixmap.put(:book_open,	XPM::Book_open)
+	    @pixmap.put(:minipage,	XPM::Minipage)
+	    @pixmap.put(:element,	XPM::Element)
+	    @pixmap.put(:reference,	XPM::Reference)
+	    @pixmap.put(:info,		XPM::Info)
+	    @pixmap.put(:warning,	XPM::Warning)
+	    @pixmap.put(:fatal,		XPM::Fatal)
+	    @pixmap.put(:zone,		XPM::Zone)
+	    @pixmap.put(:primary,	XPM::Primary)
+	    @pixmap.put(:secondary,	XPM::Secondary)
+
 
 	    # Create initial windows
 	    window = Gtk::Window::new
@@ -302,9 +335,9 @@ append_column( @c1 )
 
 
 
-	    @output = Gtk::VBox::new(false)
+	    @o = @output = Out::new
+#	    @output.set_homogeneous(false)
 	    
-
 
 
 	    scroller = Gtk::ScrolledWindow::new
@@ -321,9 +354,6 @@ append_column( @c1 )
 	    @hbbox  = Gtk::HButtonBox::new
 	    @hbbox.pack_start(@quit)
 
-	    @o = Output::new
-
-
 
 	    @progress	= Progress::new(self)
 
@@ -331,17 +361,18 @@ append_column( @c1 )
 	    toto.pack_start(@progress)
 	    toto.pack_start(scroller)
 	    toto.pack_start(@hbbox)
-	    scroller.set_size_request(500, 400)
 
+	    scroller.add_with_viewport(@output)
+	    scroller.set_size_request(600, 400)
+	    
 
 	    window.add(toto)
 
-#	    @output.pack_start(@o)
-
 
 	    window.show_all
-	    
-	    Thread::new { Gtk::main() }
+
+
+
 
 	end
 
@@ -360,27 +391,13 @@ append_column( @c1 )
 
 
 	def intro(domain)
+	    @o.add(Intro::new(self, domain))
+
 	    # Title
-	    unless @rflag.quiet
-		@o.add_node(Output::L_H1, "h1", 
-			    $mc.get("title_zoneinfo"), false, true)
-	    end
-
-	    # Zone
-	    @o.add_node(Output::L_Zone, "zoneinfo",
-			"#{domain.name.to_s}", true, false)
-
-	    # DNS (Primary / Secondary)
-	    domain.ns.each_index { |idx| 
-		ns_ip = domain.ns[idx]
-		logo = if idx == 0
-		       then Output::L_Prim
-		       else Output::L_Sec
-		       end
-
-		str = "#{ns_ip[0].to_s} (#{ns_ip[1].join(", ")})"
-		@o.add_node(logo, "zoneinfo", str, true, false)
-	    }
+#	    unless @rflag.quiet
+#		@o.add_node(Output::L_H1, "h1", 
+#			    $mc.get("title_zoneinfo"), false, true)
+#	    end
 	end
 
 	def diag_section(title)
@@ -402,11 +419,35 @@ append_column( @c1 )
 	    w_tag = w_tag.upcase if w_unexp
 	    f_tag = f_tag.upcase if f_unexp
 
-	    summary = "%1s%03d&nbsp;%1s%03d&nbsp;%1s%03d" % [ 
-		i_tag, i_count, 
-		w_tag, w_count, 
-		f_tag, f_count ]
+	    # Initialize widget
+	    tbl = Gtk::Table::new(3, 7, false)
+	    tbl.set_col_spacings(5)
+	    tbl.set_row_spacings(2)
+		
 
+	    # Zone
+	    i_img = Gtk::Image::new(*self.pixmap[:info])
+	    w_img = Gtk::Image::new(*self.pixmap[:warning])
+	    f_img = Gtk::Image::new(*self.pixmap[:fatal])
+	    i_lbl = Gtk::Label::new("%03d"  % i_count).set_alignment(0, 0.5)
+	    w_lbl = Gtk::Label::new("%03d"  % w_count).set_alignment(0, 0.5)
+	    f_lbl = Gtk::Label::new("%03d"  % f_count).set_alignment(0, 0.5)
+	    d_lbl = Gtk::Label::new(domainname.to_s).set_alignment(0, 0.5)
+	    tbl.attach(d_lbl, 0, 1, 0, 1, Gtk::EXPAND | Gtk::FILL,   Gtk::SHRINK)
+	    tbl.attach(i_img, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK)
+	    tbl.attach(i_lbl, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK)
+	    tbl.attach(w_img, 3, 4, 0, 1, Gtk::SHRINK, Gtk::SHRINK)
+	    tbl.attach(w_lbl, 4, 5, 0, 1, Gtk::SHRINK, Gtk::SHRINK)
+	    tbl.attach(f_img, 5, 6, 0, 1, Gtk::SHRINK, Gtk::SHRINK)
+	    tbl.attach(f_lbl, 6, 7, 0, 1, Gtk::SHRINK, Gtk::SHRINK)
+
+
+	    
+
+	    #
+	    tbl.show_all
+	    
+	    @o.add(tbl)
 
 	    if @rflag.tagonly
 		msg = res.testname
@@ -442,52 +483,87 @@ append_column( @c1 )
 	    end
 	    
 	    logo = case severity
-		   when "Info"    then Output::L_Info
-		   when "Warning" then Output::L_Warning
-		   when "Fatal"   then Output::L_Fatal
+		   when "Info"    then :info
+		   when "Warning" then :warning
+		   when "Fatal"   then :fatal
 		   else raise RuntimError, "XXX: unknown severity: #{severity}"
 		   end
 
 
-	    @o.add_node(logo, "diagnostic", msg, false, !@rflag.quiet)
-	    @o.forget_level("diag_details", "diag_ref", "diag_elt")
+	    dtbl = Gtk::Table::new(1, 2, false)
+	    dtbl.set_col_spacings(5)
+	    dtbl.set_row_spacings(2)
+	    didx  = 0
+
+	    img = Gtk::Image::new(*self.pixmap[logo])
+	    lbl = Gtk::Label::new(msg)
+	    lbl.set_alignment(0, 0.5)
+	    dtbl.attach(img, 0, 1, didx, didx+1, Gtk::SHRINK, Gtk::SHRINK)
+	    dtbl.attach(lbl, 1, 2, didx, didx+1, Gtk::FILL,   Gtk::SHRINK)
+	    didx += 1
+
+	    # Details
+	    if @rflag.details && desc.dtl
+		txt = ::Text::Format::new
+		txt.width = 72
+		txt.tag   = ""
+		str = txt.format(desc.dtl)
+		str.chop!
+		tbl = Gtk::Table::new(0, 2, false)
+		tbl.set_col_spacings(5)
+		tbl.set_row_spacings(2)
+		img = Gtk::Image::new(*self.pixmap[:reference])
+		lbl = Gtk::Label::new(str)
+		lbl.set_alignment(0, 0.5)
+		tbl.attach(img, 0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK)
+		tbl.attach(lbl, 1, 2, 0, 1, Gtk::FILL,   Gtk::SHRINK)
+		dtbl.attach(tbl, 1, 2, didx, didx+1, Gtk::FILL, Gtk::SHRINK)
+		didx += 1
+	    end
+
 
 	    # Explanation
 	    if xpl_lst
-		if @rflag.quiet
-		    lvl = "diag_elt"
-		else
-		    @o.add_node(Output::L_H1, "diag_details", 
-				    "Explanation", false, false)
-		    lvl = "diag_ref"
-		end
-
+		tbl = Gtk::Table::new(0, 2, false)
+		tbl.set_col_spacings(5)
+		tbl.set_row_spacings(2)
+		idx = 0
 		xpl_lst.each { |t, h, b|
 		    l10n_tag = $mc.get("xpltag_#{t}")
 		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '\1') }
-		    @o.add_node(Output::L_Ref, lvl,
-				    "#{l10n_tag}: #{h}", false, false)
-		    b.each { |l|
-			@o.add_node(Output::L_None, nil, l, true, false)
-		    }
+		    img = Gtk::Image::new(*self.pixmap[:reference])
+		    lbl = Gtk::Label::new("#{l10n_tag}: #{h}")
+		    lbl.set_alignment(0, 0.5)
+		    tbl.attach(img, 0, 1, idx, idx+1, Gtk::SHRINK, Gtk::SHRINK)
+		    tbl.attach(lbl, 1, 2, idx, idx+1, Gtk::FILL,   Gtk::SHRINK)
+		    idx += 1
+		    lbl = Gtk::Label::new(b.join("\n"))
+		    lbl.set_alignment(0, 0.5)
+		    tbl.attach(lbl, 1, 2, idx, idx+1, Gtk::FILL,   Gtk::SHRINK)
+		    idx += 1
 		}
+		dtbl.attach(tbl, 1, 2, didx, didx+1, Gtk::FILL, Gtk::SHRINK)
+		didx += 1
 	    end
 
 	    # Elements
 	    if ! lst.empty?
-		if @rflag.quiet
-		    lvl = "diag_elt"
-		else
-		    @o.add_node(Output::L_H1, "diag_details",
-				"Affected host(s)", false, true)
-		    lvl = nil
-		end
-
-		lst.each { |elt| 
-		    @o.add_node(Output::L_Element, lvl, elt, true, false)
+		tbl = Gtk::Table::new(0, 2, false)
+		tbl.set_col_spacings(5)
+		tbl.set_row_spacings(2)
+		lst.each_index { |idx| 
+		    img = Gtk::Image::new(*self.pixmap[:element])
+		    lbl = Gtk::Label::new(lst[idx])
+		    lbl.set_alignment(0, 0.5)
+		    tbl.attach(img, 0, 1, idx, idx+1, Gtk::SHRINK, Gtk::SHRINK)
+		    tbl.attach(lbl, 1, 2, idx, idx+1, Gtk::FILL,   Gtk::SHRINK)
 		}
+		dtbl.attach(tbl, 1, 2, didx, didx+1, Gtk::FILL, Gtk::SHRINK)
+		didx += 1
 	    end
 
+	    @o.add(dtbl)
+	    dtbl.show_all
 	end
 	    
 

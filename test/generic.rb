@@ -49,12 +49,12 @@ module CheckGeneric
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
 	    super(*args)
-	    cache_attr :ip, :by_subnet
+	    @cache.create(:ip, :by_subnet)
 	end
 
 	#-- Shortcuts -----------------------------------------------
 	def ip
-	    cache_use(:ip) {
+	    @cache.use(:ip) {
 		ip = @domain.ns.collect { |ns, ips| ips }
 		ip.flatten!
 		ip
@@ -69,7 +69,7 @@ module CheckGeneric
 	end
 
 	def by_subnet
-	    cache_use(:by_subnet) {
+	    @cache.use(:by_subnet) {
 		nethosts = {}
 		ip.each { |i| 
 		    net = case i                     # decide of subnet size:

@@ -19,7 +19,6 @@
 #
 
 require 'sync'
-
 require 'cache'
 
 ##

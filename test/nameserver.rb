@@ -28,12 +28,12 @@ module CheckNameServer
 	def initialize(*args)
 	    super(*args)
 
-	    cache_attr :ip
+	    @cache.create(:ip)
 	end
 
 	#-- Shortcuts -----------------------------------------------
 	def ip(ns)
-	    cache_use(:ip, ns) {
+	    @cache.use(:ip, ns) {
 		@domain.ns.assoc(ns)[1]
 	    }
 	end

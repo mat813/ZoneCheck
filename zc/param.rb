@@ -11,6 +11,7 @@
 #
 #
 
+require 'dbg'
 require 'report'
 require 'publisher'
 
@@ -262,7 +263,6 @@ class Param
 	    @warning    = @report.method(@warning_attrname).call
 	    @fatal      = @report.method(@fatal_attrname).call
 
-	    # Sanity check
 	    if rflag.tagonly && !@report.tagonly_supported?
 		raise ParamError, 
 		    $mc.get("xcp_param_output_support") % [ "tagonly" ]
@@ -451,26 +451,6 @@ class Param
 
 
     ##
-    ## Exception: Parameter errors (ie: usage)
-    ##
-    class ParamError < StandardError
-    end
-
-
-
-    attr_reader :rflag, :report, :test, :network, :fs, :resolver, :publisher
-
-    attr_reader :batch
-    attr_writer :batch
-    
-    attr_reader :domain
-    attr_writer :domain
-
-    attr_writer :debug
-
-
-
-    ##
     ##
     ##
     class Publisher
@@ -500,6 +480,24 @@ class Param
 	end
     end
 
+
+    ##
+    ## Exception: Parameter errors (ie: usage)
+    ##
+    class ParamError < StandardError
+    end
+
+
+
+    attr_reader :rflag, :report, :test, :network, :fs, :resolver, :publisher
+
+    attr_reader :batch
+    attr_writer :batch
+    
+    attr_reader :domain
+    attr_writer :domain
+
+    attr_writer :debug
 
 
 

@@ -58,6 +58,8 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:1180:1:192:134:0:49,192.134.0.49;ns2.nic.fr
 	      includes explanations
 	    </TD>
 	    <TD>
+	      <INPUT type="checkbox" name="details"  value='t'>
+	      includes details
 	    </TD>
 	  </TR>
 	  <TR>
@@ -76,16 +78,16 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:1180:1:192:134:0:49,192.134.0.49;ns2.nic.fr
 	  <TR>
 	    <TD></TD>
 	    <TD>
-	      <INPUT type="radio" name="progress" value=''>
-	      no progress bar
-	    </TD>
-	    <TD>
 	      <INPUT type="radio" name="progress" value='counter' checked>
 	      progress bar
 	    </TD>
 	    <TD>
 	      <INPUT type="radio" name="progress" value='testdesc'>
-	      tests description
+	      description
+	    </TD>
+	    <TD>
+	      <INPUT type="radio" name="progress" value=''>
+	      nothing
 	    </TD>
 	  </TR>
 	  <TR>
@@ -148,14 +150,9 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:1180:1:192:134:0:49,192.134.0.49;ns2.nic.fr
 	      <INPUT type="checkbox" name="chkzone" value='t' checked>
 	      zone content
 	    </TD>
-	  <TR>
-	    <TD></TD>
 	    <TD>
 	      <INPUT type="checkbox" name="chkwhois" value='t' checked>
 	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A>
-	    </TD>
-	    <TD>
-	      using <INPUT name="whois" value="whois.ripe.net">
 	    </TD>
 	  </TR>
 
@@ -306,7 +303,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:1180:1:192:134:0:49,192.134.0.49;ns2.nic.fr
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Oct  8 15:09:51 CEST 2002
+Last modified: Fri Dec 27 13:38:42 CET 2002
 <!-- hhmts end -->
   </BODY>
 </HTML>

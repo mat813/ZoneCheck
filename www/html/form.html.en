@@ -167,16 +167,16 @@
 	  <TR>
 	    <TD></TD>
 	    <TD>
-	      <INPUT type="radio" name="progress" value=''>
-	      no progress bar
-	    </TD>
-	    <TD>
 	      <INPUT type="radio" name="progress" value='counter' checked>
 	      progress bar
 	    </TD>
 	    <TD>
 	      <INPUT type="radio" name="progress" value='testdesc'>
-	      tests description
+	      description
+	    </TD>
+	    <TD>
+	      <INPUT type="radio" name="progress" value=''>
+	      nothing
 	    </TD>
 	  </TR>
 	  <TR>
@@ -239,14 +239,9 @@
 	      <INPUT type="checkbox" name="chkzone" value='t' checked>
 	      zone content
 	    </TD>
-	  <TR>
-	    <TD></TD>
 	    <TD>
 	      <INPUT type="checkbox" name="chkwhois" value='t' checked>
 	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A>
-	    </TD>
-	    <TD>
-	      using <INPUT name="whois" value="whois.ripe.net">
 	    </TD>
 	  </TR>
 
@@ -397,7 +392,7 @@
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Dec 18 11:29:57 CET 2002
+Last modified: Fri Dec 27 13:37:03 CET 2002
 <!-- hhmts end -->
   </BODY>
 </HTML>

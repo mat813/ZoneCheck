@@ -1,5 +1,11 @@
 # $Id$
 
+CLASS OK:
+zc/msgcat.rb
+zc/dbg.rb
+
+TODO:
+
 - test loopback v6
 - cachemanager destroy method (and use it)
 - check for SOA not necessary in NS

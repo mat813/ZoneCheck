@@ -21,6 +21,7 @@ require 'getoptlong'
 require 'thread'
 
 require 'gtk2'
+require 'data/xpm'
 
 Gtk.init
 
@@ -315,7 +316,18 @@ module Input
 	    def initialize(main)
 		# Parent constructor
 		super()
-		
+
+
+		# Pixmaps
+		winroot     = Gdk::Window::default_root_window
+		make_pixmap = Proc::new { |pixmap_data|
+		    Gdk::Pixmap::create_from_xpm_d(winroot, nil, pixmap_data) 
+		}
+		pix_zone = make_pixmap.call(Publisher::XPM::Zone)
+		pix_prim = make_pixmap.call(Publisher::XPM::Primary)
+		pix_sec  = make_pixmap.call(Publisher::XPM::Secondary)
+
+
 		# Locallisation
 		l10n_check		= $mc.get("iface_label_check")
 		l10n_guess		= $mc.get("iface_label_guess")
@@ -335,6 +347,7 @@ module Input
 		@zone = Gtk::Entry::new
 
 		hbox = Gtk::HBox::new(false, 5)
+		hbox.pack_start(Gtk::Image::new(*pix_zone), false, true)
 		hbox.pack_start(Gtk::Label::new(l10n_zone), false, true)
 		hbox.pack_start(@zone, true, true)
 	    
@@ -342,20 +355,22 @@ module Input
 		zone_f.add(hbox)
 
 		# NS
-		tbl  = Gtk::Table::new(MaxNS, 4, false)
+		tbl  = Gtk::Table::new(MaxNS, 5, false)
 		tbl.set_col_spacings(5)
 		tbl.set_row_spacings(2)
 		(0..MaxNS-1).each { |i|
 		    l10n_ns_t = (i == 0 ? l10n_primary			\
 				        : l10n_secondary).capitalize
-		    lbl_ns    = Gtk::Label::new(l10n_ns_t).set_alignment(0, 1)
-		    lbl_ips   = Gtk::Label::new(l10n_ips ).set_alignment(0, 1)
+		    logo      = Gtk::Image::new(*(i == 0 ? pix_prim : pix_sec))
+		    lbl_ns    = Gtk::Label::new(l10n_ns_t).set_alignment(0,0.5)
+		    lbl_ips   = Gtk::Label::new(l10n_ips ).set_alignment(0,0.5)
 		    @ns[i]    = Gtk::Entry::new.set_size_request(120, -1)
 		    @ips[i]   = Gtk::Entry::new.set_size_request(320, -1)
-		    tbl.attach(lbl_ns,  0, 1, i, i+1, Gtk::SHRINK | Gtk::FILL)
-		    tbl.attach(@ns[i],  1, 2, i, i+1)
-		    tbl.attach(lbl_ips, 2, 3, i, i+1, Gtk::SHRINK | Gtk::FILL)
-		    tbl.attach(@ips[i], 3, 4, i, i+1)
+		    tbl.attach(logo,    0, 1, i, i+1, Gtk::SHRINK)
+		    tbl.attach(lbl_ns,  1, 2, i, i+1, Gtk::SHRINK | Gtk::FILL)
+		    tbl.attach(@ns[i],  2, 3, i, i+1)
+		    tbl.attach(lbl_ips, 3, 4, i, i+1, Gtk::SHRINK | Gtk::FILL)
+		    tbl.attach(@ips[i], 4, 5, i, i+1)
 		}
 		
 		ns_f = Gtk::Frame::new(l10n_ns.upcase)
@@ -549,7 +564,6 @@ module Input
 	    end
 	    
 	    def release
-		puts "RELEASE"
 		@q.push nil
 	    end
 
