@@ -23,7 +23,7 @@ xpl_rfc2182 : [adv]: AFNIC\nTo avoid loosing all connectivity with the autoritat
 
 
 [chk_dn_sntx]
-testname: nom de domaine contenat des caractères illégaux
+testname: nom de domaine contenant des caractères illégaux
 error   : Le nom de domaine contient des caractères illégaux
 explain = label_xpl
 
@@ -53,21 +53,21 @@ explain = xpl_rfc2182
 
 
 [chk_distinct_ip]
-testname: addresses IP identiques sur les serveurs
+testname: addresses IP identiques parmi les serveurs
 error   : Toutes les addresses IP doivent être distinctes
 explain = xpl_rfc2182
 details : Les serveurs de noms %{ns} utilisent la même addresse IP (%{ip}).
 
 
 [chk_same_net]
-testname: addresses des serveurs de noms sur le même sous réseau
-error   : Des addresses IPs sont sous le même sous réseau
+testname: serveurs de noms sur le même sous réseau
+error   : Des serveurs sont sous le même sous réseau
 explain = xpl_rfc2182
 details : Les sous réseaux suivants sont utilisés par plusieurs hôtes: %{subnets}. Essayez de déplacer certains hôtes sur un autre sous réseau.
 
 
 [chk_all_same_net]
-testname: addresse des serveurs de noms toutes sur le même sous réseau
-error   : Les addresses IP sont toutes sur le même sous réseau
+testname: serveurs de noms tous sur le même sous réseau
+error   : Les serveurs de noms sont tous sur le même sous réseau
 explain = xpl_rfc2182
 details : Tous les serveurs de noms sont dans le sous réseau %{subnet}. Essayez d'en déplacer quelques uns sur un autre sous réseau.

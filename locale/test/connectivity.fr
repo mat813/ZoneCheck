@@ -23,7 +23,7 @@ xpl_connectivity_udp_tcp : [ref]: IETF RFC1035 (p.32 4.2. Transport)\nThe DNS as
 
 [chk_icmp]
 testname: réponses aux requêtes ICMP
-error   : L'hôte ne semble pas être en vivant (présence d'un parefeux?)
+error   : L'hôte ne semble pas être vivant (présence d'un parefeux?)
 explain : [none]
 
 

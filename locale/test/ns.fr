@@ -40,7 +40,7 @@ explain = label_xpl
 
 [chk_ns_cname]
 testname: l'enregistrement NS n'est pas un alias
-error   : l'enregistrement NS ne peut pas etre un alias (CNAME)
+error   : l'enregistrement NS ne peut pas être un alias (CNAME)
 explain = ns_cname_xpl
 
 
@@ -51,6 +51,6 @@ explain : [none]
 
 
 [chk_ns_ip]
-testname: NS peut être résolu
-error   : The IP addresses of the zone nameserver can't be found
+testname: enregistrement NS peut être résolu
+error   : L'addresse IP du serveur de noms n'existe pas
 explain : [none]

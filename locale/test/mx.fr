@@ -28,7 +28,7 @@ explain : [none]
 
 
 [chk_mx_sntx]
-testname: la syntaxe du MX réprésente un nom de machine valide
+testname: syntaxe du MX réprésente un nom de machine valide
 error   : la syntaxt du MX n'est pas correcte
 explain = label_xpl
 
@@ -40,14 +40,14 @@ explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by 
 
 
 [chk_mx_no_wildcard]
-testname: absence de jooker pour l'enregistrement MX
+testname: absence de joker pour l'enregistrement MX
 error   : Un joker pour l'enregistrement MX est présent
 explain : [none]
 
 
 [chk_mx_ip]
-testname: MX peut être résolu
-error   : The IP address of the Mail eXchanger can't be resolved
+testname: enregistrement MX peut être résolu
+error   : L'addresse IP de l'enregistrement MX ne peut pas être résolue
 explain : [none]
 
 

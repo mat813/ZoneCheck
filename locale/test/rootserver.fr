@@ -28,12 +28,12 @@ explain : [none]
 
 
 [chk_root_servers_ns_vs_icann]
-testname: liste des root servers identique a celle de l'ICANN
+testname: liste des Root Servers identique a celle de l'ICANN
 error   : La liste des Root Servers n'est pas cohérente avec celle de l'ICANN
 explain = xpl_rootserver_vs_icann
 
 
 [chk_root_servers_ip_vs_icann]
-testname: addresses IP des root servers identique à celles de l'ICANN
+testname: addresses IP des Root Servers identiques à celles de l'ICANN
 error   : La liste des Root Servers n'est pas cohérente avec celle de l'ICANN
 explain = xpl_rootserver_vs_icann
