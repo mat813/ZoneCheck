@@ -48,6 +48,11 @@ ruby ./installer.rb cli cgi		\
 	-DETCDIST=""			\
 	-DCHROOT="%{buildroot}"
 
+ruby -p -i \
+	-e "\$$_.gsub!(/(<const\s+name\s*=\s*\"ping4\"\s+value\s*=\s*\")[^\"]+(\"\s*\/>)/, '\1ping  -n -q -w 5 -c 5 %s\2')" \
+	-e "\$$_.gsub!(/(<const\s+name\s*=\s*\"ping6\"\s+value\s*=\s*\")[^\"]+(\"\s*\/>)/, '\1ping6 -n -q -w 5 -c 5 %s\2')" \
+	%{_sysconfdir}/zonecheck/zc.conf
+
 %clean
 %{__rm} -rf %{buildroot}
 

@@ -209,7 +209,7 @@ print <<EOT
 EOT
 	end
 	puts ""
-        puts "- You are now ready to use ZoneCheck"
+        puts "!!! Before using ZoneCheck, please edit the file: zc.conf"
 	puts ""
     end
 
