@@ -56,11 +56,11 @@ details : The nameservers %{ns} are using the same IP address (%{ip}). See RFC21
 [chk_same_net]
 testname: nameserver addresses on same subnet
 error   : IP addresses on the same subnet
-explain : chk_same_net_xpl
+explain = chk_same_net_xpl
 details : The following subnets are used by several hosts: %{subnets}. Try moving some of their hosts to another subnet.
 
 [chk_all_same_net]
 testname: nameserver addresses are all on the same subnet
 error   : IP addresses are all on the same subnet
-explain : chk_same_net_xpl
+explain = chk_same_net_xpl
 details : All the servers are in the subnet %{subnet}, try moving some of them  to another subnet.
