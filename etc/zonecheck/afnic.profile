@@ -3,7 +3,7 @@
 <config>
 <!-- $Id$ -->
 
-  <profile name="fr"
+  <profile name="afnic"
            longdesc="delegation under .fr/.re done by AFNIC registry">
     <const name="registry" value="AFNIC"/>
 
