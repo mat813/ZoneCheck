@@ -78,7 +78,7 @@
 
     <!-- Propaganda -->
     <P>Le programme ZoneCheck (librement disponible 
-      <A href="http://zonecheck.nic.fr/download/v2/">ici</A>
+      <A href="http://www.zonecheck.fr/download/">ici</A>
       en téléchargement) effectue plusieurs tests sur la zone 
       (domaine) afin de s'assurer que celle-ci est correctement configurée
       et peut être déléguée sans risque, fournissant un certain degré de
@@ -465,7 +465,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Jun 16 22:11:15 CEST 2003
+Last modified: Wed Jun 25 16:23:22 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

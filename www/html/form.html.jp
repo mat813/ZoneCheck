@@ -83,7 +83,7 @@
 
     <!-- Propaganda -->
     <P>The  「ZoneCheck」 program (freely available 
-      <A href="http://zonecheck.nic.fr/download/v2/">here</A>
+      <A href="http://www.zonecheck.fr/download/">here</A>
       for ダウンロード) performs several tests on your zone (ie:
       domain) to ensure that it is correctly configured and can be
       safely delegated, providing a certain quality to your domain (see the
@@ -463,7 +463,7 @@
 リリーズ: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Jun 16 22:12:52 CEST 2003
+Last modified: Wed Jun 25 16:23:48 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
