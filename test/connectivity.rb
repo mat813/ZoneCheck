@@ -34,7 +34,11 @@ module CheckNetworkAddress
     ##   the tests won't be affected by the transport flags
     ## 
     class Connectivity < Test
-	ZC_Category = "connectivity"
+	def initialize(*args)
+	    super(*args)
+	    @ping4_cmd = const("ping4")
+	    @ping6_cmd = const("ping6")
+	end
 
 	#-- Tests ---------------------------------------------------
 	# DESC: Test TCP connectivity with DNS server
@@ -56,9 +60,9 @@ module CheckNetworkAddress
 	# DESC: Test UDP connectivity with DNS server
 	def chk_udp(ns, ip)
 	    # The idea is to send 25 'server status' request in 5 seconds
-	    # if we received one answer within 8 seconds (dont care about 
-	    # its content, although generally 'Not Implemented')
-	    # we consider it sucessful
+	    #  if we received one answer within 8 seconds (dont care about 
+	    #  its content, although generally 'Not Implemented')
+	    #  we consider it sucessful
 	    msg        = NResolv::DNS::Message::Query::new
 	    msg.opcode = NResolv::DNS::OpCode::STATUS
 	    rawmsg     = msg.to_wire
@@ -84,12 +88,12 @@ module CheckNetworkAddress
 
 	# DESC: Test if host is alive (watch for firewall)
 	def chk_icmp(ns, ip)
-	    case ip
-	    when Address::IPv4
-		system("ping  -q -c 5 #{ip} > /dev/null")
-	    when Address::IPv6
-		system("ping6 -q -c 5 #{ip} > /dev/null")
-	    end
+	    ping_cmd = case ip
+		       when Address::IPv4 then @ping4_cmd
+		       when Address::IPv6 then @ping6_cmd
+		       else raise "INTERNAL: Unknown address format"
+		       end
+	    system(ping_cmd % [ ip.to_s ])
 	end
     end
 end

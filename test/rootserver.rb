@@ -5,7 +5,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -16,8 +16,6 @@ require 'framework'
 
 module CheckNetworkAddress
     class RootServer < Test
-	ZC_Category = "dns"
-
 	#-- Tests ---------------------------------------------------
 	# DESC: root server list should be available
 	def chk_root_servers(ns, ip)

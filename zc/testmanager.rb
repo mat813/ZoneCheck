@@ -76,11 +76,6 @@ class TestManager
 	eval("#{$1}")
     end
 
-    def category(testname)
-	@tests[testname]::ZC_Category
-    end
-
-
     def list
 	@tests.keys
     end
@@ -100,7 +95,8 @@ class TestManager
 	domain = @param.domain
 	@config.test_list.each { |testname|
 	    if ! @classes.has_key?(klass = @tests[testname])
-		@classes[klass] = [klass.method("new").call(@cm, 
+		@classes[klass] = [klass.method("new").call(@config,
+							    @cm, 
 							    domain.name, 
 							    domain.ns)]
 	    end

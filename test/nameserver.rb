@@ -5,7 +5,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -22,8 +22,6 @@ module CheckNameServer
     ##   (see modules CheckNetworkAddress for that)
     ##
     class ServerAccess < Test
-	ZC_Category = "dns"
-
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
 	    super(*args)

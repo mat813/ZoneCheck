@@ -5,7 +5,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -25,8 +25,6 @@ module CheckNetworkAddress
     ##
     ##
     class Misc < Test
-	ZC_Category = "dns"
-
 	#-- Tests ---------------------------------------------------
 	# DESC:
 	def chk_ns_reverse(ns, ip)

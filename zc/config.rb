@@ -53,6 +53,9 @@ class Config
 
 	@test_list	= []
 	@test_action	= {}
+	@test_category	= {}
+
+	@constants	= {}
 
 	@order		= 0
 	@order_switch	= { CheckGeneric        => 0, CheckNameServer => 1,  
@@ -71,7 +74,7 @@ class Config
     #
     # Add a new test with its corresponding action
     #
-    def add(testname, action)
+    def newtest(testname, action, category)
 	return if action == Skip
 
 	# Check if test is currently registered
@@ -89,13 +92,28 @@ class Config
 	end
 	
 	# Check if we really want the test
-	if @category && ! @category.include?(@test_manager.category(testname))
+	if @category && ! @category.include?(category)
 	    return
 	end
 
 	# Register test
 	@test_list << testname
-	@test_action[testname] = action
+	@test_action  [testname] = action
+	@test_category[testname] = category
+    end
+
+
+    def newconst(name, value)
+	@constants[name] = value
+    end
+
+    def const(name)
+	begin
+	    @constants.fetch(name)
+	rescue IndexError
+	    raise RuntimeError, 
+		"Trying to fetch undefined constant '#{name}'"
+	end
     end
 
 
@@ -112,19 +130,54 @@ class Config
 		line.sub!(/\s*\#.*/, "")	# remove comment
 		next if line.empty?		# skip empty lines
 
-		# Syntax checker
-		if line !~ /^([#{Warning}#{Info}#{Fatal}#{Skip}])\s+(\w+)$/
-		    raise SyntaxError, "line #{lineno}: malformed command"
-		end
-		action, testname = $1, $2
-		
-		# Add test
-		begin
-		    add(testname, action)
-		rescue ArgumentError => e
-		    raise ConfigError, "line #{lineno}: #{e}"
+		if line =~ /^\s*\[\s*(.*?)\s*]\s*$/
+		    section = $1
+		    case section
+		    when "tests"     then reader = method(:read_tests)
+		    when "constants" then reader = method(:read_constants)
+		    else raise SyntaxError, 
+			    "line #{lineno}: unknown section #{section}"
+		    end
+		else
+		    if reader
+			reader.call(line, lineno)
+		    else
+			raise SyntaxError,
+			    "line #{lineno}: no section defined"
+		    end
 		end
 	    end
 	}
+    end
+
+    private
+    def read_tests(line, lineno)
+	# Syntax checker
+	if line !~ /^([#{Warning}#{Info}#{Fatal}#{Skip}])\s+(\w+)\s+(\w+)\s*$/
+	    raise SyntaxError, "line #{lineno}: malformed command"
+	end
+	action, testname, category = $1, $2, $3
+	
+	# Add test
+	begin
+	    newtest(testname, action, category)
+	rescue ArgumentError => e
+	    raise ConfigError, "line #{lineno}: #{e}"
+	end
+    end
+
+    def read_constants(line, lineno)
+	# Syntax checker
+	if line !~ /^(\w+)\s*=\s*\"((?:[^\"]|\\\")*)\"$/
+	    raise SyntaxError, "line #{lineno}: malformed command"
+	end
+	name, value = $1, $2
+	
+	# Add test
+	begin
+	    newconst(name, value)
+	rescue ArgumentError => e
+	    raise ConfigError, "line #{lineno}: #{e}"
+	end
     end
 end

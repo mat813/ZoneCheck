@@ -142,11 +142,12 @@ class Test
 
 
 
-    def initialize(cm, domain_name, domain_ns)
+    def initialize(config, cm, domain_name, domain_ns)
 	@attrcache_mutex	= Sync::new
+	@config			= config
+	@cm			= cm
 	@domain_name		= domain_name
 	@domain_ns		= domain_ns
-	@cm			= cm
     end
 
 
@@ -195,6 +196,10 @@ class Test
 
     
     #-- Shortcuts -----------------------------------------------
+    def const(name)
+	@config.const(name)
+    end
+
     def rec(ip=nil, dom=@domain_name, force=false)
 	@cm[ip].rec(dom, force)
     end

@@ -5,7 +5,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/09/25 19:14:21
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -20,10 +20,11 @@ module CheckExtra
     ## Check domain NS records
     ##
     class Mail < Test
-	ZC_Category = "mail"
-
 	def initialize(*args)
 	    super(*args)
+	    @fake_dest = const("fake_mail_dest")
+	    @fake_from = const("fake_mail_from")
+	    @fake_user = const("fake_mail_user")
 	end
 
 	#-- Shortcuts -----------------------------------------------
@@ -43,10 +44,12 @@ module CheckExtra
 	    mip   = addresses(mhost, bestresolver(mhost))[0]
 
 #	    puts "DOM=#{mdom}   HOST=#{mhost}   IP=#{mip}"
+#	    puts "DEST=#{@fake_dest}  FROM=#{@fake_from}  USER=#{@fake_user}"
 	    # Execute test on mailhost
 	    mrelay = nil
 	    begin
 		mrelay = ZCMail::new(mdom, mip.to_s)
+		mrelay.fake_info(@fake_user, @fake_dest, @fake_from)
 		mrelay.banner
 		yield mrelay
 	    ensure

@@ -11,25 +11,8 @@
 #
 #
 
-#####
-#
-# TODO:
-#   - cleanup (removed reference to nic.fr, afnic.fr, zonecheck)
-#
-
 
 require 'socket'
-
-#m = MailTest::new("hyperion.nic.fr", "192.134.4.116")
-##m = MailTest::new("mrelay1.sdalu.com", "213.41.135.30")
-#m.start
-#m.helo("hyperion")
-#if m.test_openrelay
-#    puts "OPEN RELAY"
-#else
-#    puts "EVERYTHING'S FINE"
-#end
-#m.quit
 
 ##
 ##
@@ -46,9 +29,12 @@ class ZCMail
 	@mhost      = mhost
 	@mip        = mip
 	@mrelay     = TCPSocket.new(mip, 25)
-	@mdest      = "nic.fr"
-	@mother     = "afnic.fr"
-	@user       = "zonecheck"
+    end
+
+    def fake_info(user, mdest, mfrom)
+	@user	= user
+	@mdest	= mdest
+	@mfrom	= mfrom
 
 	@openrelay_testlist = [ 
 	    [ "Test 0",
@@ -56,7 +42,7 @@ class ZCMail
 	    [ "Test 1",
 		"spamtest@#{@mdest}",	"nobody@#{@mdest}"		],
 	    [ "Test 2",
-		"spamtest@#{@mother}",	"nobody@#{@mdest}"		],
+		"spamtest@#{@mfrom}",	"nobody@#{@mdest}"		],
 	    [ "Test 3",
 		"spamtest@localhost",	"nobody@#{@mdest}"		],
 	    [ "Test 4",
@@ -139,7 +125,9 @@ class ZCMail
 
 	tests.each { |name, from, to|
 	    if (r = mail_from(from)[0]) == 250
-		return true unless rcpt_to(to)[0] == 554
+		case rcpt_to(to)[0]
+		when 550, 551, 552, 553, 554 then return true
+		end
 	    else
 		raise ZCMailError, "Unexpected return code #{r}"
 	    end

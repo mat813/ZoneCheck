@@ -189,7 +189,7 @@ class ZoneCheck
     def load_testlist
 	@config = Config::new(@test_manager, @param.category)
 	if @param.test
-	    @config.add(@param.test, Config::Fatal)
+	    @config.newtest(@param.test, Config::Fatal, "none")
 	else
 	    @config.read(@param.configfile)
 	end

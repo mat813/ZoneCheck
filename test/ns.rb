@@ -5,7 +5,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -19,8 +19,6 @@ module CheckNetworkAddress
     ## Check domain NS records
     ##
     class NS < Test
-	ZC_Category = "dns"
-
 	#-- Tests ---------------------------------------------------
 	# DESC: NS entries should exists
 	def chk_ns(ns, ip)
