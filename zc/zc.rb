@@ -56,7 +56,7 @@
 #
 
 ## Installation path
-ZC_INSTALL_PATH		= ENV["ZC_INSTALL_PATH"].untaint || (ENV["HOME"].untaint || "/homes/sdalu") + "/ZC.CVS/zc"
+ZC_INSTALL_PATH		= ENV["ZC_INSTALL_PATH"].untaint || (ENV["HOME"].untaint || "/homes/sdalu") + "/Repository/zonecheck"
 
 ## Directories
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
