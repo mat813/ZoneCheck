@@ -433,7 +433,7 @@ class Config
     def profilename=(name)
 	name = nil if name == Profile_Automatic
 	if !name.nil? && @profiles[name].nil?
-	    raise ConfigError, "Profile '#{name}' doesn't exist" 
+	    raise ConfigError, $mc.get('config:unknown_profile') % name
 	end
 	@profilename = name
     end

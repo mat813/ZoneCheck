@@ -115,6 +115,9 @@
 <!-- Config -->
   <section name="config">
     <tag name="check_unknown">check '%s' unavailable</tag>
+    <tag name="unknown_profile">Unknown profile '%s'</tag>
+    <tag name="unknown_preset">Unknown preset '%s'</tag>
+    <tag name="error_in_preset">Error in preset '%s'</tag>
   </section>
 
 

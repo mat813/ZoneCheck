@@ -111,6 +111,9 @@
 <!-- Config -->
   <section name="config">
     <tag name="check_unknown">Test de vérification '%s' inconnu</tag>
+    <tag name="unknown_profile">Profile '%s' inconnu</tag>
+    <tag name="unknown_preset">Préinitialisation '%s' inconnue</tag>
+    <tag name="error_in_preset">Erreur dans la préinitialisation '%s'</tag>
   </section>
 
 
