@@ -246,6 +246,7 @@ class ZoneCheck
 	    return false
 	end
 
+	@param.info.profile = [ cfg.name, cfg.longdesc ]
 	@param.publisher.engine.constants = cfg.constants
 
 	# Display intro (ie: domain and nameserver summary)

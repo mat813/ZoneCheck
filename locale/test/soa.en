@@ -52,8 +52,8 @@
         <title><zcconst name="registry"/> registry policy</title>
         <para>The registry requieres the SOA fields to be inside
           a defined range: the 'expire' should be between
-          <zcconst name="soa:expire:min" display="duration"/> and
-          <zcconst name="soa:expire:max" display="duration"/>, 
+          <zcconst name="soa:expire:min"  display="duration"/> and
+          <zcconst name="soa:expire:max"  display="duration"/>, 
           the 'minimum' between
           <zcconst name="soa:minimum:min" display="duration"/> and
           <zcconst name="soa:minimum:max" display="duration"/>, 
@@ -61,8 +61,8 @@
           <zcconst name="soa:refresh:min" display="duration"/> and 
           <zcconst name="soa:refresh:max" display="duration"/>, 
           and at last the 'retry' between
-          <zcconst name="soa:retry:min" display="duration"/> and
-          <zcconst name="soa:retry:max" display="duration"/>.</para>
+          <zcconst name="soa:retry:min"   display="duration"/> and
+          <zcconst name="soa:retry:max"   display="duration"/>.</para>
       </src>
     </explanation>
   </shortcut>

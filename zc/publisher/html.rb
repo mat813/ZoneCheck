@@ -359,6 +359,10 @@ EOT
 	end
 
 	def end
+	    profileinfo = if info.profile
+			  then "#{info.profile[0]} (#{info.profile[1]})"
+			  else 'N/A'
+			  end
 	    @o.puts HTML.jscript { 
 		"zc_contextmenu_setlocale(\"#{$mc.get('word:name')}\", \"#{$mc.get('word:details')}\", \"#{$mc.get('word:references')}\", \"#{$mc.get('word:elements')}\");\n" +
 		    "zc_contextmenu_start();" }
@@ -375,6 +379,7 @@ EOT
 	     src="http://www.w3.org/Icons/valid-html401"
 	     alt="Valid HTML 4.01!"></a>
     </span>
+Profile: #{profileinfo} <br>
 Statistics: #{"%d tests in %.2f sec accross %d nameservers" % [info.testcount, info.testingtime, info.nscount]} <br>
 Release: #{$zc_name}-#{CGI::escapeHTML($zc_version)} <br>
 Last generated: #{Time::now.gmtime.strftime("%Y/%m/%d %H:%M UTC")}

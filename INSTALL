@@ -2,10 +2,11 @@
 
 For the impatient: ruby ./install.rb all
 should generally works, but it is still a good idea to check
-before that sensible value will be used by calling: ruby ./install.rb
+before that sensible values are correctly defined by calling:
+ruby ./install.rb
 
 You will need Ruby to install ZoneCheck, after the installation the
-executable will be available under the named of 'zonecheck'
+executable will be available under the name of 'zonecheck'
 
 Ruby can be found as a package or port in every serious
 Unix. Otherwise, see <URL:http://www.ruby-lang.org/> and
@@ -31,7 +32,7 @@ To install ZoneCheck you need to execute the following command:
 
 where target can have one of the following values
  - all: install everything
- - cgi: install the necessary to run ZoneCheck as a web service
+ - cgi: install the necessary to run ZoneCheck as a cgi
  - cli: install the necessary to run ZoneCheck as a command line
  - doc: install extra documentation 
 
@@ -64,7 +65,7 @@ PREFIX [/usr/local]
 |      |   |-- ...              #   ...
 |      |   `-- fr		#   French version
 |      |-- locale		# Localisation files
-|      |-- test			# test set
+|      |-- test			# Test set
 |      |-- lib			# Extra libraries (NResolv, Address, ...)
 |      `-- zc			# core component
 `-- share

@@ -166,6 +166,17 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    <TD><INPUT type="checkbox" name="reportok"  value="t">
 	      report ok</TD>
 	  </TR>
+	  <tr>
+	    <td></td>
+	    <td><select name="profile">
+		<option value="automatic" selected> automatic
+		<option value="fr"                > AFNIC
+		<option value="reverse"           > Reverse
+		<option value="default"           > Default
+	      </select> profile</td>
+	    <td></td>
+	    <td></td>
+	  </tr>
 
 	  
 	  <TR><TD></TD></TR>
@@ -390,7 +401,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Oct 16 17:16:10 CEST 2003
+Last modified: Wed Nov 12 19:18:03 CET 2003
 <!-- hhmts end -->
   </BODY>
 

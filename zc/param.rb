@@ -684,8 +684,8 @@ class Param
     ## Hold information (statistics, ...)
     ##
     class Info
-	attr_reader :testingtime, :testcount, :nscount
-	attr_writer :testingtime, :testcount, :nscount
+	attr_reader :testingtime, :testcount, :nscount, :profile
+	attr_writer :testingtime, :testcount, :nscount, :profile
 
 	def initialize
 	end
@@ -694,6 +694,7 @@ class Param
 	    @testingtime	= 0.0
 	    @testcount		= 0
 	    @nscount		= 0
+	    @profile		= nil
 	end
 
 	def autoconf

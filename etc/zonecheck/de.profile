@@ -3,7 +3,8 @@
 <config>
 <!-- $Id$ -->
 
-  <profile name="de">
+  <profile name="de"
+           longdesc="delegation under .de done by DENIC registry">
     <const name="registry" value="DENIC"/>
 
     <!-- min: 0  / max: 2147483647 -->

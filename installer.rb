@@ -13,7 +13,18 @@
 require 'fileutils'
 include FileUtils
 
+
 class Installer
+    CVS_NAME	= %q$Name$
+    VERSION	= (Proc::new { 
+		       n = CVS_NAME.split[1]
+		       n = /^ZC-(.*)/.match(n) unless n.nil?
+		       n = n[1]                unless n.nil?
+		       n = n.gsub(/_/, '.')    unless n.nil?
+		       
+		       n || Time::now.strftime("snapshot-%Y%d%m")
+		   }).call
+
     def initialize
 	interpreter = ENV['SUDO_COMMAND'] || ENV['_']
 	if RUBY_PLATFORM =~ /mswin32/ 
@@ -45,6 +56,8 @@ class Installer
 	ENV['ETCDIR'    ] ||= "#{ENV['PREFIX']}/etc"
 	ENV['CGIDIR'    ] ||= "#{ENV['LIBEXEC']}/#{ENV['PROGNAME']}/cgi-bin"
 
+	ENV['VERSION'	] ||= VERSION
+
 	@installdir    = "#{ENV['LIBEXEC']}/#{ENV['PROGNAME']}"
 	@confdir       = "#{ENV['ETCDIR']}/#{ENV['PROGNAME']}#{ENV['ETCDIST']}"
 	@zc            = "#{@installdir}/zc/zc.rb"
@@ -59,7 +72,8 @@ class Installer
 
     def configure
 	puts "==> Configure"
-	[ 'www/zonecheck.conf.in' ].each { |in_filename|
+	[   'www/zonecheck.conf.in', 
+	    'contrib/distrib/rpm/zonecheck.spec.in' ].each { |in_filename|
 	    out_filename = in_filename.gsub(/\.in$/, "")
 	    puts "Generating: #{out_filename}"
 	    content = File.readlines(in_filename)
@@ -262,7 +276,7 @@ else
     }
 
     ARGV.each { |rule|
-	info |= inst.send "rule_#{rule}"
+	info |= inst.send "rule_#{rule}" 
     }
     
     inst.info if info

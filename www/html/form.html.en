@@ -33,416 +33,427 @@
 <!--                                                                      -->
 <!--                                                                  -->
 
-<HTML>
-  <HEAD>
-    <LINK rel="stylesheet" href="HTML_PATH/style/zc.css"   type="text/css">
-    <LINK rel="icon"       href="HTML_PATH/img/zc-fav.png" type="image/png">
+<html>
+  <head>
+    <link rel="stylesheet" href="HTML_PATH/style/zc.css"   type="text/css">
+    <link rel="icon"       href="HTML_PATH/img/zc-fav.png" type="image/png">
 
-    <LINK rel="start" title="ZoneCheck main page"
+    <link rel="start" title="ZoneCheck main page"
 	  type="text/html"
 	  href="HTML_PATH/">
-    <LINK rel="bookmark" title="batch form"
+    <link rel="bookmark" title="batch form"
 	  type="text/html"
 	  href="batch.html">
-    <LINK rel="bookmark" title="single zone form"
+    <link rel="bookmark" title="single zone form"
 	  type="text/html"
 	  href="form.html">
 
-    <LINK rel="help"	
+    <link rel="help"	
 	  type="text/html"
 	  href="#help">
 
-    <LINK lang="fr" title="Zonecheck"
+    <link lang="fr" title="Zonecheck"
 	  type="text/html"
 	  rel="alternate"
 	  hreflang="fr"
 	  href="HTML_PATH/fr/">
 
 
-    <SCRIPT src="HTML_PATH/js/formvalidation.js" type="text/javascript"></SCRIPT>
-    <SCRIPT type="text/javascript">
+    <script src="HTML_PATH/js/formvalidation.js" type="text/javascript"></script>
+    <script type="text/javascript">
       zc_form_setlocale("You need to give at least a zone to test.");
-    </SCRIPT>
+    </script>
 
-    <TITLE>Zone Check</TITLE>
-  </HEAD>
+    <title>Zone Check</title>
+  </head>
 
-  <BODY>
-    <P id="lang">Lang: <B>EN</B> / <A href="HTML_PATH/fr/">FR</A></P>
+  <body>
+    <p id="lang">Lang: <b>EN</b> / <a href="HTML_PATH/fr/">FR</a></p>
 
     <!-- Logo -->
-    <H1 style="text-align: center;">
-      <IMG alt="ZoneCheck" src="HTML_PATH/img/logo.png"></H1>
+    <h1 style="text-align: center;">
+      <img alt="ZoneCheck" src="HTML_PATH/img/logo.png"></h1>
 
     <!-- Propaganda -->
-    <P>The ZoneCheck program (freely available 
+    <p>The ZoneCheck program (freely available 
       <A href="http://www.zonecheck.fr/download/">here</A>
       for download) performs several tests on your zone (ie:
       domain) to ensure that it is correctly configured and can be
       safely delegated, providing a certain quality to your domain (see the
-      <A href="#benefit">benefit</A> section).</P>
+      <A href="#benefit">benefit</A> section).</p>
 
-    <P>For detailed information on how to fill this form see the 
-      <A href="#help">help</A> section.</P>
+    <p>For detailed information on how to fill this form see the 
+      <A href="#help">help</A> section.</p>
       
-    <P>If you need to perform the <I>ZoneCheck</I> operation for several
+    <p>If you need to perform the <I>ZoneCheck</I> operation for several
       domains, you may find the <A href="batch.html">batch</A> form more
-      convenient.</P>
+      convenient.</p>
 
     <!-- Warning about waiting time -->
     <BLOCKQUOTE class="zc-warning">
-      <P><img src="HTML_PATH/img/notepad.png" align="left">
+      <p><img src="HTML_PATH/img/notepad.png" align="left">
       The time required to completely verify a zone can take
-      from 30 seconds up to <B>5 minutes</B> depending on the network
+      from 30 seconds up to <b>5 minutes</b> depending on the network
       speed of the server being accessed. 
       If it takes more than a minute it generally means we are
       encountering problems accessing your nameservers 
-      (configuration error, firewall, ...) and are waiting for timeout.</P>
+      (configuration error, firewall, ...) and are waiting for timeout.</p>
     </BLOCKQUOTE>
     
     <!-- Form -->
-    <FORM name="zcform" method="GET" action="HTML_PATH/cgi-bin/zc.cgi"
+    <form name="zcform" method="GET" action="HTML_PATH/cgi-bin/zc.cgi"
           onsubmit="return zc_form_validate(this)">
       <!-- Basic information -->
-      <H2>Zone information</H2>
-      <TABLE class="zc-domain">
-	  <TR class="zc-zone">
-	    <TD><IMG src="HTML_PATH/img/zone.png" alt="">Zone</TD>
-	    <TD colspan="4">
-	      <INPUT name="zone" type="text" size="65" value=""></TD>
-	  </TR>
+      <h2>Zone information</h2>
+      <table class="zc-domain">
+	  <tr class="zc-zone">
+	    <td><img src="HTML_PATH/img/zone.png" alt="">Zone</td>
+	    <td colspan="4">
+	      <input name="zone" type="text" size="65" value=""></td>
+	  </tr>
 
-	  <TR class="zc-ns-prim">
-	    <TD><IMG src="HTML_PATH/img/primary.png" alt="">Primary</TD>
-	    <TD><INPUT name="ns0"  type="text" size=24 value=""></TD>
-	    <TD></TD>
-	    <TD>IPs</TD>
-	    <TD><INPUT name="ips0" type="text" size=35 value=""></TD>
-	  </TR>
-	  <TR class="zc-ns-sec">
-	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns1"  type="text" size=24 value=""></TD>
-	    <TD></TD>
-	    <TD>IPs</TD>
-	    <TD><INPUT name="ips1" type="text" size=35 value=""></TD>
-	  </TR>
-	  <TR class="zc-ns-sec">
-	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns2"  type="text" size=24 value=""></TD>
-	    <TD></TD>
-	    <TD>IPs</TD>
-	    <TD><INPUT name="ips2" type="text" size=35 value=""></TD>
-	  </TR>
-	  <TR class="zc-ns-sec">
-	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns3"  type="text" size=24 value=""></TD>
-	    <TD></TD>
-	    <TD>IPs</TD>
-	    <TD><INPUT name="ips3" type="text" size=35 value=""></TD>
-	  </TR>
-	  <TR class="zc-ns-sec">
-	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns4"  type="text" size=24 value=""></TD>
-	    <TD></TD>
-	    <TD>IPs</TD>
-	    <TD><INPUT name="ips4" type="text" size=35 value=""></TD>
-	  </TR>
-	  <TR class="zc-ns-sec">
-	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns5"  type="text" size=24 value=""></TD>
-	    <TD></TD>
-	    <TD>IPs</TD>
-	    <TD><INPUT name="ips5" type="text" size=35 value=""></TD>
-	  </TR>
-	  <TR class="zc-ns-sec">
-	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns6"  type="text" size=24 value=""></TD>
-	    <TD></TD>
-	    <TD>IPs</TD>
-	    <TD><INPUT name="ips6" type="text" size=35 value=""></TD>
-	  </TR>
-	  <TR class="zc-ns-sec">
-	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns7"  type="text" size=24 value=""></TD>
-	    <TD></TD>
-	    <TD>IPs</TD>
-	    <TD><INPUT name="ips7" type="text" size=35 value=""></TD>
-	  </TR>
+	  <tr class="zc-ns-prim">
+	    <td><img src="HTML_PATH/img/primary.png" alt="">Primary</td>
+	    <td><input name="ns0"  type="text" size=24 value=""></td>
+	    <td></td>
+	    <td>IPs</td>
+	    <td><input name="ips0" type="text" size=35 value=""></td>
+	  </tr>
+	  <tr class="zc-ns-sec">
+	    <td><img src="HTML_PATH/img/secondary.png" alt="">Secondary</td>
+	    <td><input name="ns1"  type="text" size=24 value=""></td>
+	    <td></td>
+	    <td>IPs</td>
+	    <td><input name="ips1" type="text" size=35 value=""></td>
+	  </tr>
+	  <tr class="zc-ns-sec">
+	    <td><img src="HTML_PATH/img/secondary.png" alt="">Secondary</td>
+	    <td><input name="ns2"  type="text" size=24 value=""></td>
+	    <td></td>
+	    <td>IPs</td>
+	    <td><input name="ips2" type="text" size=35 value=""></td>
+	  </tr>
+	  <tr class="zc-ns-sec">
+	    <td><img src="HTML_PATH/img/secondary.png" alt="">Secondary</td>
+	    <td><input name="ns3"  type="text" size=24 value=""></td>
+	    <td></td>
+	    <td>IPs</td>
+	    <td><input name="ips3" type="text" size=35 value=""></td>
+	  </tr>
+	  <tr class="zc-ns-sec">
+	    <td><img src="HTML_PATH/img/secondary.png" alt="">Secondary</td>
+	    <td><input name="ns4"  type="text" size=24 value=""></td>
+	    <td></td>
+	    <td>IPs</td>
+	    <td><input name="ips4" type="text" size=35 value=""></td>
+	  </tr>
+	  <tr class="zc-ns-sec">
+	    <td><img src="HTML_PATH/img/secondary.png" alt="">Secondary</td>
+	    <td><input name="ns5"  type="text" size=24 value=""></td>
+	    <td></td>
+	    <td>IPs</td>
+	    <td><input name="ips5" type="text" size=35 value=""></td>
+	  </tr>
+	  <tr class="zc-ns-sec">
+	    <td><img src="HTML_PATH/img/secondary.png" alt="">Secondary</td>
+	    <td><input name="ns6"  type="text" size=24 value=""></td>
+	    <td></td>
+	    <td>IPs</td>
+	    <td><input name="ips6" type="text" size=35 value=""></td>
+	  </tr>
+	  <tr class="zc-ns-sec">
+	    <td><img src="HTML_PATH/img/secondary.png" alt="">Secondary</td>
+	    <td><input name="ns7"  type="text" size=24 value=""></td>
+	    <td></td>
+	    <td>IPs</td>
+	    <td><input name="ips7" type="text" size=35 value=""></td>
+	  </tr>
       </TABLE>
 
       <!-- Buttons -->
-      <INPUT type="submit" value=" Check! ">
-      <SCRIPT>
-	document.writeln('<INPUT type="button" value=" Clear "  onClick="zc_form_clear(this.form)">')
-      </SCRIPT>
+      <input type="submit" value=" Check! ">
+      <script>
+	document.writeln('<input type="button" value=" Clear "  onClick="zc_form_clear(this.form)">')
+      </script>
 
       <!-- Options -->
-      <H2>Options</H2>
-      <TABLE class="zc-options">
-	<TR class="zc-title"><TD colspan="4">Output</TD></TR>
-	  <TR>
-	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="intro"    value='t' checked>
-	      zone summary</TD>
-	    <TD></TD>
-	    <TD></TD>
-	  </TR>
-	  <TR>
-	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="testname" value='t'>
-	      test name</TD>
-	    <TD><INPUT type="checkbox" name="explain"  value='t' checked>
-	      explanations</TD>
-	    <TD><INPUT type="checkbox" name="details"  value='t' checked>
-	      details</TD>
-	  </TR>
-	  <TR>
-	    <TD></TD>
-	    <TD><INPUT type="radio" name="progress" value='counter' checked>
-	      progress bar</TD>
-	    <TD><INPUT type="radio" name="progress" value='testdesc'>
-	      description</TD>
-	    <TD><INPUT type="radio" name="progress" value=''>
-	      nothing</TD>
-	  </TR>
-	  <TR>
-	    <TD></TD>
-	    <TD><SELECT name="report">
-		<OPTION value="byseverity" SELECTED> by severity
-		<OPTION value="byhost"             > by host
-	      </SELECT>
-	      report</TD>
-	    <TD><SELECT name="format">
-		<OPTION value="html" SELECTED> HTML
-		<OPTION value="text"         > Text
-	      </SELECT>
-	      format</TD>
-	    <TD><SELECT name="lang">
-		<OPTION value="en" SELECTED> English
-		<OPTION value="fr"         > Fran&ccedil;ais
-	      </SELECT>
-	      language</TD>
-	  </TR>	    
+      <h2>Options</h2>
+      <table class="zc-options">
+	<tr class="zc-title"><td colspan="4">Output</td></tr>
+	  <tr>
+	    <td></td>
+	    <td><input type="checkbox" name="intro"    value='t' checked>
+	      zone summary</td>
+	    <td></td>
+	    <td></td>
+	  </tr>
+	  <tr>
+	    <td></td>
+	    <td><input type="checkbox" name="testname" value='t'>
+	      test name</td>
+	    <td><input type="checkbox" name="explain"  value='t' checked>
+	      explanations</td>
+	    <td><input type="checkbox" name="details"  value='t' checked>
+	      details</td>
+	  </tr>
+	  <tr>
+	    <td></td>
+	    <td><input type="radio" name="progress" value='counter' checked>
+	      progress bar</td>
+	    <td><input type="radio" name="progress" value='testdesc'>
+	      description</td>
+	    <td><input type="radio" name="progress" value=''>
+	      nothing</td>
+	  </tr>
+	  <tr>
+	    <td></td>
+	    <td><select name="report">
+		<option value="byseverity" selected> by severity
+		<option value="byhost"             > by host
+	      </select>
+	      report</td>
+	    <td><select name="format">
+		<option value="html" selected> HTML
+		<option value="text"         > Text
+	      </select>
+	      format</td>
+	    <td><SELECT name="lang">
+		<option value="en" selected> English
+		<option value="fr"         > Fran&ccedil;ais
+	      </select>
+	      language</td>
+	  </tr>	    
 
-	  <TR><TD></TD></TR>
-	  <TR class="zc-title"><TD colspan="4">Error report</TD></TR>
-	  <TR>
-	    <TD></TD>
-	    <TD><INPUT type="radio" name="errorlvl" value="" CHECKED>
-	      default error</TD>
-	    <TD><INPUT type="radio" name="errorlvl" value="allfatal">
-	      all fatals</TD>
-	    <TD><INPUT type="radio" name="errorlvl" value="allwarning">
-	      all warnings</TD>
-	  </TR>
-	  <TR>
-	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="dontstop" value="nostop">
-	      don't stop on fatal</TD>
-	    <TD><INPUT type="checkbox" name="fatalonly" value="t">
-	      fatal only</TD>
-	    <TD><INPUT type="checkbox" name="reportok"  value="t">
-	      report ok</TD> 
-	  </TR>
+	  <tr><td></td></tr>
+	  <tr class="zc-title"><td colspan="4">Error report</td></tr>
+	  <tr>
+	    <td></td>
+	    <td><input type="radio" name="errorlvl" value="" CHECKED>
+	      default error</td>
+	    <td><input type="radio" name="errorlvl" value="allfatal">
+	      all fatals</td>
+	    <td><input type="radio" name="errorlvl" value="allwarning">
+	      all warnings</td>
+	  </tr>
+	  <tr>
+	    <td></td>
+	    <td><input type="checkbox" name="dontstop" value="nostop">
+	      don't stop on fatal</td>
+	    <td><input type="checkbox" name="fatalonly" value="t">
+	      fatal only</td>
+	    <td><input type="checkbox" name="reportok"  value="t">
+	      report ok</td> 
+	  </tr>
+	  <tr>
+	    <td></td>
+	    <td><select name="profile">
+		<option value="automatic" selected> automatic
+		<option value="fr"                > AFNIC
+		<option value="reverse"           > Reverse
+		<option value="default"           > Default
+	      </select> profile</td>
+	    <td></td>
+	    <td></td>
+	  </tr>
 
-	  <TR><TD></TD></TR>
-	  <TR class="zc-title"><TD colspan="4">Extra tests performed</TD></TR>
-	  <TR>
-	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="chkmail" value='t' checked>
-	      mail delivery</TD>
-	    <TD><INPUT type="checkbox" name="chkzone" value='t' checked>
-	      zone transfer</TD>
-	    <TD><INPUT type="checkbox" name="chkrir" value='t' checked>
-	      <ACRONYM title="Regional Internet Registry">RIR</ACRONYM> databases</TD>
-	  </TR>
+	  <tr><td></td></tr>
+	  <tr class="zc-title"><td colspan="4">Extra tests performed</td></tr>
+	  <tr>
+	    <td></td>
+	    <td><input type="checkbox" name="chkmail" value='t' checked>
+	      mail delivery</td>
+	    <td><input type="checkbox" name="chkzone" value='t' checked>
+	      zone transfer</td>
+	    <td><input type="checkbox" name="chkrir" value='t' checked>
+	      <acronym title="Regional Internet Registry">RIR</acronym> databases</td>
+	  </tr>
 
-	  <TR><TD></TD></TR>
-	  <TR class="zc-title"><TD colspan="4">Transport layer</TD></TR>
-	  <TR>
-	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="transp3" value="ipv4" checked>
-	      <ACRONYM title="Internet Protocol version 4">IPv4</ACRONYM></TD>
-	    <TD><INPUT type="checkbox" name="transp3" value="ipv6" checked>
-	      <A href="http://www.ipv6.org/"><ACRONYM title="Internet Protocol version 6">IPv6</ACRONYM></A></TD>
-	  </TR>
-	  <TR>
-	    <TD></TD>
-	    <TD><INPUT type="radio" name="transp4" value="std" CHECKED>
-	      <ACRONYM title="UDP with fallback on TCP for truncated answers">STD</ACRONYM></TD>
-	    <TD><INPUT type="radio" name="transp4" value="udp">
-	      <ACRONYM title="User Datagram Protocol">UDP</ACRONYM></TD>
-	    <TD><INPUT type="radio" name="transp4" value="tcp">
-	      <ACRONYM title="Transport Control Protocol">TCP</ACRONYM></TD>
-	  </TR>
-      </TABLE>
-    </FORM>
+	  <tr><td></td></tr>
+	  <tr class="zc-title"><td colspan="4">Transport layer</td></tr>
+	  <tr>
+	    <td></td>
+	    <td><input type="checkbox" name="transp3" value="ipv4" checked>
+	      <acronym title="Internet Protocol version 4">IPv4</acronym></td>
+	    <td><input type="checkbox" name="transp3" value="ipv6" checked>
+	      <A href="http://www.ipv6.org/"><acronym title="Internet Protocol version 6">IPv6</acronym></A></td>
+	  </tr>
+	  <tr>
+	    <td></td>
+	    <td><input type="radio" name="transp4" value="std" CHECKED>
+	      <acronym title="UDP with fallback on TCP for truncated answers">STD</acronym></td>
+	    <td><input type="radio" name="transp4" value="udp">
+	      <acronym title="User Datagram Protocol">UDP</acronym></td>
+	    <td><input type="radio" name="transp4" value="tcp">
+	      <acronym title="Transport Control Protocol">TCP</acronym></td>
+	  </tr>
+      </table>
+    </form>
     
 
     <!-- Propaganda -->
-    <H2 id="benefit">Benefit</H2>
-    <P> Among the tests performed you can find checking for: </P>
-    <UL>
-      <LI>authoritative nameserver for your zone, ensuring you will
-	be able to use your domain from outside your network.</LI>
-      <LI>correct list of secondary nameservers, so that if your
+    <h2 id="benefit">Benefit</h2>
+    <p> Among the tests performed you can find checking for: </p>
+    <ul>
+      <li>authoritative nameserver for your zone, ensuring you will
+	be able to use your domain from outside your network.</li>
+      <li>correct list of secondary nameservers, so that if your
 	primary nameserver is temporarily unreachable, you will still
-	be visible on the internet;</LI>
-      <LI>check for mail delivery, so that you don't become the 
+	be visible on the internet;</li>
+      <li>check for mail delivery, so that you don't become the 
 	prey of spammers and become
-	<A href="http://www.mail-abuse.org/">blacklisted</A></LI>
+	<a href="http://www.mail-abuse.org/">blacklisted</a></li>
     </UL>
 
 
     <!-- Help -->
-    <H2 id="help">Help</H2>
-    <H3>Form</H3>
-    <TABLE rules="rows" class="zc-help">
-	<TR><TD class="zc-title" colspan="2">Zone Information</TD></TR>
-	<TR>
-	  <TD class="zc-key">Zone</TD>
-	  <TD>The domain (ie: zone) that should be tested (ie: the domain name
-	    that you want to register).</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">Primary</TD>
-	  <TD>The nameserver that is considered as primary (the one in 
-	    the SOA record if it is public).</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">Secondary</TD>
-	  <TD>The secondary nameservers (all the NS records associated
-	    with the zone, except for the one listed above).</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">IPs</TD>
-	  <TD>List of IP addresses associated with the nameserver.
-	    <UL>
-	      <LI>they are only required if they can't be resolved
-		(ie: they are in the zone that you want to register).</LI>
-	      <LI>if you have several addresses you must use a space or
-		a comma as the separator.</LI>
-	      <LI>the form accepts IPv4 and IPv6 addresses.</LI>
-	    </UL>
-	  </TD>
-	</TR>
+    <h2 id="help">Help</h2>
+    <h3>Form</h3>
+    <table rules="rows" class="zc-help">
+	<tr><td class="zc-title" colspan="2">Zone Information</td></tr>
+	<tr>
+	  <td class="zc-key">Zone</td>
+	  <td>The domain (ie: zone) that should be tested (ie: the domain name
+	    that you want to register).</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">Primary</td>
+	  <td>The nameserver that is considered as primary (the one in 
+	    the SOA record if it is public).</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">Secondary</td>
+	  <td>The secondary nameservers (all the NS records associated
+	    with the zone, except for the one listed above).</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">IPs</td>
+	  <td>List of IP addresses associated with the nameserver.
+	    <ul>
+	      <li>they are only required if they can't be resolved
+		(ie: they are in the zone that you want to register).</li>
+	      <li>if you have several addresses you must use a space or
+		a comma as the separator.</li>
+	      <li>the form accepts IPv4 and IPv6 addresses.</li>
+	    </ul>
+	  </td>
+	</tr>
 
-	<TR><TD class="zc-title" colspan="2">Options: Output</TD></TR>
-	<TR>
-	  <TD class="zc-key">zone summary</TD>
-	  <TD>Includes a summary about the zone and its nameservers in 
-	    the generated report</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">test name</TD>
-	  <TD>Includes the name of the test that has been performed
-	    when reporting errors</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">explanations</TD>
-	  <TD>Includes an explanation (when the test failed) about 
-	    the purpose of the test and why you should fix it.</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">details</TD>
-	  <TD>Includes details (when the test failed) about 
-	    the culprit elements.</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">progress bar</TD>
-	  <TD>Display information about the test progression 
+	<tr><td class="zc-title" colspan="2">Options: Output</td></tr>
+	<tr>
+	  <td class="zc-key">zone summary</td>
+	  <td>Includes a summary about the zone and its nameservers in 
+	    the generated report</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">test name</td>
+	  <td>Includes the name of the test that has been performed
+	    when reporting errors</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">explanations</td>
+	  <td>Includes an explanation (when the test failed) about 
+	    the purpose of the test and why you should fix it.</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">details</td>
+	  <td>Includes details (when the test failed) about 
+	    the culprit elements.</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">progress bar</td>
+	  <td>Display information about the test progression 
 	    using a a progress bar (<I>require javascript and
-	    Mozilla or IE5+ for correct rendering</I>).</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">description</TD>
-	  <TD>Give a short description of the test when it is performed.</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">nothing</TD>
-	  <TD>Don't display information about the test progression.</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">report</TD>
-	  <TD>Select the type of generated report you want.</TD>
-	</TR> 
-	<TR>
-	  <TD class="zc-key">format</TD>
-	  <TD>Select the format in which you want the report 
-	    (HTML or plain text).</TD>
-	</TR> 
-	<TR>
-	  <TD class="zc-key">language</TD>
-	  <TD>Select the language that you want the report generated in.</TD>
-	</TR> 
+	    Mozilla or IE5+ for correct rendering</I>).</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">description</td>
+	  <td>Give a short description of the test when it is performed.</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">nothing</td>
+	  <td>Don't display information about the test progression.</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">report</td>
+	  <td>Select the type of generated report you want.</td>
+	</tr> 
+	<tr>
+	  <td class="zc-key">format</td>
+	  <td>Select the format in which you want the report 
+	    (HTML or plain text).</td>
+	</tr> 
+	<tr>
+	  <td class="zc-key">language</td>
+	  <td>Select the language that you want the report generated in.</td>
+	</tr> 
 
-	<TR><TD class="zc-title" colspan="2">Options: Error report</TD></TR>
-	<TR>
-	  <TD class="zc-key">default error</TD>
-	  <TD>Errors are reported with the default severity associated 
-	    with them.</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">all fatals</TD>
-	  <TD>All errors are considered fatals.</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">all warnings</TD>
-	  <TD>All errors are considered warnings.</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">don't stop on fatal</TD>
-	  <TD>Keep going even after encountering a fatal error
-	    (<I>this could lead to some unexpected results</I>).</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">report ok</TD>
-	  <TD>Report test that passed.</TD>
-	</TR>
+	<tr><td class="zc-title" colspan="2">Options: Error report</td></tr>
+	<tr>
+	  <td class="zc-key">default error</td>
+	  <td>Errors are reported with the default severity associated 
+	    with them.</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">all fatals</td>
+	  <td>All errors are considered fatals.</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">all warnings</td>
+	  <td>All errors are considered warnings.</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">don't stop on fatal</td>
+	  <td>Keep going even after encountering a fatal error
+	    (<I>this could lead to some unexpected results</I>).</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">report ok</td>
+	  <td>Report test that passed.</td>
+	</tr>
 
-	<TR><TD class="zc-title" colspan="2">Options: Extra tests performed</TD></TR>
-	<TR>
-	  <TD class="zc-key">mail delivery</TD>
-	  <TD>Perform extra checking on mail delivery for typical 
+	<tr><td class="zc-title" colspan="2">Options: Extra tests performed</td></tr>
+	<tr>
+	  <td class="zc-key">mail delivery</td>
+	  <td>Perform extra checking on mail delivery for typical 
 	    mail accounts (hostmaster, postmaster, ...) associated with
-	    domain names.</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">zone transfer</TD>
-	  <TD>Perform additional tests on the zone retrieved after
-	    a <I>zone transfer</I>.</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">RIR databases</TD>
-	  <TD>Check that IP addresses used are registered in the RIR
-	    databases</TD>
-	</TR>
+	    domain names.</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">zone transfer</td>
+	  <td>Perform additional tests on the zone retrieved after
+	    a <I>zone transfer</I>.</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">RIR databases</td>
+	  <td>Check that IP addresses used are registered in the RIR
+	    databases</td>
+	</tr>
 
-	<TR><TD class="zc-title" colspan="2">Options: Transport layer</TD></TR>
-	<TR>
-	  <TD class="zc-key">IPv4, IPv6</TD>
-	  <TD>Select the routing layer (if none are selected it will
-	    default to IPv4 and IPv6).</TD>
-	</TR>
-	<TR>
-	  <TD class="zc-key">STD, UDP, TCP</TD>
-	  <TD>Select the transport layer you want for interrogating
-	    your nameservers.</TD>
-	</TR>
-    </TABLE>
+	<tr><td class="zc-title" colspan="2">Options: Transport layer</td></tr>
+	<tr>
+	  <td class="zc-key">IPv4, IPv6</td>
+	  <td>Select the routing layer (if none are selected it will
+	    default to IPv4 and IPv6).</td>
+	</tr>
+	<tr>
+	  <td class="zc-key">STD, UDP, TCP</td>
+	  <td>Select the transport layer you want for interrogating
+	    your nameservers.</td>
+	</tr>
+    </table>
 
-    <H3>Results</H3>
-    <UL>
-      <LI>the word <I>generic</I> means that the error is eitheir
-	unrelated or present on all nameservers,</LI>
-      <LI>when an error is between [brackets], this means that the test
-	failed for external reasons. The reasons are displayed next to it.</LI>
-    </UL>
+    <h3>Results</h3>
+    <ul>
+      <li>the word <i>generic</i> means that the error is eitheir
+	unrelated or present on all nameservers,</li>
+      <li>when an error is between [brackets], this means that the test
+	failed for external reasons. The reasons are displayed next to it.</li>
+    </ul>
 
 
     <!-- What / Who / When -->
-    <HR>
-    <SPAN style="float: right;">
+    <hr>
+    <span style="float: right;">
       <a href="http://jigsaw.w3.org/css-validator/check/referer">
 	<img style="border:0;width:88px;height:31px"
 	     src="http://jigsaw.w3.org/css-validator/images/vcss" 
@@ -451,17 +462,17 @@
 	<img style="border:0;width:88px;height:31px"
 	     src="http://www.w3.org/Icons/valid-html401"
 	     alt="Valid HTML 4.01!"></a>
-    </SPAN>
+    </span>
 
-Release: $Name$ <BR>
+Release: $Name$ <br>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Nov  3 10:47:20 CET 2003
+Last modified: Thu Nov 13 10:54:27 CET 2003
 <!-- hhmts end -->
-  </BODY>
+  </body>
 
 <!-- Local Variables: -->
 <!-- mode: html       -->
 <!-- End:             -->
 
-</HTML>
+</html>

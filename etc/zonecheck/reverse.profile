@@ -3,7 +3,8 @@
 <config>
 <!-- $Id$ -->
 
-  <profile name="reverse">
+  <profile name="reverse"
+           longdesc="default profile for checking reverse delegations">
     <const name="registry" value="reverse"/>
 
     <rules class="generic">

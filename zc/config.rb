@@ -46,6 +46,7 @@ class Config
     E_TEST		= 'test'	#      .
 
     A_NAME		= 'name'	# XML attributes
+    A_LONGDESC		= 'longdesc'	#      .
     A_VALUE		= 'value'	#      .
     A_ZONE		= 'zone'	#      .
     A_PROFILE		= 'profile'	#      .
@@ -195,18 +196,20 @@ class Config
     end
 
     class Profile
-	attr_reader :name, :rules, :constants
+	attr_reader :name, :rules, :constants, :longdesc
 
 	def validate(testmanager)
 	    @rules.each_value { |rules| rules.validate(testmanager) }
 	end
 
-	def initialize(name, constants, rules)
-	    @name, @constants, @rules = name, constants, rules
+	def initialize(name, constants, rules, longdesc)
+	    @name, @constants, @rules, @longdesc = 
+		name, constants, rules, longdesc
 	end
 
 	def self.from_xmlprofile(xmlprofile, parent=nil)
 	    profilename	= xmlprofile.attributes[A_NAME]
+	    longdesc	= xmlprofile.attributes[A_LONGDESC]
 	    constants	= Constants::new(parent.constants)
 	    rules	= {}
 
@@ -223,7 +226,7 @@ class Config
 		rules[klass] = parse_block(element)
 	    }
 
-	    self::new(profilename, constants, rules)
+	    self::new(profilename, constants, rules, longdesc)
 	end
 
 	#-- [private] -----------------------------------------------
@@ -297,7 +300,7 @@ class Config
 	}
 
 	# Create a fake configuration
-	fakeprofile = "<#{E_PROFILE} #{A_NAME}=\"override\">\n"
+	fakeprofile = "<#{E_PROFILE} #{A_NAME}=\"override\" #{A_LONGDESC}=\"profile generated to only check a particular set of tests\">\n"
 	TestSeqOrder.each { |family|
 	    next unless rules[family]
 	    fakeprofile += "<#{E_RULES} #{A_CLASS}=\"#{family}\">\n"

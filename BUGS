@@ -13,9 +13,6 @@ The HTML documentation is in an early stage.
 2003-02-27	sdalu@nic.fr
 - When in batch mode, an error in one domain, stop the checking of others
 
-2003-03-25	sdalu@nic.fr
-- pl. failed for dig @ns3.ikp.pl ns3.ikp.pl cname
-
 2003-??-??
 - check for oncontextmenu before using it (otherwise js error)
 - problem with progress bar on macosX (ie 5.2)

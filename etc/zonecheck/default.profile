@@ -3,7 +3,8 @@
 <config>
 <!-- $Id$ -->
 
-  <profile name="default">
+  <profile name="default"
+           longdesc="default profile for checking delegations">
     <const name="registry" value="default"/>
 
     <rules class="generic">

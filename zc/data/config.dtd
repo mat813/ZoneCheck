@@ -69,4 +69,4 @@
 <!ATTLIST rules     class      (generic|address|nameserver|extra) #REQUIRED>
 
 <!ATTLIST profile   name       CDATA #REQUIRED>
-
+<!ATTLIST profile   longdesc   CDATA #REQUIRED>

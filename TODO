@@ -35,7 +35,6 @@ version = 3.0.0
 	Cachemanager destroy method (and use it) (++)
 	Finish implementing Gtk publisher
 	Try zonecheck with the native thread ruby implementation
-	Escape HTML code
 	Remove the need of a tagonly_supported in Report
 	Finish implementing nresolv (Bitstring, DNSSEC)
 	NResolv library able to inspect all the Sections (++++)
