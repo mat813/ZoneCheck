@@ -53,7 +53,7 @@ class Config
     def self.cfgfile(configfile)
 	if configfile =~ /^\// 
 	then configfile
-	else ZC_CONFIG_DIR + "/" + configfile
+	else $zc_config_dir + "/" + configfile
 	end
     end
 

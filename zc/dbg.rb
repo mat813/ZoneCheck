@@ -49,6 +49,7 @@ class DBG
     TESTS        = 0x0010	# Tests performed
     AUTOCONF     = 0x0100       # Autoconf
     TESTDBG      = 0x0200	# Debugging messages from tests
+    INIT         = 0x0400	# Initialisation
     DBG          = 0x0800	# Debugger itself
     CACHE_INFO   = 0x1000	# Information about cached object
 
@@ -67,6 +68,7 @@ class DBG
 	TESTS		=> 'tests',
 	AUTOCONF	=> 'autoconf',
 	TESTDBG		=> 'testdbg',
+	INIT		=> 'init',
 	DBG		=> 'dbg',
 	CACHE_INFO	=> 'cache'
     }

@@ -176,14 +176,6 @@ require 'zonecheck'
 
 
 #
-# Version / Name / Contact
-#
-$zc_version	= ZC_VERSION
-$zc_name	= ZC_NAME
-$zc_contact	= ZC_CONTACT
-
-
-#
 # Debugger object
 #  (earlier initialization, can also be set via input interface)
 #
@@ -247,11 +239,39 @@ end
 
 
 #
+# Version / Name / Contact
+#
+$zc_version	= ZC_VERSION
+$zc_name	= ZC_NAME
+$zc_contact	= ZC_CONTACT
+
+
+#
+# Config directory
+# 
+$zc_config_dir	= ZC_CONFIG_DIR
+
+
+#
 # Load eventual custom version
 #
 begin 
     require 'zc-custom'
 rescue LoadError
+end
+
+
+#
+# Adjustement for zc-custom
+#
+begin
+    hintfile = "#{$zc_config_dir}/rootservers"
+    if $nresol_rootserver_hintfile != hintfile
+	NResolv::DNS::RootServer.current = NResolv::DNS::RootServer.from_hintfile(hintfile)
+    end
+rescue YAML::ParseError, SystemCallError => e
+    $dbg.msg(DBG::INIT, 
+	    "Unable to read/parse rootserver hint file (#{e})")
 end
 
 

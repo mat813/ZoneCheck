@@ -75,6 +75,10 @@ class NResolv
 			       end
 			       rootserver
 			   }).call
+
+	    @@current = Default
+	    def self.current=(rs)	; @@current = rs	; end
+	    def self.current		; @@current		; end
 	end
 
 
