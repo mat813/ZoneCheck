@@ -27,17 +27,125 @@ module Publisher
 	## the tests being performed.
 	##
 	class Progress
-	    class PBar < TTY::ProgressBar
-		def unit            ; $mc.get("pgr_speed_unit") ; end
-		def unit_cvt(value) ; value                     ; end
+	    class PBar
+		EraseEndLine            = "\033[K" 
+		HideCursor              = "\033[?25l"
+		ShowCursor              = "\033[?25h"
+		BarSize			= 37
+
+		def initialize(output, precision)
+		    @output     = output
+		    @precision  = precision
+		    @unit	= $mc.get("pgr_speed_unit")
+		    @mutex	= Mutex::new
+		    @updater	= nil
+		end
+		
+		def start(length)
+		    @length     = length
+		    @starttime  = @lasttime = Time.now
+		    @totaltime  = 0
+		    @processed	= 0
+		    @tick       = 0
+
+		    @output.print HideCursor, barstr
+
+		    @updater	= Thread::new { 
+			last_processed = nil
+			while true
+			    sleep(@precision)
+			    nowtime      = Time.now
+			    
+			    @mutex.synchronize {
+				@totaltime      = if @lasttime == @starttime
+						  then 0.0
+						  else nowtime - @starttime
+						  end
+				@lasttime       = nowtime
+
+				if @processed != last_processed
+				    @tick += 1
+				    last_processed = @processed
+				end
+
+				@output.print "\r", barstr, EraseEndLine
+				@output.flush
+			    }
+			end
+		    }
+		end
+		
+		def processed(size)
+		    @mutex.synchronize { @processed  += size }
+		end
+
+		def done
+		    @mutex.synchronize { @updater.kill }
+		    @output.print "\r#{EraseEndLine}"
+		    @output.flush
+		end
+		
+		def finish
+		    @output.print ShowCursor
+		end
+                
+		protected
+		def barstr
+		    speed	= if @totaltime == 0.0
+				  then -1.0
+				  else @processed / @totaltime
+				  end
+		    speed_s	= if speed < 0.0 
+				  then "--.--%s" % [ @unit ]
+				  else "%7.2f%s" % [ speed, @unit ]
+				  end
+		    
+		    if @length > 0 then
+			pct	= 100 * @processed / @length
+			eta	= if speed < 0.0 
+				  then -1
+				  else ((@length-@processed) / speed).to_i
+				  end
+			pct_s	= "%2d%%" % pct
+			eta_s	= "ETA " + sec_to_timestr(eta)
+			bar_s	= "=" * (BarSize * pct / 100) + ">"
+			
+			"%-4s[%-#{BarSize}.#{BarSize}s] %-11s %10s %12s" % [
+			    pct_s, bar_s, @processed, speed_s, eta_s ]
+		    else
+			ind	= @tick % (BarSize * 2 - 6)
+			pos	= if ind < BarSize - 2
+				  then ind + 1;
+				  else BarSize - (ind - BarSize + 5)
+				  end
+			bar_s	= " " * BarSize
+			bar_s[pos-1,3] = '<=>'
+			
+			"    [%s] %-11s %10s" % [ bar_s, @processed, speed_s ]
+		    end
+		end
+		
+		private
+		def sec_to_timestr(sec)
+		    return "--:--" if sec < 0
+		    
+		    hrs = sec / 3600; sec %= 3600;
+		    min = sec / 60;   sec %= 60;
+		    
+		    if (hrs > 0)
+		    then sprintf "%2d:%02d:%02d", hrs, min, sec
+		    else sprintf "%2d:%02d", min, sec
+		    end
+		end
 	    end
+
 
 	    # Initialization
 	    def initialize(publisher)
 		@publisher  = publisher
 		@o          = publisher.output
 		@counter    = if @publisher.rflag.counter && @o.tty?
-			      then PBar::new(@o, 1, PBar::DisplayNoFinalStatus)
+			      then PBar::new(@o, 1)
 			      else nil
 			      end
 	    end
@@ -49,12 +157,12 @@ module Publisher
 	    
 	    # Finished on success
 	    def done(desc)
-		@counter.done(desc)	if @counter
+		@counter.done		if @counter
 	    end
 	    
 	    # Finished on failure
 	    def failed(desc)
-		@counter.failed(desc)	if @counter
+		@counter.done		if @counter
 	    end
 	    
 	    # Finish (finalize) output
@@ -139,7 +247,6 @@ module Publisher
 		@o.puts "  #{severity}: #{res.tag}"
 		@o.puts "  #{res.desc.msg}"
 	    end
-
 	end
 
 
@@ -177,7 +284,7 @@ module Publisher
 		xpl_lst.each { |t, h, b|
 		    tag = $mc.get("xpltag_#{t}")
 		    @o.puts " | #{tag}: #{h}"
-		    b.each { |l| @o.puts " | #{l}" }
+		    b.each { |l| @o.puts " |  #{l}" }
 		}
 		@o.puts " `----- -- -- - -  -"
 	    end

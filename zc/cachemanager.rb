@@ -20,51 +20,13 @@
 
 require 'sync'
 
+require 'cache'
+
 ##
 ## The CacheManager
 ##
 class CacheManager
     Nothing = Object::new
-
-    ##
-    ## The CacheAttribute module add attribut caching capability when 
-    ## imported by a class
-    ##
-    ## WARN: the class should define attrcache_mutex as Sync
-    ##
-    module CacheAttribute
-	def cache_attribute(attr, args=nil, force=false)
-	    return yield if $dbg.enabled?(DBG::NOCACHE)
-
-	    attribute = case args
-			when NilClass  then attr
-			when Array     then case args.length
-					    when 0 then attr
-					    when 1 then "#{attr}[args[0]]"
-					    else        "#{attr}[args]"
-					    end
-			else           "#{attr}[args]"
-			end
-	    
-	    dbg_attr = "#{attribute}(#{args})"
-
-	    @attrcache_mutex.synchronize {
-		if force || (r = instance_eval("#{attribute}")).nil?
-		    r = yield
-		    r = CacheManager::Nothing if r.nil?
-		    instance_eval("#{attribute} = r")
-		    $dbg.msg(DBG::CACHE_INFO,
-			     "computed(#{__id__}): #{dbg_attr}=#{r}")
-		else
-		    $dbg.msg(DBG::CACHE_INFO,
-			     "cached  (#{__id__}): #{dbg_attr}=#{r}")
-		end
-		r == CacheManager::Nothing ? nil : r
-	    }
-	end
-    end
-
-
 
     ##
     ## Proxy an NResolv::DNS::Resource class
@@ -112,10 +74,6 @@ class CacheManager
 	    @resource.method(method).call(*args)
 	end
     end
-
-
-
-
 
 
 

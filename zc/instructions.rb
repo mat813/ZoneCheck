@@ -16,6 +16,9 @@
 ##
 ##
 module Instruction
+    class InstructionError < StandardError
+    end
+
     class Node
 	class Block < Node
 	    def initialize(instr=[])
@@ -29,6 +32,12 @@ module Instruction
 
 	    def semcheck(testmanager)
 		@instr.each { |i| i.semcheck(testmanager) }
+	    end
+
+	    def preeval(testmanager, args)
+		count = 0
+		@instr.each { |i| count += i.preeval(testmanager, args) }
+		count
 	    end
 
 	    def eval(testmanager, args)
@@ -49,6 +58,10 @@ module Instruction
 		    raise StandardError, $mc.get("config_method_unknown") % [
 			@name ]
 		end
+	    end
+
+	    def preeval(testmanager, args)
+		1
 	    end
 
 	    def eval(testmanager, args)
@@ -73,12 +86,24 @@ module Instruction
 		@else.semcheck(testmanager) if @else
 	    end
 
+	    def preeval(testmanager, args)
+		choice = testmanager.test1(testname, *args)
+		$dbg.msg(DBG::TESTS, "preeval: #{testname} = #{choice}")
+		block = @when[choice] || @else
+		block.nil? ? 0 : block.preeval(testmanager, args) 
+	    end
+
 	    def eval(testmanager, args)
 		choice = testmanager.test1(testname, *args)
 		$dbg.msg(DBG::TESTS, "switching to: #{testname} = #{choice}")
-		block = @when[choice]
-		$dbg.msg(DBG::TESTS, "leaving switch: #{testname}")
-		block.eval(testmanager, args)
+		block = @when[choice] || @else
+		if block
+		    $dbg.msg(DBG::TESTS, "leaving switch: #{testname}")
+		    block.eval(testmanager, args)
+		else
+		    $dbg.msg(DBG::TESTS, 
+			     "switch no choice: #{testname} = #{choice}")
+		end
 	    end
 	end
     end

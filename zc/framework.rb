@@ -11,6 +11,7 @@
 #
 #
 
+require 'cache'
 require 'cachemanager'
 
 ##
@@ -20,7 +21,7 @@ class Test
     DefaultDNS = NResolv::DNS::DefaultResolver
 
 
-    include CacheManager::CacheAttribute
+    include CacheAttribute
 
     ##
     ## Abstract class for: Succeed, Failed, Error
@@ -169,6 +170,9 @@ class Test
 	@config			= config
 	@cm			= cm
 	@domain			= domain
+	if self.class.constants.include?("MsgCat")
+	    $mc.read(self.instance_eval("MsgCat"))
+	end
     end
 
 
@@ -180,7 +184,7 @@ class Test
     #        domain being delegated
     #  IDEA: a better way would be to use the cachemanager to fake
     #        the nameserver NS, A and AAAA records retrieved by autoconf
-    #        unfortunately we have a NO_CACHE option in the debug mode
+    #        unfortunately we have a NOCACHE option in the debug mode
     def is_cname?(name, ip=nil, domain=@domain.name)
 	auth_domain = name.domain
 	unless auth_domain == domain
@@ -207,9 +211,8 @@ class Test
 	return nil if name.nil?
 	
 	if (ips = @domain.get_resolver_ips(name)).nil?
-	    nil
-	else
-	    ips[0]
+	then nil
+	else ips[0]
 	end
     end
 

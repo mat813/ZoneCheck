@@ -207,7 +207,7 @@ class ZoneCheck
 
 	# Instanciate input method
 	begin
-	    require "param/#{im}"
+	    require "input/#{im}"
 	rescue LoadError => e
 	    l10n_error = $mc.get("w_error").upcase
 	    l10n_input = $mc.get("input_unsupported") % [ im ]

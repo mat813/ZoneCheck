@@ -14,6 +14,7 @@
 require 'thread'
 require 'framework'
 require 'report'
+require 'cache'
 
 ##
 ##
@@ -21,6 +22,8 @@ require 'report'
 ##
 ## attributs: param, classes, cm, config, tests
 class TestManager
+    include CacheAttribute
+
     ##
     ## Exception: error in the test definition
     ##
@@ -78,7 +81,8 @@ class TestManager
 	@tests		= {}	# Hash of test  method name (tst_*)
 	@checks		= {}	# Hash of check method name (chk_*)
 	@classes	= []	# List of classes used by the methods above
-    end
+ 	@attrcache_mutex= Sync::new
+   end
 
 
     #
@@ -178,12 +182,25 @@ class TestManager
     # Use the configuration object ('config') to instanciate each
     # classes (but only once) that will be used to perform the tests.
     #
-    def init(config, cm, param)
-	@config     = config
-	@param      = param
-	@publisher  = @param.publisher.engine
-	@objects    = {}
-	@cm         = cm
+    def init(config, cm, param, do_preeval=true)
+	@config		= config
+	@param		= param
+	@publisher	= @param.publisher.engine
+	@objects	= {}
+	@cm		= cm
+	@cached_tst	= {}
+	@do_preeval	= do_preeval
+
+	@iterer = { 
+	    CheckExtra          => proc { |bl| bl.call },
+	    CheckGeneric        => proc { |bl| bl.call },
+	    CheckNameServer     => proc { |bl| 
+		@param.domain.ns.each { |ns_name, | bl.call(ns_name) } },
+	    CheckNetworkAddress => proc { |bl| 
+		@param.domain.ns.each { |ns_name, ns_addr_list|
+		    @param.network.address_wanted?(ns_addr_list).each { |addr|
+			bl.call(ns_name, addr) } } }
+	}
 
 	@classes.each { |klass|
 	    @objects[klass] = klass.method("new").call(@config,
@@ -204,9 +221,9 @@ class TestManager
 	
 	# Retrieve information relative to the test output
 	sev_report = case severity
+		     when Config::Fatal   then @param.report.fatal
 		     when Config::Warning then @param.report.warning
 		     when Config::Info    then @param.report.info
-		     when Config::Fatal   then @param.report.fatal
 		     end
 
 	# Publish information about the test being executed
@@ -255,55 +272,66 @@ class TestManager
     #
     def test1(testname, ns=nil, ip=nil)
 	$dbg.msg(DBG::TESTS, "test: #{testname}")
-
-
-	# Retrieve the method representing the check
-	klass   = @tests[testname]
-	object  = @objects[klass]
-	method  = object.method(testname)
-
-	args = []
-	args << ns if !ns.nil?
-	args << ip if !ip.nil?
-	begin
-	    res =  method.call(*args)
-	    return res
-	end
+	cache_attribute("@cached_tst", [ testname, ns, ip ]) {
+	    # Retrieve the method representing the check
+	    klass   = @tests[testname]
+	    object  = @objects[klass]
+	    method  = object.method(testname)
+	    
+	    # Call the method
+	    args = []
+	    args << ns if !ns.nil?
+	    args << ip if !ip.nil?
+	    method.call(*args)
+	}
     end
-
 
     #
     # Perform all the tests as asked in the configuration file and
     # according to the program parameters
     #
     def check
-	# Sanity check
-	if @config.nil?
-	    raise RuntimeError, "the TestManager#init should be called before"
-	end
-	
 	threadlist            = []
 	testcount             = 0
-
 	domainname_s          = @param.domain.name.to_s
 
 	begin
+	    # Do a pre-evaluation of the code
+	    if @do_preeval
+		if $dbg.enabled?(DBG::NOCACHE)
+		    raise RuntimeError, 
+			"Debugging with preeval and NOCACHE is not adviced"
+		end
+
+		begin
+		    Config::TestSeqOrder.each { |family|
+			testseq		= @config[family]
+			next if testseq.nil?
+			
+			@iterer[family].call(proc { |*args|
+				testcount += testseq.preeval(self, args)
+			   })
+		    }
+		rescue Instruction::InstructionError => e
+		    $dbg.msg(DBG::TESTS, "disabling preeval: #{e}")
+		    @do_preeval = false
+		    testcount   = 0
+		end
+	    end
+
 	    # Counter start
 	    @publisher.progress.start(testcount)
 	    
+	    # Perform the checking
 	    Config::TestSeqOrder.each { |family|
 		threadlist	= []
 		testseq		= @config[family]
 		next if testseq.nil?
 
-		if    family == CheckGeneric
-		    testseq.eval(self, [])
-
-		elsif family == CheckNameServer
-		    @param.domain.ns.each { |ns_name, |
+		@iterer[family].call(proc { |*args|
 			threadlist << Thread::new {
 			    begin
-				testseq.eval(self, [ns_name])
+				testseq.eval(self, args)
 			    rescue Report::FatalError
 				raise
 			    rescue Exception => e
@@ -313,33 +341,10 @@ class TestManager
 				raise
 			    end
 			}
-		    }
-		    
-		elsif family == CheckNetworkAddress
-		    @param.domain.ns.each { |ns_name, ns_addr_list|
-			@param.network.address_wanted?(ns_addr_list).each { |addr|
-			    threadlist << Thread::new {
-				begin
-				    testseq.eval(self, [ns_name, addr])
-				rescue Report::FatalError
-				    raise
-				rescue Exception => e
-				    # XXX: debuging
-				    puts "Exception #{e.message}"
-				    puts e.backtrace
-				    raise
-				end
-			    }
-			}
-		    }
-
-		elsif family == CheckExtra
-		    testseq.eval(self, [])
-		end
+		    })
 
 		threadlist.each { |thr| thr.join }
 	    }
-
 
 	    # Counter end on success
 	    @publisher.progress.done(domainname_s)
