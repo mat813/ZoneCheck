@@ -90,9 +90,9 @@ class Console
 
 	#
 	@ctl = {
-	    "ve" => "\033[?25h",		# show cursor
-	    "vi" => "\033[?25l",		# hide cursor
-	    "ce" => "\033[K"			# clear end of line
+	    've' => "\033[?25h",		# show cursor
+	    'vi' => "\033[?25l",		# hide cursor
+	    'ce' => "\033[K"			# clear end of line
 	}
 
 	#
@@ -107,8 +107,8 @@ class Console
 	return false if @iconv    == false	# Don't support convertion
 
 	@iconv		= case encoding
-			  when NilClass, "utf8" then nil
-			  else Iconv::new(encoding, "utf8")
+			  when NilClass, 'utf8' then nil
+			  else Iconv::new(encoding, 'utf8')
 			  end
 	@encoding	= encoding
     end

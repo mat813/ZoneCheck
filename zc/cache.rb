@@ -44,7 +44,7 @@ class Cache
     #
     # Initialize the cache mechanisme
     #
-    def initialize(name="0x%x"%__id__)
+    def initialize(name='0x%x'%__id__)
 	@name  = name
 	@mutex = Sync::new
 	@list  = {}
@@ -131,22 +131,22 @@ class Cache
 	}
 
 	# Debugging information
-	if $dbg.enabled?(DBG::CACHE_INFO)
+	$dbg.msg(DBG::CACHE_INFO) {
 	    l = case args
 		when NilClass then "#{item}"
 		when Array    then case args.length
 				   when 0 then "#{item}"
 				   when 1 then "#{item}[#{args[0]}]"
-				   else        "#{item}["+args.join(",")+"]"
+				   else        "#{item}[#{args.join(',')}]"
 				   end
 		else               "#{item}[#{args}]"
 		end
 		    
 	    if computed
-	    then $dbg.msg(DBG::CACHE_INFO, "computed(#{@name}): #{l}=#{r}")
-	    else $dbg.msg(DBG::CACHE_INFO, "cached  (#{@name}): #{l}=#{r}")
+	    then "computed(#{@name}): #{l}=#{r}"
+	    else "cached  (#{@name}): #{l}=#{r}"
 	    end
-	end
+	}
 
 	# Returns result
 	r

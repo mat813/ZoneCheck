@@ -98,7 +98,7 @@ class NResolv
                 @queries       = {}
 		@mutex         = Sync::new
 		@closed        = false
-		@close_on_exec = if Fcntl.constants.include?("F_SETFD")
+		@close_on_exec = if Fcntl.constants.include?('F_SETFD')
 				     Proc::new { |fd| 
 			                 fd.fcntl(Fcntl::F_SETFD, 1) }
 				 else
@@ -129,11 +129,11 @@ class NResolv
 	    # Create a query from the DNS message _msg_
 	    def query(msg)
 		unless msg.class == Message::Query
-		    raise RuntimeError, "DNS message should be a query"
+		    raise RuntimeError, 'DNS message should be a query'
 		end
 		query = create_query(msg)
 		@mutex.synchronize {
-		    raise RuntimeError, "Requester is closed" if @closed
+		    raise RuntimeError, 'Requester is closed' if @closed
 		    @queries[msg.msgid] = query
 		}
 	    end

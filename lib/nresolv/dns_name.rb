@@ -48,14 +48,14 @@ class NResolv
 		    def to_s        ; @downcase.gsub(/\./, '\.')     ; end
 		  
 		    def root?       ; @string.empty?                 ; end
-		    def wildcard?   ; @string == "*"                 ; end
+		    def wildcard?   ; @string == '*'                 ; end
 		    def depth       ; 1                              ; end
 		    
 		    def hash        ; @downcase.hash                 ; end
 		    def eql?(other) ; @downcase.eql?(other.downcase) ; end
 		    alias == eql?
                 end
-		Root = Label::Ordinary::new("")
+		Root = Label::Ordinary::new('')
 	    end
 
 	    attr_reader :labels
@@ -80,17 +80,17 @@ class NResolv
 	    def initialize(labels, origin=nil)
 		# Sanity check
 		unless labels.instance_of?(Array)
-		    raise "Label Array expected as labels" 
+		    raise 'Label Array expected as labels' 
 		end
 		labels.each { |lbl|
 		    unless lbl.kind_of?(Label)
-			raise ArgumentError, "Label Array expected as labels"
+			raise ArgumentError, 'Label Array expected as labels'
 		    end
 		}
 
 		case origin
 		when NilClass, Name
-		else raise ArgumentError, "DNS Name expected as origin"
+		else raise ArgumentError, 'DNS Name expected as origin'
 		end
 
 		#
@@ -123,18 +123,18 @@ class NResolv
 	    end
 
 	    def self.from_s(str, make_absolute=false)
-		return Root if str == "."
+		return Root if str == '.'
 		labels = []
 		lbl = nil
 		str.scan(/(?:(?:\\.|[^\.])+|\.)/) {|m| 
-		    lbl = if m == "."
-			      labels << Label::Ordinary::from_s(lbl ? lbl : "")
+		    lbl = if m == '.'
+			      labels << Label::Ordinary::from_s(lbl ? lbl : '')
 			      nil
 			  else
 			      m
 			  end
 		}
-		labels << Label::Ordinary::from_s(lbl ? lbl : "")
+		labels << Label::Ordinary::from_s(lbl ? lbl : '')
 		if make_absolute && !labels[-1].root?
 		    labels << Label::Root
 		end
@@ -159,14 +159,14 @@ class NResolv
 		when Label::Ordinary
 		    Name::new(@labels[1..-1])
 		else
-		    raise "XXX: NOT IMPLEMENTED YET"
+		    raise 'XXX: NOT IMPLEMENTED YET'
 		end
 	    end
 
 	    def in_domain?(domain)
 		if self.absolute? ^ domain.absolute?
 		    raise ArgumentError, 
-			"both name should be both absolutly qualified or not" 
+			'both name should be both absolutly qualified or not' 
 		end
 		return false if self.depth < domain.depth
                 s_idx = self  .depth - 1
@@ -187,7 +187,7 @@ class NResolv
 	    # XXX: not BitString ready
 	    def to_s
 		if self == Root
-		then "."
+		then '.'
 		else @labels.join('.')
 		end
 	    end

@@ -42,7 +42,7 @@ class NResolv
 	    end
 
 	    def _fields
-		self.class.class_eval("@@fields").collect { |field|
+		self.class.class_eval('@@fields').collect { |field|
 		    [ field, instance_variable_get("@#{field.id2name}") ] }
 	    end
 
@@ -61,7 +61,7 @@ class NResolv
 		# (re)create attribute reader and initializer
 		initializer_args = []
 		initializer_body = []
-		all_attrs = class_eval "@@fields"
+		all_attrs = class_eval '@@fields'
 		all_attrs.each_index { |index| attr = all_attrs[index]
 		    initializer_args << "_res_#{index}"
 		    initializer_body << "@#{attr} = _res_#{index}"
@@ -70,8 +70,8 @@ class NResolv
 		}
 
 		class_eval <<-EOS
-		def _res_initializer(#{initializer_args.join(", ")})
-		    #{initializer_body.join("; ")}
+		def _res_initializer(#{initializer_args.join(', ')})
+		    #{initializer_body.join('; ')}
 		end
 	        alias initialize _res_initializer
 	        private :_res_initializer

@@ -45,8 +45,8 @@ require 'cache'
 ## attributs: param, classes, cm, config, tests
 class TestManager
     TestSuperclass = Test	# Superclass
-    TestPrefix     = "tst_"	# Prefix for test methods
-    CheckPrefix    = "chk_"	# Prefix for check methods
+    TestPrefix     = 'tst_'	# Prefix for test methods
+    CheckPrefix    = 'chk_'	# Prefix for check methods
 
     ##
     ## Exception: error in the test definition
@@ -67,7 +67,7 @@ class TestManager
     #  WARN: file are only loaded once to avoid redefinition of constants
     #
     # To minimize risk of choosing a random directory, only files
-    #  that have the ruby extension (.rb) and the "ZCTEST 1.0"
+    #  that have the ruby extension (.rb) and the 'ZCTEST 1.0'
     #  magic header are loaded.
     #
     def self.load(*filenames)
@@ -75,7 +75,7 @@ class TestManager
 	filenames.each { |filename|
 	    # Recursively load file in the directory
 	    if File.directory?(filename)
-		$dbg.msg(DBG::LOADING, "test directory: #{filename}")
+		$dbg.msg(DBG::LOADING) { "test directory: #{filename}" }
 		Dir::open(filename) { |dir|
 		    dir.each { |entry|
 			testfile = "#{filename}/#{entry}".untaint
@@ -96,13 +96,13 @@ class TestManager
 
 		    # Really load the file if it wasn't already done
 		    if  ! @@test_files.has_key?(filename)
-			$dbg.msg(DBG::LOADING, "test file: #{filename}")
+			$dbg.msg(DBG::LOADING) { "test file: #{filename}" }
 			::Kernel.load filename
 			@@test_files[filename] = true
 			count += 1
 		    else
-			$dbg.msg(DBG::LOADING,
-				 "test file: #{filename} (already loaded)")
+			$dbg.msg(DBG::LOADING) {
+			    "test file: #{filename} (already loaded)" }
 		    end
 		end
 	    end
@@ -135,10 +135,10 @@ class TestManager
 	    mod.constants.each { |t|
 		testclass = eval "#{mod}::#{t}"
 		if testclass.superclass == TestSuperclass
-		    $dbg.msg(DBG::TESTS, "adding class: #{testclass}")
+		    $dbg.msg(DBG::TESTS) { "adding class: #{testclass}"   }
 		    self << testclass
 		else
-		    $dbg.msg(DBG::TESTS, "skipping class: #{testclass}")
+		    $dbg.msg(DBG::TESTS) { "skipping class: #{testclass}" }
 		end
 	    }
 	}
@@ -152,7 +152,7 @@ class TestManager
 	# Sanity check (all test class should derive from Test)
 	if ! (klass.superclass == TestSuperclass)
 	    raise ArgumentError, 
-		$mc.get("xcp_testmanager_badclass") % [ klass, TestSuperclass ]
+		$mc.get('xcp_testmanager_badclass') % [ klass, TestSuperclass ]
 	end
 	
 	# Inspect instance methods for finding methods (ie: chk_*, tst_*)
@@ -161,7 +161,7 @@ class TestManager
 	    # methods that represent a test
 	    when /^#{TestPrefix}/
 		if has_test?(method)
-		    l10n_tag = $mc.get("xcp_testmanager_test_exists")
+		    l10n_tag = $mc.get('xcp_testmanager_test_exists')
 		    raise DefinitionError, 
 			l10n_tag % [ method, klass, @tests[method] ]
 		end
@@ -170,7 +170,7 @@ class TestManager
 	    # methods that represent a check
 	    when /^#{CheckPrefix}/
 		if has_check?(method)
-		    l10n_tag = $mc.get("xcp_testmanager_check_exists")
+		    l10n_tag = $mc.get('xcp_testmanager_check_exists')
 		    raise DefinitionError, 
 			l10n_tag % [ method, klass, @tests[method] ]
 		end
@@ -270,7 +270,7 @@ class TestManager
 
 	# Create new instance of the class
 	@classes.each { |klass|
-	    @objects[klass] = klass.method("new").call(@param.network, @config,
+	    @objects[klass] = klass.method('new').call(@param.network, @config,
 						       @cm, @param.domain)
 	}
     end
@@ -280,7 +280,7 @@ class TestManager
     # Perform unitary check
     #
     def check1(checkname, severity, ns=nil, ip=nil) 
-	$dbg.msg(DBG::TESTS, "checking: #{checkname}")
+	$dbg.msg(DBG::TESTS) { "checking: #{checkname}" }
 	# Retrieve the method representing the check
 	klass   = @checks[checkname]
 	object  = @objects[klass]
@@ -317,13 +317,13 @@ class TestManager
 	    info = "(#{e.resource.rdesc}: #{e.name})"
 	    name = case e.code
 		   when NResolv::DNS::RCode::SERVFAIL
-		       $mc.get("nresolv_rcode_servfail")
+		       $mc.get('nresolv_rcode_servfail')
 		   when NResolv::DNS::RCode::REFUSED
-		       $mc.get("nresolv_rcode_refused")
+		       $mc.get('nresolv_rcode_refused')
 		   when NResolv::DNS::RCode::NXDOMAIN
-		       $mc.get("nresolv_rcode_nxdomain")
+		       $mc.get('nresolv_rcode_nxdomain')
 		   when NResolv::DNS::RCode::NOTIMP
-		       $mc.get("nresolv_rcode_notimp")
+		       $mc.get('nresolv_rcode_notimp')
 		   else e.code.to_s
 		   end
 	    desc.err = "#{name} #{info}"
@@ -336,7 +336,7 @@ class TestManager
 	rescue Exception => e
 	    # XXX: this is a hack
 	    unless @param.rflag.stop_on_fatal
-		desc.err = "Dependency issue? (allwarning/dontstop flag?)"
+		desc.err = 'Dependency issue? (allwarning/dontstop flag?)'
 	    else
 		desc.err = e.message
 	    end
@@ -357,7 +357,7 @@ class TestManager
     # Perform unitary test
     #
     def test1(testname, ns=nil, ip=nil)
-	$dbg.msg(DBG::TESTS, "test: #{testname}")
+	$dbg.msg(DBG::TESTS) { "test: #{testname}" }
 	@cache.use(:test, [ testname, ns, ip ]) {
 	    # Retrieve the method representing the test
 	    klass   = @tests[testname]
@@ -391,7 +391,7 @@ class TestManager
 	if @do_preeval
 	    # Sanity check for debugging
 	    if $dbg.enabled?(DBG::NOCACHE)
-		raise "Debugging with preeval and NOCACHE is not adviced"
+		raise 'Debugging with preeval and NOCACHE is not adviced'
 	    end
 
 	    # Do the pre-evaluation
@@ -406,7 +406,7 @@ class TestManager
 			   })
 		}
 	    rescue Instruction::InstructionError, Report::FatalError => e
-		$dbg.msg(DBG::TESTS, "disabling preeval: #{e}")
+		$dbg.msg(DBG::TESTS) { "disabling preeval: #{e}" }
 		@do_preeval = false
 		testcount   = 0
 	    end

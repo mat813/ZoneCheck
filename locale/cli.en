@@ -38,7 +38,7 @@
 #
 
 input_cli_usage: \
-usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns...] [-c conf] domainname\n\
+usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname\n\
     -q, --quiet         Don't display extra titles\n\
         --lang          Select another language (en, fr, ...)\n\
     -h, --help          Show this message\n\
@@ -55,12 +55,13 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns...] [-c conf] domainname\n\
                            (ex: ns1;ns2=ip1,ip2;ns3=ip3)\n\
     -1, --one           Only display the most relevant message\n\
     -g, --tagonly       Display only tag (suitable for scripting)\n\
-    -e, --error         Behaviour in case of error (see error)\n\
-    -t, --transp        Transport/routing layer (see transp)\n\
     -v, --verbose       Display extra information (see verbose)\n\
     -o, --output        Output (see output)\n\
+    -e, --error         Behaviour in case of error (see error)\n\
+    -t, --transp        Transport/routing layer (see transp)\n\
     -4, --ipv4          Only check the zone with IPv4 connectivity\n\
     -6, --ipv6          Only check the zone with IPv6 connectivity\n\
+        --option        Set extra options (-,-opt,opt,opt=foo)\n\
 \n\
   verbose:              [intro/explain/details] [testdesc|counter]\n\
     intro          [i]  Print summary for domain and associated nameservers\n\

@@ -91,7 +91,7 @@ module Publisher
 			    $mc.get("pgr_test"),
 			    $mc.get("pgr_speed"),
 			    $mc.get("pgr_time"),
-			    $mc.get("pgr_na")]
+			    $mc.get("pgr_na") ]
 			pgr_start_param  = count
 
 			str  = 'zc_pgr_setlocale("%s", "%s", "%s", "%s", "%s", "%s");' % pgr_locale_param
@@ -99,7 +99,7 @@ module Publisher
 			str += 'zc_pgr_start(%d);'    % pgr_start_param
 			str
 		    }
-		    @o.puts HTML.nscript { title }
+		    @o.puts HTML.nscript { title  }
 		    @o.puts HTML.nscript { "<ul>" }
 		end
 
@@ -179,7 +179,7 @@ module Publisher
 
 	def begin
 	    l10n_form        = $mc.get("w_form").capitalize
-	    l10n_batch_form  = l10n_form+": "+$mc.get("t_batch").capitalize
+	    l10n_batch_form  = l10n_form+": "+$mc.get("t_batch" ).capitalize
 	    l10n_single_form = l10n_form+": "+$mc.get("t_single").capitalize
 
 	    # XXX: javascript only if counter

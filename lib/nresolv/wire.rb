@@ -56,14 +56,14 @@ class NResolv
 		    def self.wire_decode(decoder)
 			mname = Name::wire_decode(decoder)
 			rname = Name::wire_decode(decoder)
-			ser, ref, ret, exp, min = *decoder.unpack("NNNNN")
+			ser, ref, ret, exp, min = *decoder.unpack('NNNNN')
 			self::new(mname, rname, ser, ref, ret, exp, min)
 		    end
 		end
 
 		class MX
 		    def self.wire_decode(decoder)
-			self::new(decoder.unpack("n")[0],
+			self::new(decoder.unpack('n')[0],
 				  Name::wire_decode(decoder))
 		    end
 		end
@@ -89,7 +89,7 @@ class NResolv
 
 		class LOC
 		    def self.wire_decode(decoder)
-			version, size, horizpre, vertpre, latitude, longitude, altitude = *decoder.unpack("CCCCNNN")
+			version, size, horizpre, vertpre, latitude, longitude, altitude = *decoder.unpack('CCCCNNN')
 			self::new(version, size, horizpre, vertpre, latitude, longitude, altitude)
 		    end
 		end
@@ -132,7 +132,7 @@ class NResolv
 		d = []
 
 		while true
-		    case decoder.look("C")[0]
+		    case decoder.look('C')[0]
 		    when 0
 			d << Label::wire_decode(decoder)
 			return self::new(d)
@@ -140,7 +140,7 @@ class NResolv
 			idx = decoder.unpack('n')[0] & 0x3fff
 			if start_idx <= idx
 			    raise Message::DecodingError,
-				"foreward name pointer in global14"
+				'foreward name pointer in global14'
 			end
 			
 			origin = decoder.inside(start_idx - idx, idx) {
@@ -160,7 +160,7 @@ class NResolv
 		    @labels.each_index { |i|
 			domain = @labels[i..-1]
 			if idx = encoder.global14[domain]
-			    encoder << [0xc000 | idx].pack("n")
+			    encoder << [0xc000 | idx].pack('n')
 			    return
 			else
 			    encoder.global14[domain] = encoder.data.length
@@ -187,7 +187,7 @@ class NResolv
 		attr_reader :data, :global14
 
 		def initialize
-		    @data	= ""
+		    @data	= ''
 		    @global14	= { }
 		end
 		
@@ -197,7 +197,7 @@ class NResolv
 		end
 		
 		def put_string(str)
-		    @data << [str.length].pack("C") << str
+		    @data << [str.length].pack('C') << str
 		end
 
 		def pack(template, *d)
@@ -235,14 +235,14 @@ class NResolv
 
 		def get_string
 		    len = @data[@index]
-		    raise DecodingError::NoMoreData, "limit exceeded" if @limit<@index+1+len
+		    raise DecodingError::NoMoreData, 'limit exceeded' if @limit<@index+1+len
 		    index, @index = @index, @index + 1 + len
 		    @data[index + 1, len]
 		end
 
 		def skip(size)
 		    if @limit < @index + size
-			raise DecodingError::NoMoreData, "limit exceeded" 
+			raise DecodingError::NoMoreData, 'limit exceeded' 
 		    end
 		    @index += size
 		end
@@ -255,7 +255,7 @@ class NResolv
 			@index = offset if offset
 
 			if @limit < @index + size
-			    raise DecodingError::NoMoreData, "limit exceeded" 
+			    raise DecodingError::NoMoreData, 'limit exceeded' 
 			end
 			
 			saved_offset += size unless offset
@@ -264,7 +264,7 @@ class NResolv
 			return yield
 
 			if @limit != @index
-			    Dbg.msg(DBG::WIRE, "junk")
+			    Dbg.msg(DBG::WIRE, 'junk')
 			end
 		    ensure
 			@limit = saved_limit
@@ -279,11 +279,11 @@ class NResolv
 			       when ?c, ?C then 1
 			       when ?n     then 2
 			       when ?N     then 4
-			       else raise RuntimeError, "unsupported template"
+			       else raise RuntimeError, 'unsupported template'
 			       end
 		    }
 		    if @limit < @index+len
-			raise DecodingError::NoMoreData, "limit exceeded" 
+			raise DecodingError::NoMoreData, 'limit exceeded' 
 		    end
 		    if lookonly
 		    then index = @index
@@ -295,8 +295,8 @@ class NResolv
 
 	    def self.from_wire(data)
 		decoder = Decoder::new(data)
-		id, flags                          = decoder.unpack("nn")
-		qdcount, ancount, nscount, arcount = decoder.unpack("nnnn")
+		id, flags                          = decoder.unpack('nn')
+		qdcount, ancount, nscount, arcount = decoder.unpack('nnnn')
 
 		msg		= Message::Answer::new(id)
 		msg.qr		= ((flags >> 15) & 1) == 1
@@ -319,18 +319,18 @@ class NResolv
 
 	    def to_wire
 		encoder = Encoder::new
-		encoder << [ @msgid ].pack("n")
+		encoder << [ @msgid ].pack('n')
 		encoder << [ (@qr ? 1 : 0)   << 15 |
 		             (@opcode.value) << 11 |
 		             (@aa ? 1 : 0)   << 10 |
 		             (@tc ? 1 : 0)   <<  9 |
 		             (@rd ? 1 : 0)   <<  8 |
 		             (@ra ? 1 : 0)   <<  7 |
-		             (@rcode.value) ].pack("n")
+		             (@rcode.value) ].pack('n')
 		encoder << [ @question   ? @question  .length : 0, 
 		             @answer     ? @answer    .length : 0,
 		             @authority  ? @authority .length : 0, 
-			     @additional ? @additional.length : 0].pack("nnnn")
+			     @additional ? @additional.length : 0].pack('nnnn')
 		@question  .wire_encode(encoder) if @question
 		@answer    .wire_encode(encoder) if @answer
 		@authority .wire_encode(encoder) if @authority
@@ -348,8 +348,8 @@ class NResolv
 			begin 
 			    # Get information about the record 
 			    name  = Name::wire_decode(decoder)
-			    t, c  = decoder.unpack("nn")
-			    ttl   = decoder.unpack("N")[0]
+			    t, c  = decoder.unpack('nn')
+			    ttl   = decoder.unpack('N')[0]
 			    res	  = begin
 					rc	= RClass.fetch_by_value(c)
 					rt	= RType .fetch_by_value(t)
@@ -357,7 +357,7 @@ class NResolv
 				    rescue IndexError => e
 					nil
 				    end
-			    rrsize = decoder.unpack("n")[0]
+			    rrsize = decoder.unpack('n')[0]
 
 			    # Decode the resource inside the record
 			    if res.nil?
@@ -375,7 +375,7 @@ class NResolv
 				    asection.add(name, rr, ttl)
 				rescue Message::DecodingError::NoMoreData
 				    Dbg.msg(DBG::WIRE, 
-					    "Skipping record (data missing)")
+					    'Skipping record (data missing)')
 				end
 			    end
 			rescue Message::DecodingError::NoMoreData
@@ -384,7 +384,7 @@ class NResolv
 			    #  (perhaps not a good idea)
 			    if (!decoder.msg_can_be_truncated ||
 				 decoder.remaining > 0)
-				Dbg.msg(DBG::WIRE, "Salvaging previous records (unexpected end of data)")
+				Dbg.msg(DBG::WIRE, 'Salvaging previous records (unexpected end of data)')
 			    end
 			    break
 			end
@@ -400,7 +400,7 @@ class NResolv
 		    
 		    (1..count).each {
 			name = Name::wire_decode(decoder)
-			t, c = decoder.unpack("nn")
+			t, c = decoder.unpack('nn')
 			res  = begin
 				   rc	= RClass.fetch_by_value(c)
 				   rt	= RType .fetch_by_value(t)
@@ -422,7 +422,7 @@ class NResolv
 		    @record.each { | name, rd_class|
 			name.wire_encode(encoder)
 			encoder << [ rd_class.rtype.value,
-			    rd_class.rclass.value ].pack("nn")
+			    rd_class.rclass.value ].pack('nn')
 		    }
 		end
 	    end

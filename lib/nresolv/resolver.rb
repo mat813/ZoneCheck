@@ -127,7 +127,7 @@ class NResolv
 		}
 
 		if exception && (count == 0)
-		    raise NoEntryError, "no matching answer"
+		    raise NoEntryError, 'no matching answer'
 		end
 	    end
 
@@ -156,7 +156,7 @@ class NResolv
 				Dbg.msg(DBG::RESOLVER, 
 					"following CNAME #{n} => #{r.cname}")
 				if cnameloop.has_key?(name)
-				    raise "CNAME loop detected"
+				    raise 'CNAME loop detected'
 				end
 				cnameloop[name] = true
 				name = r.cname
@@ -175,7 +175,7 @@ class NResolv
 
 		    if !found && !cnameloop.empty?
 			Dbg.msg(DBG::RESOLVER, 
-				"iterate on CNAME not implemented (response will be empty)")
+				'iterate on CNAME not implemented (response will be empty)')
 		    end
 		end
 	    end
@@ -216,7 +216,7 @@ class NResolv
 
 		# Sanity check
 		if ! name.absolute?
-		    raise ArgumentError, "DNS name should be abolute"
+		    raise ArgumentError, 'DNS name should be abolute'
 		end
 
 		ipv4=ipv6=false
@@ -318,7 +318,7 @@ class NResolv
 			    nmsg = r.query(msg).send.wait
 			    if nmsg.tc
 				Dbg.msg(DBG::RESOLVER, 
-					"truncated message due to UDP")
+					'truncated message due to UDP')
 			    end
 			    return nmsg
 			rescue NResolv::TimeoutError, 
@@ -353,7 +353,7 @@ class NResolv
 			    nmsg = r.query(msg).send.wait
 			    if nmsg.tc
 				Dbg.msg(DBG::RESOLVER,
-					"truncated message impossible in TCP")
+					'truncated message impossible in TCP')
 
 			    end
 			    return nmsg
@@ -388,11 +388,11 @@ class NResolv
 			begin
 			    nmsg = udp.query(msg).send.wait
 			    if nmsg.tc
-				Dbg.msg(DBG::RESOLVER, "falling back to TCP")
+				Dbg.msg(DBG::RESOLVER, 'falling back to TCP')
 				nmsg = tcp.query(msg).send.wait
 				if nmsg.tc
 				    Dbg.msg(DBG::RESOLVER,
-					 "truncated message impossible in TCP")
+					 'truncated message impossible in TCP')
 				end
 			    end
 			    return nmsg

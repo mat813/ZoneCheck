@@ -28,9 +28,9 @@ class NResolv
 	
 	# Tag associated with some types
 	Tag = { 
-	    WIRE	=> "wire",
-	    TRANSPORT	=> "transport",
-	    RESOLVER	=> "resolver"
+	    WIRE	=> 'wire',
+	    TRANSPORT	=> 'transport',
+	    RESOLVER	=> 'resolver'
 	}
 	
 	# Initializer
@@ -59,9 +59,19 @@ class NResolv
 	    end
 	end
 	
+	#
 	# Print debugging message
-	def msg(type, str)
-	    @output.puts "NResolv[#{Tag[type]}]: #{str}" if enabled?(type)
+	# WARN: It is adviced to use a block instead of the string 
+	#       second argument, as this will provide a lazy evaluation
+	#
+	def msg(type, str=nil)
+	    return unless enabled?(type)
+	    
+	    unless block_given? ^ !str.nil?
+		raise ArgumentError, 'either string or block should be given'
+	    end
+	    str = yield if block_given?
+	    @output.puts "NResolv[#{Tag[type]}]: #{str}"
 	end
     end
 

@@ -84,7 +84,7 @@ module Instruction
 
 	    def semcheck(testmanager)
 		unless testmanager.has_check?(@name)
-		    raise StandardError, $mc.get("config_method_unknown") % [
+		    raise StandardError, $mc.get('config_method_unknown') % [
 			@name ]
 		end
 	    end
@@ -114,7 +114,7 @@ module Instruction
 
 	    def semcheck(testmanager)
 		unless testmanager.has_test?(@testname)
-		    raise StandardError, $mc.get("config_method_unknown") % [
+		    raise StandardError, $mc.get('config_method_unknown') % [
 			@testname ]
 		end
 		@when.each_value { |b| b.semcheck(testmanager) }
@@ -123,21 +123,21 @@ module Instruction
 
 	    def preeval(testmanager, args)
 		choice = testmanager.test1(testname, *args)
-		$dbg.msg(DBG::TESTS, "preeval: #{testname} = #{choice}")
+		$dbg.msg(DBG::TESTS) { "preeval: #{testname} = #{choice}" }
 		block = @when[choice] || @else
 		block.nil? ? 0 : block.preeval(testmanager, args) 
 	    end
 
 	    def eval(testmanager, args)
 		choice = testmanager.test1(testname, *args)
-		$dbg.msg(DBG::TESTS, "switching to: #{testname} = #{choice}")
+		$dbg.msg(DBG::TESTS) {"switching to: #{testname} = #{choice}"}
 		block = @when[choice] || @else
 		if block
-		    $dbg.msg(DBG::TESTS, "leaving switch: #{testname}")
+		    $dbg.msg(DBG::TESTS) { "leaving switch: #{testname}" }
 		    block.eval(testmanager, args)
 		else
-		    $dbg.msg(DBG::TESTS, 
-			     "switch no choice: #{testname} = #{choice}")
+		    $dbg.msg(DBG::TESTS) {
+			"switch no choice: #{testname} = #{choice}" }
 		end
 	    end
 	end

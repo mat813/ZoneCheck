@@ -20,8 +20,8 @@
 
 #
 # PUBLIC
-#   Config.new(nameserver, search=[""], absdepth=3)
-#   Config.from_resolv(filename="/etc/resolv.conf")
+#   Config.new(nameserver, search=[''], absdepth=3)
+#   Config.from_resolv(filename='/etc/resolv.conf')
 #   Config#nameserver
 #   Config#candidates(name)
 #   Config::DefaultConfig
@@ -38,7 +38,7 @@ class NResolv
 	class Config
 	    attr_reader :nameserver
 
-	    def self.from_resolv(filename="/etc/resolv.conf")
+	    def self.from_resolv(filename='/etc/resolv.conf')
 		nameserver = []
 		search     = nil
 
@@ -50,9 +50,9 @@ class NResolv
 			    keyword, *args = line.split(/\s+/)
 			    args.each { |arg| arg.untaint }
 			    case keyword
-			    when "nameserver" then nameserver += args
-			    when "domain"     then search = [args[0]]
-			    when "search"     then search = args
+			    when 'nameserver' then nameserver += args
+			    when 'domain'     then search = [args[0]]
+			    when 'search'     then search = args
 			    end
 			}
 		    }
@@ -83,7 +83,7 @@ class NResolv
 		search.each { |domain|
 		    unless domain.absolute?
 			raise ArgumentError, 
-			    "domains in the search list should be absolute"
+			    'domains in the search list should be absolute'
 		    end
 		}
 		

@@ -41,7 +41,7 @@ require 'param'
 ##
 ## ----------------------------------------------------------------------
 ##
-## usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
+## usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname
 ##     -q, --quiet         Don't display extra titles
 ##         --lang          Select another language (en, fr, ...)
 ##     -h, --help          Show this message
@@ -55,14 +55,16 @@ require 'param'
 ##         --testdesc      Give a description (name,expl,error) of the test
 ##     -r, --resolver      Resolver to use for guessing 'ns' information
 ##     -n, --ns            List of nameservers for the domain
+##                            (ex: ns1;ns2=ip1,ip2;ns3=ip3)
 ##     -1, --one           Only display the most relevant message
 ##     -g, --tagonly       Display only tag (suitable for scripting)
-##     -e, --error         Behaviour in case of error (see error)
-##     -t, --transp        Transport/routing layer (see transp)
 ##     -v, --verbose       Display extra information (see verbose)
 ##     -o, --output        Output (see output)
+##     -e, --error         Behaviour in case of error (see error)
+##     -t, --transp        Transport/routing layer (see transp)
 ##     -4, --ipv4          Only check the zone with IPv4 connectivity
 ##     -6, --ipv6          Only check the zone with IPv6 connectivity
+##         --option        Set extra options (-,-opt,opt,opt=foo)
 ## 
 ##   verbose:              [intro/explain/details] [testdesc|counter]
 ##     intro          [i]  Print summary for domain and associated nameservers
@@ -116,12 +118,12 @@ module Input
 	end
 
 	def usage(errcode, io=$console.stderr)
-	    io.print $mc.get("input_cli_usage").gsub("PROGNAME", PROGNAME)
+	    io.print $mc.get('input_cli_usage').gsub('PROGNAME', PROGNAME)
 	    exit errcode unless errcode.nil?
 	end
 
 	def error(str, errcode=nil, io=$console.stderr)
-	    l10n_error = $mc.get("w_error").upcase
+	    l10n_error = $mc.get('w_error').upcase
 	    io.puts "#{l10n_error}: #{str}"
 	    exit errcode unless errcode.nil?
 	end
@@ -131,79 +133,79 @@ module Input
 	private
 
 	def opts_definition
-	    [   [ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ],
-		[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
-		[ "--quiet",	"-q",	GetoptLong::NO_ARGUMENT       ],
-		[ "--lang",		GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--debug",	"-d",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--batch",	"-B",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--config",	"-c",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--testdir",	        GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--category", "-C",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--test",     "-T",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--testlist",         GetoptLong::NO_ARGUMENT       ],
-		[ "--testdesc",         GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--resolver",	"-r",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--ns",	"-n",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--ipv4",	"-4",	GetoptLong::NO_ARGUMENT       ],
-		[ "--ipv6",	"-6",	GetoptLong::NO_ARGUMENT       ],
-		[ "--one",	"-1",	GetoptLong::NO_ARGUMENT       ],
-		[ "--tagonly",	"-g",   GetoptLong::NO_ARGUMENT       ],
-		[ "--error",	"-e",	GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--transp",	"-t",	GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--verbose",	"-v",   GetoptLong::OPTIONAL_ARGUMENT ],
-		[ "--output",	"-o",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--option",           GetoptLong::REQUIRED_ARGUMENT ],
+	    [   [ '--help',	'-h',	GetoptLong::NO_ARGUMENT       ],
+		[ '--version',	'-V',	GetoptLong::NO_ARGUMENT       ],
+		[ '--quiet',	'-q',	GetoptLong::NO_ARGUMENT       ],
+		[ '--lang',		GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--debug',	'-d',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--batch',	'-B',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--config',	'-c',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--testdir',	        GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--category', '-C',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--test',     '-T',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--testlist',         GetoptLong::NO_ARGUMENT       ],
+		[ '--testdesc',         GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--resolver',	'-r',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--ns',	'-n',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--ipv4',	'-4',	GetoptLong::NO_ARGUMENT       ],
+		[ '--ipv6',	'-6',	GetoptLong::NO_ARGUMENT       ],
+		[ '--one',	'-1',	GetoptLong::NO_ARGUMENT       ],
+		[ '--tagonly',	'-g',   GetoptLong::NO_ARGUMENT       ],
+		[ '--verbose',	'-v',   GetoptLong::OPTIONAL_ARGUMENT ],
+		[ '--output',	'-o',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--error',	'-e',	GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--transp',	'-t',	GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--option',           GetoptLong::REQUIRED_ARGUMENT ],
 		#
 		# Let's have some fun
-		[ "--makecoffee",       GetoptLong::NO_ARGUMENT       ],
-		[ "--coffee",           GetoptLong::NO_ARGUMENT       ] ]
+		[ '--makecoffee',       GetoptLong::NO_ARGUMENT       ],
+		[ '--coffee',           GetoptLong::NO_ARGUMENT       ] ]
         end
 
 	def opts_analyse(p)
 	    @opts.each do |opt, arg|
 		case opt
-		when "--help"      then usage(EXIT_USAGE, $console.stdout)
-		when "--version"
-		    l10n_version = $mc.get("input_version") % $zc_version
+		when '--help'      then usage(EXIT_USAGE, $console.stdout)
+		when '--version'
+		    l10n_version = $mc.get('input_version') % $zc_version
 		    l10n_version.gsub!(/PROGNAME/, PROGNAME)
 		    $console.stdout.puts l10n_version
 		    exit EXIT_OK
-		when "--quiet"     then p.rflag.quiet		= true
-		when "--debug"     then $dbg.level		= arg
-		when "--lang"
+		when '--quiet'     then p.rflag.quiet		= true
+		when '--debug'     then $dbg.level		= arg
+		when '--lang'
 		    if $mc.available?(ZC_LANG_FILE, arg)
 			$mc.lang = arg
 			$mc.reload
 		    end
-		when "--batch"     then p.batch			= arg
-		when "--config"    then p.fs.cfgfile		= arg.untaint
-		when "--testdir"   then p.fs.testdir		= arg.untaint
-		when "--category"  then p.test.categories	= arg
-		when "--test"      then p.test.tests		= arg
-		when "--testlist"  then p.test.list		= true
-		when "--testdesc"  then p.test.desctype		= arg
-		when "--resolver"  then p.resolver.local	= arg
-		when "--ns"        then p.domain.ns		= arg
-		when "--ipv6"      then p.network.ipv6		= true
-		when "--ipv4"      then p.network.ipv4		= true
-		when "--one"       then p.rflag.one		= true
-		when "--tagonly"   then p.rflag.tagonly		= true
-		when "--error"     then p.error			= arg
-		when "--transp"    then p.transp		= arg
-		when "--verbose"   then p.verbose		= arg
-		when "--output"    then p.output		= arg
-		when "--option"    then p.option	       << arg
+		when '--batch'     then p.batch			= arg
+		when '--config'    then p.fs.cfgfile		= arg.untaint
+		when '--testdir'   then p.fs.testdir		= arg.untaint
+		when '--category'  then p.test.categories	= arg
+		when '--test'      then p.test.tests		= arg
+		when '--testlist'  then p.test.list		= true
+		when '--testdesc'  then p.test.desctype		= arg
+		when '--resolver'  then p.resolver.local	= arg
+		when '--ns'        then p.domain.ns		= arg
+		when '--ipv6'      then p.network.ipv6		= true
+		when '--ipv4'      then p.network.ipv4		= true
+		when '--one'       then p.rflag.one		= true
+		when '--tagonly'   then p.rflag.tagonly		= true
+		when '--error'     then p.error			= arg
+		when '--transp'    then p.transp		= arg
+		when '--verbose'   then p.verbose		= arg
+		when '--output'    then p.output		= arg
+		when '--option'    then p.option	       << arg
 		#
 		# Let's have some fun
-		when "--makecoffee"
+		when '--makecoffee'
 		    $console.stdout.print <<EOT
 #{PROGNAME}: I'm not currently designed for that task.
 \tBut if you really want this option added in future release, 
 \tyou should see with the maintainer: \"#{ZC_MAINTAINER}\".
 EOT
 		    exit EXIT_OK
-		when "--coffee"
+		when '--coffee'
 		    $console.stdout.puts "#{PROGNAME}: No thank you, I prefer tea."
 		    exit EXIT_OK
 		end
@@ -214,12 +216,12 @@ EOT
 	    if p.batch
 		if !ARGV.empty?
 		    raise Param::ParamError, 
-			$mc.get("xcp_param_batch_nodomain")
+			$mc.get('xcp_param_batch_nodomain')
 		end
 	    else
 		if !(ARGV.length == 1)
 		    raise Param::ParamError, 
-			$mc.get("xcp_param_domain_expected") 
+			$mc.get('xcp_param_domain_expected') 
 		end
 	    end
 	    setdomain(p, ARGV[0])

@@ -61,12 +61,12 @@ class Test
 	    end
 	    
 	    def eql?(other)
-		(@testname == other.instance_eval("@testname") &&
-		 @err      == other.instance_eval("@err")      &&
-		 @msg      == other.instance_eval("@msg")      &&
-		 @xpl      == other.instance_eval("@xpl")      &&
-		 @xtr      == other.instance_eval("@xtr")      &&
-		 @data     == other.instance_eval("@data"))
+		(@testname == other.instance_eval('@testname') &&
+		 @err      == other.instance_eval('@err')      &&
+		 @msg      == other.instance_eval('@msg')      &&
+		 @xpl      == other.instance_eval('@xpl')      &&
+		 @xtr      == other.instance_eval('@xtr')      &&
+		 @data     == other.instance_eval('@data'))
 	    end
 	    alias == eql?
 
@@ -135,7 +135,7 @@ class Test
 	def tag
 	    if ! @ns.nil?				# NS
 	    then @ip.nil? ? "#{@ns}" : "#{@ns}/#{ip}"	# NS/IP
-	    else $mc.get("w_generic")			# generic
+	    else $mc.get('w_generic')			# generic
 	    end
 	end
     end

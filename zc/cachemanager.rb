@@ -79,7 +79,7 @@ class CacheManager
 	#
 	def eql?(other)
 	    return false unless self.class == other.class
-	    other = other.instance_eval("@resource") if respond_to?(:_class)
+	    other = other.instance_eval('@resource') if respond_to?(:_class)
 	    @resource == other
 	end
 	alias == eql?
@@ -154,7 +154,7 @@ class CacheManager
 	    # Sanity check
 	    case ip
 	    when Address
-	    else raise "Argument should be an Address"
+	    else raise 'Argument should be an Address'
 	    end
  
 	    # Retrieve/Create the cachemanager for the address
@@ -192,7 +192,7 @@ class CacheManager
 		end
 	    }
 	else
-	    raise ArgumentError, "Expecting Address or DNS Name"
+	    raise ArgumentError, 'Expecting Address or DNS Name'
 	end
     end
 
@@ -250,7 +250,7 @@ class CacheManager
     def rec(domainname, force=nil)
 	@cache.use(:rec, domainname, force) {
 	    soa = soa(domainname, force)
-	    raise NResolv::NResolvError, "Domain doesn't exists" if soa.nil?
+	    raise NResolv::NResolvError, 'Domain doesn\'t exists' if soa.nil?
 	    soa.ra
 	}
     end

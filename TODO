@@ -5,12 +5,12 @@ version = 2.0.0
 		- base de donnees reseau (RIR) 
 		- test connectivite avec plusieurs adresses IP 
 
-	integration avec la chaine de production
 	problem with @input.error when in html due to header (for batch)
 	handle in test1 the case when a 'test' (ie: switch) fails
 	make it more clear that 'primary' is not the primary when hidden in SOA
 
 version = 2.1.0
+	Finish xml publisher and DTD
 	IDN
 	check for label_xpl defined elsewhere
 	portage sous windows (recuperer le resolver par defaut, ...)

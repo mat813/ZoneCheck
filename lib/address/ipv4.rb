@@ -41,7 +41,7 @@ class Address
 		   (0..255) === (b = $2.to_i) &&
 		   (0..255) === (c = $3.to_i) &&
 		   (0..255) === (d = $4.to_i)
-		    return self::new([a, b, c, d].pack("CCCC").untaint.freeze)
+		    return self::new([a, b, c, d].pack('CCCC').untaint.freeze)
 		else
 		    raise InvalidAddress, 
 			"IPv4 address with invalid value: #{arg}"
@@ -56,7 +56,7 @@ class Address
 	    unless (address.instance_of?(String) && 
 		    address.length == 4 && address.frozen?)
 		raise ArgumentError,
-		    "IPv4 raw address must be a 4 byte frozen string"
+		    'IPv4 raw address must be a 4 byte frozen string'
 	    end
 	    @address = address
 	    freeze
@@ -66,7 +66,7 @@ class Address
 	    # 10.0.0.0     -  10.255.255.255   (10/8       prefix)
 	    # 172.16.0.0   -  172.31.255.255   (172.16/12  prefix)
 	    # 192.168.0.0  -  192.168.255.255  (192.168/16 prefix)
-	    bytes = @address.unpack("CCCC")
+	    bytes = @address.unpack('CCCC')
 	    return (((bytes[0] == 10))                            ||
 		    ((bytes[0] == 172) && (bytes[1]&0xf0 == 16))  ||
 		    ((bytes[0] == 192) && (bytes[1] == 168)))
@@ -75,10 +75,10 @@ class Address
 	def prefix(size=nil)
 	    if size.nil?
 		# TODO
-		raise RuntimeError, "Not Implemented Yet"
+		raise RuntimeError, 'Not Implemented Yet'
 	    else
 		if size > @address.size * 8
-		    raise ArgumentError, "prefix size too big"
+		    raise ArgumentError, 'prefix size too big'
 		end
 		bytes, bits_shift = size / 8, 8 - (size % 8)
 		address = @address.slice(0, bytes) + 
@@ -89,20 +89,20 @@ class Address
 	end
 
 	def to_s
-	    "%d.%d.%d.%d" % @address.unpack("CCCC")
+	    '%d.%d.%d.%d' % @address.unpack('CCCC')
 	end
 	
 	def to_dnsform
-	    "%d.%d.%d.%d" % @address.unpack('CCCC').reverse
+	    '%d.%d.%d.%d' % @address.unpack('CCCC').reverse
 	end
 
 	def protocol  ; Socket::AF_INET ; end
-	def namespace ; "in-addr.arpa." ; end
+	def namespace ; 'in-addr.arpa.' ; end
 
 
 	##
 	## IPv4 Loopback
 	##
-	Loopback = IPv4::create("127.0.0.1")
+	Loopback = IPv4::create('127.0.0.1')
     end
 end

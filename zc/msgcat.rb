@@ -61,7 +61,7 @@ require 'dbg'
 class MessageCatalog
     TagRegex	= /[\w\/]+/
     LANGRegex	= /^(\w+?)(?:_(\w+))?(?:\.([\w\-]+))?$/
-    None	= "[none]"
+    None	= '[none]'
 
     ##
     ## Exception: the corresponding message catalog is not installed
@@ -93,9 +93,9 @@ class MessageCatalog
 	unless lng =~ LANGRegex
 	    raise ArgumentError, "Suspicious language selection: #{lng}"
 	end
-	lang  = $1.downcase
-        lang += "_" + $2.upcase if $2
-        lang += "." + $3.downcase if $3
+	lang  =       $1.downcase
+        lang += '_' + $2.upcase   if $2
+        lang += '.' + $3.downcase if $3
         lang.untaint
     end
 
@@ -115,7 +115,7 @@ class MessageCatalog
     # Initializer
     #
     def initialize(directory)
-	$dbg.msg(DBG::LOCALE, "creating message catalogue")
+	$dbg.msg(DBG::LOCALE, 'creating message catalogue')
 	@directory	= directory
 	@catalog	= {}
 	@loaded		= {}
@@ -154,7 +154,7 @@ class MessageCatalog
     # Clear all messages
     #
     def clear
-	$dbg.msg(DBG::LOCALE, "clearing message catalogue")
+	$dbg.msg(DBG::LOCALE, 'clearing message catalogue')
 	@catalog	= {}
 	@loaded		= {}
 	@catfiles	= []
@@ -169,9 +169,8 @@ class MessageCatalog
     def read(where)
         filepath(where).each { |fp|
 	    if File::readable?(fp)
-                if res = readfile(fp)
-                    @catfiles << where
-                end
+                res = readfile(fp)
+		@catfiles << where unless res.nil?
                 return res
             end
 	}
@@ -195,19 +194,18 @@ class MessageCatalog
     #  (allowing to take into account a new locale)
     #
     def reload
-	$dbg.msg(DBG::LOCALE, "reloading message catalogue")
+	$dbg.msg(DBG::LOCALE, 'reloading message catalogue')
 	@catalog	= {}
 	@loaded		= {}
 	@catfiles.each { |where| 
-            ok = false
-            filepath(where).each { |fp|
-		if File::readable?(fp)
-                    readfile(fp) ; ok = true ; break
-                end
-            }
-            unless ok
-                raise NoCatalogFound, "No valid catalog found for #{@lang}"
-            end
+ 	    catch (:loaded) {
+		filepath(where).each { |fp|
+		    if File::readable?(fp)
+			readfile(fp) ; throw :loaded
+		    end
+		}
+		raise NoCatalogFound, "No valid catalog found for #{@lang}"
+	    }
         }
     end
 
@@ -242,7 +240,7 @@ class MessageCatalog
 	file_id   = [ file_stat.dev, file_stat.ino != 0 ? file_stat.ino \
 	                                                : msgfile ]
 	if @loaded.has_key?(file_id)
-	    $dbg.msg(DBG::LOCALE, "file already loaded: #{msgfile}")
+	    $dbg.msg(DBG::LOCALE) { "file already loaded: #{msgfile}" }
 	    return false
 	end
 
@@ -263,11 +261,13 @@ class MessageCatalog
 		case line
 		# Prefix section
 		when /^\[(#{TagRegex}|\*)\]\s*$/
-		    prefix = $1 == "*" ? nil : $1 
-		    if prefix.nil?
-		    then $dbg.msg(DBG::LOCALE, "removing prefix")
-		    else $dbg.msg(DBG::LOCALE, "using prefix: #{prefix}")
-		    end
+		    prefix = $1 == '*' ? nil : $1 
+		    $dbg.msg(DBG::LOCALE) {
+			if prefix.nil?
+			then "removing prefix"
+			else "using prefix: #{prefix}"
+			end
+		    }
 
 		# Definition
 		when /^(#{TagRegex})\s*:\s*(.*?)\s*$/
@@ -279,7 +279,7 @@ class MessageCatalog
 			    "Line #{lineno}: Tag '#{tag}' already defined (in #{msgfile})"
 		    end
 
-		    while msg.gsub!(/\\$/, "")
+		    while msg.gsub!(/\\$/, '')
 			if (line = io.gets).nil?
 			    raise SyntaxError,
 				"Line #{lineno}: line expected after '\\' (in #{msgfile})"

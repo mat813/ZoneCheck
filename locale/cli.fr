@@ -38,7 +38,7 @@
 #
 
 input_cli_usage: \
-usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns...] [-c conf] nomdedomaine\n\
+usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] nomdedomaine\n\
     -q, --quiet         N'affiche pas de titres suplémentaires\n\
         --lang          Choisit une autre langue (en, fr, ...)\n\
     -h, --help          Affiche ce message\n\
@@ -55,12 +55,13 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns...] [-c conf] nomdedomaine\n\
                            (ex: ns1;ns2=ip1,ip2;ns3=ip3)\n\
     -1, --one           Affiche uniquement le message le plus significatif\n\
     -g, --tagonly       Affiche uniquement les tags (idéal pour les scripts)\n\
-    -e, --error         Comportement en cas d'erreur (voir error)\n\
-    -t, --transp        Choix de la couche transport/routage (voir transp)\n\
     -v, --verbose       Niveau de détail des informations (voir verbose)\n\
     -o, --output        Format de sortie (see output)\n\
+    -e, --error         Comportement en cas d'erreur (voir error)\n\
+    -t, --transp        Choix de la couche transport/routage (voir transp)\n\
     -4, --ipv4          Utilise uniquement IPv4 pour vérifier le domaine\n\
     -6, --ipv6          Utilise uniquement IPv6 pour vérifier le domaine\n\
+        --option        Options supplémentaires (-,-opt,opt,opt=toto)\n\
 \n\
   verbose:              [intro/explain/details] [testdesc|counter]\n\
     intro          [i]  Affiche un résumé du domaine et de ses serveurs\n\

@@ -106,19 +106,22 @@ class Param
 	end
 
 	def autoconf
-	    flags = []
-	    flags << "tagonly"  if @tagonly
-	    flags << "one"      if @one
-	    flags << "quiet"    if @quiet
-	    flags << "intro"    if @intro
-	    flags << "testname" if @testname
-	    flags << "explain"  if @explain
-	    flags << "details"  if @details
-	    flags << "testdesc" if @testdesc
-	    flags << "counter"  if @counter
-	    flags << "stop"     if @stop_on_fatal
-	    flags << "reportok" if @reportok
-	    $dbg.msg(DBG::AUTOCONF, "Report flags: " + flags.join("/"))
+	    $dbg.msg(DBG::AUTOCONF) {
+		flags = []
+		flags << 'tagonly'  if @tagonly
+		flags << 'one'      if @one
+		flags << 'quiet'    if @quiet
+		flags << 'intro'    if @intro
+		flags << 'testname' if @testname
+		flags << 'explain'  if @explain
+		flags << 'details'  if @details
+		flags << 'testdesc' if @testdesc
+		flags << 'counter'  if @counter
+		flags << 'stop'     if @stop_on_fatal
+		flags << 'reportok' if @reportok
+		flags << 'NONE'     if flags.empty?
+		"Report flags: #{flags.join('/')}"
+	    }
 	end
     end
 
@@ -176,7 +179,7 @@ class Param
 	def name=(domain)
 	    domain = NResolv::DNS::Name::create(domain, true)
 	    unless domain.absolute?
-		raise ArgumentError, $mc.get("xcp_param_fqdn_required")
+		raise ArgumentError, $mc.get('xcp_param_fqdn_required')
 	    end
 	    @name = domain
 	end
@@ -214,13 +217,13 @@ class Param
 	def autoconf(dns)
 	    # Guess Nameservers and ensure primary is at first position
 	    if @ns.nil?
-		$dbg.msg(DBG::AUTOCONF, "Retrieving NS for #{@name}")
+		$dbg.msg(DBG::AUTOCONF) { "Retrieving NS for #{@name}" }
 		begin
 		    primary = dns.primary(@name)
-		    $dbg.msg(DBG::AUTOCONF,
-			     "Identified NS primary as #{primary}")
+		    $dbg.msg(DBG::AUTOCONF) {
+			"Identified NS primary as #{primary}" }
 		rescue NResolv::NResolvError
-		    raise ParamError, $mc.get("xcp_param_primary_soa")
+		    raise ParamError, $mc.get('xcp_param_primary_soa')
 		end
 
 		# Retrieve NS from the parent 
@@ -240,24 +243,24 @@ class Param
 			end
 		    }
 		rescue NResolv::NResolvError
-		    raise ParamError, $mc.get("xcp_param_nameservers_ns")
+		    raise ParamError, $mc.get('xcp_param_nameservers_ns')
 		end
 		
 		if @ns[0].nil?
-		    raise ParamError, $mc.get("xcp_param_prim_ns_soa")
+		    raise ParamError, $mc.get('xcp_param_prim_ns_soa')
 		end
 	    end
 	
 	    # Set cache status
 	    if @cache
 		@cache &&= can_cache?
-		$dbg.msg(DBG::AUTOCONF, "Cache status set to #{@cache}")
+		$dbg.msg(DBG::AUTOCONF) { "Cache status set to #{@cache}" }
 	    end
 	    
 	    # Guess Nameservers IP addresses
 	    @ns.each { |ns, ips|
 		if ips.empty? then
-		    $dbg.msg(DBG::AUTOCONF, "Retrieving IP for NS: #{ns}")
+		    $dbg.msg(DBG::AUTOCONF) { "Retrieving IP for NS: #{ns}" }
 		    begin
 			ips.concat(dns.getaddresses(ns, Address::OrderStrict))
 		    rescue NResolv::NResolvError
@@ -265,7 +268,7 @@ class Param
 		end
 		if ips.empty? then
 		    raise ParamError, 
-			$mc.get("xcp_param_nameserver_ips") % [ ns ]
+			$mc.get('xcp_param_nameserver_ips') % [ ns ]
 		end
 	    }
 
@@ -278,19 +281,19 @@ class Param
 		if !ns.in_domain?(@name) && !ips.nil?
 		    resolved_ips = nil
 		    begin
-			$dbg.msg(DBG::AUTOCONF, "Comparing IP for NS: #{ns}")
+			$dbg.msg(DBG::AUTOCONF) {"Comparing IP for NS: #{ns}"}
 			resolved_ips = dns.getaddresses(ns, 
 							Address::OrderStrict)
 			
 			unless ips.unsorted_eql?(resolved_ips)
 #			    raise ParamError, 
-#				$mc.get("xcp_param_ns_bad_ips") % ns
+#				$mc.get('xcp_param_ns_bad_ips') % ns
 			end
 		    rescue NResolv::NResolvError
 		    end
 		    if resolved_ips.empty?
 			raise ParamError, 
-			    $mc.get("xcp_param_nameserver_ips") % [ ns ]
+			    $mc.get('xcp_param_nameserver_ips') % [ ns ]
 		    end
 		end
 	    }
@@ -374,16 +377,16 @@ class Param
 	    # Check for 'tagonly' support
 	    if rflag.tagonly && !@report.tagonly_supported?
 		raise ParamError, 
-		    $mc.get("xcp_param_output_support") % [ "tagonly" ]
+		    $mc.get('xcp_param_output_support') % [ 'tagonly' ]
 	    end
 	    # Check for 'one' support
 	    if rflag.one     && !@report.one_supported?
 		raise ParamError, 
-		    $mc.get("xcp_param_output_support") % [ "one"     ]
+		    $mc.get('xcp_param_output_support') % [ 'one'     ]
 	    end
 
 	    # Debug
-	    $dbg.msg(DBG::AUTOCONF, "Report using #{reporter}")
+	    $dbg.msg(DBG::AUTOCONF) { "Report using #{reporter}" }
 	end
     end
 
@@ -406,8 +409,8 @@ class Param
 
 	def autoconf
 	    # Debug
-	    $dbg.msg(DBG::AUTOCONF, "configuration file: #{@cfgfile}")
-	    $dbg.msg(DBG::AUTOCONF, "tests directory: #{@testdir}")
+	    $dbg.msg(DBG::AUTOCONF) { "configuration file: #{@cfgfile}" }
+	    $dbg.msg(DBG::AUTOCONF) { "tests directory: #{@testdir}"    }
 	end
     end
 
@@ -432,14 +435,14 @@ class Param
 
 	def ipv6=(bool)
 	    if bool && ! $ipv6_stack
-		raise ParamError, $mc.get("xcp_param_ip_no_stack") % "IPv6"
+		raise ParamError, $mc.get('xcp_param_ip_no_stack') % 'IPv6'
 	    end
 	    @ipv6 = bool
 	end
 
 	def ipv4=(bool)
 	    if bool && ! $ipv4_stack
-		raise ParamError, $mc.get("xcp_param_ip_no_stack") % "IPv4"
+		raise ParamError, $mc.get('xcp_param_ip_no_stack') % 'IPv4'
 	    end
 	    @ipv4 = bool
 	end
@@ -465,18 +468,22 @@ class Param
 	    @ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
 	    @ipv4 = false        if @ipv4.nil? || !$ipv4_stack
 	    @ipv6 = false        if @ipv6.nil? || !$ipv6_stack
-	    raise "Why are you using this program!" if !@ipv4 && !@ipv6
+	    raise 'Why are you using this program!' if !@ipv4 && !@ipv6
 	    # Debug
-	    $dbg.msg(DBG::AUTOCONF, 
-		     "Routing protocol set to: " +
-		     [ @ipv4 ? "IPv4" : nil, 
-		       @ipv6 ? "IPv6" : nil].compact.join("/"))
+	    $dbg.msg(DBG::AUTOCONF) { 
+		routing = [ ]
+		routing << 'IPv4' if @ipv4
+		routing << 'IPv6' if @ipv6
+		routing << 'NONE' if routing.empty?	# => YARGL
+		"Routing protocol set to: #{routing.join('/')}"
+	    }
 
 	    # Select mode (UDP/TCP/STD)
 	    @query_mode = NResolv::DNS::Client::STD if @query_mode.nil?
 	    # Debug
-	    @query_mode.to_s =~ /([^:]+)$/
-	    $dbg.msg(DBG::AUTOCONF, "Query mode set to: #{$1}")
+	    $dbg.msg(DBG::AUTOCONF) {
+		@query_mode.to_s =~ /([^:]+)$/
+		"Query mode set to: #{$1}" }
 	end
     end
 
@@ -516,7 +523,7 @@ class Param
 				 dft = NResolv::DNS::DefaultResolver
 				 if dft.getaddresses(@local_name).empty?
 				     raise ParamError, 
-					 $mc.get("xcp_param_local_resolver") % @local_name
+					 $mc.get('xcp_param_local_resolver') % @local_name
 				 end
 			     end
 			     # Build new resolver
@@ -526,8 +533,10 @@ class Param
 	    end
 
 	    # Debug
-	    $dbg.msg(DBG::AUTOCONF, "Resolver " + 
-		     (@local_name.nil? ? "<default>" : @local_name))
+	    $dbg.msg(DBG::AUTOCONF) {
+		resolver = @local_name || '<default>'
+		"Resolver #{resolver}"
+	    }
 	end
     end
 
@@ -553,11 +562,11 @@ class Param
 
 	def desctype=(string)
 	    suf = case string
-		  when "name"  then "testname"
-		  when "expl"  then "explain"
-		  when "error" then "error"
+		  when 'name'  then 'testname'
+		  when 'expl'  then 'explain'
+		  when 'error' then 'error'
 		  else raise ParamError, 
-			  $mc.get("xcp_param_unknown_modopt") % [ string, "testdesc" ]
+			  $mc.get('xcp_param_unknown_modopt') % [ string, 'testdesc' ]
 		  end
 	    
 	    @desctype = suf
@@ -578,13 +587,19 @@ class Param
 
 	def autoconf
 	    # Debug
-	    $dbg.msg(DBG::AUTOCONF, 
-	      "Test description requested for type: #{@desctype}") if @desctype
-	    $dbg.msg(DBG::AUTOCONF, "Test listing requested") if @list
-	    $dbg.msg(DBG::AUTOCONF, "Selected tests: " +
-		     (@tests.nil? ? "ALL" : @tests.join(',')))
-	    $dbg.msg(DBG::AUTOCONF, "Selected categories: " +
-		     (@categories ? @categories.join(",") : "+"))
+	    $dbg.msg(DBG::AUTOCONF) {
+		tests = (@tests || [ 'ALL' ]).join(',')
+		"Selected tests: #{tests}" }
+	    $dbg.msg(DBG::AUTOCONF) {
+		categories = (@categories || [ '+' ]).join(',')
+		"Selected categories: #{categories}" }
+	    if @desctype
+		$dbg.msg(DBG::AUTOCONF) {
+		    "Test description requested for type: #{@desctype}" }
+	    end
+	    if @list
+		$dbg.msg(DBG::AUTOCONF) { 'Test listing requested' }
+	    end
 	end
     end
 
@@ -617,7 +632,7 @@ class Param
 	    # Set output publisher
 	    @publisher = @publisher_class::new(rflag, $console.stdout)
 
-	    $dbg.msg(DBG::AUTOCONF, "Publish using #{@publisher_class}")
+	    $dbg.msg(DBG::AUTOCONF) { "Publish using #{@publisher_class}" }
 	end
     end
 
@@ -630,29 +645,32 @@ class Param
 	    @opt	= { }
 	end
 	
+	def [](key)		; @opt[key]		; end
+	def []=(key,value)	; @opt[key] = value	; end
+	def delete(key)		; @opt.delete(key)	; end
+	def clear		; @opt = { }		; end
+
 	def <<(args)
 	    args.strip.split(/\s*,\s*/).each { |arg|
 		case arg
-		when /^-$/		then @opt = { }
-		when /^-(\w+)$/		then @opt.delete($1)
-		when /^\+?(\w+)$/	then @opt[$1] = true
-		when /^\+?(\w+)=(\w+)$/	then @opt[$1] = $2
-		else raise "Bad option specification"
+		when /^-$/		then self.clear
+		when /^-(\w+)$/		then self.delete($1)
+		when /^\+?(\w+)$/	then self[$1] = true
+		when /^\+?(\w+)=(\w+)$/	then self[$1] = $2
+		else raise ArgumentError, 'bad option specification'
 		end
 	    }
 	    self
 	end
 
-	def [](key)
-	    @opt[key]
-	end
-
 	def autoconf
 	    @opt.each { |key, value| 
-		if value == true
-		then $dbg.msg(DBG::AUTOCONF, "Option set: #{key}")
-		else $dbg.msg(DBG::AUTOCONF, "Option set: #{key} = #{value}")
-		end
+		$dbg.msg(DBG::AUTOCONF) {
+		    if value == true	# this is NOT a pleonasm!
+		    then "Option set: #{key}"
+		    else "Option set: #{key} = #{value}"
+		    end
+		}
 	    }
 	end
     end
@@ -713,20 +731,20 @@ class Param
 	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
-	    when "af",  "allfatal"
+	    when 'af',  'allfatal'
 		@report.allfatal
-	    when "aw",  "allwarning"
+	    when 'aw',  'allwarning'
 		@report.allwarning
-	    when "s",   "stop"
+	    when 's',   'stop'
 		@rflag.stop_on_fatal = true
-	    when "ns",  "nostop"
+	    when 'ns',  'nostop'
 		@rflag.stop_on_fatal = false
-	    when "std", "standard"
+	    when 'std', 'standard'
 		@report.standard
 		@rflag.stop_on_fatal = false
 	    else
 		raise ParamError,
-		    $mc.get("xcp_param_unknown_modopt") % [ token, "error" ]
+		    $mc.get('xcp_param_unknown_modopt') % [ token, 'error' ]
 	    end
 	}
     end
@@ -738,23 +756,23 @@ class Param
 	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
-	    when "i", "intro"
+	    when 'i', 'intro'
 		@rflag.intro	= true
-	    when "n", "testname"
+	    when 'n', 'testname'
 		@rflag.testname	= true
-	    when "x", "explain"
+	    when 'x', 'explain'
 		@rflag.explain	= true
-	    when "d", "details"
+	    when 'd', 'details'
 		@rflag.details  = true
-	    when "o", "reportok"
+	    when 'o', 'reportok'
 		@rflag.reportok	= true
-	    when "t", "testdesc"
+	    when 't', 'testdesc'
 		@rflag.testdesc	= true
-	    when "c", "counter"
+	    when 'c', 'counter'
 		@rflag.counter	= true
 	    else
 		raise ParamError,
-		    $mc.get("xcp_param_unknown_modopt") % [ token, "verbose" ]
+		    $mc.get('xcp_param_unknown_modopt') % [ token, 'verbose' ]
 	    end
 	}
     end
@@ -766,27 +784,27 @@ class Param
 	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
-	    when "bs", "byseverity"
+	    when 'bs', 'byseverity'
 		require 'report/byseverity'
 		@report.reporter  = Report::BySeverity
-	    when "bh", "byhost"
+	    when 'bh', 'byhost'
 		require 'report/byhost'
 		@report.reporter  = Report::ByHost
-	    when "t", "text"
+	    when 't', 'text'
 		require 'publisher/text'
 		@publisher.engine = ::Publisher::Text
-	    when "h", "html"
+	    when 'h', 'html'
 		require 'publisher/html'
 		@publisher.engine = ::Publisher::HTML
-	    when "x", "xml"
+	    when 'x', 'xml'
 		require 'publisher/xml'
 		@publisher.engine = ::Publisher::XML
-	    when "g", "gtk"
+	    when 'g', 'gtk'
 		require 'publisher/gtk'
 		@publisher.engine = ::Publisher::GTK
 	    else
 		raise ParamError,
-		    $mc.get("xcp_param_unknown_modopt") % [ token, "output" ]
+		    $mc.get('xcp_param_unknown_modopt') % [ token, 'output' ]
 	    end
 	}
     end
@@ -798,19 +816,19 @@ class Param
 	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
-	    when "4", "ipv4"
+	    when '4', 'ipv4'
 		@network.ipv4 = true
-	    when "6", "ipv6"
+	    when '6', 'ipv6'
 		@network.ipv6 = true
-	    when "u", "udp"
+	    when 'u', 'udp'
 		@network.query_mode = NResolv::DNS::Client::UDP
-	    when "t", "tcp"
+	    when 't', 'tcp'
 		@network.query_mode = NResolv::DNS::Client::TCP
-	    when "s", "std"
+	    when 's', 'std'
 		@network.query_mode = NResolv::DNS::Client::STD
 	    else
 		raise ParamError,
-		    $mc.get("xcp_param_unknown_modopt") % [token, "transp"]
+		    $mc.get('xcp_param_unknown_modopt') % [token, 'transp']
 	    end
 	}
     end

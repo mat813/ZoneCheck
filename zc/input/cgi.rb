@@ -52,6 +52,7 @@ require 'cgi'
 ##  - lang     = [ fr | en | ... ]
 ##  - quiet
 ##  - one
+##  - option
 ##  - verbose  = [ i|intro, n|testname, x|explain, d|details, 
 ##                 t|testdesc, c|counter, o|reportok ]
 ##      - intro
@@ -103,10 +104,10 @@ module Input
 	end
 
 	def redirect(url, errcode, data=nil, io=$stdout)
-	    io.puts @cgi.header({ "status"   => "REDIRECT",
-				  "location" => url,
-				  "type"     => "text/plain",
-				  "charset"  => "UTF-8" })
+	    io.puts @cgi.header({ 'status'   => 'REDIRECT',
+				  'location' => url,
+				  'type'     => 'text/plain',
+				  'charset'  => 'UTF-8' })
 	    io.puts data if data
 	    exit errcode unless errcode.nil?
 	end
@@ -115,22 +116,22 @@ module Input
 	    # XXX: not good place
 	    p.rflag.autoconf
 	    p.publisher.autoconf(p.rflag)
-	    puts @cgi.header({ "type"    => p.publisher.engine.class::Mime,
-			       "charset" => "UTF-8" })
+	    puts @cgi.header({ 'type'    => p.publisher.engine.class::Mime,
+			       'charset' => 'UTF-8' })
 	    true
 	end
 
 	def usage(errcode, io=$stdout)
-	    io.puts @cgi.header({ "type"    => "text/plain",
-				  "charset" => "UTF-8" })
-	    io.puts $mc.get("input_cgi_usage")
+	    io.puts @cgi.header({ 'type'    => 'text/plain',
+				  'charset' => 'UTF-8' })
+	    io.puts $mc.get('input_cgi_usage')
 	    exit errcode unless errcode.nil?
 	end
 
 	def error(str, errcode=nil, io=$stdout)
-	    l10n_error = $mc.get("w_error").upcase
-	    io.puts @cgi.header({ "type"    => "text/plain",
-				  "charset" => "UTF-8" })
+	    l10n_error = $mc.get('w_error').upcase
+	    io.puts @cgi.header({ 'type'    => 'text/plain',
+				  'charset' => 'UTF-8' })
 	    io.puts "#{l10n_error}: #{str}"
 	    exit errcode unless errcode.nil?
 	end
@@ -142,9 +143,9 @@ module Input
 	def parse_options(p)
 	    # Lang
 	    # => The message catalogue need to be replaced
-	    if @cgi.has_key?("lang")
+	    if @cgi.has_key?('lang')
 		begin
-		    lang = @cgi["lang"]
+		    lang = @cgi['lang']
 		    if $mc.available?(ZC_LANG_FILE, lang)
 			$mc.lang = lang
 			$mc.reload
@@ -154,73 +155,73 @@ module Input
 	    end
 
 	    # Quiet, One
-	    p.rflag.quiet = true if @cgi.has_key?("quiet")
-	    p.rflag.one   = true if @cgi.has_key?("one")
+	    p.rflag.quiet = true if @cgi.has_key?('quiet')
+	    p.rflag.one   = true if @cgi.has_key?('one')
 
 	    # Verbose
-	    if @cgi.has_key?("verbose")
-		p.verbose = @cgi.params["verbose"].join(",")
+	    if @cgi.has_key?('verbose')
+		p.verbose = @cgi.params['verbose'].join(',')
 	    else
-		p.verbose = "testname"		if @cgi.has_key?("testname")
-		p.verbose = "intro"             if @cgi.has_key?("intro")
-		p.verbose = "explain"           if @cgi.has_key?("explain")
-		p.verbose = "details"		if @cgi.has_key?("details")
-		p.verbose = "reportok"		if @cgi.has_key?("reportok")
-		p.verbose = @cgi["progress"]    if @cgi.has_key?("progress")
+		p.verbose = 'testname'		if @cgi.has_key?('testname')
+		p.verbose = 'intro'             if @cgi.has_key?('intro')
+		p.verbose = 'explain'           if @cgi.has_key?('explain')
+		p.verbose = 'details'		if @cgi.has_key?('details')
+		p.verbose = 'reportok'		if @cgi.has_key?('reportok')
+		p.verbose = @cgi['progress']    if @cgi.has_key?('progress')
 	    end
 
 	    # Output
-	    if @cgi.has_key?("output")
-		p.output = @cgi.params["output"].join(",")
+	    if @cgi.has_key?('output')
+		p.output = @cgi.params['output'].join(',')
 	    else
-		p.output = if @cgi.has_key?("format")
-			   then @cgi["format"]
-			   else "html"
+		p.output = if @cgi.has_key?('format')
+			   then @cgi['format']
+			   else 'html'
 			   end
-		p.output = if @cgi.has_key?("report")
-			   then @cgi["report"]
-			   else "byseverity"
+		p.output = if @cgi.has_key?('report')
+			   then @cgi['report']
+			   else 'byseverity'
 			   end
 	    end
 
 	    # Error
-	    if @cgi.has_key?("error")
-		p.error  = @cgi.params["error"].join(",")
+	    if @cgi.has_key?('error')
+		p.error  = @cgi.params['error'].join(',')
 	    else
-		errorlvl  = if @cgi.has_key?("errorlvl")
-			    then @cgi.params["errorlvl"].delete_if { |e| 
+		errorlvl  = if @cgi.has_key?('errorlvl')
+			    then @cgi.params['errorlvl'].delete_if { |e| 
 			           e =~ /^\s*$/ }
 			    else []
 			    end
-		errorstop = @cgi.has_key?("dontstop") ? "nostop" : "stop"
-		p.error   = (errorlvl + [ errorstop ]).join(",")
+		errorstop = @cgi.has_key?('dontstop') ? 'nostop' : 'stop'
+		p.error   = (errorlvl + [ errorstop ]).join(',')
 	    end
 
 	    # Transp
-	    if @cgi.has_key?("transp")
-		p.transp = @cgi.params["transp"].join(",")
+	    if @cgi.has_key?('transp')
+		p.transp = @cgi.params['transp'].join(',')
 	    else
-		p.transp = ((@cgi.params["transp3"] || []) + 
-			    (@cgi.params["transp4"] || [])).join(",")
+		p.transp = ((@cgi.params['transp3'] || []) + 
+			    (@cgi.params['transp4'] || [])).join(',')
 	    end
 
 	    # Category
-	    if @cgi.has_key?("category")
-		p.category = @cgi.params["category"].join(",")
+	    if @cgi.has_key?('category')
+		p.category = @cgi.params['category'].join(',')
 	    else
 		cat = [ ]
-		cat << "!mail"		unless @cgi.has_key?("chkmail")
-		cat << "!rir"		unless @cgi.has_key?("chkrir")
-		cat << "!dns:axfr"	unless @cgi.has_key?("chkzone")
+		cat << '!mail'		unless @cgi.has_key?('chkmail')
+		cat << '!rir'		unless @cgi.has_key?('chkrir')
+		cat << '!dns:axfr'	unless @cgi.has_key?('chkzone')
 		if ! cat.empty?
-		    cat << "+"
-		    p.test.categories = cat.join(",")
+		    cat << '+'
+		    p.test.categories = cat.join(',')
 		end
 	    end
 
 	    # Option
-	    if @cgi.has_key?("option")
-		p.option << @cgi.params["option"].join(",")
+	    if @cgi.has_key?('option')
+		p.option << @cgi.params['option'].join(',')
 	    end
 
 	    # Ok
@@ -229,13 +230,13 @@ module Input
 
 	def parse_zonedata(p)
 	    # Batch
-	    if @cgi.has_key?("batchdata")
-		p.batch = Param::BatchData::new(@cgi["batchdata"])
+	    if @cgi.has_key?('batchdata')
+		p.batch = Param::BatchData::new(@cgi['batchdata'])
 	    end
 
 	    # NS and IPs
-	    if @cgi.has_key?("ns")
-		p.domain.ns = @cgi.params["ns"].join(";")
+	    if @cgi.has_key?('ns')
+		p.domain.ns = @cgi.params['ns'].join(';')
 	    else
 		ns_list = [ ]
 		(0..MaxNS-1).each { |i|
@@ -244,7 +245,7 @@ module Input
 		    next unless ns = cgi_ns[0]
 		    next unless !ns.empty?
                    
-		    cgi_ips = @cgi.params["ips#{i}"] || ""
+		    cgi_ips = @cgi.params["ips#{i}"] || ''
 		    if cgi_ips.nil? || cgi_ips.length == 0 
 			ns_list << [ ns ]
 		    else
@@ -272,16 +273,16 @@ module Input
 
 		if ! ns_list.empty?
 		    p.domain.ns   = ns_list.collect { |ns, ips|
-			ips ? "#{ns}=#{ips.join(',')}" : ns }.join(";")
+			ips ? "#{ns}=#{ips.join(',')}" : ns }.join(';')
 		end
 	    end
 
 	    # Zone/Domain
 	    if p.batch.nil?
-		zone = @cgi["zone"]
+		zone = @cgi['zone']
 		zone.strip! if zone
 		if zone.nil? || zone.empty?
-		    # If we got a referer send it back to this page,
+		    # If we got a referer send him back to this page,
 		    # otherwise assume it was an attempt of a direct
 		    # script invocation (and send a usage page)
 		    if ENV.has_key?('HTTP_REFERER')

@@ -79,7 +79,7 @@ class Address
 
 
 
-	def self.hex_pack(str, data="")
+	def self.hex_pack(str, data='')
 	    str.scan(/[0-9A-Fa-f]+/) { |hex| data << [hex.hex].pack('n') }
 	    data
 	end
@@ -102,7 +102,7 @@ class Address
 		test = if    opt == IPv6StrictRegex then 1
 		       elsif opt == IPv6Regex       then 2
 		       elsif opt == IPv6LooseRegex  then 3
-		       else  raise ArgumentError, "unknown option"
+		       else  raise ArgumentError, 'unknown option'
 		       end
 
 		# Test: a:b:c:d:e:f:g:h
@@ -164,7 +164,7 @@ class Address
 	    unless (address.instance_of?(String) && 
 		    address.length == 16 && address.frozen?)
 		raise Argument,
-		    "IPv6 raw address must be a 16 byte frozen string"
+		    'IPv6 raw address must be a 16 byte frozen string'
 	    end
 	    @address = address
 	    freeze
@@ -179,7 +179,7 @@ class Address
 		prefix(64)
 	    else
 		if size > @address.size * 8
-		    raise ArgumentError, "prefix size too big"
+		    raise ArgumentError, 'prefix size too big'
 		end
 		bytes, bits_shift = size / 8, 8 - (size % 8)
 		address = @address.slice(0, bytes) + 
@@ -190,7 +190,7 @@ class Address
 	end
 
 	def to_s
-	    address = "%X:%X:%X:%X:%X:%X:%X:%X" % @address.unpack("nnnnnnnn")
+	    address = '%X:%X:%X:%X:%X:%X:%X:%X' % @address.unpack('nnnnnnnn')
 	    unless address.sub!(/(^|:)0(:0)+(:|$)/, '::')
 		address.sub!(/(^|:)0(:|$)/, '::')
 	    end
@@ -198,11 +198,11 @@ class Address
 	end
 	
 	def to_dnsform
-	    @address.unpack("H32")[0].split(//).reverse.join(".")
+	    @address.unpack('H32')[0].split(//).reverse.join('.')
 	end
 
 	def protocol  ; Socket::AF_INET6 ; end
-	def namespace ; "ip6.arpa."      ; end
+	def namespace ; 'ip6.arpa.'      ; end
 
 	##
 	## IPv6 address
@@ -217,6 +217,6 @@ class Address
 	##
 	## IPv6 Loopback
 	## 
-	Loopback = IPv6::create("::1")
+	Loopback = IPv6::create('::1')
     end
 end

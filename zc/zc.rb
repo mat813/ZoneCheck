@@ -143,6 +143,7 @@ $SAFE = 1
 $LOAD_PATH.delete_if { |path| path == "." }
 $LOAD_PATH << ZC_DIR << ZC_LIB
 
+
 #
 # Requirement
 #
@@ -175,7 +176,7 @@ $dbg.level = ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 
 #
 # IPv4/IPv6 stack detection
-#  WARN: doesn't implies that we have the connectivity
+#  WARN: doesn't implies that we have also the connectivity
 #
 $ipv4_stack = begin
 		  UDPSocket::new(Socket::AF_INET).close
@@ -237,7 +238,7 @@ $console.encoding = $mc.encoding
 class ZoneCheck
     #
     # Input method
-    #   (pseudo parameter: --INPUT=???)
+    #   (pseudo parameter: --INPUT=xxx)
     #
     def self.input_method
 	im = nil	# Input Method
@@ -485,8 +486,7 @@ class ZoneCheck
 	suf = @param.test.desctype
 	list = @param.test.tests || @test_manager.list.sort
 	list.each { |test|
-	    $console.stdout.puts $mc.get("#{test}_#{suf}")
-	}
+	    $console.stdout.puts $mc.get("#{test}_#{suf}") }
 	true
     end
 end

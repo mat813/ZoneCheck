@@ -48,6 +48,7 @@ parametres:\n\
  - lang     = [ fr | en | ... ]\n\
  - quiet\n\
  - one\n\
+ - option\n\
  - verbose  = [ i|intro, n|testname, x|explain, d|details,\n\
                 t|testdesc, c|counter, o|reportok ]\n\
      - intro\n\

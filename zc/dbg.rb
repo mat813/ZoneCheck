@@ -57,15 +57,15 @@ class DBG
     # Tag associated with some types
     #
     Tag = { 
-	LOADING		=> "loading",
-	LOCALE		=> "locale",
-	CONFIG		=> "config",
-	PARSER		=> "parser",
-	TESTS		=> "tests",
-	AUTOCONF	=> "autoconf",
-	TESTDBG		=> "testdbg",
-	DBG		=> "dbg",
-	CACHE_INFO	=> "cache"
+	LOADING		=> 'loading',
+	LOCALE		=> 'locale',
+	CONFIG		=> 'config',
+	PARSER		=> 'parser',
+	TESTS		=> 'tests',
+	AUTOCONF	=> 'autoconf',
+	TESTDBG		=> 'testdbg',
+	DBG		=> 'dbg',
+	CACHE_INFO	=> 'cache'
     }
 
 
@@ -75,7 +75,7 @@ class DBG
     def initialize(lvl=0, output=$stderr)
 	@output = output
 	@lvl    = lvl
-	msg(DBG, "Debugger initialized at level %0x" % [ @lvl ])
+	msg(DBG) { "Debugger initialized at level %0x" % @lvl }
     end
 
 
@@ -110,7 +110,7 @@ class DBG
 	end
 	
 	# message
-	msg(DBG, "Setting level to 0x%0x" % [ lvl ])
+	msg(DBG) { "Setting level to 0x%0x" % lvl }
 
 	# enable/disable CrazyDebug
 	if    enabled?(CRAZYDEBUG)
@@ -126,8 +126,16 @@ class DBG
 
     #
     # Print debugging message
+    # WARN: It is adviced to use a block instead of the string 
+    #       second argument, as this will provide a lazy evaluation
     #
-    def msg(type, str)
-	@output.puts "DBG[#{Tag[type]}]: #{str}" if enabled?(type)
+    def msg(type, str=nil)
+	return unless enabled?(type)
+
+	unless block_given? ^ !str.nil?
+	    raise ArgumentError, 'either string or block should be given'
+	end
+	str = yield if block_given?
+	@output.puts "DBG[#{Tag[type]}]: #{str}"
     end
 end
