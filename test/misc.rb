@@ -68,14 +68,8 @@ module CheckNetworkAddress
 	def chk_correct_recursive_flag(ns, ip)
 	    return true unless rec(ip)
 
-	    revdom = case ip
-		     when Address::IPv4 then "in-addr.arpa."
-		     when Address::IPv6 then "ip6.arpa."
-		     else raise "Not an IP address"
-		     end
-
 	    soa(ip, @domain.name.domain)			&&
-		soa(ip, NResolv::DNS::Name::create(revdom))
+		soa(ip, NResolv::DNS::Name::create(ip.namespace))
 	end
 
 	# DESC:

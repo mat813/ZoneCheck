@@ -198,14 +198,12 @@ class Address
 	end
 	
 	def to_name
-	    (@address.unpack("H32")[0].split(//).reverse + 
-	     ['ip6', 'arpa', '']).join(".")
+	    @address.unpack("H32")[0].split(//).reverse.join(".") + "." +
+		namespace
 	end
 
-	def protocol
-	    Socket::AF_INET6
-	end
-
+	def protocol  ; Socket::AF_INET6 ; end
+	def namespace ; "ip6.arpa."      ; end
 
 	##
 	## IPv6 address

@@ -4,9 +4,6 @@
 # See TODO before writting a new bug
 #
 
-2002-10-18	sdalu@nic.fr
-- elements of the HTML progress bar get blank sometimes
-
 2003-12-02	sdalu@nic.fr
 - HTML progress bar keep updating when page has been stopped
 

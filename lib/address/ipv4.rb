@@ -26,9 +26,7 @@ class Address
     ## IPv4 address
     ##
     class IPv4 < Address
-	Proto = Socket::AF_INET
-
-	Regex = /\A(\d+)\.(\d+)\.(\d+)\.(\d+)\z/
+	Regex	= /\A(\d+)\.(\d+)\.(\d+)\.(\d+)\z/
 	
 	def self.is_valid(str)
 	    str =~ Regex
@@ -95,12 +93,11 @@ class Address
 	end
 	
 	def to_name
-	    "%d.%d.%d.%d.in-addr.arpa." % @address.unpack('CCCC').reverse
+	    "%d.%d.%d.%d.#{namespace}" % @address.unpack('CCCC').reverse
 	end
 
-	def protocol
-	    Socket::AF_INET
-	end
+	def protocol  ; Socket::AF_INET ; end
+	def namespace ; "in-addr.arpa." ; end
 
 
 	##
