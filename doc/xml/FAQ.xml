@@ -7,8 +7,13 @@
 <!ENTITY faq SYSTEM "common/faq.xml">
 ]>
 
+<?xml-stylesheet href="/docbook/article/html.xsl" media="html" title="bigfile" type="text/xsl" ?>
+<?xml-stylesheet href="/docbook/article/pdf.xsl"  media="pdf"  title="bigfile" type="text/xsl" ?>
+
+
 <article>
   <section>
+<!-- comment -->
     <title>FAQ</title>
     &faq;
   </section>
