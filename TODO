@@ -30,6 +30,8 @@ version = 2.0.0
 	finish full configuration of the html_publish_path
 	form.erb memorize options
 
+	fix behaviour in case of test failed
+
 version = 2.1.0
         Test whois for fr (++++)
 	New configuration file (++++)         \

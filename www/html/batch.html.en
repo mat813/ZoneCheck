@@ -53,46 +53,30 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	<TR class="zc_title"><TD colspan="4">Output</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="checkbox" name="intro"    value='t'>
-	      zone summary
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="explain"  value='t'>
-	      explanations
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="details"  value='t'>
-	      details
-	    </TD>
+	    <TD><INPUT type="checkbox" name="intro"    value='t'>
+	      zone summary</TD>
+	    <TD><INPUT type="checkbox" name="explain"  value='t'>
+	      explanations</TD>
+	    <TD><INPUT type="checkbox" name="details"  value='t'>
+	      details</TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="checkbox" name="one"  value='t' checked>
-	      one liner
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="quiet"  value='t' checked>
-	      no titles
-	    </TD>
+	    <TD><INPUT type="checkbox" name="one"  value='t' checked>
+	      one liner</TD>
+	    <TD><INPUT type="checkbox" name="quiet"  value='t' checked>
+	      no titles</TD>
 	    <TD>
 	    </TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="radio" name="progress" value='counter' checked>
-	      progress bar
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="progress" value='testdesc'>
-	      description
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="progress" value=''>
-	      nothing
-	    </TD>
+	    <TD><INPUT type="radio" name="progress" value='counter' checked>
+	      progress bar</TD>
+	    <TD><INPUT type="radio" name="progress" value='testdesc'>
+	      description</TD>
+	    <TD><INPUT type="radio" name="progress" value=''>
+	      nothing</TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
@@ -120,24 +104,17 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  <TR class="zc_title"><TD colspan="4">Error report</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="radio" name="errorlvl" value="" CHECKED>
-	      default error
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="errorlvl" value="allfatal">
-	      all fatals
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="errorlvl" value="allwarning">
-	      all warnings
-	    </TD>
+	    <TD><INPUT type="radio" name="errorlvl" value="" CHECKED>
+	      default error</TD>
+	    <TD><INPUT type="radio" name="errorlvl" value="allfatal">
+	      all fatals</TD>
+	    <TD><INPUT type="radio" name="errorlvl" value="allwarning">
+	      all warnings</TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="checkbox" name="errorstop" value="stop" checked>
-	      stop on first fatal
+	    <TD><INPUT type="checkbox" name="dontstop" value="nostop">
+	      don't stop on fatal</TD>
 	    </TD>
 	  </TR>
 
@@ -146,18 +123,12 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  <TR class="zc_title"><TD colspan="4">Extra test performed</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="checkbox" name="chkmail" value='t' checked>
-	      mail delivery
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="chkzone" value='t' checked>
-	      zone content
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="chkripe" value='t' checked>
-	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A>
-	    </TD>
+	    <TD><INPUT type="checkbox" name="chkmail" value='t' checked>
+	      mail delivery</TD>
+	    <TD><INPUT type="checkbox" name="chkzone" value='t' checked>
+	      zone content</TD>
+	    <TD><INPUT type="checkbox" name="chkripe" value='t' checked>
+	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A></TD>
 	  </TR>
 
 
@@ -165,29 +136,19 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  <TR class="zc_title"><TD colspan="4">Transport layer</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="checkbox" name="transp3" value="ipv4" checked>
-	      <ACRONYM title="Internet Protocol version 4">IPv4</ACRONYM>
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="transp3" value="ipv6" checked>
-	      <A href="http://www.ipv6.org/"><ACRONYM title="Internet Protocol version 6">IPv6</ACRONYM></A>
-	    </TD>
+	    <TD><INPUT type="checkbox" name="transp3" value="ipv4" checked>
+	      <ACRONYM title="Internet Protocol version 4">IPv4</ACRONYM></TD>
+	    <TD><INPUT type="checkbox" name="transp3" value="ipv6" checked>
+	      <A href="http://www.ipv6.org/"><ACRONYM title="Internet Protocol version 6">IPv6</ACRONYM></A></TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="radio" name="transp4" value="std" CHECKED>
-	      <ACRONYM title="UDP with fallback on TCP for truncated answers">STD</ACRONYM>
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="transp4" value="udp">
-	      <ACRONYM title="User Datagram Protocol">UDP</ACRONYM>
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="transp4" value="tcp">
-	      <ACRONYM title="Transport Control Protocol">TCP</ACRONYM>
-	    </TD>
+	    <TD><INPUT type="radio" name="transp4" value="std" CHECKED>
+	      <ACRONYM title="UDP with fallback on TCP for truncated answers">STD</ACRONYM></TD>
+	    <TD><INPUT type="radio" name="transp4" value="udp">
+	      <ACRONYM title="User Datagram Protocol">UDP</ACRONYM></TD>
+	    <TD><INPUT type="radio" name="transp4" value="tcp">
+	      <ACRONYM title="Transport Control Protocol">TCP</ACRONYM></TD>
 	  </TR>
       </TABLE>
     </FORM>
@@ -302,8 +263,9 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  <TD>All errors are considered warnings.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">stop on first fatal</TD>
-	  <TD>The report stop on the first fatal error.</TD>
+	  <TD class="zc_key">don't stop on fatal</TD>
+	  <TD>Keep going even after encountering a fatal error
+	    (this could lead to some unexpected results).</TD>
 	</TR>
 
 	<TR><TD class="zc_title" colspan="2">Options: Extra tests performed</TD></TR>
@@ -342,7 +304,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Feb 20 17:43:39 CET 2003
+Last modified: Tue Mar  4 11:19:43 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

@@ -9,3 +9,6 @@
 
 2003-12-02	sdalu@nic.fr
 - HTML progress bar keep updating when page has been stopped
+
+2003-02-27	sdalu@nic.fr
+- When in batch mode, an error in one domain, stop the checking of others

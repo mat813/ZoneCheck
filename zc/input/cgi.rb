@@ -42,7 +42,7 @@ module Input
     ##      - format   = html|text
     ##  - error   = [ allfatal, allwarning, stop, nostop, standard ]
     ##      - errorlvl  = allfatal|allwarning
-    ##      - errorstop = true|false
+    ##      - dontstop = true|false
     ##  - transp  = [ ipv4, ipv6, udp, tcp, std ]
     ##      - transp3   = ipv4, ipv6
     ##      - transp4   = udp|tcp|std
@@ -100,7 +100,7 @@ module Input
 		p.output = @cgi.params["output"].join(",")
 	    else
 		p.output = if @cgi.has_key?("format")
-			   then @cgi.params["format"]
+			   then @cgi["format"]
 			   else "html"
 			   end
 	    end
@@ -114,7 +114,7 @@ module Input
 			           e =~ /^\s*$/ }
 			    else []
 			    end
-		errorstop = @cgi.has_key?("errorstop") ? "stop" : "nostop"
+		errorstop = @cgi.has_key?("dontstop") ? "nostop" : "stop"
 		p.error   = (errorlvl + [ errorstop ]).join(",")
 	    end
 
