@@ -17,22 +17,24 @@
 #
 
 
-$LOAD_PATH << "../lib/"
-$LOAD_PATH << "/homes/sdalu/ZC.CVS/zc/lib/"
-$LOAD_PATH << "/homes/sdalu/ZC.CVS/zc/zc/"
+#
+# Customizable constants
+#  (Only the ZC_INSTALL_PATH really need modification)
+#
+ZC_INSTALL_PATH		= "/homes/sdalu/ZC.CVS/zc"
 
-ZC_DIR="/homes/sdalu/ZC.CVS/zc/zc"
+ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
+ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
-ZC_LOCALIZATION_FILE = "#{ZC_DIR}/zc.en"
-ZC_CONFIG_FILE       = "#{ZC_DIR}/zc.conf"
-ZC_TEST_DIR          = "#{ZC_DIR}/test"
+ZC_LOCALIZATION_FILE	= "#{ZC_DIR}/zc.en"
+ZC_CONFIG_FILE		= "#{ZC_DIR}/zc.conf"
+ZC_TEST_DIR		= "#{ZC_DIR}/test"
+
 
 #
 # Identification
 #
 CVS_NAME	= %q$Name$
-RCS_ID		= %q$Id$
-RCS_REVISION	= RCS_ID.split[2]
 ZC_VERSION	= (Proc::new { 
 		       n = CVS_NAME.split[1]
 		       n = n.match(/^ZC-(.*)/) unless n.nil?
@@ -45,6 +47,13 @@ ZC_MAINTAINER   = "Stephane D'Alu <sdalu@nic.fr>"
 PROGNAME	= File.basename($0)
 
 $zc_version = ZC_VERSION
+
+
+#
+# Add zonecheck directories to ruby path
+#
+$LOAD_PATH << ZC_DIR << ZC_LIB
+
 
 #
 # Requirement
@@ -59,6 +68,7 @@ require 'config'
 require 'param'
 require 'cachemanager'
 require 'testmanager'
+
 
 #
 # Constants
