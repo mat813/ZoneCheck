@@ -38,19 +38,18 @@ test_progress   : Tests in progress
 
 ns_zone         : zone
 ns_ns		: ns
-ns_primary      : primary
-ns_secondary    : secondary
+ns_primary      : primaire
+ns_secondary    : secondaire
 
-title_zoneinfo  : Zone information
+title_zoneinfo  : Information sur la zone
 title_progress  : Progress
 title_testres   : Test results
 title_status    : Final status
-title_progress  : Progress
 
 pgr_progress    : Progression
 pgr_test        : Tests
-pgr_time        : Time
-pgr_speed       : Speed
+pgr_time        : Temps
+pgr_speed       : Vitesse
 pgr_speed_unit  : T/s
 
 ##############################################################################
@@ -73,9 +72,6 @@ xcp_config_constexists   : constant '%s' already declared
 xcp_config_testexists    : test '%s' already listed
 xcp_config_unknowntest   : unknown test '%s'
 xcp_config_ordering      : ordering problem with '%s'
-xcp_msgcat_continuation  : new line expected after continuation mark
-xcp_msgcat_malformed     : malformed line
-
 
 ##############################################################################
 ##############################################################################
@@ -419,68 +415,69 @@ version: PROGNAME: version %s
 
 usage: \
 usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
-    -q, --quiet         Don't display extra titles\n\
-    -h, --help          Show this message\n\
-    -V, --version       Display version and exit\n\
-    -B, --batch         Batch mode (read from file or stdin '-')\n\
-    -c, --config        Specify location of the configuration file\n\
-        --testdir       Location of the directory holding tests\n\
-    -C, --category      Only perform test for the specified category\n\
-    -T, --test          Name of the test to perform\n\
-        --testlist      List all the available tests\n\
-        --testdesc      Give a description of the test\n\
+    -q, --quiet         N'affiche pas de titres supplémentaires\n\
+    -h, --help          Affiche ce message d'aide\n\
+    -V, --version       Affiche la version et quitte\n\
+    -B, --batch         Traitement par lots (depuis fichier ou stdin '-')\n\
+    -c, --config        Emplacement du fichier de configuration\n\
+        --testdir       Emplacement du répertoire de tests\n\
+    -C, --category      Exécute uniquement les tests de cette catégorie\n\
+    -T, --test          Nom du test à exécuter\n\
+        --testlist      Liste tous les tests disponnibles\n\
+        --testdesc      Donne une description du test\n\
     -r, --resolver      Resolver to use for guessing 'ns' information\n\
-    -n, --ns            List of nameservers for the domain\n\
-    -1, --one           Only display the most relevant message\n\
-    -g, --tagonly       Display only tag (suitable for scripting)\n\
-    -e, --error         Behaviour in case of error (see error)\n\
-    -t, --transp        Transport/routing layer (see transp)\n\
-    -v, --verbose       Display extra information (see verbose)\n\
-    -o, --output        Output (see output)\n\
-    -4, --ipv4          Only check the zone with IPv4 connectivity\n\
-    -6, --ipv6          Only check the zone with IPv6 connectivity\n\
+    -n, --ns            Liste des serveurs de nom du domaine\n\
+    -1, --one           Affiche uniquement le message le plus significatif\n\
+    -g, --tagonly       Affiche uniquement les tags (idéal pour scripts)\n\
+    -e, --error         Comportement en cas d'erreurs (voir error)\n\
+    -t, --transp        Couche de routage/transport (voir transp)\n\
+    -v, --verbose       Affichage d'informations supplémentaires (voir verbose)\n\
+    -o, --output        Sortie (voir output)\n\
+    -4, --ipv4          Teste la zone en IPv4 uniquement\n\
+    -6, --ipv6          Teste la zone en IPv6 uniquement\n\
 \n\
   verbose:              [intro/explain] [testdesc|counter]\n\
-    intro          [i]  Print summary for domain and associated nameservers\n\
-    explain        [x]  Print an explanation for failed tests\n\
-    testdesc       [t]  Print the test description before running it\n\
-    counter        [c]  Print a test counter\n\
+    intro          [i]  Affiche un résumé: domain et serveurs associés\n\
+    explain        [x]  Affiche une explication pour les tests en échec\n\
+    testdesc       [t]  Affiche la description du tests avant de l'exécuter\n\
+    counter        [c]  Affiche une barre de progression\n\
 \n\
   output:               [straigh|consolidation] [text|html]\n\
     straight      *[s]  Print output without processing (or very few)\n\
     consolidation  [c]  Try to merge some results before output\n\
-    text          *[t]  Output plain text\n\
-    html           [h]  Output HTML\n\
+    text          *[t]  Sortie au format texte\n\
+    html           [h]  Sortie au format HTML\n\
 \n\
   error:                [allfatal|allwarning] [stop|nostop]\n\
-    allfatal       [af] All error are considered fatal\n\
-    allwarning     [aw] All error are considered warning\n\
-    stop          *[s]  Stop on the first fatal error\n\
-    nostop         [ns] Never stop (even on fatal error)\n\
+    allfatal       [af] Toutes les erreurs sont considérées fatales\n\
+    allwarning     [aw] Toutes les erreurs sont considérées en avertissement\n\
+    stop          *[s]  Arrête à la première erreur fatale\n\
+    nostop         [ns] Continue même un cas d'erreur fatale\n\
 \n\
   transp:               [ipv4/ipv6] [udp|tcp|std]\n\
-    ipv4          *[4]  Use IPv4 routing protocol\n\
-    ipv6          *[6]  Use IPv6 routing protocol\n\
-    udp            [u]  Use UDP transport layer\n\
-    tcp            [t]  Use TCP transport layer\n\
-    std           *[s]  Use UDP with fallback to TCP for truncated messages\n\
+    ipv4          *[4]  Utilise le protocol de routage IPv4\n\
+    ipv6          *[6]  Utilise le protocol de routage IPv6\n\
+    udp            [u]  Utilise la couche de transport UDP\n\
+    tcp            [t]  Utilise la couche de transport TCP\n\
+    std           *[s]  Utilise UDP avec repli sur TCP (messages tronques)\n\
 \n\
-  Batch Mode:\n\
-    - process domain from file or stdin, with 1 per line. The syntax is:\n\
+  Traitement par lots:\n\
+    - traite les domaines depuis un fichier ou stdin, avec 1 domaine par ligne\n\
+      la syntaxe est la suivante:\n\
       DOM=domainname\n\
-   or DOM=domainname NS=ns1;ns2=ip1,ip2\n\
+   ou DOM=domainname NS=ns1;ns2=ip1,ip2\n\
 \n\
 \n\
-EXAMPLES:\n\
+EXEMPLES:\n\
   PROGNAME -6 --verbose=x,i afnic.fr.\n\
-    Test the 'afnic.fr.' domain with IPv6 only connectivity, print\n\
-    a summary information about the tested domain and explanation of\n\
-    failed tests\n\
+    Teste le domaine 'afnic.fr.' en IPv6 seulement, affiche un résumé des\n\
+    informations sur le domaine testé et des explications en cas d'échecs\n\
 \n\
   PROGNAME -v c -1 -B -\n\
-    Work in batch mode, where domains are read from stdin, a progress bar\n\
-    indicates how many tests remain, and only short report is written\n\
+    Effectue un traitement par lot, où les domaines sont lus depuis 'stdin'\n\
+    une barre de progression indique le nombre de tests restant et seulement\n\
+    une courte description est affichée\n\
 \n\
   PROGNAME --testdesc error -T chk_soa\n\
-    Ask for the 'error' message associated with the test 'chk_soa'\n
+    Demande le message d'erreur ('error') associé avec le test 'chk_soa'\n
 
