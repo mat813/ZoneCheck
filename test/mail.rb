@@ -90,7 +90,7 @@ module CheckExtra
 	    mhost = bestmx(mdom) || mdom
 	    return true unless openrelay(mdom, mhost)
 	    { "mailhost"   => mhost,
-	      "hostmaster" => "#{rname[0]}@#{mdom}",
+	      "hostmaster" => "#{rname[0].data}@#{mdom}",
 	      "from_host"  => @fake_from,
 	      "to_host"    => @fake_dest }
 	end
@@ -110,7 +110,7 @@ module CheckExtra
 	    rname = soa(bestresolverip).rname
 	    mdom  = rname.domain
 	    mhost = bestmx(mdom) || mdom
-	    user  = "#{rname[0]}@#{mdom}"
+	    user  = "#{rname[0].data}@#{mdom}"
 	    return true if testuser(user, mdom, mhost)
 	    { "hostmaster" => user }
 	end
