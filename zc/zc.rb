@@ -95,7 +95,9 @@ $dbg.level=ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 #  WARN: default locale is mandatory as no human messages are
 #        present in the code (except debugging)
 #
-[ ENV["LANG"], ZC_LANG_DEFAULT ].compact.each { |lang|
+lang = ENV["LANG"]
+raise "Suspicious LANG variable: #{lang}" unless lang =~ /^\w{2,5}$/
+[ lang.untaint, ZC_LANG_DEFAULT ].compact.each { |lang|
     localefile = ZC_LOCALIZATION_FILE % [ lang ]
     if File.readable?(localefile)
 	$dbg.msg(DBG::LOCALE, "Using locale: #{lang}")
