@@ -12,10 +12,10 @@
 #
 
 
-require 'nresolv_internal'
-require 'thread'
-
 module NResolv
+    class NResolvError < StandardError
+    end
+
     class DNS
 	def self.dump_comment(recv=STDOUT, comment=nil, tag=";; ")
 	    if comment
@@ -26,11 +26,18 @@ module NResolv
 	end
 
 	class Message
+	    class DecodeError < NResolvError
+	    end
+
 	    attr_reader :msgid, :opcode
 
 	    @@genid = rand 0xffff
 	    def self.generate_id
-		Thread.exclusive { @@genid = (@@genid + 1) & 0xffff }
+		begin
+		    Thread.exclusive { @@genid = (@@genid + 1) & 0xffff }
+		rescue NameError
+		    @@genid = (@@genid + 1) & 0xffff
+		end
 	    end
 	    
 	    def msgid=(id)
@@ -252,6 +259,7 @@ module NResolv
 	##
 	class ASection < Section
 	    def add(name, rdata, ttl)
+		# XXX checking
 		@record << [ name, rdata, ttl ]
 	    end
 
@@ -272,6 +280,7 @@ module NResolv
 	##
 	class QSection < Section
 	    def add(name, rdata_class)
+		# XXX checking
 		@record << [ name, rdata_class ]
 	    end
 
@@ -286,4 +295,7 @@ module NResolv
 	end
     end
 end
+
+
+require 'nresolv_internal'
 

@@ -14,8 +14,11 @@
 
 require 'socket'
 require 'thread'
+require 'sync'
 require 'fcntl'
 require 'timeout'
+
+require 'nresolv/parsing'
 
 #
 # requester = Requester::ConnectedUDP::new(address)
@@ -23,71 +26,135 @@ require 'timeout'
 # reply     = query.send.wait
 #
 
+
+#
+# PUBLIC:
+#   Requester.new
+#   Requester#query(msg)
+#   Requester#close
+#   Requester#restart
+#
+# FRIEND (Query)
+#   Requester#delete(id)
+#   Requester#handler
+#
+# PROTECTED
+#   Requester#dispatch(data)
+# A Requester#connect_start
+# A Requester#connect_end
+# A Requester#create_query(msg)
+#
+
+
+#
+# PUBLIC
+#   Query#send
+#   Query#wait
+#   Query#close
+#   Query#msgid
+#
+# FRIEND (Requester)
+#   Query.new
+#
+
+
 module NResolv
     ##
     ## Timeout Errors
     ##
-    class NResolvTimeout < StandardError
+    class TimeoutError < NResolvError
     end
+
+    class NetworkError < NResolvError
+    end
+
 
     class DNS
 	Port		 = 53
-	DNSThreadGroup = ThreadGroup::new
-
 	TCPTimeout	 = 5
         UDPRetrySequence = [ 5, 10, 20, 40 ]
 	UDPSize		 = 512
+
+	DNSThreadGroup   = ThreadGroup::new
 
 	##
 	##
 	##
 	class Requester
-	    attr_reader :sock
-
-	    def initialize
-                @queries = {}
+	    def initialize(host, port, keepconnect=false)
+		@host        = host
+		@port        = port
+		@keepconnect = keepconnect
+                @queries     = {}
+		@mutex       = Sync::new
+		@closed      = false
             end
             
+	    # Delete a pending query by its _id_
+	    #
+	    # If no more query are left and the flag _keepconnect_ is set
+	    # to +false+ the requester will be closed.
             def delete(id)
-                @queries.delete(id)
+		@mutex.synchronize {
+		    @queries.delete(id)
+		    if (! @keepconnect) && (@queries.length == 0)
+			connect_close
+		    end
+		}
             end
 	    
+	    # Return an handler for the connections
+	    def handler
+		@mutex.synchronize {
+		    return connect_start
+		}
+	    end
+
+	    # Create a query from the DNS message _msg_
 	    def query(msg)
 		unless msg.type == Message::Query
 		    raise RuntimeError, "DNS message should be a query"
 		end
-		@queries[msg.msgid] = create_query(msg)
+		query = create_query(msg)
+		@mutex.synchronize {
+		    raise RuntimeError, "Requester is closed" if @closed
+		    @queries[msg.msgid] = query
+		}
 	    end
 
-	    def receive(data)
+	    # Dispatch the data (after decoding) to the waiting query
+	    def dispatch(data)
 		begin
 		    msg = Message::from_wire(data)
 		    if q = @queries[msg.msgid]
 			q.recv msg
 		    else
-			STDERR.print("non-handled DNS message id=#{msg.msgid}")
+			STDERR.puts("non-handled DNS message id=#{msg.msgid}")
 		    end
-		rescue Message::DecodeError
-		   STDERR.print("DNS message decoding error: #{reply.inspect}")
+		rescue Message::DecodeError => e
+		    STDERR.puts("DNS message decoding error: #{e}")
+		rescue Exception => e
+		    STDERR.puts "Unexpected exception while decoding: #{e}"
 		end
 	    end
 
-	    # close the requester and all the pending queries
+	    # Close the requester and all the pending queries
             def close
-                thread, sock, @thread, @sock = @thread, @sock
-                begin
-                    if thread
-                        thread.kill
-                        thread.join
-                    end
-                ensure
-		    if sock
+		@mutex.synchronize {
+		    @closed = true
+		    if @queries.length > 0
 			@queries.each { |id, query| query.close }
-			sock.close
 		    end
-                end
+		    connect_close
+		}
             end
             
+	    # Restart the requester if it has been previously closed
+	    def restart
+		@mutex.synchronize {
+		    @closed = false
+		}
+	    end
 
             class Query
 		attr_reader :msgid
@@ -111,8 +178,8 @@ module NResolv
 		    tout = @dflttout if tout.nil?
 		    begin
 			timeout(tout) { return @queue.pop }
-		    rescue TimeoutError
-			raise NResolvTimeout
+		    rescue ::TimeoutError
+			raise NResolv::TimeoutError
 		    ensure
 			close
 		    end
@@ -137,28 +204,45 @@ module NResolv
             ##
             ##
             class TCP < Requester
-                def initialize(host, port=Port)
-                    super()
-                    @host = host
-                    @port = port
-                    @sock = TCPSocket.new(host, port)
+                def initialize(host, port=Port, keepconnect=false)
+                    super(host, port, keepconnect)
+		    @sock        = nil
+		    @thread      = nil
+		end
+
+		def connect_start
+		    return @sock unless @sock.nil?
+
+                    @sock = TCPSocket::new(@host, @port)
                     @sock.fcntl(Fcntl::F_SETFD, 1)
-                    @thread = Thread.new {
+                    @thread = Thread::new {
                         DNSThreadGroup.add Thread.current
                         loop {
 			    lenhdr = @sock.read(2)
 			    len    = lenhdr.unpack('n')[0]
 			    reply  = @sock.read(len)
-			    receive(reply)
+			    dispatch(reply)
                         }
                     }
+		    @sock
                 end
+
+		def connect_close
+		    thread, sock, @thread, @sock = @thread, @sock
+		    begin
+			thread.kill if thread
+		    ensure
+			sock.close  if sock
+		    end
+		end
+
+
+ 
                 
 		def create_query(msg)
 		    Query::new(msg, self)
 		end
 
-		private
                 class Query < Requester::Query
                     def initialize(msg, requester)
 			@requester = requester
@@ -166,40 +250,54 @@ module NResolv
                         @rawmsg    = msg.to_wire
 			@msgid     = msg.msgid
 			@pktlen    = [@rawmsg.length].pack('n')
-                        @sock      = requester.sock
 			@dflttout  = 5
                     end
                     
                     def send
-			@sock.write(@pktlen)
-                        @sock.write(@rawmsg)
-                        @sock.flush
+                        sock = @requester.handler
+			sock.write(@pktlen)
+                        sock.write(@rawmsg)
+                        sock.flush
                         self
                     end
                 end
             end
             
-        
 
             ##
 	    ##
             ##
-            class ConnectedUDP < Requester
-                def initialize(host, port=Port)
-                    super()
-                    @host   = host
-                    @port   = port
+            class UDP < Requester
+                def initialize(host, port=Port, keepconnect=true)
+                    super(host, port, keepconnect)
+		    @sock = nil
+                end
+		
+		def connect_start
+		    return @sock unless @sock.nil?
+
                     @sock   = UDPSocket::new
-                    @sock.connect(host, port)
+                    @sock.connect(@host, @port)
                     @sock.fcntl(Fcntl::F_SETFD, 1)
                     @thread = Thread::new {
                         DNSThreadGroup.add Thread.current
                         loop {
 			    reply = @sock.recv(UDPSize)
-			    receive(reply)
+			    dispatch(reply)
                         }
                     }
-                end
+		    @sock
+		end
+
+		def connect_close
+		    thread, sock, @thread, @sock = @thread, @sock
+		    begin
+			thread.kill if thread
+		    ensure
+			sock.close  if sock
+		    end
+		end
+
                 
                 def create_query(msg)
                     Query::new(msg, self)
@@ -211,28 +309,36 @@ module NResolv
 			@queue     = Queue::new
                         @rawmsg    = msg.to_wire
  			@msgid     = msg.msgid
-                        @sock      = requester.sock
+                        @sock      = requester.handler
+			@sema      = Queue::new
 			@dflttout  = 2
 			UDPRetrySequence.each { |tout| @dflttout += tout }
                     end
 
                     def send
+			sock = @requester.handler
                         @thread = Thread::new {
+			    begin 
+				sock.write(@rawmsg)
+				@sema.push(nil)
+			    rescue Exception => e
+				@sema.puch(e)
+			    end
 			    DNSThreadGroup.add Thread.current
-			    @sock.write(@rawmsg)
                             UDPRetrySequence.each { |timeout|
                                 sleep timeout
-                                @sock.write(@rawmsg)
+                                sock.write(@rawmsg)
                             }
                         }
+			e = @sema.pop
+			raise e unless e.nil?
                         self
                     end
 
 		    def close
-			thread, @thread = @thread
-			if thread
-			    thread.kill
-			end
+			thread, sema, @thread, @sema = @thread, @sema
+			thread.kill    if thread
+			sema.push(nil) if sema
 			super()
 		    end
                 end

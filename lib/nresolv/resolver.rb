@@ -17,11 +17,50 @@ module NResolv
 	    def each_resource(name, resource, rec=true)
 		msg = NResolv::DNS::Message::Query::new
 		msg.rd = rec
-		msg.question.add(Name::new(name), resource)
+		msg.question.add(name, resource)
 		rpl = query(msg)
-		rpl.answer.each { |n, r, t|
+		extract_resource(rpl, name, resource) { |n, r, t|
 		    yield n, r, t, rpl
 		}
+	    end
+
+
+	    def extract_resource(msg, name, resource)
+		case resource.rtype 
+		when Resource::Type::ANY
+		    msg.answer.each { |n, r, t|
+			yield n, r, t if n == name
+		    }
+		when Resource::Type::CNAME
+		    msg.answer.each { |n, r, t|
+			yield n, r, t if (n == name) && (r.class == resource)
+		    }
+		else
+		    msg.answer.each { |n, r| 
+			if (n == name) && (r.rtype==Resource::Type::CNAME)
+			    name = Name::new(r.to_s)
+			    puts r.to_s
+			    break
+			end
+		    }
+		    puts name.to_s(true)
+		    msg.answer.each { |n, r, t|
+			yield n, r, t if (n == name) && (r.class == resource)
+		    }
+		end
+	    end
+
+	    
+	    def resources(name, resource, rec=true)
+	    end
+
+	    def addresses(sname)
+		dname = Name::new(sname)
+		@addr = []
+		each_resource(dname, NResolv::DNS::Resource::IN::A) { |n, r, t, m|
+		    @addr << r.to_s if r.type == NResolv::DNS::Resource::IN::A
+		}
+		@addr
 	    end
 
 
@@ -65,8 +104,7 @@ module NResolv
 
 	    end
 
-
-	    
+   
 	    class Classic < Client
 		def initialize(config=DefaultConfig)
 		    super(config)
