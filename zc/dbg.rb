@@ -43,11 +43,11 @@ class DBG
 	LOADING		=> "loading",
 	LOCALE		=> "locale",
 	CONFIG		=> "config",
-	AUTOCONF	=> "autoconf",
+	PARSER		=> "parser",
 	TESTS		=> "tests",
-	CACHE_INFO	=> "cache",
+	AUTOCONF	=> "autoconf",
 	DBG		=> "dbg",
-	PARSER		=> "parser"
+	CACHE_INFO	=> "cache"
     }
 
 

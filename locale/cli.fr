@@ -54,7 +54,7 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] nomdedomaine\n\
     testdesc       [t]  Affiche la description du test en cours\n\
     counter        [c]  Affiche une barre de progression\n\
 \n\
-  output:               [straigh|consolidation] [text|html]\n\
+  output:               [byseverity|byhost] [text|html]\n\
     byseverity    *[bs] Affiche les résultats trie/fusionne par severite\n\
     byhost         [bh] Affiche les résultats trie/fusionne par machine\n\
     text          *[t]  Formatage en texte pur\n\

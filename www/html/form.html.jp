@@ -155,8 +155,8 @@
 	    <TD><INPUT name="ips7" type="text" size=35 value=""></TD>
 	  </TR>
       </TABLE>
-      <INPUT type="submit" value=" Check! " onClick="zc_formcheck(this.form)">
-      <INPUT type="button" value=" Clear "  onClick="zc_formclear(this.form)">
+      <INPUT type="submit" value=" Check! " onClick="zc_form_check(this.form)">
+      <INPUT type="button" value=" Clear "  onClick="zc_form_clear(this.form)">
 
       <!-- Options -->
       <H2>Options</H2>
@@ -438,7 +438,7 @@
 リリーズ: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr 18 13:29:02 CEST 2003
+Last modified: Fri Apr 18 15:32:32 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

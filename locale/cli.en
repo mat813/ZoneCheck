@@ -54,7 +54,7 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     testdesc       [t]  Print the test description before running it\n\
     counter        [c]  Print a test counter\n\
 \n\
-  output:               [straigh|consolidation] [text|html]\n\
+  output:               [byseverity|byhost] [text|html]\n\
     byseverity    *[bs] Output is sorted/merged by severity\n\
     byhost         [bh] Output is sorted/merged by host\n\
     text          *[t]  Output plain text\n\

@@ -20,7 +20,7 @@ require 'config'
 
 module Report
     ##
-    ## Straight interpretation of messages.
+    ## Sorting by 'host'
     ##
     class ByHost < Template
 	def display_std
@@ -37,7 +37,7 @@ module Report
 		}
 
 		# Print 'generic' first
-		gentag = $mc.get("w_generic")
+		gentag = $mc.get("w_generic")	# XXX: not nice
 		display(byhost[gentag], gentag)
 		byhost.delete(gentag)
 		

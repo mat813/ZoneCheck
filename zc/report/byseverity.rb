@@ -20,7 +20,7 @@ require 'config'
 
 module Report
     ##
-    ## Straight interpretation of messages.
+    ## Sorting by severity
     ##
     class BySeverity < Template
 	def display_std

@@ -25,6 +25,9 @@ module Report
     end
 
 
+    ##
+    ## Template for creating report
+    ##
     class Template
 	attr_reader :full_list, :ok
 	attr_reader :fatal, :warning, :info
@@ -49,11 +52,9 @@ module Report
 
 	    def <<(result)
 		if result.ok?
-		then
-		    @master.ok << result
-		else
-		    @list << result
-		    @master.full_list << [ result, severity ]
+		then @master.ok << result
+		else @list << result
+		     @master.full_list << [ result, severity ]
 		end
 	    end
 	    
@@ -91,6 +92,8 @@ module Report
 	    def severity   ; nil                  ; end
 	    def has_error? ; false                ; end
 	end
+
+
 
 	def initialize(domain, rflag, publish)
 	    @domain	= domain

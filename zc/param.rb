@@ -49,6 +49,7 @@ class Param
     ##  - 'testdesc' and 'counter' are exclusive
     ##  - 'counter' can be ignored if the display doesn't suppport 
     ##     progress bar animation
+    ##  - 'one' ignore 'testname', 'explain', 'details'
     ##
     class ReportFlag
 	attr_reader :tagonly,  :one,   :quiet

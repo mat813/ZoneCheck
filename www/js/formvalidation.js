@@ -15,7 +15,11 @@
 //
 //
 
-function zc_formvalid(form) {
+function zc_form_setlocale(emptyzone) {
+  zc_form_l_emptyzone = emptyzone;
+}
+
+function zc_form_valid(form) {
   if (form["zone"].value.length == 0) {
     alert("Zone Empty");
     return 0;
@@ -24,13 +28,13 @@ function zc_formvalid(form) {
   }
 }
 
-function zc_formcheck(form) {
+function zc_form_check(form) {
   if (zc_formvalid(form))
     form.submit();
   return 0;
 }	  
 
-function zc_formguess(form) {
+function zc_form_guess(form) {
   form.action="";
   form.method="get";
   if (zc_formvalid(form))
@@ -38,7 +42,7 @@ function zc_formguess(form) {
   return 0;
 }
 
-function zc_formclear(form) {
+function zc_form_clear(form) {
   var i;
 
   if (form["zone"])
