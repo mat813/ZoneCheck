@@ -119,7 +119,7 @@ details : La valeur du champ 'expire' est de %{expire} sec, et devrait être 7 f
 testname: champ 'minimum' du SOA inférieur à 3 heures
 error   : Le champ 'minimum' doit être inférieur à 3 heures
 ok	: Le champ 'minimum' du SOA est inférieur à 3 heures
-explain : [none]
+explain : [ref]: RFC2308 "3 - Negative Answers from Authoritative Servers"
 details : La valeur du champ 'minimum' est de %{minimum} sec, et devrait être moins de 3 heures (10800 sec).
 
 
