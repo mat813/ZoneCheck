@@ -53,6 +53,10 @@ module Input
 		l10n_debug	= $mc.get("iface_label_debug")
 		l10n_output	= $mc.get("iface_label_output")
 		l10n_advanced	= $mc.get("iface_label_advanced")
+		l10n_output_progbar	= $mc.get("iface_output_progressbar")
+		l10n_output_desc	= $mc.get("iface_output_description")
+		l10n_output_nothing	= $mc.get("iface_output_nothing")
+
 
 		# Output
 		output_f = Gtk::Frame::new(l10n_output)
@@ -64,30 +68,49 @@ module Input
 		menu.append(Gtk::MenuItem::new("plain text"))
 		menu.append(Gtk::MenuItem::new("HTML"))
 		menu.append(Gtk::MenuItem::new("GTK"))
-		@o_type = Gtk::OptionMenu::new
-		@o_type.set_menu(menu)
-		@o_type.set_history(2)
+		@o_publisher = Gtk::OptionMenu::new
+		@o_publisher.set_menu(menu)
+		@o_publisher.set_history(2)
 
 		menu = Gtk::Menu::new
 		menu.append(Gtk::MenuItem::new("by severity"))
 		menu.append(Gtk::MenuItem::new("by host"))
-		@o_process = Gtk::OptionMenu::new
-		@o_process.set_menu(menu)
+		@o_report = Gtk::OptionMenu::new
+		@o_report.set_menu(menu)
 
-		tbl = Gtk::Table::new(2, 3, true)
-		tbl.attach(@o_one,       0, 1, 0, 1)
-		tbl.attach(@o_tag,       1, 2, 0, 1)
-		tbl.attach(@o_quiet,     2, 3, 0, 1)
-		tbl.attach(@o_type,      0, 1, 1, 2)
-		tbl.attach(@o_process,   1, 2, 1, 2)
+
+		tbl = Gtk::Table::new(1, 3, true)
+		tbl.attach(@o_publisher, 0, 1, 0, 1)
+		tbl.attach(@o_tag,       2, 3, 0, 1)
 
 		output_f.add(tbl)
 
-		main.set_tip(@o_one,     "expert/output/oneline")
-		main.set_tip(@o_quiet,   "expert/output/quiet")
-		main.set_tip(@o_tag,     "expert/output/tagonly")
-		main.set_tip(@o_type,    "expert/output/format")
-		main.set_tip(@o_process, "expert/output/report")
+		main.set_tip(@o_one,       "expert/output/oneline")
+		main.set_tip(@o_quiet,     "expert/output/quiet")
+		main.set_tip(@o_tag,       "expert/output/tagonly")
+		main.set_tip(@o_publisher, "expert/output/format")
+		main.set_tip(@o_report,    "expert/output/report")
+
+
+		# Progression
+		progress_f = Gtk::Frame::new("Progression")
+
+		@o_counter = Gtk::RadioButton::new(        l10n_output_progbar)
+		@o_testdesc= Gtk::RadioButton::new(@o_counter,l10n_output_desc)
+		@o_nothing = Gtk::RadioButton::new(@o_counter,l10n_output_nothing)
+		@o_counter.active = true
+
+		tbl = Gtk::Table::new(1, 3, true)
+		tbl.attach(@o_counter,   0, 1, 0, 1)
+		tbl.attach(@o_testdesc,  1, 2, 0, 1)
+		tbl.attach(@o_nothing,   2, 3, 0, 1)
+
+		progress_f.add(tbl)
+
+		main.set_tip(@o_counter,  "option/output/progress")
+		main.set_tip(@o_testdesc, "option/output/description")
+		main.set_tip(@o_nothing,  "option/output/nothing")
+		
 		
 		# Advanced
 		advanced_f = Gtk::Frame::new(l10n_advanced)
@@ -99,6 +122,14 @@ module Input
 		}
 		@a_resolver = Gtk::Entry::new
 		@a_resolver.set_sensitive(false)
+
+		@a_usecategory = Gtk::CheckButton::new("category")
+		@a_usecategory.signal_connect("clicked") { |w|
+		    @a_category.set_sensitive(w.active?)
+		    @a_category.set_text("")
+		}
+		@a_category = Gtk::Entry::new
+		@a_category.set_sensitive(false)
 		
 		@a_test = Gtk::CheckButton::new("test only")
 		@a_test.signal_connect("clicked") { |w|
@@ -109,11 +140,13 @@ module Input
 		@a_testname.set_popdown_strings(main.testmanager.list.sort)
 		@a_testname.set_sensitive(false)
 		
-		tbl = Gtk::Table::new(1, 3, true)
+		tbl = Gtk::Table::new(3, 3, true)
 		tbl.attach(@a_useresolver, 0, 1, 0, 1)
 		tbl.attach(@a_resolver,    1, 3, 0, 1)
-		tbl.attach(@a_test,        0, 1, 1, 2)
-		tbl.attach(@a_testname,    1, 3, 1, 2)
+		tbl.attach(@a_usecategory, 0, 1, 1, 2)
+		tbl.attach(@a_category,    1, 3, 1, 2)		
+		tbl.attach(@a_test,        0, 1, 2, 3)
+		tbl.attach(@a_testname,    1, 3, 2, 3)
 		
 		advanced_f.add(tbl)
 
@@ -152,6 +185,7 @@ module Input
 
 		#
 		pack_start(output_f)
+		pack_start(progress_f)
 		pack_start(advanced_f)
 		pack_start(debug_f)
 
@@ -159,22 +193,23 @@ module Input
 		show_all
 	    end
 
-	    def one      ; @o_one.active?                                 ; end
-	    def quiet    ; @o_quiet.active?                               ; end
 	    def tagonly  ; @o_tag.active?                                 ; end
-	    def testname ; @a_test.active? ? @a_testname.entry.text : nil ; end
 	    def resolver ; @a_useresolver.active? ? @a_resolver.text: nil ; end
+            def testname ; @a_test.active? ? @a_testname.entry.text : nil ; end
+
+	    def verbose
+		verbose = []
+		verbose << "counter"	if @o_counter.active?
+		verbose << "testdesc"	if @o_testdesc.active?
+		verbose.join(",")
+	    end
 
 	    def output 
 		output = []
-		output << case @o_type.history
+		output << case @o_publisher.history
 			  when 0 then "text"
 			  when 1 then "html"
 			  when 2 then "gtk"
-			  end
-		output << case @o_process.history
-			  when 0 then "byseverity"
-			  when 1 then "byhost"
 			  end
 		output.join(",")
 	    end
@@ -199,9 +234,6 @@ module Input
 		l10n_output_testname	= $mc.get("iface_output_testname")
 		l10n_output_explain	= $mc.get("iface_output_explain")
 		l10n_output_details	= $mc.get("iface_output_details")
-		l10n_output_progbar	= $mc.get("iface_output_progressbar")
-		l10n_output_desc	= $mc.get("iface_output_description")
-		l10n_output_nothing	= $mc.get("iface_output_nothing")
 		l10n_error_default	= $mc.get("iface_error_default")
 		l10n_error_allwarning	= $mc.get("iface_error_allwarnings")
 		l10n_error_allfatal	= $mc.get("iface_error_allfatals")
@@ -211,36 +243,57 @@ module Input
 		# Output
 		output_f = Gtk::Frame::new(l10n_output)
 
-		@o_zone    = Gtk::CheckButton::new(l10n_output_zone)
-		@o_zone.active = true
+		@o_summary = Gtk::CheckButton::new(l10n_output_zone)
+		@o_summary.active = true
 
 		@o_testname= Gtk::CheckButton::new(l10n_output_testname)
 		@o_explain = Gtk::CheckButton::new(l10n_output_explain)
 		@o_details = Gtk::CheckButton::new(l10n_output_details)
 		@o_explain.active = @o_details.active = true
+
+		@o_one     = Gtk::CheckButton::new("one line")
+		@o_quiet   = Gtk::CheckButton::new("quiet")
+		@o_tag     = Gtk::CheckButton::new("tag only")
 		
-		@o_prog    = Gtk::RadioButton::new(        l10n_output_progbar)
-		@o_desc    = Gtk::RadioButton::new(@o_prog,l10n_output_desc)
-		@o_nothing = Gtk::RadioButton::new(@o_prog,l10n_output_nothing)
-		@o_prog.active = true
+		@o_reportok= Gtk::CheckButton::new("report ok")
+
+		menu = Gtk::Menu::new
+		menu.append(Gtk::MenuItem::new("plain text"))
+		menu.append(Gtk::MenuItem::new("HTML"))
+		menu.append(Gtk::MenuItem::new("GTK"))
+		@o_publisher = Gtk::OptionMenu::new
+		@o_publisher.set_menu(menu)
+		@o_publisher.set_history(2)
+
+		menu = Gtk::Menu::new
+		menu.append(Gtk::MenuItem::new("sorted by severity"))
+		menu.append(Gtk::MenuItem::new("sorted by host"))
+		@o_report = Gtk::OptionMenu::new
+		@o_report.set_menu(menu)
+
+		menu = Gtk::Menu::new
+		menu.append(Gtk::MenuItem::new("Francais"))
+		menu.append(Gtk::MenuItem::new("English"))
+		@o_lang = Gtk::OptionMenu::new
+		@o_lang.set_menu(menu)
+		@o_lang.set_history(1)
+
 
 		tbl = Gtk::Table::new(3, 3, true)
-		tbl.attach(@o_zone,     0, 1, 0, 1)
-		tbl.attach(@o_testname, 0, 1, 1, 2)
-		tbl.attach(@o_explain,  1, 2, 1, 2)
-		tbl.attach(@o_details,  2, 3, 1, 2)
-		tbl.attach(@o_prog,     0, 1, 2, 3)
-		tbl.attach(@o_desc,     1, 2, 2, 3)
-		tbl.attach(@o_nothing,  2, 3, 2, 3)
+		tbl.attach(@o_summary,   0, 1, 0, 1)
+		tbl.attach(@o_report,    2, 3, 0, 1)
+		tbl.attach(@o_testname,  0, 1, 1, 2)
+		tbl.attach(@o_explain,   1, 2, 1, 2)
+		tbl.attach(@o_details,   2, 3, 1, 2)
+		tbl.attach(@o_one,       0, 1, 2, 3)
+		tbl.attach(@o_reportok,  1, 2, 2, 3)
+		tbl.attach(@o_quiet,     2, 3, 2, 3)
 		output_f.add(tbl)
 
-		main.set_tip(@o_zone,     "option/output/summary")
+		main.set_tip(@o_summary,  "option/output/summary")
 		main.set_tip(@o_testname, "option/output/testname")
 		main.set_tip(@o_explain,  "option/output/explain")
 		main.set_tip(@o_details,  "option/output/details")
-		main.set_tip(@o_prog,     "option/output/progress")
-		main.set_tip(@o_desc,     "option/output/description")
-		main.set_tip(@o_nothing,  "option/output/nothing")
 
 		# Error
 		error_f = Gtk::Frame::new(l10n_error)
@@ -249,7 +302,6 @@ module Input
 		@aw = Gtk::RadioButton::new(@ed, l10n_error_allwarning)
 		@af = Gtk::RadioButton::new(@ed, l10n_error_allfatal)
 		@sf = Gtk::CheckButton::new(l10n_error_on_first)
-		@ro = Gtk::CheckButton::new(l10n_error_reportok)
 		@sf.active = true
 
 		tbl = Gtk::Table::new(2, 3, true)
@@ -257,14 +309,12 @@ module Input
 		tbl.attach(@aw, 1, 2, 0, 1)
 		tbl.attach(@af, 2, 3, 0, 1)
 		tbl.attach(@sf, 0, 1, 1, 2)
-		tbl.attach(@ro, 2, 3, 1, 2)
 		error_f.add(tbl)
 
 		main.set_tip(@ed, "option/error/default")
 		main.set_tip(@aw, "option/error/allwarnings")
 		main.set_tip(@af, "option/error/allfatals")
 		main.set_tip(@sf, "option/error/stoponfirst")
-		main.set_tip(@ro, "option/error/reportok")
 		
 		# Tests
 		test_f   = Gtk::Frame::new(l10n_test)
@@ -324,6 +374,37 @@ module Input
 		pack_start(transp_f)
 	    end
 
+
+	    def one   ; @o_one.active?   ; end
+	    def quiet ; @o_quiet.active? ; end
+
+	    def verbose
+		verbose = []
+		verbose << "intro"		if @o_summary.active?
+		verbose << "testname"		if @o_testname.active?
+		verbose << "explain"		if @o_explain.active?
+		verbose << "details"		if @o_details.active?
+		verbose << "reportok"		if @o_reportok.active?
+		verbose.join(",")
+	    end
+
+	    def output
+		output = []
+		output << case @o_report.history
+			  when 0 then "byseverity"
+			  when 1 then "byhost"
+			  end
+		output.join(",")
+	    end
+
+	    def error
+		error = []
+		error << "allfatal"		if @af.active?
+		error << "allwarning"		if @aw.active?
+		error << "stop"			if @sf.active?
+		error.join(",")
+	    end
+
 	    def categories
 		categories = []
 		categories << "!rir"		unless @tst_rir.active?
@@ -342,33 +423,13 @@ module Input
 		transp << "tcp"			if @tcp.active?
 		transp.join(",")
 	    end
-
-	    def verbose
-		verbose = []
-		verbose << "intro"		if @o_zone.active?
-		verbose << "testname"		if @o_testname.active?
-		verbose << "details"		if @o_details.active?
-		verbose << "explain"		if @o_explain.active?
-		verbose << "testdesc"		if @o_desc.active?
-		verbose << "counter"		if @o_prog.active?
-		verbose << "reportok"		if @ro.active? # XXX
-		verbose.join(",")
-	    end
-
-	    def error
-		error = []
-		error << "allfatal"		if @af.active?
-		error << "allwarning"		if @aw.active?
-		error << "stop"			if @sf.active?
-		error.join(",")
-	    end
 	end
 
 
 	##
-	## Input
+	## Single
 	##
-	class Input < Gtk::VBox
+	class Single < Gtk::VBox
 	    def initialize(main)
 		# Parent constructor
 		super()
@@ -493,6 +554,7 @@ module Input
 		    @hbbox.set_sensitive(false)
 		    (@ns + @ips + [ @zone ]).each  { |w| w.set_text("") } 
 		    @hbbox.set_sensitive(true)
+		    main.statusbar.push(1, "Input cleared")
 		}
 	    end
 
@@ -629,6 +691,7 @@ module Input
 		    hbbox.set_sensitive(false)
 		    self.data = ""
 		    hbbox.set_sensitive(true)
+		    main.statusbar.push(1, "Input cleared")
 		}
 
 		save.signal_connect("clicked") {
@@ -758,54 +821,78 @@ module Input
 		@statusbar.push(1, "Welcome to ZoneCheck #{ZC_VERSION}")
 		
 		
-		@input   = Input::new(self)
-		@batch   = Batch::new(self)
-		@options = Option::new(self)
-		@expert  = Expert::new(self)
+		@single    = Single::new(self)
+		@batch     = Batch::new(self)
+		@options   = Option::new(self)
+		@expert    = Expert::new(self)
 		@info_note = Gtk::Frame::new
 		
 		
-
+		#
+		# +----------+-----------+------------+-----------+---------+
+		# | File     |  Mode     | Preference |           | Help    |
+		# ++--------+++---------+++----------++-----------+--------++
+		#  | Quit   | | Single  | | Tooltips |             | About |
+		#  +--------+ | Batch   | +----------+             +-------+
+		#             | ------- |
+		#             | Expert  |
+		#             +---------+
 		
-		# Mode menu
-		menu = Gtk::Menu::new
-		mode_mitem   = Gtk::MenuItem::new("Mode")
-		mode_mitem.set_submenu(menu)
+		# [File]
+		mitem = Gtk::MenuItem::new("File")
+		menu  = Gtk::Menu::new
+		mitem.set_submenu(menu)
+		menubar.append(mitem)
+
+		quit_mitem   = Gtk::ImageMenuItem::new(Gtk::Stock::QUIT)
+		menu.append(quit_mitem)
+
+		# [Mode]
+		mitem = Gtk::MenuItem::new("Mode")
+		menu  = Gtk::Menu::new
+		mitem.set_submenu(menu)
+		menubar.append(mitem)
+
 		single_mitem = Gtk::RadioMenuItem::new(nil, "Single")
 		grp = single_mitem.group
 		menu.append(single_mitem)
 		batch_mitem  = Gtk::RadioMenuItem::new(grp, "Batch")
 		menu.append(batch_mitem)
-		exp_mitem    = Gtk::CheckMenuItem::new("Expert")
-		menu.append(exp_mitem)
+#		menu.append(Gtk::SeparatorMenuItem::new)
+#		exp_mitem    = Gtk::CheckMenuItem::new("Expert")
+#		menu.append(exp_mitem)
+
+		# [Preference]
+		mitem = Gtk::MenuItem::new("Preference")
+		menu  = Gtk::Menu::new
+		mitem.set_submenu(menu)
+		menubar.append(mitem)
+
 		tooltips_mitem = Gtk::CheckMenuItem::new("Tooltips")
 		menu.append(tooltips_mitem)
-#		sep = Gtk::SeparatorMenuItem::new
-#		menu.append(sep)
-		quit_mitem   = Gtk::ImageMenuItem::new(Gtk::Stock::QUIT)
-		menu.append(quit_mitem)
-		menubar.append(mode_mitem)
 
+		# [Help]
+		mitem = Gtk::MenuItem::new("Help")
+		menu  = Gtk::Menu::new
+		mitem.set_submenu(menu)
+		mitem.set_right_justified(true)
+		menubar.append(mitem)
 
-		
-		# Help menu
-		menu       = Gtk::Menu::new
-		help_mitem = Gtk::MenuItem::new("Help")
-		help_mitem.set_right_justified(true)
-		help_mitem.set_submenu(menu)
 		about_mitem = Gtk::MenuItem::new("About")
 		menu.append(about_mitem)
-		menubar.append(help_mitem)
 
 
 		# Notebook
 		notebook = Gtk::Notebook::new
 		notebook.set_tab_pos(Gtk::POS_TOP)
-		notebook.append_page @input,   Gtk::Label::new("Input")
+		notebook.append_page @single,  Gtk::Label::new("Input")
 		notebook.append_page @batch,   Gtk::Label::new("Input")
 		notebook.append_page @options, Gtk::Label::new("Options")
-#		notebook.append_page @expert,  Gtk::Label::new("Expert")
-		
+#		notebook.set_tab_label_packing(@options, 
+#					       false, false, Gtk::PACK_END)
+		notebook.append_page @expert,  Gtk::Label::new("Expert")
+#		notebook.set_tab_label_packing(@expert, 
+#					       false, false, Gtk::PACK_END)
 		
 		vbox = Gtk::VBox::new(false)
 		vbox.pack_start(menubar,    false, true)
@@ -817,8 +904,10 @@ module Input
 		about_mitem.signal_connect("activate") {
 		    logo = Gdk::Pixmap::create_from_xpm_d(Gdk::Window::default_root_window, nil, ZCData::XPM::Logo)
 		    
-		    txt  = "Version: #{$zc_version}\n"
-		    txt += "Maintainer: #{ZC_MAINTAINER}"
+		    txt  = "Version\t: #{$zc_version}\n"
+		    txt += "Contact\t: #{ZC_CONTACT}\n"
+		    txt += "Maintainer\t: #{ZC_MAINTAINER}\n"
+		    txt += "Copyright\t: #{ZC_COPYRIGHT}\n"
 
 		    about = Gtk::Dialog::new("About", @window,
                          Gtk::Dialog::MODAL | Gtk::Dialog::DESTROY_WITH_PARENT,
@@ -837,18 +926,18 @@ module Input
 		}
 
 		single_mitem.signal_connect("toggled") { |w|
-		    if w.active? then @input.show else @input.hide end
+		    if w.active? then @single.show else @single.hide end
 		}
 
-		exp_mitem.signal_connect("toggled") { |w|
-		    if w.active?
-			notebook.append_page(@expert, Gtk::Label::new("Expert"))
-#			@expert.set_sensitive(false)
-#			notebook.set_current_page(notebook.page_num(@expert))
-		    else
-			notebook.remove_page(notebook.page_num(@expert))
-		    end
-		}
+#		exp_mitem.signal_connect("toggled") { |w|
+#		    if w.active?
+#			notebook.append_page(@expert, Gtk::Label::new("Expert"))
+##			@expert.set_sensitive(false)
+##			notebook.set_current_page(notebook.page_num(@expert))
+#		    else
+#			notebook.remove_page(notebook.page_num(@expert))
+#		    end
+#		}
 		
 		quit_mitem.signal_connect("activate") {
 		    @aborted = true ; destroy ; Gtk::main_quit }
@@ -865,6 +954,8 @@ module Input
 		@window.add(vbox)
 		@window.show_all
 		@batch.hide
+		notebook.set_page(notebook.page_num(@single))
+
 	    end
 
 	    def set_tip(widget, id)
@@ -876,10 +967,9 @@ module Input
 	    end
 
 	    def set_expert
-		@p.rflag.one		= @expert.one
 		@p.rflag.tagonly	= @expert.tagonly
-		@p.rflag.quiet		= @expert.quiet
 		@p.output		= @expert.output
+		@p.verbose		= @expert.verbose
 		@p.test.tests		= @expert.testname
 		@p.resolver.local	= @expert.resolver
 		@p.resolver.autoconf
@@ -889,7 +979,10 @@ module Input
 		@p.test.categories	= @options.categories
 		@p.transp		= @options.transp
 		@p.verbose		= @options.verbose
+		@p.output		= @options.output
 		@p.error		= @options.error
+		@p.rflag.one		= @options.one
+		@p.rflag.quiet		= @options.quiet
 	    end
 
 	    def set_batch
@@ -898,13 +991,13 @@ module Input
 
 	    def set_domain
 		@p.domain.clear
-		@p.domain.name = @input.domain
-		@p.domain.ns   = @input.ns
+		@p.domain.name = @single.domain
+		@p.domain.ns   = @single.ns
 		if @config[@p.domain.name].nil?
-		    raise "#{@input.domain} is not in our TLD map"
+		    raise "#{@single.domain} is not in our TLD map"
 		end
 		@p.domain.autoconf(@p.resolver.local)
-		@input.ns = @p.domain.ns
+		@single.ns = @p.domain.ns
 	    end
 	end
 

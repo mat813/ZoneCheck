@@ -63,7 +63,9 @@ ZC_GTK_ENV_KEYS		= [] #[ "DISPLAY" ]
 
 ZC_HTML_PATH		= "/zc" # no trailing /
 
-ZC_CONTACT		= "zonecheck@nic.fr"
+ZC_COPYRIGHT		= "AFNIC (c) 2003"
+ZC_CONTACT		= "ZoneCheck <zonecheck@nic.fr>"
+ZC_MAINTAINER		= "Stephane D'Alu <sdalu@nic.fr>"
 
 ## --> END OF CUSTOMIZATION <-- ######################################
 
@@ -81,7 +83,6 @@ ZC_VERSION	= (Proc::new {
 		       
 		       n || "<unreleased>"
 		   }).call
-ZC_MAINTAINER   = "Stephane D'Alu <sdalu@nic.fr>"
 PROGNAME	= File.basename($0)
 
 

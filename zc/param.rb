@@ -631,14 +631,14 @@ class Param
 	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
+	    when "i", "intro"
+		@rflag.intro	= true
 	    when "n", "testname"
 		@rflag.testname	= true
 	    when "x", "explain"
 		@rflag.explain	= true
 	    when "d", "details"
 		@rflag.details  = true
-	    when "i", "intro"
-		@rflag.intro	= true
 	    when "o", "reportok"
 		@rflag.reportok	= true
 	    when "t", "testdesc"
