@@ -150,7 +150,7 @@ class Param
 	def clear
 	    @name	= nil
 	    @ns		= nil
-	    @ns_input	= nil
+	    @ns_input	= [ ]
 	    @addresses	= nil
 	    @cache	= true
 	end
@@ -181,7 +181,11 @@ class Param
 	end
 	
 	def ns=(ns)
-	    return @ns = @ns_input = nil if ns.nil?
+	    if ns.nil?
+		@ns_input = [ ]
+		@ns       = nil
+		return nil
+	    end
 
 	    # Parse inputed NS (and IPs)
 	    @ns_input = [ ]
@@ -218,7 +222,7 @@ class Param
 		    raise ParamError, $mc.get("xcp_param_primary_soa")
 		end
 
-		# Retrieve NS and put ensure the primary at first place
+		# Retrieve NS and ensure the primary at first place
 		#  (based on SOA)
 		begin
 		    @ns = [ ]
@@ -255,6 +259,32 @@ class Param
 		if ips.empty? then
 		    raise ParamError, 
 			$mc.get("xcp_param_nameserver_ips") % [ ns ]
+		end
+	    }
+
+	    # Sanity check on given IP addresses
+	    #  => this is not done for nameservers which are in the 
+	    #     delegated zone, as we need to perform additional
+	    #     checks before, there will be an explicit test for it
+	    #     in the configuration file
+	    @ns_input.each { |ns, ips|
+		if !ns.in_domain?(@name) && !ips.nil?
+		    resolved_ips = nil
+		    begin
+			$dbg.msg(DBG::AUTOCONF, "Comparing IP for NS: #{ns}")
+			resolved_ips = dns.getaddresses(ns, 
+							Address::OrderStrict)
+			
+			unless ips.unsorted_eql?(resolved_ips)
+#			    raise ParamError, 
+#				$mc.get("xcp_param_ns_bad_ips") % ns
+			end
+		    rescue NResolv::NResolvError
+		    end
+		    if resolved_ips.empty?
+			raise ParamError, 
+			    $mc.get("xcp_param_nameserver_ips") % [ ns ]
+		    end
 		end
 	    }
 

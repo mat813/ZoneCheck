@@ -172,6 +172,7 @@ primary_soa	: Unable to find primary nameserver (SOA)
 nameservers_ns	: Unable to find nameservers (NS)
 prim_ns_soa	: Unable to identify primary nameserver (NS vs SOA)
 nameserver_ips	: Unable to find nameserver IP address(es) for %s
+ns_bad_ips	: Given IP address(es) for %s not matching DNS records
 output_support	: Selected output class doesn't support '%s'
 ip_no_stack	: %s not supported on that host
 unknown_modopt	: Unknown modifier '%s' for '%s' option

@@ -55,6 +55,16 @@ module CheckNetworkAddress
 	    ! ptr(srv, ip_name).empty?
 	end
 
+	def chk_ns_matching_reverse(ns, ip)
+	    ip_name	= NResolv::DNS::Name::create(ip)
+	    srv		= rec(ip) ? ip : nil
+	    res		= false
+	    ptrlist     = ptr(srv, ip_name)
+	    return true if ptrlist.empty?
+	    ptrlist.each { |rev|
+		res ||= (rev.ptrdname == ns) }
+	    res
+	end
 
 	# DESC: Ensure coherence between given (param) primary and SOA
 	def chk_given_nsprim_vs_soa(ns, ip)
@@ -78,7 +88,6 @@ module CheckNetworkAddress
 	      "list_from_param" => nslist_from_param.collect{|e| e.to_s } \
 		                                    .sort.join(", ") }
 	end
-
 
 	# DESC: Ensure that a server claiming to be recursive really is it
 	def chk_correct_recursive_flag(ns, ip)

@@ -46,6 +46,13 @@ ok	: Le nom correspondant à l'adresse IP du serveur a été trouvé
 explain : [none]
 
 
+[chk_ns_matching_reverse]
+testname: vérification du nom correspondant à l'adresse IP du serveur
+error   : Incoherence entre le nom correspondant à l'adresse IP et celui du serveur
+ok	: Le nom correspondant à l'adresse IP correspond au nom du serveur
+explain : [none]
+
+
 [chk_correct_recursive_flag]
 testname: serveur de nom réellement récursif
 error   : Le serveur dit être récursif mais ne l'est pas
