@@ -1,8 +1,8 @@
 # $Id$
 
 ZoneCheck is copyright AFNIC, 2003. It is written and maintained by
-Stephane d'Alu <sdalu@nic.fr>. You can write AFNIC at <nic@nic.fr>,
-or for technical questions/patches about this software prefer
+Stephane D'Alu <sdalu@nic.fr>. You can contact AFNIC at <nic@nic.fr>,
+or for technical questions/patches about this software at
 the following address <zonecheck@nic.fr>.
 
 The Ruby DNS library (in the lib/ directory) is licenced like Ruby
@@ -22,7 +22,7 @@ instance, you must provide them with the source code.
 
 Alternatively, if you want to use or distribute a version of ZoneCheck
 in a way which is not compatible with the GPL you *must* get an
-agreement from AFNIC which will allow you the right to use the
+agreement from AFNIC which will give you the right to use the
 following terms. The license is therefore *not* a disjunctive
 license. To use the "MIT/X11"-like license hereafter, you need a
 personal agreement with AFNIC.
@@ -33,9 +33,9 @@ Permission is hereby granted, to <<the licencee>> obtaining a copy of
 this software and associated documentation files (the "Software"), to
 deal in the Software without restriction, including without limitation
 the rights to use, copy, modify, merge, publish, distribute,
-sublicense, and/or sell copies of the Software, and to permit persons
-to whom the Software is furnished to do so, subject to the following
-conditions:
+sublicense, and/or sell copies of the Software, and to permit
+individuals or organizations to whom the Software is furnished to do
+so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
