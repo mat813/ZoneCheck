@@ -16,20 +16,20 @@
 <!--                                                                  -->
 <!--                                                                  -->
 
-<% load "/homes/sdalu/ZC.CVS/zc/html/script/autofill.rb" %>
+<% load (ENV["ZC_INSTALL_PATH"].untaint || (ENV["HOME"].untaint || "/homes/sdalu") + "/ZC.CVS/zc") + "/www/script/autofill.rb" %>
 
 <HTML>
   <HEAD>
-    <LINK rel="stylesheet" href="/zc/zc.css" type="text/css">
+    <LINK rel="stylesheet" href="HTML_PATH/style/zc.css" type="text/css">
     <LINK rel="start" title="The first page of the manual"
 	  type="text/html"
-	  href="/zc/">
+	  href="HTML_PATH/">
     <LINK rel="bookmark" title="batch form"
 	  type="text/html"
-	  href="/zc/batch.html">
+	  href="HTML_PATH/batch.html">
     <LINK rel="bookmark" title="single zone form"
 	  type="text/html"
-	  href="/zc/">
+	  href="HTML_PATH/">
 
     <LINK rel="help"	
 	  type="text/html"
@@ -42,14 +42,14 @@
 	  href="http://someplace.com/manual/dutch.html">
 
 
-    <SCRIPT src="/zc/formvalidation.js"  type="text/javascript"></SCRIPT>
+    <SCRIPT src="HTML_PATH/js/formvalidation.js"  type="text/javascript"></SCRIPT>
     <TITLE>Zone Check</TITLE>
   </HEAD>
 
   <BODY>
     <!-- Logo -->
     <H1 style="text-align: center;">
-      <IMG alt="ZoneCheck" src="/zc/img/logo.png"></H1>
+      <IMG alt="ZoneCheck" src="HTML_PATH/img/logo.png"></H1>
 
     <!-- Propaganda -->
     <P>The ZoneCheck program (freely available 
@@ -80,19 +80,19 @@
     <%=$msg%>
 
     <!-- Form -->
-    <FORM name="zcform" method="POST" action="/cgi-bin/zc.cgi">
+    <FORM name="zcform" method="POST" action="HTML_PATH/cgi-bin/zc.cgi">
       <!-- Basic information -->
       <H2>Zone information</H2>
       <TABLE class="zc_domain">
 	  <TR class="zc_zone">
-	    <TD><IMG src="/zc/img/zone.png" alt="">Zone</TD>
+	    <TD><IMG src="HTML_PATH/img/zone.png" alt="">Zone</TD>
 	    <TD colspan="4">
 	      <INPUT name="zone" type="text" size="65"
 		     value="<%=$name%>"></TD>
 	  </TR>
 
 	  <TR class="zc_ns_prim">
-	    <TD><IMG src="/zc/img/primary.png" alt="">Primary</TD>
+	    <TD><IMG src="HTML_PATH/img/primary.png" alt="">Primary</TD>
 	    <TD><INPUT name="ns0"  type="text" size=24 
 		       value="<%=$ns[0]%>"></TD>
 	    <TD></TD>
@@ -101,7 +101,7 @@
 		       value="<%=$ips[0]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
-	    <TD><IMG src="/zc/img/secondary.png" alt="">Secondary</TD>
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns1"  type="text" size=24
 		       value="<%=$ns[1]%>"></TD>
 	    <TD></TD>
@@ -110,7 +110,7 @@
 		       value="<%=$ips[1]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
-	    <TD><IMG src="/zc/img/secondary.png" alt="">Secondary</TD>
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns2"  type="text" size=24
 		       value="<%=$ns[2]%>"></TD>
 	    <TD></TD>
@@ -119,7 +119,7 @@
 		       value="<%=$ips[2]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
-	    <TD><IMG src="/zc/img/secondary.png" alt="">Secondary</TD>
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns3"  type="text" size=24
 		       value="<%=$ns[3]%>"></TD>
 	    <TD></TD>
@@ -128,7 +128,7 @@
 		       value="<%=$ips[3]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
-	    <TD><IMG src="/zc/img/secondary.png" alt="">Secondary</TD>
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns4"  type="text" size=24
 		       value="<%=$ns[4]%>"></TD>
 	    <TD></TD>
@@ -137,7 +137,7 @@
 		       value="<%=$ips[4]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
-	    <TD><IMG src="/zc/img/secondary.png" alt="">Secondary</TD>
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns5"  type="text" size=24
 		       value="<%=$ns[5]%>"></TD>
 	    <TD></TD>
@@ -146,7 +146,7 @@
 		       value="<%=$ips[5]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
-	    <TD><IMG src="/zc/img/secondary.png" alt="">Secondary</TD>
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns6"  type="text" size=24
 		       value="<%=$ns[6]%>"></TD>
 	    <TD></TD>
@@ -155,7 +155,7 @@
 		       value="<%=$ips[6]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
-	    <TD><IMG src="/zc/img/secondary.png" alt="">Secondary</TD>
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns7"  type="text" size=24
 		       value="<%=$ns[7]%>"></TD>
 	    <TD></TD>
@@ -399,7 +399,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Mar 13 10:47:01 CET 2003
+Last modified: Fri Mar 14 19:26:30 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

@@ -174,7 +174,7 @@ module Publisher
 	  href="#{@publish_path}/#{$mc.lang}/"             type="text/html">
 
     <LINK rel="alternate" title="Original AFNIC version"
-	  href="http://hyperion.nic.fr/zc/"                type="text/html">
+	  href="http://zonecheck.nic.fr/v2/"               type="text/html">
 
     <LINK rel="section" title="#{$mc.get("title_zoneinfo")}"
           href="#t_zoneinfo"                               type="text/html">
@@ -186,7 +186,7 @@ module Publisher
           href="#t_status"                                 type="text/html">
 
     <!-- Style -->
-    <LINK rel="stylesheet" href="#{@publish_path}/zc.css" type="text/css">
+    <LINK rel="stylesheet" href="#{@publish_path}/style/zc.css" type="text/css">
     <STYLE>
         UL.zc_ref LI { 
             list-style: url(#{@publish_path}/img/ref.png)     disc }
@@ -202,9 +202,9 @@ module Publisher
     <SCRIPT type="text/javascript">
       zc_publish_path = "#{@publish_path}"
     </SCRIPT>
-    <SCRIPT src="#{@publish_path}/progress.js"  type="text/javascript">
+    <SCRIPT src="#{@publish_path}/js/progress.js"  type="text/javascript">
     </SCRIPT>
-    <SCRIPT src="#{@publish_path}/popupmenu.js" type="text/javascript">
+    <SCRIPT src="#{@publish_path}/js/popupmenu.js" type="text/javascript">
     </SCRIPT>
   </HEAD>
   <BODY>

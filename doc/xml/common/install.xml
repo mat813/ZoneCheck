@@ -36,9 +36,6 @@
 		<para>Apache2: <ulink url="http://httpd.apache.org/">http://httpd.apache.org/</ulink></para>
 	      </listitem>
 	      <listitem>
-		<para>eruby: <ulink url="http://www.modruby.net/">http://www.modruby.net/</ulink></para>
-	      </listitem>
-	      <listitem>
 		<para>Mozilla: <ulink url="http://www.mozilla.org/">http://www.mozilla.org/</ulink></para>
 	      </listitem>
 	    </itemizedlist>
@@ -59,10 +56,15 @@
 |   `--zc
 |      |-- cgi-bin
 |      |   `-- zc.cgi           # CGI
-|      |-- html                 # HTML directory (javascript, css, pics, ...)
-|      |   |-- en               #   English version
-|      |   |-- ...              #   ...
-|      |   `-- fr               #   French version
+|      |-- www                  # WWW directory (javascript, css, pics, ...)
+|      |   |-- htlm             #   HTML content
+|      |   |   |-- en           #     English version
+|      |   |   |-- ...          #     ...
+|      |   |   `-- fr           #     French version
+|      |   |-- img              #   Pictures, icons, logos, ...
+|      |   |-- js               #   Javascript
+|      |   |-- script           #   Scripts that can be used to enhance HTML
+|      |   `-- style		#   Cascaded Style Sheets
 |      |-- locale               # Localisation files (zonecheck)
 |      |   `-- test             #   localisation for the test set
 |      |-- test                 # test set
@@ -75,19 +77,29 @@
 
 
     <section>
-      <title>HTML</title>
-      <para>toto</para>
+      <title>CGI</title>
+      <para>Here is an exemple of Apache2 configuration file,
+      assuming ZoneCheck has been installed for used in /zc/
 <screen>
-SetEnv ZC_INSTALL_PATH /homes/sdalu/ZC.CVS/zc
-ExtFilterDefine eruby mode=output cmd="/usr/local/bin/eruby -n -"
+ExtFilterDefine eruby mode=output cmd="/usr/local/bin/erb -n -"
 AddOutputFilter eruby .erb
-    ScriptAlias /cgi-bin/ "/usr/local/www/cgi-bin/"
-    Alias /zc/formfill.js "/homes/sdalu/ZC.CVS/zc/html/formfill.js"
-    Alias /zc/progress.js "/homes/sdalu/ZC.CVS/zc/html/progress.js"
-    Alias /zc/zc.css "/homes/sdalu/ZC.CVS/zc/html/zc.css"
-    Alias /zc/img/ "/homes/sdalu/ZC.CVS/zc/html/img/"
-    Alias /zc/ "/homes/sdalu/ZC.CVS/zc/html/en/"
+
+ScriptAlias  /zc/cgi-bin/    /usr/local/libexec/zc/cgi-bin/
+Alias        /zc/js/         /usr/local/libexec/zc/www/js/
+Alias        /zc/style/      /usr/local/libexec/zc/www/style/
+Alias        /zc/img/        /usr/local/libexec/zc/www/img/
+Alias        /zc/            /usr/local/libexec/zc/www/html/en/
+
+&lt;Directory /usr/local/libexec/zc/cgi-bin/&gt;
+    Options ExecCGI 
+&lt;/Directory&gt;
+
+&lt;Directory /usr/local/libexec/zc/www/&gt;
+    Options Includes FollowSymLinks
+&lt;/Directory&gt;
+
 </screen>
+</para>
     </section>
 
 <!-- 

@@ -3,7 +3,7 @@
   <qandaset>
     <qandaentry>
       <question>
-	<para>Where can I found documentation about ruby?</para>
+	<para>Where can I find documentation about ruby?</para>
       </question>
       <answer>
 	<para>Try the offical Ruby website: <ulink url="http://www.ruby-lang.org/">http://www.ruby-lang.org/</ulink></para>
