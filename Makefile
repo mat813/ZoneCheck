@@ -49,16 +49,24 @@ install: install-common install-cli install-cgi install-doc
 install-common:
 	@echo "==> Installing core components"
 	$(INSTALL) -d $(LIBEXEC)/zc
-	$(CP) -r zc    $(LIBEXEC)/zc
+	$(CP) -r zc     $(LIBEXEC)/zc
 	$(RUBY) -p -i \
 		-e "\$$_.gsub!(/^#!.*ruby/, '#!$(RUBY)')" \
 		-e "\$$_.gsub!(/^(ZC_INSTALL_PATH\s*=\s*).*/, '\1\"$(LIBEXEC)/zc\"')" \
 		-e "\$$_.gsub!(/^(ZC_CONFIG_FILE\s*=\s*).*/, '\1\"$(ETCDIR)/zc.conf\"')" \
+		-e "\$$_.gsub!(/^(ZC_LOCALIZATION_FILE\s*=\s*).*/, '\1\"$(LIBEXEC)/zc/locale/zc.%s\"')" \
+		-e "\$$_.gsub!(/^(ZC_TEST_DIR\s*=\s*).*/, '\1\"$(LIBEXEC)/zc/test\"')" \
 		$(LIBEXEC)/zc/zc/zc.rb
 	$(CHMOD) 755 $(LIBEXEC)/zc/zc/zc.rb 
 
 	@echo "==> Installing libraries"
-	$(CP) -r lib   $(LIBEXEC)/zc
+	$(CP) -r lib    $(LIBEXEC)/zc
+
+	@echo "==> Installing tests"
+	$(CP) -r test   $(LIBEXEC)/zc
+
+	@echo "==> Installing locale"
+	$(CP) -r locale $(LIBEXEC)/zc
 
 	@echo "==> Installing default configuration file"
 	$(INSTALL) -d $(ETCDIR)
@@ -66,7 +74,7 @@ install-common:
 
 install-cgi:
 	@echo "==> Installing HTML pages"
-	$(CP) -r html  $(LIBEXEC)/zc
+	$(CP) -r html   $(LIBEXEC)/zc
 
 	@echo "==> Installing CGI"
 	$(INSTALL) -d $(CGIDIR)

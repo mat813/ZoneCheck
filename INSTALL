@@ -9,3 +9,25 @@ Unix. Otherwise, see <URL:http://www.rubycentral.com/>.
 Once Ruby is installed, just "make install" will install everything
 somewhere under /usr/local. If you prefer another place, type "make
 PREFIX=/some/where install".
+
+The default hierarchie is:
+PREFIX
+|-- bin
+|   `-- zc			# Command line
+|-- etc
+|   `-- zc.conf			# Configuration file
+|-- libexec
+|   `--zc
+|      |-- cgi-bin
+|      |   `-- zc.cgi		# CGI
+|      |-- html			# HTML directory (javascript + css)
+|      |   |-- en		#   English version
+|      |   |-- ...              #   ...
+|      |   `-- fr		#   French version
+|      |-- locale		# Localisation files
+|      |-- test			# test set
+|      |-- lib			# Extra libraries (NResolv, Address, ...)
+|      `-- zc			# core component
+`-- share
+    `-- doc
+        `-- zc			# Documentation
