@@ -80,7 +80,7 @@ class NResolv
 
     class DNS
 	Port		 = 53
-	TCPTimeout	 = 5
+	TCPTimeout	 = 10
 #       UDPRetrySequence = [ 5, 10, 20, 40 ]
 	UDPRetrySequence = [ 1, 2, 3, 4 ]
 	UDPSize		 = 512
@@ -239,12 +239,21 @@ class NResolv
 		    @close_on_exec.call(@sock)
                     @thread = Thread::new {
                         DNSThreadGroup.add Thread.current
-                        loop {
-			    lenhdr = @sock.read(2)
-			    len    = lenhdr.unpack('n')[0]
-			    reply  = @sock.read(len)
-			    dispatch(reply)
-                        }
+			begin
+			    loop {
+				lenhdr = @sock.read(2)
+				break if lenhdr.nil? || lenhdr.size != 2
+				len    = lenhdr.unpack('n')[0]
+				reply  = @sock.read(len)
+				break if reply.size != len
+				dispatch(reply)
+			    }
+			rescue Errno::ECONNRESET
+			    Dbg.msg(DBG::TRANSPORT,
+				    "closing TCP connection due to reset/error")
+			ensure
+			    connect_close
+			end
                     }
 		    @sock
                 end
