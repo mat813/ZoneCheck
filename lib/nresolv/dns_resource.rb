@@ -16,7 +16,7 @@
 #
 
 
-module NResolv
+class NResolv
     class DNS
 	class Resource
 	    @@hash_resource = {}

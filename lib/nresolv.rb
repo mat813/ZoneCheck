@@ -25,10 +25,11 @@ require 'nresolv/transport'
 require 'nresolv/config'
 require 'nresolv/resolver'
 require 'nresolv/dig_output'
+require 'nresolv/compatibility'
 
 require 'address'
 
-module NResolv
+class NResolv
     # 
     # Ensure that 'arg' will be an Address or a DNS Name object,
     # raise the ArgumentError exception if conversion failed

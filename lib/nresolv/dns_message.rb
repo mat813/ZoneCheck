@@ -18,7 +18,7 @@
 #
 #
 
-module NResolv
+class NResolv
     class DNS
 	class Message
 	    attr_reader :msgid, :opcode

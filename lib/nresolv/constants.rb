@@ -15,7 +15,7 @@
 #
 #
 
-module NResolv
+class NResolv
     class ValueHolder
 	attr_reader :name, :value
 

@@ -30,7 +30,7 @@
 require 'socket'
 
 
-module NResolv
+class NResolv
     class DNS
 	##
 	##

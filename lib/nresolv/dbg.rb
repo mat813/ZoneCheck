@@ -16,7 +16,7 @@
 #
 
 
-module NResolv
+class NResolv
     ##
     ## Debugging
     ##

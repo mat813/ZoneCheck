@@ -23,7 +23,7 @@
 #
 #
 
-module NResolv
+class NResolv
     class DNS
 	class Name
 	    class Label

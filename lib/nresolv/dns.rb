@@ -20,7 +20,7 @@
 
 require 'address'
 
-module NResolv
+class NResolv
     class NResolvError < StandardError
     end
 end

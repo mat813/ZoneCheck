@@ -27,7 +27,7 @@
 
 require 'nresolv/dbg'
 
-module NResolv
+class NResolv
     class DNS
 	##
 	## provide encoding/decoding methodes for DNS records

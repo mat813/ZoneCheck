@@ -23,7 +23,7 @@ require 'nresolv/transport'
 require 'nresolv/config'
 require 'nresolv/dbg'
 
-module NResolv
+class NResolv
     class NoEntryError  < NResolvError
     end
 

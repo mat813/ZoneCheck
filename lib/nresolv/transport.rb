@@ -67,7 +67,7 @@ require 'nresolv/dbg'
 #
 
 
-module NResolv
+class NResolv
     ##
     ## Timeout Errors
     ##

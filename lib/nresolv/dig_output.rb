@@ -20,7 +20,7 @@
 # Add a dig-like formated output
 #
 
-module NResolv
+class NResolv
     class DNS
 	def self.dump_comment(output=$stdout, comment=nil, tag=";; ")
 	    if comment
