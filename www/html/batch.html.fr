@@ -198,7 +198,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	d'utiliser le domaine à l'extérieur de votre réseau ;</LI>
       <LI>liste des serveurs secondaires corrects, de telle manière
 	que si le serveur primaire est temporairement injoignable, 
-	le domaine reste encore visible depuis l'Internet ;</LI>
+	le domaine reste encore visible depuis l'internet ;</LI>
       <LI>vérification de la distribution du courrier, afin de ne pas
 	devenir la proie des spammers et finir en 
 	<A href="http://www.mail-abuse.org/">liste noire</A></LI>
@@ -212,7 +212,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	<TR><TD class="zc-title" colspan="2">Information sur la zone</TD></TR>
 	<TR>
 	  <TD class="zc-key">Zone</TD>
-	  <TD>Le domaine (ie: zone) qui doit être testé (ie: le nom de
+	  <TD>Le domaine (zone) qui doit être testé (le nom de
 	    domaine qui doit être enregistré).</TD>
 	</TR>
 	<TR>
@@ -231,7 +231,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  <TD>Liste des adresses IP associées avec le serveur de noms.
 	    <UL>
 	      <LI>elles sont uniquement requises si elles ne peuvent être
-		déduites (ie: elles sont dans la zone qui est actuellement
+		déduites (elles sont dans la zone qui est actuellement
 		en cours d'enregistrement),</LI>
 	      <LI>s'il y a plusieurs adresses, elle doivent être séparées
 		par un espace ou une virgule,</LI>
@@ -379,7 +379,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr 18 17:33:38 CEST 2003
+Last modified: Fri Apr 18 18:22:34 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

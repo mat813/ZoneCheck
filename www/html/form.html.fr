@@ -60,8 +60,8 @@
     <!-- Propaganda -->
     <P>Le programme ZoneCheck (librement disponible 
       <A href="http://zonecheck.nic.fr/download/v2/">ici</A>
-      en téléchargement) effectue plusieurs tests sur la zone (ie:
-      domaine) afin de s'assurer que celle ci est correctement configurée
+      en téléchargement) effectue plusieurs tests sur la zone 
+      (domaine) afin de s'assurer que celle ci est correctement configurée
       et peut être déléguée sans risque, fournissant un certain degré de
       qualité à votre domaine (voir la section sur les 
       <A href="#benefit">bénéfices</A>).</P>
@@ -266,7 +266,7 @@
 	d'utiliser le domaine à l'extérieur de votre réseau ;</LI>
       <LI>liste des serveurs secondaires corrects, de telle manière
 	que si le serveur primaire est temporairement injoignable, 
-	le domaine reste encore visible depuis l'Internet ;</LI>
+	le domaine reste encore visible depuis l'internet ;</LI>
       <LI>vérification de la distribution du courrier, afin de ne pas
 	devenir la proie des spammers et finir en 
 	<A href="http://www.mail-abuse.org/">liste noire</A></LI>
@@ -280,7 +280,7 @@
 	<TR><TD class="zc-title" colspan="2">Information sur la zone</TD></TR>
 	<TR>
 	  <TD class="zc-key">Zone</TD>
-	  <TD>Le domaine (ie: zone) qui doit être testé (ie: le nom de
+	  <TD>Le domaine (zone) qui doit être testé (le nom de
 	    domaine qui doit être enregistré).</TD>
 	</TR>
 	<TR>
@@ -299,7 +299,7 @@
 	  <TD>Liste des adresses IP associées avec le serveur de noms.
 	    <UL>
 	      <LI>elles sont uniquement requises si elles ne peuvent être
-		déduites (ie: elles sont dans la zone qui est actuellement
+		déduites (elles sont dans la zone qui est actuellement
 		en cours d'enregistrement),</LI>
 	      <LI>s'il y a plusieurs adresses, elle doivent être séparées
 		par un espace ou une virgule,</LI>
@@ -440,7 +440,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr 18 17:32:29 CEST 2003
+Last modified: Fri Apr 18 18:23:00 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
