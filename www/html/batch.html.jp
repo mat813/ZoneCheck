@@ -336,14 +336,21 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
     <!-- What / Who / When -->
     <HR>
-      <a style="float: right;"
-	 href="http://validator.w3.org/check/referer"><img border="0"
-          src="http://www.w3.org/Icons/valid-html401"
-          alt="Valid HTML 4.01!" height="31" width="88"></a>
+    <SPAN style="float: right;">
+      <a href="http://jigsaw.w3.org/css-validator/check/referer">
+	<img style="border:0;width:88px;height:31px"
+	     src="http://jigsaw.w3.org/css-validator/images/vcss" 
+	     alt="Valid CSS!"></a>
+      <a href="http://validator.w3.org/check/referer">
+	<img style="border:0;width:88px;height:31px"
+	     src="http://www.w3.org/Icons/valid-html401"
+	     alt="Valid HTML 4.01!"></a>
+    </SPAN>
+
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr  4 10:52:19 CEST 2003
+Last modified: Fri Apr  4 11:17:45 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
