@@ -25,6 +25,7 @@ module CheckExtra
 	    @fake_dest = const("fake_mail_dest")
 	    @fake_from = const("fake_mail_from")
 	    @fake_user = const("fake_mail_user")
+	    @fake_host = const("fake_mail_host")
 	end
 
 	#-- Shortcuts -----------------------------------------------
@@ -51,6 +52,7 @@ module CheckExtra
 		mrelay = ZCMail::new(mdom, mip.to_s)
 		mrelay.fake_info(@fake_user, @fake_dest, @fake_from)
 		mrelay.banner
+		mrelay.helo(@fake_host)
 		yield mrelay
 	    ensure
 		mrelay.quit
