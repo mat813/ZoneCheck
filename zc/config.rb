@@ -47,11 +47,8 @@ class Config
     #
     # Initializer
     #
-    def initialize(test_manager, fatal, warning, info)
+    def initialize(test_manager)
 	@test_manager	= test_manager
-	@fatal		= fatal
-	@warning	= warning
-	@info		= info
 
 	@test_list	= []
 	@test_action	= {}
@@ -92,11 +89,7 @@ class Config
 	
 	# Register test
 	@test_list << testname
-	@test_action[testname] = case action
-				 when Warning then @warning
-				 when Info    then @info
-				 when Fatal   then @fatal
-				 end
+	@test_action[testname] = action
     end
 
 

@@ -28,16 +28,21 @@ class Test
     class Answer # --> ABSTRACT <--
 	attr_reader :testname, :ns, :ip
 
-	def initialize(testname, msg=nil, xpl=nil, ns=nil, ip=nil)
+	def initialize(testname, msg=nil, xpl=nil, xtra=nil, ns=nil, ip=nil)
 	    @testname = testname
-	    @msg      = msg
-	    @xpl      = xpl
+	    @msg      = msg	# Error message (if unexpected)
+	    @xpl      = xpl	# Test explanation
+	    @xtra     = xtra	# Extra information
 	    @ns       = ns
 	    @ip       = ip
 	end
 	
+	def is_unexpected?
+	    !@msg.nil?
+	end
+
 	def msg
-	    if @msg
+	    if is_unexpected?
 		"[TEST %s]: %s" % [ $mc.get("#{testname}_testname"), @msg] 
 	    else
 		$mc.get("#{testname}_error")
@@ -48,11 +53,12 @@ class Test
 	    $mc.get("#{testname}_testname")
 	end
 
+
 	def explanation
 	    if @xpl
 		@xpl
 	    else
-		@msg ? nil : $mc.get("#{@testname}_explain")
+		is_unexpected? ? nil : $mc.get("#{@testname}_explain")
 	    end
 	end
 

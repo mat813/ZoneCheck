@@ -11,7 +11,7 @@
 #
 #
 
-module Diagnostic
+module Report
     class FatalError < StandardError
     end
 
@@ -20,26 +20,38 @@ module Diagnostic
     ## Straight interpretation of messages.
     ##
     class Straight
+	def tagonly_supported? ; true ; end
+	def one_supported?     ; true ; end
+	
 	class Processor # ABSTRACT
-	    def initialize(diag)
-		@param     = diag.param
-		@formatter = diag.param.formatter
-		@explain   = diag.param.explanation
-		@list      = []
+	    def initialize(rflag, publisher)
+		@rflag		= rflag
+		@publisher	= publisher
+		@list		= []
 	    end
 
-	    def empty?
-		@list.empty?
-	    end
+	    def empty? ; @list.empty? ; end
 
-	    def count
-		@list.length
-	    end
+	    def count  ; @list.length ; end
 
 	    def add_answer(answer)
 		@list << answer unless answer.ok?
 	    end
 	    
+	    def name
+		self.class.to_s =~ /([^:]+)$/
+		$1
+	    end
+
+	    def one
+		@list.nil? ? nil : @list.first
+	    end
+
+	    def has_unexpected?
+		@list.each { |ans| return true if ans.is_unexpected? }
+		false
+	    end
+
 	    def display
 		nlist = @list.dup
 
@@ -47,9 +59,17 @@ module Diagnostic
 		    tags = [ ]
 		    
 		    ans = nlist.shift
-		    @formatter.msg1(ans.msg) 
-		    if @param.explanation && !@param.tagonly
-			@formatter.explanation(ans.explanation) 
+		    if !@rflag.tagonly
+			@publisher.msg1(ans.msg) 
+		    else
+			if ans.is_unexpected?
+			    @publisher.msg1("#{name}[Unexpected]: #{ans.testname}")
+			else
+			    @publisher.msg1("#{name}: #{ans.testname}")
+			end
+		    end
+		    if @rflag.explain && !@rflag.tagonly
+			@publisher.explanation(ans.explanation) 
 		    end
 		    tags << ans.tag
 
@@ -60,8 +80,8 @@ module Diagnostic
 			end
 		    }
 		    
-		    @formatter.list(tags)
-		    @formatter.vskip
+		    @publisher.list(tags)
+		    @publisher.vskip
 		end
 	    end
 	end
@@ -80,26 +100,59 @@ module Diagnostic
 	end
 
 
-	def initialize(param)
-	    @param     = param
-	    @formatter = param.formatter
-	    @fatal     = Fatal::new(self)
-	    @warning   = Warning::new(self)
-	    @info      = Info::new(self)
+	def initialize(domain, rflag, publisher)
+	    @domain	= domain
+	    @rflag	= rflag
+	    @publisher	= publisher
+	    @fatal	= Fatal::new(rflag, publisher)
+	    @warning	= Warning::new(rflag, publisher)
+	    @info	= Info::new(rflag, publisher)
 	end
 
 	def finish
-	    @formatter.h1("Test results")
+	    if @rflag.one
+		ans   = @info.one
+		ans ||= @warning.one
+		ans ||= @fatal.one
+
+		
+		i_tag = @rflag.tagonly ? "i" : $mc.get("i_tag")
+		w_tag = @rflag.tagonly ? "w" : $mc.get("w_tag")
+		f_tag = @rflag.tagonly ? "f" : $mc.get("f_tag")
+
+		i_tag = i_tag.upcase if @info.has_unexpected?
+		w_tag = w_tag.upcase if @warning.has_unexpected?
+		f_tag = f_tag.upcase if @fatal.has_unexpected?
+
+
+		@publisher.one(@domain.name, 
+			       @info.count,
+			       @warning.count,
+			       @fatal.count)
+
+
+#		@publisher.msg1("%-62s   %s" % [ 
+#				    @param.domain.name, summary])
+#		@publisher.msg1("  Warning: #{ans.tag}")
+#		@publisher.msg1("  #{ans.msg}")
+
+
+		return
+	    end
+
+
+
+	    @publisher.h1("Test results")
 	    if ! @info.empty?
-		@formatter.h2($mc.get("info"))
+		@publisher.h2($mc.get("info")) if !@rflag.tagonly
 		@info.display
 	    end
 	    if ! @warning.empty?
-		@formatter.h2($mc.get("warning"))
+		@publisher.h2($mc.get("warning")) if !@rflag.tagonly
 		@warning.display
 	    end
 	    if ! @fatal.empty?
-		@formatter.h2($mc.get("fatal"))
+		@publisher.h2($mc.get("fatal")) if !@rflag.tagonly
 		@fatal.display
 	    end
 
@@ -110,7 +163,7 @@ module Diagnostic
 	    if fatals == 0
 		tag = (warnings > 0) ? "res_succeed_but" : "res_succeed"
 	    else
-		if ! @param.stop_on_fatal # XXX: bad $
+		if ! @rflag.stop_on_fatal # XXX: bad $
 		    tag = "res_failed_on"
 		else
 		    tag = (warnings > 0) ? "res_failed_and" : "res_failed"

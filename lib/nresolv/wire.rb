@@ -210,7 +210,7 @@ module NResolv
 		    else
 			index, @index = @index, @index + len
 		    end
-		    @data.unpack("@#{index}#{template}")
+		    @data.unpack("@#{index}#{template}") # XXX: segfault
 		end
 	    end
 

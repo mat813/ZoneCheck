@@ -2,3 +2,4 @@
 
 - test loopback v6
 - verifier que certains test ne sont fait que si recursif
+- cachemanager destroy method (and use it)

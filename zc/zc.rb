@@ -47,7 +47,9 @@ EXIT_FAILED	=  1
 EXIT_ERROR      =  3
 
 
-
+#
+# Debugger object
+#
 $dbg = DBG::new
 
 
@@ -61,90 +63,101 @@ $mc = MessageCatalog::new("zc.en")
 # Parse command line
 #
 begin
-    Param::cmdline_usage(EXIT_USAGE) if ($param = Param::cmdline_parse).nil?
-    $param.autoconf
+    Param::cmdline_usage(EXIT_USAGE) if (param = Param::cmdline_parse).nil?
+    param.autoconf
 rescue Param::ParamError => e
     $stderr.puts "ERROR: #{e}"
     exit EXIT_ERROR
 end
 
 
-def zc(param)
-    formatter = param.formatter
+#
+# Load ruby files implementing tests
+#
+$dbg.msg(DBG::TEST_LOADING, "directory: #{param.testdir}")
+Dir::open(param.testdir) { |dir|
+    dir.each { |entry|
+	next unless entry =~ /\.rb$/
+	$dbg.msg(DBG::TEST_LOADING, "loading file: #{entry}")
+	load "#{param.testdir}/#{entry}"
+    }
+}
+    
 
+#
+# Load TestManager with test classees
+#
+# Create test manager
+test_manager = TestManager::new
+    
+# Add the test classes (they should have Test as superclass)
+[ CheckGeneric, CheckNameServer, CheckNetworkAddress].each { |mod|
+    mod.constants.each { |t|
+	testclass = eval "#{mod}::#{t}"
+	if testclass.superclass == Test
+	    $dbg.msg(DBG::TEST_LOADING, "instanciate class: #{testclass}")
+	    test_manager << testclass
+	else
+	    $dbg.msg(DBG::TEST_LOADING, "not a test class: #{testclass}")
+	end
+    }
+}
+
+
+#
+# Read the 'zc.conf' configuration file
+#
+config = Config::new(test_manager)
+config.read(param.configfile)
+
+
+
+def zc(test_manager, config, cm, param)
     # Begin formatter
-    formatter.begin
+    param.publisher.begin
 
     # Display intro (ie: domain and nameserver summary)
-    if param.intro
-	formatter.intro(param.domainname, param.ns, param.cache)
-    end
+    param.publisher.intro(param.domain) if param.rflag.intro
 
-
-    #
-    # Loading into the TestManager all the implemented tests
-    #
-    # Create test manager
-    test_manager = TestManager::new(param)
-    
-    # Load ruby files implementing tests
-    $dbg.msg(DBG::TEST_LOADING, "directory: #{param.testdir}")
-    Dir::open(param.testdir) { |dir|
-	dir.each { |entry|
-	    next unless entry =~ /\.rb$/
-	    $dbg.msg(DBG::TEST_LOADING, "loading file: #{entry}")
-	    load "#{param.testdir}/#{entry}"
-	}
-    }
-    
-    # Use the test classes (they should have Test as superclass)
-    [ CheckGeneric, CheckNameServer, CheckNetworkAddress].each { |mod|
-	mod.constants.each { |t|
-	    testclass = eval "#{mod}::#{t}"
-	    if testclass.superclass == Test
-		$dbg.msg(DBG::TEST_LOADING, "instanciate class: #{testclass}")
-		test_manager << testclass
-	    else
-		$dbg.msg(DBG::TEST_LOADING, "not a test class: #{testclass}")
-	    end
-	}
-    }
-
-    
-    #
-    # Read the configuration file
-    #
-    config = Config::new(test_manager, param.fatal, param.warning, param.info)
-    config.read(param.configfile)
-    
-    
-    #
-    # Initialise and run the tests
-    #
-    test_manager.init(config)
+    # Initialise and test
+    test_manager.init(config, cm, param)
     success = begin
 		  test_manager.test
 		  true
-	      rescue Diagnostic::FatalError
+	      rescue Report::FatalError
 		  false
 	      end
-    
 
-    #
     # Finish diagnostic (in case of pending output)
-    #
-    param.diagnostic.finish
+    param.report.finish
     
     
-    #
     # End formatter
-    #
-    formatter.end
+    param.publisher.end
 
     return success
 end
 
-success = zc($param)
+
+
+
+if ! param.batch
+    cm = CacheManager::create(Test::DefaultDNS, param.client)
+    success = zc(test_manager, config, cm, param)
+else
+    cm = CacheManager::create(Test::DefaultDNS, param.client)
+    $stdin.each_line { |line|
+	case line
+	when /^DOM=(\S+)\s+NS=(\S+)\s*$/
+	    param.domain = Param::Domain::new($1, $2)
+	when /^DOM=(\S+)\s*$/
+	    param.domain = Param::Domain::new($1)
+	end
+	param.autoconf
+	zc(test_manager, config, cm, param)
+    }
+end
+
 
 #
 # EXIT

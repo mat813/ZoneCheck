@@ -15,14 +15,14 @@
 require 'thread'
 require 'xtra'
 
-module Formatter
+module Publisher
     class PBar < Xtra::ProgressBar
 	def unit            ; "T/s"  ; end
 	def unit_cvt(value) ;  value ; end
     end
 
     class Text
-	MaxLineLength           = 78
+	MaxLineLength           = 79
 
 	#------------------------------------------------------------
 
@@ -66,16 +66,24 @@ module Formatter
 
 	#------------------------------------------------------------
 
-	def intro(domainname, ns, cache)
-	    puts "DOMAIN: #{domainname}"
-	    ns.each_index { |i| 
-		n = ns[i]
+	def intro(domain)
+	    puts "DOMAIN: #{domain.name}"
+	    domain.ns.each_index { |i| 
+		n = domain.ns[i]
 		printf "NS %2s : %s [%s]\n",
 		    i == 0 ? "<=" : "  ", n[0], n[1].join(", ")
 	    }
-	    puts "CACHE : #{cache}"
+	    puts "CACHE : #{domain.cache}"
 	    puts
 	end
+
+	def one(domainname, i_count, w_count, f_count)
+#		summary = "%1s%03d %1s%03d %1s%03d" % [ i_count, w_count, f_count]
+
+#	    printf "%-*s    %s\n", 
+#		MaxLineLength - 4 - summary.length, domainname, summary
+	end
+
 
 	#------------------------------------------------------------
 	def h1(h)
@@ -251,3 +259,4 @@ EOT
     class BatchText 
     end
 end
+

@@ -11,6 +11,11 @@
 #
 #
 
+i_tag : i
+w_tag : w
+f_tag : f
+
+
 res_succeed_but : ==> SUCCEED (but %d warning(s))\n
 res_succeed	: ==> SUCCEED\n
 res_failed	: ==> FAILED\n
