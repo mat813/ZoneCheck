@@ -443,7 +443,7 @@ module Publisher
 
 	def diag_section(title)
 	    if !@rflag.quiet
-		@o.add_node(Output::L_H2, "h2", title.capitalize, false, true)
+		@o.add_node(Output::L_H2, "h2", title, false, true)
 		@o.forget_level("diagnostic")
 	    end
 	end
@@ -634,13 +634,6 @@ module Publisher
 
 	    # Wait...
 	    q.pop
-	end
-
-	#------------------------------------------------------------
-
-	def h2(h)
-	    @o.add_node(Output::L_H2, "h2", h.capitalize, false, true)
-	    @o.forget_level("diagnostic")
 	end
     end
 end

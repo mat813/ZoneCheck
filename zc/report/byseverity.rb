@@ -22,78 +22,37 @@ module Report
     ##
     ## Straight interpretation of messages.
     ##
-    class BySeverity
-	def tagonly_supported? ; true ; end
-	def one_supported?     ; true ; end
-	
+    class BySeverity < Template
+	def finish
+	    if @rflag.one
+		rtest, severity = nil,          nil
+		rtest, severity = @fatal.one,   @fatal.severity   unless rtest
+		rtest, severity = @warning.one, @warning.severity unless rtest
 
-	##
-	##
-	##
-	class Processor # --> ABSTRACT <--
-	    def initialize(master, rflag, publish)
-		@master		= master
-		@rflag		= rflag
-		@publish	= publish
-		@list_failed	= []
-		@list_ok	= master.list_ok
-	    end
-
-	    def empty? ; @list_failed.empty? ; end
-	    def count  ; @list_failed.length ; end
-	    def one    ; @list_failed.first  ; end
-	    def list   ; @list_failed        ; end
-
-	    def add_result(result)
-		if result.ok?
-		then @list_ok     << result
-		else @list_failed << result
+		@publish.diagnostic1(@domain.name, 
+				     @info.count,    @info.has_error?,
+				     @warning.count, @warning.has_error?,
+				     @fatal.count,   @fatal.has_error?,
+				     rtest, severity)
+	    else
+		if !(@info.empty? && @warning.empty? && @fatal.empty?)
+		    @publish.diag_start() unless @rflag.quiet
+		    
+		    catlist = []
+		    catlist << @ok   if @rflag.reportok
+		    catlist << @info << @warning << @fatal
+		    catlist.each { |cat|
+			display(cat.list, cat.severity) }
 		end
-	    end
-	    
-	    def has_error?
-		@list_failed.each { |res| return true if res.desc.is_error? }
-		false
+
+		@publish.status(@domain.name, 
+				@info.count, @warning.count, @fatal.count)
 	    end
 	end
 
-
-	##
-	## Fatal/Warning/Info results 
-	##
-	class Fatal   < Processor
-	    def add_result(result)
-		super(result)
-		raise FatalError unless result.ok?
-	    end
-	    def severity ; Config::Fatal        ; end
-	end
-
-	class Warning < Processor
-	    def severity ; Config::Warning      ; end
-	end
-
-	class Info    < Processor
-	    def severity ; Config::Info         ; end
-	end
-
-
-
-	attr_reader :list_ok
-
-	def initialize(domain, rflag, publish)
-	    @domain	= domain
-	    @rflag	= rflag
-	    @publish	= publish
-	    @list_ok	= []
-	    @fatal	= Fatal::new(self, rflag, publish)
-	    @warning	= Warning::new(self, rflag, publish)
-	    @info	= Info::new(self, rflag, publish)
-	end
-
-
+	private
 	def display(list, severity)
-	    return if list.empty?
+	    return if list.nil? || list.empty?
 
 	    if !@rflag.tagonly && !@rflag.quiet
 		severity_tag	= Config.severity2tag(severity)
@@ -113,42 +72,13 @@ module Report
 		
 		# Look for similare test results
 		nlist.delete_if { |a|
-		    if (a.testname == res.testname) && (a.desc == res.desc)
-			whos << a.tag
-		    end
+		    whos << a.tag if ((a.testname == res.testname) && 
+				      (a.desc == res.desc))
 		}
 		
 		# Publish diagnostic
 		@publish.diagnostic(severity, testname, desc, whos)
 	    end
 	end
-
-	def finish
-	    if @rflag.one
-		rtest, severity = nil,          nil
-		rtest, severity = @fatal.one,   @fatal.severity   unless rtest
-		rtest, severity = @warning.one, @warning.severity unless rtest
-
-		@publish.diagnostic1(@domain.name, 
-				     @info.count,    @info.has_error?,
-				     @warning.count, @warning.has_error?,
-				     @fatal.count,   @fatal.has_error?,
-				     rtest, severity)
-	    else
-		if !(@info.empty? && @warning.empty? && @fatal.empty?)
-		    @publish.diag_start() unless @rflag.quiet
-		    
-		    display(@list_ok,      nil             ) if @rflag.reportok
-		    display(@info.list,	   @info.severity   )
-		    display(@warning.list, @warning.severity)
-		    display(@fatal.list,   @fatal.severity  )
-		end
-
-		@publish.status(@domain.name, 
-				@info.count, @warning.count, @fatal.count)
-	    end
-	end
-
-	attr_reader :fatal, :warning, :info
     end
 end

@@ -307,7 +307,7 @@ EOT
 	end
 
 	def diag_section(title)
-	    h2(title)
+	    @o.puts "<H3 class=\"zc-diagsec\">---- #{title} ----</H3>"
 	end
 
 	def diagnostic1(domainname, 
@@ -439,14 +439,6 @@ EOT
 		@o.puts "<HR width=\"60%\">"
 		@o.puts "<BR>"
 	    end
-	end
-
-
-
-	#------------------------------------------------------------
-
-	def h2(h)
-	    @o.puts "<H3 class=\"zc-severity\">---- #{h.capitalize} ----</H3>"
 	end
     end
 end

@@ -22,107 +22,7 @@ module Report
     ##
     ## Straight interpretation of messages.
     ##
-    class ByHost
-	def tagonly_supported? ; true ; end
-	def one_supported?     ; true ; end
-	
-
-	##
-	##
-	##
-	class Processor # --> ABSTRACT <--
-	    def initialize(master, rflag, publish)
-		@master		= master
-		@rflag		= rflag
-		@publish	= publish
-		@list_failed	= []
-		@list_ok	= master.list_ok
-	    end
-
-	    def empty? ; @list_failed.empty? ; end
-	    def count  ; @list_failed.length ; end
-	    def one    ; @list_failed.first  ; end
-	    def list   ; @list_failed        ; end
-
-	    def add_result(result)
-		if result.ok?
-		then @list_ok     << result
-		else @list_failed << result
-		end
-	    end
-	    
-	    def has_error?
-		@list_failed.each { |res| return true if res.desc.is_error? }
-		false
-	    end
-	end
-
-
-	##
-	## Fatal/Warning/Info results 
-	##
-	class Fatal   < Processor
-	    def add_result(result)
-		super(result)
-		raise FatalError unless result.ok?
-	    end
-	    def severity ; Config::Fatal        ; end
-	end
-
-	class Warning < Processor
-	    def severity ; Config::Warning      ; end
-	end
-
-	class Info    < Processor
-	    def severity ; Config::Info         ; end
-	end
-
-
-
-	attr_reader :list_ok
-
-	def initialize(domain, rflag, publish)
-	    @domain	= domain
-	    @rflag	= rflag
-	    @publish	= publish
-	    @list_ok	= []
-	    @fatal	= Fatal::new(self, rflag, publish)
-	    @warning	= Warning::new(self, rflag, publish)
-	    @info	= Info::new(self, rflag, publish)
-	end
-
-
-	def display(list, severity)
-	    return if list.empty?
-
-	    if !@rflag.tagonly && !@rflag.quiet
-		severity_tag	= Config.severity2tag(severity)
-		l10n_severity	= $mc.get("w_#{severity_tag}")
-		@publish.diag_section(l10n_severity)
-	    end
-		
-	    nlist = list.dup
-	    while ! nlist.empty?
-		# Get test result
-		res		= nlist.shift
-		
-		# Initialize 
-		whos		= [ res.tag ]
-		desc		= res.desc.clone
-		testname	= res.testname
-		
-		# Look for similare test results
-		nlist.delete_if { |a|
-		    if (a.testname == res.testname) && (a.desc == res.desc)
-			whos << a.tag
-		    end
-		}
-		
-		# Publish diagnostic
-		@publish.diagnostic(severity, testname, desc, whos)
-	    end
-	end
-
+    class ByHost < Template
 	def finish
 	    if @rflag.one
 		rtest, severity = nil,          nil
@@ -137,11 +37,24 @@ module Report
 	    else
 		if !(@info.empty? && @warning.empty? && @fatal.empty?)
 		    @publish.diag_start() unless @rflag.quiet
-		    
-		    display(@list_ok,      nil             ) if @rflag.reportok
-		    display(@info.list,	   @info.severity   )
-		    display(@warning.list, @warning.severity)
-		    display(@fatal.list,   @fatal.severity  )
+
+		    # Sorting by 'host'
+		    byhost = {}
+		    full_list.each { |elt| res, severity = elt
+			next if severity.nil? && !@rflag.reportok
+			tag = res.tag
+			byhost[tag] = [] unless byhost.has_key?(tag)
+			byhost[tag] << elt
+		    }
+
+		    # Print 'generic' first
+		    gentag = $mc.get("w_generic")
+		    display(byhost[gentag], gentag)
+		    byhost.delete(gentag)
+
+		    # Print remaining 'host'
+		    byhost.keys.sort.each { |tag|
+			display(byhost[tag], tag) }
 		end
 
 		@publish.status(@domain.name, 
@@ -149,6 +62,19 @@ module Report
 	    end
 	end
 
-	attr_reader :fatal, :warning, :info
+	attr_reader :full_list
+	attr_reader :ok, :fatal, :warning, :info
+
+	private
+	def display(list, title)
+	    return if list.nil? || list.empty?
+
+	    if !@rflag.tagonly && !@rflag.quiet
+		@publish.diag_section(title)
+	    end
+ 
+	    list.each { |res, severity|
+		@publish.diagnostic(severity, res.testname, res.desc, []) }
+	end
     end
 end

@@ -445,7 +445,7 @@ class ZoneCheck
 	rescue Config::ConfigError => e
 	    @input.error(e.to_s, EXIT_ERROR)
 	rescue => e
-	    raise e if $dbg.enabled?(DBG::DONT_RESCUE)
+	    raise if $dbg.enabled?(DBG::DONT_RESCUE)
 	    @input.error(e.to_s, EXIT_ERROR)
 	ensure
 	    # exit() raise an exception ensuring that the following code

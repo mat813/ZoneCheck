@@ -97,7 +97,7 @@ class Test
 
 
 
-	attr_reader :testname, :desc, :ns, :ip, :data
+	attr_reader :testname, :desc, :ns, :ip
 
 	def initialize(testname, desc, ns=nil, ip=nil)
 	    @testname	= testname

@@ -234,7 +234,14 @@ module Publisher
 	end
 
 	def diag_section(title)
-	    h2(title)
+	    txtlen = [title.length, MaxLineLength-20].min
+	    txt    = title[0..txtlen]
+	    @o.print "       ", "_" * (8+txtlen), "\n"
+	    @o.print "     ,", "-" * (8+txtlen), ".|\n"
+	    @o.print "~~~~ |    #{txt}    || ", 
+		"~" * (MaxLineLength-19-txtlen), "\n"
+	    @o.print "     `", "-" * (8+txtlen), "'\n"
+	    @o.print "\n"
 	end
 
 	def diagnostic1(domainname, 
@@ -342,20 +349,6 @@ module Publisher
 
 	def status(domainname, i_count, w_count, f_count)
 	    @o.printf "==> %s\n", super(domainname, i_count, w_count, f_count)
-	end
-
-
-	#------------------------------------------------------------
-
-	def h2(h)
-	    txtlen = [h.length, MaxLineLength-20].min
-	    txt    = h.capitalize[0..txtlen]
-	    @o.print "       ", "_" * (8+txtlen), "\n"
-	    @o.print "     ,", "-" * (8+txtlen), ".|\n"
-	    @o.print "~~~~ |    #{txt}    || ", 
-		"~" * (MaxLineLength-19-txtlen), "\n"
-	    @o.print "     `", "-" * (8+txtlen), "'\n"
-	    @o.print "\n"
 	end
     end
 end

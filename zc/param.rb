@@ -657,6 +657,7 @@ class Param
 		require 'report/byseverity'
 		@report.reporter  = Report::BySeverity
 	    when "bh", "byhost"
+		require 'report/byhost'
 		@report.reporter  = Report::ByHost
 	    when "t", "text"
 		require 'publisher/text'

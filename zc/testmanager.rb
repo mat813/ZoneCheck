@@ -320,7 +320,7 @@ class TestManager
 	# Build result
 	begin
 	    result = result_class::new(checkname, desc, ns, ip)
-	    sev_report.add_result(result)
+	    sev_report << result
 	rescue Report::FatalError
 	    raise if @param.rflag.stop_on_fatal
 	end
