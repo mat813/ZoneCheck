@@ -192,13 +192,13 @@ module Publisher
     <!-- Navigation -->
     <LINK rel="start" href="#{@publish_path}/"             type="text/html">
     <LINK rel="up"    href="#{@publish_path}/#{$mc.lang}/" type="text/html">
+
+    <LINK rel="bookmark" title="ZoneCheck website"
+	  href="http://www.zonecheck.fr/"                  type="text/html">
     <LINK rel="bookmark" title="#{l10n_batch_form}"
 	  href="#{@publish_path}/#{$mc.lang}/batch.html"   type="text/html">
     <LINK rel="bookmark" title="#{l10n_single_form}"
 	  href="#{@publish_path}/#{$mc.lang}/"             type="text/html">
-
-    <LINK rel="alternate" title="Original AFNIC version"
-	  href="http://zonecheck.afnic.fr/v2/"             type="text/html">
 
     <LINK rel="section" title="#{$mc.get("title_zoneinfo")}"
           href="#t_zoneinfo"                               type="text/html">
