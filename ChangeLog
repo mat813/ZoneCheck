@@ -2,6 +2,7 @@
 
 2003-01-??  ZoneCheck-2.0.3
 	* dbg: fixed debuging output for nresolv
+	* dbg: added smtp transaction as debuging information for mail
 	* doc: fixed apache configuration example
 	* zc: fixed locale interpretation
 	* zc: added control on IP stack detection (ZC_IP_STACK)
@@ -11,6 +12,8 @@
 	* publisher: option 'nojavascript' and 'ihtml' for html
 	* misc: B rootserver IP addresse changed
 	* config: fixed profile selection
+	* html: use of option group for the profile selection
+	* test: follow cname chain when checking for reverse
 	
 2003-01-20  ZoneCheck-2.0.2
 	* test: fixed bugs in mail_delivery_{postmaster,hostmaster}

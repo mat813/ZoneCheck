@@ -73,14 +73,14 @@ module CheckExtra
 	    exch
 	end
 
-	def mhosttest(mdom, mhost)
+	def mhosttest(mdom, mhost, dbgio=nil)
 	    # Mailhost and IP 
 	    mip   = addresses(mhost, bestresolverip(mhost))[0]
 	    mip   = addresses(mhost, nil)[0] if mip.nil?
 	    raise "No host servicing mail for domain #{mdom}" if mip.nil?
 
 	    # Execute test on mailhost
-	    mrelay = ZCMail::new(mdom, mip.to_s)
+	    mrelay = ZCMail::new(mdom, mip.to_s, dbgio)
 	    mrelay.open(CONNECTION_TIMEOUT)
 	    begin
 		mrelay.banner
@@ -109,13 +109,14 @@ module CheckExtra
 
 	def testuser(user, mdom, mhost)
 	    status = nil
+	    dbgio  = []
 	    begin
-		mhosttest(mdom, mhost) { |mrelay| 
+		mhosttest(mdom, mhost, dbgio) { |mrelay| 
 		    return status = mrelay.test_userexists(user) }
 	    ensure
 		dbgmsg { 
 		    [ "mail for user #{user} : #{DBG.status2str(status)}",
-			"  on domain #{mdom} using relay #{mhost}" ]
+			"  on domain #{mdom} using relay #{mhost}" ] + dbgio
 		}
 	    end
 	end

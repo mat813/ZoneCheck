@@ -45,11 +45,12 @@ class ZCMail
     class ZCMailError < StandardError
     end
 
-    def initialize(mhost, mip, tout=nil)
+    def initialize(mhost, mip, dbgio=nil)
 	@myhostname = Socket::gethostname
 	@mhost      = mhost
 	@mip        = mip
 	@mrelay     = nil
+	@dbgio      = dbgio
     end
 
     def open(tout=nil)
@@ -112,13 +113,16 @@ class ZCMail
 
     def cmd(str)
 	if str
+	    @dbgio << ">> #{str}\n" if @dbgio
 	    @mrelay.write("#{str}\r\n") ; @mrelay.flush
 	end
 
 	begin
 	    desc = ""	
 	    while true
-		case @mrelay.readline
+		line = @mrelay.readline
+		@dbgio << "<< #{line}" if @dbgio
+		case line
 		when NilClass         then raise ZCMailError, "parsing error"
 		when /^(\d{3}) (.*)$/ then return [ $1.to_i, desc << $2 ]
 		when /^(\d{3})-(.*)$/ then desc << $2
