@@ -116,12 +116,8 @@ class NResolv
 	    end
 
 	    def self.from_winreg
-		nameserver, search = [], nil
-
-		# Read configuration from 'nslookup'
-		nslookup_info = `nslookup 127.0.0.1`.split(/\r?\n/)
-		nslookup_info[1] =~ /^[^:]+:\s*(.*?)\s*$/
-		nameserver << $1.to_s.untaint unless $1.nil?
+		require 'win32/resolv'
+		search, nameserver = Win32::Resolv::get_resolv_info
 
 		# Autoconf for missing information
 		nameserver= [ '0.0.0.0' ] if nameserver.empty?
