@@ -563,8 +563,8 @@ class Param
 		@publisher.engine = ::Publisher::Text
 	    when "h", "html"
 		@publisher.engine = ::Publisher::HTML
-#	    when "g", "gtk"
-#		@publisher.engine = ::Publisher::GTK
+	    when "g", "gtk"
+		@publisher.engine = ::Publisher::GTK
 	    else
 		raise ParamError,
 		    $mc.get("xcp_param_unknown_modopt") % [ token, "output" ]

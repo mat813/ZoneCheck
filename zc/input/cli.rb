@@ -86,7 +86,7 @@ class Param
 EOT
 		    exit EXIT_OK
 		when "--coffee"
-		    puts "#{PROGNAME}: I'll take one too. thank you."
+		    puts "#{PROGNAME}: No thank you, I prefer tea."
 		    exit EXIT_OK
 		end
 	    end

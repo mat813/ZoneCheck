@@ -12,6 +12,29 @@
 #
 #
 
+
+## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+##
+## WARN: when editing this file on installed ZoneCheck, you should
+##       keep in mind that some ZoneCheck variant (cgi, ...) are 
+##       more or less strongly connected with this file by:
+##       - a copy     : only THIS file will be modified
+##       - a hardlink : depending of your editor behaviour when
+##                      saving the file, all the files will hold
+##                      the modification OR only this file will.
+##       - a symlink  : no problem should occured (except if on Windows)
+##
+## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+## --> CUSTOMIZATION <-- #############################################
+# 
+# You shouldn't really need to change these values:
+#  - This is normally automatically done when performing a: make install
+#  - Setting the environment variable ZC_INSTALL_PATH should be enough
+#     for testing the code
+#
+
 ZC_INSTALL_PATH		= ENV["ZC_INSTALL_PATH"].untaint || "/homes/sdalu/ZC.CVS/zc"
 
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
@@ -24,8 +47,13 @@ ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
 ZC_LANG_FILE		= "zc.%s"
 ZC_LANG_DEFAULT		= "en"
 
+ZC_DEFAULT_INPUT	= "cli"
+
 ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
 ZC_CGI_EXT		= "cgi"
+
+## --> END OF CUSTOMIZATION <-- ######################################
+
 
 
 #
@@ -48,6 +76,8 @@ $zc_version	= ZC_VERSION
 
 #
 # Run at safe level 1
+#  A greater safe level is unfortunately not possible due to some 
+#  low level operations in the NResolv library
 #
 $SAFE = 1
 
@@ -61,11 +91,14 @@ $LOAD_PATH << ZC_DIR << ZC_LIB
 #
 # Requirement
 #
-require 'socket'
+# Standard Ruby library
+require 'socket'		
 
+# External libraries
 require 'nresolv'
 require 'ext'
 
+# ZoneCheck component
 require 'dbg'
 require 'msgcat'
 require 'config'
@@ -77,11 +110,11 @@ require 'testmanager'
 #
 # Constants
 #
-EXIT_OK		=  0
-EXIT_USAGE	= -1
-EXIT_ABORTED	=  2
-EXIT_FAILED	=  1
-EXIT_ERROR      =  3
+EXIT_OK		=  0	# Everything went fine
+EXIT_USAGE	= -1	# The user didn't bother reading the man page
+EXIT_ABORTED	=  2	# The user aborted the program before completion
+EXIT_FAILED	=  1	# The program completed but the result is negative
+EXIT_ERROR      =  3	# An error unrelated to the result occured
 
 
 #
@@ -143,8 +176,7 @@ class ZoneCheck
     # Parse command line
     #
     def select_input_method
-	# Default Input Method
-	im = nil
+	im = nil	# Input Method
 
 	# Check meta argument 
 	ARGV.delete_if { |a|
@@ -159,7 +191,7 @@ class ZoneCheck
 	im ||= if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
 		  (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
 	       then "cgi"
-	       else "cli"
+	       else ZC_DEFAULT_INPUT
 	       end
 
 	# Sanity check on Input Method
@@ -221,7 +253,7 @@ class ZoneCheck
 				File.open(testfile) { |io|
 			           io.gets =~ /^\#\s*ZCTEST\s+1\.0:?\W/
 		                }
-			    rescue # Carefull with rescue all
+			    rescue # XXX: Careful with rescue all
 				false
 			    end
 		$dbg.msg(DBG::TEST_LOADING, "loading file: #{entry}")
@@ -232,7 +264,7 @@ class ZoneCheck
     
 
     #
-    # Load TestManager with test classees
+    # Load TestManager with test classes
     #
     def init_testmanager
 	# Create test manager

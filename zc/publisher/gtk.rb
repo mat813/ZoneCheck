@@ -26,6 +26,65 @@ module Publisher
     class GTK < Template
 	Mime		= nil
 
+	class Output < Gtk::CTree
+	    L_H1      = "h1"
+	    L_H2      = "h2"
+	    L_Zone    = "zone"
+	    L_Prim    = "prim"
+	    L_Sec     = "sec"
+	    L_Root    = "root"
+	    L_Element = "element"
+	    L_Warning = "warning"
+	    L_Info    = "info"
+	    L_Fatal   = "fatal"
+
+	    def initialize(*args)
+		super(*args)
+
+		winroot = Gdk::Window::foreign_new(Gdk::Window::root_window)
+		
+		# Build Pixmap
+		make_pixmap = Proc::new { |pixmap_data|
+		    Gdk::Pixmap::create_from_xpm_d(winroot, style.white,
+						   pixmap_data) 
+		}
+		
+		@xpm_book_o	= make_pixmap.call(XPM::Book_closed)
+		@xpm_book_c	= make_pixmap.call(XPM::Book_open)
+		@xpm_minipage	= make_pixmap.call(XPM::Minipage)
+		@xpm_element	= make_pixmap.call(XPM::Element)
+		@xpm_reference	= make_pixmap.call(XPM::Reference)
+		@xpm_info	= make_pixmap.call(XPM::Info)
+		@xpm_warning	= make_pixmap.call(XPM::Warning)
+		@xpm_fatal	= make_pixmap.call(XPM::Fatal)
+		@xpm_zone	= make_pixmap.call(XPM::Zone)
+		@xpm_primary	= make_pixmap.call(XPM::Primary)
+		@xpm_secondary	= make_pixmap.call(XPM::Secondary)
+	    end
+
+	    def add_node(type, lvl, str, is_leaf, expanded)
+		xpm_open, xpm_closed = 
+		    case type
+		    when L_Zone    then [ @xpm_zone,      @xpm_zone      ]
+		    when L_Prim    then [ @xpm_primary,   @xpm_primary   ]
+		    when L_Sec     then [ @xpm_secondary, @xpm_secondary ]
+		    when L_Element then [ @xpm_element,   @xpm_element   ]
+		    when L_Info    then [ @xpm_info,      @xpm_info      ]
+		    when L_Warning then [ @xpm_warning,   @xpm_warning   ]
+		    when L_Fatal   then [ @xpm_fatal,     @xpm_fatal     ]
+		    when L_H1      then [ @xpm_book_o,    @xpm_book_c    ]
+		    when L_H2      then [ @xpm_book_o,    @xpm_book_c    ]
+		    else                [ @xpm_book_o,    @xpm_book_c    ]
+		    end
+		sibling = nil
+		parent = nil
+		insert_node(parent, sibling, [ str ], 5,
+			    xpm_open[0],   xpm_open[1], 
+			    xpm_closed[0], xpm_closed[1],
+			    is_leaf, expanded)
+	    end
+	end
+	
 	class Progress < Gtk::Table
 	    def initialize(publisher)
 		super(2, 5, false)
@@ -76,20 +135,22 @@ module Publisher
 		@processed	= 0
 		@starttime	= Time.now
 
-
-
-		title = if @publisher.rflag.quiet
-			then ""
-			else "<H2>" + $mc.get("title_progress") + "</H2>"
-			end
 		if @publisher.rflag.counter
 		    @updater = Thread::new { 
 			while true ; update_bar ; sleep(1) ; end
 		    }
 		end
+
 		if @publisher.rflag.testdesc
-		    @o.puts title
-		    @o.puts "<UL class=\"zc_test\">"
+		    @parent = @publisher.parent
+		    @ctree  = @publisher.ctree
+		    if ! @publisher.rflag.quiet
+			@parent = @ctree.insert_node(@parent, nil, 
+						     [$mc.get("title_progress")], 5,
+				   @pixmap1, @mask1, @pixmap2, @mask2,
+				   false, true)
+
+		    end
 		end
 	    end
 	    
@@ -107,6 +168,8 @@ module Publisher
 		if @publisher.rflag.testdesc
 		    @o.puts "</UL>"
 		end
+
+		hide_all
 	    end
 	    
 	    def process(desc, ns, ip)
@@ -118,23 +181,18 @@ module Publisher
 		       end
 
 		if @publisher.rflag.counter
-
-		    @tname.set_text("#{desc} #{xtra}")
 		    pct = 100 * @processed / @count
 
-		    @pct.set_text("%3d%%" % [  pct ])
+		    @tname.set_text("#{desc} #{xtra}")
+		    @pct  .set_text("%3d%%" % [ pct ])
 		    @tests.set_text(@processed.to_s)
-		    
 		    @pbar.set_value(pct)
-
 		end
 
 		if @publisher.rflag.testdesc
-		    @o.puts "<LI>"
-		    @o.printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
-		    @o.puts "</LI>"
+		    @ctree.add_node(Output::L_Element, nil,
+				       "#{desc}#{xtra}", true, false)
 		end
-		@o.flush
 	    end
 
 	    private
@@ -176,85 +234,64 @@ module Publisher
 
 	#------------------------------------------------------------
 
+	attr_reader :ctree, :parent
+	attr_reader :xpm_element
+
 	def initialize(rflag, ostream=$stdout)
 	    super(rflag, ostream)
 	    @progress	= Progress::new(self)
 
+	    # Create default style
+	    style = Gtk::Style::new
 
+	    # Create initial windows
 	    window = Gtk::Window::new
+	    window.realize	# requiered before pixmap creation
+
+
+
+
+	    window.set_title("ZoneCheck result")
 	    window.signal_connect("delete_event") {|*args| delete_event(*args) }
 	    window.signal_connect("destroy") {|*args| destroy(*args) }
 	    window.border_width = 10
-	    window.set_title("ZoneCheck result")
-
 
 	    @output = Gtk::VBox::new(false)
 	    
-	    style = Gtk::Style::new
 
-	    scrolled_window = Gtk::ScrolledWindow.new
+
+
+	    scrolled_window = Gtk::ScrolledWindow::new
 	    scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC,
 				       Gtk::POLICY_ALWAYS)
 	    scrolled_window.add_with_viewport(@output);
 	    @output.set_focus_vadjustment(scrolled_window.get_vadjustment)
 
+
+	    #
+	    @quit   = Gtk::Button::new($mc.get("w_abort"))
+	    @quit_sigclicked = @quit.signal_connect("clicked") { 
+		exit EXIT_ABORTED 
+	    }
+
+	    @hbbox  = Gtk::HButtonBox::new
+	    @hbbox.pack_start(@quit)
+
+
+
 	    toto = Gtk::VBox::new(false)
 	    toto.pack_start(@progress)
 	    toto.pack_start(scrolled_window)
+	    toto.pack_start(@hbbox)
 	    scrolled_window.set_usize(500, 400)
 
 
 	    window.add(toto)
 
 
-	    @pixmap1, @mask1 = Gdk::Pixmap::create_from_xpm_d(window.window,
-							      style.white,
-							      XPM::Book_closed)
-	    @pixmap2, @mask2 = Gdk::Pixmap::create_from_xpm_d(window.window,
-							      style.white,
-							      XPM::Book_open)
-	    @pixmap3, @mask3 = Gdk::Pixmap::create_from_xpm_d(window.window,
-							      style.white,
-							      XPM::Minipage)
-
-	    @xpm_element = Gdk::Pixmap::create_from_xpm_d(window.window,
-						       style.white,
-						       XPM::Element)
-
-	    @xpm_reference = Gdk::Pixmap::create_from_xpm_d(window.window,
-						       style.white,
-						       XPM::Reference)
-
-	    @xpm_info = Gdk::Pixmap::create_from_xpm_d(window.window,
-						       style.white,
-						       XPM::Info)
-
-	    @xpm_info = Gdk::Pixmap::create_from_xpm_d(window.window,
-						       style.white,
-						       XPM::Info)
-
-	    @xpm_warning = Gdk::Pixmap::create_from_xpm_d(window.window,
-						       style.white,
-						       XPM::Warning)
-
-	    @xpm_fatal = Gdk::Pixmap::create_from_xpm_d(window.window,
-						       style.white,
-						       XPM::Fatal)
-
-	    @xpm_zone = Gdk::Pixmap::create_from_xpm_d(window.window,
-						       style.white,
-						       XPM::Zone)
-
-	    @xpm_primary = Gdk::Pixmap::create_from_xpm_d(window.window,
-							  style.white,
-							  XPM::Primary)
-
-	    @xpm_secondary = Gdk::Pixmap::create_from_xpm_d(window.window,
-							    style.white,
-							    XPM::Secondary)
 
 
-	    @ctree = Gtk::CTree::new([ "Tree" ], 0)
+	    @ctree = Output::new([ "Tree" ], 0)
 	    @ctree.set_row_height(18) # XXX: pixmap / font size
 	    @ctree.column_titles_hide
 	    @output.pack_start(@ctree)
@@ -270,9 +307,8 @@ module Publisher
 
 	def setup(domain_name)
 	    if ! @rflag.quiet
-		@parent = @ctree.insert_node(nil, nil, [domain_name.to_s], 5,
-				   @pixmap1, @mask1, @pixmap2, @mask2,
-				   false, true)
+		@ctree.add_node(Output::L_Root, "root",
+				domain_name.to_s, false, true)
 #		lbl.set_name("H1")
 	    end
 	end
@@ -281,41 +317,32 @@ module Publisher
 
 
 	def intro(domain)
-	    parent = nil
+	    parent = @parent
+
+	    # Title
 	    unless rflag.quiet
 		title = $mc.get("title_zoneinfo")
-		parent = @ctree.insert_node(@parent, nil, [title], 5,
-					    @pixmap1, @mask1, @pixmap2, @mask2,
-					    false, true)
-#		lbl.set_name("H2")
+		@ctree.add_node(Output::L_H1, nil, title, false, true)
 	    end
 
-
-	    
+	    # Zone
 	    l10n_zone  = $mc.get("ns_zone").capitalize
-	    
-	    @ctree.insert_node(parent, nil, [ "#{l10n_zone}: #{domain.name.to_s}"], 5,
-					nil, nil, @xpm_zone[0], @xpm_zone[1],
-					false, true)
+	    @ctree.add_node(Output::L_Zone, nil,
+			    "#{l10n_zone}: #{domain.name.to_s}", true, false)
 
-
-
+	    # DNS (Primary / Secondary)
 	    domain.ns.each_index { |idx| 
 		ns_ip = domain.ns[idx]
 		if idx == 0
-		    name = "ns_prim"
 		    desc = $mc.get("ns_primary").capitalize
-		    pxm  = [ nil, nil, *@xpm_primary ]
+		    xpm  = @xpm_primary
 		else
-		    name = "ns_sec"
 		    desc = $mc.get("ns_secondary").capitalize
-		    pxm  = [ nil, nil, *@xpm_secondary ]
+		    xpm  = @xpm_secondary
 		end
 
 		str = "#{desc}: #{ns_ip[0].to_s} (#{ns_ip[1].join(", ")})"
-		@ctree.insert_node(parent, nil, [ str ], 5,
-				   pxm[0], pxm[1], pxm[2], pxm[3], false, true)
-
+		@ctree.add_node(Output::L_Prim, nil, str, true, false)
 	    }
 	end
 
@@ -353,6 +380,7 @@ module Publisher
 	end
 
 
+
 	def diagnostic(severity, testname, desc, lst)
 	    msg, xpl_lst = nil, nil
 	    if @rflag.tagonly
@@ -369,55 +397,38 @@ module Publisher
 		xpl_lst = xpl_split(desc.xpl)
 	    end
 	    
-	    case severity
-	    when "Warning"
-		pxm = [ @xpm_warning[0], @xpm_warning[1], @xpm_warning[0], @xpm_warning[1] ]
-	    when "Info"
-		pxm = [ @xpm_info[0], @xpm_info[1], @xpm_info[0], @xpm_info[1] ]
-	    when "Fatal"
-		pxm = [ @xpm_fatal[0], @xpm_fatal[1], @xpm_fatal[0], @xpm_fatal[1] ]
-	    end
+	    logo = case severity
+		   when "Info"    then Output::L_Info
+		   when "Warning" then Output::L_Warning
+		   when "Fatal"   then Output::L_Fatal
+		   end
 
 
-	    parent = @ctree.insert_node(@parent, nil, [msg], 5,
-					pxm[0], pxm[1], pxm[2], pxm[3],
-					false, true)
+	    @ctree.add_node(logo, nil, msg, false, true)
 
 
 	    if xpl_lst
-		xpl_parent = @ctree.insert_node(parent, nil, 
-						["Explanation"], 5,
-						@pixmap1, @mask1, @pixmap2, @mask2,
-						false, true)
-		ref_sibling = nil
+		@ctree.add_node(Output::L_H1, nil, 
+				"Explanation", false, true)
 
 		xpl_lst.each { |t, h, b|
 		    l10n_tag = $mc.get("xpltag_#{t}")
 		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>') }
-		    ref_sibling = @ctree.insert_node(xpl_parent, ref_sibling, 
-						     [ "#{l10n_tag}: #{h}" ], 5,
-						     @xpm_reference[0], @xpm_reference[1], @xpm_reference[0], @xpm_reference[1], 
-
-						     false, false)
+		    @ctree.add_node(Output::L_H1, nil,
+				    "#{l10n_tag}: #{h}", false, false)
 		    b.each { |l|
-			@ctree.insert_node(ref_sibling, nil,
-					   [ l ], 5, 
-					   nil, nil, nil, nil,
-					   true, false)
+			@ctree.add_node(Output::L_H1, nil, l, true, false)
 		    }
 		}
 
 	    end
 
 	    if ! lst.empty?
-		parent = @ctree.insert_node(parent, nil, ["Affected host(s)"], 5,
-					@pixmap1, @mask1, @pixmap2, @mask2,
-					    false, true)
+		@ctree.add_node(Output::L_H1, nil,
+				"Affected host(s)", false, true)
 		sibling = nil
 		lst.each { |elt| 
-		    @ctree.insert_node(parent, nil, [elt], 5,
-				       @xpm_element[0], @xpm_element[1], nil, nil,
-				       true, false)
+		    @ctree.add_node(Output::L_Element, nil, elt, true, false)
 		}
 	    end
 
@@ -436,25 +447,29 @@ module Publisher
 		@o.puts "<HR width=\"60%\">"
 		@o.puts "<BR>"
 	    end
-
-	    sleep(60)
 	end
 
 
+	def end
+	    q = Queue::new	# Semaphore
+
+	    # Change "Abort" to "Quit"
+	    @quit.signal_disconnect(@quit_sigclicked)
+	    @quit.child.text = $mc.get("w_quit")
+	    @quit.signal_connect("clicked") { q.push("end") }
+
+	    # Wait...
+	    q.pop
+	end
 
 	#------------------------------------------------------------
 
 	def h1(h)
-	    @h1 = @parent = @ctree.insert_node(@parent, nil, [ h.capitalize ], 5,
-					 @pixmap1, @mask1, @pixmap2, @mask2,
-					 false, true)
+	    @ctree.add_node(Output::L_H1, "h1", h.capitalize, false, true)
 	end
 
 	def h2(h)
-	    parent = @h1.nil? ? @parent : @h1
-	    @h2 = @parent = @ctree.insert_node(parent, nil, [ h.capitalize ], 5,
-					 @pixmap1, @mask1, @pixmap2, @mask2,
-					 false, true)
+	    @ctree.add_node(Output::L_H2, "h2", h.capitalize, false, true)
 	end
     end
 end
