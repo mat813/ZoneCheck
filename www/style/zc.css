@@ -75,6 +75,15 @@ UL.zc_ref {
 }
 
 
+DIV.zc_zinfo {
+    padding-left: 5ex;
+}
+
+UL.zc_test { 
+    padding-left: 5ex;
+    list-style-type: none;
+}
+
 /* 
  * The diagnostic box
  */
@@ -88,6 +97,11 @@ DIV.zc_diag DIV.zc_title {
     font-weight: bold;
 }
 
+
+DIV.zc_status { 
+    padding-left: 5ex;
+    font-weight: bold;
+}
 
 
 

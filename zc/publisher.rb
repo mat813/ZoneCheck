@@ -36,6 +36,9 @@ module Publisher
 	    @mutex.synchronize(&block)
 	end
 
+	def setup(domain_name)
+	end
+
 	def status(domainname, i_count, w_count, f_count)
 	    if f_count == 0
 		tag = (w_count > 0) ? "res_succeed_but" : "res_succeed"
@@ -151,11 +154,11 @@ module Publisher
 		MaxLineLength - 4 - summary.length, domainname, summary
 
 	    if @rflag.tagonly
-		msg1("  #{severity}: #{res.tag}")
-		msg1("  #{res.testname}")
+		puts "  #{severity}: #{res.tag}"
+		puts "  #{res.testname}"
 	    else
-		msg1("  #{severity}: #{res.tag}")
-		msg1("  #{res.desc.msg}")
+		puts "  #{severity}: #{res.tag}"
+		puts "  #{res.desc.msg}"
 	    end
 
 	end
@@ -178,15 +181,26 @@ module Publisher
 		xpl = desc.xpl
 	    end
 	    
-	    msg1(msg)
+	    puts msg
 	    explanation(xpl)
-	    list(lst)
-	    vskip
+
+	    lst.each { |elt|
+		lines  = elt.split(/\n/)
+		
+		if !lines.empty?
+		    puts "=> #{lines[0]}"
+		    lines[1..-1].each { |e|
+			puts "   #{e}"
+		    }
+		end
+	    }
+
+	    puts ""
 	end
 	    
 
 	def status(domainname, i_count, w_count, f_count)
-	    print super(domainname, i_count, w_count, f_count)
+	    print "==> ", super(domainname, i_count, w_count, f_count)
 	end
 
 
@@ -211,28 +225,6 @@ module Publisher
 		puts " | #{e}"
 	    }
 	    puts " `----- -- -- - -  -"
-	end
-	
-	def msg1(str)
-	    puts str
-	end
-
-	def list(l, tag=" =>")
-	    l.each { |elt|
-		lines  = elt.split(/\n/)
-		spacer = " " * (tag.length + 1)
-		
-		if !lines.empty?
-		    puts "#{tag} #{lines[0]}"
-		    lines[1..-1].each { |e|
-			puts "#{spacer} #{e}"
-		    }
-		end
-	    }
-	end
-
-	def vskip(skip=1)
-	    skip.times { puts }
 	end
     end
 
@@ -259,13 +251,17 @@ module Publisher
 	    end
 	    
 	    def start(count)
-		title = "<H2>Progress</H2>"
+		title = if @publisher.rflag.quiet
+			then ""
+			else "<H2>#{$mc.get("title_progress")}</H2>"
+			end
 		if @publisher.rflag.counter
 		    @o.puts HTML.jscript { "zc_pgr_start(#{count})" }
 		    @o.puts HTML.nscript { title + "<UL>" }
 		end
 		if @publisher.rflag.testdesc
 		    @o.puts title
+		    @o.puts "<UL class=\"zc_test\">"
 		end
 	    end
 	    
@@ -279,6 +275,10 @@ module Publisher
 		if @publisher.rflag.counter
 		    @o.puts HTML.jscript { "zc_pgr_finish();" }
 		    @o.puts HTML.nscript { "</UL>" }
+		end
+
+		if @publisher.rflag.testdesc
+		    @o.puts "</UL>"
 		end
 	    end
 	    
@@ -299,10 +299,10 @@ module Publisher
 		end
 
 		if @publisher.rflag.testdesc
+		    puts "<LI>"
 		    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
-		    puts "<BR>"
+		    puts "</LI>"
 		end
-
 		@o.flush
 	    end
 	end
@@ -330,7 +330,6 @@ module Publisher
     </SCRIPT>
   </HEAD>
   <BODY>
-<H1>ZoneCheck</H1>
 EOT
 @o.flush
 	end
@@ -342,6 +341,13 @@ EOT
 EOT
 	end
 	
+
+	def setup(domain_name)
+	    if ! @rflag.quiet
+		puts "<H1>ZoneCheck: #{domain_name}</H1>"
+	    end
+	end
+
 	#------------------------------------------------------------
 
 
@@ -352,24 +358,28 @@ EOT
 	    tbl_end   = '</TABLE>'
 
 
-	    h1("Zone information")
+	    unless rflag.quiet
+		puts "<H2>#{$mc.get("title_zoneinfo")}</H2>"
+	    end
 
 
+	    puts "<DIV class=\"zc_zinfo\">"
 	    puts tbl_beg
-	    puts tbl_zone % [ "Zone", domain.name ]
+	    puts tbl_zone % [ $mc.get("ns_zone").capitalize, domain.name ]
 	    domain.ns.each_index { |i| 
 		ns_ip = domain.ns[i]
 		if i == 0
 		    css  = "zc_ns_prim"
-		    desc = "Primary"
+		    desc = $mc.get("ns_primary").capitalize
 		else
 		    css  = "zc_ns_sec"
-		    desc = "Secondary"
+		    desc = $mc.get("ns_secondary").capitalize
 		end
 
 		puts tbl_ns % [ css, desc, ns_ip[0], ns_ip[1].join(", ") ]
 	    }
 	    puts tbl_end
+	    puts "</DIV>"
 	    @o.flush
 	end
 
@@ -385,27 +395,30 @@ EOT
 	    w_tag = w_tag.upcase if w_unexp
 	    f_tag = f_tag.upcase if f_unexp
 
-	    summary = "%1s%03d %1s%03d %1s%03d" % [ 
+	    summary = "%1s%03d&nbsp;%1s%03d&nbsp;%1s%03d" % [ 
 		i_tag, i_count, 
 		w_tag, w_count, 
 		f_tag, f_count ]
 
-	    printf "%-*s    %s\n", 
-		MaxLineLength - 4 - summary.length, domainname, summary
 
 	    if @rflag.tagonly
-		msg1("  #{severity}: #{res.tag}")
-		msg1("  #{res.testname}")
+		msg = res.testname
 	    else
-		msg1("  #{severity}: #{res.tag}")
-		msg1("  #{res.desc.msg}")
+		msg = res.desc.msg
 	    end
 
+	    puts "<DIV class=\"zc_diag1\">"
+	    puts "<TABLE width=\"100%\">"
+	    puts "<TR><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
+	    puts "<TR><TD colspan=\"2\">#{severity}: #{res.tag}</TD></TR>"
+	    puts "<TR><TD colspan=\"2\">#{msg}</TD></TR>"
+	    puts "</TABLE>"
+	    puts "</DIV>"
 	end
 
 
 	def diagnostic(severity, testname, desc, lst)
-	    msg, xpl = nil, nil
+	    msg, xpl_lst = nil, nil
 	    if @rflag.tagonly
 		if desc.is_error?
 		    msg = "#{severity}[Unexpected]: #{testname}"
@@ -416,25 +429,60 @@ EOT
 		msg = desc.msg
 	    end
 
-
 	    if @rflag.explain && !@rflag.tagonly
-		xpl = desc.xpl
+		if xpl = desc.xpl
+		    xpl_lst = [ ]
+		    xpl_elt = nil
+		    xpl.split(/\n/).each { |e|
+			if e =~ /^\[\w+]:\s*/
+			    xpl_elt     = [ e, [] ]
+			    xpl_lst << xpl_elt
+			else
+			    xpl_elt[1] << e
+			end
+		    }
+		end
 	    end
 	    
+
 	    @o.puts "<DIV class=\"zc_diag\">"
 	    @o.puts "<DIV class=\"zc_title\">#{msg}</DIV>"
-	    explanation(xpl)
-	    @o.puts "<UL>"
-	    lst.each { |elt| @o.puts "  <LI>#{elt}</LI>" }
-	    @o.puts "</UL>"
+
+	    if xpl_lst
+		puts "<UL class=\"zc_ref\">"
+		xpl_lst.each { |h, t|
+		    h =~ /^\[(\w+)\]:\s*/
+		    @o.puts "<LI>"
+		    @o.puts "<SPAN class=\"zc_ref\">Ref: #{$'}</SPAN>"
+		    @o.puts "<BR>"
+		    @o.puts t.join(" ")
+		    @o.puts "</LI>"
+		}
+		puts "</UL>"
+	    end
+
+	    if ! lst.empty?
+		@o.puts "<UL>"
+		lst.each { |elt| @o.puts "  <LI>#{elt}</LI>" }
+		@o.puts "</UL>"
+	    end
+
 	    @o.puts "<BR>"
 	    @o.puts "</DIV>"
 	end
 	    
 
 	def status(domainname, i_count, w_count, f_count)
-	    h1("Final status")
-	    print super(domainname, i_count, w_count, f_count)
+	    unless @rflag.quiet
+		puts "<H2>#{$mc.get("title_status")}</H2>"
+	    end
+	    print "<DIV class=\"zc_status\">", 
+		super(domainname, i_count, w_count, f_count), "</DIV>"
+	    puts "<BR>"
+	    if @rflag.quiet
+		puts "<HR width=\"60%\">"
+		puts "<BR>"
+	    end
 	end
 
 
@@ -447,34 +495,6 @@ EOT
 
 	def h2(h)
 	    @o.puts "<H3 class=\"warning\">---- #{h.capitalize} ----</H3>"
-#	    @o.puts "<P class=\"warning\">---- #{h.capitalize} ----</P>"
-	end
-
-	def explanation(xpl)
-	    return unless xpl
-	    puts "<UL class=\"zc_ref\">"
-	    xpl.split(/\n/).each { |e|
-		if e =~ /^Ref/
-		    puts "<LI><SPAN class=\"zc_ref\">#{e}</SPAN><BR>"
-		else
-		    puts e
-		end
-	    }
-	    puts "</UL>"
-	end
-	
-	def msg1(str)
-	    puts "<H3>#{str}</H3>"
-	end
-
-	def list(l, tag="=>")
-	    @o.puts "<UL>"
-	    l.each { |elt| @o.puts "  <LI>#{elt}</LI>" }
-	    @o.puts "</UL>"
-	end
-
-	def vskip(skip=1)
-	    skip.times { puts "<BR>" }
 	end
     end
 end

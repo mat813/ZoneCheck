@@ -197,9 +197,9 @@ class ZoneCheck
 
 
     def zc(cm)
-	# Begin formatter
-	@param.publisher.begin
-	
+	# Setup publisher domain
+	@param.publisher.setup(@param.domain.name)
+
 	# Display intro (ie: domain and nameserver summary)
 	@param.publisher.intro(@param.domain) if @param.rflag.intro
 	
@@ -214,11 +214,7 @@ class ZoneCheck
 	
 	# Finish diagnostic (in case of pending output)
 	@param.report.finish
-	
-	
-	# End formatter
-	@param.publisher.end
-	
+		
 	return success
     end
 
@@ -239,13 +235,23 @@ class ZoneCheck
     def run
 	ok = true
 
+	@param.output_autoconf
+	
+	# Begin formatter
+	@param.publisher.begin
+	
+	# 
 	if ! @param.batch
 	    @param.autoconf
 	    cm = CacheManager::create(Test::DefaultDNS, @param.client)
 	    ok = zc(cm)
 	else
 	    cm = CacheManager::create(Test::DefaultDNS, @param.client)
-	    batchio = @param.batch == "-" ? $stdin : File::open(@param.batch) 
+	    batchio = case @param.batch
+		      when "-"    then $stdin
+		      when String then File::open(@param.batch) 
+		      when Param::CGI::BatchData then @param.batch
+		      end
 	    batchio.each_line { |line|
 		next if line =~ /^\s*$/
 		next if line =~ /^\#/
@@ -258,6 +264,9 @@ class ZoneCheck
 	    }
 	    batchio.close unless @param.batch == "-"
 	end
+
+	# End formatter
+	@param.publisher.end
     end
 
     def start 

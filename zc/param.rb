@@ -34,6 +34,21 @@ class Param
     ##  - resolver
     ##
     class CGI
+	class BatchData
+	    def initialize(data)
+		@data = data.split(/\n/)
+	    end
+
+	    def each_line(&block)
+		@data.each &block
+	    end
+
+	    def close
+		@data = nil
+	    end
+	end
+
+
 	def initialize
 	    @p    = Param::new
 	end
@@ -52,6 +67,15 @@ class Param
 #		    end
 #		end
 #	    end
+
+	    # Batch
+	    if cgi.has_key?("batchdata")
+		@p.batch = BatchData::new(cgi["batchdata"][0])
+	    end
+
+	    # Quiet, One
+	    @p.rflag.quiet = true if cgi.has_key?("quiet")
+	    @p.rflag.one   = true if cgi.has_key?("one")
 
 
 	    # Verbose
@@ -201,6 +225,7 @@ class Param
 		when "--ipv4"      then @p.ipv4          = true
 		when "--one"       then @p.rflag.one	 = true
 		when "--tagonly"   then @p.rflag.tagonly = true
+		when "--quiet"     then @p.rflag.quiet   = true
 		when "--error"     then @p.error         = arg
 		when "--transp"    then @p.transp        = arg
 		when "--verbose"   then @p.verbose	 = arg
@@ -245,7 +270,7 @@ EOT
 	def usage(errcode, io=$stderr)
 	    io.print <<EOT
 usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
-    -q, --quiet         Quiet mode, doesn't print visual candy.
+    -q, --quiet         Don't display extra titles
     -h, --help          Show this message
     -V, --version       Display version and exit
     -B, --batch         Batch mode (read from file or stdin '-')
@@ -333,11 +358,12 @@ EOT
     ##  - 'testdesc' and 'counter' are exclusive
     ##
     class ReportFlag
-	attr_reader :tagonly, :one
+	attr_reader :tagonly, :one,     :quiet
 	attr_reader :intro,   :explain, :testdesc, :counter
 	attr_reader :stop_on_fatal
 
-	attr_writer :one, :intro, :stop_on_fatal
+	attr_writer :one, :quiet, :intro, :stop_on_fatal
+
 
 	def initialize
 	    @tagonly = @one                           	= false
@@ -727,6 +753,12 @@ EOT
 
 
 
+
+    def output_autoconf
+	# Set output publisher
+	@publisher = @publisher_class::new(@rflag)
+    end
+
     #
     # Try to fill the blank for the unspecified parameters
     #
@@ -741,9 +773,6 @@ EOT
 	@ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
 	@ipv4 = false        if @ipv4.nil?
 	@ipv6 = false        if @ipv6.nil?
-
-	# Set output publisher
-	@publisher = @publisher_class::new(@rflag)
 
 	# Set report object
 	@report.autoconf(@domain, @rflag, @publisher)

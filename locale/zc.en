@@ -16,11 +16,11 @@ w_tag : w
 f_tag : f
 
 
-res_succeed_but : ==> SUCCEED (but %d warning(s))\n
-res_succeed	: ==> SUCCEED\n
-res_failed	: ==> FAILED\n
-res_failed_on	: ==> FAILED (on warning)\n
-res_failed_and	: ==> FAILED (and %d warning(s))\n
+res_succeed_but : SUCCEED (but %d warning(s))\n
+res_succeed	: SUCCEED\n
+res_failed	: FAILED\n
+res_failed_on	: FAILED (on warning)\n
+res_failed_and	: FAILED (and %d warning(s))\n
 warning_fmt	: Warning: %s\n
 fatal_fmt	: Fatal  : %s\n
 info_fmt	: Info   : %s\n
@@ -31,15 +31,25 @@ fatal           : fatal
 info            : info
 test_progress   : Tests in progress
 
-label_xpl : Ref: IETF RFC1034 (p.11)\nLabels are only composed by letters ([A-Za-z]), digits ([0-9]) or dashes\n('-') (not starting or ending with), and should be less than 63 characters;\ndomain name (labels separated by '.') should be less than 255 characters.
+ns_zone         : zone
+ns_primary      : primary
+ns_secondary    : secondary
 
-cname_xpl : Ref: IETF RFC1912 (p.6)\nA CNAME record is not allowed to coexist with any other data.
+title_zoneinfo  : Zone information
+title_progress  : Progress
+title_testres   : Test results
+title_status    : Final status
 
 
-ns_cname_xpl : Ref: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME is bad and may conflict badly\nwith current BIND servers.  In fact, current BIND implementations\nwill ignore such records, possibly leading to a lame delegation.\nThere is a certain amount of security checking done in BIND to\nprevent spoofing DNS NS records.  Also, older BIND servers reportedly\nwill get caught in an infinite query loop trying to figure out the\naddress for the aliased nameserver, causing a continuous stream of\nDNS requests to be sent.
+label_xpl : [ref]: IETF RFC1034 (p.11)\nLabels are only composed by letters ([A-Za-z]), digits ([0-9]) or dashes\n('-') (not starting or ending with), and should be less than 63 characters;\ndomain name (labels separated by '.') should be less than 255 characters.
+
+cname_xpl : [ref]: IETF RFC1912 (p.6)\nA CNAME record is not allowed to coexist with any other data.
 
 
-loopback_xpl: Ref: DNS & BIND (2nd edition) (p.61)\nNo one was given responsibility for the loopback network and system\nuse it for a loopback address, so it is the responsibility of everyone.\nIf it wasn't configured the request would eventually reach the root\nname server (increasing network traffic, and adding local delay) and\nthere is no guarantee that the answer would be 'localhost'
+ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME is bad and may conflict badly\nwith current BIND servers.  In fact, current BIND implementations\nwill ignore such records, possibly leading to a lame delegation.\nThere is a certain amount of security checking done in BIND to\nprevent spoofing DNS NS records.  Also, older BIND servers reportedly\nwill get caught in an infinite query loop trying to figure out the\naddress for the aliased nameserver, causing a continuous stream of\nDNS requests to be sent.
+
+
+loopback_xpl: [ref]: DNS & BIND (2nd edition) (p.61)\nNo one was given responsibility for the loopback network and system\nuse it for a loopback address, so it is the responsibility of everyone.\nIf it wasn't configured the request would eventually reach the root\nname server (increasing network traffic, and adding local delay) and\nthere is no guarantee that the answer would be 'localhost'
 
 
 #
@@ -59,7 +69,7 @@ explain = label_xpl
 [chk_dn_dbl_hyph]
 testname: double hyphen in domain name
 error   : The domain name contains a double hyphen
-explain : Ref: IETF IDN project (internationalized domain names)\nThe double dash ('--') will have a special meaning for the domain name\nencoding, so it is strongly advised not to used it.
+explain : [ref]: IETF IDN project (internationalized domain names)\nThe double dash ('--') will have a special meaning for the domain name\nencoding, so it is strongly advised not to used it.
 
 
 
@@ -82,7 +92,7 @@ error   : All addresses should be distinct
 [chk_same_net]
 testname: nameserver addresses on same subnet
 error   : IP addresses on the same subnet
-explain : Ref: AFNIC advise\n  To avoid loosing all connectivity with the autoritative DNS in case\n  of network outage it is advised to host the DNS on different networks.
+explain : [ref]: AFNIC advise\n  To avoid loosing all connectivity with the autoritative DNS in case\n  of network outage it is advised to host the DNS on different networks.
 
 [chk_private_ip]
 testname: address in a private network
@@ -158,7 +168,7 @@ error   : The SOA answer is not authoritative
 [chk_soa_sntx_contact_at]
 testname: illegal characters in SOA contact name
 error   : The contact name contains illegal characters
-explain : Ref: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are converted by using the following rule:\n   <local-part>@<mail-domain>  ==>  <local-part>.<mail-domain>\nif <local-part> contains a dot in should be backslashed (for 'bind')
+explain : [ref]: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are converted by using the following rule:\n   <local-part>@<mail-domain>  ==>  <local-part>.<mail-domain>\nif <local-part> contains a dot in should be backslashed (for 'bind')
 
 [chk_soa_sntx_master]
 testname: illegal characters in SOA master nameserver
@@ -167,7 +177,7 @@ error   : The SOA master nameserver contains illegal characters
 [chk_soa_serial_fmt]
 testname: serial number of the form YYYYMMDDnn
 error   : The format of the serial number is not YYYYMMDDnn
-explain : Ref: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day,\nnn=revision number).
+explain : [ref]: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day,\nnn=revision number).
 
 [chk_soa_refresh_6h]
 testname: SOA 'refresh' at least 6 hours
@@ -176,7 +186,7 @@ error   : The 'refresh' period should be at least 6 hours
 [chk_soa_retry_refresh]
 testname: SOA 'retry' lower than 'refresh'
 error   : The 'retry' period must be lower than the 'refresh' period
-explain : Ref: IETF RFC1912 (p.4)\nThe 'retry' value is typically a fraction of the 'refresh' interval.
+explain : [ref]: IETF RFC1912 (p.4)\nThe 'retry' value is typically a fraction of the 'refresh' interval.
 
 [chk_soa_retry_1h]
 testname: SOA 'retry' at least 1 hour
@@ -185,7 +195,7 @@ error   : The 'retry' period should be at least 1 hour
 [chk_soa_expire_7d]
 testname: SOA 'expire' at least 7 days
 error   : The 'expire' period must be at least 7 days
-explain : Ref: IETF RFC1912 (p.4)\nAfter a zone is expired a secondary will still continue to try to contact\nthe primary, but it will no longer provide nameservice for the zone.\n2 to 4 weeks are suggested values.\nRef: AFNIC constraint\nA minimum of 1 week (7 days) is enforced.
+explain : [ref]: IETF RFC1912 (p.4)\nAfter a zone is expired a secondary will still continue to try to contact\nthe primary, but it will no longer provide nameservice for the zone.\n2 to 4 weeks are suggested values.\n[ref]: AFNIC constraint\nA minimum of 1 week (7 days) is enforced.
 
 [chk_soa_expire_refresh]
 testname: SOA 'expire' at least 7 times 'refresh'
@@ -194,7 +204,7 @@ error   : The 'expire' period must be at least 7 times greater than 'refresh'
 [chk_soa_minimum_24h]
 testname: SOA 'minimum' at least 24 hours
 error   : The 'minimum' period must be at least 24 hours
-explain : Ref: IETF RFC1912 (p.4)\n  The default TTL for resource records: how long data will remain in other\n  nameserves' cache. 1 to 5 days are typical values.\nRef: AFNIC constraint\n  A minimum of 1 day (24h) is enforced.
+explain : [ref]: IETF RFC1912 (p.4)\n  The default TTL for resource records: how long data will remain in other\n  nameserves' cache. 1 to 5 days are typical values.\n[ref]: AFNIC constraint\n  A minimum of 1 day (24h) is enforced.
 
 [chk_soa_ttl]
 testname: SOA 'TTL' equal 'minimum'
@@ -250,7 +260,7 @@ error   : Can't find reverse for the nameserver IP address
 [chk_mx]
 testname: MX record present
 error   : No MX record found on server
-explain : Ref: IETF RFC1912 (p.7)\nPut MX records even on hosts that aren't intended to send or receive\ne-mail.  If there is a security problem involving one of these hosts,\nsome people will mistakenly send mail to postmaster or root at the\nsite without checking first to see if it is a "real" host or just a\nterminal or personal computer that's not set up to accept e-mail.
+explain : [ref]: IETF RFC1912 (p.7)\nPut MX records even on hosts that aren't intended to send or receive\ne-mail.  If there is a security problem involving one of these hosts,\nsome people will mistakenly send mail to postmaster or root at the\nsite without checking first to see if it is a "real" host or just a\nterminal or personal computer that's not set up to accept e-mail.
 
 [chk_mx_auth]
 testname: MX authoritative answer
@@ -262,7 +272,7 @@ testname: MX syntax is valid for an hostname
 [chk_mx_cname]
 testname: MX is not an alias
 error   : MX is not allowed to point to a CNAME alias
-explain : Ref: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
+explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
 
 [chk_mx_ip]
 testname: MX can be resolved

@@ -121,7 +121,9 @@ module Report
 
 
 
-	    @publish.h1("Test results")
+	    if ! @rflag.quiet
+		@publish.h1($mc.get("title_testres"))
+	    end
 	    if ! @info.empty?
 		@publish.h2($mc.get("info")) if !@rflag.tagonly
 		@info.display

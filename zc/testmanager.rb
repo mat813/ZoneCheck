@@ -258,8 +258,5 @@ class TestManager
 	    # Counter cleanup
 	    @publisher.progress.finish
 	end
-
-	# Testdesc spacer
-	@publisher.vskip if @param.rflag.testdesc
     end
 end
