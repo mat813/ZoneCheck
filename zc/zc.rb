@@ -58,7 +58,7 @@ ZC_DEFAULT_INPUT	= "cli"
 ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
 ZC_CGI_EXT		= "cgi"
 
-ZC_GTK_ENV_KEYS		= [ "DISPLAY" ]
+ZC_GTK_ENV_KEYS		= [] #[ "DISPLAY" ]
 
 ZC_HTML_PATH		= "/zc" # no trailing /
 
