@@ -45,6 +45,7 @@ class DBG
     PARSER       = 0x0008	# Parser
     TESTS        = 0x0010	# Tests performed
     AUTOCONF     = 0x0100       # Autoconf
+    TESTDBG      = 0x0200	#
     DBG          = 0x0800	# Debugger itself
     CACHE_INFO   = 0x1000	# Information about cached object
 
@@ -62,6 +63,7 @@ class DBG
 	PARSER		=> "parser",
 	TESTS		=> "tests",
 	AUTOCONF	=> "autoconf",
+	TESTDBG		=> "testdbg",
 	DBG		=> "dbg",
 	CACHE_INFO	=> "cache"
     }

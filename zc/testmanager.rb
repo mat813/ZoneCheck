@@ -64,10 +64,10 @@ class TestManager
     #
     # Load ruby files implementing tests
     #  WARN: we are required to untaint for loading
-    #  WARN: file are only loaded once to avoid constant redefinition
+    #  WARN: file are only loaded once to avoid redefinition of constants
     #
     # To minimize risk of choosing a random directory, only files
-    #  that have the ruby extension (.rb) and have the "ZCTEST 1.0"
+    #  that have the ruby extension (.rb) and the "ZCTEST 1.0"
     #  magic header are loaded.
     #
     def self.load(*filenames)
