@@ -267,7 +267,7 @@
   <check name="soa_coherence">
     <name>coherence of SOA with primary nameserver</name>
     <success>The SOA is consistent with primary nameserver</success>
-    <failure>The SAO is not consistent with primary nameserver</failure>
+    <failure>The SOA is not consistent with primary nameserver</failure>
     <explanation/>
     <details/>
   </check>
