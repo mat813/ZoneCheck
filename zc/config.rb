@@ -89,10 +89,10 @@ class Config
     ## Syntax error, while parsing the file
     ##
     class SyntaxError < ConfigError
-	attr_reader :path, :pos
-	def initialize(string=nil, path=nil, pos=nil)
+	attr_reader :path, :line
+	def initialize(string=nil, path=nil, line=nil)
 	    super(string) if string
-	    @path, @pos = path, pos
+	    @path, @line = path, line
 	end
     end
 
@@ -331,7 +331,7 @@ class Config
 	rescue SystemCallError # for the Errno::ENOENT error
 	    raise ConfigError, $mc.get('problem_file') % configfile
 	rescue REXML::ParseException => e
-	    puts "YO: #{e.position} / #{e.line} / #{e.message}"
+	    raise SyntaxError::new(e.message, cfgfile, e.line)
 	ensure
 	    io.close unless io.nil?
 	end
@@ -362,7 +362,7 @@ class Config
 	    rescue SystemCallError # for the Errno::ENOENT error
 		raise ConfigError, $mc.get("problem_file") % cfgfile
 	    rescue REXML::ParseException => e
-		puts "YO: #{e.position} / #{e.line} / #{e.message}"
+		raise SyntaxError::new(e.message, cfgfile, e.line)
 	    end
 	    @profiles << Profile::from_xmlprofile(doc.root.elements[1], self)
 	}

@@ -140,7 +140,7 @@ class ZoneCheck
 	    @input.error(e.to_s, EXIT_ERROR)
 	rescue Config::SyntaxError => e
 	    @input.error("%s %d: %s\n\t(%s)" % [ 
-			     $mc.get('word:line').capitalize, e.pos.y, e.to_s,
+			     $mc.get('word:line').capitalize, e.line, e.to_s,
 			     e.path ], EXIT_ERROR)
 	rescue Config::ConfigError => e
 	    @input.error(e.to_s, EXIT_ERROR)

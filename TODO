@@ -29,13 +29,11 @@ version = 3.0.0
 	New configuration file (++++)         \
 	New scheduling engine (++++)          |
 	New test scheme (ie: tst_*) (++++)    |
-	Rework config parser (++)             /
 	Have a useconf strict (+++)
 	Detection of failure due to dependencies [doomed]
 	A test can change the severity (ex: test soa.ttl between ns) (+++)
 	Cachemanager destroy method (and use it) (++)
 	Finish implementing Gtk publisher
-	Implement Fox publisher (superted in current windows version)
 	Try zonecheck with the native thread ruby implementation
 	Escape HTML code
 	Remove the need of a tagonly_supported in Report
