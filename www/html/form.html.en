@@ -389,14 +389,20 @@
 
     <!-- What / Who / When -->
     <HR>
-      <a style="float: right;"
-	 href="http://validator.w3.org/check/referer"><img border="0"
-          src="http://www.w3.org/Icons/valid-html401"
-          alt="Valid HTML 4.01!" height="31" width="88"></a>
+    <SPAN style="float: right;">
+      <a href="http://validator.w3.org/check/referer">
+	<img border="0"
+	     src="http://www.w3.org/Icons/valid-html401"
+	     alt="Valid HTML 4.01!" height="31" width="88"></a>
+      <a href="http://jigsaw.w3.org/css-validator/">
+	<img style="border:0;width:88px;height:31px"
+	     src="http://jigsaw.w3.org/css-validator/images/vcss" 
+	     alt="Valid CSS!"></a></SPAN>
+
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr  4 10:48:10 CEST 2003
+Last modified: Fri Apr  4 11:12:53 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
