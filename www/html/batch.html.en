@@ -41,7 +41,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
       <TEXTAREA name="batchdata" rows="10" cols="60"></TEXTAREA>
       <P>
 	<INPUT type="submit" value=" Check! ">
-	<INPUT type="reset" value=" Clear ">
+	<INPUT type="reset"  value=" Clear ">
 	
 	
       <H2>Options</H2>
@@ -303,7 +303,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Jan 14 17:28:21 CET 2003
+Last modified: Thu Jan 16 14:21:32 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

@@ -140,9 +140,9 @@ module Publisher
 
 	def initialize(rflag, ostream=$stdout)
 	    super(rflag, ostream)
-	    @progress	= Progress::new(self)
+	    @progress		= Progress::new(self)
+	    @publish_path	= ZC_HTML_PATH
 	end
-
 
 	def error(text)
 	    @o.puts "<BLOCKQUOTE class=\"zc_error\">#{text}</BLOCKQUOTE>"
@@ -157,25 +157,25 @@ module Publisher
   <HEAD>
     <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <TITLE>ZoneCheck results</TITLE>
-    <LINK rel="stylesheet" href="/zc/zc.css" type="text/css">
-    <SCRIPT language="JavaScript" src="/zc/progress.js" type="text/javascript">
+    <LINK rel="stylesheet" href="#{@publish_path}zc.css" type="text/css">
+    <SCRIPT language="JavaScript" src="#{@publish_path}progress.js" type="text/javascript">
     </SCRIPT>
     <STYLE>
         UL.zc_ref LI { 
-            list-style: url(/zc/img/ref.png) disc
+            list-style: url(#{@publish_path}img/ref.png) disc
         }
 
         UL.zc_element LI { 
-            list-style: url(/zc/img/element.png) disc
+            list-style: url(#{@publish_path}img/element.png) disc
         }
 
         UL.zc_details LI { 
-            list-style: url(/zc/img/details.png) disc
+            list-style: url(#{@publish_path}img/details.png) disc
         }
     </STYLE>
   </HEAD>
   <BODY>
-    <IMG class="zc_logo" src="/zc/img/logo.png">
+    <IMG class="zc_logo" src="#{@publish_path}img/logo.png">
 EOT
 @o.flush
 	end
@@ -213,7 +213,7 @@ EOT
 
 	    @o.puts "<DIV class=\"zc_zinfo\">"
 	    @o.puts tbl_beg
-	    @o.puts tbl_zone % [ "<IMG src=\"/zc/img/zone.png\" alt=\"#{l10n_zone}\">", domain.name ]
+	    @o.puts tbl_zone % [ "<IMG src=\"#{@publish_path}img/zone.png\" alt=\"#{l10n_zone}\">", domain.name ]
 	    domain.ns.each_index { |i| 
 		ns_ip = domain.ns[i]
 		if i == 0
@@ -226,7 +226,7 @@ EOT
 		    logo = "secondary"
 		end
 
-		desc = "<IMG src=\"/zc/img/#{logo}.png\" alt= \"#{desc}\">"
+		desc = "<IMG src=\"#{@publish_path}img/#{logo}.png\" alt= \"#{desc}\">"
 
 		@o.puts tbl_ns % [ css, desc, ns_ip[0], ns_ip[1].join(", ") ]
 	    }
@@ -297,7 +297,7 @@ EOT
 		   end
 
 	    @o.puts "<DIV class=\"zc_diag\">"
-	    @o.puts "<DIV class=\"zc_title\"><IMG src=\"/zc/img/#{logo}.png\" alt=\"\"> #{msg}</DIV>"
+	    @o.puts "<DIV class=\"zc_title\"><IMG src=\"#{@publish_path}img/#{logo}.png\" alt=\"\"> #{msg}</DIV>"
 
 	    if @rflag.details && desc.dtl
 		@o.puts "<UL class=\"zc_details\">"

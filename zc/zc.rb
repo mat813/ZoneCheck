@@ -56,6 +56,8 @@ ZC_CGI_EXT		= "cgi"
 
 ZC_GTK_ENV_KEYS		= [ "DISPLAY" ]
 
+ZC_HTML_PATH		= "/zc/"
+
 ## --> END OF CUSTOMIZATION <-- ######################################
 
 

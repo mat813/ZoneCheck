@@ -47,6 +47,9 @@ NOT ABLE TODO?
 2003-01-16 sdalu@nic.fr
 	implement AXFR tests (only framework exists)
 
+2003-01-16 sdalu@nic.fr
+	progress bar for HTML publisher
+
 DONE:
 2003-01-16 sdalu@nic.fr
 	allow choosing the local resolver in GTK input
