@@ -122,6 +122,8 @@ class TestManager
 	    result_class = method.call(*args) ? Test::Succeed : Test::Failed
 	rescue NResolv::RefusedError
 	    desc.err = "Connection refused"
+	rescue Errno::EADDRNOTAVAIL
+	    desc.err = "Network transport unavailable try option -4 or -6"
 	rescue Exception => e
 	    desc.err = "Dependency issue (allwarning?)"
 	    raise if $dbg.enable?(DBG::DONT_RESCUE)
