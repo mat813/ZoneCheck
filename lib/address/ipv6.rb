@@ -157,10 +157,10 @@ class Address
 		if size > @address.size * 8
 		    raise StandardError, "prefix size too big"
 		end
-		bytes, bits = size / 8, size % 8
+		bytes, bits_shift = size / 8, 8 - (size % 8)
 		address = @address.slice(0, bytes) + 
 		    ("\0" * (@address.size - bytes))
-		address[bytes] = (@address[bytes] >> bits) << bits
+		address[bytes] = (@address[bytes] >> bits_shift) << bits_shift
 		IPv6::new(address)
 	    end
 	end
