@@ -25,10 +25,10 @@
 	  href="HTML_PATH/">
     <LINK rel="bookmark" title="formulaire pour traitement en lots"
 	  type="text/html"
-	  href="HTML_PATH/batch.html">
+	  href="batch.html">
     <LINK rel="bookmark" title="formulaire pour domaine unique"
 	  type="text/html"
-	  href="HTML_PATH/">
+	  href="form.html">
 
     <LINK rel="help"	
 	  type="text/html"
@@ -330,16 +330,16 @@
 
 	<TR><TD class="zc_title" colspan="2">Options: rapport d'erreurs</TD></TR>
 	<TR>
-	  <TD class="zc_key">default error</TD>
+	  <TD class="zc_key">sévérité par défaut</TD>
 	  <TD>Les erreurs sont rapportés avec le degré de sévérité associé
 	    au test.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">all fatals</TD>
+	  <TD class="zc_key">tout fatal</TD>
 	  <TD>Toute erreur est considérée comme fatale.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">all warnings</TD>
+	  <TD class="zc_key">tout avertissement</TD>
 	  <TD>Toute erreur est considérée comme un avertissement.</TD>
 	</TR>
 	<TR>
@@ -386,7 +386,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Mar 20 17:55:07 CET 2003
+Last modified: Thu Mar 20 18:10:14 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

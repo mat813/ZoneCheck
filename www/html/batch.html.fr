@@ -24,10 +24,10 @@
 	  href="HTML_PATH/">
     <LINK rel="bookmark" title="batch form"
 	  type="text/html"
-	  href="HTML_PATH/batch.html">
+	  href="batch.html">
     <LINK rel="bookmark" title="single zone form"
 	  type="text/html"
-	  href="HTML_PATH/">
+	  href="form.html">
 
     <LINK rel="help"	
 	  type="text/html"
@@ -271,16 +271,16 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
 	<TR><TD class="zc_title" colspan="2">Options: rapport d'erreurs</TD></TR>
 	<TR>
-	  <TD class="zc_key">default error</TD>
+	  <TD class="zc_key">sévérité par défaut</TD>
 	  <TD>Les erreurs sont rapportés avec le degré de sévérité associé
 	    au test.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">all fatals</TD>
+	  <TD class="zc_key">tout fatal</TD>
 	  <TD>Toute erreur est considérée comme fatale.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">all warnings</TD>
+	  <TD class="zc_key">tout avertissement</TD>
 	  <TD>Toute erreur est considérée comme un avertissement.</TD>
 	</TR>
 	<TR>
@@ -327,7 +327,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Mar 20 18:03:15 CET 2003
+Last modified: Thu Mar 20 18:10:38 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

@@ -25,10 +25,10 @@
 	  href="HTML_PATH/">
     <LINK rel="bookmark" title="batch form"
 	  type="text/html"
-	  href="HTML_PATH/batch.html">
+	  href="batch.html">
     <LINK rel="bookmark" title="single zone form"
 	  type="text/html"
-	  href="HTML_PATH/">
+	  href="form.html">
 
     <LINK rel="help"	
 	  type="text/html"
@@ -378,7 +378,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Mar 20 17:54:55 CET 2003
+Last modified: Thu Mar 20 18:11:06 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>
