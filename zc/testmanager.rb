@@ -91,7 +91,7 @@ class TestManager
     def init(config, cm, param)
 	@config     = config
 	@param      = param
-	@publisher  = @param.publisher
+	@publisher  = @param.publisher.engine
 	@classes    = {}
 	@cm         = cm
 

@@ -272,10 +272,10 @@ class ZoneCheck
 
     def zc(cm)
 	# Setup publisher domain
-	@param.publisher.setup(@param.domain.name)
+	@param.publisher.engine.setup(@param.domain.name)
 
 	# Display intro (ie: domain and nameserver summary)
-	@param.publisher.intro(@param.domain) if @param.rflag.intro
+	@param.publisher.engine.intro(@param.domain) if @param.rflag.intro
 	
 	# Initialise and test
 	@test_manager.init(@config, cm, @param)
@@ -309,16 +309,23 @@ class ZoneCheck
     def do_check
 	ok = true
 
-	@param.output_autoconf
-	
+	@param.fs.autoconf
+	@param.rflag.autoconf
+	@param.publisher.autoconf(@param.rflag)
+	@param.network.autoconf
+	@param.resolver.autoconf
+	@param.test.autoconf
+
 	# Begin formatter
-	@param.publisher.begin
+	@param.publisher.engine.begin
 	
 	# 
 	if ! @param.batch
-	    @param.autoconf
 	    cm = CacheManager::create(Test::DefaultDNS, 
 				      @param.network.query_mode)
+	    @param.domain.autoconf(@param.resolver.local)
+	    @param.report.autoconf(@param.domain, 
+				   @param.rflag, @param.publisher.engine)
 	    ok = zc(cm)
 	else
 	    cm = CacheManager::create(Test::DefaultDNS, 
@@ -334,14 +341,16 @@ class ZoneCheck
 		if ! parse_batch(line)
 		    @input.error($mc.get("xcp_zc_batch_parse"), EXIT_ERROR)
 		end
-		@param.autoconf
+		@param.domain.autoconf(@param.resolver.local)
+		@param.report.autoconf(@param.domain, 
+				       @param.rflag, @param.publisher.engine)
 		ok = false unless zc(cm)
 	    }
 	    batchio.close unless @param.batch == "-"
 	end
 
 	# End formatter
-	@param.publisher.end
+	@param.publisher.engine.end
 
 	exit EXIT_OK
     end

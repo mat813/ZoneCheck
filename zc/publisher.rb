@@ -79,3 +79,4 @@ end
 #
 load "publisher/text.rb"
 load "publisher/html.rb"
+#load "publisher/gtk.rb"

@@ -67,6 +67,19 @@ class Param
 	def counter=(val)
 	    @testdesc = false if @counter = val
 	end
+
+	def autoconf
+	    flags = []
+	    flags << "tagonly"  if @tagonly
+	    flags << "one"      if @one
+	    flags << "quiet"    if @quiet
+	    flags << "intro"    if @intro
+	    flags << "explain"  if @explain
+	    flags << "testdesc" if @testdesc
+	    flags << "counter"  if @counter
+	    flags << "stop"     if @stop_on_fatal
+	    $dbg.msg(DBG::AUTOCONF, "Report flags: " + flags.join("/"))
+	end
     end
 
 
@@ -228,6 +241,10 @@ class Param
 	    @report_class
 	end
 
+	def finish
+	    @report.finish
+	end
+
 	def autoconf(domain, rflag, publisher)
 	    @report	= @report_class::new(domain, rflag, publisher)
 	    @info       = @report.method(@info_attrname).call
@@ -245,10 +262,6 @@ class Param
 	    end
 
 	    $dbg.msg(DBG::AUTOCONF, "Report using #{reporter}")
-	end
-
-	def finish
-	    @report.finish
 	end
     end
 
@@ -372,6 +385,9 @@ class Param
 				NResolv::DNS::Client::Classic::new(cfg)
 			    end
 	    end
+
+	    $dbg.msg(DBG::AUTOCONF, "Resolver " + 
+		     (@local_name.nil? ? "<default>" : @local_name))
 	end
     end
 
@@ -416,6 +432,9 @@ class Param
 	    return if string =~ /^\s*$/
 	    @categories = string.split(/\s*,\s*/)
 	end
+
+	def autoconf
+	end
     end
 
 
@@ -427,9 +446,7 @@ class Param
 
 
 
-    attr_reader :rflag, :report, :test, :network, :fs, :resolver
-    attr_reader :publisher, :publisher_class
-
+    attr_reader :rflag, :report, :test, :network, :fs, :resolver, :publisher
 
     attr_reader :batch
     attr_writer :batch
@@ -441,7 +458,29 @@ class Param
 
 
 
+    ##
+    ##
+    ##
+    class Publisher
+	def initialize
+	    @publisher_class	= ::Publisher::Text
+	    @publisher		= nil
+	end
+	
+	def engine=(klass)
+	    @publisher_class = klass
+	end
+	def engine
+	    @publisher
+	end
 
+	def autoconf(rflag)
+	    # Set output publisher
+	    @publisher = @publisher_class::new(rflag)
+
+	    $dbg.msg(DBG::AUTOCONF, "Publish using #{@publisher_class}")
+	end
+    end
 
 
 
@@ -450,9 +489,7 @@ class Param
     #
     #
     def initialize
-	@publisher_class	= Publisher::Text
-	@publisher		= nil
-
+	@publisher		= Publisher::new
 	@fs			= FSData::new
 	@network		= Network::new
 	@resolver		= Resolver::new
@@ -519,13 +556,15 @@ class Param
 	string.split(/\s*,\s*/).each { |token|
 	    case token
 	    when "s", "straight"
-		@report.reporter = Report::Straight
+		@report.reporter  = Report::Straight
 	    when "c", "consolidation"
-		@report.reporter = Report::Consolidation
+		@report.reporter  = Report::Consolidation
 	    when "t", "text"
-		@publisher_class = Publisher::Text
+		@publisher.engine = ::Publisher::Text
 	    when "h", "html"
-		@publisher_class = Publisher::HTML
+		@publisher.engine = ::Publisher::HTML
+#	    when "g", "gtk"
+#		@publisher.engine = ::Publisher::GTK
 	    else
 		raise ParamError,
 		    $mc.get("xcp_param_unknown_modopt") % [ token, "output" ]
@@ -555,29 +594,6 @@ class Param
 		    $mc.get("xcp_param_unknown_modopt") % [token, "transp"]
 	    end
 	}
-    end
-
-
-    #
-    # Try to fill the blank for the ouput parameters
-    #
-    def output_autoconf
-	# Set output publisher
-	@publisher = @publisher_class::new(@rflag)
-	$dbg.msg(DBG::AUTOCONF, "Publish using #{@publisher_class}")
-    end
-
-    #
-    # Try to fill the blank for the unspecified parameters
-    #
-    # WARN: parameters that are used before the call to 'zc'
-    #       should not be part of autoconf
-    #
-    def autoconf
-	@network.autoconf
-	@resolver.autoconf
-	@domain.autoconf(@resolver.local)
-	@report.autoconf(@domain, @rflag, @publisher)
     end
 end
 
