@@ -14,6 +14,9 @@
 [*]
 openrelay_xpl: [ref]: ????\nYou can perform a more complete test by using the following command:\n"telnet relay-test.mail-abuse.org", for more information look at\n<URL:http://www.mail-abuse.org/>
 
+chk_mail_postmaster_xpl: [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved\nmailbox "Postmaster".
+
+
 [chk_mail_openrelay_domain]
 testname: delegated domain is not an openrelay
 error   : The best MX for the domain is an openrelay
@@ -26,10 +29,11 @@ error   : The best MX for the hostmaster address is an openrelay
 explain = openrelay_xpl
 details : The mailhost (%{mailhost}) used for the hostmaster address (%{hostmaster}) seems to act as an open relay, it is allowing mail from %{from_host} to %{to_host}.
 
+
 [chk_mail_postmaster]
 testname: 'postmaster' email address for the domain is valid
 error   : The postmaster can't be contacted by email
-explain : [none]
+explain : chk_mail_postmaster_xpl
 details : The postmaster address (%{postmaster}) doesn't exist.
 
 [chk_mail_hostmaster]
