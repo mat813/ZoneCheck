@@ -106,7 +106,8 @@
     <success>IP addresses of the zone nameserver have been found</success>
     <failure>The IP addresses of the zone nameserver can't be found</failure>
     <explanation/>
-    <details/>
+    <details><para>The IP address for <zcvar name="name"/> was not 
+      known.</para></details>
   </check>
 
 

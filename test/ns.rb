@@ -77,7 +77,9 @@ module CheckNetworkAddress
 	# DESC: NS host should be resolvable
 	def chk_ns_ip(ns, ip)
 	    ns(ip).each { |n|
-		return false unless is_resolvable?(n.name, ip, @domain.name)
+		unless is_resolvable?(n.name, ip, @domain.name)
+		    return { 'name' => n.name }
+		end
 	    }
 	    true
 	end
