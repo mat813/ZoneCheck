@@ -1,6 +1,10 @@
 # $Id$
 
 2003-??-??  ZoneCheck-2.0.0??
+	* publisher: protect quote in javascript string
+	* test: re. use the same profile as fr.
+
+2003-11-18  ZoneCheck-2.0.0b10
 	* misc: fixed bug in installer
 	* dbg: added debugging information
 	* test: added details for email test 
