@@ -32,9 +32,9 @@ explain : [none]
 
 
 [chk_soa_auth]
-testname: réponse autoritaire pour le SOA
-error   : La réponse pour le SOA n'est pas autoritaire
-ok	: La réponse pour le SOA est autoritaire
+testname: réponse faisant autorité pour le SOA
+error   : La réponse pour le SOA ne fait pas autorité
+ok	: La réponse pour le SOA fait autorité
 explain : [none]
 
 
