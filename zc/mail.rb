@@ -85,7 +85,7 @@ class ZCMail
 
     def cmd(str)
 	if str
-	    @mrelay.write(str) ; @mrelay.write("\n") ; @mrelay.flush
+	    @mrelay.write(str) ; @mrelay.write("\r\n") ; @mrelay.flush
 	end
 
 	desc = ""
