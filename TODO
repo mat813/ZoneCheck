@@ -22,3 +22,11 @@
 NOT ABLE TODO?
 - test if ping6 is really there and, otherwise, do not perform some IPv6 tests 
 =>ping for IPv6 is not always called ping6, will only test for IPv6 stack
+
+
+2002-10-17 francois.tigeot@nic.fr
+	
+	Document the class hierarchy with graphics if possible
+	Include sample code to easily add debuging printfs (not
+	straightforward with the current threaded code)
+	
