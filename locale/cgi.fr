@@ -32,8 +32,10 @@ parametres:\n\
  - lang     = [ fr | en | ... ]\n\
  - quiet\n\
  - one\n\
- - verbose  = [ i|intro, x|explain, d|details, t|testdesc, c|counter ]\n\
+ - verbose  = [ i|intro, n|testname, x|explain, d|details,\n\
+                t|testdesc, c|counter ]\n\
      - intro\n\
+     - testname\n\
      - explain\n\
      - details\n\
      - progress = [ testdesc | counter ]\n\

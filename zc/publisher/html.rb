@@ -229,7 +229,7 @@ EOT
 
 	def end
 	    @o.puts HTML.jscript { 
-		"zc_contextmenu_setlocale(\"#{$mc.get("w_details")}\", \"#{$mc.get("w_references")}\", \"#{$mc.get("w_elements")}\");\n" +
+		"zc_contextmenu_setlocale(\"#{$mc.get("w_name")}\", \"#{$mc.get("w_details")}\", \"#{$mc.get("w_references")}\", \"#{$mc.get("w_elements")}\");\n" +
 		    "zc_contextmenu_start();" }
 	    @o.print <<"EOT"
 
@@ -352,57 +352,67 @@ EOT
 
 	def diagnostic(severity, testname, desc, lst)
 	    msg, xpl_lst = nil, nil
-	    if @rflag.tagonly
-		if desc.is_error?
-		    msg = "#{severity}[Unexpected]: #{testname}"
-		else
-		    msg = "#{severity}: #{testname}"
-		end
-	    else
-		msg = desc.msg
-	    end
-
-	    if @rflag.explain && !@rflag.tagonly
-		xpl_lst = xpl_split(desc.xpl)
-	    end
-
-	    logo = case severity
-		   when "Info"    then "info"
-		   when "Warning" then "warning"
-		   when "Fatal"   then "fatal"
-		   else raise RuntimError, "XXX: unknown severity: #{severity}"
-		   end
 
 	    @o.puts "<DIV class=\"zc-diag\">"
 
-#	    l10n_name = $mc.get("#{testname}_testname")
-#	    @o.puts "<DIV class=\"zc-name\"><IMG src=\"#{@publish_path}/img/element.png\" alt=\"\"> #{l10n_name}</DIV>"
-
-	    @o.puts "<DIV class=\"zc-msg\"><IMG src=\"#{@publish_path}/img/#{logo}.png\" alt=\"\"> #{msg}</DIV>"
-
-	    if @rflag.details && desc.dtl
-		@o.puts "<UL class=\"zc-details\">"
-		@o.puts "<LI>"
-		@o.puts desc.dtl
-		@o.puts "</LI>"
-		@o.puts "</UL>"
+	    # Testname
+	    if @rflag.testname
+		l10n_name = $mc.get("#{testname}_testname")
+		@o.puts "<DIV class=\"zc-name\"><IMG src=\"#{@publish_path}/img/gear.png\" alt=\"\"> #{l10n_name}</DIV>"
 	    end
 
-	    if xpl_lst
-		@o.puts "<UL class=\"zc-ref\">"
-		xpl_lst.each { |t, h, b|
-		    l10n_tag = $mc.get("tag_#{t}")
-		    h.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>')
-		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>') }
+	    # Message
+	    if !severity.nil?
+		logo = case severity
+		       when Config::Info    then "info.png"
+		       when Config::Warning then "warning.png"
+		       when Config::Fatal   then "fatal.png"
+		       else raise "XXX: unknown severity: #{severity}"
+		       end
+
+		if @rflag.tagonly
+		    if desc.is_error?
+			msg = "#{severity}[Unexpected]: #{testname}"
+		    else
+			msg = "#{severity}: #{testname}"
+		    end
+		else
+		    msg = desc.msg
+		end
+
+		@o.puts "<DIV class=\"zc-msg\"><IMG src=\"#{@publish_path}/img/#{logo}\" alt=\"\"> #{msg}</DIV>"
+		
+		# Details
+		if @rflag.details && desc.dtl
+		    @o.puts "<UL class=\"zc-details\">"
 		    @o.puts "<LI>"
-		    @o.puts "<SPAN class=\"zc-ref\">#{l10n_tag}: #{h}</SPAN>"
-		    @o.puts "<BR>"
-		    @o.puts b.join(" ")
+		    @o.puts desc.dtl
 		    @o.puts "</LI>"
-		}
-		@o.puts "</UL>"
+		    @o.puts "</UL>"
+		end
+
+		# Explanation
+		if @rflag.explain && !@rflag.tagonly
+		    xpl_lst = xpl_split(desc.xpl)
+		end
+
+		if xpl_lst
+		    @o.puts "<UL class=\"zc-ref\">"
+		    xpl_lst.each { |t, h, b|
+			l10n_tag = $mc.get("tag_#{t}")
+			h.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>')
+			b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>') }
+			@o.puts "<LI>"
+			@o.puts "<SPAN class=\"zc-ref\">#{l10n_tag}: #{h}</SPAN>"
+			@o.puts "<BR>"
+			@o.puts b.join(" ")
+			@o.puts "</LI>"
+		    }
+		    @o.puts "</UL>"
+		end
 	    end
 
+	    # Elements
 	    if ! lst.empty?
 		@o.puts "<UL class=\"zc-element\">"
 		lst.each { |elt| @o.puts "  <LI>#{elt}</LI>" }

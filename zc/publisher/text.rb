@@ -284,6 +284,11 @@ module Publisher
 	    if @rflag.explain && !@rflag.tagonly
 		xpl_lst = xpl_split(desc.xpl)
 	    end
+
+	    if @rflag.testname
+		l10n_name = $mc.get("#{testname}_testname")
+		@o.puts "[> #{l10n_name}"
+	    end
 	    
 	    @o.puts msg
 

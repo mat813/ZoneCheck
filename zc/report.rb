@@ -15,6 +15,8 @@
 #
 #
 
+require 'config'
+
 module Report
     ##
     ## Exception raised to abort zonecheck
@@ -36,61 +38,55 @@ module Report
 	##
 	##
 	class Processor # --> ABSTRACT <--
-	    def initialize(rflag, publish)
+	    def initialize(master, rflag, publish)
+		@master		= master
 		@rflag		= rflag
 		@publish	= publish
-		@list		= []
+		@list_failed	= []
+		@list_ok	= master.list_ok
 	    end
 
-	    def empty? ; @list.empty? ; end
-
-	    def count  ; @list.length ; end
+	    def empty? ; @list_failed.empty? ; end
+	    def count  ; @list_failed.length ; end
+	    def one    ; @list_failed.first  ; end
+	    def list   ; @list_failed        ; end
 
 	    def add_result(result)
-		@list << result unless result.ok?
+		if result.ok?
+		then @list_ok     << result
+		else @list_failed << result
+		end
 	    end
 	    
-	    def severity
-		self.class.to_s =~ /([^:]+)$/
-		$1
-	    end
-
-	    def first
-		@list.nil? ? nil : @list.first
-	    end
-
-	    def one 
-		first
-	    end
-
 	    def has_error?
-		@list.each { |res| return true if res.desc.is_error? }
+		@list_failed.each { |res| return true if res.desc.is_error? }
 		false
 	    end
 
-	    def display(title)
-		nlist = @list.dup
+	    def display
+		return if @list_failed.empty?
 
-		if !@rflag.tagonly
+		if !@rflag.tagonly && !@rflag.quiet
 		    @publish.diag_section(title)
 		end
-
+		
+		nlist = @list_failed.dup
 		while ! nlist.empty?
 		    # Get test result
 		    res		= nlist.shift
-
+		    
 		    # Initialize 
 		    whos	= [ res.tag ]
 		    desc	= res.desc.clone
 		    testname	= res.testname
-
+		    
 		    # Look for similare test results
 		    nlist.delete_if { |a|
 			if (a.testname == res.testname) && (a.desc == res.desc)
 			    whos << a.tag
 			end
 		    }
-
+		    
 		    # Publish diagnostic
 		    @publish.diagnostic(severity, testname, desc, whos)
 		end
@@ -100,42 +96,41 @@ module Report
 
 
 	##
-	## Fatal results 
+	## Fatal/Warning/Info results 
 	##
 	class Fatal   < Processor
 	    def add_result(result)
 		super(result)
 		raise FatalError unless result.ok?
 	    end
+	    def severity ; Config::Fatal        ; end
+	    def title    ; $mc.get("w_fatal")   ; end
 	end
 
-
-
-	##
-	## Warning results
-	##
 	class Warning < Processor
+	    def severity ; Config::Warning      ; end
+	    def title    ; $mc.get("w_warning") ; end
 	end
-	
 
-
-	##
-	## Informational results
-	##
 	class Info    < Processor
+	    def severity ; Config::Info         ; end
+	    def title    ; $mc.get("w_info")    ; end
 	end
 
 
 
+	attr_reader :list_ok
 
 	def initialize(domain, rflag, publish)
 	    @domain	= domain
 	    @rflag	= rflag
 	    @publish	= publish
-	    @fatal	= Fatal::new(rflag, publish)
-	    @warning	= Warning::new(rflag, publish)
-	    @info	= Info::new(rflag, publish)
+	    @list_ok	= []
+	    @fatal	= Fatal::new(self, rflag, publish)
+	    @warning	= Warning::new(self, rflag, publish)
+	    @info	= Info::new(self, rflag, publish)
 	end
+
 
 	def finish
 	    if @rflag.one
@@ -153,13 +148,13 @@ module Report
 	    end
 
 
+	    if !(@info.empty? && @warning.empty? && @fatal.empty?)
+		@publish.diag_start() unless @rflag.quiet
 
-	    if !@rflag.quiet && !(@info.empty?    && 
-				  @warning.empty? && @fatal.empty?)
-		@publish.diag_start()
-		@info   .display($mc.get("w_info"))    unless @info.empty?
-		@warning.display($mc.get("w_warning")) unless @warning.empty?
-		@fatal  .display($mc.get("w_fatal"))   unless @fatal.empty?
+#		display(@list_ok)
+		@info.display
+		@warning.display
+		@fatal.display
 	    end
 
 	    @publish.status(@domain.name, 

@@ -35,11 +35,13 @@ class Param
     ## one          : only print 1 message
     ## quiet        : don't print extra titles
     ## intro        : display summary about checked domain
+    ## testname     : print the name of the test in the report
     ## explain      : explain the reason behind the test (if test failed)
     ## details      : give details about the test failure
     ## testdesc     : print a short description of the test being performed
     ## counter      : display a progress bar
     ## stop_on_fatal: stop on the first fatal error
+    ## report_ok    : also report test that have passed
     ##
     ## Corrections are silently made to respect the following constraints:
     ##  - 'tagonly' doesn't support 'explain', 'details' (as displaying
@@ -49,16 +51,21 @@ class Param
     ##     progress bar animation
     ##
     class ReportFlag
-	attr_reader :tagonly, :one,     :quiet
-	attr_reader :intro,   :explain, :details, :testdesc, :counter
-	attr_reader :stop_on_fatal
+	attr_reader :tagonly,  :one,   :quiet
+	attr_reader :testname, :intro, :explain, :details
+	attr_reader :testdesc, :counter
+	attr_reader :stop_on_fatal, :report_ok
 
-	attr_writer :one, :quiet, :intro, :stop_on_fatal
+	attr_writer :one, :quiet, :intro
+	attr_writer :stop_on_fatal, :report_ok
+	attr_writer :testname
 
 	def initialize
-	    @tagonly = @one                           	= false
-	    @intro   = @explain = @testdesc = @counter	= false
+	    @tagonly  = @one                           	= false
+	    @intro    = @testname = @details = @explain	= false
+	    @testdesc = @counter			= false
 	    @stop_on_fatal				= true
+	    @report_ok					= false
 	end
 
 	def tagonly=(val)
@@ -87,11 +94,13 @@ class Param
 	    flags << "one"      if @one
 	    flags << "quiet"    if @quiet
 	    flags << "intro"    if @intro
+	    flags << "testname" if @testname
 	    flags << "explain"  if @explain
 	    flags << "details"  if @details
 	    flags << "testdesc" if @testdesc
 	    flags << "counter"  if @counter
 	    flags << "stop"     if @stop_on_fatal
+	    flags << "reportok" if @report_ok
 	    $dbg.msg(DBG::AUTOCONF, "Report flags: " + flags.join("/"))
 	end
     end
@@ -610,6 +619,8 @@ class Param
 	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
+	    when "n", "testname"
+		@rflag.testname	= true
 	    when "x", "explain"
 		@rflag.explain	= true
 	    when "d", "details"

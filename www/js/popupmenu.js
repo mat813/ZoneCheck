@@ -118,7 +118,9 @@ ZC_Popup.prototype.add    = function(label, func) {
 
 /***********************************************************************/
 
-function zc_contextmenu_setlocale(l10n_details,l10n_references,l10n_elements) {
+function zc_contextmenu_setlocale(l10n_testname,   l10n_details,
+				  l10n_references, l10n_elements) {
+  zc_l10n_testname   = l10n_testname;
   zc_l10n_details    = l10n_details;
   zc_l10n_references = l10n_references;
   zc_l10n_elements   = l10n_elements;
@@ -140,6 +142,9 @@ function zc_contextmenu_start() {
   };
 
   var ctx = new ZC_Popup("zc_contextmenu", "+/-");
+  ctx.add("<IMG src='"+ zc_publish_path+"/img/gear.png'>"+
+	  "&nbsp;"+zc_l10n_testname,
+	  function () { hidefunc('zc-name', 'DIV'); });
   ctx.add("<IMG src='"+ zc_publish_path+"/img/details.png'>"+
 	  "&nbsp;"+zc_l10n_details,
 	  function () { hidefunc('zc-details', 'UL'); });

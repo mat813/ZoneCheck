@@ -350,6 +350,7 @@ module Publisher
 	    @pixmap.put(:minipage,	ZCData::XPM::Minipage)
 	    @pixmap.put(:element,	ZCData::XPM::Element)
 	    @pixmap.put(:reference,	ZCData::XPM::Reference)
+	    @pixmap.put(:gear,		ZCData::XPM::Gear)
 	    @pixmap.put(:detail,	ZCData::XPM::Detail)
 	    @pixmap.put(:info,		ZCData::XPM::Info)
 	    @pixmap.put(:warning,	ZCData::XPM::Warning)
@@ -523,9 +524,9 @@ module Publisher
 	    end
 	    
 	    logo = case severity
-		   when "Info"    then :info
-		   when "Warning" then :warning
-		   when "Fatal"   then :fatal
+		   when Config::Info    then :info
+		   when Config::Warning then :warning
+		   when Config::Fatal   then :fatal
 		   else raise RuntimError, "XXX: unknown severity: #{severity}"
 		   end
 

@@ -42,6 +42,8 @@ w_details	: details
 w_references	: references
 w_elements	: elements
 w_form          : form
+w_name		: name
+w_ok		: ok
 
 
 #

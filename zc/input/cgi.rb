@@ -36,8 +36,10 @@ module Input
     ##  - lang     = [ fr | en | ... ]
     ##  - quiet
     ##  - one
-    ##  - verbose  = [ i|intro, x|explain, d|details, t|testdesc, c|counter ]
+    ##  - verbose  = [ i|intro, n|testname, x|explain, d|details, 
+    ##                 t|testdesc, c|counter ]
     ##      - intro
+    ##      - testname
     ##      - explain
     ##      - details
     ##      - progress = [ testdesc | counter ]
@@ -100,6 +102,7 @@ module Input
 	    if @cgi.has_key?("verbose")
 		p.verbose = @cgi.params["verbose"].join(",")
 	    else
+		p.verbose = "testname"		if @cgi.has_key?("testname")
 		p.verbose = "intro"             if @cgi.has_key?("intro")
 		p.verbose = "explain"           if @cgi.has_key?("explain")
 		p.verbose = "details"		if @cgi.has_key?("details")
