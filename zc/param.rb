@@ -175,8 +175,7 @@ class Param
 		    host_str, ips_str = $1, $2
 		    host = NResolv::DNS::Name::create(host_str, true)
 		    ips_str.split(/\s*,\s*|\s+/).each { |str|
-			ips << Address::create(str)
-		    }
+			ips << Address::create(str) }
 		else
 		    host = NResolv::DNS::Name::create(entry, true)
 		end
@@ -312,20 +311,25 @@ class Param
 		@report_class = ::Report::BySeverity
 	    end
 
+	    # Instanciate report engine
 	    @report	= @report_class::new(domain, rflag, publisher)
+	    # Define dealing of info/warning/fatal severity
 	    @info       = @report.method(@info_attrname).call
 	    @warning    = @report.method(@warning_attrname).call
 	    @fatal      = @report.method(@fatal_attrname).call
 
+	    # Check for 'tagonly' support
 	    if rflag.tagonly && !@report.tagonly_supported?
 		raise ParamError, 
 		    $mc.get("xcp_param_output_support") % [ "tagonly" ]
 	    end
+	    # Check for 'one' support
 	    if rflag.one     && !@report.one_supported?
 		raise ParamError, 
 		    $mc.get("xcp_param_output_support") % [ "one"     ]
 	    end
 
+	    # Debug
 	    $dbg.msg(DBG::AUTOCONF, "Report using #{reporter}")
 	end
     end
@@ -348,6 +352,7 @@ class Param
 	end
 
 	def autoconf
+	    # Debug
 	    $dbg.msg(DBG::AUTOCONF, "configuration file: #{@cfgfile}")
 	    $dbg.msg(DBG::AUTOCONF, "tests directory: #{@testdir}")
 	end
@@ -403,12 +408,12 @@ class Param
 	end
 
 	def autoconf
-	    # Select routing protocol
+	    # Select routing protocol (IPv4/IPv6)
 	    @ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
 	    @ipv4 = false        if @ipv4.nil? || !$ipv4_stack
 	    @ipv6 = false        if @ipv6.nil? || !$ipv6_stack
 	    raise "Why are you using this program!" if !@ipv4 && !@ipv6
-	    
+	    # Debug
 	    $dbg.msg(DBG::AUTOCONF, 
 		     "Routing protocol set to: " +
 		     [ @ipv4 ? "IPv4" : nil, 
@@ -416,6 +421,7 @@ class Param
 
 	    # Select mode
 	    @query_mode = NResolv::DNS::Client::STD if @query_mode.nil?
+	    # Debug
 	    @query_mode.to_s =~ /([^:]+)$/
 	    $dbg.msg(DBG::AUTOCONF, "Query mode set to: #{$1}")
 	end
@@ -466,6 +472,7 @@ class Param
 			 end
 	    end
 
+	    # Debug
 	    $dbg.msg(DBG::AUTOCONF, "Resolver " + 
 		     (@local_name.nil? ? "<default>" : @local_name))
 	end
@@ -475,7 +482,8 @@ class Param
     ##
     ## Hold information about the test
     ## 
-    ## list      : limiting tests to this list
+    ## list      : has listing of test name been requested
+    ## test      : limiting tests to this list
     ## catagories: limiting tests to these categories
     ## desctype  : description type (name, xpl, error, ...)
     ##
@@ -516,6 +524,14 @@ class Param
 	end
 
 	def autoconf
+	    # Debug
+	    $dbg.msg(DBG::AUTOCONF, 
+	      "Test description requested for type: #{@desctype}") if @desctype
+	    $dbg.msg(DBG::AUTOCONF, "Test listing requested") if @list
+	    $dbg.msg(DBG::AUTOCONF, "Selected tests: " +
+		     (@tests.nil? ? "ALL" : @tests.join(',')))
+	    $dbg.msg(DBG::AUTOCONF, "Selected categories: " +
+		     (@categories ? @categories.join(",") : "+"))
 	end
     end
 

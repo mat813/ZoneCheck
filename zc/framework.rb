@@ -17,6 +17,7 @@
 
 require 'cache'
 require 'cachemanager'
+require 'msgcat'
 
 ##
 ## Class that should be inherited by every test set
@@ -62,11 +63,7 @@ class Test
 		    nil
 		else
 		    x = $mc.get("#{@testname}_explain")
-		    if x == "[none]"
-			nil
-		    else
-			x
-		    end
+		    x == MessageCatalog::None ? nil : x
 		end
 	    end
 
@@ -74,7 +71,7 @@ class Test
 		return nil if @data.nil?
 		
 		d = $mc.get("#{@testname}_details")
-		if d == "[none]"
+		if d == MessageCatalog::None
 		    nil
 		else
 		    d = d.dup

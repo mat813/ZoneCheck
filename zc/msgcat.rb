@@ -45,6 +45,7 @@ require 'dbg'
 class MessageCatalog
     TagRegex	= /[\w\/]+/
     LANGRegex	= /^(\w+?)(?:_(\w+))?(?:\.([\w\-]+))?$/
+    None	= "[none]"
 
     ##
     ## Exception: the corresponding message catalog is not installed

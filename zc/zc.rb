@@ -156,8 +156,10 @@ $dbg       = DBG::new
 $dbg.level = ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 
 
+#
 # IPv4/IPv6 stack detection
 #  WARN: doesn't implies that we have the connectivity
+#
 $ipv4_stack = begin
 		  UDPSocket::new(Socket::AF_INET).close
 		  true
@@ -218,7 +220,7 @@ $console.encoding = $mc.encoding
 class ZoneCheck
     #
     # Input method
-    #   (pseudo parameter in CLI: --INPUT=???)
+    #   (pseudo parameter: --INPUT=???)
     #
     def self.input_method
 	im = nil	# Input Method
@@ -385,7 +387,9 @@ class ZoneCheck
     # XXX: should use publisher
     #
     def do_testlist
-	$console.stdout.puts @test_manager.list.sort
+	@param.test.autoconf
+	@test_manager.list.sort.each { |testname|
+	    $console.stdout.puts testname }
 	true
     end
 
@@ -396,6 +400,7 @@ class ZoneCheck
     # XXX: should use publisher
     #
     def do_testdesc
+	@param.test.autoconf
 	suf = @param.test.desctype
 	list = @param.test.tests || @test_manager.list.sort
 	list.each { |test|
