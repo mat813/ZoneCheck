@@ -32,7 +32,7 @@ module NResolv
     # 
     # Ensure that 'arg' will be an Address or a DNS Name object,
     # raise the ArgumentError exception if conversion failed
-    def self.to_name(arg)
+    def self.to_addrname(arg)
         case arg
         when Address::IPv4, Address::IPv6, NResolv::DNS::Name
             arg
@@ -46,7 +46,7 @@ module NResolv
                 DNS::Name::create(arg)
             end
         else
-            raise ArgumentError, "IP address or DNS Name expected"
+            raise ArgumentError, "address or DNS Name expected"
         end
     end
 end

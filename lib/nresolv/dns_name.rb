@@ -110,6 +110,10 @@ module NResolv
 		    else obj
 		    end
 		when String
+		    begin
+			obj = Address::create(obj).to_name
+		    rescue Address::InvalidAddress
+		    end
 		    self::from_s(obj,         make_absolute)
 		when Address
 		    self::from_s(obj.to_name, make_absolute)

@@ -52,6 +52,22 @@ module NResolv
 		@config = config
 	    end
 
+	    def getaddress(name, order=Address::OrderDefault)
+		@config.candidates(name).each { |fqname|
+		    each_address(fqname, order) { |address| return address } }
+		raise NoEntryError, "address for #{name} not found"
+	    end
+
+	    def getaddresses(name, order=Address::OrderDefault)
+		@config.candidates(name).each { |fqname|
+		    res = addresses(fqname)
+		    return res unless res.empty?
+		}
+		[]
+	    end
+
+
+	    
 	    def getresources(name, resource, rec=true, exception=true)
 		ret = [ ]
 		each_resource(name, resource, rec, exception) {|resource,| 
@@ -60,15 +76,6 @@ module NResolv
 		return ret
 	    end
 
-	    def getaddresses(name)
-		@config.candidates(name).each { |fqname|
-		    res = addresses(fqname)
-		    return res unless res.empty?
-		}
-		[]
-	    end
-
-	    
 	    #
 	    # yield: resource, ttl, name, msg
 	    # exceptions: NoEntryError, NoDomainError
@@ -145,34 +152,41 @@ module NResolv
 		ns
 	    end
 
-	    def addresses(name, order=Address::OrderDefault)
+	    #
+	    #  WARN: this can result in duplicated entries if order
+	    #        wasn't correctly defined
+	    def each_address(name, order=Address::OrderDefault)
+		# ensure we got a DNS::Name
 		name = Name::create(name)
-		addr  = []
 
+		# Sanity check
+		if ! name.absolute?
+		    raise ArgumentError, "DNS name should be abolute"
+		end
+
+		# Retrieve addresses in the requested order
 		order.each { |o|
 		    if o == Address::IPv6::Compatibility
 			[ Resource::IN::A, Resource::IN::AAAA ].each { |rt|
 			    each_resource(name, rt, true, false) { |r,|
-				addr << Address::IPv6::create(r.address)
-			    }
+				yield Address::IPv6::create(r.address) }
 			}
 		    elsif o == Address::IPv6
-			begin
-			    each_resource(name, Resource::IN::AAAA, 
-					  true, false) { |r,|
-				addr << r.address
-			    }
-			end
+			each_resource(name, Resource::IN::AAAA, 
+				      true, false) { |r,|
+			    yield r.address }
 		    elsif o == Address::IPv4
-			begin
-			    each_resource(name, Resource::IN::A, 
-					  true, false) { |r,|
-				addr << r.address
-			    }
-			end
+			each_resource(name, Resource::IN::A, 
+				      true, false) { |r,|
+			    yield r.address }
 		    end
 		}
-		addr
+	    end
+
+	    def addresses(name, order=Address::OrderDefault)
+		ret = []
+		each_address(name, order) {|address| ret << address}
+		return ret
 	    end
 
 

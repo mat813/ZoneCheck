@@ -355,7 +355,7 @@ EOT
      end
 
      def self.query(name, type)
-	 if servers = self.getservers(NResolv::to_name(name))
+	 if servers = self.getservers(NResolv::to_addrname(name))
 	     servers.each { |server|
 		 if whois = self.getwhois(server)
 		     if ans = whois.query(name, type)

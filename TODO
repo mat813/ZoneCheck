@@ -9,6 +9,8 @@ version = 2.0.0
 	display erreur messages when in CGI no zone has been given
 	write help page describing how to interpret zonecheck results
 
+form =	autofilling of zc form
+
 BEURK:
 	pour les sous zones (asso.fr , ....) ne pas faire les tests des MX
 
