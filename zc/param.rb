@@ -164,7 +164,7 @@ class Param
 	#
 	def can_cache?
 	    # purely guessed information
-	    return false if @ns_input.nil?
+	    return false if @ns_input.empty?
 	    # glue misused
 	    @ns_input.each { |ns, ips|
 		return false unless ns.in_domain?(@name) ^ !ips.empty? }
