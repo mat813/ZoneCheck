@@ -11,6 +11,7 @@
 	* zc: option --resolver is not necessary anymore on windows
 	* zc: added statistics for web page
 	* test: check for non recursive server (chk_not_recursive)
+	* misc: new installation procedure (using ruby only)
 	
 2003-10-02  ZoneCheck-2.0.0b8
 	* test: added chk_soa_coherence

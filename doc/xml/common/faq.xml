@@ -55,24 +55,6 @@
     
     <qandaentry>
       <question>
-	<para><application>make</application> failed to configure or install
-          ZoneCheck</para>
-      </question>
-      <answer>
-	<para>You should use the GNU version of the
-	<application>make</application> program, sometimes called
-	<application>gmake</application>.</para>
-	
-	<para>You should also have <application>ruby</application>
-	installed, if it wasn't detected you need to force the
-	<envar>RUBY</envar> variable to point to your
-	<filename>ruby</filename> program (with fullpath if
-	necessary).</para>
-      </answer>
-    </qandaentry>
-      
-    <qandaentry>
-      <question>
 	<para>I would like to easily test ZoneCheck without doing a
 	  <command>make install</command></para>
       </question>

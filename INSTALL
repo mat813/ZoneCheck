@@ -1,30 +1,53 @@
 # $Id$
 
-To install ZoneCheck 2 (the executable is simply named zc), you will
-need the Ruby environment and GNU Make (sometimes called gmake)
+For the impatient: ruby ./install.rb all
+
+To install ZoneCheck 2 (the executable is simply named zonecheck), you
+will need the Ruby environment.
 
 Ruby can be found as a package or port in every serious
 Unix. Otherwise, see <URL:http://www.ruby-lang.org/> and
-<URL:http://www.rubycentral.com/>, or if you are a Windows user,
-you can find <URL:http://rubyinstaller.sourceforge.net/> more convenient.
+<URL:http://www.rubycentral.com/>, or if you are a Windows user, you
+can find <URL:http://rubyinstaller.sourceforge.net/> more convenient.
 
-WARNING: you need the Ruby version 1.8.0 which is currently in the
-preview stage and so it is possible that a binary package is not
-available for your operating system (some 1.7.x version could be
-enough, but no garantee are given)
+WARNING: you need at least the version 1.8 of Ruby.
 
-Once Ruby is installed, just "make install" will install everything
-somewhere under /usr/local. If you prefer another place, type "make
-PREFIX=/some/where install".
+If you are reading this file, we can assume that you haven't already
+install ZoneCheck by tipping "make install"; in fact you don't need
+the 'make' command (but as it is a reflex, a dummy Makefile has been
+created).
+
+To install ZoneCheck you need to execute the following command:
+ ruby ./installer.rb target [-Dparam=value]
+
+where target can have one of the following values
+ - all: install everything
+ - cgi: install the necessary to run ZoneCheck as a web service
+ - cli: install the necessary to run ZoneCheck as a command line
+ - doc: install extra documentation 
+
+the -D option allow to define one of the installation parameters
+for exemple:
+ - RUBY      define the full path of the interpreter to use
+ - PREFIX    define where zonecheck will be install
+ - HTML_PATH define the path relative to the web site (for the cgi)
+
+There are a few other parameters but you shouldn't need them.
+
 
 The default hierarchie is:
-PREFIX
+PREFIX [/usr/local]
 |-- bin
-|   `-- zc			# Command line
+|   `-- zonecheck		# Command line
 |-- etc
-|   `-- zc.conf			# Configuration file
+|   `-- zonecheck		# Configuration directory
+|      |-- zc.conf		#   Main configuration file
+|      |-- rootservers		#   List of the root servers (YAML file)
+|      |-- reverse.rules	#   Rules for checking reverse delegation
+|      |-- ...			#   ...
+|      `-- default.rules	#   Default set of rules to be used
 |-- libexec
-|   `--zc
+|   `--zonecheck
 |      |-- cgi-bin
 |      |   `-- zc.cgi		# CGI
 |      |-- html			# HTML directory (javascript, css, pics, ...)
@@ -37,4 +60,4 @@ PREFIX
 |      `-- zc			# core component
 `-- share
     `-- doc
-        `-- zc			# Documentation
+        `-- zonecheck		# Documentation

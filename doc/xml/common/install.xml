@@ -57,32 +57,29 @@
       <title>Directory layout</title>
       <screen>PREFIX
 |-- bin
-|   `-- zc                      # Command line
+|   `-- zonecheck		# Command line
 |-- etc
-|   `-- zc.conf                 # Configuration file
+|   `-- zonecheck		# Configuration directory
+|      |-- zc.conf		#   Main configuration file
+|      |-- rootservers		#   List of the root servers (YAML file)
+|      |-- reverse.rules	#   Rules for checking reverse delegation
+|      |-- ...			#   ...
+|      `-- default.rules	#   Default set of rules to be used
 |-- libexec
-|   `--zc
+|   `--zonecheck
 |      |-- cgi-bin
-|      |   `-- zc.cgi           # CGI
-|      |-- www                  # WWW directory (javascript, css, pics, ...)
-|      |   |-- htlm             #   HTML content
-|      |   |   |-- en           #     English version
-|      |   |   |-- ...          #     ...
-|      |   |   `-- fr           #     French version
-|      |   |-- img              #   Pictures, icons, logos, ...
-|      |   |-- js               #   Javascript
-|      |   |-- script           #   Scripts that can be used to enhance HTML
-|      |   `-- style		#   Cascaded Style Sheets
-|      |-- locale               # Localisation files (zonecheck)
-|      |   `-- test             #   localisation for the test set
-|      |-- test                 # test set
-|      |-- lib                  # Extra libraries (NResolv, Address, ...)
-|      `-- zc                   # core components
-|-- man
-|   `-- man1                    # Man pages
+|      |   `-- zc.cgi		# CGI
+|      |-- html			# HTML directory (javascript, css, pics, ...)
+|      |   |-- en		#   English version
+|      |   |-- ...              #   ...
+|      |   `-- fr		#   French version
+|      |-- locale		# Localisation files
+|      |-- test			# test set
+|      |-- lib			# Extra libraries (NResolv, Address, ...)
+|      `-- zc			# core component
 `-- share
     `-- doc
-        `-- zc                  # Documentation</screen>
+        `-- zonecheck		# Documentation</screen>
     </section>
 
 
@@ -95,20 +92,20 @@
       and for html pages generated in the
       <filename class="directory">/zc/</filename> namespace (HTML_PATH=/zc).
 <screen>
-AliasMatch  ^/zc/?$         /usr/local/libexec/zc/www/html/form.html
-AliasMatch  ^/zc/(en|fr)/?$ /usr/local/libexec/zc/www/html/form.html.$1
-AliasMatch  ^/zc/(en|fr)/(.*)$ /usr/local/libexec/zc/www/html/$2.$1
-ScriptAlias /zc/cgi-bin/    /usr/local/libexec/zc/cgi-bin/
-Alias       /zc/js/         /usr/local/libexec/zc/www/js/
-Alias       /zc/style/      /usr/local/libexec/zc/www/style/
-Alias       /zc/img/        /usr/local/libexec/zc/www/img/
-Alias       /zc/            /usr/local/libexec/zc/www/html/
+AliasMatch  ^/zc/?$         /usr/local/libexec/zonecheck/www/html/form.html
+AliasMatch  ^/zc/(en|fr)/?$ /usr/local/libexec/zonecheck/www/html/form.html.$1
+AliasMatch  ^/zc/(en|fr)/(.*)$ /usr/local/libexec/zonecheck/www/html/$2.$1
+ScriptAlias /zc/cgi-bin/    /usr/local/libexec/zonecheck/cgi-bin/
+Alias       /zc/js/         /usr/local/libexec/zonecheck/www/js/
+Alias       /zc/style/      /usr/local/libexec/zonecheck/www/style/
+Alias       /zc/img/        /usr/local/libexec/zonecheck/www/img/
+Alias       /zc/            /usr/local/libexec/zonecheck/www/html/
 
-&lt;Directory /usr/local/libexec/zc/cgi-bin/&gt;
+&lt;Directory /usr/local/libexec/zonecheck/cgi-bin/&gt;
     Options ExecCGI 
 &lt;/Directory&gt;
 
-&lt;Directory /usr/local/libexec/zc/www/&gt;
+&lt;Directory /usr/local/libexec/zonecheck/www/&gt;
     Options Includes FollowSymLinks MultiViews
 &lt;/Directory&gt;
 
