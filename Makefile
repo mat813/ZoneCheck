@@ -17,6 +17,7 @@ RUBY   ?= $(shell which ruby)
 LIBEXEC=$(PREFIX)/libexec/zc
 BINDIR=$(PREFIX)/bin
 DOCDIR=$(PREFIX)/share/doc/zc
+
 INSTALL=install
 CP=cp
 LN=ln
@@ -34,6 +35,8 @@ zc-bin:
 	@echo "You can change them by using the syntax:"
 	@echo "  $(MAKE) key=value"
 
+zc-cgi:
+	@echo "Not automatized yet"
 
 install:
 	if [ ! -d $(DOCDIR) ]; then \
