@@ -23,6 +23,8 @@ module Input
     ## Processing parameters from CLI (Command Line Interface)
     ##
     class CLI
+	with_msgcat "cli.%s"
+
 	def initialize
 	    @opts = GetoptLong.new(* opts_definition)
 	    @opts.quiet = true
@@ -125,7 +127,7 @@ EOT
 	end
 
 	def usage(errcode, io=$stderr)
-	    io.print $mc.get("param_cli_usage").gsub("PROGNAME", PROGNAME)
+	    io.print $mc.get("input_cli_usage").gsub("PROGNAME", PROGNAME)
 	    exit errcode unless errcode.nil?
 	end
 
