@@ -32,6 +32,9 @@
 #
 
 
+require 'thread'
+
+
 ##
 ## Debugging
 ##
@@ -45,7 +48,7 @@ class DBG
     PARSER       = 0x0008	# Parser
     TESTS        = 0x0010	# Tests performed
     AUTOCONF     = 0x0100       # Autoconf
-    TESTDBG      = 0x0200	#
+    TESTDBG      = 0x0200	# Debugging messages from tests
     DBG          = 0x0800	# Debugger itself
     CACHE_INFO   = 0x1000	# Information about cached object
 
@@ -75,6 +78,7 @@ class DBG
     def initialize(lvl=0, output=$stderr)
 	@output = output
 	@lvl    = lvl
+	@mutex	= Mutex::new
 	msg(DBG) { "Debugger initialized at level %0x" % @lvl }
     end
 
@@ -129,13 +133,32 @@ class DBG
     # WARN: It is adviced to use a block instead of the string 
     #       second argument, as this will provide a lazy evaluation
     #
-    def msg(type, str=nil)
+    def msg(type, arg=nil)
 	return unless enabled?(type)
 
-	unless block_given? ^ !str.nil?
+	unless block_given? ^ !arg.nil?
 	    raise ArgumentError, 'either string or block should be given'
 	end
-	str = yield if block_given?
-	@output.puts "DBG[#{Tag[type]}]: #{str}"
+	arg = yield if block_given?
+
+	@mutex.synchronize {
+	    case arg
+	    when Array
+		case arg.size
+		when 0
+		    raise ArgumentError, 'the array argument must not be empty'
+		when 1
+		    @output.puts "DBG[#{Tag[type]}]: #{arg[0]}"
+		else
+		    tag       = "DBG[#{Tag[type]}]"
+		    tagfiller = " " * tag.size
+		    @output.puts "#{tag}: #{arg[0]}"
+		    arg[1..-1].each { |l|
+			@output.puts "#{tagfiller}| #{l}" }
+		end
+	    else
+		@output.puts "DBG[#{Tag[type]}]: #{arg}"
+	    end
+	}
     end
 end
