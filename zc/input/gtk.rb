@@ -480,8 +480,8 @@ module Input
 
 		# NS
 		tbl  = Gtk::Table::new(MaxNS, 5, false)
-		tbl.set_col_spacings(5)
-		tbl.set_row_spacings(2)
+		tbl.column_spacings = 5
+		tbl.row_spacings = 2
 		(0..MaxNS-1).each { |i|
 		    l10n_ns_t = (i == 0 ? l10n_primary			\
 				        : l10n_secondary).capitalize

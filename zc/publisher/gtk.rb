@@ -80,8 +80,8 @@ module Publisher
 	    def initialize(main, domain)
 		# Initialize widget
 		super(2, 3, false)
-		set_col_spacings(5)
-		set_row_spacings(2)
+		self.column_spacings = 5
+		self.row_spacings = 2
 		
 		# Zone
 		img      = Gtk::Image::new(*main.pixmap[:zone])
@@ -119,8 +119,8 @@ module Publisher
 	    def initialize(main)
 		@main = main
 		super(0, 2, false)
-		set_col_spacings(5)
-		set_row_spacings(2)
+		self.columns_spacings = 5
+		self.row_spacings = 2
 		show
 		@idx = 0
 	    end
@@ -193,8 +193,8 @@ module Publisher
 		lbl_speed   = Gtk::Label::new(l10n_speed).set_alignment(0.5, 0.5)
 		lbl_time    = Gtk::Label::new(l10n_time ).set_alignment(0.5, 0.5)
 
-		set_col_spacings(5)
-		set_row_spacings(2)
+		self.column_spacings = 5
+		self.row_spacings = 2
 
 		
 
@@ -281,12 +281,12 @@ module Publisher
 
 		# Counter
 		if @publisher.rflag.counter
-		    pct = 100 * @processed / @count
+		    frac = @processed.to_f / @count
 
 		    @tname.set_text("#{desc} #{xtra}")
-		    @pct  .set_text("%3d%%" % [ pct ])
+		    @pct  .set_text("%3d%%" % [ 100 * frac ])
 		    @tests.set_text(@processed.to_s)
-		    @pbar .adjustment.set_value(pct)
+		    @pbar .set_fraction(frac)
 		end
 
 		# Test description
@@ -462,8 +462,8 @@ module Publisher
 
 	    # Initialize widget
 	    tbl = Gtk::Table::new(3, 7, false)
-	    tbl.set_col_spacings(5)
-	    tbl.set_row_spacings(2)
+	    tbl.column_spacings = 5
+	    tbl.row_spacings = 2
 		
 
 	    # Zone
@@ -532,8 +532,8 @@ module Publisher
 
 
 	    dtbl = Gtk::Table::new(1, 2, false)
-	    dtbl.set_col_spacings(5)
-	    dtbl.set_row_spacings(2)
+	    dtbl.column_spacings = 5
+	    dtbl.row_spacings    = 2
 	    didx  = 0
 
 	    img = Gtk::Image::new(*self.pixmap[logo])
@@ -551,8 +551,8 @@ module Publisher
 		str = txt.format(desc.dtl)
 		str.chop!
 		tbl = Gtk::Table::new(0, 2, false)
-		tbl.set_col_spacings(5)
-		tbl.set_row_spacings(2)
+		tbl.column_spacings = 5
+		tbl.row_spacings    = 2
 		img = Gtk::Image::new(*self.pixmap[:detail])
 		lbl = Gtk::Label::new(str)
 		lbl.set_alignment(0, 0.5)
@@ -566,8 +566,8 @@ module Publisher
 	    # Explanation
 	    if xpl_lst
 		tbl = Gtk::Table::new(0, 2, false)
-		tbl.set_col_spacings(5)
-		tbl.set_row_spacings(2)
+		tbl.column_spacings = 5
+		tbl.row_spacings    = 2
 		idx = 0
 		xpl_lst.each { |t, h, b|
 		    l10n_tag = $mc.get("tag_#{t}")
@@ -590,8 +590,8 @@ module Publisher
 	    # Elements
 	    if ! lst.empty?
 		tbl = Gtk::Table::new(0, 2, false)
-		tbl.set_col_spacings(5)
-		tbl.set_row_spacings(2)
+		tbl.column_spacings = 5
+		tbl.row_spacings    = 2
 		lst.each_index { |idx| 
 		    img = Gtk::Image::new(*self.pixmap[:element])
 		    lbl = Gtk::Label::new(lst[idx])
