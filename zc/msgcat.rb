@@ -35,6 +35,10 @@ require 'dbg'
 ##
 ## WARN: this file is not localized
 ##
+## BUGFIX:
+##  - method readfile: inode is always 0 on Windows
+##      we replace the inode number by the filename if the inode is 0
+##
 class MessageCatalog
     ##
     ## Exception: Syntax error, while parsing the file
@@ -123,7 +127,8 @@ class MessageCatalog
     def readfile(msgfile)
 	# Check for already loaded catalog
 	file_stat = File::stat(msgfile)
-	file_id   = [ file_stat.dev, file_stat.ino ]
+	file_id   = [ file_stat.dev, file_stat.ino != 0 ? file_stat.ino \
+	                                                : msgfile ]
 	if @loaded.has_key?(file_id)
 	    $dbg.msg(DBG::LOCALE, "file already loaded: #{msgfile}")
 	    return
