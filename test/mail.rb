@@ -63,8 +63,10 @@ module CheckExtra
 		mrelay.fake_info(@fake_user, @fake_dest, @fake_from)
 		yield mrelay
 	    ensure
-		mrelay.quit
-		mrelay.close if mrelay
+		if mrelay
+		    mrelay.quit
+		    mrelay.close
+		end
 	    end
 	end
 	
