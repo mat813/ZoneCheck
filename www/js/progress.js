@@ -83,7 +83,7 @@ function zc_pgr_start(count) {
   s += "<TABLE id=\"zc_pgr_pbar_out\"><TR><TD>";
   s += "<TABLE id=\"zc_pgr_pbar_in\" style='border-collapse: collapse;'>";
   s += "<TR>";
-  s += "<TD colspan=3>" + zc_pgr_l_progress + "Progression</TD>";
+  s += "<TD colspan=3>" + zc_pgr_l_progress + "</TD>";
   s += "<TD style='width: 2em;'></TD>"
   s += "<TD style='text-align: center;'>&nbsp;&nbsp;" + zc_pgr_l_test + "&nbsp;&nbsp;</TD>";
   s += "<TD style='text-align: center;'>&nbsp;&nbsp;" + zc_pgr_l_speed + "&nbsp;&nbsp;</TD>";
