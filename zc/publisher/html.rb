@@ -246,7 +246,7 @@ EOT
     </SPAN>
 Release: #{$zc_name}-#{$zc_version} <BR>
 Last generated: #{Time::now}
-Contact: #{$zc_contact}
+<!-- <BR> Contact: #{$zc_contact} -->
   </BODY>
 </HTML>
 EOT
