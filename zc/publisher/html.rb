@@ -256,7 +256,8 @@ module Publisher
 
 		# Counter
 		if @publisher.rflag.counter
-		    @o.puts HTML.jscript { "zc_pgr_process(\"#{msg}\")" }
+		    jmsg = msg.gsub(/\"/, '\\"')
+		    @o.puts HTML.jscript { "zc_pgr_process(\"#{jmsg}\")" }
 		    @o.puts HTML.nscript { "<li>#{@l10n_testing}: #{msg}</li>"}
 		end
 
