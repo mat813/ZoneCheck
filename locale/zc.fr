@@ -116,6 +116,9 @@
     <tag name="error_in_preset">Erreur dans la préinitialisation '%s'</tag>
   </section>
 
+ <section name="param">
+    <tag name="ns_name">Le serveur de nom (%s) n'est pas un nom de machine</tag>
+  </section>
 
 <!-- Exceptions -->
 <tag name="xcp_zc_batch_parse">Impossible d'analyser la ligne par lot</tag>

@@ -200,10 +200,17 @@ class Param
 		ips  = []
 		if entry =~ /^(.*?)\s*=\s*(.*)$/
 		    host_str, ips_str = $1, $2
+		    if Address.is_valid(host_str)
+			raise ParamError, $mc.get("param:ns_name") % host_str
+		    end
+
 		    host = NResolv::DNS::Name::create(host_str, true)
 		    ips_str.split(/\s*,\s*|\s+/).each { |str|
 			ips << Address::create(str) }
 		else
+		    if Address.is_valid(entry)
+			raise ParamError, $mc.get("param:ns_name") % entry
+		    end
 		    host = NResolv::DNS::Name::create(entry, true)
 		end
 		@ns_input << [ host, ips ]
