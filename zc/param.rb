@@ -645,10 +645,11 @@ class Param
 	    @opt	= { }
 	end
 	
-	def [](key)		; @opt[key]		; end
-	def []=(key,value)	; @opt[key] = value	; end
-	def delete(key)		; @opt.delete(key)	; end
-	def clear		; @opt = { }		; end
+	def [](key)		; @opt[key]			; end
+	def []=(key,value)	; @opt[key] = value		; end
+	def delete(key)		; @opt.delete(key)		; end
+	def clear		; @opt = { }			; end
+	def each		; @opt.each { |*a| yield a }	; end 
 
 	def <<(args)
 	    args.strip.split(/\s*,\s*/).each { |arg|
