@@ -21,3 +21,4 @@ end
 load 'nresolv/dns_name.rb'
 load 'nresolv/dns_resource.rb'
 load 'nresolv/dns_message.rb'
+

@@ -18,18 +18,20 @@
 
 module NResolv
     class DNS
-	def self.dump_comment(recv=STDOUT, comment=nil, tag=";; ")
+	def self.dump_comment(output=$stdout, comment=nil, tag=";; ")
 	    if comment
 		comment.split(/\n/, -1).each { |line|
-		    recv << "#{tag}#{line.gsub(/\s*$/, "")}\n"
+		    line.gsub!(/\s+$/, "")
+		    output << "#{tag}#{line}\n"
 		}
 	    end
 	end
 
 	class Message
 	    # dump the message content (with a format like +dig+) into 
-	    # the stream _recv_, by default +STDOUT+ is used
-	    def dump(recv=STDOUT)
+	    # the stream _output_, by default +STDOUT+ is used
+	    def dump(output=$stdout)
+		# Print header
 		hdr1 = "opcode: %-*s  status: %-*s  id: %#06x" % [
 		    OpCode::maxlen, @opcode,
 		    RCode::maxlen,  @rcode ? @rcode : RCode::filler("-"),
@@ -46,43 +48,41 @@ module NResolv
 		    @authority.nil?  ? 0 : @authority.length, 
 		    @additional.nil? ? 0 : @additional.length ]
 
-		DNS::dump_comment(recv, hdr1)
-		DNS::dump_comment(recv, hdr2)
-		DNS::dump_comment(recv, hdr3)
-		DNS::dump_comment(recv, "")
+		DNS::dump_comment(output, hdr1)
+		DNS::dump_comment(output, hdr2)
+		DNS::dump_comment(output, hdr3)
+		DNS::dump_comment(output, "")
 		
+		# Print section content
 		[ [ @question,   "QUESTION SECTION:"   ],
 		  [ @answer,     "ANSWER SECTION:"     ],
 		  [ @authority,  "AUTHORITY SECTION:"  ],
 		  [ @additional, "ADDITIONAL SECTION:" ] ].each { |sec, title|
-		    next unless sec && !sec.empty?
-		    sec.dump(recv, title)
-		    recv << "\n"
+		    next if sec.nil? || sec.empty?
+		    sec.dump(output, title)
+		    output << "\n"
 		}
 	    end
 	end
 
 	class Section
-	    DEFAULT_ALIGNEMENT = 29
-
-	    def dump(recv=STDOUT, comment=nil)
-		DNS.dump_comment(recv, comment)
-		maxlen = DEFAULT_ALIGNEMENT
+	    def dump(output=$stdout, comment=nil, align=29)
+		DNS.dump_comment(output, comment)
 		prevname = nil
 		each { |entry|
 		    name     = entry[0]
 		    dispname = prevname == name ? nil : name
 		    prevname = name
-		    recv << entry_to_s([entry[0], *entry[1..-1]])
+		    output << entry_to_s([entry[0], *entry[1..-1]], align)
 		}
 	    end
 
 	    class A
 		private
-		def entry_to_s(entry)
+		def entry_to_s(entry, align)
 		    name, rr, ttl = entry
 		    "%-*s  %6d  %-*s  %-*s  %s\n" % [
-			DEFAULT_ALIGNEMENT-7, name,
+			align-7, name,
 			ttl,
 			rr.rclass.class.maxlen, rr.rclass,
 			rr.rtype.class.maxlen,  rr.rtype,
@@ -92,10 +92,10 @@ module NResolv
 	
 	    class Q
 		private
-		def entry_to_s(entry)
+		def entry_to_s(entry, maxlen)
 		    name, rr = entry
 		    ";%-*s  %-*s  %-*s\n" % [
-			DEFAULT_ALIGNEMENT, name,
+			align, name,
 			rr::rclass.class.maxlen, rr::rclass,
 			rr::rtype.class.maxlen,  rr::rtype ]
 		end

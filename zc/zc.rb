@@ -95,11 +95,13 @@ $LOAD_PATH << ZC_DIR << ZC_LIB
 #
 # Requirement
 #
-# Standard Ruby library
-require 'socket'		
+# Standard Ruby libraries
+require 'socket'
 
 # External libraries
 require 'nresolv'
+
+# Modification to standard/core ruby classes
 require 'ext/array'
 
 # ZoneCheck component

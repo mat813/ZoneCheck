@@ -4,11 +4,18 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
 #
+#
+
+#
+# This file provide encoding/decoding faility for the 'wire' format
+# with the respective methods:
+#  - message component: self.wire_decode, self.wire_encode
+#  - message itself   : self.from_wire, to_wire
 #
 
 

@@ -1,6 +1,15 @@
-# 
+# $Id$
 
-require 'socket'
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
 
 #
 # PUBLIC
@@ -11,8 +20,14 @@ require 'socket'
 #   Config::DefaultConfig
 #
 
+require 'socket'
+
+
 module NResolv
     class DNS
+	##
+	##
+	##
 	class Config
 	    attr_reader :nameserver
 
@@ -20,63 +35,69 @@ module NResolv
 		nameserver = []
 		search     = nil
 
-		# read config file
+		# Read configuration file
 		begin
-		    open(filename) {|f|
-			f.each {|line|
+		    File.open(filename) {|io|
+			io.each { |line|
 			    line.sub!(/[\#;].*/, '')
 			    keyword, *args = line.split(/\s+/)
 			    args.each { |arg| arg.untaint }
-			    next unless keyword
 			    case keyword
-			    when 'nameserver'
-				nameserver += args
-			    when 'domain'
-				search = [args[0]]
-			    when 'search'
-				search = args
+			    when "nameserver" then nameserver += args
+			    when "domain"     then search = [args[0]]
+			    when "search"     then search = args
 			    end
 			}
 		    }
 		rescue Errno::ENOENT
 		end
 		
-		# try to auto-configure for missing information
-		nameserver = ['0.0.0.0'] if nameserver.empty?
-		unless search
-		    hostname = Socket.gethostname
-		    if /\./ =~ hostname
-			search = [$'] #'
-		    else
-			search = []
-		    end
+		# Autoconf for missing information
+		if nameserver.empty?
+		    nameserver = ['0.0.0.0'] 
+		end
+		if search.nil?
+		    search = Socket.gethostname =~ /\./ ? [$'] : [] #' <- emacs
 		end
 		
-		# ensure that domain in the search list are FQDN
-		search.map { |domain|
-		    domain.concat(".") unless domain =~ /\.$/
-		}
-		# ensure root is in the search list
+		# Ensure that domain in the search list are FQDN
+		search.map { |domain| # domain can't be empty
+		    domain.concat(".") unless domain[-1] == ?. }
+		# Ensure root is in the search list
 		search.push("") unless search.include?("")
 
+		# Create config
 		self::new(nameserver, search)
 	    end
 
+	    def self.from_winreg
+	    end
+
 	    def initialize(nameserver, search=[""], absdepth=3)
-		@nameserver = nameserver
-		@search     = search
-		@absdepth   = absdepth
+		# Sanity check
+		search.map { |domain|
+		    if (! domain.empty?) && (domain[-1] != ?.)
+			raise ArgumentError, 
+			    "domains in the search list should be absolute"
+		    end
+		}
+		
+		# Initialize attributs
+		@nameserver = case nameserver
+			      when Array then nameserver
+			      else [ nameserver ]
+			      end
+		@search     = search.uniq
+		@absdepth   = absdepth < 0 ? 0 : absdepth
 	    end
 	    
 	    def candidates(name)
-		if name =~ /\.$/
-		    [ name ]
-		else
-		    if name.count(".") + 1 >= @absdepth
-			[ name + "." ]
-		    else
-			@search.collect { |domain| name + "." + domain }
-		    end
+		if name[-1] == ?.
+		then [ name ]
+		else if name.count(".") + 1 >= @absdepth
+		     then [ "#{name}." ]
+		     else @search.collect { |domain| "#{name}.#{domain}" }
+		     end
 		end
 	    end
 	end
