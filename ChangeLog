@@ -1,6 +1,10 @@
 # $Id$
 
-2003-12-??  ZoneCheck-2.0.1
+2003-01-??  ZoneCheck-2.0.2
+	* test: fixed bugs in mail_delivery_{postmaster,hostmaster}
+	* zc: fixed bugs in XML parsing
+	
+2003-01-05  ZoneCheck-2.0.1
 	* test: preeval doesn't report fatal error anymore
 	* locale: removed wrong explanation for ping (french)
 	* zc: automatically use ruby-libxml implementation if available

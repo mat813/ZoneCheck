@@ -360,10 +360,12 @@ class Config
 	    fakeprofile += "</#{E_RULES}>\n"
 	}
 	fakeprofile += "</#{E_PROFILE}>\n"
-	fakeconf = "<#{E_CONFIG}>" + fakeprofile + "</#{E_CONFIG}>"
+	fakeconf  = "<?xml version='1.0' encoding='UTF-8'?>" + "\n"
+	fakeconf += '<!DOCTYPE config PUBLIC "-//ZoneCheck//DTD Config V1.0//EN" "config.dtd">' + "\n"
+	fakeconf += "<#{E_CONFIG}>" + fakeprofile + "</#{E_CONFIG}>"
 
 	# Register it as an override profile
-	xmlprofile = MyXML::Document::new(fakeconf).root.elements[E_PROFILE]
+	xmlprofile = MyXML::Document::new(fakeconf).root.child(E_PROFILE)
 	@profile_override = Profile::from_xmlprofile(xmlprofile, self)
     end
 

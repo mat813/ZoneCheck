@@ -60,13 +60,13 @@ module MyXML
 	class Text    < Node ; end
 	class Comment < Node ; end
 
-	def child(type=false, idx=1)
+	def child(type=:element, idx=1)
 	    each(type) { |node| 
 		return node if (idx -= 1) <= 0 }
 	    return nil
 	end
 
-	def to_a(type=false)
+	def to_a(type=:element)
 	    res = []
 	    each(type) { |node| res << node }
 	    res
@@ -85,7 +85,7 @@ module MyXML
 	def initialize(doc)
 	    @parser = XML::Parser::new
 	    case doc
-	    when String	then @parser.filename	= doc
+	    when String	then @parser.string	= doc
 	    when IO	then @parser.io		= doc
 	    else raise ArgumentError, "String or IO expected"
 	    end
