@@ -24,6 +24,8 @@ require 'sync'
 ## The CacheManager
 ##
 class CacheManager
+    Nothing = Object::new
+
     ##
     ## The CacheAttribute module add attribut caching capability when 
     ## imported by a class
@@ -32,6 +34,8 @@ class CacheManager
     ##
     module CacheAttribute
 	def cache_attribute(attr, args=nil, force=false)
+	    return yield if $dbg.enable?(DBG::NOCACHE)
+
 	    attribute = case args
 			when NilClass  then attr
 			when Array     then case args.length
@@ -41,18 +45,21 @@ class CacheManager
 					    end
 			else           "#{attr}[args]"
 			end
-
-	    return yield if $dbg.enable?(DBG::NOCACHE)
+	    
+	    dbg_attr = "#{attribute}(#{args})"
 
 	    @attrcache_mutex.synchronize {
 		if force || (r = instance_eval("#{attribute}")).nil?
 		    r = yield
+		    r = CacheManager::Nothing if r.nil?
 		    instance_eval("#{attribute} = r")
-		    $dbg.msg(DBG::CACHE_INFO, "computed: #{attribute}=#{r}")
+		    $dbg.msg(DBG::CACHE_INFO,
+			     "computed(#{__id__}): #{dbg_attr}=#{r}")
 		else
-		    $dbg.msg(DBG::CACHE_INFO, "cached  : #{attribute}=#{r}")
+		    $dbg.msg(DBG::CACHE_INFO,
+			     "cached  (#{__id__}): #{dbg_attr}=#{r}")
 		end
-		r
+		r == CacheManager::Nothing ? nil : r
 	    }
 	end
     end
