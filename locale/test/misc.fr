@@ -32,6 +32,7 @@ explain : [none]
 [chk_given_nsprim_vs_soa]
 testname: serveur de nom donnée comme primaire est primaire
 error   : Le serveur de nom primaire ne correspond pas à celui donné
+details : Le serveur de nom primaire (%{primary}) ne correspont pas à celui indiqué (%{given_primary}).
 explain : [none]
 
 

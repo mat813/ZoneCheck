@@ -32,6 +32,7 @@ explain : [none]
 [chk_given_nsprim_vs_soa]
 testname: given primary nameserver is primary
 error   : The primary nameserver doesn't match the given one
+details : The primary nameserver (%{primary}) doesn't match the given one (%{given_primary}).
 explain : [none]
 
 

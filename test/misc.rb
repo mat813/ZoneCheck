@@ -45,7 +45,8 @@ module CheckNetworkAddress
 	    mname = soa(ip).mname
 	    if @domain.ns[0][0] != mname
 		@domain.ns[1..-1].each { |nsname|
-		    return false if nsname == mname }
+		    return { "given_primary" => @domain.ns[0][0],
+			     "primary"       => mname } if nsname == mname }
 	    end
 	    true
 	end
