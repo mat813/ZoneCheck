@@ -122,7 +122,7 @@ module Input
 	end
 
 	def usage(errcode, io=$console.stderr)
-	    io.print $mc.get('input_cli_usage').gsub('PROGNAME', PROGNAME)
+	    io.print $mc.get('input:cli:usage').gsub('PROGNAME', PROGNAME)
 	    exit errcode unless errcode.nil?
 	end
 

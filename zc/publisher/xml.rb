@@ -110,7 +110,7 @@ module Publisher
 	    # XXX: javascript only if counter
 	    @o.print <<"EOT"
 <?xml version="1.0" encoding='UTF-8'?>
-<!DOCTYPE zonecheck SYSTEM "zc.dtd">
+<!DOCTYPE zonecheck SYSTEM "zonecheck.dtd">
 
 <zonecheck>
 EOT
@@ -166,13 +166,8 @@ EOT
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get("word:info_id")
-	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get("word:warning_id")
-	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get("word:fatal_id")
-	    
-	    i_tag = i_tag.upcase if i_unexp
-	    w_tag = w_tag.upcase if w_unexp
-	    f_tag = f_tag.upcase if f_unexp
+	    i_tag, w_tag, f_tag = 
+		severity_description(i_unexp, w_unexp, f_unexp)
 
 	    summary = "%1s%03d&nbsp;%1s%03d&nbsp;%1s%03d" % [ 
 		i_tag, i_count, 

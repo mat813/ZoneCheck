@@ -235,7 +235,7 @@ class TestManager
     def family(checkname) 
 	klass = @checks[checkname]
 	klass.name =~ /^([^:]+)/
-	eval("#{$1}")
+	eval("#{$1}.family")
     end
 
 
@@ -262,11 +262,11 @@ class TestManager
 	@cache.clear(:test)
 
 	@iterer = { 
-	    CheckExtra          => proc { |bl| bl.call },
-	    CheckGeneric        => proc { |bl| bl.call },
-	    CheckNameServer     => proc { |bl| 
+	    CheckExtra.family          => proc { |bl| bl.call },
+	    CheckGeneric.family        => proc { |bl| bl.call },
+	    CheckNameServer.family     => proc { |bl| 
 		@param.domain.ns.each { |ns_name, | bl.call(ns_name) } },
-	    CheckNetworkAddress => proc { |bl| 
+	    CheckNetworkAddress.family => proc { |bl| 
 		@param.domain.ns.each { |ns_name, ns_addr_list|
 		    @param.network.address_wanted?(ns_addr_list).each { |addr|
 			bl.call(ns_name, addr) } } }
@@ -313,7 +313,7 @@ class TestManager
 	@publisher.progress.process(checkname, ns, ip)
 
 	# Perform the test
-	desc         = Test::Result::Desc::new(checkname)
+	desc         = Test::Result::Desc::new
 	result_class = Test::Error
 	begin
 	    starttime    = Time::now
@@ -397,8 +397,8 @@ class TestManager
 	    begin
 		method.call(*args)
 	    rescue NResolv::NResolvError => e
-		desc = Test::Result::Desc::new(testname)
-		desc.err = "Resolver error (#{e})"
+		desc = Test::Result::Desc::new(false)
+		desc.error = "Resolver error (#{e})"
 		@param.report.fatal << Test::Error::new(testname, desc, ns, ip)
 	    end
 	}

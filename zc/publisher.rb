@@ -40,9 +40,8 @@ module Publisher
     ##
     ##
     class Template # --> ABSTRACT <--
-	attr_reader :progress
-	attr_reader :rflag
-	attr_reader :info
+	attr_reader :progress, :xmltrans
+	attr_reader :rflag, :info
 
 	def initialize(rflag, info, ostream=$stdout)
 	    @rflag	= rflag
@@ -71,5 +70,43 @@ module Publisher
 
 	def begin ; end
 	def end   ; end
+
+
+	#-- [protected] ---------------------------------------------
+	protected
+
+	def severity_description(i_unexp, w_unexp, f_unexp)
+	    if @rflag.tagonly
+		i_tag = Config::Info
+		w_tag = Config::Warning
+		f_tag = Config::Fatal
+	    else
+		i_tag = $mc.get('word:info_id')
+		w_tag = $mc.get('word:warning_id')
+		f_tag = $mc.get('word:fatal_id')
+	    end
+	    
+	    i_tag = i_tag.upcase if i_unexp
+	    w_tag = w_tag.upcase if w_unexp
+	    f_tag = f_tag.upcase if f_unexp
+
+	    [ i_tag, w_tag, f_tag ]
+	end
+
+	def status_message(checkname, desc, severity)
+	    # WARN: MsgCat::TEST only defines MsgCat::NAME but
+	    #       it is only generated on error
+	    type = desc.check ? MsgCat::CHECK : MsgCat::TEST
+
+	    if severity.nil?
+		@xmltrans.apply($mc.get(checkname, type, MsgCat::SUCCESS))
+	    elsif desc.error
+		l10n_name = @xmltrans.apply($mc.get(checkname, 
+						   type, MsgCat::NAME))
+		"[TEST #{l10n_name}]: #{desc.error}"
+	    else
+		@xmltrans.apply($mc.get(checkname, type, MsgCat::FAILURE))
+	    end
+	end
     end
 end

@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="fr">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,50 +33,57 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-input_cgi_usage: \
-=> Ce script CGI ne peut pas être directement invoqué!\n\
-   Utilisez un des formulaires présent sur le site à la place.\n\
-\n\
-Ci-dessus se trouve un résumé des paramètres possibles, pour plus\n\
-d'informations veuillez consulter la documentation de ZoneCheck.\n\
-\n\
-parametres:\n\
- - lang     = [ fr | en | ... ]\n\
- - quiet\n\
- - one\n\
- - option\n\
- - verbose  = [ i|intro, n|testname, x|explain, d|details,\n\
-                t|testdesc, c|counter, o|reportok ]\n\
-     - intro\n\
-     - testname\n\
-     - explain\n\
-     - details\n\
-     - progress = [ t|testdesc | c|counter ]\n\
-     - reportok\n\
-     - fatalonly\n\
- - output   = [ bs|byseverity, bh|byhost, t|text, h|html ]\n\
-     - report   = bs|byseverity | bh|byhost\n\
-     - format   = h|html | t|text\n\
- - error    = [ af|allfatal, aw|allwarning, ds|dfltseverity,\n\
-                s|stop, ns|nostop ]\n\
-     - errorlvl  = [ af|allfatal | aw|allwarning | ds|dfltseverity ]\n\
-     - dontstop \n\
- - transp   = [ ipv4, ipv6, udp, tcp, std ]\n\
-     - transp3   = [ ipv4, ipv6 ]\n\
-     - transp4   = [ udp | tcp | std ]\n\
- - category = cat1,!cat2:subcat1,cat2,!cat3,+\n\
-     - chkmail (!mail)\n\
-     - chkrir  (!rir)\n\
-     - chkzone (!dns:axfr)\n\
- - ns       = ns1=ip1,ip2;ns2=ip3;ns3\n\
-               (ATTENTION: utiliser '%3b' dans l'URL à la place de ';')\n\
-     - ns0  .. nsX   = serveur de nom\n\
-     - ips0 .. ipsX  = adresses IP séparées par une virgule\n\
- - zone     = zone à tester\n\
-\n\
-exemples:\n\
- - zone=afnic.fr&intro&progress=testdesc&transp=ipv4,ipv6,std\n\
- - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr\n\
+  <tag name="input:cgi:usage">
+=> Ce script CGI ne peut pas être directement invoqué!
+   Utilisez un des formulaires présent sur le site à la place.
+
+Ci-dessus se trouve un résumé des paramètres possibles, pour plus
+d'informations veuillez consulter la documentation de ZoneCheck.
+
+parametres:
+ - lang     = [ fr | en | ... ]
+ - quiet
+ - one
+ - option
+ - verbose  = [ i|intro, n|testname, x|explain, d|details,
+                t|testdesc, c|counter, o|reportok ]
+     - intro
+     - testname
+     - explain
+     - details
+     - progress = [ t|testdesc | c|counter ]
+     - reportok
+     - fatalonly
+ - output   = [ bs|byseverity, bh|byhost, t|text, h|html ]
+     - report   = bs|byseverity | bh|byhost
+     - format   = h|html | t|text
+ - error    = [ af|allfatal, aw|allwarning, ds|dfltseverity,
+                s|stop, ns|nostop ]
+     - errorlvl  = [ af|allfatal | aw|allwarning | ds|dfltseverity ]
+     - dontstop 
+ - transp   = [ ipv4, ipv6, udp, tcp, std ]
+     - transp3   = [ ipv4, ipv6 ]
+     - transp4   = [ udp | tcp | std ]
+ - category = cat1,!cat2:subcat1,cat2,!cat3,+
+     - chkmail (!mail)
+     - chkrir  (!rir)
+     - chkzone (!dns:axfr)
+ - ns       = ns1=ip1,ip2;ns2=ip3;ns3
+               (ATTENTION: utiliser '%3b' dans l'URL à la place de ';')
+     - ns0  .. nsX   = serveur de nom
+     - ips0 .. ipsX  = adresses IP séparées par une virgule
+ - zone     = zone à tester
+
+exemples:
+ - zone=afnic.fr&intro&progress=testdesc&transp=ipv4,ipv6,std
+ - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr
  - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr=192.93.0.1&ns=ns2.nic.fr&ns=bns3.nic.fr
+</tag>
 
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

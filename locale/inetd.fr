@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,90 +33,99 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
+<section name="input:inetd">
+  <tag name="usage">
 input_inetd_usage: \
-usage: PROGNAME: [-hV] [-46] [-c conf]\n\
-        --lang          Choisit une autre langue (en, fr, ...)\n\
-    -h, --help          Affiche ce message\n\
-    -V, --version       Affiche le numéro de version et quitte\n\
-    -c, --config        Emplacement du fichier de configuration\n\
-        --testdir       Emplacement du répertoire contenant les tests\n\
-    -r, --resolver      Résolveur à utiliser pour déterminer les 'ns'\n\
-    -4, --ipv4          Autorise uniquement IPv4 pour vérifier le domaine\n\
-    -6, --ipv6          Autorise uniquement IPv6 pour vérifier le domaine\n\
+usage: PROGNAME: [-hV] [-46] [-c conf]
+        --lang          Choisit une autre langue (en, fr, ...)
+    -h, --help          Affiche ce message
+    -V, --version       Affiche le numéro de version et quitte
+    -c, --config        Emplacement du fichier de configuration
+        --testdir       Emplacement du répertoire contenant les tests
+    -r, --resolver      Résolveur à utiliser pour déterminer les 'ns'
+    -4, --ipv4          Autorise uniquement IPv4 pour vérifier le domaine
+    -6, --ipv6          Autorise uniquement IPv6 pour vérifier le domaine
 
 
 
 input_inetd_help: \
-Command           Args\n\
-  ?|help           0     Ce message\n\
-  q|quit|exit      0     Quite ZoneCheck\n\
-  check            0     Lance le processus de vérification de la zone\n\
-  zone|domain      1     Zone à tester\n\
-  nslist           0+    Liste des serveurs de la zone\n\
-  set              1-2   Option à activer (see options)\n\
-  unset            1     Option à supprimer (see options)\n\
-  preset           1     Configuration préselectionnée (supporté: classic)\n\
-\n\
-Options           Args\n\
-  lang             1     Choisit une autre langue (en, fr, ...)\n\
-  one              0     Affiche uniquement le message le plus significatif\n\
-  quiet            0     N'affiche pas de titres suplémentaires\n\
-  tagonly          0     Affiche uniquement les tags (idéal pour les scripts)\n\
-  category         1+    Limite les tests à un ensemble de catégories\n\
-  verbose          1+    Niveau de détail des informations (voir verbose)\n\
-  output           1+    Format de sortie (see output)\n\
-  error            1+    Comportement en cas d'erreur (voir error)\n\
-  transp           1+    Choix de la couche transport/routage (voir transp)\n\
-  option           1+    Options supplémentaires (-,-opt,opt,opt=toto)\n\
-\n\
-Arguments for Options\n\
-  verbose:              [intro/testname/explain/details]\n\
-                        [reportok|fatalonly] [testdesc|counter]\n\
-    intro          [i]  Affiche un résumé du domaine et de ses serveurs\n\
-    testname       [n]  Affiche le nom du test\n\
-    explain        [x]  Affiche une explication en cas d'échec du test\n\
-    details        [d]  Affiche les détails liés à l'échec du test\n\
-    reportok       [o]  Affiche quand même les tests qui ont réussi\n\
-    fatalonly      [f]  Affiche uniquement les erreurs fatales\n\
-    testdesc       [t]  Affiche la description du test en cours\n\
-    counter        [c]  Affiche une barre de progression\n\
-\n\
-  output:               [byseverity|byhost] [text|html]\n\
-    byseverity    *[bs] Affiche les résultats classés par sévérité\n\
-    byhost         [bh] Affiche les résultats classés par machine\n\
-    text          *[t]  Formatage en texte pur\n\
-    html           [h]  Formatage en HTML\n\
-\n\
-  error:                [allfatal|allwarning|dfltseverity] [stop|nostop]\n\
-    allfatal       [af] Tout échec est considéré comme fatal\n\
-    allwarning     [aw] Tout échec est considéré comme un avertissement\n\
-    dfltseverity  *[ds] Utilise la sévérité associée au test\n\
-    stop          *[s]  Arrête dès le premier échec\n\
-    nostop         [ns] Exécute tous les tests (même après échec fatal)\n\
-\n\
-  transp:               [ipv4/ipv6] [udp|tcp|std]\n\
-    ipv4          *[4]  Utilise le protocole de routage IPv4\n\
-    ipv6          *[6]  Utilise le protocole de routage IPv6\n\
-    udp            [u]  Utilise la couche de transport UDP\n\
-    tcp            [t]  Utilise la couche de transport TCP\n\
-    std           *[s]  Utilise UDP et se replie sur TCP si nécessaire\n\
-\n\
-Exemple\n\
-  preset classic\n\
-  zone toto.com\n\
-  check\n
+Command           Args
+  ?|help           0     Ce message
+  q|quit|exit      0     Quite ZoneCheck
+  check            0     Lance le processus de vérification de la zone
+  zone|domain      1     Zone à tester
+  nslist           0+    Liste des serveurs de la zone
+  set              1-2   Option à activer (see options)
+  unset            1     Option à supprimer (see options)
+  preset           1     Configuration préselectionnée (supporté: classic)
 
-input_inetd_welcome: \
-Bienvenu sur Zonecheck VERSION\n\
-\n\
-Pour changer la langue: set lang en\n\
-Pour demander l'aide  : help\n\
-\n\
-Pour plus d'information sur ZoneCheck visitez l'URL suivante:\n\
-  http://www.zonecheck.fr/\n\
-\n
+Options           Args
+  lang             1     Choisit une autre langue (en, fr, ...)
+  one              0     Affiche uniquement le message le plus significatif
+  quiet            0     N'affiche pas de titres suplémentaires
+  tagonly          0     Affiche uniquement les tags (idéal pour les scripts)
+  category         1+    Limite les tests à un ensemble de catégories
+  verbose          1+    Niveau de détail des informations (voir verbose)
+  output           1+    Format de sortie (see output)
+  error            1+    Comportement en cas d'erreur (voir error)
+  transp           1+    Choix de la couche transport/routage (voir transp)
+  option           1+    Options supplémentaires (-,-opt,opt,opt=toto)
 
-input_inetd_what: Je n'ai pas compris, essayez de demander de l'aide!
+Arguments for Options
+  verbose:              [intro/testname/explain/details]
+                        [reportok|fatalonly] [testdesc|counter]
+    intro          [i]  Affiche un résumé du domaine et de ses serveurs
+    testname       [n]  Affiche le nom du test
+    explain        [x]  Affiche une explication en cas d'échec du test
+    details        [d]  Affiche les détails liés à l'échec du test
+    reportok       [o]  Affiche quand même les tests qui ont réussi
+    fatalonly      [f]  Affiche uniquement les erreurs fatales
+    testdesc       [t]  Affiche la description du test en cours
+    counter        [c]  Affiche une barre de progression
 
-input_inetd_unknown_preset: Valeur de préselection '%s' inconnue
+  output:               [byseverity|byhost] [text|html]
+    byseverity    *[bs] Affiche les résultats classés par sévérité
+    byhost         [bh] Affiche les résultats classés par machine
+    text          *[t]  Formatage en texte pur
+    html           [h]  Formatage en HTML
+
+  error:                [allfatal|allwarning|dfltseverity] [stop|nostop]
+    allfatal       [af] Tout échec est considéré comme fatal
+    allwarning     [aw] Tout échec est considéré comme un avertissement
+    dfltseverity  *[ds] Utilise la sévérité associée au test
+    stop          *[s]  Arrête dès le premier échec
+    nostop         [ns] Exécute tous les tests (même après échec fatal)
+
+  transp:               [ipv4/ipv6] [udp|tcp|std]
+    ipv4          *[4]  Utilise le protocole de routage IPv4
+    ipv6          *[6]  Utilise le protocole de routage IPv6
+    udp            [u]  Utilise la couche de transport UDP
+    tcp            [t]  Utilise la couche de transport TCP
+    std           *[s]  Utilise UDP et se replie sur TCP si nécessaire
+
+Exemple
+  preset classic
+  zone toto.com
+  check
+</tag>
+
+  <tag name="welcome">
+Bienvenu sur Zonecheck VERSION
+
+Pour changer la langue: set lang en
+Pour demander l'aide  : help
+
+Pour plus d'information sur ZoneCheck visitez l'URL suivante:
+  http://www.zonecheck.fr/
+</tag>
+
+  <tag name="what">Je n'ai pas compris, essayez de demander de l'aide!</tag>
+  <tag name="unknown_preset">Valeur de préselection '%s' inconnue</tag>
+</section>
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

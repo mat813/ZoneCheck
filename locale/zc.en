@@ -109,38 +109,13 @@
 <tag name="input_unsupported_domain">No mapping able to process '%s'</tag>
 
 
-<!-- Parser -->
-<tag name="config_section_exists">section '%s' already defined</tag>
-<tag name="config_section_unknown">unknown or unavailable section '%s'</tag>
-<tag name="config_constant_exists">constant '%s' already defined</tag>
-<tag name="config_param_exists">parameter '%s' already defined</tag>
-<tag name="config_param_unknown">unknown parameter '%s'</tag>
-<tag name="config_wrong_arg_number">wrong number of arguments (%s for %s) in '%s'</tag>
-<tag name="config_dcl_map_exists">map for "%s" already specified</tag>
-<tag name="config_dcl_unknown">unknown declaration '%s'</tag>
-<tag name="config_method_unknown">method '%s' unavailable</tag>
-<tag name="config_for_domain">%s for domain %s</tag>
-<tag name="config_family_unknown">unknown family '%s'</tag>
+<!-- Config -->
+  <section name="config">
+    <tag name="check_unknown">check '%s' unavailable</tag>
+  </section>
 
 
-<tag name="config_expect_string">string expected</tag>
-<tag name="config_expect_symbol">symbol expected</tag>
-<tag name="config_expect_keyword">'%s' keyword expected</tag>
-<tag name="config_expect_token">'%s' expected</tag>
-<tag name="config_expect_cfg_main">expecting constant declaration or useconf</tag>
-<tag name="config_expect_cfg_specific">expecting constant declaration or testseq</tag>
 
-<tag name="config_expect_checkname">check method (ie: chk_*) expected</tag>
-<tag name="config_expect_testname">test method (ie: tst_*) expected</tag>
-<tag name="config_expect_severity_level">expect severity level (w,i,f,S)</tag>
-<tag name="config_expect_category">expecting category</tag>
-<tag name="config_expect_constname">expecting constant declaration</tag>
-<tag name="config_expect_value">expecting string value for constant assignment</tag>
-<tag name="config_expect_domain">expecting domain name</tag>
-<tag name="config_expect_filename">expecting file name</tag>
-<tag name="config_expect_testtype">expecting test type (generic, extra, nameserver or address)</tag>
-
-<tag name="config_expect_lexical">unexpected character '%s'</tag>
 
 
 <!-- Exceptions -->
@@ -159,20 +134,6 @@
 <tag name="xcp_param_unknown_modopt">Unknown modifier '%s' for '%s' option</tag>
 <tag name="xcp_param_local_resolver">IP address expected for the local resolver</tag>
 
-<tag name="xcp_config_malformed_cmd">malformed command</tag>
-<tag name="xcp_config_nosection">no section defined</tag>
-<tag name="xcp_config_unknownsection">unknown section '%s'</tag>
-<tag name="xcp_config_constexists">constant '%s' already declared</tag>
-<tag name="xcp_config_testexists">test '%s' already listed</tag>
-<tag name="xcp_config_confexists">configuration for '%s' already listed</tag>
-<tag name="xcp_config_unknowntest">unknown test '%s'</tag>
-<tag name="xcp_config_badsection">section '%s' couldn't be used in this context</tag>
-<tag name="xcp_config_unexpected_token">unexpected '%s' token</tag>
-<tag name="xcp_config_unexpected_test">unexpected test (missing 'when'?)</tag>
-<tag name="xcp_config_whenexists">key '%s' in 'when' statement already defined</tag>
-<tag name="xcp_config_elseexists">else already used</tag>
-<tag name="xcp_config_unknown_sectopt">unknown option '%s' for section '%s'</tag>
-<tag name="xcp_config_missing_sectopt">missing option for section '%s'</tag>
 
 <tag name="xcp_testmanager_badclass">class '%s' doesn't derive from %s</tag>
 <tag name="xcp_testmanager_test_exists">test '%s' defined in classes '%s' and '%s'</tag>

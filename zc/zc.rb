@@ -85,7 +85,8 @@ ZC_CGI_EXT		= 'cgi'
 ZC_GTK_ENV_KEYS		= [] #[ 'DISPLAY' ]
 
 ## Publisher
-ZC_HTML_PATH		= '/zc'
+ZC_HTML_PATH		= '/homes/sdalu/Repository/zonecheck/www'
+
 
 ## Contact / Details
 ZC_COPYRIGHT		= 'AFNIC (c) 2003'

@@ -76,14 +76,14 @@ module Report
 		res		= nlist.shift
 		
 		# Initialize 
-		whos		= [ res.tag ]
+		whos		= [ res.source ]
 		desc		= res.desc.clone
 		testname	= res.testname
 		
 		# Look for similare test results
 		nlist.delete_if { |a|
-		    whos << a.tag if ((a.testname == res.testname) && 
-				      (a.desc == res.desc))
+		    whos << a.source if ((a.testname == res.testname) && 
+				         (a.desc == res.desc))
 		}
 		
 		# Publish diagnostic

@@ -105,78 +105,33 @@
 <tag name="input_unsupported_domain">Impossible d'établir une correspondance pour '%s'</tag>
 
 
-<!-- Parser -->
-[config]
-section_exists	: section '%s' déjà définie
-section_unknown	: section '%s' inconnue ou indisponnible
-constant_exists	: constante '%s' déjà définie
-param_exists	: paramètre '%s' déjà défini
-param_unknown	: paramètre '%s' inconnu
-wrong_arg_number: mauvais nombre d'arguments (%s au lieu de %s) dans '%s'
-dcl_map_exists	: carte pour "%s" déjà définie
-dcl_unknown	: déclaration '%s' inconnue
-method_unknown	: méthode '%s' indisponible
-for_domain	: %s pour le domaine %s
-family_unknown	: famille '%s' inconnue
-
-
-expect_string	: chaîne attendue
-expect_symbol	: symbole attendu
-expect_keyword	: mot clé '%s' attendu
-expect_token	: '%s' attendu
-expect_cfg_main	: déclaration de constante ou 'useconf' attendue
-expect_cfg_specific: déclaration de constante ou 'testseq' attendue
-
-expect_checkname: méthode de vérification (ie: chk_*) attendue
-expect_testname	: méthode de test (ie: tst_*) attendue
-expect_severity_level : niveau de sévérité (w,i,f,S) attendu
-expect_category	: catégorie attendue
-expect_constname: déclaration de constante attendue
-expect_value	: chaîne de caractères pour l'affection de constante attendue
-expect_domain	: nom de domaine attendu
-expect_filename	: nom de fichier attendu
-expect_testtype	: type de test (generic, extra, nameserver ou address) attendu
-
-expect_lexical	: caractère '%s' inattendu
+<!-- Config -->
+  <section name="config">
+    <tag name="check_unknown">Test de vérification '%s' inconnu</tag>
+  </section>
 
 
 <!-- Exceptions -->
 <tag name="xcp_zc_batch_parse">Impossible d'analyser la ligne par lot</tag>
 
-[xcp_param]
-fqdn_required	: Nom de domaine absolument qualifié attendu
-batch_nodomain	: Aucun nom de domaine n'est attendu pour le traitement en lots
-domain_expected	: Un nom de domaine (et un seul) attendu
-primary_soa	: Impossible de trouver le serveur de nom primaire (SOA)
-nameservers_ns	: Impossible de trouver les serveurs de noms (NS)
-prim_ns_soa	: Impossible d'identifier le serveur de nom primaire (NS vs SOA)
-nameserver_ips	: Impossible de trouver les adresses IP de %s
-ns_bad_ips	: Addresses IP donnees pour %s ne corrspondent pas aux enregistrement du DNS
-output_support	: La sortie ne supporte pas la classe '%s'
-ip_no_stack	: %s n'est pas supporté sur cette machine
-unknown_modopt	: Modificateur '%s' inconnu pour l'option '%s'
-local_resolver	: Addresse IP attendue pour le resolveur local
+<tag name="xcp_param_fqdn_required">Nom de domaine absolument qualifié attendu</tag>
+<tag name="xcp_param_batch_nodomain">Aucun nom de domaine n'est attendu pour le traitement en lots</tag>
+<tag name="xcp_param_domain_expected">Un nom de domaine (et un seul) attendu</tag>
+<tag name="xcp_param_primary_soa">Impossible de trouver le serveur de nom primaire (SOA)</tag>
+<tag name="xcp_param_nameservers_ns">Impossible de trouver les serveurs de noms (NS)</tag>
+<tag name="xcp_param_prim_ns_soa">Impossible d'identifier le serveur de nom primaire (NS vs SOA)</tag>
+<tag name="xcp_param_nameserver_ips">Impossible de trouver les adresses IP de %s</tag>
+<tag name="xcp_param_ns_bad_ips">Addresses IP donnees pour %s ne corrspondent pas aux enregistrement du DNS</tag>
+<tag name="xcp_param_output_support">La sortie ne supporte pas la classe '%s'</tag>
+<tag name="xcp_param_ip_no_stack">%s n'est pas supporté sur cette machine</tag>
+<tag name="xcp_param_unknown_modopt">Modificateur '%s' inconnu pour l'option '%s'</tag>
+<tag name="xcp_param_local_resolver">Addresse IP attendue pour le resolveur local</tag>
 
-[xcp_config]
-malformed_cmd	: commande malformée
-nosection	: aucune section définie
-unknownsection	: section '%s' inconnue
-constexists	: constante '%s' déjà déclarée
-testexists	: test '%s' déjà listé
-confexists	: configuration pour '%s' déjà listée
-unknowntest	: test '%s' inconnu
-badsection	: section '%s' ne peut pas être utilisée dans ce contexte
-unexpected_token: jeton '%s' inattendu
-unexpected_test	: test inattendu ('when' manquant?)
-whenexists	: clé '%s' déjà définie dans la déclaration 'when'
-elseexists	: 'else' déjà utilisé
-unknown_sectopt	: option '%s' inconnue dans la section '%s'
-missing_sectopt	: option manquante pour la section '%s'
 
-[xcp_testmanager]
-badclass	: classe '%s' ne dérive pas de %s
-test_exists	: test '%s' défini dans les classes '%s' et '%s'
-check_exists	: vérification '%s' définie dans les classes '%s' et '%s'
+
+<tag name="xcp_testmanager_badclass">classe '%s' ne dérive pas de %s</tag>
+<tag name="xcp_testmanager_test_exists">test '%s' défini dans les classes '%s' et '%s'</tag>
+<tag name="xcp_testmanager_check_exists">vérification '%s' définie dans les classes '%s' et '%s'</tag>
 
 
 <section name="nresolv:rcode">

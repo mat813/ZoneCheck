@@ -45,7 +45,7 @@ module Report
 	    full_list.each { |elt| res, severity = elt
 		next if @rflag.fatalonly && severity != Config::Fatal
 		next if severity.nil? && !@rflag.reportok
-		tag = res.tag
+		tag = res.source
 		byhost[tag] = [] unless byhost.has_key?(tag)
 		byhost[tag] << elt
 	    }
@@ -77,7 +77,7 @@ module Report
  
 	    list.each { |res, severity|
 		@publish.diagnostic(severity, 
-				    res.testname, res.desc, [ res.tag ]) }
+				    res.testname, res.desc, [ res.source ]) }
 	end
     end
 end

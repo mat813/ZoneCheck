@@ -46,19 +46,20 @@ class Test
 	class Desc
 	    attr_writer :error, :details
 	    attr_reader :error, :details
+	    attr_reader :check
 
-	    def initialize(testname=nil)
-		@testname	= testname
+	    def initialize(check=true)
+		@check		= check
 		@error		= nil	# Error message (ie: Exception)
 		@details	= nil
 	    end
 
 	    def hash
-		@testname.hash ^ @error.hash ^ @msg.details
+		@check ^ @error.hash ^ @msg.details
 	    end
 	    
 	    def eql?(other)
-		(@testname    == other.instance_eval('@testname')    &&
+		(@check       == other.instance_eval('@check')       &&
 		 @error       == other.instance_eval('@error')       &&
 		 @details     == other.instance_eval('@details'))
 	    end
@@ -91,10 +92,10 @@ class Test
 	    testname.hash ^ ns.hash ^ ip.hash
 	end
 
-	def tag
+	def source
 	    if ! @ns.nil?				# NS
 	    then @ip.nil? ? "#{@ns}" : "#{@ns}/#{ip}"	# NS/IP
-	    else $mc.get('word:generic')		# generic
+	    else nil					# generic
 	    end
 	end
     end
@@ -105,7 +106,7 @@ class Test
     ## Test that has Succeed
     ##
     class Succeed < Result
-	def ok? ; true ; end
+	def ok? ; true	; end
     end
 
 
@@ -114,7 +115,7 @@ class Test
     ## Test that has Failed
     ##
     class Failed < Result
-	def ok? ; false ; end
+	def ok? ; false	; end
     end
 
 
@@ -123,7 +124,7 @@ class Test
     ## Test that was unable to complete due to Error
     ##
     class Error < Result
-	def ok? ; false ; end
+	def ok? ; false	; end
     end
 
 
@@ -245,6 +246,7 @@ end
 ## Hold tests that are generic
 ##
 module CheckGeneric
+    def self.family ; 'generic'		; end
 end
 
 
@@ -254,6 +256,7 @@ end
 ##  => take an NS name as argument
 ##
 module CheckNameServer
+    def self.family ; 'nameserver'	; end
 end
 
 
@@ -263,6 +266,7 @@ end
 ##  => take an NS name and an IP address as argument
 ##
 module CheckNetworkAddress
+    def self.family ; 'address'		; end
 end
 
 
@@ -271,4 +275,5 @@ end
 ## Hold tests that are not directed DNS related
 ##
 module CheckExtra
+    def self.family ; 'extra'		; end
 end

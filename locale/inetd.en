@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,88 +33,96 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-input_inetd_usage: \
-usage: PROGNAME: [-hV] [-46] [-c conf]\n\
-        --lang          Select another language (en, fr, ...)\n\
-    -h, --help          Show this message\n\
-    -V, --version       Display version and exit\n\
-    -c, --config        Specify location of the configuration file\n\
-        --testdir       Location of the directory holding tests\n\
-    -r, --resolver      Resolver to use for guessing 'ns' information\n\
-    -4, --ipv4          Only allow to check the zone with IPv4 connectivity\n\
+<section name="input:inetd">
+  <tag name="usage">
+usage: PROGNAME: [-hV] [-46] [-c conf]
+        --lang          Select another language (en, fr, ...)
+    -h, --help          Show this message
+    -V, --version       Display version and exit
+    -c, --config        Specify location of the configuration file
+        --testdir       Location of the directory holding tests
+    -r, --resolver      Resolver to use for guessing 'ns' information
+    -4, --ipv4          Only allow to check the zone with IPv4 connectivity
     -6, --ipv6          Only allow to check the zone with IPv6 connectivity\n
 
 input_inetd_help: \
-Command           Args\n\
-  ?|help           0     This message\n\
-  q|quit|exit      0     Leave ZoneCheck\n\
-  check            0     Launch the zone checking process\n\
-  zone|domain      1     Zone to test\n\
-  nslist           0+    Set the list of the zone nameservers\n\
-  set              1-2   Option to set (see options)\n\
-  unset            1     Option to unset (see options)\n\
-  preset           1     Preset configuration (supported: classic)\n\
-\n\
-Options           Args\n\
-  lang             1     Select another language (en, fr, ...)\n\
-  one              0     Only display the most relevant message\n\
-  quiet            0     Don't display extra titles\n\
-  tagonly          0     Display only tag (suitable for scripting)\n\
-  category         1+    Only perform test for the specified category\n\
-  verbose          1+    Display extra information (see verbose)\n\
-  output           1+    Output (see output)\n\
-  error            1+    Behaviour in case of error (see error)\n\
-  transp           1+    Transport/routing layer (see transp)\n\
-  option           1+    Set extra options (-,-opt,opt,opt=foo)\n\
-\n\
-Arguments for Options\n\
-  verbose:             [intro/testname/explain/details]\n\
-                       [reportok|fatalonly] [testdesc|counter]\n\
-    intro          [i]  Print summary for domain and associated nameservers\n\
-    testname       [n]  Print the test name\n\
-    explain        [x]  Print an explanation for failed tests\n\
-    details        [d]  Print a detailed description of the failure\n\
-    reportok       [o]  Still report passed test\n\
-    fatalonly      [f]  Print fatal errors only\n\
-    testdesc       [t]  Print the test description before running it\n\
-    counter        [c]  Print a test counter\n\
-\n\
-  output:               [byseverity|byhost] [text|html]\n\
-    byseverity    *[bs] Output is sorted/merged by severity\n\
-    byhost         [bh] Output is sorted/merged by host\n\
-    text          *[t]  Output plain text\n\
-    html           [h]  Output HTML\n\
-\n\
-  error:                [allfatal|allwarning|dfltseverity] [stop|nostop]\n\
-    allfatal       [af] All error are considered fatal\n\
-    allwarning     [aw] All error are considered warning\n\
-    dfltseverity  *[ds] Use the severity associated with the test\n\
-    stop          *[s]  Stop on the first fatal error\n\
-    nostop         [ns] Never stop (even on fatal error)\n\
-\n\
-  transp:               [ipv4/ipv6] [udp|tcp|std]\n\
-    ipv4          *[4]  Use IPv4 routing protocol\n\
-    ipv6          *[6]  Use IPv6 routing protocol\n\
-    udp            [u]  Use UDP transport layer\n\
-    tcp            [t]  Use TCP transport layer\n\
-    std           *[s]  Use UDP with fallback to TCP for truncated messages\n\
-\n\
-Example\n\
-  preset classic\n\
-  zone foorbar.com\n\
-  check\n
+Command           Args
+  ?|help           0     This message
+  q|quit|exit      0     Leave ZoneCheck
+  check            0     Launch the zone checking process
+  zone|domain      1     Zone to test
+  nslist           0+    Set the list of the zone nameservers
+  set              1-2   Option to set (see options)
+  unset            1     Option to unset (see options)
+  preset           1     Preset configuration (supported: classic)
 
-input_inetd_welcome: \
-Welcome to Zonecheck VERSION\n\
-\n\
-To change the language: set lang fr\n\
-To ask for help       : help\n\
-\n\
-For more information visit about ZoneCheck visit the following URL:\n\
-  http://www.zonecheck.fr/\n\
-\n
+Options           Args
+  lang             1     Select another language (en, fr, ...)
+  one              0     Only display the most relevant message
+  quiet            0     Don't display extra titles
+  tagonly          0     Display only tag (suitable for scripting)
+  category         1+    Only perform test for the specified category
+  verbose          1+    Display extra information (see verbose)
+  output           1+    Output (see output)
+  error            1+    Behaviour in case of error (see error)
+  transp           1+    Transport/routing layer (see transp)
+  option           1+    Set extra options (-,-opt,opt,opt=foo)
 
-input_inetd_what: I didn't understand, try asking for help!
+Arguments for Options
+  verbose:             [intro/testname/explain/details]
+                       [reportok|fatalonly] [testdesc|counter]
+    intro          [i]  Print summary for domain and associated nameservers
+    testname       [n]  Print the test name
+    explain        [x]  Print an explanation for failed tests
+    details        [d]  Print a detailed description of the failure
+    reportok       [o]  Still report passed test
+    fatalonly      [f]  Print fatal errors only
+    testdesc       [t]  Print the test description before running it
+    counter        [c]  Print a test counter
 
-input_inetd_unknown_preset: Unknown preset value '%s'
+  output:               [byseverity|byhost] [text|html]
+    byseverity    *[bs] Output is sorted/merged by severity
+    byhost         [bh] Output is sorted/merged by host
+    text          *[t]  Output plain text
+    html           [h]  Output HTML
+
+  error:                [allfatal|allwarning|dfltseverity] [stop|nostop]
+    allfatal       [af] All error are considered fatal
+    allwarning     [aw] All error are considered warning
+    dfltseverity  *[ds] Use the severity associated with the test
+    stop          *[s]  Stop on the first fatal error
+    nostop         [ns] Never stop (even on fatal error)
+
+  transp:               [ipv4/ipv6] [udp|tcp|std]
+    ipv4          *[4]  Use IPv4 routing protocol
+    ipv6          *[6]  Use IPv6 routing protocol
+    udp            [u]  Use UDP transport layer
+    tcp            [t]  Use TCP transport layer
+    std           *[s]  Use UDP with fallback to TCP for truncated messages
+
+Example
+  preset classic
+  zone foorbar.com
+  check
+</tag>
+
+  <tag name="welcome">
+Welcome to Zonecheck VERSION
+
+To change the language: set lang fr
+To ask for help       : help
+
+For more information visit about ZoneCheck visit the following URL:
+  http://www.zonecheck.fr/
+</tag>
+
+  <tag name="what">I didn't understand, try asking for help!</tag>
+  <tag name="unknwon_preset">Unknown preset value '%s'</tag>
+  </section>
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

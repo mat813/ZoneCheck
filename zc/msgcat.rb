@@ -64,7 +64,6 @@ require 'dbg'
 class MsgCat
     TagRegex	= /[\w\/]+/
 
-
     TAG		= 'tag'
     CHECK	= 'check'
     TEST	= 'test'
@@ -277,8 +276,13 @@ class MsgCat
 		explanation	= element.elements[EXPLANATION]
 		details		= element.elements[DETAILS]
 
-		explanation = nil if explanation.elements.empty?
-		details     = nil if details.elements.empty?
+		if explanation.attributes['sameas'].nil?
+		    explanation = nil if explanation.elements.empty?
+		end
+		
+		if details.attributes['sameas'].nil?
+		    details     = nil if details.elements.empty?
+		end
 
 		@check[checkname] = {
 		    NAME	=> name,

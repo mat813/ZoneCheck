@@ -97,7 +97,7 @@
     <name>présence de serveurs de nom gérant le domaine</name>
     <success>Au moins un serveur de nom présent</success>
     <failure>Au moins un serveur de nom est requis</failure>
-    <explanation sameas="rfc2182"/>
+    <explanation sameas="shortcut:rfc2182"/>
     <details/>
   </check>
 
@@ -106,7 +106,7 @@
     <name>présence d'au moins deux serveurs de noms pour le domaine</name>
     <success>Au moins deux serveurs de noms présents</success>
     <failure>Au moins deux serveurs de noms sont nécessaires</failure>
-    <explanation sameas="rfc2182"/>
+    <explanation sameas="shortcut:rfc2182"/>
     <details/>
   </check>
 
@@ -115,7 +115,7 @@
     <name>adresses IP identiques parmi les serveurs</name>
     <success>Toutes les adresses IP sont distinctes</success>
     <failure>Toutes les adresses IP doivent être distinctes</failure>
-    <explanation sameas="rfc2182"/>
+    <explanation sameas="shortcut:rfc2182"/>
     <details><para>Les serveurs de noms <zcvar name="ns"/> utilisent la
       même adresse IP (<zcvar name="ip"/>).</para></details>
   </check>
@@ -125,7 +125,7 @@
     <name>serveurs de noms sur le même sous réseau</name>
     <success>Aucun serveur de nom n'est sous le même sous réseau</success>
     <failure>Des serveurs sont sur le même sous réseau</failure>
-    <explanation sameas="rfc2182"/>
+    <explanation sameas="shortcut:rfc2182"/>
     <details><para>Les sous réseaux suivants sont utilisés par plusieurs
       hôtes: <zcvar name="subnets"/>. Essayez de déplacer certains hôtes
       sur un autre sous réseau.</para></details>
@@ -136,7 +136,7 @@
     <name>serveurs de noms tous sur le même sous réseau</name>
     <success>Les serveurs de noms ne sont pas tous sur le même sous réseau</success>
     <failure>Les serveurs de noms sont tous sur le même sous réseau</failure>
-    <explanation sameas="rfc2182"/>
+    <explanation sameas="shortcut:rfc2182"/>
     <details><para>Tous les serveurs de noms sont dans le sous réseau
       <zcvar name="subnet"/>. Essayez d'en déplacer quelques uns sur un
       autre sous réseau.</para></details>

@@ -75,7 +75,7 @@ module Report
 	    end
 	    
 	    def has_error?
-		@list.each { |res| return true if res.desc.is_error? }
+		@list.each { |res| return true if res.desc.error }
 		false
 	    end
 	end

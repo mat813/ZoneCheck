@@ -97,7 +97,7 @@
     <name>one nameserver for the domain </name>
     <success>At least one nameserver found</success>
     <failure>At least one nameserver is required</failure>
-    <explanation sameas="rfc2182"/>
+    <explanation sameas="shortcut:rfc2182"/>
     <details/>
   </check>
 
@@ -105,7 +105,7 @@
     <name>at least two nameservers for the domain</name>
     <success>At least two nameservers found</success>
     <failure>At least two nameservers are necessary</failure>
-    <explanation sameas="rfc2182"/>
+    <explanation sameas="shortcut:rfc2182"/>
     <details/>
   </check>
 
@@ -113,7 +113,7 @@
     <name>identical addresses</name>
     <success>All addresses are distinct</success>
     <failure>All addresses should be distinct</failure>
-    <explanation sameas="rfc2182"/>
+    <explanation sameas="shortcut:rfc2182"/>
     <details><para> : The nameservers <zcvar name="ns"/> are using the 
       same IP address (<zcvar name="ip"/>).</para></details>
   </check>
@@ -122,7 +122,7 @@
     <name>nameserver's addresses on same subnet</name>
     <success>Some IP addresses are not on the same subnet</success>
     <failure>IP addresses on the same subnet</failure>
-    <explanation sameas="rfc2182"/>
+    <explanation sameas="shortcut:rfc2182"/>
     <details><para>The following subnets are used by several
       hosts: <zcvar name="subnets"/>. Try moving some of their hosts
       to another subnet.</para></details>
@@ -132,7 +132,7 @@
     <name>nameserver addresses are all on the same subnet</name>
     <success>All IP addresses are not on the same subnet</success>
     <failure>IP addresses are all on the same subnet</failure>
-    <explanation sameas="rfc2182"/>
+    <explanation sameas="shortcut:rfc2182"/>
     <details><para>All the servers are in the subnet 
       <zcvar name="subnet"/>, try moving some of them  to another
       subnet.</para></details>

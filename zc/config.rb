@@ -33,8 +33,8 @@ class Config
     Ok			= "o"		# Reserved
 
 
-    TestSeqOrder	= [ CheckGeneric, CheckNameServer, 
-	                    CheckNetworkAddress, CheckExtra ]
+    TestSeqOrder	= [ CheckGeneric.family, CheckNameServer.family, 
+	                    CheckNetworkAddress.family, CheckExtra.family ]
 
     def self.severity2tag(severity)
 	case severity
@@ -184,20 +184,12 @@ class Config
 
 	    xmlprofile.elements.each("rules") { |element|
 		klass  = element.attributes["class"]
-		klass = case klass
-			when 'generic'    then CheckGeneric
-			when 'nameserver' then CheckNameServer
-			when 'address'    then CheckNetworkAddress
-			when 'extra'      then CheckExtra
-			end
-
 		@rules[klass] = parse_block(element)
 	    }
 	end
 
 	#-- [private] -----------------------------------------------
 	private
-
 
 	def parse_block(rule)
 	    block = Instruction::Block::new
@@ -212,13 +204,16 @@ class Config
 	end
 	
 	def parse_check(xmlelt)
-	    Instruction::Check::new(xmlelt.attributes['name'],
-				    xmlelt.attributes['severity'],
-				    xmlelt.attributes['catagory'])
+	    name, severity, category = xmlelt.attributes['name'], 
+		xmlelt.attributes['severity'], xmlelt.attributes['category']
+
+	    $dbg.msg(DBG::CONFIG, "creating instruction check: #{name}")
+	    Instruction::Check::new(name, severity, category)
 	end
 
 	def parse_case(xmlelt)
 	    when_stmt, else_stmt = {}, nil
+	    testname = xmlelt.attributes['test']
 	    xmlelt.each_child { |elt|
 		next unless elt.kind_of?(REXML::Element)
 		case elt.name
@@ -228,8 +223,9 @@ class Config
 		    else_stmt = parse_block(elt)
 		end
 	    }
-	    Instruction::Switch::new(xmlelt.attributes['test'],
-				     when_stmt, else_stmt)
+
+	    $dbg.msg(DBG::CONFIG, "creating instruction test: #{testname}")
+	    Instruction::Switch::new(testname, when_stmt, else_stmt)
 	end
     end
 
@@ -245,43 +241,40 @@ class Config
     end
 
 
-    def clear
-	@constants	= Constants::new
-	@profiles	= Profiles::new
-	@mapping	= ZoneMapping::new
-	@overrideconf	= nil
-    end
-
-
     #
     # Set the overriding configuration profile
     #
     def overrideconf(testlist)
-	# Create
-	@overrideconf = ByDomain::new(self, NResolv::DNS::Name::Root, 
-				   @test_manager)
-	Config::TestSeqOrder.each { |family|
-	    @overrideconf[family] = Instruction::Block::new
-	}
+	rules = {}
 
-	# Populate with the requested check
+	# Order the check by class (or family)
 	testlist.each { |checkname|
-	    # Check that we have the method
+	    # Ensure that the check is currently available
 	    if ! @test_manager.has_check?(checkname)
-		raise ArgumentError, $mc.get("config_method_unknown") % [ 
-		    checkname ]
+		raise ArgumentError, 
+		    $mc.get("config:check_unknown") % [ checkname ]
 	    end
 
-	    # Add the new instruction
-	    family = @test_manager.family(checkname)
-	    instr  = Instruction::Check::new(checkname, 
-						   Config::Fatal, "none")
-	    @overrideconf[family] << instr
+	    # Ordering
+	    (rules[@test_manager.family(checkname)] ||= []) << checkname
 	}
+
+	# Create a fake configuration
+	fakeprofile = "<profile name=\"override\">\n"
+	TestSeqOrder.each { |family|
+	    next unless rules[family]
+	    fakeprofile += "<rules class=\"#{family}\">\n"
+	    rules[family].each { |checkname|
+		fakeprofile += "<check name=\"#{checkname}\" severity=\"f\" category=\"\"/>\n" }
+	    fakeprofile += "</rules>\n"
+	}
+	fakeprofile += "</profile>\n"
+	fakeconf = '<config>' + fakeprofile + '</config>'
+
+	# Register it as an override profile
+	xmlprofile = REXML::Document::new(fakeconf).root.elements['profile']
+	@profile_override = Profile::new(xmlprofile, self)
     end
-
-
-
 
 
     #
@@ -335,9 +328,7 @@ class Config
 		puts "YO: #{e.position} / #{e.line} / #{e.message}"
 	    end
 	    @profiles << Profile::new(doc.root.elements[1], self)
-
 	}
-
     end
 
 
@@ -349,14 +340,28 @@ class Config
 	@profiles.each { |c| c.validate(testmanager) }
     end
 
+
     #
     # Retrieve the bet profile for the zone
     #
     def profile(zone)
+	return @profile_override if @profile_override
 	@profiles[@mapping[zone]]
     end
 
 
     attr_reader :constants
-end
 
+    #-- [private] ---------------------------------------------------------
+    private
+    #
+    # Clear the current configuration
+    #  (used in: initialize and load)
+    #
+    def clear
+	@constants		= Constants::new
+	@profiles		= Profiles::new
+	@mapping		= ZoneMapping::new
+	@profile_override	= nil
+    end
+end

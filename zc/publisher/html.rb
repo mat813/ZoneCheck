@@ -61,6 +61,96 @@ module Publisher
 
 
 	##
+	## Rendering of XML chunks
+	##
+	class XMLTransform
+	    def initialize(const={})
+		@const	= const
+	    end
+
+	    def apply(xmlnode, var={})
+		case xmlnode
+		when REXML::Element
+		    case xmlnode.name
+		    when MsgCat::NAME, MsgCat::FAILURE, MsgCat::SUCCESS
+			do_text(xmlnode, var)
+		    when MsgCat::EXPLANATION	# not displayed in tagonly
+			"<ul class=\"zc-ref\">" +
+			xmlnode.elements.to_a('src').collect { |xmlsrc|
+			    type  = xmlsrc.attributes['type']
+			    type  = $mc.get("tag_#{type}")
+
+			    from = xmlsrc.attributes['from']
+			    fid  = xmlsrc.attributes['fid']
+
+			    title = xmlsrc.elements['title'].text
+
+			    link = case from
+				   when 'rfc'
+				       case fid
+				       when NilClass
+					   'http://www.ietf.org/'
+				       when /^(rfc\d+)/
+					   "ftp://ftp.ietf.org/rfc/#{$1}.txt"
+				       end
+				   end
+			    title = "<a href=\"#{link}\">#{title}</a>" if link
+
+			    "<li>" +
+			    "<span class=\"zc-ref\">#{type}: <i>#{title}</i></span>" +
+			    "<br>" +
+			    xmlsrc.elements.to_a('para').collect { |xmlpara|
+				fmt_para(do_text(xmlpara, var)) }.join +
+			    "</li>"
+			}.join("\n") +
+			"</ul>"
+		    when MsgCat::DETAILS	# not displayed in tagonly
+			"<ul class=\"zc-details\"><li>" +
+			xmlnode.elements.to_a('para').collect { |xmlpara|
+			    fmt_para(do_text(xmlpara, var)) }.join +
+			'</li></ul>'
+		    else
+			do_text(xmlnode, var)
+		    end
+		when REXML::Text
+		    xmlnode.value
+		when REXML::Comment
+		    ''
+		end
+	    end
+
+	    #-- [private] -----------------------------------------------
+	    private
+	    def fmt_para(text)
+		'<p>' + text + '</p>'
+	    end
+
+	    def do_text(xmlnode, var={})
+		case xmlnode
+		when REXML::Element
+		    case xmlnode.name
+		    when 'zcvar'
+			name = xmlnode.attributes['name']
+			var[name].to_s
+		    when 'zcconst'
+			''
+		    when 'uri'
+			link = xmlnode.attributes['link']
+			"<a href=\"#{link}\">" + xmlnode.text + "</a>"
+		    else
+			xmlnode.to_a.collect { |xmlchild| 
+			    do_text(xmlchild, var) }.join
+		    end
+		when REXML::Text
+		    xmlnode.value
+		when REXML::Comment
+		    ''
+		end
+	    end
+	end
+
+
+	##
 	## Class for displaying progression information about
 	## the tests being performed.
 	##
@@ -146,10 +236,8 @@ module Publisher
 
 		# Counter
 		if @publisher.rflag.counter
-		    @o.puts HTML.jscript {
-			"zc_pgr_process(\"#{msg}\")" }
-		    @o.puts HTML.nscript {
-			"<li>#{@l10n_testing}: #{msg}</li>" }
+		    @o.puts HTML.jscript { "zc_pgr_process(\"#{msg}\")" }
+		    @o.puts HTML.nscript { "<li>#{@l10n_testing}: #{msg}</li>"}
 		end
 
 		# Test description
@@ -169,6 +257,7 @@ module Publisher
 	    super(rflag, info, ostream)
 	    @progress		= Progress::new(self)
 	    @publish_path	= ZC_HTML_PATH.gsub(/\/+$/, '')
+	    @xmltrans		= XMLTransform::new
 	end
 
 	def error(text)
@@ -224,13 +313,13 @@ module Publisher
     <link rel="stylesheet" href="#{@publish_path}/style/zc.css"   type="text/css">
 
     <style type="text/css">
-        UL.zc-ref LI { 
+        ul.zc-ref li { 
             list-style: url(#{@publish_path}/img/ref.png)     disc }
 
-        UL.zc-element LI { 
+        ul.zc-element li { 
             list-style: url(#{@publish_path}/img/element.png) disc }
 
-        UL.zc-details LI { 
+        ul.zc-details li { 
             list-style: url(#{@publish_path}/img/details.png) disc }
     </style>
 
@@ -344,35 +433,33 @@ EOT
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? Config::Info   :$mc.get('word:info_id')
-	    w_tag = @rflag.tagonly ? Config::Warning:$mc.get('word:warning_id')
-	    f_tag = @rflag.tagonly ? Config::Fatal  :$mc.get('word:fatal_id')
-	    
-	    i_tag = i_tag.upcase if i_unexp
-	    w_tag = w_tag.upcase if w_unexp
-	    f_tag = f_tag.upcase if f_unexp
+	    i_tag, w_tag, f_tag = 
+		severity_description(i_unexp, w_unexp, f_unexp)
 
 	    summary = "%1s%03d&nbsp;%1s%03d&nbsp;%1s%03d" % [ 
 		i_tag, i_count, 
 		w_tag, w_count, 
 		f_tag, f_count ]
 
-
 	    @o.puts "<div class=\"zc-diag1\">"
 	    @o.puts "<table width=\"100%\">"
 	    @o.puts "<tr class=\"zc-title\"><td width=\"100%\">#{domainname}</td><td>#{summary}</td></tr>"
-	    if res.nil?
-		l10n_perfect = $mc.get('word:perfect').capitalize
-		@o.puts "<tr><td colspan=\"2\"><b>#{l10n_perfect}</b></td></tr>"
-		@o.puts "<tr><td colspan=\"2\">&nbsp;</td></tr>"
-
-	    else
-		msg = if @rflag.tagonly
-		      then res.testname
-		      else res.desc.msg
-		      end
-		@o.puts "<tr><td colspan=\"2\">#{severity}: #{res.tag}</td></tr>"
+	    if !res.nil?
+		if @rflag.tagonly
+		    status = severity
+		    source = res.source || 'generic'
+		    msg    = res.testname
+		else
+		    status = Config.severity2tag(severity)
+		    status = $mc.get("word:#{status}").capitalize
+		    source = res.source || $mc.get('word:generic')
+		    msg    = status_message(res.testname, res.desc, severity)
+		end
+		@o.puts "<tr><td colspan=\"2\">#{status}: #{source}</td></tr>"
 		@o.puts "<tr><td colspan=\"2\">#{msg}</td></tr>"
+	    else
+		@o.puts "<tr><td colspan=\"2\">&nbsp;--</td></tr>"
+		@o.puts "<tr><td colspan=\"2\">&nbsp;--</td></tr>"
 	    end
 
 	    @o.puts "</table>"
@@ -381,76 +468,55 @@ EOT
 
 
 	def diagnostic(severity, testname, desc, lst)
-	    msg, xpl_lst = nil, nil
-
 	    @o.puts "<!-- TEST: #{testname.ljust(40)} -->"
 	    @o.puts "<div class=\"zc-diag\">"
 
 	    # Testname
-	    if @rflag.testname
-		l10n_name = $mc.get("#{testname}_testname")
+	    if  desc.check && @rflag.testname && !@rflag.tagonly
+		l10n_name = @xmltrans.apply($mc.get(testname, 
+					    MsgCat::CHECK, MsgCat::NAME))
 		@o.puts "<div class=\"zc-name\"><img src=\"#{@publish_path}/img/gear.png\" alt=\"\"> #{l10n_name}</div>"
 	    end
 
-	    # Severity
-	    severity_tag		= Config.severity2tag(severity)
-	    logo			= severity_tag + ".png"
-	    l10n_severity_shorttag	= if @rflag.tagonly
-					  then #{severity_tag}
-					  else $mc.get("word:#{severity_tag}_id")
-					  end
+	    # Status messsage
+	    status_tag		= Config.severity2tag(severity)
+	    logo		= status_tag + ".png"
 
-	    # Message
-	    msg = if severity.nil?
-		      $mc.get("#{testname}_ok")
-		  else
-		      if @rflag.tagonly
-			  if desc.is_error?
-			  then "#{severity_tag}[Unexpected]: #{testname}"
-			  else "#{severity_tag}: #{testname}"
-			  end
-		      else
-			  desc.msg
-		      end
-		  end
-	    
-	    @o.puts "<div class=\"zc-msg\"><img src=\"#{@publish_path}/img/#{logo}\" alt=\"#{l10n_severity_shorttag}:\"> #{msg}</div>"
+	    if @rflag.tagonly
+		status_shorttag	= severity || Config::Ok
+		status = desc.error ? "[Unexpected] #{testname}" : testname
+	    else
+		status_shorttag	= $mc.get("word:#{status_tag}_id")
+		status = status_message(testname, desc, severity)
+	    end
+
+	    @o.puts "<div class=\"zc-msg\"><img src=\"#{@publish_path}/img/#{logo}\" alt=\"#{status_shorttag}:\"> #{status}</div>"
 		
-	    if !severity.nil?
-		# Details
-		if @rflag.details && desc.dtl
-		    @o.puts "<ul class=\"zc-details\">"
-		    @o.puts "<li>"
-		    @o.puts desc.dtl
-		    @o.puts "</li>"
-		    @o.puts "</ul>"
-		end
-
+	    # Explanation & Details
+	    #  => only in case of failure (ie: not for Ok or Error)
+	    #     not when in 'tag only' mode
+	    if  desc.check && !severity.nil? && 
+		    desc.error.nil? && !@rflag.tagonly
 		# Explanation
-		if @rflag.explain && !@rflag.tagonly
-		    xpl_lst = xpl_split(desc.xpl)
+		if @rflag.explain 
+		    explanation = $mc.get(testname, 
+					  MsgCat::CHECK, MsgCat::EXPLANATION)
+		    @o.print @xmltrans.apply(explanation) if explanation
 		end
 
-		if xpl_lst
-		    @o.puts "<ul class=\"zc-ref\">"
-		    xpl_lst.each { |t, h, b|
-			l10n_tag = $mc.get("tag_#{t}")
-			h.gsub!(/<URL:([^>]+)>/, '<a href="\1">\1</a>')
-			b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<a href="\1">\1</a>') }
-			@o.puts "<li>"
-			@o.puts "<span class=\"zc-ref\">#{l10n_tag}: #{h}</span>"
-			@o.puts "<br>"
-			@o.puts b.join(" ")
-			@o.puts "</li>"
-		    }
-		    @o.puts "</ul>"
+		# Details
+		if @rflag.details && desc.details
+		    details = $mc.get(testname, MsgCat::CHECK, MsgCat::DETAILS)
+		    @o.print @xmltrans.apply(details, desc.details) if details
 		end
 	    end
 
 	    # Elements
 	    if ! lst.empty?
 		@o.puts "<ul class=\"zc-element\">"
-		lst.each { |elt| @o.puts "  <li>#{elt}</li>" }
+		lst.each { |elt| 
+		    elt ||= (@rflag.tagonly ? 'generic' : $mc.get('word:generic'))
+		    @o.puts "  <li>#{elt}</li>" }
 		@o.puts "</ul>"
 	    end
 

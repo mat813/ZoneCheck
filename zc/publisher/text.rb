@@ -42,6 +42,10 @@ module Publisher
 	Mime		= "text/plain"
 	MaxLineLength	= 79
 
+
+	##
+	## Rendering of XML chunks
+	##
 	class XMLTransform
 	    def initialize(const={})
 		@const	= const
@@ -53,19 +57,20 @@ module Publisher
 		    case xmlnode.name
 		    when MsgCat::NAME, MsgCat::FAILURE, MsgCat::SUCCESS
 			do_text(xmlnode, var)
-		    when MsgCat::EXPLANATION
-			xmlnode.elements.to_a('src').collect { |xmlsrc|
+		    when MsgCat::EXPLANATION	# not displayed in tagonly
+			text=xmlnode.elements.to_a('src').collect { |xmlsrc|
 			    type = xmlsrc.attributes['type']
-
 			    type = $mc.get("tag_#{type}")
 
 			    type + ': ' +xmlsrc.elements['title'].text + "\n" +
 			    xmlsrc.elements.to_a('para').collect { |xmlpara|
 				fmt_para(do_text(xmlpara, var)) }.join
 			}.join("\n")
-		    when MsgCat::DETAILS
-			xmlnode.elements.to_a('para').collect { |xmlpara|
-			    fmt_para(do_text(xmlpara, var)) }.join
+			::Text::Formater.lbox(text, [ ' |', ' `', '-', ' ' ])
+		    when MsgCat::DETAILS	# not displayed in tagonly
+			text=xmlnode.elements.to_a('para').collect { |xmlpara|
+			    fmt_para(do_text(xmlpara, var)) }.join("\n")
+			::Text::Formater.lbox(text, [ ' :', ' `', '.', ' ' ])
 		    else
 			do_text(xmlnode, var)
 		    end
@@ -90,7 +95,7 @@ module Publisher
 			name = xmlnode.attributes['name']
 			var[name].to_s
 		    when 'zcconst'
-			""
+			''
 		    else
 			xmlnode.to_a.collect { |xmlchild| 
 			    do_text(xmlchild, var) }.join
@@ -288,12 +293,12 @@ module Publisher
 	    @xmltrans	= XMLTransform::new
 	end
 
-	attr_reader :xmltrans
 
 	#------------------------------------------------------------
 	
 	def error(text)
-	    ::Text::Formater::new(text, 72, $mc.get('word:error').upcase+': ')
+	    @o.print ::Text::Formater.paragraph(text, MaxLineLength,
+					$mc.get('word:error').upcase+': ')
 	end
 
 
@@ -325,41 +330,37 @@ module Publisher
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    if @rflag.tagonly
-		i_tag = Config::Info
-		w_tag = Config::Warning
-		f_tag = Config::Fatal
-	    else
-		i_tag = $mc.get('word:info_id')
-		w_tag = $mc.get('word:warning_id')
-		f_tag = $mc.get('word:fatal_id')
-	    end
-	    
-	    i_tag = i_tag.upcase if i_unexp
-	    w_tag = w_tag.upcase if w_unexp
-	    f_tag = f_tag.upcase if f_unexp
+	    i_tag, w_tag, f_tag = 
+		severity_description(i_unexp, w_unexp, f_unexp)
 
 	    summary = "%1s%03d %1s%03d %1s%03d" % [ 
 		i_tag, i_count, 
 		w_tag, w_count, 
 		f_tag, f_count ]
 
-	    printf "%-*s    %s\n", 
+	    @o.printf "%-*s    %s\n", 
 		MaxLineLength - 4 - summary.length, domainname, summary
 
-	    if @rflag.tagonly
-		@o.puts "  #{severity}: #{res.tag}"
-		@o.puts "  #{res.testname}"
+	    if !res.nil?
+		if @rflag.tagonly
+		    @o.puts "  #{res.testname}"
+		    @o.puts "  #{severity}: #{res.source || 'generic'}"
+		else
+		    status      = Config.severity2tag(severity)
+		    l10n_status = $mc.get("word:#{status}").capitalize
+		    source = res.source || $mc.get('word:generic')
+		    msg    = status_message(res.testname, res.desc, severity)
+		    @o.puts "  #{msg}"
+		    @o.puts "  #{l10n_status}: #{source}"
+		end
 	    else
-		@o.puts "  #{severity}: #{res.tag}"
-		@o.puts "  #{res.desc.msg}"
+		@o.puts "  --", "  --"
 	    end
 	end
 
-
 	def diagnostic(severity, testname, desc, lst)
 	    # Testname
-	    if @rflag.testname && !@rflag.tagonly
+	    if  desc.check && @rflag.testname && !@rflag.tagonly
 		l10n_name = @xmltrans.apply($mc.get(testname, 
 					    MsgCat::CHECK, MsgCat::NAME))
 		@o.puts "[> #{l10n_name}"
@@ -367,55 +368,40 @@ module Publisher
 
 	    # Status messsage
 	    status_tag		= Config.severity2tag(severity)
-	    status_shorttag	= severity || Config::Ok
 
 	    if @rflag.tagonly
+		status_shorttag	= severity || Config::Ok
 		status = desc.error ? "[Unexpected] #{testname}" : testname
-		@o.puts "#{status_shorttag}> #{status}"
 	    else
-		l10n_status_shorttag	= $mc.get("word:#{status_tag}_id")
-		status = if severity.nil?
-			     @xmltrans.apply($mc.get(testname, 
-					      MsgCat::CHECK, MsgCat::SUCCESS))
-			 elsif desc.error
-			     l10n_name = @xmltrans.apply($mc.get(testname, 
-					      MsgCat::CHECK, MsgCat::NAME))
-			     "[TEST #{l10n_name}]: #{desc.error}"
-			 else
-			     @xmltrans.apply($mc.get(testname, 
-					      MsgCat::CHECK, MsgCat::FAILURE))
-			 end
-		@o.puts "#{l10n_status_shorttag}> #{status}"
+		status_shorttag	= $mc.get("word:#{status_tag}_id")
+		status = status_message(testname, desc, severity)
 	    end
+	    @o.puts "#{status_shorttag}> #{status}"
 	    
 	    # Explanation & Details
 	    #  => only in case of failure (ie: not for Ok or Error)
 	    #     not when in 'tag only' mode
-	    if !severity.nil? && desc.error.nil? && !@rflag.tagonly
+	    if  desc.check && !severity.nil? && 
+		    desc.error.nil? && !@rflag.tagonly
 		# Explanation
 		if @rflag.explain 
 		    explanation = $mc.get(testname, 
 					  MsgCat::CHECK, MsgCat::EXPLANATION)
-		    if explanation
-			text = @xmltrans.apply(explanation)
-			@o.print ::Text::Formater.lbox(text, 
-						     [ ' |', ' `', '-', ' ' ])
-		    end
+		    @o.print @xmltrans.apply(explanation) if explanation
 		end
 
 		# Details
 		if @rflag.details && desc.details
 		    details = $mc.get(testname, MsgCat::CHECK, MsgCat::DETAILS)
-		    if details
-			text = @xmltrans.apply(details, desc.details)
-			@o.print ::Text::Formater.lbox(text,
-						     [ ' :', ' `', '.', ' ' ])
-		    end
+		    @o.print @xmltrans.apply(details, desc.details) if details
 		end
 	    end
 		
 	    # Elements
-	    lst.each { |elt| @o.print ::Text::Formater.item(elt) }
+	    lst.each { |elt| 
+		elt ||= (@rflag.tagonly ? 'generic' : $mc.get('word:generic'))
+		@o.print ::Text::Formater.item(elt) 
+	    }
 
 	    # Blank
 	    @o.puts ''
@@ -423,7 +409,7 @@ module Publisher
 	    
 
 	def status(domainname, i_count, w_count, f_count)
-	    @o.printf "==> %s\n", super(domainname, i_count, w_count, f_count)
+	    @o.puts "==> " + super(domainname, i_count, w_count, f_count)
 	end
     end
 end

@@ -125,7 +125,7 @@ module Input
 	def usage(errcode, io=$console.stdout)
 	    io.puts @cgi.header({ 'type'    => 'text/plain',
 				  'charset' => $console.encoding })
-	    io.puts $mc.get('input_cgi_usage')
+	    io.puts $mc.get('input:cgi:usage')
 	    exit errcode unless errcode.nil?
 	end
 
