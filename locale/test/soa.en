@@ -91,11 +91,6 @@ error   : The 'minimum' period should be less than 3 hours
 explain : [none]
 details : The minimum value is %{minimum} sec, and should be less than 3 hours (10800 sec).
 
-[chk_soa_ttl]
-testname: SOA 'TTL' equal 'minimum'
-error   : The 'TTL' should be equal to the 'minimum'
-explain : [none]
-
 [chk_soa_ns_cname]
 testname: SOA master is not an alias
 error   : SOA master is not allowed to point to a CNAME alias

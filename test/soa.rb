@@ -111,11 +111,6 @@ module CheckNetworkAddress
 	    { "minimum" => soa(ip).minimum }
 	end
 
-	# DESC: coherence between 'ttl' and 'minimum'
-	def chk_soa_ttl(ns, ip)
-	    soa(ip).ttl == soa(ip).minimum
-	end
-
 	# DESC: Ensure coherence between SOA and ANY
 	def chk_soa_vs_any(ns, ip)
 	    soa(ip) == any(ip, NResolv::DNS::Resource::IN::SOA)[0]
