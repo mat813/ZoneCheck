@@ -82,11 +82,18 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	<TR class="zc-title"><TD colspan="4">Output</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="intro"    value='t'>
+	    <TD><INPUT type="checkbox" name="intro"    value='t' checked>
 	      résumé sur la zone</TD>
-	    <TD><INPUT type="checkbox" name="explain"  value='t'>
-	      explanations</TD>
-	    <TD><INPUT type="checkbox" name="details"  value='t'>
+	    <TD></TD>
+	    <TD></TD>
+	  </TR>
+	  <TR>
+	    <TD></TD>
+	    <TD><INPUT type="checkbox" name="testname" value='t'>
+	      nom du test</TD>
+	    <TD><INPUT type="checkbox" name="explain"  value='t' checked>
+	      explications</TD>
+	    <TD><INPUT type="checkbox" name="details"  value='t' checked>
 	      détails</TD>
 	  </TR>
 	  <TR>
@@ -109,6 +116,11 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TR>
 	  <TR>
 	    <TD></TD>
+	    <TD>rapport
+	      <SELECT name="report">
+		<OPTION value="byseverity" SELECTED> par severité
+		<OPTION value="byhost"             > par machine
+	      </SELECT></TD>
 	    <TD>format
 	      <SELECT name="format">
 		<OPTION value="html" SELECTED> HTML
@@ -137,6 +149,9 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="dontstop" value="nostop">
 	      continue après fatal</TD>
+	    <TD></TD>
+	    <TD><INPUT type="checkbox" name="reportok" value="t">
+	      affiche ok</TD>	    
 	  </TR>
 
 	  
@@ -233,6 +248,10 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    rapport généré</TD>
 	</TR>
 	<TR>
+	  <TD class="zc-key">nom du test</TD>
+	  <TD>Inclus le nom du test qui a été réalisé</TD>
+	</TR>
+	<TR>
 	  <TD class="zc-key">explications</TD>
 	  <TD>Inclus une explication sur la raison du test et pourquoi
 	    il doit être corrigé (quand le test a échoué).</TD>
@@ -265,6 +284,10 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  <TD>N'affiche aucune information sur la progression des tests.</TD>
 	</TR>
 	<TR>
+	  <TD class="zc-key">rapport</TD>
+	  <TD>Sélectionne le type de rapport qui doit être généré.</TD>
+	</TR> 
+	<TR>
 	  <TD class="zc-key">format</TD>
 	  <TD>Sélectionne le format dans lequel le rapport doit être généré
 	    (HTML ou texte simple).</TD>
@@ -293,6 +316,10 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  <TD class="zc-key">continue après fatal</TD>
 	  <TD>Continue même après avoir rencontré une erreur fatale
 	    (<I>cela peut conduire à des résultats inattendus</I>).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc-key">affiche ok</TD>
+	  <TD>Affiche les tests qui ont passés sans erreurs.</TD>
 	</TR>
 
 	<TR><TD class="zc-title" colspan="2">Options: tests supplémentaires effectués</TD></TR>
@@ -352,7 +379,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr  4 11:17:33 CEST 2003
+Last modified: Fri Apr 18 13:25:37 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

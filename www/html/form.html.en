@@ -338,6 +338,10 @@
 	  <TD>Don't display information about the test progression.</TD>
 	</TR>
 	<TR>
+	  <TD class="zc-key">report</TD>
+	  <TD>Select the type of generated report you want.</TD>
+	</TR> 
+	<TR>
 	  <TD class="zc-key">format</TD>
 	  <TD>Select the format in which you want the report 
 	    (HTML or plain text).</TD>
@@ -427,7 +431,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr 17 17:34:00 CEST 2003
+Last modified: Fri Apr 18 13:09:48 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
