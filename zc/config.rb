@@ -4,7 +4,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/07/19 07:28:13
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -17,6 +17,12 @@ require 'framework'
 ## Hold the information about the zc.conf configuration file
 ##
 class Config
+    Warning	= "w"
+    Info	= "i"
+    Fatal	= "f"
+    Skip	= "-"
+
+
     ##
     ## Syntax error, while parsing the file
     ##
@@ -37,36 +43,68 @@ class Config
     attr_reader :test_list
 
 
+
     #
     # Initializer
     #
-    def initialize(fatal, warning, info)
+    def initialize(test_manager, fatal, warning, info)
+	@test_manager	= test_manager
 	@fatal		= fatal
 	@warning	= warning
 	@info		= info
 
 	@test_list	= []
 	@test_action	= {}
+
+	@order		= 0
+	@order_switch	= { CheckGeneric => 0, CheckNameServer => 1,  
+	                    CheckNetworkAddress => 2 }
     end
 
 
     #
-    #
+    # Retrieve the action associated to the test
     #
     def action(testname)
 	@test_action[testname]
     end
 
 
+    #
+    # Add a new test with its corresponding action
+    #
+    def add(testname, action)
+	return if action == Skip
+
+	# Check if test is currently registered
+	if ! @test_manager.has_test?(testname)
+	    raise ArgumentError, "unknown test '#{testname}'"
+	end
+		
+	# Check for test ordering problems
+	#  (according to their families)
+	order_new = @order_switch[@test_manager.family(testname)]
+	if order_new < @order
+	    raise ArgumentError, "ordering problem with '#{testname}'"
+	else
+	    @order = order_new
+	end
+	
+	# Register test
+	@test_list << testname
+	@test_action[testname] = case action
+				 when Warning then @warning
+				 when Info    then @info
+				 when Fatal   then @fatal
+				 end
+    end
+
 
     #
+    # Read the configuration file
     #
-    #
-    def read(test_manager, configfile)
+    def read(configfile)
 	lineno    = 0
-	order_cur = 0 
-	order     = { CheckGeneric => 0, CheckNameServer => 1,  
-                      CheckNetworkAddress => 2 }
 	File.open(configfile) { |io|
 	    while line = io.gets
 		# Read line
@@ -76,37 +114,17 @@ class Config
 		next if line.empty?		# skip empty lines
 
 		# Syntax checker
-		if line !~ /^([wif-])\s+(\w+)$/
+		if line !~ /^([#{Warning}#{Info}#{Fatal}#{Skip}])\s+(\w+)$/
 		    raise SyntaxError, "line #{lineno}: malformed command"
 		end
 		action, testname = $1, $2
 		
-		# Skip test not used
-		next if action == "-"
-
-		# Check if test is currently registered
-		if ! test_manager.has_test?(testname)
-		    raise ConfigError, 
-			"line #{lineno}: unknown test '#{testname}'"
+		# Add test
+		begin
+		    add(testname, action)
+		rescue ArgumentError => e
+		    raise ConfigError, "line #{lineno}: #{e}"
 		end
-		
-		# Check for test ordering problems
-		#  (according to their families)
-		order_new = order[test_manager.family(testname)]
-		if order_new < order_cur
-		    raise ConfigError,
-			"line #{lineno}: ordering problem with '#{testname}'"
-		else
-		    order_cur = order_new
-		end
-
-		# Register test
-		@test_list << testname
-		@test_action[testname] = case action
-					 when "w" then @warning
-					 when "i" then @info
-					 when "f" then @fatal
-					 end
 	    end
 	}
     end
