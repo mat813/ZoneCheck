@@ -12,14 +12,14 @@
 #
 #
 
-ZC_INSTALL_PATH		= "/homes/sdalu/ZC.CVS/zc"
+ZC_INSTALL_PATH		= ENV["ZC_INSTALL_PATH"].untaint || "/homes/sdalu/ZC.CVS/zc"
 
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
-ZC_CONFIG_FILE		= "#{ZC_DIR}/zc.conf"
-ZC_LOCALIZATION_FILE	= "#{ZC_DIR}/locale/zc.%s"
-ZC_TEST_DIR		= "#{ZC_DIR}/test"
+ZC_CONFIG_FILE		= "#{ZC_INSTALL_PATH}/etc/zc.conf"
+ZC_LOCALIZATION_FILE	= "#{ZC_INSTALL_PATH}/locale/zc.%s"
+ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
 
 ZC_LANG_DEFAULT		= "en"
 
@@ -105,7 +105,8 @@ end
     localefile = ZC_LOCALIZATION_FILE % [ lang ]
     if File.readable?(localefile)
 	$dbg.msg(DBG::LOCALE, "Using locale: #{lang}")
-	$mc = MessageCatalog::new(localefile)
+	$mc = MessageCatalog::new
+	$mc.read(localefile)
 	break
     end
     $dbg.msg(DBG::LOCALE, "Unable to find locale for '#{lang}'")

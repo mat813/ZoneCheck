@@ -64,7 +64,8 @@ class Param
 		if lang =~ ZC_LANG_CHECK	# Security checking
 		    localefile = (ZC_LOCALIZATION_FILE % [ lang ]).untaint
 		    if File.readable?(localefile)
-			$mc = MessageCatalog::new(localefile)
+			$mc.clear
+			$mc.read(localefile)
 		    end
 		end
 	    end

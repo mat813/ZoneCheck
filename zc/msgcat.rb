@@ -50,10 +50,17 @@ class MessageCatalog
     #
     # Initializer
     #
-    def initialize(msgfile)
+    def initialize
+	$dbg.msg(DBG::LOCALE, "creating message catalogue")
+	@catalog = {}
+    end
+
+    #
+    # Read catalog file
+    #
+    def read(msgfile)
 	$dbg.msg(DBG::LOCALE, "reading file: #{msgfile}")
 
-	@catalog = {}
 	prefix   = nil
 	lineno   = 0
 
@@ -113,7 +120,13 @@ class MessageCatalog
 	}
     end
 
-
+    #
+    #
+    #
+    def clear
+	$dbg.msg(DBG::LOCALE, "clearing message catalogue")
+	@catalog = {}
+    end
 
     #
     # Get message associated with the 'tag'
