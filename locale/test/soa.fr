@@ -96,7 +96,7 @@ testname: champ 'refresh' du SOA est à au moins 6 heures
 error   : Le champ 'refresh' doit être positionné à au moins 6 heures
 ok	: Le champ 'refresh' du SOA est à au moins 6 heures
 explain : [ref]: RFC1912 (p.3) et RIPE-203
-details : La valeur du champ 'refresh' est de %{refresh} sec, et devrait être de moins de 6 heures (21600 sec).
+details : La valeur du champ 'refresh' est de %{refresh} sec, et devrait être de au moins 6 heures (21600 sec).
 
 
 [chk_soa_retry_refresh]
