@@ -96,13 +96,11 @@ class TestManager
 	@cm         = cm
 
 	# Instanciate only once each classes that has a requested test
-	domain = @param.domain
 	@config.test_list.each { |testname|
 	    if ! @classes.has_key?(klass = @tests[testname])
 		@classes[klass] = [klass.method("new").call(@config,
 							    @cm, 
-							    domain.name, 
-							    domain.ns)]
+							    @param.domain)]
 	    end
 	}
     end

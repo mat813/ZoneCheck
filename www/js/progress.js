@@ -112,13 +112,13 @@ function zc_pgr_start(count) {
 
 function zc_pgr_update(pct, speed, eta, desc) {
   // write progress bar
+  document.getElementById("zc_pgr_desc" ).innerHTML = desc;
   document.getElementById("zc_pgr_pct"  ).innerHTML = pct + "%&nbsp;";
   document.getElementById("zc_pgr_pct1" ).style.width = 3 * pct;
   document.getElementById("zc_pgr_pct2" ).style.width = 3 * (100-pct);
   document.getElementById("zc_pgr_proc" ).innerHTML = zc_pgr_processed;
   document.getElementById("zc_pgr_speed").innerHTML = zc_speed_tostr(speed);
   document.getElementById("zc_pgr_eta"  ).innerHTML = zc_sec_to_timestr(eta);
-  document.getElementById("zc_pgr_desc" ).innerHTML = desc;
 }
 
 // process element in progress bar

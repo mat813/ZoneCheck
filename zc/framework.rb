@@ -142,12 +142,11 @@ class Test
 
 
 
-    def initialize(config, cm, domain_name, domain_ns)
+    def initialize(config, cm, domain)
 	@attrcache_mutex	= Sync::new
 	@config			= config
 	@cm			= cm
-	@domain_name		= domain_name
-	@domain_ns		= domain_ns
+	@domain			= domain
     end
 
 
@@ -160,7 +159,7 @@ class Test
     #  IDEA: a better way would be to use the cachemanager to fake
     #        the nameserver NS, A and AAAA records retrieved by autoconf
     #        unfortunately we have a NO_CACHE option in the debug mode
-    def is_cname?(name, ip=nil, domain=@domain_name)
+    def is_cname?(name, ip=nil, domain=@domain.name)
 	auth_domain = name.domain
 	unless auth_domain == domain
 	    ns_list = @cm[nil].ns(auth_domain)
@@ -170,55 +169,56 @@ class Test
 	! @cm[ip].cname(name).nil?
     end
 
-    def is_resolvable?(name, ip=nil, domain=@domain_name)
+    def is_resolvable?(name, ip=nil, domain=@domain.name)
 #	puts "IP=#{ip} DOM=#{domain} NAME=#{name}"
 #	puts  name.in_domain?(domain)
 #	puts  @cm[ip].rec(@domain_name) && !@cm[ip].addresses(name).empty?
 #	puts !@cm[ip].rec(@domain_name) && !@cm[nil].addresses(name).empty?
 	
 	(( name.in_domain?(domain))                                        ||
-	 ( @cm[ip].rec(@domain_name) && !@cm[ip].addresses(name).empty?)   ||
-	 (!@cm[ip].rec(@domain_name) && !@cm[nil].addresses(name).empty?))
+	 ( @cm[ip].rec(@domain.name) && !@cm[ip].addresses(name).empty?)   ||
+	 (!@cm[ip].rec(@domain.name) && !@cm[nil].addresses(name).empty?))
     end
 
 
-    def bestresolver(name=nil)
-	return @domain_ns[0][0] if name.nil?
-
-	if ((name == @domain_name) ||
-	    (name.in_domain?(@domain_name) && 
-	     (name.depth - @domain_name.depth) == 1))
-	    @domain_ns[0][0]
-	else
+    def bestresolverip(name=nil)
+	return nil if name.nil?
+	
+	if (ips = @domain.get_resolver_ips(name)).nil?
 	    nil
+	else
+	    ips[0]
 	end
     end
 
-    
+    def address_wanted?(address)
+	raise "Not Implemented Yet"
+    end
+
     #-- Shortcuts -----------------------------------------------
     def const(name)
 	@config.const(name)
     end
 
-    def rec(ip=nil, dom=@domain_name, force=false)
+    def rec(ip=nil, dom=@domain.name, force=false)
 	@cm[ip].rec(dom, force)
     end
 
-    def soa(ip=nil, dom=@domain_name, force=false)
+    def soa(ip=nil, dom=@domain.name, force=false)
 	@cm[ip].soa(dom, force)
     end
 
 
-    def ns(ip=nil, dom=@domain_name, force=false)
+    def ns(ip=nil, dom=@domain.name, force=false)
 	@cm[ip].ns(dom, force)
     end
 
-    def mx(ip=nil, dom=@domain_name, force=false)
+    def mx(ip=nil, dom=@domain.name, force=false)
 	@cm[ip].mx(dom, force)
     end
 
     def any(ip=nil, resource=nil)
-	@cm[ip].any(@domain_name, resource)
+	@cm[ip].any(@domain.name, resource)
     end
     
     def addresses(name, ip=nil)

@@ -27,8 +27,8 @@ module CheckNetworkAddress
 	
 	# DESC: MX answers should be authoritative
 	def chk_mx_auth(ns, ip)
-	    mx(ip, @domain_name)		# request should be done twice
-	    mx(ip, @domain_name, true)[0].aa	# so we need to force the cache
+	    mx(ip, @domain.name)		# request should be done twice
+	    mx(ip, @domain.name, true)[0].aa	# so we need to force the cache
 	end
 
 	# DESC: Ensure coherence between MX and ANY
@@ -55,7 +55,7 @@ module CheckNetworkAddress
 	# DESC: MX exchange should be resolvable
 	def chk_mx_ip(ns, ip)
 	    mx(ip).each { |m|
-		return false unless is_resolvable?(m.exchange,ip,@domain_name)
+		return false unless is_resolvable?(m.exchange,ip,@domain.name)
 	    }
 	    true
 	end

@@ -88,12 +88,16 @@ module CheckNetworkAddress
 
 	# DESC: Test if host is alive (watch for firewall)
 	def chk_icmp(ns, ip)
-	    ping_cmd = case ip
-		       when Address::IPv4 then @ping4_cmd
-		       when Address::IPv6 then @ping6_cmd
-		       else raise "INTERNAL: Unknown address format"
-		       end
-	    system(ping_cmd % [ ip.to_s ])
+	    # Build ping command
+	    ping_tmpl = case ip
+			when Address::IPv4 then @ping4_cmd
+			when Address::IPv6 then @ping6_cmd
+			else raise "INTERNAL: Unknown address format"
+			end
+	    ping_cmd = ping_tmpl % [ ip.to_s ]
+
+	    # Do ping
+	    system(ping_cmd)
 	end
     end
 end

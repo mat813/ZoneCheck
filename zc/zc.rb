@@ -210,6 +210,7 @@ class ZoneCheck
     def load_testlist
 	@config = Config::new(@test_manager, @param.category)
 	if @param.test
+	    @config.read(@param.configfile, [ "constants" ])
 	    @config.newtest(@param.test, Config::Fatal, "none")
 	else
 	    @config.read(@param.configfile)
@@ -323,5 +324,10 @@ end
 #  (if not in slave method)
 #
 if ! $zc_slavemode
-    exit ZoneCheck::new.start ? EXIT_OK : EXIT_FAILED
+    begin
+	exit ZoneCheck::new.start ? EXIT_OK : EXIT_FAILED
+    rescue => e
+	puts e.message
+	puts e.backtrace.join("\n")
+    end
 end

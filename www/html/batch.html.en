@@ -32,6 +32,11 @@
     
 
     <H2>Zone information</H2>
+Examples:
+    <PRE>DOM=afnic.fr
+DOM=nic.fr NS=ns1.nic.fr;ns2.nic.fr
+DOM=nic.fr NS=ns3.nic.fr=2001:660:1180:1:192:134:0:49,192.134.0.49;ns2.nic.fr
+</PRE>
     <FORM method="POST" action="/cgi-bin/zc.cgi">
       <TEXTAREA name="batchdata" rows="10" cols="60"></TEXTAREA>
       <P>
@@ -301,7 +306,7 @@
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Oct  7 14:10:48 CEST 2002
+Last modified: Tue Oct  8 15:09:51 CEST 2002
 <!-- hhmts end -->
   </BODY>
 </HTML>

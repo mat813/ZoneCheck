@@ -85,7 +85,7 @@ module Report
 
 
 	##
-	## 
+	## Fatal results 
 	##
 	class Fatal   < Processor
 	    def add_result(result)
@@ -97,7 +97,7 @@ module Report
 
 
 	##
-	##
+	## Warning results
 	##
 	class Warning < Processor
 	end
@@ -105,7 +105,7 @@ module Report
 
 
 	##
-	##
+	## Informational results
 	##
 	class Info    < Processor
 	end

@@ -27,8 +27,8 @@ module CheckNetworkAddress
 	
 	# DESC: SOA answers should be authoritative
 	def chk_soa_auth(ns, ip)
-	    soa(ip, @domain_name)		# request should be done twice
-	    soa(ip, @domain_name, true).aa	# so we need to force the cache
+	    soa(ip, @domain.name)		# request should be done twice
+	    soa(ip, @domain.name, true).aa	# so we need to force the cache
 	end
 
 	# DESC: SOA email adddress shouldn't have an '@'

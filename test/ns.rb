@@ -27,8 +27,8 @@ module CheckNetworkAddress
 	
 	# DESC: NS answers should be authoritative
 	def chk_ns_auth(ns, ip)
-	    ns(ip, @domain_name)		# request should be done twice
-	    ns(ip, @domain_name, true)[0].aa	# so we need to force the cache
+	    ns(ip, @domain.name)		# request should be done twice
+	    ns(ip, @domain.name, true)[0].aa	# so we need to force the cache
 	end
 
 	# DESC: Ensure coherence between NS and ANY
@@ -55,7 +55,7 @@ module CheckNetworkAddress
 	# DESC: NS host should be resolvable
 	def chk_ns_ip(ns, ip)
 	    ns(ip).each { |n|
-		return false unless is_resolvable?(n.name, ip, @domain_name)
+		return false unless is_resolvable?(n.name, ip, @domain.name)
 	    }
 	    true
 	end

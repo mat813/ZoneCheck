@@ -15,6 +15,7 @@ i_tag : i
 w_tag : w
 f_tag : f
 
+xpltag_ref: Ref
 
 res_succeed_but : SUCCEED (but %d warning(s))\n
 res_succeed	: SUCCEED\n
@@ -47,7 +48,8 @@ pgr_time        : Time
 pgr_speed       : Speed
 
 
-
+##############################################################################
+##############################################################################
 
 #
 # Tests
@@ -62,6 +64,8 @@ ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME 
 
 
 loopback_xpl: [ref]: DNS & BIND (2nd edition) (p.61)\nNo one was given responsibility for the loopback network and system\nuse it for a loopback address, so it is the responsibility of everyone.\nIf it wasn't configured the request would eventually reach the root\nname server (increasing network traffic, and adding local delay) and\nthere is no guarantee that the answer would be 'localhost'
+
+openrelay_xpl: [ref]: ????\nYou can perform a more complete test by using the following command:\n"telnet relay-test.mail-abuse.org", for more information look at\n<URL:http://www.mail-abuse.org/>
 
 
 #
@@ -127,6 +131,7 @@ error   : Server doesn't listen/answer for UDP protocol
 [chk_tcp]
 testname: TCP connectivity
 error   : Server doesn't listen/answer for TCP protocol
+
 
 
 #
@@ -265,6 +270,8 @@ error   : The IP addresses of the zone nameserver can't be found
 testname: Nameserver IP reverse
 error   : Can't find reverse for the nameserver IP address
 
+
+
 #
 # MX
 #
@@ -293,6 +300,8 @@ error   : The IP address of the Mail eXchanger can't be resolved
 [chk_mx_vs_any]
 testname: coherence between MX and ANY records
 
+
+
 #
 # Coherence with given parameters
 #
@@ -306,16 +315,20 @@ testname: correctness of given nameserver list
 error   : The nameserver list doesn't match the given one
 
 
+
 #
+# Mail
 #
-#
+
 [chk_mail_openrelay_domain]
 testname: delegated domain is not an openrelay
 error   : The best MX for the domain is an openrelay
+explain = openrelay_xpl
 
 [chk_mail_openrelay_hostmaster]
 testname: domain of the hostmaster email is not an openrelay
 error   : The best MX for the hostmaster address is an openrelay
+explain = openrelay_xpl
 
 [chk_mail_postmaster]
 testname: 'postmaster' email address for the domain is valid

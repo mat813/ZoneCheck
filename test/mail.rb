@@ -20,6 +20,7 @@ module CheckExtra
     ## Check domain NS records
     ##
     class Mail < Test
+	#-- Initialisation ------------------------------------------
 	def initialize(*args)
 	    super(*args)
 	    @fake_dest = const("fake_mail_dest")
@@ -31,7 +32,7 @@ module CheckExtra
 	#-- Shortcuts -----------------------------------------------
 	def bestmx(name)
 	    pref, exch = 65536, nil
-	    mx(bestresolver(name), name).each { |m|
+	    mx(bestresolverip(name), name).each { |m|
 		if m.preference < pref
 		    pref, exch = m.preference, m.exchange
 		end
@@ -42,7 +43,7 @@ module CheckExtra
 	def mhosttest(mdom)
 	    # Mailhost and IP 
 	    mhost = bestmx(mdom)
-	    mip   = addresses(mhost, bestresolver(mhost))[0]
+	    mip   = addresses(mhost, bestresolverip(mhost))[0]
 
 #	    puts "DOM=#{mdom}   HOST=#{mhost}   IP=#{mip}"
 #	    puts "DEST=#{@fake_dest}  FROM=#{@fake_from}  USER=#{@fake_user}"
@@ -50,9 +51,9 @@ module CheckExtra
 	    mrelay = nil
 	    begin
 		mrelay = ZCMail::new(mdom, mip.to_s)
-		mrelay.fake_info(@fake_user, @fake_dest, @fake_from)
 		mrelay.banner
 		mrelay.helo(@fake_host)
+		mrelay.fake_info(@fake_user, @fake_dest, @fake_from)
 		yield mrelay
 	    ensure
 		mrelay.quit
@@ -73,23 +74,23 @@ module CheckExtra
 	#-- Tests ---------------------------------------------------
 	# DESC: Check that the best MX for hostmaster is not an openrelay
 	def chk_mail_openrelay_hostmaster
-	    ! openrelay(soa(bestresolver).rname.domain)
+	    ! openrelay(soa(bestresolverip).rname.domain)
 	end
 
 	# DESC: Check that the best MX for the domain is not an openrelay
 	def chk_mail_openrelay_domain
-	    ! openrelay(@domain_name)
+	    ! openrelay(@domain.name)
 	end
 
 	# DESC: Check that hostmaster address is valid
 	def chk_mail_hostmaster
-	    rname = soa(bestresolver).rname
+	    rname = soa(bestresolverip).rname
 	    testuser(rname[0], rname.domain)
 	end
 	
 	# DESC: Check that postmaster address is valid
 	def chk_mail_postmaster
-	    testuser("postmaster", @domain_name)
+	    testuser("postmaster", @domain.name)
 	end
     end
 end

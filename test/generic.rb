@@ -22,17 +22,17 @@ module CheckGeneric
 	#-- Tests ---------------------------------------------------
 	# DESC: A domainname should only contains A-Z a-Z 0-9 '-' '.'
 	def chk_dn_alpha
-	    @domain_name.to_s =~ /^[A-Za-z0-9\-\.]+$/
+	    @domain.name.to_s =~ /^[A-Za-z0-9\-\.]+$/
 	end
 
 	# DESC: A domainname should not countain a double hyphen
 	def chk_dn_dbl_hyph
-	    ! (@domain_name.to_s =~ /--/)
+	    ! (@domain.name.to_s =~ /--/)
 	end
 
 	# DESC: A domainname should not start or end with an hyphen
 	def chk_dn_orp_hyph
-	    ! (@domain_name.to_s =~ /(^|\.)-|-(\.|$)/)
+	    ! (@domain.name.to_s =~ /(^|\.)-|-(\.|$)/)
 	end
     end
 
@@ -51,7 +51,7 @@ module CheckGeneric
 	#-- Shortcuts -----------------------------------------------
 	def ip
 	    cache_attribute("@ip") {
-		ip = @domain_ns.collect { |ns| ns[1] }
+		ip = @domain.ns.collect { |ns| ns[1] }
 		ip.flatten!
 		ip
 	    }
@@ -84,12 +84,12 @@ module CheckGeneric
 	#-- Tests ---------------------------------------------------
 	# DESC: A domain should have a nameserver!
 	def chk_one_ns
-	    @domain_ns.length >= 1
+	    @domain.ns.length >= 1
 	end
 
 	# DESC: A domain should have at least 2 nameservers
 	def chk_several_ns
-	    @domain_ns.length >= 2
+	    @domain.ns.length >= 2
 	end
     end
 end

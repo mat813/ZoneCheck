@@ -31,7 +31,7 @@ module CheckNameServer
 	#-- Shortcuts -----------------------------------------------
 	def ip(ns)
 	    cache_attribute("@ip", ns) {
-		@domain_ns.assoc(ns)[1]
+		@domain.ns.assoc(ns)[1]
 	    }
 	end
 

@@ -35,13 +35,13 @@ module CheckNetworkAddress
 
 	# DESC: Ensure coherence between given (param) primary and SOA
 	def chk_given_nsprim_vs_soa(ns, ip)
-	    soa(ip).mname == @domain_ns[0][0]
+	    soa(ip).mname == @domain.ns[0][0]
 	end
 	   
 	# DESC: Ensure coherence between given (param) nameservers and NS
 	def chk_given_ns_vs_ns(ns, ip)
 	    nslist_from_ns    = ns(ip).collect{ |n| n.name}
-	    nslist_from_param = @domain_ns.collect { |n, ips| n }
+	    nslist_from_param = @domain.ns.collect { |n, ips| n }
 
 	    nslist_from_ns.unsorted_eql?(nslist_from_param)
 	end
