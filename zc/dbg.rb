@@ -161,4 +161,13 @@ class DBG
 	    end
 	}
     end
+
+
+    def self.status2str(status, ok=true)
+	case status
+	when FalseClass, TrueClass then status == ok ? 'passed' : 'failed'
+	when NilClass,   Exception then 'exception'
+	else                            'n/a'
+	end
+    end
 end

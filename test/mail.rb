@@ -95,13 +95,29 @@ module CheckExtra
 	
 	
 	def openrelay(mdom, mhost)
-	    mhosttest(mdom, mhost) { |mrelay| return mrelay.test_openrelay }
+	    status = nil
+	    begin
+		mhosttest(mdom, mhost) { |mrelay| 
+		    return status = mrelay.test_openrelay }
+	    ensure
+		dbgmsg { 
+		    [ "not an openrelay : #{DBG.status2str(status, false)}",
+			"  on domain #{mdom} using relay #{mhost}" ]
+		}
+	    end
 	end
 
 	def testuser(user, mdom, mhost)
-	    mhosttest(mdom, mhost) { 
-		|mrelay| return mrelay.test_userexists(user)
-	    }
+	    status = nil
+	    begin
+		mhosttest(mdom, mhost) { |mrelay| 
+		    return status = mrelay.test_userexists(user) }
+	    ensure
+		dbgmsg { 
+		    [ "mail for user #{user} : #{DBG.status2str(status)}",
+			"  on domain #{mdom} using relay #{mhost}" ]
+		}
+	    end
 	end
 
 	#-- Checks --------------------------------------------------
@@ -149,7 +165,8 @@ module CheckExtra
 		    end
 		}
 	    end
-	    { 'hostmaster' => user }
+	    { 'hostmaster' => user, 
+	      'mxlist'     => mxlist.collect { |mx| mx.exchange }.join(', ') }
 	end
 	
 	# DESC: check for MX or A
@@ -179,7 +196,8 @@ module CheckExtra
 		    end
 		}
 	    end
-	    { 'postmaster' => user }
+	    { 'postmaster' => user,
+	      'mxlist'     => mxlist.collect { |mx| mx.exchange }.join(', ') }
 	end
 
 	# DESC:

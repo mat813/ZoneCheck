@@ -1,5 +1,12 @@
 # $Id$
+
 2003-??-??  ZoneCheck-2.0.0??
+	* misc: fixed bug in installer
+	* dbg: added debugging information
+	* test: added details for email test 
+	* zc: explanation are formated automatically
+	
+2003-10-27  ZoneCheck-2.0.0b9
 	* dbg: time the execution of test
 	* www: form can be submited by pressing enter
 	* test: fix chk_aaaa test
