@@ -101,3 +101,20 @@ error   : Les serveurs de noms sont tous sur le même sous réseau
 ok	: Les serveurs de noms ne sont pas tous sur le même sous réseau
 explain = xpl_rfc2182
 details : Tous les serveurs de noms sont dans le sous réseau %{subnet}. Essayez d'en déplacer quelques uns sur un autre sous réseau.
+
+
+[chk_delegation_udp512]
+testname: delegation response fit in a 512 byte UDP packet
+error   : Delegation response won't fit in a 512 byte UDP packet
+ok      : Delagation response fit in a 512 byte UDP packet
+explain : [none]
+details : For a query of %{bytes} bytes, it won't be possible to send all the nameserver.
+
+
+[chk_delegation_udp512_additional]
+testname: delegation response with additional fit in a 512 byte UDP packet
+error   : Delegation response with additional won't fit in a 512 byte UDP packet
+ok      : Delagation response with additional fit in a 512 byte UDP packet
+explain : [none]
+details : For a query of %{bytes} bytes, it won't be possible to send all the nameserver with the corresponding glues.
+

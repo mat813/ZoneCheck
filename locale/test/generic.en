@@ -101,3 +101,20 @@ error   : IP addresses are all on the same subnet
 ok	: All IP addresses are not on the same subnet
 explain = xpl_rfc2182
 details : All the servers are in the subnet %{subnet}, try moving some of them  to another subnet.
+
+
+[chk_delegation_udp512]
+testname: delegation response fit in a 512 byte UDP packet
+error   : Delegation response won't fit in a 512 byte UDP packet
+ok      : Delagation response fit in a 512 byte UDP packet
+explain : [none]
+details : For a query of %{bytes} bytes, it won't be possible to send all the nameserver.
+
+
+[chk_delegation_udp512_additional]
+testname: delegation response with additional fit in a 512 byte UDP packet
+error   : Delegation response with additional won't fit in a 512 byte UDP packet
+ok      : Delagation response with additional fit in a 512 byte UDP packet
+explain : [none]
+details : For a query of %{bytes} bytes, it won't be possible to send all the nameserver with the corresponding glues.
+

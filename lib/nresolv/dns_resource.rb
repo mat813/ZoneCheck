@@ -169,3 +169,18 @@ class NResolv
 	end
     end
 end
+
+
+require 'address'
+class Address
+    class IPv4
+	def to_dnsressource
+	    NResolv::DNS::Resource::IN::A::new(self)
+	end
+    end
+    class IPv6
+	def to_dnsressource
+	    NResolv::DNS::Resource::IN::AAAA::new(self)
+	end
+    end
+end

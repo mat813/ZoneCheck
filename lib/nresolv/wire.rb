@@ -50,6 +50,9 @@ class NResolv
 		    def self.wire_decode(decoder)
 			self::new(Name::wire_decode(decoder))
 		    end
+		    def wire_encode(encoder)
+			@name.wire_encode(encoder)
+		    end
 		end
 
 		class SOA
@@ -101,12 +104,18 @@ class NResolv
 			addr = Address::IPv4::new(decoder.get_bytes(4).freeze)
 			self::new(addr)
 		    end
+		    def wire_encode(encoder)
+			encoder.data << address.address
+		    end
 		end
 
 		class AAAA
 		    def self.wire_decode(decoder)
 			addr = Address::IPv6::new(decoder.get_bytes(16).freeze)
 			self::new(addr)
+		    end
+		    def wire_encode(encoder)
+			encoder.data << address.address
 		    end
 		end
 	    end
@@ -154,16 +163,17 @@ class NResolv
 		# NOT REACHED
 	    end
 	    
-	    
 	    def wire_encode(encoder)
 		if encoder.global14
 		    @labels.each_index { |i|
 			domain = @labels[i..-1]
 			if idx = encoder.global14[domain]
-			    encoder << [0xc000 | idx].pack('n')
+			    encoder.pack('n', 0xc000 | idx)
 			    return
 			else
-			    encoder.global14[domain] = encoder.data.length
+			    if @labels[i] != Label::Root
+				encoder.global14[domain] = encoder.data.length
+			    end
 			    @labels[i].wire_encode(encoder)
 			end
 		    }
@@ -191,18 +201,25 @@ class NResolv
 		    @global14	= { }
 		end
 		
-		def <<(obj)
-		    @data << obj
-		    self
-		end
-		
 		def put_string(str)
 		    @data << [str.length].pack('C') << str
 		end
 
 		def pack(template, *d)
-		    @data << d.pack(template)
+		    @data << self.class::pack(template, *d)
 		    self
+		end
+
+		def []=(idx, data)
+		    @data[idx] = data
+		end
+
+		def size
+		    @data.size
+		end
+
+		def self.pack(template, *d)
+		    d.pack(template)
 		end
 	    end
 
@@ -322,18 +339,20 @@ class NResolv
 
 	    def to_wire
 		encoder = Encoder::new
-		encoder << [ @msgid ].pack('n')
-		encoder << [ (@qr ? 1 : 0)   << 15 |
+		encoder.pack('n', @msgid)
+		encoder.pack('n', 
+			     (@qr ? 1 : 0)   << 15 |
 		             (@opcode.value) << 11 |
 		             (@aa ? 1 : 0)   << 10 |
 		             (@tc ? 1 : 0)   <<  9 |
 		             (@rd ? 1 : 0)   <<  8 |
 		             (@ra ? 1 : 0)   <<  7 |
-		             (@rcode.value) ].pack('n')
-		encoder << [ @question   ? @question  .length : 0, 
+		             (@rcode.value))
+		encoder.pack('nnnn',
+			     @question   ? @question  .length : 0, 
 		             @answer     ? @answer    .length : 0,
 		             @authority  ? @authority .length : 0, 
-			     @additional ? @additional.length : 0].pack('nnnn')
+			     @additional ? @additional.length : 0)
 		@question  .wire_encode(encoder) if @question
 		@answer    .wire_encode(encoder) if @answer
 		@authority .wire_encode(encoder) if @authority
@@ -395,6 +414,19 @@ class NResolv
 
 		    asection
 		end
+
+		def wire_encode(encoder)
+		    @record.each { |name, rdata, ttl|
+			name.wire_encode(encoder)
+			encoder.pack('nn', 
+				     rdata.rtype.value, rdata.rclass.value)
+			encoder.pack('N', ttl)
+			encoder.data << 'xx'
+			toto = encoder.data.length
+			rdata.wire_encode(encoder)
+			encoder.data[toto-2, 2] = [ encoder.data.length - toto ].pack('n')
+		    }
+		end
 	    end
 
 	    class Q
@@ -424,8 +456,9 @@ class NResolv
 		def wire_encode(encoder)
 		    @record.each { | name, rd_class|
 			name.wire_encode(encoder)
-			encoder << [ rd_class.rtype.value,
-			    rd_class.rclass.value ].pack('nn')
+			encoder.pack('nn', 
+				     rd_class.rtype.value,
+				     rd_class.rclass.value)
 		    }
 		end
 	    end

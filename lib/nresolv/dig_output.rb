@@ -105,7 +105,7 @@ class NResolv
 			ttl,
 			rr.rclass.class.maxlen, rr.rclass,
 			rr.rtype.class.maxlen,  rr.rtype,
-			rr ]
+			rr.respond_to?(:to_dig) ? rr.to_dig : rr.to_s ]
 		end
 	    end
 	

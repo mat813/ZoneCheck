@@ -179,4 +179,51 @@ module CheckGeneric
 	    @domain.ns.length >= 2
 	end
     end
+
+
+    class Delegation < Test
+	with_msgcat 'test/generic.%s'
+
+	#-- Initialisation ------------------------------------------
+	def initialize(*args)
+	    super(*args)
+	    @querysize = const('delegation_query_size').to_i
+	end
+
+	#-- Checks --------------------------------------------------
+	def chk_delegation_udp512
+	    dummyttl	= 3600
+	    msg		= NResolv::DNS::Message::Answer::new
+	    msg.question.add(NResolv::DNS::Name::Root, 
+			     NResolv::DNS::Resource::IN::NS)
+	    @domain.ns.each { |ns, ips|
+		msg.authority.add(@domain.name, 
+				  NResolv::DNS::Resource::IN::NS::new(ns),
+				  dummyttl) 
+	    }
+
+	    return true if msg.to_wire.size + @querysize-1 <= 512
+	    { 'bytes' => @querysize }
+	end
+
+	def chk_delegation_udp512_additional
+	    dummyttl	= 3600
+	    msg		= NResolv::DNS::Message::Answer::new
+	    msg.question.add(NResolv::DNS::Name::Root, 
+			     NResolv::DNS::Resource::IN::NS)
+	    @domain.ns.each { |ns, ips|
+		msg.answer.add(@domain.name, 
+			       NResolv::DNS::Resource::IN::NS::new(ns),
+			       dummyttl)
+
+		if ns.in_domain?(@domain.name)
+		    ips.each { |ip|
+			msg.additional.add(ns, ip.to_dnsressource, dummyttl) }
+		end
+	    }
+
+	    return true if msg.to_wire.size + @querysize-1 <= 512
+	    { 'bytes' => @querysize }
+	end
+    end
 end

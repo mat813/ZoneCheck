@@ -104,6 +104,7 @@ class NResolv
 		def initialize(msgid=nil)
 		    super(msgid)
 		    @qr         = true
+		    @opcode     = OpCode::QUERY
 		    @question   = Section::Q::new
 		    @answer     = Section::A::new
 		    @authority  = Section::A::new
