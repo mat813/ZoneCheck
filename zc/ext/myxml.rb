@@ -79,18 +79,11 @@ case MyXML::Implementation
 when :libxml
 
 #-- BEGIN: libxml specific --------------------------------------------
-if ENV['XML_CATALOG_FILES'].nil?
-    $stderr.print <<EOT
-When using the 'libxml' parser, you should define
-the environment variable XML_CATALOG_FILES to point to
-#{ZC_INSTALL_PATH}/zc/data/catalog.xml
+# Define XML_CATALOG_FILES to point to our catalog
+ENV['XML_CATALOG_FILES'] = ((ENV['XML_CATALOG_FILES'] || '').split(/:/, -1) \
+			    << "#{ZC_DIR}/data/catalog.xml").uniq.join(':')
+$dbg.msg(DBG::INIT, "Using XML_CATALOG_FILES=#{ENV['XML_CATALOG_FILES']}")
 
-We are hoping that in new version of ruby-libxml it will be possible
-to set the catalog directly in ruby.
-
-EOT
-    exit EXIT_ERROR
-end
 
 require 'xml/libxml'
 
