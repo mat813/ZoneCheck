@@ -76,10 +76,10 @@
 <tag name="tag_adv">Adv</tag>
 
 <!-- -->
-<tag name="res_succeed_but">SUCCEED (but %d warning(s))</tag>
-<tag name="res_succeed">SUCCEED</tag>
-<tag name="res_failed">FAILED</tag>
-<tag name="res_failed_and">FAILED (and %d warning(s))</tag>
+<tag name="res_success_but">SUCCESS (but %d warning(s))</tag>
+<tag name="res_success">SUCCESS</tag>
+<tag name="res_failure">FAILURE</tag>
+<tag name="res_failure_and">FAILURE (and %d warning(s))</tag>
 
 <tag name="ns_batch">batch</tag>
 <tag name="ns_zone">zone</tag>

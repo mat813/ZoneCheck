@@ -84,9 +84,9 @@ module Publisher
 
 	def status(domainname, i_count, w_count, f_count)
 	    if f_count == 0
-		tag = (w_count > 0) ? "res_succeed_but" : "res_succeed"
+		tag = (w_count > 0) ? "res_success_but" : "res_success"
 	    else
-		tag = (w_count > 0) ? "res_failed_and" : "res_failed"
+		tag = (w_count > 0) ? "res_failure_and" : "res_failure"
 	    end
 	    $mc.get(tag) % [ w_count ]
 	end

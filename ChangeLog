@@ -3,7 +3,10 @@
 2003-??-??  ZoneCheck-2.0.0??
 	* publisher: protect quote in javascript string
 	* test: re. use the same profile as fr.
-
+	* zc: renamed profile fr to afnic
+	* test: improved ip_bogon to handle NXDOMAIN responses
+	* test: tcp connectivity has an 8 seconds timeout
+	
 2003-11-18  ZoneCheck-2.0.0b10
 	* misc: fixed bug in installer
 	* dbg: added debugging information
