@@ -6,6 +6,8 @@
 	* main: change handling of custom version (no more slave mode)
 	* main: fixed bug in is_resolvable?
 	* test: reduced timeout on tcp for mail connection
+	* test: more in depth check of tcp connection (chk_tcp)
+	* nresolv: added code for handling lost of tcp connection
 	
 2003-09-01  ZoneCheck-2.0.0b7
 	* i18n/l10n: better handling of locale (and encoding)

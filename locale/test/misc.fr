@@ -40,7 +40,7 @@
 
 
 [chk_ns_reverse]
-testname: recherche du nom correspondant à l'adresse IP du serveur
+testname: existance du nom correspondant à l'adresse IP du serveur
 error   : Impossible de trouver le nom correspondant à l'adresse IP du serveur
 ok	: Le nom correspondant à l'adresse IP du serveur a été trouvé
 explain : [none]
