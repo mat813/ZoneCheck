@@ -206,9 +206,7 @@ class Test
     end
 
 
-    def bestresolverip(name=nil)
-	return nil if name.nil?
-	
+    def bestresolverip(name=@domain.name)
 	if (ips = @domain.get_resolver_ips(name)).nil?
 	then nil
 	else ips[0]
