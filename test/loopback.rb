@@ -16,11 +16,6 @@
 #
 #
 
-#####
-#
-# TODO:
-#   - add support for IPv6
-#
 
 require 'framework'
 
@@ -38,7 +33,13 @@ module CheckNetworkAddress
 	#-- Checks --------------------------------------------------
 	# DESC: loopback network should be delegated
 	def chk_loopback_delegation(ns, ip)
-	    soa(ip, IPv4LoopbackName.domain)
+	    case ip
+	    when Address::IPv4
+		!soa(ip, IPv4LoopbackName.domain).nil?
+	    when Address::IPv6
+		!soa(ip, IPv4LoopbackName.domain).nil? &&
+		!soa(ip, IPv6LoopbackName.domain).nil?
+	    end
 	end
 
 	# DESC: loopback host reverse should exists

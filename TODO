@@ -2,10 +2,8 @@
 
 version = 2.0.0
 	Tests:	- Implement AXFR tests (only framework exists)
-		- Test loopback delegation v6
 		- base de donnees reseau (RIPE) 
 		- test connectivite avec plusieurs adresses IP 
-	Check name from_s methode
 
 	portage sous windows (recuperer le resolver par defaut, ...)
 	integration avec la chaine de production
@@ -39,6 +37,7 @@ version = 2.1.0
 	Don't assume an IPv4 stack exists
 
 	Test:	- comparaison de le resolution resolver parent avec ns
+		- Improve loopback delegation detection
 		
 
 version = 3.0.0
