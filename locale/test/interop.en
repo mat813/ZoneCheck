@@ -45,3 +45,10 @@ ok	: Correct behaviour against AAAA query
 explain : [none]
 
 
+[chk_cname]
+testname: behaviour against CNAME query
+error   : Misbehaviour against CNAME query
+ok	: Correct behaviour against CNAME query
+explain : [none]
+
+

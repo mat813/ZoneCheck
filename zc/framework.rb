@@ -268,6 +268,10 @@ class Test
 	@cm[ip].aaaa(name, force)
     end
 
+    def cname(ip, name, force=false)
+	@cm[ip].cname(name, force)
+    end
+
     def ptr(ip, name)
 	@cm[ip].ptr(name)
     end

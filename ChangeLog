@@ -10,6 +10,7 @@
 	* mail: fixed open relay detection
 	* test: catch connection refused in chk_udp
 	* test: aaaa query behaviour
+	* test: fixed bug in chk_given_nsprim_vs_soa
 	* nresolv: added code for handling lost of tcp connection
 	
 2003-09-01  ZoneCheck-2.0.0b7

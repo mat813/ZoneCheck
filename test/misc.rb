@@ -70,7 +70,7 @@ module CheckNetworkAddress
 	def chk_given_nsprim_vs_soa(ns, ip)
 	    mname = soa(ip).mname
 	    if @domain.ns[0][0] != mname
-		@domain.ns[1..-1].each { |nsname|
+		@domain.ns[1..-1].each { |nsname, |
 		    return { 'given_primary' => @domain.ns[0][0],
 			     'primary'       => mname } if nsname == mname }
 	    end

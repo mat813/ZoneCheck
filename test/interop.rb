@@ -42,19 +42,33 @@ module CheckNetworkAddress
     class Interop < Test
 	with_msgcat 'test/interop.%s'
 
-	#-- Checks --------------------------------------------------
-	# DESC: Test UDP connectivity with DNS server
-	def chk_aaaa(ns, ip)
+	#-- Shortcuts -----------------------------------------------
+	def dflt_exception(ip, name)
 	    a_exception = nil
 	    begin
 		a(ip, @domain.name)
 	    rescue NResolv::NResolvError => a_exception
 	    end
+	    a_exception
+	end
 
+	#-- Checks --------------------------------------------------
+	# DESC: 
+	def chk_cname(ns, ip)
+	    begin
+		cname(ip, @domain.name)
+	    rescue NResolv::NResolvError => cname_exception
+		return false if cname_exception.class != dflt_exception.class
+	    end
+	    true
+	end
+
+	# DESC: 
+	def chk_aaaa(ns, ip)
 	    begin
 		aaaa(ip, @domain.name)
 	    rescue NResolv::NResolvError => aaaa_exception
-		return false if a_exception.class != aaaa_exception.class
+		return false if aaaa_exception.class != dflt_exception.class
 	    end
 	    true
 	end
