@@ -16,7 +16,7 @@
 #
 
 [*]
-xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay when it processes a\nmessage from a non-local sender to a non-local recipient. These days,\njunk emailers abuse this capability at an alarming rate. They use the\nstolen capacity to greatly increase the amount of spam they can deliver.\n[adv]: AFNIC\nYou can perform more complete testing by using the following command:\n"telnet relay-test.mail-abuse.org", for more information take a look at\n<URL:http://www.mail-abuse.org/>
+xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay when it processes a\nmessage from a non-local sender to a non-local recipient. These days,\njunk emailers abuse this capability at an alarming rate. They use the\nstolen capacity to greatly increase the amount of spam they can deliver.\n[adv]: AFNIC\nIl est possible d'effectuer un test plus exhaustif en utilisant la\ncommande suivante: "telnet relay-test.mail-abuse.org", pour plus\nd'informations regardez <URL:http://www.mail-abuse.org/>\n
 
 
 
@@ -35,14 +35,14 @@ details : The mailhost (%{mailhost}) used for the hostmaster address (%{hostmast
 
 
 [chk_mail_postmaster]
-testname: addresse mél du 'postmaster' est valide pour le domaine
+testname: existence de l'addresse mél du 'postmaster'
 error   : Le 'postmaster' ne peut pas être contacté par mél
 explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved\nmailbox "Postmaster".
 details : L'addresse du 'postmaster' (%{postmaster}) n'existe pas.
 
 
 [chk_mail_hostmaster]
-testname: addresse mél du 'hostmaster' est valide
+testname: existence de l'addresse mél du 'hostmaster'
 error   : Le 'hostmaster' ne peut pas être contacté par mél
 explain : [none]
-details : L'addrese du 'hostmaster' (%{hostmaster}) n'existe pas.
+details : L'addresse du 'hostmaster' (%{hostmaster}) n'existe pas.

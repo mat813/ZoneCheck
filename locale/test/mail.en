@@ -35,7 +35,7 @@ details : The mailhost (%{mailhost}) used for the hostmaster address (%{hostmast
 
 
 [chk_mail_postmaster]
-testname: 'postmaster' email address for the domain is valid
+testname: 'postmaster' email address is valid
 error   : The postmaster can't be contacted by email
 explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved\nmailbox "Postmaster".
 details : The postmaster address (%{postmaster}) doesn't exist.

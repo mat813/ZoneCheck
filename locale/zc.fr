@@ -25,7 +25,7 @@ w_fatal		: fatal
 w_fatal_id	: f
 w_info		: info
 w_info_id	: i
-w_testing	: testing
+w_testing	: teste
 w_unexpected	: innattendu
 w_line          : ligne
 w_error		: erreur
@@ -38,7 +38,7 @@ w_abort		: interrompt
 # Tag
 #
 tag_ref		: Réf
-tag_adv		: Csl
+tag_adv		: Conseil
 
 
 #

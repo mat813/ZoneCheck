@@ -24,18 +24,18 @@ explain : [none]
 
 
 [chk_correct_recursive_flag]
-testname: vérifié que le serveur de nom est réllement récursif
+testname: serveur de nom réellement récursif
 error   : le serveur dit être récursif mais ne l'est pas
 explain : [none]
 
 
 [chk_given_nsprim_vs_soa]
-testname: given primary nameserver is primary
+testname: serveur de nom donnée comme primaire est primaire
 error   : The primary nameserver doesn't match the given one
 explain : [none]
 
 
 [chk_given_ns_vs_ns]
-testname: correctness of given nameserver list
+testname: cohérence avec la liste des serveurs de noms donnée
 error   : The nameserver list doesn't match the given one
 explain : [none]

@@ -19,43 +19,43 @@ input_cli_usage: \
 usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     -q, --quiet         N'affiche pas de titres suplémentaires\n\
     -h, --help          Affiche ce message\n\
-    -V, --version       Affiche le numéro de version et quite\n\
-    -B, --batch         Mode par lots (lit depuis un fichier ou stdin '-')\n\
-    -c, --config        Specifie l'emplacement du fichier de configuration\n\
+    -V, --version       Affiche le numéro de version et quitte\n\
+    -B, --batch         Mode en lots (lit depuis un fichier ou stdin '-')\n\
+    -c, --config        Emplacement du fichier de configuration\n\
         --testdir       Emplacement du répertoire contenant les tests\n\
-    -C, --category      N'effectue les tests que pour la catégorie précisée\n\
+    -C, --category      Limite les tests a un ensemble de catégories\n\
     -T, --test          Nom du test a effectuer\n\
         --testlist      Liste tous les tests disponibles\n\
         --testdesc      Donne une description du test (name,expl,error)\n\
-    -r, --resolver      Resolver a utiliser pour deviner les 'ns'\n\
+    -r, --resolver      Resolveur à utiliser pour déterminer les 'ns'\n\
     -n, --ns            Liste des serveurs de nom pour le domaine\n\
-    -1, --one           N'affiche que le message le plus significatif\n\
+    -1, --one           Affiche uniquement le message le plus significatif\n\
     -g, --tagonly       Affiche uniquement les tags (ideal pour les scripts)\n\
-    -e, --error         Comportemen en cas d'erreurs (voir error)\n\
-    -t, --transp        Couche de transport/routage (voir transp)\n\
-    -v, --verbose       Affichage d'informations supplémentaires (voir verbose)\n\
-    -o, --output        Sortie (see output)\n\
+    -e, --error         Comportement en cas d'erreurs (voir error)\n\
+    -t, --transp        Choix de la couche transport/routage (voir transp)\n\
+    -v, --verbose       Niveau de détail des informations (voir verbose)\n\
+    -o, --output        Format de sortie (see output)\n\
     -4, --ipv4          Utilise uniquement IPv4 pour vérifier le domaine\n\
     -6, --ipv6          Utilise uniquement IPv6 pour vérifier le domaine\n\
 \n\
   verbose:              [intro/explain/details] [testdesc|counter]\n\
     intro          [i]  Affiche un résumé du domaine et ses serveurs\n\
-    explain        [x]  Affiche une explication pour le test ayant échoué\n\
-    details        [d]  Affiche une description detaillé de l'echec\n\
+    explain        [x]  Affiche une explication en cas d'échec du test\n\
+    details        [d]  Affiche les details liés à l'échec du test\n\
     testdesc       [t]  Affiche la description du test en cours\n\
-    counter        [c]  Affiche un compteur\n\
+    counter        [c]  Affiche une bar de progression\n\
 \n\
   output:               [straigh|consolidation] [text|html]\n\
     straight      *[s]  Affiche les résultats sans traitements (ou presque)\n\
-    consolidation  [c]  Essaye de regroupe les résultats avant affichage\n\
-    text          *[t]  Formatage en text pur\n\
+    consolidation  [c]  Essaye de regrouper les résultats avant affichage\n\
+    text          *[t]  Formatage en texte pur\n\
     html           [h]  Formatage en HTML\n\
 \n\
   error:                [allfatal|allwarning] [stop|nostop]\n\
-    allfatal       [af] Toute erreur est considérée comme fatale\n\
-    allwarning     [aw] Toute erreur est considérée comme un avertissement\n\
-    stop          *[s]  Arrête des la première erreure\n\
-    nostop         [ns] N'arrête jamais (même sur les erreurs fatales)\n\
+    allfatal       [af] Tout échec est considérée comme fatale\n\
+    allwarning     [aw] Tout échec est considérée comme un avertissement\n\
+    stop          *[s]  Arrête dès le premier échec\n\
+    nostop         [ns] Exécute tous les tests (même après échec fatal)\n\
 \n\
   transp:               [ipv4/ipv6] [udp|tcp|std]\n\
     ipv4          *[4]  Utilise le protocole de routage IPv4\n\
@@ -64,10 +64,11 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     tcp            [t]  Utilise la couche de transport TCP\n\
     std           *[s]  Utilise UDP et se replie sur TCP si nécessaire\n\
 \n\
-  Traitement par lots:\n\
-    - process domain from file or stdin, with 1 per line. The syntax is:\n\
-      DOM=domainname\n\
-   or DOM=domainname NS=ns1;ns2=ip1,ip2\n\
+  Traitement en lots:\n\
+   Lit les domaines ligne par lignes depuis un fichier ou l'entrée standard,\n\
+   La syntaxe est:\n\
+      DOM=nom_de_domain\n\
+   ou DOM=nom_de_domain NS=ns1;ns2=ip1,ip2\n\
 \n\
   Catégories:\n\
     permet=[+|]    interdit=[-|!]    sous-composant=:    séparateur=,\n\
@@ -77,8 +78,8 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
 \n\
 EXEMPLES:\n\
   PROGNAME -6 --verbose=i,x,d afnic.fr.\n\
-    Teste le domaine 'afnic.fr.' en utilisant une connectivité IPv6\n\
-    uniquement, affiche un résumé des informations sur le domaine testé\n\
+    Teste le domaine 'afnic.fr.' en utilisant uniquement une connectivité\n\
+    IPv6, affiche un résumé des informations sur le domaine testé\n\
     ainsi qu'une explication et les détails sur les tests ayant échoués\n\
 \n\
   PROGNAME -v c -1 -B -\n\

@@ -56,7 +56,7 @@ explain = xpl_rfc2182
 testname: identical addresses
 error   : All addresses should be distinct
 explain = xpl_rfc2182
-details : The nameservers %{ns} are using the same IP address (%{ip}). See RFC2182.
+details : The nameservers %{ns} are using the same IP address (%{ip}).
 
 
 [chk_same_net]

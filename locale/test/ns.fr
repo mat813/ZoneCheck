@@ -45,8 +45,8 @@ explain = ns_cname_xpl
 
 
 [chk_ns_vs_any]
-testname: cohérence entre enregistrements MS et ANY
-error   : Enregistrement MS et ANY en désaccord
+testname: cohérence entre enregistrements NS et ANY
+error   : Enregistrement NS et ANY en désaccord
 explain : [none]
 
 

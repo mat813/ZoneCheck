@@ -49,38 +49,38 @@ explain = label_xpl
 
 
 [chk_soa_master_fq]
-testname: fully qualified master nameserver in SOA
-error   : The SOA master nameserver is not fully qualified
+testname: nom du serveur pleinement qualifié dans le 'master' du SOA
+error   : Le nom du serveur dans le 'master' du SOA n'est pas pleinement qualifie
 explain : [none]
-details : The master nameserver (%{mname}) is certainly missing the final dot in the configuration file.
+details : Le point ('.') final est certainement manquant dans le fichier de configuration pour le serveur (%{mname}) indiqué en tant que maître dans le SOA.
 
 
 [chk_soa_serial_fmt_YYYYMMDDnn]
-testname: serial number of the form YYYYMMDDnn
-error   : The format of the serial number is not YYYYMMDDnn
+testname: numéro de série de la forme YYYYMMDDnn
+error   : Le numéro de série n'est pas de la forme YYYYMMDDnn
 explain : [ref]: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day,\nnn=revision number).
-details : The serial %{serial} doesn't seem to be in the YYYYMMDDnn format.
+details : Le numéro de série %{serial} ne semble pas être au format YYYYMMDDnn.
 
 
 [chk_soa_refresh_6h]
-testname: SOA 'refresh' at least 6 hours
-error   : The 'refresh' period should be at least 6 hours
+testname: champ 'refresh' du SOA est à au moins 6 hours
+error   : Le champs 'refresh' doit être positionné à au moins 6 hours
 explain : [none]
-details : The refresh (%{refresh} sec) should be at least 6 hours (21600 sec), you should correct this value.
+details : Le champ 'refresh' (%{refresh} sec) doit être au moins de 6 heures (21600 sec).
 
 
 [chk_soa_retry_refresh]
-testname: SOA 'retry' lower than 'refresh'
+testname: le 'retry' doit être inférieure au 'refresh' dans le SOA
 error   : The 'retry' period must be lower than the 'refresh' period
 explain : [ref]: IETF RFC1912 (p.4)\nThe 'retry' value is typically a fraction of the 'refresh' interval.
-details : The retry (%{retry} sec) should be lower than the refresh (%{refresh} sec), you should correct one of these values.
+details : Le champ 'retry' (%{retry} sec) doit être inférieur au 'refresh' (%{refresh} sec).
 
 
 [chk_soa_retry_1h]
 testname: SOA 'retry' at least 1 hour
 error   : The 'retry' period should be at least 1 hour
 explain : [none]
-details : The retry (%{retry} sec) should be at least 1 hour (3600 sec), you should correct this value.
+details : The retry (%{retry} sec) should be at least 1 hour (3600 sec).
 
 
 [chk_soa_expire_7d]
@@ -112,20 +112,20 @@ details : The master (%{master}) is a CNAME alias to %{alias}.
 
 
 [chk_soa_vs_any]
-testname: coherence between SOA and ANY records
-error   : SOA and ANY request disagree
+testname: cohérence entre enregistrements SOA et ANY
+error   : Enregistrement SOA et ANY en désaccord
 explain : [none]
 
 
 [chk_soa_coherence_serial]
-testname: coherence of serial number with primary nameserver
-error   : The serial number is not coherent with primary nameserver
+testname: cohérence du numéro de série avec celui du serveur primaire
+error   : Le numéro de série n'est pas cohérent avec celui du serveur primaire
 explain : [none]
 details : got serial %{serial_this} instead of %{serial_ref} as on %{host_ref}.
 
 
 [chk_soa_coherence_master]
-testname: coherence of master number with primary nameserver
+testname: cohérence of master number with primary nameserver
 error   : The master number is not coherent with primary nameserver
 explain : [none]
 details : got master %{master_this} instead of %{master_ref} as on %{host_ref}.
