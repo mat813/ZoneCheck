@@ -339,7 +339,7 @@ class Param
     ## 
     ## ipv4    : use IPv4 routing protocol
     ## ipv6    : use IPv6 routing protocol
-    ## mode    : use the following mode for new resolvers: Classic / UDP / TCP 
+    ## mode    : use the following mode for new resolvers: STD / UDP / TCP 
     ##
     class Network
 	attr_reader :ipv4, :ipv6, :query_mode
@@ -394,7 +394,7 @@ class Param
 		       @ipv6 ? "IPv6" : nil].compact.join("/"))
 
 	    # Select mode
-	    @query_mode = NResolv::DNS::Client::Classic if @query_mode.nil?
+	    @query_mode = NResolv::DNS::Client::STD if @query_mode.nil?
 	    @query_mode.to_s =~ /([^:]+)$/
 	    $dbg.msg(DBG::AUTOCONF, "Query mode set to: #{$1}")
 	end
@@ -441,7 +441,7 @@ class Param
 			     end
 			     # Build new resolver
 			     cfg = NResolv::DNS::Config::new(@local_name)
-			     NResolv::DNS::Client::Classic::new(cfg)
+			     NResolv::DNS::Client::STD::new(cfg)
 			 end
 	    end
 
@@ -670,7 +670,7 @@ class Param
 	    when "t", "tcp"
 		@network.query_mode = NResolv::DNS::Client::TCP
 	    when "s", "std"
-		@network.query_mode = NResolv::DNS::Client::Classic
+		@network.query_mode = NResolv::DNS::Client::STD
 	    else
 		raise ParamError,
 		    $mc.get("xcp_param_unknown_modopt") % [token, "transp"]

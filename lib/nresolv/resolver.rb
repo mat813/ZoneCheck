@@ -130,7 +130,7 @@ module NResolv
 		end
 	    end
 
-	    
+
 	    def master(domain)
 		domain = Name::create(domain)
 		each_resource(domain, Resource::IN::SOA) { |r,|
@@ -254,7 +254,7 @@ module NResolv
 	    ## UDP with TCP fallback client
 	    ##  (support multiple DNS servers)
 	    ##
-	    class Classic < Client
+	    class STD < Client
 		def initialize(config=DefaultConfig)
 		    super(config)
 		    @requester = config.nameserver.collect { |ns|
@@ -289,6 +289,6 @@ module NResolv
 	    end
 	end
 
-	DefaultResolver = Client::Classic::new
+	DefaultResolver = Client::STD::new
     end
 end

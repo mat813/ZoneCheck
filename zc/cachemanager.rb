@@ -155,7 +155,7 @@ class CacheManager
     end
 
     # Create the root information cache
-    def self.create(dns, client=NResolv::DNS::Client::Classic)
+    def self.create(dns, client=NResolv::DNS::Client::STD)
 	CacheManager::new(nil, dns, client)
     end
 
