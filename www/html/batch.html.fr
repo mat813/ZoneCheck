@@ -331,10 +331,14 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
     <!-- What / Who / When -->
     <HR>
+      <a style="float: right;"
+	 href="http://validator.w3.org/check/referer"><img border="0"
+          src="http://www.w3.org/Icons/valid-html401"
+          alt="Valid HTML 4.01!" height="31" width="88"></a>
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr  3 14:17:16 CEST 2003
+Last modified: Thu Apr  3 14:23:36 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
