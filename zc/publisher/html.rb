@@ -399,7 +399,7 @@ EOT
 	
 
 	def setup(domain_name)
-	    if ! @rflag.quiet
+	    if !@rflag.quiet && !@option['ihtml']
 		@o.puts "<h1>ZoneCheck: #{domain_name}</h1>"
 	    end
 	end
