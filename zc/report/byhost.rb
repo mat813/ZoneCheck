@@ -40,19 +40,18 @@ module Report
     ##
     class ByHost < Template
 	def display_std
-	    if (!(@info.empty? && @warning.empty? && @fatal.empty?) || 
-		@rflag.reportok)
-		@publish.diag_start() unless @rflag.quiet
+	    # Sorting by 'host'
+	    byhost = {}
+	    full_list.each { |elt| res, severity = elt
+		next if @rflag.fatalonly && severity != Config::Fatal
+		next if severity.nil? && !@rflag.reportok
+		tag = res.tag
+		byhost[tag] = [] unless byhost.has_key?(tag)
+		byhost[tag] << elt
+	    }
 
-		# Sorting by 'host'
-		byhost = {}
-		full_list.each { |elt| res, severity = elt
-		    next if @rflag.fatalonly && severity != Config::Fatal
-		    next if severity.nil? && !@rflag.reportok
-		    tag = res.tag
-		    byhost[tag] = [] unless byhost.has_key?(tag)
-		    byhost[tag] << elt
-		}
+	    if !byhost.empty?
+		@publish.diag_start() unless @rflag.quiet
 
 		# Print 'generic' first
 		gentag = $mc.get('w_generic')	# XXX: not nice

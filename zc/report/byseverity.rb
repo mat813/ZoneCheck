@@ -40,21 +40,22 @@ module Report
     ##
     class BySeverity < Template
 	def display_std
-	    if (!(@info.empty? && @warning.empty? && @fatal.empty?) || 
-		@rflag.reportok)
-		@publish.diag_start() unless @rflag.quiet
-		    
-		catlist = []
-		if !@rflag.fatalonly
-		    catlist << @ok   if @rflag.reportok
-		    catlist << @info << @warning
-		end
-		catlist << @fatal
+	    catlist = []
+	    if !@rflag.fatalonly
+		catlist << @ok   if @rflag.reportok
+		catlist << @info << @warning
+	    end
+	    catlist << @fatal
 
+	    allempty = true
+	    catlist.each { |e| allempty &&= e.empty? }
+	    if !allempty
+		@publish.diag_start() unless @rflag.quiet
+		
 		catlist.each { |cat|
 		    display(cat.list, cat.severity) }
 	    end
-
+	    
 	    @publish.status(@domain.name, 
 			    @info.count, @warning.count, @fatal.count)
 	end
