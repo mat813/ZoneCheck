@@ -152,7 +152,7 @@ class ZCMail
 	tests.each { |name, from, to|
 	    if (r = mail_from(from)[0]) == 250
 		case rcpt_to(to)[0]
-		when 550, 551, 552, 553, 554, 571
+		when 550, 551, 552, 553, 554, 571, 454
 		else return true
 		end
 	    else
