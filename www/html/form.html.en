@@ -26,12 +26,14 @@
   </HEAD>
 
   <BODY>
-    
-    <H1><IMG alt="ZoneCheck" src="/zc/img/logo.png"></H1>
+    <!-- Logo -->
+    <H1><IMG style="float:left;" alt="ZoneCheck" src="/zc/img/logo.png"></H1>
 
-    <P>The ZoneCheck program (freely available <A href="toto">here</A>
-      for download) performs several tests on your zone (or
-      domain name) to ensure that it is correctly configured and can be
+    <!-- Propaganda -->
+    <P>The ZoneCheck program (freely available 
+      <A href="http://www.zonecheck.fr/download/">here</A>
+      for download) performs several tests on your zone (ie:
+      domain) to ensure that it is correctly configured and can be
       safely delegated, providing a certain quality to your domain (see the
       <A href="#benefit">benefit</A> section).</P>
 
@@ -40,8 +42,9 @@
       
     <P>If you need to perform the <I>ZoneCheck</I> operation for several
       domains, you can find the <A href="batch.html">batch</A> form more
-      convenient</P>
+      convenient.</P>
 
+    <!-- Warning about waiting time -->
     <BLOCKQUOTE class="zc_warning">
       <P>The time required to completely verify a zone can take
       from 30 seconds up to <B>5 minutes</B> depending on the network
@@ -51,9 +54,13 @@
       (configuration error, firewall, ...) and are waiting for timeout.</P>
     </BLOCKQUOTE>
     
-    <H2>Zone information</H2>
+    <!-- Error reporting -->
     <%=$msg%>
+
+    <!-- Form -->
     <FORM name="zcform" method="POST" action="/cgi-bin/zc.cgi">
+      <!-- Basic information -->
+      <H2>Zone information</H2>
       <TABLE class="zc_domain">
 	  <TR class="zc_zone">
 	    <TD><IMG src="/zc/img/zone.png" alt="">Zone</TD>
@@ -137,12 +144,13 @@
 		       value="<%=$ips[7]%>"></TD>
 	  </TR>
       </TABLE>
-      <P>
+      <INPUT type="submit" value=" Check! " onClick="do_check(this.form)">
+      <INPUT type="button" value=" Guess "  onClick="do_guess(this.form)">
+      <INPUT type="button" value=" Clear "  onClick="do_clear(this.form)">
 
-
-
-	<SCRIPT language="JavaScript" type="text/javascript"> 
-	  function validform(form) {
+      <!-- Form validation -->
+      <SCRIPT language="JavaScript" type="text/javascript"> 
+	function validform(form) {
 	    if (form["zone"].value.length == 0) {
 	      alert("Zone Empty");
 	      return 0;
@@ -170,211 +178,182 @@
 	      form["ips"+i].value = "";
 	    }
 	  }
-	</SCRIPT>
-
-	<INPUT type="submit" value=" Check! " onClick="do_check(this.form)">
-	<INPUT type="button" value=" Guess "  onClick="do_guess(this.form)">
-	<INPUT type="button" value=" Clear "  onClick="do_clear(this.form)">
+      </SCRIPT>
+      
 	
+      <!-- Options -->
       <H2>Options</H2>
       <TABLE class="zc_options">
 	<TR class="zc_title"><TD colspan="4">Output</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="checkbox" name="intro"    value='t' checked>
-	      zone summary
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="explain"  value='t' checked>
-	      includes explanation
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="details"  value='t' checked>
-	      includes details
-	    </TD>
+	    <TD><INPUT type="checkbox" name="intro"    value='t' checked>
+	      zone summary</TD>
+	    <TD><INPUT type="checkbox" name="details"  value='t' checked>
+	      details</TD>
+	    <TD><INPUT type="checkbox" name="explain"  value='t' checked>
+	      explanations</TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="radio" name="progress" value='counter' checked>
-	      progress bar
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="progress" value='testdesc'>
-	      description
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="progress" value=''>
-	      nothing
-	    </TD>
+	    <TD><INPUT type="radio" name="progress" value='counter' checked>
+	      progress bar</TD>
+	    <TD><INPUT type="radio" name="progress" value='testdesc'>
+	      description</TD>
+	    <TD><INPUT type="radio" name="progress" value=''>
+	      nothing</TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <SELECT name="format">
-		<OPTION value="html" SELECTED>
-		  HTML
-		<OPTION value="text">
-		  Text
-	      </SELECT> format
-	    </TD>
-	    <TD>
-	      <SELECT name="lang">
-		<OPTION value="">
-		  Default
-		<OPTION value="en" SELECTED>
-		  English
-		<OPTION value="fr">
-		  Fran&ccedil;ais
-	      </SELECT> Language
-	    </TD>
+	    <TD><SELECT name="format">
+		<OPTION value="html" SELECTED> HTML
+		<OPTION value="text"         > Text
+	      </SELECT>
+	      format</TD>
+	    <TD><SELECT name="lang">
+		<OPTION value=""           > Default
+		<OPTION value="en" SELECTED> English
+		<OPTION value="fr"         > Fran&ccedil;ais
+	      </SELECT>
+	      language</TD>
 	  </TR>	    
 
 	  <TR></TR>
 	  <TR class="zc_title"><TD colspan="4">Error report</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="radio" name="errorlvl" value="" CHECKED>
-	      default error
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="errorlvl" value="allfatal">
-	      all fatals
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="errorlvl" value="allwarning">
-	      all warnings
-	    </TD>
+	    <TD><INPUT type="radio" name="errorlvl" value="" CHECKED>
+	      default error</TD>
+	    <TD><INPUT type="radio" name="errorlvl" value="allfatal">
+	      all fatals</TD>
+	    <TD><INPUT type="radio" name="errorlvl" value="allwarning">
+	      all warnings</TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="checkbox" name="errorstop" value="stop" checked>
-	      stop on first fatal
-	    </TD>
+	    <TD><INPUT type="checkbox" name="errorstop" value="stop" checked>
+	      stop on first fatal</TD>
 	  </TR>
 
-	  
 	  <TR></TR>
-	  <TR class="zc_title"><TD colspan="4">Extra test performed</TD></TR>
+	  <TR class="zc_title"><TD colspan="4">Extra tests performed</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="checkbox" name="chkmail" value='t' checked>
-	      mail delivery
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="chkzone" value='t' checked>
-	      zone content
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="chkripe" value='t' checked>
-	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A>
-	    </TD>
+	    <TD><INPUT type="checkbox" name="chkmail" value='t' checked>
+	      mail delivery</TD>
+	    <TD><INPUT type="checkbox" name="chkzone" value='t' checked>
+	      zone transfert</TD>
+	    <TD><INPUT type="checkbox" name="chkripe" value='t' checked>
+	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A></TD>
 	  </TR>
-
 
 	  <TR></TR>
 	  <TR class="zc_title"><TD colspan="4">Transport layer</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="checkbox" name="transp3" value="ipv4" checked>
-	      <ACRONYM title="Internet Protocol version 4">IPv4</ACRONYM>
-	    </TD>
-	    <TD>
-	      <INPUT type="checkbox" name="transp3" value="ipv6" checked>
-	      <A href="http://www.ipv6.org/"><ACRONYM title="Internet Protocol version 6">IPv6</ACRONYM></A>
-	    </TD>
+	    <TD><INPUT type="checkbox" name="transp3" value="ipv4" checked>
+	      <ACRONYM title="Internet Protocol version 4">IPv4</ACRONYM></TD>
+	    <TD><INPUT type="checkbox" name="transp3" value="ipv6" checked>
+	      <A href="http://www.ipv6.org/"><ACRONYM title="Internet Protocol version 6">IPv6</ACRONYM></A></TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <INPUT type="radio" name="transp4" value="std" CHECKED>
-	      <ACRONYM title="UDP with fallback on TCP for truncated answers">STD</ACRONYM>
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="transp4" value="udp">
-	      <ACRONYM title="User Datagram Protocol">UDP</ACRONYM>
-	    </TD>
-	    <TD>
-	      <INPUT type="radio" name="transp4" value="tcp">
-	      <ACRONYM title="Transport Control Protocol">TCP</ACRONYM>
-	    </TD>
+	    <TD><INPUT type="radio" name="transp4" value="std" CHECKED>
+	      <ACRONYM title="UDP with fallback on TCP for truncated answers">STD</ACRONYM></TD>
+	    <TD><INPUT type="radio" name="transp4" value="udp">
+	      <ACRONYM title="User Datagram Protocol">UDP</ACRONYM></TD>
+	    <TD><INPUT type="radio" name="transp4" value="tcp">
+	      <ACRONYM title="Transport Control Protocol">TCP</ACRONYM></TD>
 	  </TR>
       </TABLE>
     </FORM>
     
+
+    <!-- Propaganda -->
     <H2 id="benefit">Benefit</H2>
     <P> Among the tests performed you can find checking for: 
     <UL>
       <LI>authoritative nameserver for your zone, ensuring you will
-	be able to use your domain from outside your network.
-      </LI>
+	be able to use your domain from outside your network.</LI>
       <LI>correct list of secondary nameservers, so that if your
 	primary nameserver is temporarily unreachable, you will still
-	be visible on the internet;
+	be visible on the internet;</LI>
       <LI>check for mail delivery, so that you don't become the 
 	pray of spammer	and be 
-	<A href="http://www.mail-abuse.org/">blacklisted</A>
-      </LI>
+	<A href="http://www.mail-abuse.org/">blacklisted</A></LI>
     </UL></P>
 
+
+    <!-- Help -->
     <H2 id="help">Help</H2>
     <TABLE rules="rows" class="zc_help">
+	<TR><TD class="zc_title" colspan="2">Zone Information</TD></TR>
 	<TR>
 	  <TD class="zc_key">Zone</TD>
-	  <TD>The Zone that should be tested (this is the domain name
+	  <TD>The domain (ie: zone) that should be tested (ie: the domain name
 	    that you want to register).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">Primary</TD>
 	  <TD>The nameserver that is considered as primary (the one in 
-	    the SOA record).</TD>
+	    the SOA record if it is public).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">Secondary</TD>
 	  <TD>The secondary nameservers (all the NS records associated
-	    with the zone, except for the primary).</TD>
+	    with the zone, except for the one listed above).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">IPs</TD>
 	  <TD>List of IP addresses associated with the nameserver.
 	    <UL>
-	      <LI>They only need to be specified if they can't be resolved
-		(ie: they are in the zone that you want to install).</LI>
-	      <LI>If you have several addresses could enter them separated
-		by space or coma.</LI>
-	      <LI>The form accept IPv4 and IPv6 addresses.</LI>
+	      <LI>they are only required if they can't be resolved
+		(ie: they are in the zone that you want to register).</LI>
+	      <LI>if you have several addresses you must use a coma as
+		the separator.</LI>
+	      <LI>the form accept IPv4 and IPv6 addresses.</LI>
 	    </UL>
 	  </TD>
 	</TR>
+	<TR><TD class="zc_title" colspan="2">Options: Output</TD></TR>
 	<TR>
 	  <TD class="zc_key">zone summary</TD>
 	  <TD>Includes a summary about the zone and its nameservers in 
 	    the generated report</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">includes explanations</TD>
-	  <TD>Includes an explanation (when the test failed) about 
-	    what was the purpose of the test and why you should fixed it.</TD>
+	  <TD class="zc_key">details</TD>
+	  <TD>Includes details (when the test failed) about 
+	    the culprit elements.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">no progress bar</TD>
-	  <TD>Don't display information about the test progression.</TD>
+	  <TD class="zc_key">one liner</TD>
+	  <TD>Report information as a one liner (in fact 3 lines).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">no titles</TD>
+	  <TD>Don't use title for the different sections.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">explanations</TD>
+	  <TD>Includes an explanation (when the test failed) about 
+	    the purpose of the test and why you should fixed it.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">progress bar</TD>
 	  <TD>Display information about the test progression 
-	    using a kind of progress bar (<I>require javascript and
-	    Mozilla or IE5+</I>).</TD>
+	    using a a progress bar (<I>require javascript and
+	    Mozilla or IE5+ for correct rendering</I>).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">test description</TD>
+	  <TD class="zc_key">description</TD>
 	  <TD>Give a short description of the test when it is performed.</TD>
 	</TR>
+	<TR>
+	  <TD class="zc_key">nothing</TD>
+	  <TD>Don't display information about the test progression.</TD>
+	</TR>
+	<TR><TD class="zc_title" colspan="2">Options: Error report</TD></TR>
 	<TR>
 	  <TD class="zc_key">default error</TD>
 	  <TD>Errors are reported with the default severity associated 
@@ -392,19 +371,23 @@
 	  <TD class="zc_key">stop on first fatal</TD>
 	  <TD>The report stop on the first fatal error.</TD>
 	</TR>
+	<TR><TD class="zc_title" colspan="2">Options: Extra tests performed</TD></TR>
 	<TR>
 	  <TD class="zc_key">mail delivery</TD>
-	  <TD>Perform extra checking on the mail delivery daemon.</TD>
+	  <TD>Perform extra checking on mail delivery for typical 
+	    mail account associated with domain names.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">zone content</TD>
+	  <TD class="zc_key">zone transfert</TD>
 	  <TD>Perform additional tests on the zone retrieved after
 	    a <I>zone transfert</I>.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">RIPE database</TD>
-	  <TD>????</TD>
+	  <TD>Check that IP addresses used are registered in the RIPE
+	    database (if they belong to RIPE)</TD>
 	</TR>
+	<TR><TD class="zc_title" colspan="2">Options: Transport layer</TD></TR>
 	<TR>
 	  <TD class="zc_key">IPv4, IPv6</TD>
 	  <TD>Select the routing layer (if none are selected it will
@@ -417,14 +400,13 @@
 	</TR>
     </TABLE>
 
-    
+
+    <!-- What / Who / When -->
     <HR>
-Release: $Name$
-<BR>
-    <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
+Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Feb 14 10:48:35 CET 2003
+Last modified: Tue Feb 18 12:17:44 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>
