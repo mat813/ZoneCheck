@@ -6,7 +6,6 @@ zc/dbg.rb
 zc/param.rb
 
 version = 2.0.0
-	Cleanup input/* pubisher/*
 	Implement AXFR tests (only framework exists)
 	Test loopback delegation v6
 	Cache status is wrong

@@ -108,7 +108,10 @@ ZC_Popup.prototype.add    = function(label, func) {
 
 /***********************************************************************/
 
-function zc_contextmenu_setlocale() {
+function zc_contextmenu_setlocale(l10n_details,l10n_references,l10n_elements) {
+  zc_l10n_details    = l10n_details;
+  zc_l10n_references = l10n_references;
+  zc_l10n_elements   = l10n_elements;
 }
 
 function zc_contextmenu_start() {
@@ -127,11 +130,11 @@ function zc_contextmenu_start() {
   };
 
   var ctx = new ZC_Popup("zc_contextmenu");
-  ctx.add("<IMG src='" + zc_publish_path + "/img/details.png'>toggle details",
+  ctx.add("<IMG src='"+ zc_publish_path+"/img/details.png'>"+zc_l10n_details,
 	  function () { hidefunc('zc_details', 'UL'); });
-  ctx.add("<IMG src='" + zc_publish_path + "/img/ref.png'>toggle references",
+  ctx.add("<IMG src='"+ zc_publish_path+"/img/ref.png'>"   +zc_l10n_references,
 	  function () { hidefunc('zc_ref', 'UL'); });
-  ctx.add("<IMG src='" + zc_publish_path + "/img/element.png'>toggle elements",
+  ctx.add("<IMG src='"+ zc_publish_path+"/img/element.png'>"+zc_l10n_elements,
 	  function () { hidefunc('zc_element', 'UL'); });
 
   ctx.create();

@@ -20,7 +20,7 @@ require 'dbg'
 
 
 ##
-## Message catalog for L10N
+## Message catalog for I18N/L10N
 ##
 ## The format of the message catalog is as follow:
 ## line       : '#' comment              # a comment
@@ -96,7 +96,7 @@ class MessageCatalog
     # WRITER: Set lang
     #
     def lang=(lng)
-	@lang = MessageCatalog::normlang(lng).clone.untaint
+	@lang = self.class::normlang(lng).clone.untaint
     end
 
 
@@ -165,8 +165,8 @@ class MessageCatalog
     #  - if not fullpath the default directory is prepend
     #
     def filepath(where, lng=@lang)
-	lng   = MessageCatalog::normlang(lng) unless lng == @lang
-	where = "#{@directory}/#{where}"      unless where[0] == ?/
+	lng   = self.class::normlang(lng) unless lng == @lang
+	where = "#{@directory}/#{where}"  unless where[0] == ?/
 	where % [ lng ]
     end
 

@@ -33,11 +33,27 @@ module Input
     ##  - lang
     ##  - quiet
     ##  - one
-    ##  - verbose [ intro, explain, details, testdesc, counter ]
+    ##  - verbose = [ intro, explain, details, testdesc, counter ]
     ##      - intro    = true|false
     ##      - explain  = true|false
     ##      - details  = true|false
     ##      - progress = testdesc|counter
+    ##  - output  = [ straight, consolidation, text, html ]
+    ##      - format   = html|text
+    ##  - error   = [ allfatal, allwarning, stop, nostop, standard ]
+    ##      - errorlvl  = allfatal|allwarning
+    ##      - errorstop = true|false
+    ##  - transp  = [ ipv4, ipv6, udp, tcp, std ]
+    ##      - transp3   = ipv4, ipv6
+    ##      - transp4   = udp|tcp|std
+    ##  - category
+    ##      - chkmail   = true|false  -> '!mail'
+    ##      - chkripe   = true|false  -> '!ripe'
+    ##      - chkzone   = true|false  -> '!dns:axfr'
+    ##  - ns
+    ##      - ns1  .. nsX
+    ##      - ips1 .. ipsX
+    ##  - zone
     ##
     class CGI
 	MaxNS = 8	# Maximum number of NS taken into account

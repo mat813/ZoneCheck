@@ -98,7 +98,7 @@ EXIT_ERROR      =  3	# An error unrelated to the result occured
 #
 m = /^(\d+)\.(\d+)\./.match(RUBY_VERSION)
 if (m[1].to_i <= 1) && (m[2].to_i < 8)
-    $stderr.puts "#{PROGNAME}: ruby version 1.8.0 is at least required."
+    $stderr.puts "#{PROGNAME}: ruby version 1.8.0 at least is required."
     exit EXIT_ERROR
 end
 

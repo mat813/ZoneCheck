@@ -32,6 +32,9 @@ w_error		: erreur
 w_perfect	: parfait
 w_quit		: quite
 w_abort		: interrompt
+w_details	: détails
+w_references	: références
+w_elements	: éléments
 
 
 #

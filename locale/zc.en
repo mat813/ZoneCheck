@@ -32,7 +32,9 @@ w_error		: error
 w_perfect	: perfect
 w_quit		: quit
 w_abort		: abort
-
+w_details	: details
+w_references	: references
+w_elements	: elements
 
 #
 # Tag
