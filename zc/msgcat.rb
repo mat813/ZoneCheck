@@ -15,15 +15,18 @@
 ## Message catalog for L10N
 ##
 ## The format of the message catalog is as follow:
-## line   : '#' comment              # a comment
-##        | tag ':' definition       # a tag definition
-##        | tag '=' tag              # a link to another tag
-##        | '[' prefix ']'           # a prefic to append to other tags
+## line       : '#' comment              # a comment
+##            | tag ':' definition       # a tag definition
+##            | tag '=' tag              # a link to another tag
+##            | '[' prefix ']'           # a prefic to append to other tags
 ##
-## prefix : tag                      # the tag to use as prefix
-##        | '*'                      # don't use a prefix
+## prefix     : tag                      # the tag to use as prefix
+##            | '*'                      # don't use a prefix
 ##
-## tag    : [a-zA-Z0-9_]
+## definition : string                   # a string
+##            | string '\' definition    # with posibility of continuation '\'
+##
+## tag        : [a-zA-Z0-9_]
 ##
 class MessageCatalog
     ##
@@ -75,7 +78,8 @@ class MessageCatalog
 		    while msg.gsub!(/\\$/, "")
 			if (line = io.gets).nil?
 			    raise SyntaxError, 
-				"New line expected after continuation mark"
+				fmt_line(lineno, 
+					 $mc.get("xcp_msgcat_continuation"))
 			end
 			lineno += 1
 			line.chomp!
@@ -94,7 +98,8 @@ class MessageCatalog
 		    $dbg.msg(DBG::LOCALE, "linking #{tag} -> #{link}")
 
 		else
-		    raise SyntaxError, "#{lineno}: Unexpected token"
+		    raise SyntaxError, 
+			fmt_line(lineno, $mc.get("xcp_msgcat_malformed"))
 		end
 	    end
 	}
@@ -107,8 +112,19 @@ class MessageCatalog
     #
     def get(tag)
 	if (str = @catalog[tag]).nil?
+	    # WARN: not localized (programming error)
 	    raise EntryNotFound, "Tag '#{tag}' has not been localized"
 	end
 	str
+    end
+
+    ## [private] #########################################################
+
+    private
+    #
+    # Shortcut for formating text with line number prefixed
+    #
+    def fmt_line(lineno, txt)
+	"%s %d: %s" % [ $mc.get("w_line"), lineno, txt ]
     end
 end

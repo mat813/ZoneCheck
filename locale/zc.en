@@ -73,6 +73,9 @@ xcp_config_constexists   : constant '%s' already declared
 xcp_config_testexists    : test '%s' already listed
 xcp_config_unknowntest   : unknown test '%s'
 xcp_config_ordering      : ordering problem with '%s'
+xcp_msgcat_continuation  : new line expected after continuation mark
+xcp_msgcat_malformed     : malformed line
+
 
 ##############################################################################
 ##############################################################################
