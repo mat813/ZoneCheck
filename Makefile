@@ -36,8 +36,6 @@ zc-bin:
 
 
 install:
-	echo $(PREFIX)
-	echo $(RUBY)
 	if [ ! -d $(DOCDIR) ]; then \
 		$(INSTALL) -d $(DOCDIR); \
 	fi
@@ -53,8 +51,8 @@ install:
 	$(CP) -r lib $(LIBEXEC)
 
 	$(RUBY) -p -i.bak \
-		-e "\$$_.gsub!('INSTALLPATHTOPATCH', '$(LIBEXEC)')" \
-		-e "\$$_.gsub!('#!ruby', '#!$(RUBY)')" \
+		-e "\$$_.gsub!(/^(ZC_INSTALL_PATH\s*=\s*).*/, '\1\"$(LIBEXEC)\"')" \
+		-e "\$$_.gsub!(/^#!.*\/ruby/, '#!$(RUBY)')" \
 		$(LIBEXEC)/zc/zc.rb
 	$(CHMOD) 755 $(LIBEXEC)/zc/zc.rb 
 	$(LN) -s -f $(LIBEXEC)/zc/zc.rb $(BINDIR)/zc
