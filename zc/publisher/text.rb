@@ -85,7 +85,7 @@ module Publisher
 
 		def done
 		    @mutex.synchronize { @updater.kill }
-		    @output.write "\r", $console.ctl["ce"]
+		    @output.write "\r" + $console.ctl["ce"]
 		    @output.flush
 		end
 		
