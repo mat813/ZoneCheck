@@ -170,7 +170,7 @@ class CacheManager
 	when NResolv::DNS::Name
 	    @cache.use(:address, host) {
 		begin
-		    @dns.addresses(host, order)
+		    @dns.getaddresses(host, order)
 		rescue NResolv::NoEntryError
 		    []
 		end

@@ -15,6 +15,21 @@
  *
  */
  
+
+#lang { 
+  float: right;
+  margin-left: 0;
+}
+
+#beta { 
+  margin: 0;
+  z-index: 0;
+  color: red;
+  text-align: center;
+  font-style: italic;
+  font-size: 50pt;
+}
+
 BODY { 
     background: white;
     color: #333333; 

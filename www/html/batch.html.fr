@@ -47,6 +47,10 @@
   </HEAD>
 
   <BODY>
+    <P id="lang"><A href="HTML_PATH/en/batch.html">EN</A></P>
+    <P id="beta">BETA<BR>format non standard</P>
+
+    <!-- Logo -->
     <H1><IMG alt="ZoneCheck (traitement en lots)" src="HTML_PATH/img/logo.png"></H1>
 
     <P>Il est supposé que vous êtes déjà familiarisé avec <I>ZoneCheck</I>,
@@ -64,6 +68,7 @@ Exemples:
 DOM=nic.fr NS=ns1.nic.fr;ns2.nic.fr
 DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 </PRE>
+    <!-- Form -->
     <FORM method="POST" action="HTML_PATH/cgi-bin/zc.cgi">
       <TEXTAREA name="batchdata" rows="10" cols="60"></TEXTAREA>
       <P>
@@ -329,7 +334,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Mar 24 15:58:08 CET 2003
+Last modified: Tue Apr  1 11:32:43 CEST 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

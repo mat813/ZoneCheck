@@ -203,12 +203,6 @@ class NResolv
 		}
 	    end
 
-	    def addresses(name, order=Address::OrderDefault)
-		ret = []
-		each_address(name, order) {|address| ret << address}
-		return ret
-	    end
-
 
 	    ##
 	    ## UDP only client

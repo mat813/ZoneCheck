@@ -218,7 +218,7 @@ class Param
 		if ips.empty? then
 		    $dbg.msg(DBG::AUTOCONF, "Retrieving IP for NS: #{ns}")
 		    begin
-			ips.concat(dns.addresses(ns, Address::OrderStrict))
+			ips.concat(dns.getaddresses(ns, Address::OrderStrict))
 		    rescue NResolv::NResolvError
 		    end
 		end

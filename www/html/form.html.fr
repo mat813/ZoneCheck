@@ -48,6 +48,9 @@
   </HEAD>
 
   <BODY>
+    <P id="lang"><A href="HTML_PATH/en/">EN</A></P>
+    <P id="beta">BETA</P>
+
     <!-- Logo -->
     <H1 style="text-align: center;">
       <IMG alt="ZoneCheck" src="HTML_PATH/img/logo.png"></H1>
@@ -388,7 +391,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Mar 24 15:57:04 CET 2003
+Last modified: Tue Apr  1 11:02:10 CEST 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

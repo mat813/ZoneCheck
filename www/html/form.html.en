@@ -46,6 +46,9 @@
   </HEAD>
 
   <BODY>
+    <P id="lang"><A href="HTML_PATH/fr/">FR</A></P>
+    <P id="beta">BETA</P>
+
     <!-- Logo -->
     <H1 style="text-align: center;">
       <IMG alt="ZoneCheck" src="HTML_PATH/img/logo.png"></H1>
@@ -274,8 +277,8 @@
 	    <UL>
 	      <LI>they are only required if they can't be resolved
 		(ie: they are in the zone that you want to register).</LI>
-	      <LI>if you have several addresses you must use a coma as
-		the separator.</LI>
+	      <LI>if you have several addresses you must use a space or
+		a coma as the separator.</LI>
 	      <LI>the form accept IPv4 and IPv6 addresses.</LI>
 	    </UL>
 	  </TD>
@@ -378,7 +381,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Mar 24 15:58:22 CET 2003
+Last modified: Tue Apr  1 11:34:38 CEST 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

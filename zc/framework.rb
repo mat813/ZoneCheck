@@ -167,7 +167,7 @@ class Test
 	@cm		= cm
 	@domain		= domain
 
-	@cache = Cache::new
+	@cache		= Cache::new
     end
 
 
