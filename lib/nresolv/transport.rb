@@ -83,12 +83,18 @@ module NResolv
 	##
 	class Requester
 	    def initialize(host, port, keepconnect=false)
-		@host        = host
-		@port        = port
-		@keepconnect = keepconnect
-                @queries     = {}
-		@mutex       = Sync::new
-		@closed      = false
+		@host          = host
+		@port          = port
+		@keepconnect   = keepconnect
+                @queries       = {}
+		@mutex         = Sync::new
+		@closed        = false
+		@close_on_exec = if Fcntl.constants.include?("F_SETFD")
+				     Proc::new { |fd| 
+			                 fd.fcntl(Fcntl::F_SETFD, 1) }
+				 else
+				     Proc::new { }
+				 end
             end
             
 	    # Delete a pending query by its _id_
@@ -159,6 +165,9 @@ module NResolv
 		}
 	    end
 
+	    ##
+	    ##
+	    ##
             class Query
 		attr_reader :msgid
 
@@ -217,7 +226,7 @@ module NResolv
 		    return @sock unless @sock.nil?
 
                     @sock = TCPSocket::new(@host, @port)
-                    @sock.fcntl(Fcntl::F_SETFD, 1)
+		    @close_on_exec.call(@sock)
                     @thread = Thread::new {
                         DNSThreadGroup.add Thread.current
                         loop {
@@ -285,7 +294,7 @@ module NResolv
 
                     @sock = UDPSocket::new(protocol)
                     @sock.connect(@host, @port)
-                    @sock.fcntl(Fcntl::F_SETFD, 1)
+		    @close_on_exec.call(@sock)
                     @thread = Thread::new {
                         DNSThreadGroup.add Thread.current
                         loop {
