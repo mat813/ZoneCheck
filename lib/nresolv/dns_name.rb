@@ -37,6 +37,7 @@ module NResolv
 		    def initialize(str)
 			@string   = str.to_s.freeze
 			@downcase = @string.downcase.freeze
+			freeze
 		    end
 
                     def data        ; @string                        ; end
@@ -77,11 +78,28 @@ module NResolv
             end
 
 	    def initialize(labels, origin=nil)
+		# Sanity check
+		unless labels.instance_of?(Array)
+		    raise "Label Array expected as labels" 
+		end
+		labels.each { |lbl|
+		    unless lbl.kind_of?(Label)
+			raise ArgumentError, "Label Array expected as labels"
+		    end
+		}
+
+		case origin
+		when NilClass, Name
+		else raise ArgumentError, "DNS Name expected as origin"
+		end
+
+		#
 		@labels = labels.dup
 		if origin && (@labels.empty? || ! @labels[-1].root?)
 		    origin.labels.each { |lbl| @labels << lbl }
 		end
 		@labels.freeze
+		freeze
 	    end
 
 	    def self.create(obj, make_absolute=false)
