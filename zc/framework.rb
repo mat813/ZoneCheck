@@ -166,10 +166,11 @@ class Test
 	msgcat_list.each { |msgcat| $mc.read(msgcat) }
     end
 
-    def initialize(config, cm, domain)
-	@config			= config
-	@cm			= cm
-	@domain			= domain
+    def initialize(network, config, cm, domain)
+	@network	= network
+	@config		= config
+	@cm		= cm
+	@domain		= domain
 
 	@cache = Cache::new
     end
@@ -213,10 +214,6 @@ class Test
 	then nil
 	else ips[0]
 	end
-    end
-
-    def address_wanted?(address)
-	raise "Not Implemented Yet"
     end
 
     #-- Shortcuts -----------------------------------------------

@@ -225,7 +225,7 @@ class TestManager
 
 	# Create new instance of the class
 	@classes.each { |klass|
-	    @objects[klass] = klass.method("new").call(@config,
+	    @objects[klass] = klass.method("new").call(@param.network, @config,
 						       @cm, @param.domain)
 	}
     end

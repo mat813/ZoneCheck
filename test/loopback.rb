@@ -43,7 +43,13 @@ module CheckNetworkAddress
 
 	# DESC: loopback host reverse should exists
 	def chk_loopback_host(ns, ip)
-	    !ptr(ip, IPv4LoopbackName).empty?
+	    case ip
+	    when Address::IPv4
+		!ptr(ip, IPv4LoopbackName).empty?
+	    when Address::IPv6
+		!ptr(ip, IPv4LoopbackName).empty? &&
+		!ptr(ip, IPv6LoopbackName).empty?
+	    end
 	end
     end
 end

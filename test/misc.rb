@@ -42,7 +42,12 @@ module CheckNetworkAddress
 
 	# DESC: Ensure coherence between given (param) primary and SOA
 	def chk_given_nsprim_vs_soa(ns, ip)
-	    soa(ip).mname == @domain.ns[0][0]
+	    mname = soa(ip).mname
+	    if @domain.ns[0][0] != mname
+		@domain.ns[1..-1].each { |nsname|
+		    return false if nsname == mname }
+	    end
+	    true
 	end
 	   
 	# DESC: Ensure coherence between given (param) nameservers and NS
