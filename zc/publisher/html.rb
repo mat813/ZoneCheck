@@ -296,6 +296,12 @@ EOT
 	    l10n_zone = $mc.get("ns_zone").capitalize
 
 	    @o.puts "<DIV class=\"zc-zinfo\">"
+	    # Easy parseable comment
+	    ([ "ZONE: #{domain.name}" ] +
+		domain.ns.collect { |ns, ips|
+		 "NS  : #{ns} [#{ips.join(', ')}]" }).each { |e|
+		@o.puts "<!-- #{e.ljust(70)} -->" }
+	    # Result
 	    @o.puts tbl_beg
 	    @o.puts tbl_zone % [ "<IMG src=\"#{@publish_path}/img/zone.png\" alt=\"#{l10n_zone}\">", domain.name ]
 	    domain.ns.each_index { |i| 
@@ -371,6 +377,7 @@ EOT
 	def diagnostic(severity, testname, desc, lst)
 	    msg, xpl_lst = nil, nil
 
+	    @o.puts "<!-- TEST: #{testname.ljust(40)} -->"
 	    @o.puts "<DIV class=\"zc-diag\">"
 
 	    # Testname
@@ -452,7 +459,12 @@ EOT
 	    end
 
 	    @o.puts "<DIV class=\"zc-status\">"
-	    @o.puts "<!-- ???? -->"
+	    # Easy parseable comment
+	    [   "STATUS : #{f_count > 0 ? "FAILED" : "PASSED"}",
+		"ERROR  : #{f_count}",
+		"WARNING: #{w_count}" ].each { |e|
+		@o.puts "<!-- #{e.ljust(20)} -->" }
+	    # Result
 	    @o.puts super(domainname, i_count, w_count, f_count)
 	    @o.puts "</DIV>"
 
