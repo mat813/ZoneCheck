@@ -45,8 +45,8 @@ usage: PROGNAME: [-hV] [-46] [-c conf]\n\
     -c, --config        Specify location of the configuration file\n\
         --testdir       Location of the directory holding tests\n\
     -r, --resolver      Resolver to use for guessing 'ns' information\n\
-    -4, --ipv4          Only allow check the zone with IPv4 connectivity\n\
-    -6, --ipv6          Only allow check the zone with IPv6 connectivity\n
+    -4, --ipv4          Only allow to check the zone with IPv4 connectivity\n\
+    -6, --ipv6          Only allow to check the zone with IPv6 connectivity\n
 
 input_inetd_help: \
 Command           Args\n\

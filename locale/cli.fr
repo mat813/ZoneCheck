@@ -39,7 +39,6 @@
 
 input_cli_usage: \
 usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] nomdedomaine\n\
-    -q, --quiet         N'affiche pas de titres suplémentaires\n\
         --lang          Choisit une autre langue (en, fr, ...)\n\
     -d, --debug         Choisit les messages de deboguage à afficher\n\
     -h, --help          Affiche ce message\n\
@@ -54,6 +53,7 @@ usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] nomdedomaine\n\
     -r, --resolver      Résolveur à utiliser pour déterminer les 'ns'\n\
     -n, --ns            Liste des serveurs de noms pour le domaine\n\
                            (ex: ns1;ns2=ip1,ip2;ns3=ip3)\n\
+    -q, --quiet         N'affiche pas de titres suplémentaires\n\
     -1, --one           Affiche uniquement le message le plus significatif\n\
     -g, --tagonly       Affiche uniquement les tags (idéal pour les scripts)\n\
     -v, --verbose       Niveau de détail des informations (voir verbose)\n\
