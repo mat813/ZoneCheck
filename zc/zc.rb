@@ -414,7 +414,7 @@ class ZoneCheck
 
 	    # Everything fine?
 	    exit success ? EXIT_OK : EXIT_FAILED
-	rescue Param::ParamError => e
+	rescue Param::ParamError, Config::ConfigError => e
 	    @input.error(e.to_s, EXIT_ERROR)
 	ensure
 	    # exit() raise an exception ensuring that the following code

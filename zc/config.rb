@@ -49,7 +49,7 @@ class Config
 
 
     ## Configuration error
-    ##  (unknown test, ordering problem)
+    ##  (unknown test, ordering problem, file not found)
     ## 
     class ConfigError < StandardError
     end
@@ -143,10 +143,14 @@ class Config
 	    cfgfile = Config.cfgfile(configfile)
 	    $dbg.msg(DBG::CONFIG, "domain config file: #{configfile}")
 	    $dbg.msg(DBG::CONFIG, "reading file: #{cfgfile}")
-	    io = File::open(cfgfile)
-	    parser = Config::Parser::new(Config::Lexer::new(io))
-	    constants, test_seq = parser.parse_cfg_specific
-	    io.close
+	    begin
+		io = File::open(cfgfile)
+		parser = Config::Parser::new(Config::Lexer::new(io))
+		constants, test_seq = parser.parse_cfg_specific
+		io.close
+	    rescue SystemCallError # for the Errno::ENOENT error
+		raise ConfigError, $mc.get("problem_file") % configfile
+	    end
 
 	    # Add elements
 	    begin
@@ -296,10 +300,15 @@ class Config
 	cfgfile = Config.cfgfile(configfile)
 	$dbg.msg(DBG::CONFIG, "main config file: #{configfile}")
 	$dbg.msg(DBG::CONFIG, "reading file: #{cfgfile}")
-	io = File::open(cfgfile)
-	parser = Config::Parser::new(Config::Lexer::new(io))
-	config, constants, useconf = parser.parse_cfg_main
-	io.close
+	begin
+	    io = File::open(cfgfile)
+	    parser = Config::Parser::new(Config::Lexer::new(io))
+	    config, constants, useconf = parser.parse_cfg_main
+	    io.close
+	rescue SystemCallError # for the Errno::ENOENT error
+	    raise ConfigError, $mc.get("problem_file") % configfile
+	end
+
 	
 	# Add elements
 	begin

@@ -81,6 +81,12 @@ pgr_speed_unit  : T/s
 
 
 #
+#
+#
+problem_file	: problem while opening/reading file: %s
+
+
+#
 # Input
 #
 [input]
@@ -88,7 +94,6 @@ unsupported	: Input method '%s' unsupported
 suspicious	: Input method '%s' suspicious
 version		: PROGNAME: version %s
 unsupported_domain: No mapping able to process '%s'
-
 
 
 #

@@ -81,6 +81,12 @@ pgr_speed_unit  : T/s
 
 
 #
+#
+#
+problem_file	: problème à l'ouverture/lecture du fichier: %s
+
+
+#
 # Input
 #
 [input]
@@ -88,7 +94,6 @@ unsupported	: méthode d'entrée '%s' non supportée
 suspicious	: méthode d'entrée '%s' douteuse
 version		: PROGNAME: version %s
 unsupported_domain: Impossible d'établir une correspondance pour '%s'
-
 
 
 #
