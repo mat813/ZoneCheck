@@ -170,7 +170,13 @@ class Param
 	    @p
 	end
 
-	def usage
+	def usage(errcode, io=$stderr)
+	    io.print $mc.get("param_usage").gsub("PROGNAME", PROGNAME)
+	    exit errcode unless errcode.nil?
+	end
+
+	def error(str, errcode=nil, io=$stderr)
+	    exit errcode unless errcode.nil?
 	end
     end
 
@@ -281,9 +287,10 @@ EOT
 	    exit errcode unless errcode.nil?
 	end
 
-	def error(str, io=$stderr)
+	def error(str, errcode=nil, io=$stderr)
 	    l10n_error = $mc.get("w_error").upcase
 	    io.puts "#{l10n_error}: #{str}"
+	    exit errcode unless errcode.nil?
 	end
     end
 

@@ -4,8 +4,6 @@ Documentation about 'ruby' can be found at: http://www.ruby-lang.org/
 
 
 counter only if tty
-ipv6 stack detection doesn't ensure that the host as IPv6 connectivity
-
 
 When in module CheckExtra, it is assumed that all the DNS 
 entries are coherents

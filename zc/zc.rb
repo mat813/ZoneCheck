@@ -91,24 +91,6 @@ $dbg = DBG::new
 $dbg.level=ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 
 
-#
-# Internationalisation
-#  WARN: default locale is mandatory as no human messages are
-#        present in the code (except debugging)
-#
-$mc = MessageCatalog::new(ZC_LOCALIZATION_DIR)
-[ ENV["LANG"], ZC_LANG_DEFAULT ].compact.each { |lang|
-    if $mc.available?(ZC_LANG_FILE, lang)
-	$dbg.msg(DBG::LOCALE, "Using locale: #{lang}")
-	$mc.lang = lang
-	$mc.read(ZC_LANG_FILE)
-	break
-    end
-    $dbg.msg(DBG::LOCALE, "Unable to find locale for '#{lang}'")
-}
-raise "Default locale (#{ZC_LANG_DEFAULT}) not found" if $mc.lang.nil?
-
-
 # Test for IPv6 stack
 #  WARN: doesn't implies that we have IPv6 connectivity
 $ipv6_stack = begin
@@ -118,12 +100,36 @@ $ipv6_stack = begin
 		  false
 	      end
 
+#
+# Internationalisation
+#  WARN: default locale is mandatory as no human messages are
+#        present in the code (except debugging)
+#
+$mc = MessageCatalog::new(ZC_LOCALIZATION_DIR)
+begin
+    [ ENV["LANG"], ZC_LANG_DEFAULT ].compact.each { |lang|
+	if $mc.available?(ZC_LANG_FILE, lang)
+	    $dbg.msg(DBG::LOCALE, "Using locale: #{lang}")
+	    $mc.lang = lang
+	    $mc.read(ZC_LANG_FILE)
+	    break
+	end
+	$dbg.msg(DBG::LOCALE, "Unable to find locale for '#{lang}'")
+    }
+    raise "Default locale (#{ZC_LANG_DEFAULT}) not found" if $mc.lang.nil?
+rescue => e
+    raise if $zc_slavemode
+    $stderr.puts "ERROR: #{e.to_s}"
+    exit EXIT_ERROR
+end
+
 
 ##
 ##
 ##
 class ZoneCheck
     def initialize
+	@input		= nil
 	@param		= nil
 	@test_manager	= nil
 	@testlist	= nil
@@ -137,16 +143,15 @@ class ZoneCheck
     # Parse command line
     #
     def configure
-	param = if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
-		   (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
-		then Param::CGI::new
-		else Param::CLI::new
-		end
+	@input = if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
+		    (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
+		 then Param::CGI::new
+		 else Param::CLI::new
+		 end
 	begin
-	    param.usage(EXIT_USAGE) if (@param = param.parse).nil?
+	    @input.usage(EXIT_USAGE) if (@param = @input.parse).nil?
 	rescue Param::ParamError => e
-	    param.error(e.to_s)
-	    exit EXIT_ERROR
+	    @input.error(e.to_s, EXIT_ERROR)
 	end
     end
 
@@ -270,16 +275,15 @@ class ZoneCheck
 	else
 	    cm = CacheManager::create(Test::DefaultDNS, @param.client)
 	    batchio = case @param.batch
-		      when "-"    then $stdin
-		      when String then File::open(@param.batch) 
+		      when "-"                   then $stdin
+		      when String                then File::open(@param.batch) 
 		      when Param::CGI::BatchData then @param.batch
 		      end
 	    batchio.each_line { |line|
 		next if line =~ /^\s*$/
 		next if line =~ /^\#/
 		if ! parse_batch(line)
-		    $stderr.puts "ERROR: Unable to parse batch line"
-		    exit(EXIT_ERROR)
+		    @input.error($mc.get("xcp_zc_batch_parse"), EXIT_ERROR)
 		end
 		@param.autoconf
 		ok = false unless zc(cm)

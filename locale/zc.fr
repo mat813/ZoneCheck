@@ -73,6 +73,7 @@ xcp_config_constexists   : constante '%s' déjà déclarée
 xcp_config_testexists    : test '%s' déjà listé
 xcp_config_unknowntest   : test '%s' inconnu
 xcp_config_ordering      : problème d'ordre avec '%s'
+xcp_zc_batch_parse       : Impossible d'analyser la ligne de traitement par lots
 
 ##############################################################################
 ##############################################################################

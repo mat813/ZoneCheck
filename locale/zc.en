@@ -73,6 +73,7 @@ xcp_config_constexists   : constant '%s' already declared
 xcp_config_testexists    : test '%s' already listed
 xcp_config_unknowntest   : unknown test '%s'
 xcp_config_ordering      : ordering problem with '%s'
+xcp_zc_batch_parse       : Unable to parse batch line
 
 ##############################################################################
 ##############################################################################

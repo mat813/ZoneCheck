@@ -61,31 +61,45 @@ install-common:
 
 	@echo "==> Installing libraries"
 	$(CP) -r lib    $(LIBEXEC)/zc
+	@echo
 
 	@echo "==> Installing tests"
 	$(CP) -r test   $(LIBEXEC)/zc
+	@echo
 
 	@echo "==> Installing locale"
 	$(CP) -r locale $(LIBEXEC)/zc
+	@echo
 
 	@echo "==> Installing default configuration file"
 	$(INSTALL) -d $(ETCDIR)
 	$(INSTALL) -b -m 0644 etc/zc.conf $(ETCDIR)
+	@echo "*************************"
+	@echo "** If you already had a zc.conf file it has been renamed"
+	@echo "**   to zc.conf.old"
+	@echo "** Don't forget to edit the zc.conf to reflect your system"
+	@echo "**   configuration"
+	@echo "*************************"
+	@echo
 
 install-cgi:
 	@echo "==> Installing HTML pages"
 	$(CP) -r html   $(LIBEXEC)/zc
+	@echo
 
 	@echo "==> Installing CGI"
 	$(INSTALL) -d $(CGIDIR)
 	$(LN) -f $(LIBEXEC)/zc/zc/zc.rb $(CGIDIR)/zc.cgi
+	@echo
 
 install-cli:
 	@echo "==> Installing CLI"
 	$(INSTALL) -d $(BINDIR)
 	$(LN) -f $(LIBEXEC)/zc/zc/zc.rb $(BINDIR)/zc
+	@echo
 
 install-doc:
 	@echo "==> Installing documentation"
 	$(INSTALL) -d $(DOCDIR)/zc
 	$(INSTALL) -m 0644 README TODO INSTALL BUGS $(DOCDIR)/zc
+	@echo
