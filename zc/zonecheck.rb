@@ -132,7 +132,7 @@ class ZoneCheck
 
 		if preset = @config.presets[presetname]
 		    $dbg.msg(DBG::INIT) { 
-			"Using preset '#{preset}' (reloading parameters)" }
+			"Using preset '#{preset.name}' (reloading parameters)"}
 
 		    # Create new argument
 		    @param = Param::new
