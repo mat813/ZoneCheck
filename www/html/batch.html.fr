@@ -120,7 +120,6 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 		<OPTION value="en"         > English
 		<OPTION value="fr" SELECTED> Fran&ccedil;ais
 	      </SELECT></TD>
-	    </TD>
 	  </TR>	    
 
 	  <TR><TD></TD></TR>
@@ -138,7 +137,6 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="dontstop" value="nostop">
 	      continue après fatal</TD>
-	    </TD>
 	  </TR>
 
 	  
@@ -338,7 +336,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr  3 14:23:36 CEST 2003
+Last modified: Thu Apr  3 14:25:45 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
