@@ -21,36 +21,36 @@ ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME 
 
 
 [chk_ns]
-testname: NS record present
-error   : No NS record found on server
+testname: présence d'un enregistrement NS
+error   : Aucun enregistrement NS présent sur le serveur
 explain : [none]
 
 
 [chk_ns_auth]
-testname: NS authoritative answer
-error   : The NS answer is not authoritative
+testname: réponse autoritaire pour le NS
+error   : La réponse pour le NS n'est pas autoritaire
 explain : [none]
 
 
 [chk_ns_sntx]
-testname: NS name has a valid domain/hostname syntax
-error   : NS name syntax is not correct
+testname: la syntaxe du NS réprésente un nom/domaine valide
+error   : la syntaxe du MS n'est pas correcte
 explain = label_xpl
 
 
 [chk_ns_cname]
-testname: NS is not an alias
-error   : NS is not allowed to point to a CNAME alias
+testname: l'enregistrement NS n'est pas un alias
+error   : l'enregistrement NS ne peut pas etre un alias (CNAME)
 explain = ns_cname_xpl
 
 
 [chk_ns_vs_any]
-testname: coherence between NS and ANY records
-error   : NS and ANY request disagree
+testname: cohérence entre enregistrements MS et ANY
+error   : Enregistrement MS et ANY en désaccord
 explain : [none]
 
 
 [chk_ns_ip]
-testname: NS can be resolved
+testname: NS peut être résolu
 error   : The IP addresses of the zone nameserver can't be found
 explain : [none]

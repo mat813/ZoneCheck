@@ -24,8 +24,8 @@ explain : [none]
 
 
 [chk_correct_recursive_flag]
-testname: check if server is really recursive
-error   : server claims to be recursive but is not
+testname: vérifié que le serveur de nom est réllement récursif
+error   : le serveur dit être récursif mais ne l'est pas
 explain : [none]
 
 

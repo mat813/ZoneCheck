@@ -21,8 +21,8 @@ xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay w
 
 
 [chk_mail_openrelay_domain]
-testname: delegated domain is not an openrelay
-error   : The best MX for the domain is an openrelay
+testname: domain délégué est un openrelay
+error   : Le meilleur MX pour le domaine est un openrelay
 explain = xpl_openrelay
 details : The mailhost (%{mailhost}) used for receiving email for your domain seems to act as an open relay, it is allowing mail from %{from_host} to %{to_host}.
 
@@ -35,14 +35,14 @@ details : The mailhost (%{mailhost}) used for the hostmaster address (%{hostmast
 
 
 [chk_mail_postmaster]
-testname: 'postmaster' email address for the domain is valid
-error   : The postmaster can't be contacted by email
+testname: addresse mél du 'postmaster' est valide pour le domaine
+error   : Le 'postmaster' ne peut pas être contacté par mél
 explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved\nmailbox "Postmaster".
-details : The postmaster address (%{postmaster}) doesn't exist.
+details : L'addresse du 'postmaster' (%{postmaster}) n'existe pas.
 
 
 [chk_mail_hostmaster]
-testname: hostmaster email address is valid
-error   : The hostmaster can't be contacted by email
+testname: addresse mél du 'hostmaster' est valide
+error   : Le 'hostmaster' ne peut pas être contacté par mél
 explain : [none]
-details : The hostmaster address (%{hostmaster}) doesn't exist.
+details : L'addrese du 'hostmaster' (%{hostmaster}) n'existe pas.

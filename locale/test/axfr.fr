@@ -16,17 +16,17 @@
 #
 
 [chk_axfr]
-testname: Zone transfert possible
-error   : Zone transfert not possible
+testname: Transfert de zone possible
+error   : Transfert de zone impossible
 explain : [none]
 
 [chk_axfr_empty]
-testname: Zone transfert contains data
-error   : Zone transfert is empty
+testname: Transfert de zone contient des données
+error   : Transfert de zone vide
 explain : [none]
 
 [chk_axfr_valid_labels]
-testname: Zone transfert contains valid labels
-error   : Zone transfert containts invalid label(s)
+testname: Transfert de zone contient des labels valides
+error   : Transfert de zone contient des labels invalides
 explain = label_xpl
 

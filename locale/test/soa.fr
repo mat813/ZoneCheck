@@ -19,32 +19,32 @@
 xpl_email_sntx: [ref]: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are converted by using the following rule:\n   <local-part>@<mail-domain>  ==>  <local-part>.<mail-domain>\nif <local-part> contains a dot in should be backslashed (for 'bind')
 
 [chk_soa]
-testname: SOA record present
-error   : No SOA record found on server
+testname: présence d'un enregistrement SOA
+error   : Aucun enregistrement SOA présent sur le serveur
 explain : [none]
 
 
 [chk_soa_auth]
-testname: SOA authoritative answer
-error   : The SOA answer is not authoritative
+testname: réponse autoritaire pour le SOA
+error   : La réponse pour le SOA n'est pas autoritaire
 explain : [none]
 
 
 [chk_soa_contact_sntx_at]
-testname: missused '@' characters in SOA contact name
-error   : The contact name contains the character '@'
+testname: mauvaise utilisation du caractère '@' dans le contact du SOA
+error   : Le contact contient le caractère '@'
 explain = xpl_email_sntx
 
 
 [chk_soa_contact_sntx]
-testname: illegal characters in SOA contact name
-error   : The contact name contains illegal characters
+testname: caractères illégaux dans le contact du SOA
+error   : Le contact contient des caractères illégaux
 explain = xpl_email_sntx
 
 
 [chk_soa_master_sntx]
-testname: illegal characters in SOA master nameserver
-error   : The SOA master nameserver contains illegal characters
+testname: caractères illégaux dans le 'master' du SOA
+error   : Le 'master' du SOA contient des caractères illégaux
 explain = label_xpl
 
 

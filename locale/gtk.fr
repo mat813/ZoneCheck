@@ -1,0 +1,107 @@
+# $Id$
+
+# 
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2002/08/02 13:58:17
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+[iface]
+label_transport		: Transport
+label_error		: Erreur
+label_extra_tests	: tests supplémentaires
+label_output		: Sortie
+label_check		: Vérifie
+label_guess		: Devine
+label_clear		: Efface
+label_debug		: Debug
+label_advanced		: Avancé
+stop_on_first		: arrête sur le premier fatal
+error_default		: sévérité par défaut
+error_allwarnings	: tout avertissment
+error_allfatals		: tout fatal
+test_mail		: mail delivery
+test_zone		: zone content
+test_ripe		: RIPE database
+output_explain		: explication
+output_details		: détails
+output_zone		: résumé
+output_progressbar	: bar de progression
+output_nothing		: rien
+output_description	: description
+dbg_loading		: chargement
+dbg_locale		: locale
+dbg_config		: config
+dbg_parser		: parser
+dbg_tests		: tests
+dbg_autoconf		: autoconf
+dbg_dbg			: debugger
+dbg_cache_info		: cache information
+dbg_nocache		: pas de cache
+dbg_dont_rescue		: aucun parachute
+dbg_crazydebug		: crazy debug
+
+batch_example		: example:\nDOM=domain\nDOM=domain NS=ns1;ns2=1.2.34,2001:1547::1
+
+batch_save		: Ouvrir traitement en lots
+batch_open		: Sauvegarder traitement en lots
+
+file_overwrite		: Ecraser le fichier: %s
+file_gotdirectory	: Ne peut pas lire un répertoire
+
+xcp_toomany_nameservers : Trop de serveurs de noms
+
+[iface_tooltip]
+input/simple/zone : Enter zone to check
+input/simple/nameserver/name: Enter nameserver name
+input/simple/nameserver/addresses: Enter nameserver IP addresses (coma separated)
+input/batch/data: Enter the list of Zone that you want to test
+input/batch/save: Save current batch data
+input/batch/open: Set batch data from existing file
+input/simple/guess: Try to fill the nameserver information for an existing zone
+input/clear: Clear all the input information
+input/check: Start the ZoneCheck verification
+
+option/output/summary: Give summary information about the zone tested
+option/output/explain: Give explanation and references
+option/output/details: Give detailed information
+option/output/progress: Show a progress bar
+option/output/description: Show current test name
+option/output/nothing: Don't display progress information
+option/error/default: Use the severity assigned in the configuration file
+option/error/allwarnings: All errors are considered as warnings
+option/error/allfatals: All errors are considered as fatals
+option/error/stoponfirst: Stop on first fatal error
+option/transp/ipv4: Use IPv4 protocol
+option/transp/ipv6: Use IPv6 protocol (new internet protocol)
+option/transp/std: Use UDP and fallback to TCP in case of truncated anser
+option/transp/udp: Use UDP protocol for all queries
+option/transp/tcp: Use TCP protocol for all queries
+
+expert/output/oneline: Print a short answer
+expert/output/tagonly: Only print tag (ideal for scripting)
+expert/output/quiet: Try to minimize ouput messages
+expert/output/format: Select output format
+expert/output/report: Select report analyse/processing
+expert/advanced/resolver: Select an alternative local resolver
+expert/advanced/testonly: Select the unique test you want to make
+
+
+
+[*]
+input_gtk_usage: \
+usage: PROGNAME: [-hV] [-c conf] [-r resolver]\n\
+    -h, --help          Show this message\n\
+    -V, --version       Display version and exit\n\
+    -c, --config        Specify location of the configuration file\n\
+        --testdir       Location of the directory holding tests\n\
+    -r, --resolver      Resolver to use for guessing 'ns' information\n
