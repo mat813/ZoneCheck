@@ -96,7 +96,7 @@ module CheckGeneric
 	    }
 	    hosts.delete_if { |k, v| v.size < 2 }
 	    hosts.each { |k, v|	# Got at least 1 entry as ip != ip.uniq
-		return { "ip" => k.to_s, "ns" => v.join(", ") }
+		return { "ip" => k, "ns" => v.join(", ") }
 	    }
 	end
 

@@ -74,15 +74,14 @@ module CheckNetworkAddress
 
 	# DESC: coherence between 'expire' and 'refresh'
 	def chk_soa_expire_7refresh(ns, ip)
-#	    return true if soa(ip).expire >= 7 * soa(ip).refresh
-	    { "expire"  => soa(ip).expire.to_s, 
-	      "refresh" => soa(ip).refresh.to_s }
+	    return true if soa(ip).expire >= 7 * soa(ip).refresh
+	    { "expire"  => soa(ip).expire, "refresh" => soa(ip).refresh }
 	end
 
 	# DESC: recommanded minimum is > 24h
 	def chk_soa_minimum_3h(ns, ip)
 	    return true if soa(ip).minimum <= 10800
-	    { "minimum" => soa(ip).minimum.to_s }
+	    { "minimum" => soa(ip).minimum }
 	end
 
 	# DESC: coherence between 'ttl' and 'minimum'
