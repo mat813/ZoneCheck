@@ -265,7 +265,7 @@ module Publisher
 	    def start(count)
 		title = if @publisher.rflag.quiet
 			then ""
-			else "<H2>#{$mc.get("title_progress")}</H2>"
+			else "<H2>" + $mc.get("title_progress") + "</H2>"
 			end
 		if @publisher.rflag.counter
 		    @o.puts HTML.jscript {
@@ -384,7 +384,8 @@ EOT
 
 
 	    unless rflag.quiet
-		@o.puts "<H2>#{$mc.get("title_zoneinfo")}</H2>"
+		title = $mc.get("title_zoneinfo")
+		@o.puts "<H2>#{title}</H2>"
 	    end
 
 
@@ -499,7 +500,8 @@ EOT
 
 	def status(domainname, i_count, w_count, f_count)
 	    unless @rflag.quiet
-		@o.puts "<H2>#{$mc.get("title_status")}</H2>"
+		title = $mc.get("title_status")
+		@o.puts "<H2>#{title}</H2>"
 	    end
 	    @o.print "<DIV class=\"zc_status\">", 
 		super(domainname, i_count, w_count, f_count), "</DIV>"

@@ -146,7 +146,12 @@ class Param
 		}
 		if ! ns_list.empty?
 		    @p.domain.ns   = ns_list.collect { |ns, ips|
-			ips ? "#{ns}=#{ips.join(",")}" : ns
+			if ips
+			    ips_str = ips.join(",")
+			    "#{ns}=#{ips_str}" 
+			else
+			    ns
+			end
 		    }.join(";")
 		end
 	    end
