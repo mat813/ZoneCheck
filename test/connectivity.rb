@@ -23,6 +23,11 @@
 #   - 'chk_udp' perhaps used a SOA request instead of a 'server status'
 #     in case the tested DNS uses view
 #
+# BUGFIX:
+#   - chk_udp: recvfrom reject datagram bigger than the requested size
+#              instead of copying the beginning
+#     using the NResolv::DNS::UDPSize instead of 1 byte
+#
 
 require 'framework'
 
@@ -77,7 +82,7 @@ module CheckNetworkAddress
 		    (1..25).each { sock.write(rawmsg) ; sleep(0.2) }
 		}
 		begin
-		    timeout(8) { sock.recv(1) }
+		    timeout(8) { sock.recv(NResolv::DNS::UDPSize) }
 		    true
 		rescue TimeoutError
 		    false
