@@ -7,7 +7,9 @@
 	* test: use of alternative rootserver possible in chk_root_server_*
 	* test: checking of delegation response size chk_delegation_udp512*
 	* nresolv: able to encode NS, A, AAAA records
-	
+	* zc: fixed wrong exit code when 'no stop on fatal' was enabled
+	* zc: option --resolver is not necessary anymore on windows
+
 2003-10-02  ZoneCheck-2.0.0b8
 	* test: added chk_soa_coherence
 	* l10n: improved chk_mx_ip description

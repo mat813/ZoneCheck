@@ -87,8 +87,7 @@ class NResolv
 	    attr_reader :rootserver
 
 	    def self.from_resolv(filename='/etc/resolv.conf')
-		nameserver = []
-		search     = nil
+		nameserver, search = [], nil
 
 		# Read configuration file
 		begin
@@ -117,13 +116,11 @@ class NResolv
 	    end
 
 	    def self.from_winreg
-		nameserver = []
-		search     = nil
+		nameserver, search = [], nil
 
-		# Use of 'nslookup'
+		# Read configuration from 'nslookup'
 		nslookup_info = `nslookup 127.0.0.1`.split(/\r?\n/)
 		nslookup_info[1] =~ /^[^:]+:\s*(.*?)\s*$/
-
 		nameserver << $1.to_s.untaint unless $1.nil?
 
 		# Autoconf for missing information

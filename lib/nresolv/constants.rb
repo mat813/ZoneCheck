@@ -21,6 +21,10 @@
 ##
 ##
 class NResolv
+
+    ##
+    ## Objects of this class are imutable
+    ##
     class ValueHolder
 	attr_reader :name, :value
 
@@ -31,7 +35,7 @@ class NResolv
 	def initialize(name, value)
 	    # Sanity check
 	    if ! name.instance_of?(String)
-		raise ArgumentError, 'Constant name should be a String'
+		raise ArgumentError, "name should be of type #{String}"
 	    end
 
 	    # Define attributes
@@ -51,19 +55,14 @@ class NResolv
 	    @@maxlen[klass] = @name.length if @@maxlen[klass] < @name.length
 	end
 
-	def to_s
-	    @name
-	end
-
-	def eql?(other)
-	    (self.class == other.class) && (self.value == other.value)
-	end
+	#
+	def to_s	; @name					; end
+	def hash	; self.value.hash			; end
+	def eql?(other)	; (self.class == other.class) && 
+		            (self.value == other.value)		; end
 	alias == eql?
 
-	def hash
-	    self.value.hash
-	end
-
+	# Fetch a constant by name
 	def self.fetch_by_name(name)
 	    begin
 		@@hash_by_name[self].fetch(name)
@@ -72,6 +71,7 @@ class NResolv
 	    end
 	end
 	
+	# Fetch a constant by value
 	def self.fetch_by_value(value)
 	    begin
 		@@hash_by_value[self].fetch(value)
@@ -80,6 +80,7 @@ class NResolv
 	    end
 	end
 	
+	#
 	def self.maxlen        ; @@maxlen[self]      ; end
 	def self.filler(token) ; token * self.maxlen ; end
     end

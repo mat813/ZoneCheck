@@ -27,10 +27,12 @@ class NResolv
     class DNS
 	##
 	## DNS Name
+	##  (object of this class are immutable)
 	##
 	class Name
 	    ##
 	    ## DNS Label
+	    ##  (object of this class are immutable)
 	    ##
 	    class Label
 		##

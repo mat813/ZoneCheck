@@ -181,6 +181,9 @@ module CheckGeneric
     end
 
 
+    ##
+    ##
+    ##
     class Delegation < Test
 	with_msgcat 'test/generic.%s'
 

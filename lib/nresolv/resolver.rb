@@ -63,7 +63,7 @@ class NResolv
 
 	    def initialize(config=Config::Default)
 		if self.class == Client
-		    raise RuntimeError, "#{self.class} is an abstract class"
+		    raise "#{self.class} is an abstract class"
 		end
 		@config = config
 	    end

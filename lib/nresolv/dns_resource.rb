@@ -130,16 +130,12 @@ class NResolv
 
 		class AXFR < Resource
 		    has_fields # none
-		    def initialize
-			raise "#{self.class} can't be instanciated"
-		    end
+		    def initialize ; raise "abstract class #{self.class}" ; end
 		end
 
 		class ANY < Resource
 		    has_fields # none
-		    def initialize
-			raise "#{self.class} can't be instanciated"
-		    end
+		    def initialize ; raise "abstract class #{self.class}" ; end
 		end
 	    end
 	    
