@@ -78,8 +78,9 @@ module CheckNetworkAddress
 	end
 
 	# DESC: recommanded minimum is > 24h
-	def chk_soa_minimum_24h(ns, ip)
-	    soa(ip).minimum >= 86400
+	def chk_soa_minimum_3h(ns, ip)
+	    return true if soa(ip).minimum <= 10800
+	    { "minimum" => soa(ip).minimum.to_s }
 	end
 
 	# DESC: coherence between 'ttl' and 'minimum'

@@ -46,7 +46,7 @@ module CheckGeneric
 	def initialize(*args)
 	    super(*args)
 	    @ip		= nil
-	    @same_net	= nil
+	    @by_subnet	= nil
 	end
 
 	#-- Shortcuts -----------------------------------------------
@@ -65,11 +65,9 @@ module CheckGeneric
 	    nil
 	end
 
-	def same_net
-	    cache_attribute("@same_net") {
+	def by_subnet
+	    cache_attribute("@by_subnet") {
 		nethosts = {}
-
-		# Classifying host by subnet
 		ip.each { |i| 
 		    net = case i                     # decide of subnet size:
 			  when Address::IPv4 then i.prefix(28) # /28 for IPv4
@@ -78,10 +76,6 @@ module CheckGeneric
 		    nethosts[net] = [ ] unless nethosts.has_key?(net)
 		    nethosts[net] << i
 		}
-		
-		# Only keep list of hosts on same subnet
-		nethosts.delete_if { |k, v| v.size < 2 }
-		
 		nethosts
 	    }
 	end
@@ -108,6 +102,9 @@ module CheckGeneric
 
 	# DESC: Addresses should avoid belonging to the same network
 	def chk_same_net
+	    # Only keep list of hosts on same subnet
+	    same_net = by_subnet.dup.delete_if { |k, v| v.size < 2 }
+		
 	    # Ok all hosts are on different subnets
 	    return true if same_net.empty?
 
@@ -128,10 +125,11 @@ module CheckGeneric
 	# WARN: Test is wrong in case of IPv4 and IPv6
 	def chk_all_same_net
 	    # Ok not all hosts are on the same subnet
-	    return true if same_net.empty? || same_net.size > 1
+	    return true unless ((by_subnet.size           == 1) && 
+				(by_subnet.values[0].size >  1))
 
 	    # Create output data for failure
-	    subnet = same_net.keys[0]
+	    subnet = by_subnet.keys[0]
 	    prefix = case subnet
 		     when Address::IPv4 then 28
 		     when Address::IPv6 then 64

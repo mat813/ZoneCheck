@@ -39,7 +39,8 @@ class Test
 	    end
 
 	    def hash
-		@testname.hash ^ @err.hash ^ @msg.hash ^ @xpl.hash ^ @xtr.hash
+		@testname.hash ^ @err.hash ^ @msg.hash ^ 
+		    @xpl.hash ^ @xtr.hash ^ @data.hash
 	    end
 	    
 	    def eql?(other)
@@ -47,7 +48,8 @@ class Test
 		 @err      == other.instance_eval("@err")      &&
 		 @msg      == other.instance_eval("@msg")      &&
 		 @xpl      == other.instance_eval("@xpl")      &&
-		 @xtr      == other.instance_eval("@xtr"))
+		 @xtr      == other.instance_eval("@xtr")      &&
+		 @data     == other.instance_eval("@data"))
 	    end
 	    alias == eql?
 

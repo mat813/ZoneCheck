@@ -293,10 +293,11 @@ testname: SOA 'expire' at least 7 times 'refresh'
 error   : The 'expire' period must be at least 7 times greater than 'refresh'
 explain : [none]
 
-[chk_soa_minimum_24h]
-testname: SOA 'minimum' at least 24 hours
-error   : The 'minimum' period must be at least 24 hours
-explain : [ref]: IETF RFC1912 (p.4)\n  The default TTL for resource records: how long data will remain in other\n  nameserves' cache. 1 to 5 days are typical values.\n[ref]: AFNIC constraint\n  A minimum of 1 day (24h) is enforced.
+[chk_soa_minimum_3h]
+testname: SOA 'minimum' less than 3 hours
+error   : The 'minimum' period should be less than 3 hours
+explain : [none]
+details : The minimum value is %{minimum} sec, and should be less than 3 hours (10800 sec).
 
 [chk_soa_ttl]
 testname: SOA 'TTL' equal 'minimum'
