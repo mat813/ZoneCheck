@@ -22,20 +22,18 @@ testname: Nameserver IP reverse
 error   : Can't find reverse for the nameserver IP address
 explain : [none]
 
+
 [chk_correct_recursive_flag]
 testname: check if server is really recursive
 error   : server claims to be recursive but is not
 explain : [none]
 
 
-#
-# Coherence with given parameters
-#
-
 [chk_given_nsprim_vs_soa]
 testname: given primary nameserver is primary
 error   : The primary nameserver doesn't match the given one
 explain : [none]
+
 
 [chk_given_ns_vs_ns]
 testname: correctness of given nameserver list

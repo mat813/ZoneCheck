@@ -15,36 +15,42 @@
 #
 #
 
+[*]
+ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME is bad and may conflict badly\nwith current BIND servers.  In fact, current BIND implementations\nwill ignore such records, possibly leading to a lame delegation.\nThere is a certain amount of security checking done in BIND to\nprevent spoofing DNS NS records.  Also, older BIND servers reportedly\nwill get caught in an infinite query loop trying to figure out the\naddress for the aliased nameserver, causing a continuous stream of\nDNS requests to be sent.
+
+
+
 [chk_ns]
 testname: NS record present
 error   : No NS record found on server
 explain : [none]
+
 
 [chk_ns_auth]
 testname: NS authoritative answer
 error   : The NS answer is not authoritative
 explain : [none]
 
+
 [chk_ns_sntx]
 testname: NS name has a valid domain/hostname syntax
 error   : NS name syntax is not correct
 explain = label_xpl
+
 
 [chk_ns_cname]
 testname: NS is not an alias
 error   : NS is not allowed to point to a CNAME alias
 explain = ns_cname_xpl
 
+
 [chk_ns_vs_any]
 testname: coherence between NS and ANY records
 error   : NS and ANY request disagree
 explain : [none]
 
+
 [chk_ns_ip]
 testname: NS can be resolved
 error   : The IP addresses of the zone nameserver can't be found
 explain : [none]
-
-[*]
-ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME is bad and may conflict badly\nwith current BIND servers.  In fact, current BIND implementations\nwill ignore such records, possibly leading to a lame delegation.\nThere is a certain amount of security checking done in BIND to\nprevent spoofing DNS NS records.  Also, older BIND servers reportedly\nwill get caught in an infinite query loop trying to figure out the\naddress for the aliased nameserver, causing a continuous stream of\nDNS requests to be sent.
-
