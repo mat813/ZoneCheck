@@ -109,7 +109,7 @@ module Input
 	    begin
 		opts_analyse(p)
 		args_analyse(p) unless p.test.list || p.test.desctype
-	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
+	    rescue GetoptLong::Error
 		return false
 	    end
 	    true

@@ -1092,7 +1092,7 @@ EOT
 	    begin
 		opts_analyse(p)
 		return false unless ARGV.empty?
-	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
+	    rescue GetoptLong::Error
 		return false
 	    end
 	    p.fs.autoconf
