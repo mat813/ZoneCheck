@@ -1,53 +1,50 @@
 # $Id$
 
-require 'test/framework'
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revivion$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+require 'framework'
 
 module CheckGeneric
     ##
-    ##
+    ## Check syntax validity of the domain name
     ##
     class DomainNameSyntax < Test
-	#-- Initialization ------------------------------------------
-	def initialize(domainname, cm)
-	    super(domainname, cm)
-	end
-
-	def self.create(param, cm)
-	    return DomainNameSyntax::new(param.domainname, cm)
-	end
-
 	#-- Tests ---------------------------------------------------
 	# DESC: A domainname should only contains A-Z a-Z 0-9 '-' '.'
 	def chk_dn_alpha
-	    domainname.to_s =~ /^[A-Za-z0-9\-\.]+$/
+	    @domain_name.to_s =~ /^[A-Za-z0-9\-\.]+$/
 	end
 
-	# DESC: A domainname shoul not countain a double hyphen
+	# DESC: A domainname should not countain a double hyphen
 	def chk_dn_dbl_hyph
-	    ! (domainname.to_s =~ /--/)
+	    ! (@domain_name.to_s =~ /--/)
 	end
 
 	# DESC: A domainname should not start or end with an hyphen
 	def chk_dn_orp_hyph
-	    ! (domainname.to_s =~ /(^|\.)-|-(\.|$)/)
+	    ! (@domain_name.to_s =~ /(^|\.)-|-(\.|$)/)
 	end
     end
 
 
 
     ##
-    ##
+    ## Check basic absurdity with the nameserver IP addresses
     ##
     class ServerAddress < Test
 	#-- Initialization ------------------------------------------
-	def initialize(domainname, ns, cm)
-	    super(domainname, cm)
-	    @domain_ns = ns
+	def initialize(*args)
+	    super(*args)
 	    @ip        = nil
-	end
-
-	def self.create(param, cm)
-	    return ServerAddress::new(param.domainname, param.ns, cm)
 	end
 
 	#-- Shortcuts -----------------------------------------------
@@ -80,19 +77,9 @@ module CheckGeneric
 
 
     ##
-    ##
+    ## Check for nameserver!
     ##
     class NameServers < Test
-	#-- Initialization ------------------------------------------
-	def initialize(domainname, ns, cm)
-	    super(domainname, cm)
-	    @domain_ns = ns
-	end
-
-	def self.create(param, cm)
-	    return NameServers::new(param.domainname, param.ns, cm)
-	end
-
 	#-- Tests ---------------------------------------------------
 	# DESC: A domain should have a nameserver!
 	def chk_one_ns
