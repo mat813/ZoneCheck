@@ -19,3 +19,4 @@
 - check name from_s methode
 - escape HTML code
 - meaningfull exit code
+- test if ping6 is really there and, otherwise, do not perform some IPv6 tests 
