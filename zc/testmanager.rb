@@ -77,6 +77,10 @@ class TestManager
     end
 
 
+    def list
+	@tests.keys
+    end
+
     #
     # Use the configuration object ('config') to instanciate each
     # classes (but only once) that will be used to perform the tests.

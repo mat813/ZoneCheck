@@ -67,8 +67,8 @@ class Param
 		when "--testdir"   then @p.testdir       = arg
 		when "--dnsonly"   then @p.dnsonly	 = true
 		when "--test"      then @p.test          = arg
-		when "--testlist"  then @p
-		when "--testdesc"  then @p
+		when "--testlist"  then @p.give_testlist = true
+		when "--testdesc"  then @p.give_testdesc = arg
 		when "--resolver"  then @p.resolver      = arg
 		when "--ns"        then @p.domain.ns     = arg
 		when "--ipv6"      then @p.ipv6          = true
@@ -109,7 +109,7 @@ EOT
 	def parse
 	    begin
 		opts_analyse
-		args_analyse
+		args_analyse unless @p.give_testlist || @p.give_testdesc
 	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
 		return nil
 	    end
@@ -427,6 +427,13 @@ EOT
 
     attr_writer :debug
 
+    attr_reader :give_testlist
+    attr_writer :give_testlist
+
+    attr_reader :give_testdesc
+    
+
+
     attr_reader :testdir
     attr_writer :testdir
 
@@ -450,6 +457,9 @@ EOT
 	@ipv4			= nil
 	@ipv6			= nil
 
+	@testlist		= nil
+	@testdesc		= nil
+
 	@client			= NResolv::DNS::Client::Classic
 
 
@@ -463,6 +473,23 @@ EOT
     #
     #
 
+    def give_testdesc=(string)
+#	case string
+#	when /^(\w+):(\w+)$/ then type, tag = $1,     $2
+#	when /^(\w+)$/       then type, tag = "name", $1
+#	else raise ParamError, "bad syntax for testdesc option"
+#	end
+
+	suf = case string
+	      when "name"  then "testname"
+	      when "expl"  then "explain"
+	      when "error" then "error"
+	      else raise ParamError, 
+		      "unknown type '#{type}' for testdesc option"
+	      end
+	
+	@give_testdesc = suf
+    end
 
 
     #

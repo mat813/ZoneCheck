@@ -12,7 +12,8 @@
 #
 #
 # HISTORIC:
-#  - First version of ZoneCheck was developped by Erwan Mas
+#  - First version was developped by Erwan Mas
+#  - C++ prototype was developped by 
 #
 
 $LOAD_PATH << "../lib/"
@@ -32,7 +33,6 @@ ZC_VERSION	= (Proc::new {
 		       
 		       n || "<unreleased>"
 		   }).call
-ZC_AUTHOR	= "Stephane D'Alu <sdalu@nic.fr>"
 ZC_MAINTAINER   = "Stephane D'Alu <sdalu@nic.fr>"
 PROGNAME	= File.basename($0)
 
@@ -220,6 +220,19 @@ class ZoneCheck
 	    load_tests_implementation
 	    init_testmanager
 	    load_testlist
+	    
+	    if @param.give_testlist
+		puts @config.test_list.sort
+		exit EXIT_OK
+	    end
+	    if @param.give_testdesc
+		suf = @param.give_testdesc
+		@config.test_list.each { |test|
+		    puts $mc.get("#{test}_#{suf}")
+		}
+		exit EXIT_OK
+	    end
+
 	    run
 	ensure
 	    destroy
