@@ -1,25 +1,37 @@
 ZoneCheck is copyright AFNIC, 2003. It is written and maintained by
 Stephane d'Alu <sdalu@nic.fr>. You can write AFNIC at <nic@nic.fr>.
 
-The licence of ZoneCheck is disjunctive. It means you can use or
-distribute (in the original form or a modified one) ZoneCheck
-according to the terms in *either* (at your choice):
+The Ruby DNS library (in the lib/ directory) is licenced like Ruby
+(either GPL or the Ruby licence, see
+<URL:http://www.ruby-lang.org/en/LICENSE.txt> for details).
 
-1) the GPL (GNU General Public License)
+ZoneCheck terms of use and distribution:
+
+You can use, modify and distribute ZoneCheck according to the GPL
+(GNU General Public License)
 <URL:http://www.gnu.org/licenses/gpl.html>. To summary (a lot!), it
-means you can use ZoneCheck freely, you can have the source code, you
-can distribute it freely (even after modifications) BUT you cannot
-deny these freedoms to the people who receive it: for instance, you
-must provide them with the source code.
+means you can use ZoneCheck freely (but not to link it with software
+which is not GPL-compatible), you can have the source code, you can
+distribute it freely (even after modifications) BUT you cannot deny
+these freedoms to the people who receive it: for instance, you must
+provide them with the source code.
 
-2) or the following terms (which are very close from the X11/MIT
-licence): Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation files
-(the "Software"), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of the Software,
-and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+Alternatively, if you want to use or distribute a version of ZoneCheck
+in a way which is not compatible with the GPL you *must* get an
+agreement from AFNIC which will allow you the right to use the
+following terms. The license is therefore *not* a disjunctive
+license. To use the "MIT/X11"-like license hereafter, you need a
+personal agreement with AFNIC.
+
+----------- Terms after relicencing, for the licencee only ----
+
+Permission is hereby granted, to <<the licencee>> obtaining a copy of
+this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies of the Software, and to permit persons
+to whom the Software is furnished to do so, subject to the following
+conditions:
 
 The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
@@ -32,10 +44,10 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
---------------
+-----------------------------------------
 
 Patch submitters are therefore informed that, for the patches to be
-included, you must agree on both licences.
+included, you must agree on this possible relicensing.
 
 ------------
 
