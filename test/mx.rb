@@ -59,5 +59,12 @@ module CheckNetworkAddress
 	    }
 	    true
 	end
+
+
+
+
+	def tst_mail_by_mx_or_a(ns, ip)
+	    "MX"
+	end
     end
 end

@@ -20,7 +20,6 @@ class Param
     ##
     class CLI
 	def initialize
-	    @p    = Param::new
 	    @opts = GetoptLong.new(* opts_definition)
 	    @opts.quiet = true
 	end
@@ -51,7 +50,7 @@ class Param
 		[ "--coffee",           GetoptLong::NO_ARGUMENT       ] ]
         end
 
-	def opts_analyse
+	def opts_analyse(p)
 	    @opts.each do |opt, arg|
 		case opt
 		when "--help"      then usage(EXIT_USAGE, $stdout)
@@ -59,25 +58,25 @@ class Param
 		    puts $mc.get("param_version").gsub("PROGNAME", PROGNAME) % 
 			[ $zc_version ]
 		    exit EXIT_OK
-		when "--debug"     then $dbg.level	    = arg
-		when "--batch"     then @p.batch	    = arg
-		when "--config"    then @p.fs.cfgfile       = arg
-		when "--testdir"   then @p.fs.testdir       = arg
-		when "--category"  then @p.test.categories  = arg
-		when "--test"      then @p.test.tests       = arg
-		when "--testlist"  then @p.test.list        = true
-		when "--testdesc"  then @p.test.desctype    = arg
-		when "--resolver"  then @p.resolver.local   = arg
-		when "--ns"        then @p.domain.ns        = arg
-		when "--ipv6"      then @p.network.ipv6     = true
-		when "--ipv4"      then @p.network.ipv4     = true
-		when "--one"       then @p.rflag.one	    = true
-		when "--tagonly"   then @p.rflag.tagonly    = true
-		when "--quiet"     then @p.rflag.quiet      = true
-		when "--error"     then @p.error            = arg
-		when "--transp"    then @p.transp           = arg
-		when "--verbose"   then @p.verbose	    = arg
-		when "--output"    then @p.output           = arg
+		when "--debug"     then $dbg.level		= arg
+		when "--batch"     then p.batch			= arg
+		when "--config"    then p.fs.cfgfile		= arg
+		when "--testdir"   then p.fs.testdir		= arg
+		when "--category"  then p.test.categories	= arg
+		when "--test"      then p.test.tests		= arg
+		when "--testlist"  then p.test.list		= true
+		when "--testdesc"  then p.test.desctype		= arg
+		when "--resolver"  then p.resolver.local	= arg
+		when "--ns"        then p.domain.ns		= arg
+		when "--ipv6"      then p.network.ipv6		= true
+		when "--ipv4"      then p.network.ipv4		= true
+		when "--one"       then p.rflag.one		= true
+		when "--tagonly"   then p.rflag.tagonly		= true
+		when "--quiet"     then p.rflag.quiet		= true
+		when "--error"     then p.error			= arg
+		when "--transp"    then p.transp		= arg
+		when "--verbose"   then p.verbose		= arg
+		when "--output"    then p.output		= arg
 		when "--makecoffee"
 		    print <<EOT
 #{PROGNAME}: I'm not currently designed for that task.
@@ -92,8 +91,8 @@ EOT
 	    end
 	end
 	
-	def args_analyse
-	    if @p.batch
+	def args_analyse(p)
+	    if p.batch
 		if !ARGV.empty?
 		    raise ParamError, $mc.get("xcp_param_batch_nodomain")
 		end
@@ -101,21 +100,21 @@ EOT
 		if !(ARGV.length == 1)
 		    raise ParamError, $mc.get("xcp_param_domain_expected") 
 		end
-		@p.domain.name = ARGV[0]
+		p.domain.name = ARGV[0]
 	    end
 	end
 
-	def parse
+	def parse(p)
 	    begin
-		opts_analyse
-		args_analyse unless @p.test.list || @p.test.desctype
+		opts_analyse(p)
+		args_analyse(p) unless p.test.list || p.test.desctype
 	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
-		return nil
+		false
 	    end
-	    @p
+	    true
 	end
 
-	def interact(param)
+	def interact(p)
 	    true
 	end
 

@@ -12,6 +12,14 @@
 #
 
 require 'framework'
+require 'nresolv'
+
+
+require 'config/pos'
+require 'config/token'
+require 'config/lexer'
+require 'config/parser'
+
 
 ##
 ## Hold the information about the zc.conf configuration file
@@ -20,22 +28,25 @@ class Config
     Warning		= "w"		# Warning severity
     Fatal		= "f"		# Fatal severity
     Info		= "i"		# Informational
-    Skip		= "-"		# Don't run the test
-
-    S_Constants		= "constants"
-    S_Tests		= "tests"
+    Skip		= "S"		# Don't run the test
 
     L_Category		= "category"
     L_Test		= "test"
 
-    ##
-    ## Syntax error, while parsing the file
-    ##
-    class SyntaxError < StandardError
+    TestSeqOrder	= [ CheckGeneric, CheckNameServer, 
+	                    CheckNetworkAddress, CheckExtra ]
+
+    #
+    # Create a full filename from a configfile
+    #  XXX: unix specific '/'
+    def self.cfgfile(configfile)
+	if configfile =~ /^\// 
+	then configfile
+	else ZC_CONFIG_DIR + "/" + configfile
+	end
     end
 
 
-    ##
     ## Configuration error
     ##  (unknown test, ordering problem)
     ## 
@@ -43,8 +54,120 @@ class Config
     end
 
 
+    ##
+    ## Syntax error, while parsing the file
+    ##
+    class SyntaxError < ConfigError
+	def initialize(string=nil, pos=nil)
+	    super(string) if string
+	    @pos  = pos
+	end
+	
+	def at ; @pos ; end
+    end
 
-    attr_reader :test_list, :const_list
+
+    ##
+    ##
+    ##
+    ##
+    class ByDomain
+	def initialize(parent, domain, test_manager)
+	    @domain		= domain
+	    @test_manager	= test_manager
+	    @parent		= parent
+	    @constants		= {}
+	    @test_seq		= {}
+	end
+
+
+	#
+	# Set tests sequence for the 'family'
+	#
+	def []=(family, sequence)
+	    if ! TestSeqOrder.include?(family)
+		raise ArgumentError, $mc.get("config_family_unknown") % [ 
+		    family.to_s ]
+	    end
+	    @test_seq[family] = sequence
+	end
+
+
+	#
+	# Retrieve tests sequence
+	#
+	def [](family)
+	    if ! TestSeqOrder.include?(family)
+		raise ArgumentError, $mc.get("config_family_unknown") % [ 
+		    family.to_s ]
+	    end
+	    @test_seq[family]
+	end
+
+
+	#
+	# Add a new constant
+	#
+	def newconst(name, value)
+	    # Check if constant is currently registered
+	    if @constants.has_key?(name)
+		raise ArgumentError, $mc.get("xcp_config_constexists") % [name]
+	    end
+	    # Debug
+	    $dbg.msg(DBG::CONFIG, "adding constant: #{name} (in #{@domain})")
+	    # Register constant
+	    @constants[name] = value
+	end
+
+
+	#
+	# Retrieve the constant value
+	#
+	def const(name)
+	    @constants[name] || @parent.const(name)
+	end
+
+
+	#
+	# Read the configuration file
+	#
+	def read(configfile)
+	    # Parse the configuration file
+	    cfgfile = Config.cfgfile(configfile)
+	    $dbg.msg(DBG::CONFIG, "domain config file: #{configfile}")
+	    $dbg.msg(DBG::CONFIG, "reading file: #{cfgfile}")
+	    io = File::open(cfgfile)
+	    parser = Config::Parser::new(Config::Lexer::new(io))
+	    constants, test_seq = parser.parse_cfg_specific
+	    io.close
+
+	    # Add elements
+	    begin
+		# Set tests sequences
+		test_seq.each  { |family, sequence| self[family] = sequence }
+		# Add constants
+		constants.each { |name, value|      newconst(name, value)   }
+	    rescue ArgumentError => e
+		raise ConfigError, e
+	    end
+	end
+
+
+	#
+	# Validate the loaded configuration file
+	#  (ie: check the existence of all used methods chk_* and tst_*)
+	#
+	def validate(testmanager)
+	    @test_seq.each_value { |b| 
+		begin
+		    b.semcheck(testmanager) 
+		rescue StandardError => e
+		    raise ConfigError, $mc.get("config_for_domain") % [ 
+			e.message, @domain ]
+		end
+	    }
+	end
+    end
 
 
     #
@@ -52,19 +175,27 @@ class Config
     #
     def initialize(test_manager)
 	@test_manager	= test_manager
-	@l_category	= nil
-	@l_test		= nil
-
-	@test_list	= []
-	@test_action	= {}
-	@test_category	= {}
-
-	@const_list	= []
 	@constants	= {}
+	@conf		= {}
+	@overrideconf	= nil
+    end
 
-	@order		= 0
-	@order_switch	= { CheckGeneric        => 0, CheckNameServer => 1,  
-	                    CheckNetworkAddress => 2, CheckExtra      => 3 }
+
+    #
+    # Retrieve configuration for the specified domain
+    #  (retrieving the longest match)
+    #
+    def [](domain)
+	return @overrideconf if @overrideconf
+
+	depth = -1;
+	cfg   = nil
+	@conf.keys.each { |dom|
+	    next unless domain.in_domain?(dom) && (depth < dom.depth)
+	    depth = dom.depth
+	    cfg   = @conf[dom]
+	}
+	cfg
     end
 
 
@@ -73,106 +204,17 @@ class Config
     # Limit tests to perform to some categories
     #
     def limittest(type, limit=nil)
-	tester = nil
 	case type
-	when L_Category
-	    @l_category = limit
-	    tester = Proc::new { |testname|
-		!@l_category.include?(@test_category[testname]) }
-	when L_Test
-	    @l_test = limit
-	    tester = Proc::new { |testname|
-		!@l_test.include?(testname) }
-	else
-	    raise ArgumentError, "Wrong limitation type: #{type}"
+	when L_Category then @l_category = limit
+	when L_Test     then @l_test     = limit
+	else raise ArgumentError, "Wrong limitation type: #{type}"
 	end 
-
+	
 	if limit.nil?
-	    $dbg.msg(DBG::CONFIG, "no #{type} limitation")
-	    return
-	else
-	    $dbg.msg(DBG::CONFIG, "limiting to #{type}: " + limit.join("/"))
+	then $dbg.msg(DBG::CONFIG, "no #{type} limitation")
+	else $dbg.msg(DBG::CONFIG, "limiting to #{type}: "+limit.join("/"))
 	end
-	@test_list.delete_if { |testname|
-	    if (remove = tester.call(testname))
-		$dbg.msg(DBG::CONFIG, "removing (due to limit): #{testname}")
-		@test_category.delete(testname)
-		@test_action.delete(testname)
-	    end
-	    remove
-	}
     end
-	
-
-
-    #
-    # Add a new test with its corresponding action
-    #
-    def newtest(testname, action, category)
-	return if action == Skip
-
-	# Check if test was already listed
-	if @test_action.has_key?(testname)
-	    raise ArgumentError, $mc.get("xcp_config_testexists") % [ name ]
-	end
-
-	# Check if test is currently registered
-	if ! @test_manager.has_test?(testname)
-	    raise ArgumentError, $mc.get("xcp_config_unknowntest") % [testname]
-	end
-	
-	# Check for test ordering problems
-	#  (according to their families)
-	order_new = @order_switch[@test_manager.family(testname)]
-	if order_new < @order
-	    raise ArgumentError, $mc.get("xcp_config_ordering") % [ testname ]
-	else
-	    @order = order_new
-	end
-	
-	# Check if we really want the test
-	if (@l_category && ! @l_category.include?(category)) ||
-	   (@l_test     && ! @l_test.include?(testname))
-	    $dbg.msg(DBG::CONFIG, "test skipped (due to limit): #{testname}")
-	    return
-	end
-
-	# Register test
-	@test_list << testname
-	@test_action  [testname] = action
-	@test_category[testname] = category
-	
-	# Debug
-	$dbg.msg(DBG::CONFIG, "adding test: #{testname}")
-    end
-
-
-    #
-    # Add a new constant
-    #
-    def newconst(name, value)
-	if @constants.has_key?(name)
-	    raise ArgumentError, $mc.get("xcp_config_constexists") % [ name ]
-	end
-	@const_list << name
-	@constants[name] = value
-
-	# Debug
-	$dbg.msg(DBG::CONFIG, "adding constant: #{name}")
-    end
-
-
-    #
-    # Retrieve the action associated to the test
-    #
-    def action(testname)
-	@test_action[testname]
-    end
-
-    def category(testname)
-	@test_category[testname]
-    end
-
 
     #
     # Retrieve the constant value
@@ -182,98 +224,113 @@ class Config
 	    @constants.fetch(name)
 	rescue IndexError
 	    # WARN: not localized (programming error)
-	    raise RuntimeError, "Trying to fetch undefined constant '#{name}'"
+	    raise RuntimeError, 
+		"Trying to fetch undefined constant '#{name}'"
 	end
     end
+
+    #
+    # Add a new constant
+    #
+    def newconst(name, value)
+	# Check if constant is currently registered
+	if @constants.has_key?(name)
+	    raise ArgumentError, $mc.get("xcp_config_constexists") % [ name ]
+	end
+	# Debug
+	$dbg.msg(DBG::CONFIG, "adding constant: #{name}")
+	# Register constant
+	@constants[name] = value
+    end
+
+
+    #
+    # Set the overriding configuration profile
+    #
+    def overrideconf(testlist)
+	# Create
+	@overrideconf = ByDomain::new(self, NResolv::DNS::Name::Root, 
+				   @test_manager)
+	Config::TestSeqOrder.each { |family|
+	    @overrideconf[family] = Instruction::Node::Block::new
+	}
+
+	# Populate with the requested check
+	testlist.each { |checkname|
+	    # Check that we have the method
+	    if ! @test_manager.has_check?(checkname)
+		raise ArgumentError, $mc.get("config_method_unknown") % [ 
+		    checkname ]
+	    end
+
+	    # Add the new instruction
+	    family = @test_manager.family(checkname)
+	    instr  = Instruction::Node::Check::new(checkname, 
+						   Config::Warning, "none")
+	    @overrideconf[family] << instr
+	}
+    end
+
+
+    #
+    # Add a new configuration profile
+    #
+    def newconf(domain, file)
+	# Check if this specific configuration is already registered
+	if @conf.has_key?(domain)
+	    raise ArgumentError, $mc.get("xcp_config_confexists") % [ domain ]
+	end
+
+	# Debug
+	$dbg.msg(DBG::CONFIG, "adding config for: #{domain}")
+
+	# Read and register specific configuration
+	if file.nil?
+	    # Create a blackhole
+	    cfg = nil
+	else
+	    # Create a new profile and read it from the configuration file
+	    cfg = ByDomain::new(self, domain, @test_manager)
+	    cfg.read(file)
+	end
+	@conf[domain] = cfg
+    end
+
 
 
     #
     # Read the configuration file
     #
-    def read(configfile, sections=[ S_Constants, S_Tests ])
-	$dbg.msg(DBG::CONFIG, "reading file: #{configfile}")
-	$dbg.msg(DBG::CONFIG, "requested sections: " + sections.join(", "))
-
-	lineno    = 0
-	File.open(configfile) { |io|
-	    while line = io.gets
-		# Read line
-		lineno += 1
-		line.chomp!			# remove return carriage
-		line.sub!(/\s*\#.*/, "")	# remove comment
-		next if line.empty?		# skip empty lines
-
-		if line =~ /^\s*\[\s*(.*?)\s*]\s*$/
-		    section = $1
-		    case section
-		    when S_Tests     then reader = method(:read_tests)
-		    when S_Constants then reader = method(:read_constants)
-		    else raise SyntaxError, fmt_line(lineno, 
-			$mc.get("xcp_config_unknownsection") % [ section ])
-							 
-		    end
-		    $dbg.msg(DBG::CONFIG, "parsing section: #{section}")
-
-		else
-		    if reader.nil?
-			raise SyntaxError, fmt_line(lineno,
-			$mc.get("xcp_config_nosection"))
-		    end
-		    if sections.include?(section)
-			reader.call(line, lineno)
-		    end
-		end
-	    end
-	}
-    end
-
-
-    ## [private] #########################################################
-
-    private
-    #
-    # Shortcut for formating text with line number prefixed
-    #
-    def fmt_line(lineno, txt)
-	"%s %d: %s" % [ $mc.get("w_line"), lineno, txt ]
-    end
-
-    #
-    # Test parser
-    #
-    def read_tests(line, lineno)
-	# Syntax checker
-	if line !~ /^([#{Warning}#{Info}#{Fatal}#{Skip}])\s+(\w+)\s+(\w+)\s*$/
-	    raise SyntaxError, fmt_line(lineno,$mc.get("xcp_config_malformed"))
-	end
-	action, testname, category = $1, $2, $3
+    def read(configfile)
+	# Parse the configuration file
+	cfgfile = Config.cfgfile(configfile)
+	$dbg.msg(DBG::CONFIG, "main config file: #{configfile}")
+	$dbg.msg(DBG::CONFIG, "reading file: #{cfgfile}")
+	io = File::open(cfgfile)
+	parser = Config::Parser::new(Config::Lexer::new(io))
+	config, constants, useconf = parser.parse_cfg_main
+	io.close
 	
-	# Add test
+	# Add elements
 	begin
-	    newtest(testname, action, category)
+	    # Add constants
+	    constants.each { |k, v| newconst(k, v) }
+
+	    # Create/Load domain specific configuration
+	    useconf.each { |domain, filename|
+		newconf(NResolv::DNS::Name::create(domain), filename)
+	    }
 	rescue ArgumentError => e
-	    raise ConfigError, fmt_line(lineno, e.to_s)
+	    raise ConfigError, e
 	end
     end
 
-    #
-    # Constant parser
-    #
-    def read_constants(line, lineno)
-	# Syntax checker
-	if line !~ /^(\w+)\s*=\s*\"((?:[^\"]|\\\")*)\"$/
-	    raise SyntaxError, fmt_line(lineno,$mc.get("xcp_config_malformed"))
-	end
-	name, value = $1, $2
 
-	# WARN: It's configuration writer fault
-	value.untaint
-	
-	# Add constant
-	begin
-	    newconst(name, value)
-	rescue ArgumentError => e
-	    raise ConfigError, fmt_line(lineno, e.to_s)
-	end
+    #
+    # Validate the loaded configuration file
+    #  (ie: check the existence of all used methods chk_* and tst_*)
+    #
+    def validate(testmanager)
+	@conf.each_value { |c| c.validate(testmanager) }
     end
 end

@@ -68,7 +68,7 @@ install-common:
 	$(RUBY) -p -i \
 		-e "\$$_.gsub!(/^#!.*ruby/, '#!$(RUBY)')" \
 		-e "\$$_.gsub!(/^(ZC_INSTALL_PATH\s*=\s*).*/, '\1\"$(LIBEXEC)/zc\"')" \
-		-e "\$$_.gsub!(/^(ZC_CONFIG_FILE\s*=\s*).*/, '\1\"$(ETCDIR)/zc.conf\"')" \
+		-e "\$$_.gsub!(/^(ZC_CONFIG_DIR\s*=\s*).*/, '\1\"$(ETCDIR)\"')" \
 		-e "\$$_.gsub!(/^(ZC_LOCALIZATION_DIR\s*=\s*).*/, '\1\"$(LIBEXEC)/zc/locale\"')" \
 		-e "\$$_.gsub!(/^(ZC_TEST_DIR\s*=\s*).*/, '\1\"$(LIBEXEC)/zc/test\"')" \
 		$(LIBEXEC)/zc/zc/zc.rb

@@ -40,9 +40,11 @@ ZC_INSTALL_PATH		= ENV["ZC_INSTALL_PATH"].untaint || "/homes/sdalu/ZC.CVS/zc"
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
-ZC_CONFIG_FILE		= "#{ZC_INSTALL_PATH}/etc/zc.conf"
+ZC_CONFIG_DIR		= "#{ZC_INSTALL_PATH}/etc"
 ZC_LOCALIZATION_DIR	= "#{ZC_INSTALL_PATH}/locale"
 ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
+
+ZC_CONFIG_FILE		= "zc.conf"
 
 ZC_LANG_FILE		= "zc.%s"
 ZC_LANG_DEFAULT		= "en"
@@ -59,9 +61,9 @@ ZC_CGI_EXT		= "cgi"
 #
 # Identification
 #
-CVS_NAME	= %q$Name$
+ZC_CVS_NAME	= %q$Name$
 ZC_VERSION	= (Proc::new { 
-		       n = CVS_NAME.split[1]
+		       n = ZC_CVS_NAME.split[1]
 		       n = /^ZC-(.*)/.match(n) unless n.nil?
 		       n = n[1]                unless n.nil?
 		       n = n.gsub(/_/, ".")    unless n.nil?
@@ -219,7 +221,8 @@ class ZoneCheck
     # fs should be configured
     def parse_arguments
 	begin
-	    if (@param = @input.parse).nil?
+	    @param = Param::new
+	    if ! @input.parse(@param)
 		@input.usage(EXIT_USAGE)
 	    end
 	rescue Param::ParamError => e
@@ -235,73 +238,14 @@ class ZoneCheck
 	end
     end
 
-    #
-    # Load ruby files implementing tests
-    #  WARN: we are required to untaint for loading
-    #
-    # To minimize risk of choosing a random directory, only files
-    #  that have the ruby extension (.rb) and have the "ZCTEST 1.0"
-    #  magic header are loaded.
-    #
-    def load_tests_implementation
-	$dbg.msg(DBG::TEST_LOADING, "directory: #{@param.fs.testdir}")
-	Dir::open(@param.fs.testdir) { |dir|
-	    dir.each { |entry|
-		next unless entry =~ /\.rb$/
-		testfile = "#{@param.fs.testdir}/#{entry}".untaint
-		next unless begin
-				File.open(testfile) { |io|
-			           io.gets =~ /^\#\s*ZCTEST\s+1\.0:?\W/
-		                }
-			    rescue # XXX: Careful with rescue all
-				false
-			    end
-		$dbg.msg(DBG::TEST_LOADING, "loading file: #{entry}")
-		load testfile
-	    }
-	}
-    end
-    
 
-    #
-    # Load TestManager with test classes
-    #
-    def init_testmanager
-	# Create test manager
-	@test_manager = TestManager::new
-    
-	# Add the test classes (they should have Test as superclass)
-	[ CheckGeneric, CheckNameServer, 
-	    CheckNetworkAddress, CheckExtra].each { |mod|
-	    mod.constants.each { |t|
-		testclass = eval "#{mod}::#{t}"
-		if testclass.superclass == Test
-		    $dbg.msg(DBG::TEST_LOADING, 
-			     "instanciate class: #{testclass}")
-		    @test_manager << testclass
-		else
-		    $dbg.msg(DBG::TEST_LOADING, 
-			     "not a test class: #{testclass}")
-		end
-	    }
-	}
-    end
-
-
-    #
-    # Read the 'zc.conf' configuration file
-    #
-    def load_configuration
-	@config = Config::new(@test_manager)
-	@config.read(@param.fs.cfgfile)
-    end
 
     def select_tests
 	if @param.test.categories
 	    @config.limittest(Config::L_Category, @param.test.categories)
 	end
 	if @param.test.tests
-	    @config.limittest(Config::L_Test, @param.test.tests)
+	    @config.overrideconf(@param.test.tests)
 	end
     end
 
@@ -312,10 +256,12 @@ class ZoneCheck
 	# Display intro (ie: domain and nameserver summary)
 	@param.publisher.engine.intro(@param.domain) if @param.rflag.intro
 	
-	# Initialise and test
-	@test_manager.init(@config, cm, @param)
+	cfg = @config[@param.domain.name]
+
+	# Initialise and check
+	@test_manager.init(cfg, cm, @param)
 	success = begin
-		      @test_manager.test
+		      @test_manager.check
 		      true
 		  rescue Report::FatalError
 		      false
@@ -358,6 +304,7 @@ class ZoneCheck
 	if ! @param.batch
 	    cm = CacheManager::create(Test::DefaultDNS, 
 				      @param.network.query_mode)
+
 	    @param.domain.autoconf(@param.resolver.local)
 	    @param.report.autoconf(@param.domain, 
 				   @param.rflag, @param.publisher.engine)
@@ -390,14 +337,24 @@ class ZoneCheck
 	exit EXIT_OK
     end
 
+
+    #
+    # Print the list of available tests
+    #
     def do_testlist
-	puts @config.test_list.sort
+	puts @test_manager.list.sort
 	exit EXIT_OK
     end
 
+    #
+    # Print the description of the tests
+    #  If no selection is done (option -T), the description is
+    #  printed for all the available tests
+    #
     def do_testdesc
 	suf = @param.test.desctype
-	@config.test_list.each { |test|
+	list = @param.test.tests || @test_manager.list.sort
+	list.each { |test|
 	    puts $mc.get("#{test}_#{suf}")
 	}
 	exit EXIT_OK
@@ -407,9 +364,18 @@ class ZoneCheck
 	begin
 	    select_input_method
 	    parse_arguments
-	    load_tests_implementation
-	    init_testmanager
-	    load_configuration
+
+	    TestManager.load(@param.fs.testdir)
+
+	    # Create test manager
+	    @test_manager = TestManager::new
+	    @test_manager.add_allcheckclass
+
+	    # Load configuration
+	    @config = Config::new(@test_manager)
+	    @config.read(@param.fs.cfgfile)
+	    @config.validate(@test_manager)
+
 	    interact
 	    select_tests
 
@@ -438,6 +404,10 @@ end
 if ! $zc_slavemode
     begin
 	exit ZoneCheck::new.start ? EXIT_OK : EXIT_FAILED
+    rescue Config::SyntaxError => e
+	puts e.message
+	puts e.at.x
+	puts e.at.y
     rescue => e
 	puts e.message
 	puts e.backtrace.join("\n")

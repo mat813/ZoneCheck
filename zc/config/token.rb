@@ -24,9 +24,6 @@ class Config
 	CHAR		= 4
 	EOF		= 9
 
-	KW_useconf	= "useconf"
-	KW_const	= "const"
-	KW_testseq	= "testseq"
 	KW_case		= "case"
 	KW_when		= "when"
 	KW_else		= "else"

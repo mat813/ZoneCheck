@@ -45,5 +45,10 @@ module CheckNetworkAddress
 
 	    nslist_from_ns.unsorted_eql?(nslist_from_param)
 	end
+
+
+	def tst_recursive_servers(ns, ip)
+	    "true"
+	end
     end
 end

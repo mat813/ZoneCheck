@@ -240,6 +240,11 @@ class Param
 	    @warning_attrname = @fatal_attrname = :warning
 	end
 
+	def standard
+	    @warning_attrname	= :warning
+	    @fatal_attrname	= :fatal
+	end
+
 	def reporter=(report_class)
 	    @report_class = report_class
 	end
@@ -523,13 +528,16 @@ class Param
 	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
-	    when "af", "allfatal"
+	    when "af",  "allfatal"
 		@report.allfatal
-	    when "aw", "allwarning"
+	    when "aw",  "allwarning"
 		@report.allwarning
-	    when "s",  "stop"
+	    when "s",   "stop"
 		@rflag.stop_on_fatal = true
-	    when "ns", "nostop"
+	    when "ns",  "nostop"
+		@rflag.stop_on_fatal = false
+	    when "std", "standard"
+		@report.standard
 		@rflag.stop_on_fatal = false
 	    else
 		raise ParamError,

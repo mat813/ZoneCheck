@@ -84,7 +84,10 @@ class Config
 		# Tokenize the whole line.
 		while line && !line.empty?
 		    info = case line
-			   when /^(case|when|else|end|const|useconf|testseq)(?=\W)/
+			   when /^(#{Token::KW_case}    |
+                                   #{Token::KW_when}    |
+                                   #{Token::KW_else}    |
+                                   #{Token::KW_end})(?=\W)/x
 			       [ $&, $', Token::KEYWORD, $1 ] #'
 			   when /^(\w+)/
 			       [ $&, $', Token::SYMBOL, $1 ] #'

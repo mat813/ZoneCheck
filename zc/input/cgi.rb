@@ -48,11 +48,10 @@ class Param
 
 
 	def initialize
-	    @p    = Param::new
 	    @cgi  = ::CGI::new
 	end
 
-	def parse
+	def parse(p)
 	    # Lang
 	    # => The message catalogue need to be replaced
 	    if @cgi["lang"].length == 1

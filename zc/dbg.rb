@@ -19,9 +19,11 @@ class DBG
     #
     # Debugging types
     #
-    TEST_LOADING = 0x0001	# Test loading status
+    LOADING	 = 0x0001	# Test loading status
     LOCALE       = 0x0002	# Localization / Internationalisation
     CONFIG       = 0x0004	# Configuration
+    PARSER       = 0x0008	# Parser
+    TESTS        = 0x0010	# Tests
     AUTOCONF     = 0x0100       # Autoconf
     DBG          = 0x0800	# The debugger itself
     CACHE_INFO   = 0x1000	# Information about cached object
@@ -34,12 +36,14 @@ class DBG
     # Tag associated with some types
     #
     Tag = { 
-	TEST_LOADING	=> "test",
+	LOADING		=> "loading",
 	LOCALE		=> "locale",
 	CONFIG		=> "config",
 	AUTOCONF	=> "autoconf",
+	TESTS		=> "tests",
 	CACHE_INFO	=> "cache",
 	DBG		=> "dbg",
+	PARSER		=> "parser"
     }
 
     #
