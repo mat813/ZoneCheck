@@ -79,7 +79,7 @@ details : The serial %{serial} doesn't seem to be in the YYYYMMDDnn format.
 testname: SOA 'refresh' at least 6 hours
 error   : The 'refresh' period should be at least 6 hours
 ok	: The 'refresh' is at least 6 hours
-explain : [none]
+explain : [ref]: RFC1912 (p.3) and RIPE-203
 details : The refresh (%{refresh} sec) should be at least 6 hours (21600 sec), you should correct this value.
 
 
@@ -95,7 +95,7 @@ details : The retry (%{retry} sec) should be lower than the refresh (%{refresh} 
 testname: SOA 'retry' at least 1 hour
 error   : The 'retry' period should be at least 1 hour
 ok	: The 'retry' is at least 1 hour
-explain : [none]
+explain : [ref]: RFC1912 (p.3) and RIPE-203
 details : The retry (%{retry} sec) should be at least 1 hour (3600 sec), you should correct this value.
 
 
