@@ -75,11 +75,16 @@ class MessageCatalog
 		when /^(\w+)\s*:\s*(.*?)\s*$/
 		    tag, msg = $1, $2
 		    tag = "#{prefix}_#{tag}" if prefix
+
+		    if @catalog.has_key?(tag)
+			raise SyntaxError, fmt_line(lineno,
+				"Tag '#{tag}' already defined")
+		    end
+
 		    while msg.gsub!(/\\$/, "")
 			if (line = io.gets).nil?
-			    raise SyntaxError, 
-				fmt_line(lineno, 
-					 $mc.get("xcp_msgcat_continuation"))
+			    raise SyntaxError, fmt_line(lineno, 
+				"new line expected after continuation mark")
 			end
 			lineno += 1
 			line.chomp!
@@ -99,7 +104,7 @@ class MessageCatalog
 
 		else
 		    raise SyntaxError, 
-			fmt_line(lineno, $mc.get("xcp_msgcat_malformed"))
+			fmt_line(lineno, "malformed line")
 		end
 	    end
 	}
@@ -125,6 +130,6 @@ class MessageCatalog
     # Shortcut for formating text with line number prefixed
     #
     def fmt_line(lineno, txt)
-	"%s %d: %s" % [ $mc.get("w_line"), lineno, txt ]
+	"Line #{lineno}: #{txt}"
     end
 end
