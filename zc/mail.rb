@@ -108,13 +108,13 @@ class ZCMail
 	# NOT REACHED
     end
 
-    def banner          ; cmd(nil)			; end
-    def helo(host)      ; cmd("HELO #{host}")		; end
-    def vrfy(user)	; cmd("VRFY <#{user}>")		; end
-    def mail_from(from) ; cmd("MAIL FROM: <#{from}>")	; end
-    def rcpt_to(to)     ; cmd("RCPT TO: <#{to}>")	; end
-    def rset            ; cmd("RSET")			; end
-    def quit            ; cmd("QUIT")			; end
+    def banner          ; cmd(nil)					; end
+    def helo(host)      ; cmd("HELO #{host.gsub(/\.$/, "")}")		; end
+    def vrfy(user)	; cmd("VRFY #{user.gsub(/\.$/, "")}")		; end
+    def mail_from(from) ; cmd("MAIL FROM: <#{from.gsub(/\.$/, "")}>")	; end
+    def rcpt_to(to)     ; cmd("RCPT TO: <#{to.gsub(/\.$/, "")}>")	; end
+    def rset            ; cmd("RSET")					; end
+    def quit            ; cmd("QUIT")					; end
 
 
     def test_userexists(user, use_vrfy=false)
