@@ -176,6 +176,11 @@ dbg_crazydebug		: crazy debug
 
 batch_example		: example:\nDOM=domain\nDOM=domain NS=ns1;ns2=1.2.34,2001:1547::1
 
+batch_save		: Open Batch File
+batch_open		: Save Batch File
+
+file_overwrite		: Overwrite file: %s
+file_gotdirectory	: Can't read directory
 
 xcp_toomany_nameservers : Too many nameservers
 
