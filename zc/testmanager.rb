@@ -18,8 +18,8 @@ require 'cache'
 
 
 ##
-##
-##
+## TODO: decide how to replace the Errno::EADDRNOTAVAIL which is not
+##       available on windows
 ##
 ## attributs: param, classes, cm, config, tests
 class TestManager
@@ -270,8 +270,8 @@ class TestManager
 			   end
 	rescue NResolv::RefusedError
 	    desc.err = "Answer refused"
-	rescue Errno::EADDRNOTAVAIL
-	    desc.err = "Network transport unavailable try option -4 or -6"
+#	rescue Errno::EADDRNOTAVAIL
+#	    desc.err = "Network transport unavailable try option -4 or -6"
 	rescue NResolv::NResolvError => e
 	    desc.err = "Resolver error (#{e})"
 	rescue Exception => e
