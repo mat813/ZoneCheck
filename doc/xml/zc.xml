@@ -91,7 +91,7 @@
 	  <listitem>
 	    <para><option>-V</option>, <option>--version</option></para>
 	    <para>print the <application>ZoneCheck</application>
-            version </para>
+            version and exit</para>
 	  </listitem>
 
 	  <listitem>
@@ -105,7 +105,8 @@
 	  <listitem>
 	    <para><option>-c <replaceable>cfgfile</replaceable></option>,
 	    <option>--config <replaceable>cfgfile</replaceable></option></para>
-            <para>specify the location of the configuration file</para>
+            <para>specify the location of the configuration file
+            (default is <filename>etc/zc.conf</filename>)</para>
 	  </listitem>
 
 	  <listitem>
@@ -115,7 +116,20 @@
 	  </listitem>
 
 	  <listitem>
-	    <para><option>-C</option>, <option>--category</option></para>
+	    <para><option>-C
+	    <replaceable>catlist</replaceable></option>,
+	    <option>--category <replaceable>catlist</replaceable></option>
+            </para>
+	    <para>limit the test to the specified category list
+	    (<replaceable>catlist</replaceable>); the list is comma
+	    separeted and we stop on the first match. If the category
+	    start with <literal>-</literal> or <literal>!</literal>
+	    the test should not belong to that category, if it starts
+	    with nothing or <literal>+</literal> the test should
+	    belong to it. It is possible to have subcategories which
+	    are delimited by <literal>:</literal>. Here is an example
+	    that says don't perform DNS tests that are not SOA
+	    related: <literal>dns:soa,!dns,+</literal></para>
 	  </listitem>
 
 	  <listitem>
@@ -123,25 +137,27 @@
             <option>--test <replaceable>testname</replaceable></option></para>
 	    <para>only the test <replaceable>testname</replaceable> will
             be performed and its severity will default to 
-            <literal>warning</literal></para>
+            <literal>fatal</literal></para>
 	  </listitem>
 
 	  <listitem>
 	    <para><option>-r <replaceable>host</replaceable></option>,
             <option>--resolver <replaceable>host</replaceable></option></para>
 	    <para>the nameserver running on <replaceable>host</replaceable>
-            will be used as the local resolver</para>
+            will be used as the local resolver instead of taking this
+            information from <filename>/etc/resolv.conf</filename></para>
 	  </listitem>
 
 	  <listitem>
 	    <para><option>-n <replaceable>nameservers</replaceable></option>,
             <option>--ns <replaceable>nameservers</replaceable></option></para>
 
-	    <para><replaceable>nameservers</replaceable> is a list of
-	    nameserver to use separated by a semicolon, if IP
+	    <para><replaceable>nameservers</replaceable> is the exhaustive
+            list of nameservers that are primary or secondary for the zone,
+            they are separated by a semicolon, if IP
 	    addresses should be specified the hostname must be
-	    followed by the equal sign and the coma separated list of
-	    IP addresses: <literal>ns1.toto.fr=192.168.1.5,192.168.1.6;ns2.toto.fr</literal> </para>
+	    followed by the equal sign and a coma separated list of
+	    IP addresses. For example: <literal>ns1.toto.fr=192.168.1.5,192.168.1.6;ns2.toto.fr</literal> </para>
 	  </listitem>
 
 	  <listitem>
@@ -157,19 +173,26 @@
 	  </listitem>
 
 	  <listitem>
-	    <para><option>-e</option>, <option>--error</option></para>
+	    <para><option>-e <replaceable>list</replaceable></option>, 
+            <option>--error <replaceable>list</replaceable></option></para>
 	  </listitem>
 
 	  <listitem>
-	    <para><option>-t</option>, <option>--transp</option></para>
+	    <para><option>-t <replaceable>list</replaceable></option>,
+            <option>--transp <replaceable>list</replaceable></option></para>
+<para><replaceable>list</replaceable></para>
 	  </listitem>
 
 	  <listitem>
-	    <para><option>-v</option>, <option>--verbose</option></para>
+	    <para><option>-v <replaceable>list</replaceable></option>,
+            <option>--verbose <replaceable>list</replaceable></option></para>
+<para><replaceable>list</replaceable></para>
 	  </listitem>
 
 	  <listitem>
-	    <para><option>-o</option>, <option>--output</option></para>
+	    <para><option>-o <replaceable>list</replaceable></option>,
+             <option>--output <replaceable>list</replaceable></option></para>
+<para><replaceable>list</replaceable></para>
 	  </listitem>
 
 	  <listitem>
@@ -208,7 +231,57 @@ NS    : ns3.nic.fr. [192.134.0.49, 2001:660:1180:1:192:134::49]
       
       <section>
 	<title>Common Gateway Interface (CGI)</title>
-      <para>toto</para>
+      <para>
+	<itemizedlist>
+	  <listitem>
+ <para><option>lang</option> = [ fr | en | ... ]</para>
+          </listitem>
+ <listitem> 
+<para>quiet</para></listitem>
+ <listitem> 
+<para> - one\n</para></listitem>
+ <listitem> 
+<para> - verbose  = [ i|intro, n|testname, x|explain, d|details,\n\
+                t|testdesc, c|counter, o|reportok ]\n\
+	<itemizedlist>
+	  <listitem><para>
+     - intro\n\</para></listitem>
+<listitem><para>          - testname\n\</para></listitem>
+<listitem><para>     - explain\n\</para></listitem>
+<listitem><para>     - details\n\</para></listitem>
+<listitem><para>     - progress = [ t|testdesc | c|counter ]\n\</para></listitem>
+<listitem><para>     - reportok\n\</para></listitem>
+</itemizedlist>
+</para>
+</listitem>
+ <listitem> 
+<para> - output   = [ bs|byseverity, bh|byhost, t|text, h|html ]\n\
+     - report   = bs|byseverity | bh|byhost\n\
+     - format   = h|html | text\n\</para></listitem>
+ <listitem> 
+<para> - error    = [ af|allfatal, aw|allwarning, std|standard,\n\
+                s|stop, ns|nostop ]\n\
+     - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]\n\
+     - dontstop \n\</para></listitem>
+ <listitem> 
+<para> - transp   = [ ipv4, ipv6, udp, tcp, std ]\n\
+     - transp3   = [ ipv4, ipv6 ]\n\
+     - transp4   = [ udp | tcp | std ]\n\</para></listitem>
+ <listitem> 
+<para> - category = cat1,!cat2:subcat1,cat2,!cat3,+\n\
+     - chkmail (!mail)\n\
+     - chkrir  (!rir)\n\
+     - chkzone (!dns:axfr)\n\</para></listitem>
+ <listitem> 
+<para> - ns       = ns1=ip1,ip2;ns2=ip3;ns3\n\
+               (WARNING: in URL '%3b' should be used instead of ';')\n\
+     - ns0  .. nsX   = nameserver name\n\
+     - ips0 .. ipsX  = coma separated ip addresses\n\</para></listitem>
+ <listitem> 
+<para> - zone     = zone to test\n\</para></listitem>
+
+</itemizedlist>
+</para>
       </section>
       
       <section>
