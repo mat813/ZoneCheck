@@ -72,15 +72,15 @@ module CheckNetworkAddress
 		soa(ip, NResolv::DNS::Name::create(ip.namespace))
 	end
 
-	# DESC:
-	def chk_rir_inetnum(ns, ip)
-	    true
-	end
+#	# DESC:
+#	def chk_rir_inetnum(ns, ip)
+#	    true
+#	end
 
-	# DESC:
-	def chk_rir_route(ns, ip)
-	    true
-	end
+#	# DESC:
+#	def chk_rir_route(ns, ip)
+#	    true
+#	end
 	#-- Tests ---------------------------------------------------
 	# 
 	def tst_recursive_server(ns, ip)
