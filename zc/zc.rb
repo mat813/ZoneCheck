@@ -370,13 +370,8 @@ class ZoneCheck
 	    # Interaction
 	    @input.interact(@param, @config, @test_manager)
 
-	    # Test selection/limitation
-	    if @param.test.categories
-#		@config.limitcheck(Config::L_Category, @param.test.categories)
-	    end
-	    if @param.test.tests
-		@config.overrideconf(@param.test.tests)
-	    end
+	    # Test selection
+	    @config.overrideconf(@param.test.tests) if @param.test.tests
 
 	    # Do the job
 	    if    @param.test.list	then do_testlist
