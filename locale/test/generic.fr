@@ -74,7 +74,7 @@ details : Les serveurs de noms %{ns} utilisent la même adresse IP (%{ip}).
 [chk_ip_same_net]
 testname: serveurs de noms sur le même sous réseau
 error   : Des serveurs sont sur le même sous réseau
-ok	: Aucun serveur de noms n'est sous le même sous réseau
+ok	: Aucun serveur de nom n'est sous le même sous réseau
 explain = xpl_rfc2182
 details : Les sous réseaux suivants sont utilisés par plusieurs hôtes: %{subnets}. Essayez de déplacer certains hôtes sur un autre sous réseau.
 

@@ -34,11 +34,11 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] nomdedomaine\n\
     -T, --test          Nom du test à effectuer\n\
         --testlist      Liste tous les tests disponibles\n\
         --testdesc      Donne une description du test (name,expl,error)\n\
-    -r, --resolver      Resolveur à utiliser pour déterminer les 'ns'\n\
+    -r, --resolver      Résolveur à utiliser pour déterminer les 'ns'\n\
     -n, --ns            Liste des serveurs de noms pour le domaine\n\
     -1, --one           Affiche uniquement le message le plus significatif\n\
     -g, --tagonly       Affiche uniquement les tags (idéal pour les scripts)\n\
-    -e, --error         Comportement en cas d'erreurs (voir error)\n\
+    -e, --error         Comportement en cas d'erreur (voir error)\n\
     -t, --transp        Choix de la couche transport/routage (voir transp)\n\
     -v, --verbose       Niveau de détail des informations (voir verbose)\n\
     -o, --output        Format de sortie (see output)\n\
@@ -49,7 +49,7 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] nomdedomaine\n\
     intro          [i]  Affiche un résumé du domaine et de ses serveurs\n\
     testname       [n]  Affiche le nom du test\n\
     explain        [x]  Affiche une explication en cas d'échec du test\n\
-    details        [d]  Affiche les details liés à l'échec du test\n\
+    details        [d]  Affiche les détails liés à l'échec du test\n\
     reportok       [o]  Affiche quand même les tests qui ont réussi\n\
     testdesc       [t]  Affiche la description du test en cours\n\
     counter        [c]  Affiche une barre de progression\n\

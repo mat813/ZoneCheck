@@ -31,7 +31,7 @@ testname: domain délégué est un openrelay
 error   : Le MX principal pour le domaine est un openrelay
 ok	: Le MX principal pour le domaine n'est pas un openrelay
 explain = xpl_openrelay
-details : La machine indiquée pour la réception du courrier (%{mailhost}) du domaine semble être un "open relay", elle permet l'envoi de mél de %{from_host} à %{to_host}.
+details : La machine indiquée pour la réception du courrier (%{mailhost}) du domaine semble être un openrelay, elle permet l'envoi de mél de %{from_host} à %{to_host}.
 
 
 [chk_mail_openrelay_hostmaster]
@@ -39,7 +39,7 @@ testname: domain of the hostmaster email is not an openrelay
 error   : Le MX principal pour le 'hostmaster' est un openrelay
 ok	: Le MX principal pour le 'hostmaster' n'est pas un openrelay
 explain = xpl_openrelay
-details : La machine indiquée pour la réception du courrier (%{mailhost}) pour le "hostmaster" (%{hostmaster}) semble être un "open relay", elle permet l'envoi de mél de %{from_host} à %{to_host}.
+details : La machine indiquée pour la réception du courrier (%{mailhost}) pour le "hostmaster" (%{hostmaster}) semble être un openrelay, elle permet l'envoi de mél de %{from_host} à %{to_host}.
 
 
 [chk_mail_postmaster]
@@ -53,7 +53,7 @@ details : L'adresse du 'postmaster' (%{postmaster}) n'existe pas.
 [chk_mail_hostmaster]
 testname: existence de l'adresse mél du 'hostmaster'
 error   : Le 'hostmaster' ne peut pas être contacté par mél
-ok	: Le 'hostmaster' peut etre contacte par mel
+ok	: Le 'hostmaster' peut être contacté par mel
 explain : [none]
 details : L'adresse du 'hostmaster' (%{hostmaster}) n'existe pas.
 

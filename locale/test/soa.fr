@@ -27,14 +27,14 @@ xpl_email_sntx: [ref]: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are co
 [chk_soa]
 testname: présence d'un enregistrement SOA
 error   : Aucun enregistrement SOA présent sur le serveur
-ok	: Enregistrement SOA trouve
+ok	: Enregistrement SOA trouvé
 explain : [none]
 
 
 [chk_soa_auth]
 testname: réponse autoritaire pour le SOA
 error   : La réponse pour le SOA n'est pas autoritaire
-ok	: La reponse pour le SOA est autoritaire
+ok	: La réponse pour le SOA est autoritaire
 explain : [none]
 
 
@@ -48,21 +48,21 @@ explain = xpl_email_sntx
 [chk_soa_contact_sntx]
 testname: caractères illégaux dans le contact du SOA
 error   : Le contact contient des caractères illégaux
-ok	: Aucun caractere illegal dans le contact du SOA
+ok	: Aucun caractère illégal dans le contact du SOA
 explain = xpl_email_sntx
 
 
 [chk_soa_master_sntx]
 testname: caractères illégaux dans le 'master' du SOA
 error   : Le 'master' du SOA contient des caractères illégaux
-ok	: Aucun caractere illegal dans le 'master' du SOA
+ok	: Aucun caractère illégal dans le 'master' du SOA
 explain = label_xpl
 
 
 [chk_soa_master_fq]
 testname: nom de serveur pleinement qualifié dans le 'master' du SOA
-error   : Le nom du serveur dans le 'master' du SOA n'est pas pleinement qualifie
-ok	: Le 'master' est pleinement qualifie
+error   : Le nom du serveur dans le 'master' du SOA n'est pas pleinement qualifié
+ok	: Le 'master' est pleinement qualifié
 explain : [none]
 details : Le point ('.') final est certainement manquant dans le fichier de configuration pour le serveur (%{mname}) indiqué en tant que maître dans le SOA.
 
@@ -84,11 +84,11 @@ details : La valeur du champ 'refresh' est de %{refresh} sec, et devrait être d
 
 
 [chk_soa_retry_refresh]
-testname: champ 'retry' du SOA inférieure à celui du 'refresh'
-error   : Le champ 'retry' doit être inférieure à celui du 'refresh'
-ok	: Le champ 'retry' du SOA inférieure à celui du 'refresh'
+testname: champ 'retry' du SOA inférieur à celui du 'refresh'
+error   : Le champ 'retry' doit être inférieur à celui du 'refresh'
+ok	: Le champ 'retry' du SOA inférieur à celui du 'refresh'
 explain : [ref]: IETF RFC1912 (p.4)\nThe 'retry' value is typically a fraction of the 'refresh' interval.
-details : La valeur du champ 'retry' est de %{retry} sec, et devrait être inférieur au 'refresh' (%{refresh} sec).
+details : La valeur du champ 'retry' est de %{retry} sec, et devrait être inférieure au 'refresh' (%{refresh} sec).
 
 
 [chk_soa_retry_1h]
@@ -112,7 +112,7 @@ testname: champ 'expire' est au moins 7 fois celui du 'refresh'
 error   : Le champ 'expire' doit être au moins 7 fois celui du 'refresh'
 ok	: Le champ 'expire' est au moins 7 fois celui du 'refresh'
 explain : [none]
-details : La valeur du champ 'expire' est de %{expire} sec, et devrait être 7 fois plus grande que celui du 'refresh' (%{refresh} sec).
+details : La valeur du champ 'expire' est de %{expire} sec, et devrait être 7 fois plus grande que celle du 'refresh' (%{refresh} sec).
 
 
 [chk_soa_minimum_3h]

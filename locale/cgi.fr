@@ -22,11 +22,11 @@
 #
 
 input_cgi_usage: \
-=> Ce script CGI ne peut pas etre directement invoque!\n\
-   Utilisez un des formulaires present sur le site a la place.\n\
+=> Ce script CGI ne peut pas être directement invoqué!\n\
+   Utilisez un des formulaires présent sur le site à la place.\n\
 \n\
-Ci-dessus se trouve un resume des parametres possibles, pour plus\n\
-d'information veuillez consulter la documentation de ZoneCheck.\n\
+Ci-dessus se trouve un résumé des paramètres possibles, pour plus\n\
+d'informations veuillez consulter la documentation de ZoneCheck.\n\
 \n\
 parametres:\n\
  - lang     = [ fr | en | ... ]\n\
@@ -55,10 +55,10 @@ parametres:\n\
      - chkrir  (!rir)\n\
      - chkzone (!dns:axfr)\n\
  - ns       = ns1=ip1,ip2;ns2=ip3;ns3\n\
-               (ATTENTION: utiliser '%3b' dans l'URL a la place de ';')\n\
+               (ATTENTION: utiliser '%3b' dans l'URL à la place de ';')\n\
      - ns0  .. nsX   = serveur de nom\n\
-     - ips0 .. ipsX  = addresses IPs separees par une virgule\n\
- - zone     = zone a tester\n\
+     - ips0 .. ipsX  = adresses IP séparées par une virgule\n\
+ - zone     = zone à tester\n\
 \n\
 exemples:\n\
  - zone=afnic.fr&intro&progress=testdesc&transp=ipv4,ipv6,std\n\

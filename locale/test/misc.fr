@@ -33,7 +33,7 @@ explain : [none]
 [chk_correct_recursive_flag]
 testname: serveur de nom réellement récursif
 error   : Le serveur dit être récursif mais ne l'est pas
-ok	: Le serveur est récursif comme affirmé
+ok	: Le serveur est récursif comme annoncé
 explain : [none]
 
 

@@ -135,7 +135,7 @@ expect_category	: catégorie attendue
 expect_constname: déclaration de constante attendue
 expect_value	: chaîne de caractères pour l'affection de constante attendue
 expect_domain	: nom de domaine attendu
-expect_filename	: no de fichier attendu
+expect_filename	: nom de fichier attendu
 expect_testtype	: type de test (generic, extra, nameserver ou address) attendu
 
 expect_lexical	: caractère '%s' inattendu
@@ -150,7 +150,7 @@ batch_parse	: Incapable d'analyser la ligne par lot
 [xcp_param]
 fqdn_required	: Nom de domaine absolument qualifié attendu
 batch_nodomain	: Aucun nom de domaine n'est attendu pour le traitement en lots
-domain_expected	: UN nom de domaine attendu
+domain_expected	: Un nom de domaine (et un seul) attendu
 primary_soa	: Incapable de trouver le serveur de nom primaire (SOA)
 nameservers_ns	: Incapable de trouver les serveurs de noms (NS)
 prim_ns_soa	: Incapable d'identifier le serveur de nom primaire (NS vs SOA)
@@ -171,7 +171,7 @@ unknowntest	: test '%s' inconnu
 badsection	: section '%s' ne peut pas être utilisée dans ce contexte
 unexpected_token: jeton '%s' inattendu
 unexpected_test	: test inattendu ('when' manquant?)
-whenexists	: clef '%s' déjà définie dans la déclaration 'when'
+whenexists	: clé '%s' déjà définie dans la déclaration 'when'
 elseexists	: 'else' déjà utilisé
 unknown_sectopt	: option '%s' inconnue dans la section '%s'
 missing_sectopt	: option manquante pour la section '%s'

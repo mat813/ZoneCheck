@@ -29,7 +29,7 @@ ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME 
 [chk_ns]
 testname: présence d'un enregistrement NS
 error   : Aucun enregistrement NS présent sur le serveur
-ok	: Enregistrement NS present sur le serveur
+ok	: Enregistrement NS présent sur le serveur
 explain : [none]
 
 

@@ -43,6 +43,6 @@ explain = xpl_rootserver_vs_icann
 
 [chk_root_servers_ip_vs_icann]
 testname: adresses IP des "Root Servers" identiques à celles de l'ICANN
-error   : Les adresses des "Root Servers" sont incohérentes avec celle de l'ICANN
-ok	: Les adresses des "Root Servers" sont cohérentes avec celle de l'ICANN
+error   : Les adresses des "Root Servers" sont incohérentes avec celles de l'ICANN
+ok	: Les adresses des "Root Servers" sont cohérentes avec celles de l'ICANN
 explain = xpl_rootserver_vs_icann
