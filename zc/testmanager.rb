@@ -209,6 +209,7 @@ class TestManager
 		}
 
 	    when /^CheckExtra::/ then
+		testcount += 1
 		check_extra << [severity, method, testname]
 	    end
 	}
