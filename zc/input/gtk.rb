@@ -1049,12 +1049,7 @@ module Input
 		    puts $mc.get("input_version").gsub("PROGNAME", PROGNAME) % 
 			[ $zc_version ]
 		    exit EXIT_OK
-		when "--lang"
-		    if $mc.available?(ZC_LANG_FILE, arg)
-			$mc.lang = arg
-			$mc.reload
-			$console.encoding = $mc.encoding
-		    end
+		when "--lang"     then $locale.lang         = arg
 		when "--debug"     then $dbg.level	    = arg
 		when "--config"    then p.fs.cfgfile        = arg
 		when "--testdir"   then p.fs.testdir        = arg

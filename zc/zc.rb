@@ -73,6 +73,8 @@ ZC_CONFIG_FILE		= 'zc.conf'
 ZC_LANG_FILE		= 'zc.%s'
 ZC_LANG_DEFAULT		= 'en'
 
+ZC_MSGCAT_DEFAULT	= 'en'		# don't specifie an encoding here
+
 ## Input methods
 ZC_DEFAULT_INPUT	= 'cli'
 
@@ -160,6 +162,7 @@ require 'ext/array'
 
 # ZoneCheck component
 require 'dbg'
+require 'locale'
 require 'msgcat'
 require 'console'
 require 'config'
@@ -201,39 +204,27 @@ $ipv6_stack = begin
 #  WARN: default locale is mandatory as no human messages are
 #        present in the code (except for debugging purpose)
 #
-
-# Initialize the message catalog system
-$mc = MessageCatalog::new(ZC_LOCALIZATION_DIR)
-
-
-# Load the default locale
 begin
-    # Assume that if the ZC_LANG_FILE is available for a locale
-    #  all the other necessary files are also available for that locale
-    [ ENV['LANG'], ZC_LANG_DEFAULT ].compact.each { |lang|
-	if $mc.available?(ZC_LANG_FILE, lang)
-	    $dbg.msg(DBG::LOCALE) { "Using locale: #{lang}" }
-	    $mc.lang = lang
-	    $mc.read(ZC_LANG_FILE)
-	    break
-	end
-	$dbg.msg(DBG::LOCALE) { "Unable to find locale for '#{lang}'" }
-    }
-    raise "Default locale (#{ZC_LANG_DEFAULT}) not found" if $mc.lang.nil?
+    $locale = Locale::new
+    $locale.lang = ZC_LANG_DEFAULT if $locale.lang.nil?
+    
+    # Initialize the console
+    $console = Console::new
+    $console.encoding = $locale.encoding
+    
+    # Initialize the message catalog
+    $mc = MessageCatalog::new(ZC_LOCALIZATION_DIR, ZC_MSGCAT_DEFAULT)
+    $mc.locale = $locale
+    $mc.read(ZC_LANG_FILE)
+
+    $locale.watch('lang', proc { $mc.reload } )
+    $locale.watch('encoding', proc { $console.encoding = $locale.encoding } )
 rescue => e
     raise if $zc_slavemode
     $stderr.puts "ERROR: #{e.to_s}"
     exit EXIT_ERROR
 end
-
-
-#
-# Console (needed for localisation)
-#
-$console = Console::new
-$console.encoding = $mc.encoding
-
-
+   
 ##
 ##
 ##

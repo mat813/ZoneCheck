@@ -60,7 +60,6 @@ require 'dbg'
 ##
 class MessageCatalog
     TagRegex	= /[\w\/]+/
-    LANGRegex	= /^(\w+?)(?:_(\w+))?(?:\.([\w\-]+))?$/
     None	= '[none]'
 
     ##
@@ -85,67 +84,30 @@ class MessageCatalog
 
 
     #
-    # Normalize lang
-    #  (and raise exception is the parameter is suspicious)
-    #  The settings are based on: LanguageCode_CountryCode.Encoding
-    #
-    def self.normlang(lng)
-	unless lng =~ LANGRegex
-	    raise ArgumentError, "Suspicious language selection: #{lng}"
-	end
-	lang  =       $1.downcase
-        lang += '_' + $2.upcase   if $2
-        lang += '.' + $3.downcase if $3
-        lang.untaint
-    end
-
-
-    #
-    # Split lang between Language, Country, Encoding
-    #
-    def self.splitlang(lng)
-	unless lng =~ LANGRegex
-	    raise ArgumentError, "Suspicious language selection: #{lng}"
-	end
-        [ $1, $2, $3 ]
-    end
-
-
-    #
     # Initializer
     #
-    def initialize(directory)
-	$dbg.msg(DBG::LOCALE, 'creating message catalogue')
+    def initialize(directory, dfltlang)
+	$dbg.msg(DBG::LOCALE) { 'creating message catalogue' }
+	$dbg.msg(DBG::LOCALE) {"fallback for language is set to '#{dfltlang}'"}
+	@dfltlang	= dfltlang
 	@directory	= directory
 	@catalog	= {}
 	@loaded		= {}
 	@catfiles	= []
-	@lang		= nil
-        @language	= nil
-        @country	= nil
-        @encoding	= nil
+	@language	= nil
+	@country	= nil
     end
     
-    #
-    # READER
-    #
-    attr_reader :lang, :language, :country, :encoding
 
-
-    #
-    # WRITER: Set lang
-    #
-    def lang=(lng)
-	@lang = self.class::normlang(lng)
-        @language, @country, @encoding = self.class::splitlang(@lang)
-    end
+    attr_reader :locale
+    attr_writer :locale
 
 
     #
     # Test if a file catalog is available
     #
-    def available?(where, lng=@lang)
-        filepath(where, lng).each { |fp| return true if File::readable?(fp) }
+    def available?(where)
+        filepath(where).each { |fp| return true if File::readable?(fp) }
         false
     end
 
@@ -220,13 +182,16 @@ class MessageCatalog
     # WARN: An array is returned has for exemple we could need to
     #       test for fr_CA and next fr
     #
-    def filepath(where, lng=@lang)
-	lng   = self.class::normlang(lng) unless lng.object_id==@lang.object_id
-        language, country, encoding = self.class::splitlang(lng)
+    def filepath(where)
 	where = "#{@directory}/#{where}"  unless where[0] == ?/
-	fp = [ where % [ language ] ]
-        fp << where % [ "#{language}_#{country}" ] if country
-        fp
+
+	fp = []
+	if locale && locale.language
+	    fp << "#{locale.language}_#{locale.country}" if locale.country
+	    fp << locale.language
+	end
+	fp << @dfltlang
+	fp.collect { |x| where % x }
     end
 
 

@@ -177,12 +177,7 @@ module Input
 		    exit EXIT_OK
 		when '--quiet'     then p.rflag.quiet		= true
 		when '--debug'     then $dbg.level		= arg
-		when '--lang'
-		    if $mc.available?(ZC_LANG_FILE, arg)
-			$mc.lang = arg
-			$mc.reload
-			$console.encoding = $mc.encoding
-		    end
+		when '--lang'      then $locale.lang		= arg
 		when '--batch'     then p.batch			= arg
 		when '--config'    then p.fs.cfgfile		= arg.untaint
 		when '--testdir'   then p.fs.testdir		= arg.untaint

@@ -104,11 +104,11 @@ module Input
 	    parse_zonedata(p) && parse_options(p)
 	end
 
-	def redirect(url, errcode, data=nil, io=$stdout)
+	def redirect(url, errcode, data=nil, io=$console.stdout)
 	    io.puts @cgi.header({ 'status'   => 'REDIRECT',
 				  'location' => url,
 				  'type'     => 'text/plain',
-				  'charset'  => 'UTF-8' })
+				  'charset'  => $console.encoding })
 	    io.puts data if data
 	    exit errcode unless errcode.nil?
 	end
@@ -122,17 +122,17 @@ module Input
 	    true
 	end
 
-	def usage(errcode, io=$stdout)
+	def usage(errcode, io=$console.stdout)
 	    io.puts @cgi.header({ 'type'    => 'text/plain',
-				  'charset' => 'UTF-8' })
+				  'charset' => $console.encoding })
 	    io.puts $mc.get('input_cgi_usage')
 	    exit errcode unless errcode.nil?
 	end
 
-	def error(str, errcode=nil, io=$stdout)
+	def error(str, errcode=nil, io=$console.stdout)
 	    l10n_error = $mc.get('w_error').upcase
 	    io.puts @cgi.header({ 'type'    => 'text/plain',
-				  'charset' => 'UTF-8' })
+				  'charset' => $console.encoding })
 	    io.puts "#{l10n_error}: #{str}"
 	    exit errcode unless errcode.nil?
 	end
@@ -145,15 +145,7 @@ module Input
 	    # Lang
 	    # => The message catalogue need to be replaced
 	    if @cgi.has_key?('lang')
-		begin
-		    lang = @cgi['lang']
-		    if $mc.available?(ZC_LANG_FILE, lang)
-			$mc.lang = lang
-			$mc.reload
-			$console.encoding = $mc.encoding
-		    end
-		rescue ArgumentError
-		end
+		$locale.lang = @cgi['lang']
 	    end
 
 	    # Quiet, One

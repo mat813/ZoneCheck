@@ -145,12 +145,7 @@ module Input
 			exit EXIT_OK
 		    when '--quiet'     then p.rflag.quiet	= true
 		    when '--debug'     then $dbg.level		= arg
-		    when '--lang'
-			if $mc.available?(ZC_LANG_FILE, arg)
-			    $mc.lang = arg
-			    $mc.reload
-			    $console.encoding = $mc.encoding
-			end
+		    when '--lang'      then $locale.lang	= arg
 		    when '--config'    then p.fs.cfgfile	= arg.untaint
 		    when '--testdir'   then p.fs.testdir	= arg.untaint
 		    when '--resolver'  then p.resolver.local	= arg
@@ -170,10 +165,12 @@ module Input
 	end
 
 	def interact(p, c, tm)
-	    puts $mc.get('input_inetd_welcome').gsub('VERSION', ZC_VERSION)
+	    io = $console.stdout	# XXX: bad
 
-	    print @prompt
-	    $stdout.flush
+	    io.puts $mc.get('input_inetd_welcome').gsub('VERSION', ZC_VERSION)
+
+	    io.print @prompt
+	    io.flush
 	    
 	    while true do
 		# Check if ^D otherwise read a full line
@@ -212,14 +209,7 @@ module Input
 			when 'quiet'	then p.rflag.quiet	= true
 			when 'one'	then p.rflag.one	= true
 			when 'tagonly'	then p.rflag.tagonly	= true
-			when 'lang'
-			    begin
-				if $mc.available?(ZC_LANG_FILE, $2)
-				    $mc.lang = $2
-				    $mc.reload
-				end
-			    rescue ArgumentError
-			    end
+			when 'lang'	then $locale.lang	= $2
 			end
 		    when /^nslist\s+(.*)/	   then p.domain.ns	= $1
 		    when /^(?:zone|domain)\s+(.*)/ then p.domain.name	= $1
@@ -231,7 +221,7 @@ module Input
 			end
 		    #
 		    when '?', 'help'
-			puts $mc.get('input_inetd_help')
+			io.puts $mc.get('input_inetd_help')
 		    # Leave interaction loop
 		    when 'check'		then return true
 		    when 'quit', 'q', 'exit'	then return false
@@ -244,21 +234,21 @@ module Input
 		    error(e.to_s)
 		end
 
-		print @prompt
-		$stdout.flush
+		io.print @prompt
+		io.flush
 	    end
 
-	    puts # Skip a line
+	    io.puts # Skip a line
 	    return false
 	end
 
-	def usage(errcode, io=$stdout)
+	def usage(errcode, io=$console.stdout)
 	    io.puts $mc.get('input_inetd_usage').gsub('PROGNAME', PROGNAME)
 	    io.flush
 	    exit errcode unless errcode.nil?
 	end
 
-	def error(str, errcode=nil, io=$stdout)
+	def error(str, errcode=nil, io=$console.stdout)
 	    l10n_error = $mc.get('w_error').upcase
 	    io.puts "#{l10n_error}: #{str}"
 	    io.flush

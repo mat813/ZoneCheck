@@ -87,7 +87,7 @@ class Console
 	rescue LoadError => e
             @iconv = false
         end
-	@encoding = nil
+	@encoding = 'UTF-8'
 
 	#
 	@ctl = {
@@ -111,7 +111,7 @@ class Console
 			  when NilClass, 'UTF-8' then nil
 			  else Iconv::new(encoding, 'UTF-8')
 			  end
-	@encoding	= encoding
+	@encoding	= encoding || 'UTF-8'
     end
 
     def conv_to(msg)
