@@ -97,7 +97,8 @@
 
     <!-- Warning about waiting time -->
     <BLOCKQUOTE class="zc-warning">
-      <P>The time required to completely verify a zone can take
+      <P><img src="HTML_PATH/img/light.png" align="left">
+      The time required to completely verify a zone can take
       from 30 seconds から <B>5分間</B> まで depending on the network
       speed of the server being accessed. 
       If it takes more than a minute it generally means we are
@@ -461,7 +462,7 @@
 リリーズ: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Oct  3 15:17:53 CEST 2003
+Last modified: Thu Oct 16 15:47:55 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
