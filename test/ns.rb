@@ -47,7 +47,7 @@ module CheckNetworkAddress
 
 	# DESC: NS record should not point to CNAME alias
 	def chk_ns_cname(ns, ip) 
-	    ns(ip).each { |n| return false if is_cname?(ip, n.name) }
+	    ns(ip).each { |n| return false if is_cname?(n.name, ip) }
 	    true
 	end
 

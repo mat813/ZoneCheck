@@ -42,7 +42,7 @@ module CheckNetworkAddress
 
 	# DESC: SOA master should not point to CNAME alias
 	def chk_soa_ns_cname(ns, ip)
-	    ! is_cname?(ip, soa(ip).mname)
+	    ! is_cname?(soa(ip).mname, ip)
 	end
 	
 	# DESC: recommanded format for serial is YYYYMMDDnn

@@ -150,8 +150,19 @@ class Test
     end
 
 
-
-    def is_cname?(ip, name)
+    # Test if 'name' is a cname
+    #  If 'domain' is specified and 'name' is directly in 'domain' the
+    #   request will be done using the DNS at address 'ip', otherwise
+    #   the default DNS is querried
+    #  WARN: this is necessary because the query could be in the
+    #        domain being delegated
+    def is_cname?(name, ip=nil, domain=@domain_name)
+	auth_domain = name.domain
+	unless auth_domain == domain
+	    ns_list = @cm[nil].ns(auth_domain)
+	    ns_addr = @cm[nil].addresses(ns_list[0].name)
+	    ip = ns_addr[0]
+	end
 	! @cm[ip].cname(name).nil?
     end
 

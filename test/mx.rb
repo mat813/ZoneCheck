@@ -47,7 +47,7 @@ module CheckNetworkAddress
 
 	# DESC: MX record should not point to CNAME alias
 	def chk_mx_cname(ns, ip) 
-	    mx(ip).each { |m| return false if is_cname?(ip, m.exchange) }
+	    mx(ip).each { |m| return false if is_cname?(m.exchange, ip) }
 	    true
 	end
 
