@@ -168,8 +168,16 @@ class CacheManager
     public
     def [](ip, client=@client)
 	@all_caches_m.synchronize {
+	    # Is the root asked?
 	    return @root if ip.nil?
 
+	    # Sanity check
+	    case ip
+	    when Address::IPv4, Address::IPv6
+	    else raise RuntimeError, "Argument should be an Address"
+	    end
+ 
+	    # Retrieve/Create the cachemanager for the address
 	    ip = ip.to_s
 	    config = NResolv::DNS::Config::new([ ip ], [])
 	    key    = [ip, client]
