@@ -28,5 +28,5 @@ explain : [none]
 [chk_axfr_valid_labels]
 testname: Zone transfert contains valid labels
 error   : Zone transfert containts invalid label(s)
-explain : label_xpl
+explain = label_xpl
 
