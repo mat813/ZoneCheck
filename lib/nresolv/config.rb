@@ -83,7 +83,7 @@ class NResolv
 		nslookup_info = `nslookup 127.0.0.1`.split(/\r?\n/)
 		nslookup_info[1] =~ /^[^:]+:\s*(.*?)\s*$/
 
-		nameserver << $1 unless $1.nil?
+		nameserver << $1.to_s.untaint unless $1.nil?
 
 		# Autoconf for missing information
 		if nameserver.empty?
