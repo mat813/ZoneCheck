@@ -337,4 +337,9 @@ Release: $Name$ <BR>
 Last modified: Tue Apr  1 17:25:40 CEST 2003
 <!-- hhmts end -->
   </BODY>
+
+<!-- Local Variables: -->
+<!-- mode: html       -->
+<!-- End:             -->
+
 </HTML>

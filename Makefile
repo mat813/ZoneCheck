@@ -110,6 +110,7 @@ install-cgi:
 	@echo "==> Installing HTML pages"
 	$(CP) -r www   $(LIBEXEC)/zc
 	@echo "==> Patching HTML pages"
+	$(FIND) $(LIBEXEC)/zc/www -name '*.html.*' -exec $(RUBY) -p -i -e "\$$_.gsub!(/HTML_PATH/, '$(HTML_PATH)')" {} \;
 	$(FIND) $(LIBEXEC)/zc/www -name '*.html' -exec $(RUBY) -p -i -e "\$$_.gsub!(/HTML_PATH/, '$(HTML_PATH)')" {} \;
 	@echo
 
