@@ -70,7 +70,6 @@
 
   <BODY>
     <P id="lang">Lang: <A href="HTML_PATH/en/">EN</A> / <B>FR</B></P>
-    <P id="beta">BETA</P>
 
     <!-- Logo -->
     <H1 style="text-align: center;">
@@ -466,7 +465,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Aug  7 14:50:00 CEST 2003
+Last modified: Thu Oct  2 19:09:22 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

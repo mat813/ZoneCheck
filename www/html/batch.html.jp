@@ -64,7 +64,7 @@
 
   <BODY>
     <P id="lang">Lang: <A href="HTML_PATH/en/batch.html">EN</A> / <A href="HTML_PATH/fr/batch.html">FR</A> / <B>JP</B></P>
-    <P id="beta">BETA<BR>Help needed for translation</P>
+    <P id="beta">Help needed for translation</P>
 
     <!-- Logo -->
     <H1><IMG alt="ZoneCheck (batch mode)" src="HTML_PATH/img/logo.png"></H1>
@@ -392,7 +392,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Aug  7 14:50:40 CEST 2003
+Last modified: Thu Oct  2 19:10:12 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
