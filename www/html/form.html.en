@@ -16,7 +16,6 @@
 <!--                                                                  -->
 <!--                                                                  -->
 
-<% load (ENV["ZC_INSTALL_PATH"].untaint || (ENV["HOME"].untaint || "/homes/sdalu") + "/ZC.CVS/zc") + "/www/script/autofill.rb" %>
 
 <HTML>
   <HEAD>
@@ -76,9 +75,6 @@
       (configuration error, firewall, ...) and are waiting for timeout.</P>
     </BLOCKQUOTE>
     
-    <!-- Error reporting -->
-    <%=$msg%>
-
     <!-- Form -->
     <FORM name="zcform" method="POST" action="HTML_PATH/cgi-bin/zc.cgi">
       <!-- Basic information -->
@@ -88,84 +84,83 @@
 	    <TD><IMG src="HTML_PATH/img/zone.png" alt="">Zone</TD>
 	    <TD colspan="4">
 	      <INPUT name="zone" type="text" size="65"
-		     value="<%=$name%>"></TD>
+		     value=""></TD>
 	  </TR>
 
 	  <TR class="zc_ns_prim">
 	    <TD><IMG src="HTML_PATH/img/primary.png" alt="">Primary</TD>
 	    <TD><INPUT name="ns0"  type="text" size=24 
-		       value="<%=$ns[0]%>"></TD>
+		       value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips0" type="text" size=35
-		       value="<%=$ips[0]%>"></TD>
+		       value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns1"  type="text" size=24
-		       value="<%=$ns[1]%>"></TD>
+		       value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips1" type="text" size=35
-		       value="<%=$ips[1]%>"></TD>
+		       value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns2"  type="text" size=24
-		       value="<%=$ns[2]%>"></TD>
+		       value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips2" type="text" size=35
-		       value="<%=$ips[2]%>"></TD>
+		       value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns3"  type="text" size=24
-		       value="<%=$ns[3]%>"></TD>
+		       value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips3" type="text" size=35
-		       value="<%=$ips[3]%>"></TD>
+		       value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns4"  type="text" size=24
-		       value="<%=$ns[4]%>"></TD>
+		       value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips4" type="text" size=35
-		       value="<%=$ips[4]%>"></TD>
+		       value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns5"  type="text" size=24
-		       value="<%=$ns[5]%>"></TD>
+		       value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips5" type="text" size=35
-		       value="<%=$ips[5]%>"></TD>
+		       value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns6"  type="text" size=24
-		       value="<%=$ns[6]%>"></TD>
+		       value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips6" type="text" size=35
-		       value="<%=$ips[6]%>"></TD>
+		       value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
 	    <TD><INPUT name="ns7"  type="text" size=24
-		       value="<%=$ns[7]%>"></TD>
+		       value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips7" type="text" size=35
-		       value="<%=$ips[7]%>"></TD>
+		       value=""></TD>
 	  </TR>
       </TABLE>
       <INPUT type="submit" value=" Check! " onClick="zc_formcheck(this.form)">
-      <INPUT type="button" value=" Guess "  onClick="zc_formguess(this.form)">
       <INPUT type="button" value=" Clear "  onClick="zc_formclear(this.form)">
 
       <!-- Options -->
@@ -399,7 +394,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Mar 17 16:30:07 CET 2003
+Last modified: Thu Mar 20 14:56:55 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

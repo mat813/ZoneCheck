@@ -57,7 +57,6 @@ zc-bin:
 	@echo "  HTML_PATH=$(HTML_PATH)"
 	@echo "  PREFIX=$(PREFIX)"
 	@echo "  RUBY=$(RUBY)"
-	@echo "  WITH_ERB=$(WITH_ERB)"
 	@echo ""
 	@echo "You can change them by using the syntax:"
 	@echo "  $(MAKE) key=value"
@@ -112,9 +111,6 @@ install-cgi:
 	$(CP) -r www   $(LIBEXEC)/zc
 	@echo "==> Patching HTML pages"
 	$(FIND) $(LIBEXEC)/zc/www -name '*.html' -exec $(RUBY) -p -i -e "\$$_.gsub!(/HTML_PATH/, '$(HTML_PATH)')" {} \;
-ifndef WITH_ERB
-	$(FIND) $(LIBEXEC)/zc/www -name '*.html' -exec $(RUBY) -p -i -e "\$$_.gsub!(/<%.*%>/, '')" {} \;
-endif
 	@echo
 
 	@echo "==> Installing CGI"

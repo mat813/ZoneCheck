@@ -15,13 +15,8 @@ version = 2.0.0
 
 	check for label_xpl defined elsewhere
 
-	reorganize javascript (espetially for localisation)
-
 BEURK:
 	pour les sous zones (asso.fr , ....) ne pas faire les tests des MX
-
-	zonecheck.afnic.fr virtual host
-	mail tous
 
 
 version = 2.1.0
@@ -45,6 +40,9 @@ version = 2.1.0
 	Remove the need of a tagonly_supported in Report
 	Finish implementing nresolv (Bitstring, DNSSEC, unknown records)
 	Don't assume an IPv4 stack exists
+
+	Test:	- comparaison de le resolution resolver parent avec ns
+		
 
 version = 3.0.0
 	IDN

@@ -73,12 +73,13 @@ module Publisher
 			    $mc.get("pgr_progress"),
 			    $mc.get("pgr_test"),
 			    $mc.get("pgr_speed"),
-			    $mc.get("pgr_time") ]
+			    $mc.get("pgr_time"),
+			    $mc.get("pgr_na")]
 			pgr_start_param  = count
 
-			str  = 'zc_pgr_setlocale("%s", "%s", "%s", "%s", "%s");' % pgr_locale_param
+			str  = 'zc_pgr_setlocale("%s", "%s", "%s", "%s", "%s", "%s");' % pgr_locale_param
 			str += 'zc_pgr_setquiet(%s);' % pgr_quiet_param
-			str += 'zc_pgr_start(%d);' % pgr_start_param
+			str += 'zc_pgr_start(%d);'    % pgr_start_param
 			str
 		    }
 		    @o.puts HTML.nscript { title }
@@ -174,7 +175,7 @@ module Publisher
 	  href="#{@publish_path}/#{$mc.lang}/"             type="text/html">
 
     <LINK rel="alternate" title="Original AFNIC version"
-	  href="http://zonecheck.nic.fr/v2/"               type="text/html">
+	  href="http://zonecheck.afnic.fr/v2/"             type="text/html">
 
     <LINK rel="section" title="#{$mc.get("title_zoneinfo")}"
           href="#t_zoneinfo"                               type="text/html">

@@ -73,13 +73,13 @@ function zc_element_clear_id(id) {
 /**
  * initialize locale for the progress bar (ie: internationalisation)
  */
-function zc_pgr_setlocale(tprogress, progress, test, speed, time) {
+function zc_pgr_setlocale(tprogress, progress, test, speed, time, na) {
   zc_pgr_l_title_progress = tprogress;
   zc_pgr_l_progress       = progress;
   zc_pgr_l_test           = test;
   zc_pgr_l_speed          = speed;
   zc_pgr_l_time           = time;
-  zc_pgr_l_na             = "N/A";
+  zc_pgr_l_na             = na;
 }
 
 /**

@@ -84,13 +84,13 @@ pgr_test        : Tests
 pgr_time        : Time
 pgr_speed       : Speed
 pgr_speed_unit  : T/s
+pgr_na		: N/A
 
 
 #
 #
 #
 problem_file	: problem while opening/reading file: %s
-na		: N/A
 
 #
 # Input
