@@ -1,0 +1,11 @@
+# $Id$
+
+To install ZoneCheck 2 (the executable is simply named zc), you will
+need the Ruby environement.
+
+Ruby can be found as a package or port in every serious
+Unix. Otherwise, see <URL:http://www.rubycentral.com/>.
+
+Once Ruby is installed, just "make install" will install everything
+somewhere under /usr/local. If you prefer another place, type "make
+PREFIX=/some/where install".
