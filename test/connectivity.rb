@@ -50,6 +50,8 @@
 #
 
 require 'framework'
+require 'timeout'
+
 
 module CheckNetworkAddress
     ##
