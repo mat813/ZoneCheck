@@ -18,11 +18,14 @@ explain : [none]
 
 [chk_udp]
 testname: UDP connectivity
-error   : Server doesn't listen/answer for UDP protocol
-explain : [none]
+error   : Server doesn't listen/answer on port 53 for UDP protocol
+explain : connectivity_udp_tcp
 
 [chk_tcp]
 testname: TCP connectivity
-error   : Server doesn't listen/answer for TCP protocol
-explain : [none]
+error   : Server doesn't listen/answer on port 53 for TCP protocol
+explain : connectivity_udp_tcp
+
+[*]
+connectivity_udp_tcp : [ref]: IETF RFC1035 (p.32 4.2. Transport)\nThe DNS assumes that messages will be transmitted as datagrams or in a\nbyte stream carried by a virtual circuit.  While virtual circuits can be\nused for any DNS activity, datagrams are preferred for queries due to\ntheir lower overhead and better performance.
 
