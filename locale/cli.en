@@ -41,6 +41,7 @@ input_cli_usage: \
 usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname\n\
     -q, --quiet         Don't display extra titles\n\
         --lang          Select another language (en, fr, ...)\n\
+    -d, --debug         Select debugging messages to print\n\
     -h, --help          Show this message\n\
     -V, --version       Display version and exit\n\
     -B, --batch         Batch mode (read from file or stdin '-')\n\

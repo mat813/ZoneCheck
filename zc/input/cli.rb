@@ -44,6 +44,7 @@ require 'param'
 ## usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname
 ##     -q, --quiet         Don't display extra titles
 ##         --lang          Select another language (en, fr, ...)
+##     -d, --debug         Select debugging messages to print
 ##     -h, --help          Show this message
 ##     -V, --version       Display version and exit
 ##     -B, --batch         Batch mode (read from file or stdin '-')

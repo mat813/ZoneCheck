@@ -41,6 +41,7 @@ input_cli_usage: \
 usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] nomdedomaine\n\
     -q, --quiet         N'affiche pas de titres suplémentaires\n\
         --lang          Choisit une autre langue (en, fr, ...)\n\
+    -d, --debug         Choisit les messages de deboguage à afficher\n\
     -h, --help          Affiche ce message\n\
     -V, --version       Affiche le numéro de version et quitte\n\
     -B, --batch         Mode en lots (lit depuis un fichier ou stdin '-')\n\
