@@ -272,21 +272,25 @@ explain : [ref]: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year,
 testname: SOA 'refresh' at least 6 hours
 error   : The 'refresh' period should be at least 6 hours
 explain : [none]
+details : The refresh (%{refresh} sec) should bet at least 6 hours (21600 sec), you should correct this value.
 
 [chk_soa_retry_refresh]
 testname: SOA 'retry' lower than 'refresh'
 error   : The 'retry' period must be lower than the 'refresh' period
 explain : [ref]: IETF RFC1912 (p.4)\nThe 'retry' value is typically a fraction of the 'refresh' interval.
+details : The retry (%{retry} sec) should be lower than the refresh (%{refresh} sec), you should correct one of these values.
 
 [chk_soa_retry_1h]
 testname: SOA 'retry' at least 1 hour
 error   : The 'retry' period should be at least 1 hour
 explain : [none]
+details : The retry (%{retry} sec) should be at least 1 hour (3600 sec), you should correct this value.
 
 [chk_soa_expire_7d]
 testname: SOA 'expire' at least 7 days
 error   : The 'expire' period must be at least 7 days
 explain : [ref]: IETF RFC1912 (p.4)\nAfter a zone is expired a secondary will still continue to try to contact\nthe primary, but it will no longer provide nameservice for the zone.\n2 to 4 weeks are suggested values.\n[ref]: AFNIC constraint\nA minimum of 1 week (7 days) is enforced.
+details : The expire (%{expire} sec) should be at least 7 days (604800 sec), you should correct this value.
 
 [chk_soa_expire_7refresh]
 testname: SOA 'expire' at least 7 times 'refresh'

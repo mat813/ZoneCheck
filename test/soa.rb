@@ -54,22 +54,26 @@ module CheckNetworkAddress
 
 	# DESC: recommanded refresh is > 6h
 	def chk_soa_refresh_6h(ns, ip)
-	    soa(ip).refresh >= 6*3600
+	    return true if soa(ip).refresh >= 6*3600
+	    { "refresh" => soa(ip).refresh }
 	end
 
 	# DESC: coherence between 'retry' and 'refresh'
 	def chk_soa_retry_refresh(ns, ip)
-	    soa(ip).retry < soa(ip).refresh
+	    return true if soa(ip).retry < soa(ip).refresh
+	    { "retry" => soa(ip).retry, "refresh" => soa(ip).refresh }
 	end
 	
 	# DESC: recommanded retry is > 1h
 	def chk_soa_retry_1h(ns, ip)
-	    soa(ip).retry >= 3600
+	    return true if soa(ip).retry >= 3600
+	    { "retry" => soa(ip).retry }
 	end
 
 	# DESC: recommanded expire is > 7d
 	def chk_soa_expire_7d(ns, ip)
-	    soa(ip).expire >= 7 * 86400
+	    return true if soa(ip).expire >= 7 * 86400
+	    { "expire" => soa(ip).expire }
 	end
 
 	# DESC: coherence between 'expire' and 'refresh'
@@ -78,7 +82,7 @@ module CheckNetworkAddress
 	    { "expire"  => soa(ip).expire, "refresh" => soa(ip).refresh }
 	end
 
-	# DESC: recommanded minimum is > 24h
+	# DESC: recommanded minimum is <= 3h
 	def chk_soa_minimum_3h(ns, ip)
 	    return true if soa(ip).minimum <= 10800
 	    { "minimum" => soa(ip).minimum }
