@@ -16,7 +16,7 @@
 #
 
 [*]
-xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay when it processes a\nmessage from a non-local sender to a non-local recipient. These days,\njunk emailers abuse this capability at an alarming rate. They use the\nstolen capacity to greatly increase the amount of spam they can deliver.\n[adv]: AFNIC\nYou can perform more complete tests by using the following command:\n"telnet relay-test.mail-abuse.org", for more information take a look at\n<URL:http://www.mail-abuse.org/>
+xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay when it processes a\nmessage from a non-local sender to a non-local recipient. These days,\njunk emailers abuse this capability at an alarming rate. They use the\nstolen capacity to greatly increase the amount of spam they can deliver.\n[adv]: AFNIC\nYou can perform more complete testing by using the following command:\n"telnet relay-test.mail-abuse.org", for more information take a look at\n<URL:http://www.mail-abuse.org/>
 
 
 

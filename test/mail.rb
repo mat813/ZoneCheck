@@ -121,5 +121,11 @@ module CheckExtra
 	    return true if testuser(user, mdom, mhost)
 	    { "postmaster" => user }
 	end
+
+	#-- Tests ---------------------------------------------------
+	# 
+	def tst_mail_is_for_tld
+	    @domain.name.depth <= 2 ? "true" : "false"
+	end
     end
 end

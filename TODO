@@ -19,7 +19,6 @@ version = 2.0.0
  	test de connectivite pour les serveurs qui ont plusieurs adresses IP 
 	traitement des exceptions
 	portage sous windows (recuperer le resolver par defaut, ...)
-	pour le . et les TLDs ne pas faire les test des MX
 	pour les sous zones (asso.fr , ....) ne pas faire les tests des MX
 	integration avec la chaine de production
 
@@ -33,10 +32,12 @@ version = 2.0.0
 
 version = 2.1.0
         Test whois for fr (++++)
-	New test scheduling engine (++++)
-	A test can change the severity (ex: test soa.ttl between ns) (+++)
+	New configuration file (++++)         \
+	New scheduling engine (++++)          |
+	New test scheme (ie: tst_*) (++++)    |
+	Rework config parser (++)             /
 	Have a useconf strict (+++)
-	Rework config parser (++)
+	A test can change the severity (ex: test soa.ttl between ns) (+++)
 	Cachemanager destroy method (and use it) (++)
 	Implement XML input and XML publisher
 	Finish implementing Gtk publisher

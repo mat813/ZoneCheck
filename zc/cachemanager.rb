@@ -233,7 +233,9 @@ class CacheManager
     #-- Shortcuts ----------------------------------------------------
     def rec(domainname, force=nil)
 	@cache.use(:rec, domainname, force) {
-	    soa(domainname, force).ra
+	    soa = soa(domainname, force)
+	    raise NResolv::NResolvError, "Domain doesn't exists" if soa.nil?
+	    soa.ra
 	}
     end
 end

@@ -19,8 +19,9 @@
 # TODO: don't do install-cgi if INPUT_METHODS doesn't support cgi ??
 #
 
-PREFIX ?= /usr/local
-RUBY   ?= $(shell which ruby)
+PREFIX    ?= /usr/local
+RUBY      ?= $(shell which ruby)
+HTML_PATH ?= /zc
 
 LIBEXEC=$(PREFIX)/libexec
 BINDIR=$(PREFIX)/bin
@@ -53,6 +54,7 @@ zc-bin:
 	@echo "Nothing to make, you can install it right now!"
 	@echo ""
 	@echo "Default values are:"
+	@echo "  HTML_PATH=$(HTML_PATH)"
 	@echo "  PREFIX=$(PREFIX)"
 	@echo "  RUBY=$(RUBY)"
 	@echo ""
@@ -73,9 +75,10 @@ install-common:
 	$(RUBY) -p -i \
 		-e "\$$_.gsub!(/^#!.*ruby/, '#!$(RUBY)')" \
 		-e "\$$_.gsub!(/^(ZC_INSTALL_PATH\s*=\s*).*/, '\1\"$(LIBEXEC)/zc\"')" \
-		-e "\$$_.gsub!(/^(ZC_CONFIG_DIR\s*=\s*).*/, '\1\"$(ETCDIR)\"')" \
+		-e "\$$_.gsub!(/^(ZC_CONFIG_DIR\s*=\s*).*/,   '\1\"$(ETCDIR)\"')" \
 		-e "\$$_.gsub!(/^(ZC_LOCALIZATION_DIR\s*=\s*).*/, '\1\"$(LIBEXEC)/zc/locale\"')" \
-		-e "\$$_.gsub!(/^(ZC_TEST_DIR\s*=\s*).*/, '\1\"$(LIBEXEC)/zc/test\"')" \
+		-e "\$$_.gsub!(/^(ZC_TEST_DIR\s*=\s*).*/,  '\1\"$(LIBEXEC)/zc/test\"')" \
+		-e "\$$_.gsub!(/^(ZC_HTML_PATH\s*=\s*).*/, '\1\"$(HTML_PATH)\"')" \
 		$(LIBEXEC)/zc/zc/zc.rb
 	$(CHMOD) 755 $(LIBEXEC)/zc/zc/zc.rb 
 

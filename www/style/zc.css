@@ -173,8 +173,8 @@ H3.zc_severity {
 
 
 
-/*
-*/
+/* Zone information
+ */
 TABLE.zc_domain {
     border-collapse: collapse;
     border: solid #0066B2; 
@@ -199,8 +199,8 @@ TR.zc_ns_prim {
     background-color: #e4dcca;
 }
 
-/*
-*/
+/* Options
+ */
 
 TABLE.zc_options {
     border: solid #f5b13d;
@@ -215,8 +215,8 @@ TABLE.zc_options TR.zc_title {
 }
 
 
-/*
-*/
+/* Help
+ */
 
 TABLE.zc_help { 
     border: solid #333333;
