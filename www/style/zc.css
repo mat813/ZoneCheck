@@ -177,7 +177,7 @@ H3.zc_severity {
  */
 TABLE.zc_domain {
     border-collapse: collapse;
-    border: solid #0066B2; 
+    border: solid #0066B2;
 }
 
 TABLE.zc_domain TD {
@@ -203,9 +203,11 @@ TR.zc_ns_prim {
  */
 
 TABLE.zc_options {
+    border-collapse: collapse;
     border: solid #f5b13d;
     background-color: #f0ece5;
 }
+
 TABLE.zc_options TD {
     padding: 2px 1ex;
 }
