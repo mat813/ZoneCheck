@@ -37,9 +37,9 @@ Provide a web service interface for ZoneCheck.
 %setup -n %{name}
 
 %build
+%{__rm} -rf %{buildroot}
 
 %install
-%{__rm} -rf %{buildroot}
 ruby ./installer.rb cli cgi		\
 	-DPREFIX="%{_prefix}"		\
 	-DETCDIR="%{_sysconfdir}"	\
