@@ -22,11 +22,12 @@ CVS_NAME	= %q$Name$
 RCS_ID		= %q$Id$
 RCS_REVISION	= RCS_ID.split[2]
 ZC_VERSION	= (Proc::new { 
-		       if (n = CVS_NAME.match(/^ZC-(.*)/)).nil?
-			   "<unreleased>"
-		       else
-			   n[1]
-		       end
+		       n = CVS_NAME.split[1]
+		       n = n.match(/^ZC-(.*)/) unless n.nil?
+		       n = n[1]                unless n.nil?
+		       n = n.gsub(/_/, ".")    unless n.nil?
+		       
+		       n || "<unreleased>"
 		   }).call
 PROGNAME	= File.basename($0)
 
