@@ -32,6 +32,11 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 
+#
+# TODO: remove temporary hack where we are looking at the local resolver
+#       due to bestresolverip not correctly implemented
+#
+
 require 'framework'
 require 'mail'
 
@@ -54,7 +59,10 @@ module CheckExtra
 	#-- Shortcuts -----------------------------------------------
 	def bestmx(name)
 	    pref, exch = 65536, nil
-	    mx(bestresolverip(name), name).each { |m|
+
+	    mxlist = mx(bestresolverip(name), name)
+	    mxlist = mx(nil, mdom) if mxlist.empty?
+	    mxlist.each { |m|
 		if m.preference < pref
 		    pref, exch = m.preference, m.exchange
 		end
@@ -123,7 +131,9 @@ module CheckExtra
 	    mdom  = rname.domain
 	    user  = "#{rname[0].data}@#{mdom}"
 
-	    mxlist = mx(bestresolverip(mdom), mdom).sort { |a,b|
+	    mxlist = mx(bestresolverip(mdom), mdom)
+	    mxlist = mx(nil, mdom) if mxlist.empty?
+	    mxlist.sort { |a,b|
 		a.preference <=> b.preference }
 
 	    if mxlist.empty?
@@ -151,7 +161,9 @@ module CheckExtra
 	    mdom  = @domain.name
 	    user  = "postmaster@#{mdom}"
 
-	    mxlist = mx(bestresolverip(mdom), mdom).sort { |a,b|
+	    mxlist = mx(bestresolverip(mdom), mdom)
+	    mxlist = mx(nil, mdom) if mxlist.empty?
+	    mxlist.sort { |a,b|
 		a.preference <=> b.preference }
 
 	    if mxlist.empty?
