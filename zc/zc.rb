@@ -119,7 +119,8 @@ class ZoneCheck
 	@test_manager = TestManager::new
     
 	# Add the test classes (they should have Test as superclass)
-	[ CheckGeneric, CheckNameServer, CheckNetworkAddress].each { |mod|
+	[ CheckGeneric, CheckNameServer, 
+	    CheckNetworkAddress, CheckExtra].each { |mod|
 	    mod.constants.each { |t|
 		testclass = eval "#{mod}::#{t}"
 		if testclass.superclass == Test
@@ -139,7 +140,11 @@ class ZoneCheck
     #
     def load_testlist
 	@config = Config::new(@test_manager)
-	@config.read(@param.configfile)
+	if @param.test
+	    @config.add(@param.test, Config::Fatal)
+	else
+	    @config.read(@param.configfile)
+	end
     end
 
 

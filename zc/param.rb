@@ -35,8 +35,9 @@ class Param
 		[ "--debug",	"-d",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--batch",	"-B",   GetoptLong::NO_ARGUMENT       ],
 		[ "--config",	"-c",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--testdir",	"-T",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--testdir",	        GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--dnsonly",  "-D",   GetoptLong::NO_ARGUMENT       ],
+		[ "--test",     "-T",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--resolver",	"-r",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--ns",	"-n",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--ipv4",	"-4",	GetoptLong::NO_ARGUMENT       ],
@@ -63,6 +64,7 @@ class Param
 		when "--config"    then @p.configfile    = arg
 		when "--testdir"   then @p.testdir       = arg
 		when "--dnsonly"   then @p.dnsonly	 = true
+		when "--test"      then @p.test          = arg
 		when "--resolver"  then @p.resolver      = arg
 		when "--ns"        then @p.domain.ns     = arg
 		when "--ipv6"      then @p.ipv6          = true
@@ -118,8 +120,9 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     -V, --version       Display version and exit
     -B, --batch         Batch mode (read from stdin)
     -c, --config        Specify location of the configuration file
-    -T, --testdir       Location of the directory holding tests
+        --testdir       Location of the directory holding tests
     -D, --dnsonly       Only perform DNS related tests
+    -T, --test          Name of the test to perform
     -r, --resolver      Resolver to use for guessing 'ns' information
     -n, --ns            List of nameservers for the domain
     -1, --one           Only primite the most relevant message
@@ -253,6 +256,8 @@ EOT
 
 	attr_reader :name, :ns, :cache
 
+	def can_cache? ; true ; end
+
 	def name=(domain)
 	    domain = NResolv::DNS::Name::create(domain, true)
 	    unless domain.absolute?
@@ -283,6 +288,7 @@ EOT
 	def autoconf(dns)
 	    # Guess Nameservers and ensure primary is at first position
 	    if @ns.nil?
+		$dbg.msg(DBG::AUTOCONF, "Retrieving #{@name} NS")
 		begin
 		    primary = dns.primary(@name)
 		rescue NResolv::NResolvError
@@ -309,23 +315,15 @@ EOT
 	    end
 	
 	    # Set cache status
-	    @cache = false if dns.nil?
 	    if @cache
-		domain_exists = begin
-				    dns.primary(@name)
-				    true
-				rescue NResolv::NoDomainError
-				    false
-				end
-		@ns.each { |ns, ips|
-		    @cache &&= ips.empty? || (!domain_exists && 
-					      ns.in_domain?(@name))
-		}
+		$dbg.msg(DBG::AUTOCONF, "Setting cache status")
+		@cache &&= can_cache?
 	    end
 	    
 	    # Guess Nameservers IP addresses
 	    @ns.each { |ns, ips|
 		if ips.empty? then
+		    $dbg.msg(DBG::AUTOCONF, "Retrieving IP for NS:#{ns}")
 		    begin
 			ips.concat(dns.addresses(ns, Address::OrderStrict))
 		    rescue NResolv::NResolvError
@@ -409,6 +407,9 @@ EOT
     
     attr_reader :dnsonly
     attr_writer :dnsonly
+
+    attr_reader :test
+    attr_writer :test
 
     attr_reader :domain
     attr_writer :domain

@@ -55,7 +55,7 @@ class Config
 
 	@order		= 0
 	@order_switch	= { CheckGeneric => 0, CheckNameServer => 1,  
-	                    CheckNetworkAddress => 2 }
+	                    CheckNetworkAddress => 2, CheckExtra => 3 }
     end
 
 

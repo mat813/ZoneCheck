@@ -181,6 +181,17 @@ class Test
     end
 
 
+    def bestresolver(name=nil)
+	return @domain_ns[0][0] if name.nil?
+
+	if ((name == @domain_name) ||
+	    (name.in_domain?(@domain_name) && 
+	     (name.depth - @domain_name.depth) == 1))
+	    @domain_ns[0][0]
+	else
+	    nil
+	end
+    end
 
     
     #-- Shortcuts -----------------------------------------------

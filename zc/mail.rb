@@ -13,7 +13,24 @@
 
 require 'socket'
 
+#m = MailTest::new("hyperion.nic.fr", "192.134.4.116")
+##m = MailTest::new("mrelay1.sdalu.com", "213.41.135.30")
+#m.start
+#m.helo("hyperion")
+#if m.test_openrelay
+#    puts "OPEN RELAY"
+#else
+#    puts "EVERYTHING'S FINE"
+#end
+#m.quit
+
+##
+##
+##
 class ZCMail
+    ##
+    ##
+    ##
     class ZCMailError < StandardError
     end
 
@@ -24,6 +41,7 @@ class ZCMail
 	@mrelay     = TCPSocket.new(mip, 25)
 	@mdest      = "nic.fr"
 	@mother     = "afnic.fr"
+	@user       = "zonecheck"
 
 	@openrelay_testlist = [ 
 	    [ "Test 0",
@@ -68,7 +86,8 @@ class ZCMail
 		"postmaster@#{@mhost}",	"nobody@#{@mdest}"		] ]
     end
 
-    def destroy
+    def close
+	@mrelay.close
     end
 
     def cmd(str)
@@ -100,14 +119,16 @@ class ZCMail
     def quit            ; cmd("QUIT")                 ; end
 
 
-    def test_userexists(from, to)
-	mail_from(from)
+    def test_userexists(user)
+	mail_from("#{@user}@#{mdest}")
 	rcpt_to(to)
 	rset
     end
 
-    def test_openrelay
-	openrelay_testlst.each { |name, from, to|
+    def test_openrelay(count=1)
+	tests = [ @openrelay_testlist[0] ]
+
+	tests.each { |name, from, to|
 	    puts name
 	    
 	    if (r = mail_from(from)[0]) == 250
@@ -122,16 +143,6 @@ class ZCMail
 end
 
 
-m = MailTest::new("hyperion.nic.fr", "192.134.4.116")
-#m = MailTest::new("mrelay1.sdalu.com", "213.41.135.30")
-m.start
-m.helo("hyperion")
-if m.test_openrelay
-    puts "OPEN RELAY"
-else
-    puts "EVERYTHING'S FINE"
-end
-m.quit
 
 #         500 Syntax error, command unrecognized
 #            [This may include errors such as command line too long]

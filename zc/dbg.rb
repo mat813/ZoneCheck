@@ -18,10 +18,12 @@ class DBG
     NOCACHE      = 0x2000	# Disable caching
     DONT_RESCUE  = 0x4000	# Don't try to rescue some exceptions
     CRAZYDEBUG   = 0x8000	# Crazy Debug, the name says it all
+    AUTOCONF     = 0x0100       # Information about autoconf
 
     C = { 
 	TEST_LOADING => "test",
 	CACHE_INFO   => "cache",
+	AUTOCONF     => "autoconf",
     }
 
 

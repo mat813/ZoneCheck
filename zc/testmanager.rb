@@ -152,6 +152,7 @@ class TestManager
 	check_generic         = []
 	check_nameserver      = {}
 	check_network_address = {}
+	check_extra           = []
 
 	threadlist            = []
 	testcount             = 0
@@ -203,6 +204,9 @@ class TestManager
 			    [ severity, method, testname, ns_name, addr ]
 		    }
 		}
+
+	    when /^CheckExtra::/ then
+		check_extra << [severity, method, testname]
 	    end
 	}
 
@@ -235,7 +239,12 @@ class TestManager
 		}
 	    }
 	    threadlist.each { |thr| thr.join }
-	    
+
+	    # Do CheckExtra
+	    if ! @param.dnsonly
+		check_extra.each { |args| test1(*args) }
+	    end
+
 	    # Counter end
 	    @publisher.counter.done(domainname_s)   if @param.rflag.counter
 	rescue Report::FatalError
