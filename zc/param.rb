@@ -103,6 +103,7 @@ class Param
     ##              if element aren't specified they will be 'guessed'
     ##              when calling 'autoconf'
     ## addresses : list of ns addresses
+    ## cache     : should result be stored in external database (hook)
     ##
     class Domain
 	def initialize(name=nil, ns=nil)
@@ -363,11 +364,7 @@ class Param
     ##
     ## Hold information about local resolver
     ##
-    ## resolver: local resolver to use
-    ##
-    ## WARN: the 'resolver' doesn't follow the Network constraints
-    ##       as it is local and should be able to correctly operate in its
-    ##       own environment
+    ## local: local resolver to use
     ##
     class Resolver
 	attr_reader :local
@@ -461,7 +458,9 @@ class Param
 
 
     ##
+    ## Hold information about the publisher
     ##
+    ## engine : the publisher to use (write class, read object)
     ##
     class Publisher
 	def initialize
@@ -509,15 +508,15 @@ class Param
 	def close             ; @data = nil              ; end
     end
 
-    attr_reader :rflag, :report, :test, :network, :fs, :resolver, :publisher
 
-    attr_reader :batch
-    attr_writer :batch
-    
-    attr_reader :domain
-    attr_writer :domain
 
-    attr_writer :debug
+
+    #
+    # ATTRIBUTS
+    #
+    attr_reader :publisher, :fs, :network, :resolver, :rflag, :test, :report
+    attr_reader :batch, :domain
+    attr_writer :batch, :domain
 
 
 

@@ -150,9 +150,9 @@ module Report
 		@publish.h1($mc.get("title_testres"))
 	    end
 	    
-	    @info.display($mc.get("w_info"))       if ! @info.empty?
-	    @warning.display($mc.get("w_warning")) if ! @warning.empty?
-	    @fatal.display($mc.get("w_fatal"))     if ! @fatal.empty?
+	    @info   .display($mc.get("w_info"))    unless @info.empty?
+	    @warning.display($mc.get("w_warning")) unless @warning.empty?
+	    @fatal  .display($mc.get("w_fatal"))   unless @fatal.empty?
 
 	    @publish.status(@domain.name, 
 			      @info.count, @warning.count, @fatal.count)

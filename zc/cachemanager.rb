@@ -29,10 +29,18 @@ class CacheManager
     ## Proxy an NResolv::DNS::Resource class
     ##
     ## This will allow to add access to extra fields that are normally
-    ## provided only in the DNS message header
+    ## provided only in the DNS message header:
+    ##  - ttl    : time to live
+    ##  - aa     : authoritative answer
+    ##  - ra     : recursivity available
+    ##  - r_name : resource name
     ##
     class ProxyResource
 	attr_reader :ttl, :aa, :ra, :r_name
+
+	#
+	# Initialize proxy 
+	#
 	def initialize(resource, ttl, name, msg)
 	    @resource = resource
 	    @ttl      = ttl
@@ -40,10 +48,15 @@ class CacheManager
 	    @aa       = msg.aa
 	    @ra       = msg.ra
 	end
-
+	
+	#
+	# Save the class method for later use
+	# 
 	alias _class class
 
-
+	#
+	# Equality should work with proxy object or real object
+	#
 	def eql?(other)
 	    return false unless self.class == other.class
 	    other = other.instance_eval("@resource") if respond_to?(:_class)
@@ -51,6 +64,10 @@ class CacheManager
 	end
 	alias == eql?
 
+	#
+	# Redefine basic methods (hash, class, ...) to point to the
+	# real object
+	#
 	def hash        ; @resource.hash        ; end
 	def to_s        ; @resource.to_s        ; end
 	def class       ; @resource.class       ; end
@@ -58,6 +75,9 @@ class CacheManager
 	alias instance_of? kind_of?
 	alias is_a?        kind_of?
 
+	#
+	# Direct all unknown methods to the real object
+	#
 	def method_missing(method, *args)
 	    @resource.method(method).call(*args)
 	end

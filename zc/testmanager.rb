@@ -16,6 +16,7 @@ require 'framework'
 require 'report'
 require 'cache'
 
+
 ##
 ##
 ##
@@ -26,15 +27,18 @@ class TestManager
     TestPrefix     = "tst_"	# Prefix for test methods
     CheckPrefix    = "chk_"	# Prefix for check methods
 
-
-    @@test_files = {}
-
     ##
     ## Exception: error in the test definition
     ##
     class DefinitionError < StandardError
     end
 
+
+    #
+    # List of loaded test files
+    #  (avoid loading the same file twice)
+    #
+    @@test_files = {}
 
     #
     # Load ruby files implementing tests
@@ -48,6 +52,7 @@ class TestManager
     def self.load(*filenames)
 	count = 0
 	filenames.each { |filename|
+	    # Recursively load file in the directory
 	    if File.directory?(filename)
 		$dbg.msg(DBG::LOADING, "test directory: #{filename}")
 		Dir::open(filename) { |dir|
@@ -56,15 +61,19 @@ class TestManager
 			count += self.load(testfile) if File.file?(testfile)
 		    }
 		}
+		
+	    # Load test file
 	    elsif File.file?(filename)
+		# Only load file if it meet some criteria (see above)
 		if ((filename =~ /\.rb$/) &&
 		    begin
 			File.open(filename) { |io|
-			    io.gets =~ /^\#\s*ZCTEST\s+1\.0:?\W/
-			}
+			    io.gets =~ /^\#\s*ZCTEST\s+1\.0:?\W/ }
 		    rescue # XXX: Careful with rescue all
 			false
 		    end)
+
+		    # Really load the file if it wasn't already done
 		    if  ! @@test_files.has_key?(filename)
 			$dbg.msg(DBG::LOADING, "test file: #{filename}")
 			::Kernel.load filename
@@ -77,6 +86,8 @@ class TestManager
 		end
 	    end
 	}
+
+	# Return the number of loaded file
 	return count
     end
 
@@ -94,7 +105,7 @@ class TestManager
 
 
     #
-    # Add all the available classes that containts check methods
+    # Add all the available classes that containts test/check methods
     #
     def add_allclasses
 	# Add the test classes (they should have Test as superclass)
@@ -114,7 +125,7 @@ class TestManager
 
 
     #
-    # Register all the checks/tests that are provided by the class 'klass'.
+    # Register all the tests/checks that are provided by the class 'klass'.
     #
     def <<(klass)
 	# Sanity check (all test class should derive from Test)
@@ -123,10 +134,10 @@ class TestManager
 		$mc.get("xcp_testmanager_badclass") % [ klass, TestSuperclass ]
 	end
 	
-	# Inspect instance methods for finding check methods (ie: chk_*, tst_*)
-	klass.public_instance_methods.each { |method| 
-	    # Only deal with methods that represent a check or a test
+	# Inspect instance methods for finding methods (ie: chk_*, tst_*)
+	klass.public_instance_methods.each { |method| 	    
 	    case method
+	    # methods that represent a test
 	    when /^#{TestPrefix}/
 		if has_test?(method)
 		    l10n_tag = $mc.get("xcp_testmanager_test_exists")
@@ -135,6 +146,7 @@ class TestManager
 		end
 		@tests[method] = klass
 
+	    # methods that represent a check
 	    when /^#{CheckPrefix}/
 		if has_check?(method)
 		    l10n_tag = $mc.get("xcp_testmanager_check_exists")
@@ -211,6 +223,7 @@ class TestManager
 			bl.call(ns_name, addr) } } }
 	}
 
+	# Create new instance of the class
 	@classes.each { |klass|
 	    @objects[klass] = klass.method("new").call(@config,
 						       @cm, @param.domain)

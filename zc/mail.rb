@@ -11,8 +11,8 @@
 #
 #
 
-
 require 'socket'
+
 
 ##
 ##
@@ -101,15 +101,10 @@ class ZCMail
     end
 
     def banner          ; cmd(nil)                    ; end
-
     def helo(host)      ; cmd("HELO #{host}")         ; end
-
     def mail_from(from) ; cmd("MAIL FROM: <#{from}>") ; end
-
     def rcpt_to(to)     ; cmd("RCPT TO: <#{to}>")     ; end
-
     def rset            ; cmd("RSET")                 ; end
-
     def quit            ; cmd("QUIT")                 ; end
 
 
