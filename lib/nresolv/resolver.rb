@@ -126,6 +126,10 @@ class NResolv
 	    # yield: name, resource, ttl
 	    def extract_resource(msg, name, resource)
 		case resource.rtype 
+		when RType::AXFR
+		    msg.answer.each { |n, r, t|
+			yield n, r, t
+		    }
 		when RType::ANY
 		    msg.answer.each { |n, r, t|
 			yield n, r, t if n == name

@@ -86,6 +86,13 @@ class NResolv
 			self::new(decoder.get_string, decoder.get_string)
 		    end
 		end
+
+		class LOC
+		    def self.wire_decode(decoder)
+			version, size, horizpre, vertpre, latitude, longitude, altitude = *decoder.unpack("CCCCNNN")
+			self::new(version, size, horizpre, vertpre, latitude, longitude, altitude)
+		    end
+		end
 	    end
 
 	    module IN

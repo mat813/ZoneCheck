@@ -31,6 +31,21 @@ class NResolv
 	    end
 	end
 
+	class Resource
+	    def to_dig
+		"#{rclass}\t#{rtype}\t" + _fields.collect { |name, value|
+		    value.to_s }.join(" ")
+	    end
+
+	    module Generic
+		class SOA
+		    def to_dig
+			"#{rclass}\t#{rtype}\t#{@mname} #{@rname} (#{@serial} #{@refresh} #{@retry} #{@expire} #{@minimum})"
+		    end
+		end
+	    end
+	end
+
 	class Message
 	    # dump the message content (with a format like +dig+) into 
 	    # the stream _output_, by default +STDOUT+ is used

@@ -18,7 +18,7 @@
 
 class NResolv
     class DNS
-	class Resource
+	class Resource # --> Abstract <--
 	    @@hash_resource = {}
 
 	    # Constant shortcut
@@ -40,11 +40,28 @@ class NResolv
 		@@hash_resource[[klass.rclass, klass.rtype]] = klass
 	    end
 
+	    def _fields
+		self.class.class_eval("@@fields").collect { |field|
+		    [ field, instance_variable_get("@#{field.id2name}") ] }
+	    end
+
 	    def self.has_fields(*attrs)
+		# add fields to the list
+		class_eval <<-EOS
+		@@fields ||= [ ]
+		attrs.each { |attr|
+		    if @@fields.include?(attr)
+			raise "field \#{attr} already present"
+		    end
+		    @@fields << attr
+		}
+		EOS
+
+		# (re)create attribute reader and initializer
 		initializer_args = []
 		initializer_body = []
-
-		attrs.each_index { |index| attr = attrs[index]
+		all_attrs = class_eval "@@fields"
+		all_attrs.each_index { |index| attr = all_attrs[index]
 		    initializer_args << "_res_#{index}"
 		    initializer_body << "@#{attr} = _res_#{index}"
 
@@ -60,61 +77,28 @@ class NResolv
 		EOS
 	    end
 
-#	    def self.build_resource(klass, rtype)
-#		klass =~ /::([^:]+)/
-#		puts "class #{r
-#		puts klass
-#	    end
-
 	    def eql?(other)
 		return false unless self.class == other.class
-		siv = self.instance_variables
-		oiv = other.instance_variables
-		return false unless siv == oiv
-		siv.collect {|name| self.instance_eval name } ==
-		    oiv.collect {|name| other.instance_eval name}
+		self._fields == other._fields
 	    end
 	    alias == eql?
 
 	    module Generic
 		class TXT < Resource
 		    has_fields :txtdata
-
-		    def self::from_s(str)
-			self::new(str)
-		    end
-
-		    def to_s
-			@txtdata
-		    end
 		end
 
 		class CNAME < Resource
 		    has_fields :cname
-
-		    def self.from_s(str)
-			self::new(DNS::Name::from_s(str))
-		    end
-
-		    def to_s
-			@cname.to_s
-		    end
 		end
 
 		class SOA < Resource
-		    has_fields :mname, :rname, :serial, :refresh, :retry, :expire, :minimum
+		    has_fields :mname,  :rname
+		    has_fields :serial, :refresh, :retry, :expire, :minimum
 		end
 
 		class NS < Resource
 		    has_fields :name
-
-		    def self.from_s(str)
-			self::new(DNS::Name::from_s(str))
-		    end
-
-		    def to_s
-			@name.to_s
-		    end
 		end
 
 		class MX < Resource
@@ -133,7 +117,21 @@ class NResolv
 		    has_fields :cpu, :os
 		end
 
+		class LOC < Resource
+		    has_fields :version
+		    has_fields :size, :horizpre, :vertpre
+		    has_fields :latitude, :longitude, :altitude
+		end
+
+		class AXFR < Resource
+		    has_fields # none
+		    def initialize
+			raise "#{self.class} can't be instanciated"
+		    end
+		end
+
 		class ANY < Resource
+		    has_fields # none
 		    def initialize
 			raise "#{self.class} can't be instanciated"
 		    end
@@ -144,92 +142,26 @@ class NResolv
 
 
 	    module IN
+		# Add all the generic resources
+		Generic.constants.each { |name|
+		    next unless Generic.const_get(name).class == Class
+		    module_eval <<-EOS
+		    class #{name} < Generic::#{name}
+		        RClass, RType = RClass::IN, RType::#{name}
+			add_resource(self)
+		    end
+		    EOS
+		}
+
 		class A < Resource
-		    RClass = RClass::IN
-		    RType  = RType::A
-
+		    RClass, RType = RClass::IN, RType::A
 		    has_fields :address
-		    
-		    def self.from_s(str)
-			A::new(Address::IPv4::create(str))
-		    end
-
-		    def to_s
-			@address.to_s
-		    end
-
 		    add_resource(self)
 		end
 
 		class AAAA < Resource
-		    RClass = RClass::IN
-		    RType  = RType::AAAA
-
+		    RClass, RType = RClass::IN, RType::AAAA
 		    has_fields :address
-
-		    def self.from_s(str)
-			AAAA::new(Address::IPv6::create(str))
-		    end
-
-		    def to_s
-			@address.to_s
-		    end
-
-		    add_resource(self)
-		end
-		
-		class TXT < Generic::TXT
-		    RClass = RClass::IN
-		    RType  = RType::TXT
-		    add_resource(self)
-		end
-
-		class NS < Generic::NS
-		    RClass = RClass::IN
-		    RType  = RType::NS
-		    add_resource(self)
-		end    
-
-
-		class MX < Generic::MX
-		    RClass = RClass::IN
-		    RType  = RType::MX
-		    add_resource(self)
-		end    
-
-		class SOA < Generic::SOA
-		    RClass = RClass::IN
-		    RType  = RType::SOA
-		    add_resource(self)
-		end
-
-		class CNAME < Generic::CNAME
-		    RClass = RClass::IN
-		    RType  = RType::CNAME
-		    add_resource(self)
-		end
-
-		class PTR < Generic::PTR
-		    RClass = RClass::IN
-		    RType  = RType::PTR
-		    add_resource(self)
-		end
-
-		class RP < Generic::RP
-		    RClass = RClass::IN
-		    RType  = RType::RP
-		    add_resource(self)
-		end
-
-		class HINFO < Generic::HINFO
-		    RClass = RClass::IN
-		    RType  = RType::HINFO
-		    add_resource(self)
-		end
-
-		class ANY < Generic::ANY
-		    RClass = RClass::IN
-		    RType  = RType::ANY
 		    add_resource(self)
 		end
 	    end
