@@ -218,6 +218,11 @@ module Input
 		end
 	    end
 
+	    # Option
+	    if @cgi.has_key("option")
+		p.option << @cgi.params["option"].join(",")
+	    end
+
 	    # Ok
 	    true
 	end
