@@ -42,7 +42,6 @@ require 'param'
 ## ----------------------------------------------------------------------
 ##
 ## usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname
-##     -q, --quiet         Don't display extra titles
 ##         --lang          Select another language (en, fr, ...)
 ##     -d, --debug         Select debugging messages to print
 ##     -h, --help          Show this message
@@ -57,6 +56,7 @@ require 'param'
 ##     -r, --resolver      Resolver to use for guessing 'ns' information
 ##     -n, --ns            List of nameservers for the domain
 ##                            (ex: ns1;ns2=ip1,ip2;ns3=ip3)
+##     -q, --quiet         Don't display extra titles
 ##     -1, --one           Only display the most relevant message
 ##     -g, --tagonly       Display only tag (suitable for scripting)
 ##     -v, --verbose       Display extra information (see verbose)

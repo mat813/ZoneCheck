@@ -49,8 +49,8 @@ require 'param'
 ##     -c, --config        Specify location of the configuration file
 ##         --testdir       Location of the directory holding tests
 ##     -r, --resolver      Resolver to use for guessing 'ns' information
-##     -4, --ipv4          Only allow check the zone with IPv4 connectivity
-##     -6, --ipv6          Only allow check the zone with IPv6 connectivity
+##     -4, --ipv4          Only allow to check the zone with IPv4 connectivity
+##     -6, --ipv6          Only allow to check the zone with IPv6 connectivity
 ##
 ##
 ## Command           Args
@@ -176,50 +176,56 @@ module Input
 	    
 	    while line = $stdin.gets do
 		line.strip!
-		case line
-	        # Set
-		when /^preset\s+(\w+)$/
-		    case $1
-		    when 'classic'
-			p.verbose = "i,x,d,c"
-		    end
-		when /^set\s+(\w+)\s+(.*)$/
-		    case $1
-		    when 'verbose'	then p.verbose		= $2
-		    when 'output'	then p.output		= $2
-		    when 'error'	then p.error		= $2
-		    when 'transp'	then p.transp		= $2
-		    when 'option'	then p.option		= $2
-		    when 'category'	then p.category		= $2
-		    when 'quiet'	then p.rflag.quiet	= true
-		    when 'one'		then p.rflag.one	= true
-		    when 'tagonly'	then p.rflag.tagonly	= true
-		    when 'lang'
-			begin
-			    if $mc.available?(ZC_LANG_FILE, $2)
-				$mc.lang = $2
-				$mc.reload
-			    end
-			rescue ArgumentError
+		begin
+		    case line
+		    # Set
+		    when /^preset\s+(\w+)$/
+			case $1
+			when 'classic'
+			    p.verbose = "i,x,d,c"
 			end
+		    when /^set\s+(\w+)\s+(.*)$/
+			case $1
+			when 'verbose'	then p.verbose		= $2
+			when 'output'	then p.output		= $2
+			when 'error'	then p.error		= $2
+			when 'transp'	then p.transp		= $2
+			when 'option'	then p.option		= $2
+			when 'category'	then p.category		= $2
+			when 'quiet'	then p.rflag.quiet	= true
+			when 'one'	then p.rflag.one	= true
+			when 'tagonly'	then p.rflag.tagonly	= true
+			when 'lang'
+			    begin
+				if $mc.available?(ZC_LANG_FILE, $2)
+				    $mc.lang = $2
+				    $mc.reload
+				end
+			    rescue ArgumentError
+			    end
+			end
+		    when /^nslist\s+(.*)/	   then p.domain.ns	= $1
+		    when /^(?:zone|domain)\s+(.*)/ then p.domain.name	= $1
+		    # Unset
+		    when /^unset\s+(\w+)$/
+			case $1
+			when 'quiet'	then p.rflag.quiet	= false
+			when 'one'	then p.rflag.one	= false
+			end
+		    #
+		    when '?', 'help'
+			puts $mc.get('input_inetd_help')
+		    # Leave interaction loop
+		    when 'check'		then return true
+		    when 'quit','q','exit',"\004"	then return false
+			
+		    # What did he said?!
+		    else
+			puts line[0]
+			error($mc.get('input_inetd_what'))
 		    end
-		when /^nslist\s+(.*)/		then p.domain.ns	= $1
-		when /^(?:zone|domain)\s+(.*)/	then p.domain.name	= $1
-		# Unset
-		when /^unset\s+(\w+)$/
-		    case $1
-		    when 'quiet'	then p.rflag.quiet	= false
-		    when 'one'		then p.rflag.one	= false
-		    end
-		#
-		when /^(?:\?|help)$/
-		    puts $mc.get('input_inetd_help')
-		# Leave interaction loop
-		when /^check$/			then return true
-		when /^(?:quit|q|exit)$/	then return false
-
-		else
-		    puts $mc.get('input_inetd_what')
+		rescue Param::ParamError => e
+		    error(e.to_s)
 		end
 
 		print @prompt
@@ -231,12 +237,14 @@ module Input
 
 	def usage(errcode, io=$stdout)
 	    io.puts $mc.get('input_inetd_usage').gsub('PROGNAME', PROGNAME)
+	    io.flush
 	    exit errcode unless errcode.nil?
 	end
 
 	def error(str, errcode=nil, io=$stdout)
 	    l10n_error = $mc.get('w_error').upcase
 	    io.puts "#{l10n_error}: #{str}"
+	    io.flush
 	    exit errcode unless errcode.nil?
 	end
     end
