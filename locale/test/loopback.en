@@ -11,7 +11,7 @@
 # $Revision$ 
 # $Date$
 #
-# CONTRIBUTORS:
+# CONTRIBUTORS: (see also CREDITS file)
 #
 #
 

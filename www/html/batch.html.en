@@ -12,7 +12,7 @@
 <!-- $Revision$                                                -->
 <!-- $Date$                                     -->
 <!--                                                                  -->
-<!-- CONTRIBUTORS:                                                    -->
+<!-- CONTRIBUTORS: (see also CREDITS file)                            -->
 <!--                                                                  -->
 <!--                                                                  -->
 
@@ -304,7 +304,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Mar 11 14:23:50 CET 2003
+Last modified: Thu Mar 13 10:46:52 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

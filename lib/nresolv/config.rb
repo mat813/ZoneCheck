@@ -14,7 +14,7 @@
 # INSPIRED BY:
 #   - the ruby file: resolv.rb 
 #
-# CONTRIBUTORS:
+# CONTRIBUTORS: (see also CREDITS file)
 #
 #
 

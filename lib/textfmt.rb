@@ -14,7 +14,7 @@
 # INSPIRED BY:
 #   Austin Ziegler ruby version of the perl version of Text::Format
 #
-# CONTRIBUTORS:
+# CONTRIBUTORS: (see also CREDITS file)
 #
 #
 

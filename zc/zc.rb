@@ -12,7 +12,7 @@
 # $Revision$ 
 # $Date$
 #
-# CONTRIBUTORS:
+# CONTRIBUTORS: (see also CREDITS file)
 #
 #
 
@@ -80,8 +80,6 @@ ZC_VERSION	= (Proc::new {
 ZC_MAINTAINER   = "Stephane D'Alu <sdalu@nic.fr>"
 PROGNAME	= File.basename($0)
 
-$zc_version	= ZC_VERSION
-
 
 #
 # Constants
@@ -140,12 +138,13 @@ require 'testmanager'
 
 #
 # Debugger object
+#  (earlier initialization, can also be set via input interface)
 #
 $dbg = DBG::new
 $dbg.level=ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 
 
-# Test for IPv6 stack
+# Test for IPv6 stack detection
 #  WARN: doesn't implies that we have IPv6 connectivity
 $ipv6_stack = begin
 		  UDPSocket::new(Socket::AF_INET6).close
@@ -158,10 +157,10 @@ $ipv6_stack = begin
 #
 # Internationalisation
 #  WARN: default locale is mandatory as no human messages are
-#        present in the code (except debugging)
+#        present in the code (except for debugging purpose)
 #
 
-# Initialize the message catolog system
+# Initialize the message catalog system
 $mc = MessageCatalog::new(ZC_LOCALIZATION_DIR)
 
 # Include the 'with_msgcat' facility in every objects
@@ -256,6 +255,19 @@ class ZoneCheck
     def lastaction(success)
     end
 
+    def parse_batch(line)
+	case line
+	when /^DOM=(\S+)\s+NS=(\S+)\s*$/
+	    @param.domain = Param::Domain::new($1, $2)
+	    true
+	when /^DOM=(\S+)\s*$/
+	    @param.domain = Param::Domain::new($1)
+	    true
+	else
+	    false
+	end
+    end
+
 
     def zc(cm)
 	# Setup publisher (for the domain)
@@ -288,20 +300,6 @@ class ZoneCheck
 
 	# Return status
 	return success
-    end
-
-
-    def parse_batch(line)
-	case line
-	when /^DOM=(\S+)\s+NS=(\S+)\s*$/
-	    @param.domain = Param::Domain::new($1, $2)
-	    true
-	when /^DOM=(\S+)\s*$/
-	    @param.domain = Param::Domain::new($1)
-	    true
-	else
-	    false
-	end
     end
 
     def do_check
@@ -434,6 +432,8 @@ end
 #  (if not in slave method)
 #
 if ! $zc_slavemode
+    $zc_version	= ZC_VERSION
+
     begin
 	exit ZoneCheck::new.start ? EXIT_OK : EXIT_FAILED
     rescue Config::SyntaxError => e

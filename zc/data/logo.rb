@@ -11,7 +11,7 @@
 # $Revision$ 
 # $Date$
 #
-# CONTRIBUTORS:
+# CONTRIBUTORS: (see also CREDITS file)
 #   - All graphics are from: David Barou <david.barou@nic.fr>
 
 

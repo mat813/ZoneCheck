@@ -31,6 +31,8 @@ version = 2.0.0
 
 	fix behaviour in case of test failed
 
+	add checking of message catalog and test set
+
 version = 2.1.0
         Test whois for fr (++++)
 	New configuration file (++++)         \
@@ -47,6 +49,7 @@ version = 2.1.0
 	Escape HTML code
 	Remove the need of a tagonly_supported in Report
 	Finish implementing nresolv (Bitstring, DNSSEC, unknown records)
+	Don't assume an IPv4 stack exists
 
 version = 3.0.0
 	IDN
