@@ -175,7 +175,7 @@ class Param
 		end
 		if ips.empty? then
 		    raise ParamError, 
-			"Unable to find nameserver IP address(es) for #{n}"
+			"Unable to find nameserver IP address(es) for #{ns}"
 		end
 	    }
 	end
