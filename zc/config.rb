@@ -416,10 +416,11 @@ class Config
 	    @presets << Preset::new(presetname, params)
 	}
 
-	@mapping.each { |zone, profilename|
+	# Load all the available profiles
+	Dir[Config.cfgfile('*.profile')].each { |cfgfile|
+	    filename    = cfgfile.split('/')[-1]
+	    profilename = filename.gsub(/\.profile$/, '')
 	    next if @profiles[profilename]
-	    filename ="#{profilename}.profile"
-	    cfgfile = Config.cfgfile(filename)
 	    $dbg.msg(DBG::CONFIG, "loading profile: #{filename}")
 	    $dbg.msg(DBG::CONFIG, "reading file: #{cfgfile}")
 	    io = nil
