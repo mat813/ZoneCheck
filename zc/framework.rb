@@ -18,8 +18,6 @@ require 'cachemanager'
 ## Class that should be inherited by every test set
 ##
 class Test
-    DefaultDNS = NResolv::DNS::DefaultResolver
-
     ##
     ## Abstract class for: Succeed, Failed, Error
     ##

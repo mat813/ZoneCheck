@@ -280,7 +280,7 @@ class ZoneCheck
 	
 	# 
 	if ! @param.batch
-	    cm = CacheManager::create(Test::DefaultDNS, 
+	    cm = CacheManager::create(@param.resolver.local,
 				      @param.network.query_mode)
 
 	    @param.domain.autoconf(@param.resolver.local)
@@ -288,7 +288,7 @@ class ZoneCheck
 				   @param.rflag, @param.publisher.engine)
 	    zc(cm)
 	else
-	    cm = CacheManager::create(Test::DefaultDNS, 
+	    cm = CacheManager::create(@param.resolver.local, 
 				      @param.network.query_mode)
 	    batchio = case @param.batch
 		      when "-"              then $stdin
