@@ -36,6 +36,7 @@ LN=ln			# Doesn't cross partition boundary
 CP=cp
 CHMOD=chmod
 FIND=find
+TAR=tar
 
 HTML2TXT=elinks -dump
 
@@ -71,7 +72,7 @@ install: install-common install-cli install-cgi install-doc
 install-common:
 	@echo "==> Installing core components"
 	$(INSTALL) -d $(LIBEXEC)/zc
-	$(CP) -r zc     $(LIBEXEC)/zc
+	$(TAR) xf - zc     | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
 	$(RUBY) -p -i \
 		-e "\$$_.gsub!(/^#!.*ruby/, '#!$(RUBY)')" \
 		-e "\$$_.gsub!(/^(ZC_INSTALL_PATH\s*=\s*).*/, '\1\"$(LIBEXEC)/zc\"')" \
@@ -83,15 +84,15 @@ install-common:
 	$(CHMOD) 755 $(LIBEXEC)/zc/zc/zc.rb 
 
 	@echo "==> Installing libraries"
-	$(CP) -r lib    $(LIBEXEC)/zc
+	$(TAR) xf - lib    | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
 	@echo
 
 	@echo "==> Installing tests"
-	$(CP) -r test   $(LIBEXEC)/zc
+	$(TAR) xf - test   | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
 	@echo
 
 	@echo "==> Installing locale"
-	$(CP) -r locale $(LIBEXEC)/zc
+	$(TAR) xf - locale | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
 	@echo
 
 	@echo "==> Installing default configuration file"
@@ -109,7 +110,7 @@ install-common:
 
 install-cgi:
 	@echo "==> Installing HTML pages"
-	$(CP) -r www   $(LIBEXEC)/zc
+	$(TAR) xf - www   | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
 	@echo "==> Patching HTML pages"
 	$(FIND) $(LIBEXEC)/zc/www -name '*.html.*' -exec $(RUBY) -p -i -e "\$$_.gsub!(/HTML_PATH/, '$(HTML_PATH)')" {} \;
 	$(FIND) $(LIBEXEC)/zc/www -name '*.html' -exec $(RUBY) -p -i -e "\$$_.gsub!(/HTML_PATH/, '$(HTML_PATH)')" {} \;
