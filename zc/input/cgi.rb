@@ -209,7 +209,7 @@ module Input
 
 	    # Category
 	    if @cgi.has_key?('category')
-		p.category = @cgi.params['category'].join(',')
+		p.test.categories = @cgi.params['category'].join(',')
 	    else
 		cat = [ ]
 		cat << '!mail'		unless @cgi.has_key?('chkmail')
