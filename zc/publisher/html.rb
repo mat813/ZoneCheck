@@ -166,6 +166,7 @@ module Publisher
 
 	    # XXX: javascript only if counter
 	    @o.print <<"EOT"
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
   <HEAD>
     <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -199,7 +200,7 @@ module Publisher
     <!-- Style -->
     <LINK rel="stylesheet" href="#{@publish_path}/style/zc.css"   type="text/css">
 
-    <STYLE>
+    <STYLE type="text/css">
         UL.zc-ref LI { 
             list-style: url(#{@publish_path}/img/ref.png)     disc }
 
@@ -220,7 +221,7 @@ module Publisher
     </SCRIPT>
   </HEAD>
   <BODY>
-    <IMG class="zc-logo" src="#{@publish_path}/img/logo.png">
+    <IMG class="zc-logo" alt="ZoneCheck" src="#{@publish_path}/img/logo.png">
 EOT
 @o.flush
 	end
