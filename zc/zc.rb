@@ -95,6 +95,7 @@ ZC_MAINTAINER		= 'Stephane D\'Alu <sdalu@nic.fr>'
 
 ## Internal
 ZC_XML_PARSER		= ENV['ZC_XML_PARSER'] 
+ZC_IP_STACK		= ENV['ZC_IP_STACK'] || '46'
 
 ## --> END OF CUSTOMIZATION <-- ######################################
 
@@ -228,20 +229,24 @@ $dbg.msg(DBG::INIT) { "Using XML parser: #{MyXML::Implementation}" }
 # IPv4/IPv6 stack detection
 #  WARN: doesn't implies that we have also the connectivity
 #
-$ipv4_stack = begin
-		  UDPSocket::new(Socket::AF_INET).close
-		  true
-	      rescue NameError,      # if Socket::AF_INET doesn't exist
-		     SystemCallError # for the Errno::EAFNOSUPPORT error
-		  false
-	      end
-$ipv6_stack = begin
-		  UDPSocket::new(Socket::AF_INET6).close
-		  true
-	      rescue NameError,      # if Socket::AF_INET6 doesn't exist
-		     SystemCallError # for the Errno::EAFNOSUPPORT error
-		  false
-	      end
+$ipv4_stack = !(ZC_IP_STACK =~ /4/).nil?
+$ipv6_stack = !(ZC_IP_STACK =~ /6/).nil?
+$ipv4_stack = $ipv6_stack = true if !$ipv4_stack && !$ipv6_stack
+
+$ipv4_stack &&= begin
+		    UDPSocket::new(Socket::AF_INET).close
+		    true
+		rescue NameError,      # if Socket::AF_INET doesn't exist
+			SystemCallError # for the Errno::EAFNOSUPPORT error
+		    false
+		end
+$ipv6_stack &&= begin
+		    UDPSocket::new(Socket::AF_INET6).close
+		    true
+		rescue NameError,      # if Socket::AF_INET6 doesn't exist
+			SystemCallError # for the Errno::EAFNOSUPPORT error
+		    false
+		end
 
 
 #
