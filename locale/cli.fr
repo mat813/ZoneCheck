@@ -81,7 +81,7 @@ usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] nomdedomaine\n\
     text          *[t]  Formatage en texte pur\n\
     html           [h]  Formatage en HTML\n\
 \n\
-  error:                [allfatal|allwarning] [stop|nostop]\n\
+  error:                [allfatal|allwarning|dfltseverity] [stop|nostop]\n\
     allfatal       [af] Tout échec est considéré comme fatal\n\
     allwarning     [aw] Tout échec est considéré comme un avertissement\n\
     dfltseverity  *[ds] Utilise la sévérité associée au test\n\

@@ -81,7 +81,7 @@ usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname\n\
     text          *[t]  Output plain text\n\
     html           [h]  Output HTML\n\
 \n\
-  error:                [allfatal|allwarning] [stop|nostop]\n\
+  error:                [allfatal|allwarning|dfltseverity] [stop|nostop]\n\
     allfatal       [af] All error are considered fatal\n\
     allwarning     [aw] All error are considered warning\n\
     dfltseverity  *[ds] Use the severity associated with the test\n\

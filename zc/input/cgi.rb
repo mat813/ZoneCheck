@@ -65,9 +65,9 @@ require 'param'
 ##  - output   = [ bs|byseverity, bh|byhost, text, html ]
 ##      - report   = bs|byseverity | bh|byhost
 ##      - format   = h|html | t|text
-##  - error    = [ af|allfatal, aw|allwarning, std|standard,
+##  - error    = [ af|allfatal, aw|allwarning, ds|dfltseverity,
 ##                s|stop, ns|nostop ]
-##      - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]
+##      - errorlvl  = [ af|allfatal | aw|allwarning | ds|dfltseverity ]
 ##      - dontstop 
 ##  - transp   = [ ipv4, ipv6, udp, tcp, std ]
 ##      - transp3   = [ ipv4, ipv6 ]

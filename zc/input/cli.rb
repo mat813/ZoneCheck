@@ -84,9 +84,10 @@ require 'param'
 ##     text          *[t]  Output plain text
 ##     html           [h]  Output HTML
 ## 
-##   error:                [allfatal|allwarning] [stop|nostop]
+##   error:                [allfatal|allwarning|dfltseverity] [stop|nostop]
 ##     allfatal       [af] All error are considered fatal
 ##     allwarning     [aw] All error are considered warning
+##     dfltseverity  *[ds] Use the severity associated with the test
 ##     stop          *[s]  Stop on the first fatal error
 ##     nostop         [ns] Never stop (even on fatal error)
 ## 
