@@ -1,9 +1,13 @@
-#!/usr/local/bin/ruby18
+#!/usr/local/bin/ruby
 # $Id$
 
 # 
-# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
-# CREATED: 2002/08/02 13:58:17
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2002/08/02 13:58:17
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0
 #
 # $Revision$ 
 # $Date$

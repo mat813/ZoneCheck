@@ -1,3 +1,20 @@
+# $Id$
+
+# 
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2002/08/02 13:58:17
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#   - All graphics are from: David Barou <david.barou@nic.fr>
+
+
 module ZCData
     module XPM
 	Logo = [

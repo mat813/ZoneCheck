@@ -4,6 +4,7 @@
 # See TODO before writting a new bug
 #
 
+2002-18-10	sdalu@nic.fr
 - cigref.fr, is stuck on the openrelay test
 - elements of the HTML progress bar get blank sometimes
-- in HTML don't submit is form is not valid
+

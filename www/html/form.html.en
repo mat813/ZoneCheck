@@ -2,8 +2,12 @@
 <!-- $Id$ -->
  
 <!--                                                                  -->
-<!-- AUTHOR : Stephane D'Alu <sdalu@nic.fr>                           -->
-<!-- CREATED: 2002/10/01 13:58:17                                     -->
+<!-- AUTHOR   : Stephane D'Alu <sdalu@nic.fr>                         -->
+<!-- CREATED  : 2002/10/01 13:58:17                                   -->
+<!--                                                                  -->
+<!-- COPYRIGHT: AFNIC (c) 2003                                        -->
+<!-- CONTACT  : zonecheck@nic.fr                                      -->
+<!-- LICENSE  : GPL v2.0                                              -->
 <!--                                                                  -->
 <!-- $Revision$                                                -->
 <!-- $Date$                                     -->
@@ -413,10 +417,12 @@
 
     
     <HR>
+Release: $Name$
+<BR>
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Jan 16 18:18:31 CET 2003
+Last modified: Tue Jan 21 17:13:01 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

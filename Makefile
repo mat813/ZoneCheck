@@ -4,6 +4,10 @@
 # AUTHOR : Stephane Bortzmeyer <bortzmeyer@nic.fr>
 # CREATED: 2002/10/10 16:38:17
 #
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0
+#
 # $Revision$ 
 # $Date$
 #

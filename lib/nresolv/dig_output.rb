@@ -4,8 +4,15 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : 
+# LICENSE  : RUBY
+#
+# $Revision$ 
 # $Date$
+#
+# INSPIRED BY:
+#   - the ruby file: resolv.rb 
 #
 # CONTRIBUTORS:
 #

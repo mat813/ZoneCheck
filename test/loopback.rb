@@ -2,8 +2,12 @@
 # $Id$
 
 # 
-# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
-# CREATED: 2002/09/11 11:20:17
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2002/09/11 11:20:17
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0
 #
 # $Revision$ 
 # $Date$

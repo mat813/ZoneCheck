@@ -1,11 +1,18 @@
 # $Id$
 
 # 
-# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
-# CREATED: 2002/08/26 21:58:17
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2002/08/26 21:58:17
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : 
+# LICENSE  : RUBY
 #
 # $Revision$ 
 # $Date$
+#
+# INSPIRED BY:
+#   - the ruby file: resolv.rb 
 #
 # CONTRIBUTORS:
 #
