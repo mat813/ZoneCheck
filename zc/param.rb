@@ -402,6 +402,12 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     tcp            [t]  Use TCP transport layer
     std           *[s]  Use UDP with fallback to TCP for truncated messages
 
+  Batch Mode: 
+    - process domain from stdin, with 1 per line. The syntax is:
+      DOM=domainname
+   or DOM=domainname NS=ns1;ns2=ip1,ip2
+    
+
 EXAMPLES:
   #{PROGNAME} -4 --verbose=x,i afnic.fr.
 EOT
