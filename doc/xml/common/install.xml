@@ -93,18 +93,21 @@
       and for html pages generated in the
       <filename class="directory">/zc/</filename> namespace (HTML_PATH=/zc).
 <screen>
-ScriptAlias  /zc/cgi-bin/    /usr/local/libexec/zc/cgi-bin/
-Alias        /zc/js/         /usr/local/libexec/zc/www/js/
-Alias        /zc/style/      /usr/local/libexec/zc/www/style/
-Alias        /zc/img/        /usr/local/libexec/zc/www/img/
-Alias        /zc/            /usr/local/libexec/zc/www/html/en/
+AliasMatch  ^/zc/?$         /usr/local/libexec/zc/www/html/form.html
+AliasMatch  ^/zc/(en|fr)/?$ /usr/local/libexec/zc/www/html/form.html.$1
+AliasMatch  ^/zc/(en|fr)/(.*)$ /usr/local/libexec/zc/www/html/$2.$1
+ScriptAlias /zc/cgi-bin/    /usr/local/libexec/zc/cgi-bin/
+Alias       /zc/js/         /usr/local/libexec/zc/www/js/
+Alias       /zc/style/      /usr/local/libexec/zc/www/style/
+Alias       /zc/img/        /usr/local/libexec/zc/www/img/
+Alias       /zc/            /usr/local/libexec/zc/www/html/
 
 &lt;Directory /usr/local/libexec/zc/cgi-bin/&gt;
     Options ExecCGI 
 &lt;/Directory&gt;
 
 &lt;Directory /usr/local/libexec/zc/www/&gt;
-    Options Includes FollowSymLinks
+    Options Includes FollowSymLinks MultiViews
 &lt;/Directory&gt;
 
 </screen>
