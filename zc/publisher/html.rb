@@ -20,6 +20,7 @@
 # TODO:
 #  - escape html text
 #  - clean up html
+#  - only load javascript when needed
 #
 
 module Publisher
@@ -247,9 +248,9 @@ EOT
 	    if xpl_lst
 		@o.puts "<UL class=\"zc_ref\">"
 		xpl_lst.each { |t, h, b|
-		    tag = $mc.get("xpltag_#{t}")
+		    l10n_tag = $mc.get("xpltag_#{t}")
 		    @o.puts "<LI>"
-		    @o.puts "<SPAN class=\"zc_ref\">#{tag}: #{h}</SPAN>"
+		    @o.puts "<SPAN class=\"zc_ref\">#{l10n_tag}: #{h}</SPAN>"
 		    @o.puts "<BR>"
 		    @o.puts b.join(" ")
 		    @o.puts "</LI>"
@@ -270,8 +271,8 @@ EOT
 
 	def status(domainname, i_count, w_count, f_count)
 	    unless @rflag.quiet
-		title = $mc.get("title_status")
-		@o.puts "<H2>#{title}</H2>"
+		l10n_title = $mc.get("title_status")
+		@o.puts "<H2>#{l10n_title}</H2>"
 	    end
 	    @o.print "<DIV class=\"zc_status\">", 
 		super(domainname, i_count, w_count, f_count), "</DIV>"

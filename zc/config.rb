@@ -17,11 +17,13 @@ require 'framework'
 ## Hold the information about the zc.conf configuration file
 ##
 class Config
-    Warning	= "w"	# Warning severity
-    Fatal	= "f"	# Fatal severity
-    Info	= "i"	# Informational
-    Skip	= "-"   # Don't run the test
+    Warning		= "w"		# Warning severity
+    Fatal		= "f"		# Fatal severity
+    Info		= "i"		# Informational
+    Skip		= "-"		# Don't run the test
 
+    Sec_Constants	= "constants"
+    Sec_Test		= "tests"
 
     ##
     ## Syntax error, while parsing the file
@@ -151,13 +153,12 @@ class Config
 			    "line #{lineno}: unknown section #{section}"
 		    end
 		else
-		    if reader
-			if sections.nil? || sections.include?(section)
-			    reader.call(line, lineno)
-			end
-		    else
-			raise SyntaxError,
+		    if reader.nil?
+			raise SyntaxError, 
 			    "line #{lineno}: no section defined"
+		    end
+		    if sections.nil? || sections.include?(section)
+			reader.call(line, lineno)
 		    end
 		end
 	    end

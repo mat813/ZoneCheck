@@ -11,7 +11,8 @@
 //
 //
 
-//
+// convert a time in sec into a string
+//  possible formats are 'mm:ss', 'hh:mm:ss' or '--:--'
 function zc_sec_to_timestr(sec) {
   if (sec < 0)
     return "--:--";
@@ -31,7 +32,7 @@ function zc_sec_to_timestr(sec) {
   }
 }
 
-//
+// convert a speed into a string (2 digit after the coma)
 function zc_speed_tostr(speed) {
   if (speed < 0)
     return "--.--";
@@ -55,7 +56,7 @@ function zc_pgr_clear_id(id) {
   document.getElementById(id).id = "";
 }
 
-//
+// initialise locale for the progress bar (ie: internationalisation)
 function zc_pgr_locale(tprogress, progress, test, speed, time) {
   zc_pgr_l_title_progress = tprogress;
   zc_pgr_l_progress       = progress;
@@ -110,8 +111,8 @@ function zc_pgr_start(count) {
   zc_pgr_update(0, -1, -1, "...");
 }
 
+// update the progress bar
 function zc_pgr_update(pct, speed, eta, desc) {
-  // write progress bar
   document.getElementById("zc_pgr_desc" ).innerHTML = desc;
   document.getElementById("zc_pgr_pct"  ).innerHTML = pct + "%&nbsp;";
   document.getElementById("zc_pgr_pct1" ).style.width = 3 * pct;

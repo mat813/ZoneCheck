@@ -27,6 +27,13 @@
 ##
 class MessageCatalog
     ##
+    ## Syntax error, while parsing the file
+    ##
+    class SyntaxError < StandardError
+    end
+
+
+    ##
     ## Exception: no message for the 'tag'
     ##
     class EntryNotFound < StandardError
@@ -40,10 +47,12 @@ class MessageCatalog
     def initialize(msgfile)
 	@catalog = {}
 	prefix   = nil
+	lineno   = 0
 
 	# Read message catalogue
 	File.open(msgfile) { |io|
 	    while line = io.gets
+		lineno += 1
 		line.chomp!
 		next if line =~ /^\s*\#/
 		next if line.empty?
@@ -57,6 +66,16 @@ class MessageCatalog
 		when /^(\w+)\s*:\s*(.*?)\s*$/
 		    tag, msg = $1, $2
 		    tag = "#{prefix}_#{tag}" if prefix
+		    while msg.gsub!(/\\$/, "")
+			if (line = io.gets).nil?
+			    raise SyntaxError, 
+				"New line expected after continuation mark"
+			end
+			lineno += 1
+			line.chomp!
+			msg << line
+		    end
+
 		    msg.gsub!(/\\n/, "\n")
 		    @catalog[tag] = msg
 
@@ -65,6 +84,9 @@ class MessageCatalog
 		    tag, link = $1, $2
 		    tag = "#{prefix}_#{tag}" if prefix
 		    @catalog[tag] = @catalog[link]
+
+		else
+		    raise SyntaxError, "#{lineno}: Unexpected token"
 		end
 	    end
 	}

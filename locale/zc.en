@@ -15,7 +15,14 @@ i_tag : i
 w_tag : w
 f_tag : f
 
-xpltag_ref: Ref
+
+w_generic	: generic
+w_warning	: warning
+w_fatal		: fatal
+w_info		: info
+w_unexpected	: unexpected
+
+xpltag_ref	: Ref
 
 res_succeed_but : SUCCEED (but %d warning(s))\n
 res_succeed	: SUCCEED\n
@@ -26,13 +33,10 @@ warning_fmt	: Warning: %s\n
 fatal_fmt	: Fatal  : %s\n
 info_fmt	: Info   : %s\n
 testing_fmt     : Testing : %s\n
-generic         : generic
-warning         : warning
-fatal           : fatal
-info            : info
 test_progress   : Tests in progress
 
 ns_zone         : zone
+ns_ns		: ns
 ns_primary      : primary
 ns_secondary    : secondary
 
@@ -46,7 +50,21 @@ pgr_progress    : Progression
 pgr_test        : Tests
 pgr_time        : Time
 pgr_speed       : Speed
+pgr_speed_unit  : T/s
 
+##############################################################################
+##############################################################################
+
+xcp_param_fqdn_required  : Absolute domain name required
+xcp_param_batch_nodomain : No domainname expected for batch mode
+xcp_param_domain_expected: One domainname expected
+xcp_param_primary_soa    : Unable to find primary nameserver (SOA)
+xcp_param_nameservers_ns : Unable to find nameservers (NS)
+xcp_param_prim_ns_soa    : Unable to identify primary nameserver (NS vs SOA)
+xcp_param_nameserver_ips : Unable to find nameserver IP address(es) for %s
+xcp_param_output_support : Selected output class doesn't support '%s'
+xcp_param_ipv6_no_stack  : IPv6 not supported on that host
+xcp_param_unknown_modopt : unknown modifier '%s' for %s option
 
 ##############################################################################
 ##############################################################################
@@ -111,7 +129,10 @@ explain : [none]
 [chk_same_net]
 testname: nameserver addresses on same subnet
 error   : IP addresses on the same subnet
-explain : [ref]: AFNIC advise\n  To avoid loosing all connectivity with the autoritative DNS in case\n  of network outage it is advised to host the DNS on different networks.
+explain : \
+[ref]: AFNIC advise\n\
+  To avoid loosing all connectivity with the autoritative DNS in case\n\
+  of network outage it is advised to host the DNS on different networks.
 
 [chk_private_ip]
 testname: address in a private network
@@ -372,3 +393,83 @@ explain : [none]
 testname: hostmaster email address is valid
 error   : The hostmaster can't be contacted by email
 explain : [none]
+
+
+
+
+
+
+## USAGE #####################################################################
+##############################################################################
+
+[param]
+
+version: PROGNAME: version %s
+
+usage: \
+usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
+    -q, --quiet         Don't display extra titles\n\
+    -h, --help          Show this message\n\
+    -V, --version       Display version and exit\n\
+    -B, --batch         Batch mode (read from file or stdin '-')\n\
+    -c, --config        Specify location of the configuration file\n\
+        --testdir       Location of the directory holding tests\n\
+    -C, --category      Only perform test for the specified category\n\
+    -T, --test          Name of the test to perform\n\
+        --testlist      List all the available tests\n\
+        --testdesc      Give a description of the test\n\
+    -r, --resolver      Resolver to use for guessing 'ns' information\n\
+    -n, --ns            List of nameservers for the domain\n\
+    -1, --one           Only display the most relevant message\n\
+    -g, --tagonly       Display only tag (suitable for scripting)\n\
+    -e, --error         Behaviour in case of error (see error)\n\
+    -t, --transp        Transport/routing layer (see transp)\n\
+    -v, --verbose       Display extra information (see verbose)\n\
+    -o, --output        Output (see output)\n\
+    -4, --ipv4          Only check the zone with IPv4 connectivity\n\
+    -6, --ipv6          Only check the zone with IPv6 connectivity\n\
+\n\
+  verbose:              [intro/explain] [testdesc|counter]\n\
+    intro          [i]  Print summary for domain and associated nameservers\n\
+    explain        [x]  Print an explanation for failed tests\n\
+    testdesc       [t]  Print the test description before running it\n\
+    counter        [c]  Print a test counter\n\
+\n\
+  output:               [straigh|consolidation] [text|html]\n\
+    straight      *[s]  Print output without processing (or very few)\n\
+    consolidation  [c]  Try to merge some results before output\n\
+    text          *[t]  Output plain text\n\
+    html           [h]  Output HTML\n\
+\n\
+  error:                [allfatal|allwarning] [stop|nostop]\n\
+    allfatal       [af] All error are considered fatal\n\
+    allwarning     [aw] All error are considered warning\n\
+    stop          *[s]  Stop on the first fatal error\n\
+    nostop         [ns] Never stop (even on fatal error)\n\
+\n\
+  transp:               [ipv4/ipv6] [udp|tcp|std]\n\
+    ipv4          *[4]  Use IPv4 routing protocol\n\
+    ipv6          *[6]  Use IPv6 routing protocol\n\
+    udp            [u]  Use UDP transport layer\n\
+    tcp            [t]  Use TCP transport layer\n\
+    std           *[s]  Use UDP with fallback to TCP for truncated messages\n\
+\n\
+  Batch Mode:\n\
+    - process domain from file or stdin, with 1 per line. The syntax is:\n\
+      DOM=domainname\n\
+   or DOM=domainname NS=ns1;ns2=ip1,ip2\n\
+\n\
+\n\
+EXAMPLES:\n\
+  PROGNAME -6 --verbose=x,i afnic.fr.\n\
+    Test the 'afnic.fr.' domain with IPv6 only connectivity, print\n\
+    a summary information about the tested domain and explanation of\n\
+    failed tests\n\
+\n\
+  PROGNAME -v c -1 -B -\n\
+    Work in batch mode, where domains are read from stdin, a progress bar\n\
+    indicates how many tests remain, and only short report is written\n\
+\n\
+  PROGNAME --testdesc error -T chk_soa\n\
+    Ask for the 'error' message associated with the test 'chk_soa'\n
+

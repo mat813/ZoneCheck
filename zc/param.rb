@@ -134,12 +134,12 @@ class Param
 		    next unless cgi_ns.length > 0
 		    next if     (ns = cgi_ns[0]).empty?
 		    
-		    cgi_ad = cgi["ips#{i}"]
-		    if cgi_ad.nil? || cgi_ad.length == 0 
+		    cgi_ips = cgi["ips#{i}"]
+		    if cgi_ips.nil? || cgi_ips.length == 0 
 			ns_list << [ ns ]
 		    else
-			# XXX: cgi_ad[x].empty?
-			ips = cgi_ad.collect { |a| 
+			# XXX: cgi_ips[x].empty?
+			ips = cgi_ips.collect { |a| 
 			    a.split(/\s*,\s*|\s+/) }.flatten.compact
 			ns_list << [ ns, ips ]
 		    end
@@ -214,7 +214,8 @@ class Param
 		case opt
 		when "--help"      then usage(EXIT_USAGE, $stdout)
 		when "--version"
-		    puts "#{PROGNAME}: version #{$zc_version}"
+		    puts $mc.get("param_version").gsub("PROGNAME", PROGNAME) % 
+			[ $zc_version ]
 		    exit EXIT_OK
 		when "--debug"     then $dbg.level	 = arg
 		when "--batch"     then @p.batch	 = arg
@@ -252,12 +253,12 @@ EOT
 	def args_analyse
 	    if @p.batch
 		if !ARGV.empty?
-		    raise ParamError, 
-			"no domainname expected for batch mode"
+		    raise ParamError, $mc.get("xcp_param_batch_nodomain")
 		end
 	    else
-		raise ParamError, 
-		    "one domainname expected" unless ARGV.length == 1
+		if !(ARGV.length == 1)
+		    raise ParamError, $mc.get("xcp_param_domain_expected") 
+		end
 		@p.domain.name = ARGV[0]
 	    end
 	end
@@ -273,74 +274,8 @@ EOT
 	end
 
 	def usage(errcode, io=$stderr)
-	    io.print <<EOT
-usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
-    -q, --quiet         Don't display extra titles
-    -h, --help          Show this message
-    -V, --version       Display version and exit
-    -B, --batch         Batch mode (read from file or stdin '-')
-    -c, --config        Specify location of the configuration file
-        --testdir       Location of the directory holding tests
-    -C, --category      Only perform test for the specified category
-    -T, --test          Name of the test to perform
-        --testlist      List all the available tests
-        --testdesc      Give a description of the test
-    -r, --resolver      Resolver to use for guessing 'ns' information
-    -n, --ns            List of nameservers for the domain
-    -1, --one           Only display the most relevant message
-    -g, --tagonly       Display only tag (suitable for scripting)
-    -e, --error         Behaviour in case of error (see error)
-    -t, --transp        Transport/routing layer (see transp)
-    -v, --verbose       Display extra information (see verbose)
-    -o, --output        Output (see output)
-    -4, --ipv4          Only check the zone with IPv4 connectivity
-    -6, --ipv6          Only check the zone with IPv6 connectivity
-
-  verbose:              [intro/explain] [testdesc|counter]
-    intro          [i]  Print summary for domain and associated nameservers
-    explain        [x]  Print an explanation for failed tests
-    testdesc       [t]  Print the test description before running it
-    counter        [c]  Print a test counter
-
-  output:               [straigh|consolidation] [text|html]
-    straight      *[s]  Print output without processing (or very few)
-    consolidation  [c]  Try to merge some results before output
-    text          *[t]  Output plain text
-    html           [h]  Output HTML
-
-  error:                [allfatal|allwarning] [stop|nostop]
-    allfatal       [af] All error are considered fatal
-    allwarning     [aw] All error are considered warning
-    stop          *[s]  Stop on the first fatal error
-    nostop         [ns] Never stop (even on fatal error)
-
-  transp:               [ipv4/ipv6] [udp|tcp|std]
-    ipv4          *[4]  Use IPv4 routing protocol
-    ipv6          *[6]  Use IPv6 routing protocol
-    udp            [u]  Use UDP transport layer
-    tcp            [t]  Use TCP transport layer
-    std           *[s]  Use UDP with fallback to TCP for truncated messages
-
-  Batch Mode: 
-    - process domain from file or stdin, with 1 per line. The syntax is:
-      DOM=domainname
-   or DOM=domainname NS=ns1;ns2=ip1,ip2
-    
-
-EXAMPLES:
-  #{PROGNAME} -6 --verbose=x,i afnic.fr.
-    Test the 'afnic.fr.' domain with IPv6 only connectivity, print
-    a summary information about the tested domain and explanation of
-    failed tests
-
-  #{PROGNAME} -v c -1 -B -
-    Work in batch mode, where domains are read from stdin, a progress bar
-    indicates how many tests remain, and only short report is written
-
-  #{PROGNAME} --testdesc error -T chk_soa
-    Ask for the 'error' message associated with the test 'chk_soa'
-EOT
-       exit errcode unless errcode.nil? #'
+	    io.print $mc.get("param_usage").gsub("PROGNAME", PROGNAME)
+	    exit errcode unless errcode.nil?
 	end
     end
 
@@ -428,7 +363,7 @@ EOT
 	def name=(domain)
 	    domain = NResolv::DNS::Name::create(domain, true)
 	    unless domain.absolute?
-		raise ArgumentError, "Absolute domain name required" 
+		raise ArgumentError, $mc.get("xcp_param_fqdn_required")
 	    end
 	    @name = domain
 	end
@@ -455,29 +390,27 @@ EOT
 	def autoconf(dns)
 	    # Guess Nameservers and ensure primary is at first position
 	    if @ns.nil?
-		$dbg.msg(DBG::AUTOCONF, "Retrieving #{@name} NS")
+		$dbg.msg(DBG::AUTOCONF, "Retrieving NS for #{@name}")
 		begin
 		    primary = dns.primary(@name)
 		rescue NResolv::NResolvError
-		    raise ParamError, "Unable to find primary nameserver (SOA)"
+		    raise ParamError, $mc.get("xcp_param_primary_soa")
 		end
 		
 		begin
 		    @ns = [ nil ]
 		    dns.nameservers(@name).each { |n|
 			if n == primary
-			    @ns[0] = [ n, [] ]
-			else
-			    @ns  <<  [ n, [] ]
+			then @ns[0] = [ n, [] ]
+			else @ns  <<  [ n, [] ]
 			end
 		    }
 		rescue NResolv::NResolvError
-		    raise ParamError, "Unable to find nameservers (NS)"
+		    raise ParamError, $mc.get("xcp_param_nameservers_ns")
 		end
 		
 		if @ns[0].nil?
-		    raise ParamError, 
-			"Unable to identify primary nameserver (NS vs SOA)"
+		    raise ParamError, $mc.get("xcp_param_prim_ns_soa")
 		end
 	    end
 	
@@ -490,7 +423,7 @@ EOT
 	    # Guess Nameservers IP addresses
 	    @ns.each { |ns, ips|
 		if ips.empty? then
-		    $dbg.msg(DBG::AUTOCONF, "Retrieving IP for NS:#{ns}")
+		    $dbg.msg(DBG::AUTOCONF, "Retrieving IP for NS: #{ns}")
 		    begin
 			ips.concat(dns.addresses(ns, Address::OrderStrict))
 		    rescue NResolv::NResolvError
@@ -498,7 +431,7 @@ EOT
 		end
 		if ips.empty? then
 		    raise ParamError, 
-			"Unable to find nameserver IP address(es) for #{ns}"
+			$mc.get("xcp_param_nameserver_ips") % [ ns ]
 		end
 	    }
 
@@ -548,6 +481,9 @@ EOT
 	def reporter=(report_class)
 	    @report_class = report_class
 	end
+	def reporter
+	    @report_class
+	end
 
 	def autoconf(domain, rflag, publisher)
 	    @report	= @report_class::new(domain, rflag, publisher)
@@ -558,11 +494,11 @@ EOT
 	    # Sanity check
 	    if rflag.tagonly && !@report.tagonly_supported?
 		raise ParamError, 
-		    "selected output class doesn't support 'tagonly'"
+		    $mc.get("xcp_param_output_support") % [ "tagonly" ]
 	    end
 	    if rflag.one     && !@report.one_supported?
 		raise ParamError, 
-		    "selected output class doesn't support 'one'"
+		    $mc.get("xcp_param_output_support") % [ "one"     ]
 	    end
 	end
 
@@ -606,6 +542,9 @@ EOT
     attr_writer :testdir
 
 
+    ##
+    ## Parameter errors (ie: usage)
+    ##
     class ParamError < StandardError
     end
 
@@ -644,7 +583,7 @@ EOT
 	      when "expl"  then "explain"
 	      when "error" then "error"
 	      else raise ParamError, 
-		      "unknown type '#{type}' for testdesc option"
+		      $mc.gt("xcp_param_unknown_modopt") % [ type, "testdesc" ]
 	      end
 	
 	@give_testdesc = suf
@@ -656,7 +595,7 @@ EOT
     #
     def ipv6=(bool)
 	if bool && ! $ipv6_stack
-	    raise ParamError, "IPv6 not supported on that host"
+	    raise ParamError, $mc.get("xcp_param_ipv6_no_stack")
 	end
 	@ipv6 = bool
     end
@@ -687,7 +626,8 @@ EOT
 	    when "ns", "nostop"
 		@rflag.stop_on_fatal = false
 	    else
-		raise ParamError, "unknown error modifier '#{token}'"
+		raise ParamError,
+		    $mc.gt("xcp_param_unknown_modopt") % [ token, "error" ]
 	    end
 	}
     end
@@ -708,7 +648,8 @@ EOT
 	    when "c", "counter"
 		@rflag.counter	= true
 	    else
-		raise ParamError, "unknown verbose modifier '#{token}'"
+		raise ParamError,
+		    $mc.gt("xcp_param_unknown_modopt") % [ token, "verbose" ]
 	    end
 	}
     end
@@ -731,7 +672,8 @@ EOT
 	    when "s", "std"
 		@client = NResolv::DNS::Client::Classic
 	    else
-		raise ParamError, "unknown transport modifier '#{token}'"
+		raise ParamError,
+		    $mc.gt("xcp_param_unknown_modopt") % [ token, "transp" ]
 	    end
 	}
     end
@@ -752,7 +694,8 @@ EOT
 	    when "h", "html"
 		@publisher_class = Publisher::HTML
 	    else
-		raise ParamError, "unknown output modifier '#{token}'"
+		raise ParamError,
+		    $mc.gt("xcp_param_unknown_modopt") % [ token, "output" ]
 	    end
 	}
     end
@@ -792,6 +735,7 @@ EOT
     def output_autoconf
 	# Set output publisher
 	@publisher = @publisher_class::new(@rflag)
+	$dbg.msg(DBG::AUTOCONF, "Publish using #{@publisher_class}")
     end
 
     #
@@ -808,8 +752,13 @@ EOT
 	@ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
 	@ipv4 = false        if @ipv4.nil?
 	@ipv6 = false        if @ipv6.nil? || !$ipv6_stack
+	$dbg.msg(DBG::AUTOCONF, 
+		 "Routing protocol set to: " +
+		   [ @ipv4 ? "ipv4" : nil, 
+		     @ipv6 ? "ipv6" : nil].compact.join("/"))
 
 	# Set report object
 	@report.autoconf(@domain, @rflag, @publisher)
+	$dbg.msg(DBG::AUTOCONF, "Report using #{@report.reporter}")
     end
 end

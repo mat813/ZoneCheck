@@ -1,4 +1,4 @@
-#!ruby
+#!/usr/local/bin/ruby
 # $Id$
 
 # 
@@ -12,7 +12,7 @@
 #
 #
 
-ZC_INSTALL_PATH		= "INSTALLPATHTOPATCH"
+ZC_INSTALL_PATH		= "/homes/sdalu/ZC.CVS/zc"
 
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
@@ -47,7 +47,7 @@ $zc_version	= ZC_VERSION
 #
 # Run at safe level 1
 #
-$SAFE = 0
+$SAFE = 1
 
 
 #

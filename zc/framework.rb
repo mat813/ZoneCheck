@@ -110,7 +110,7 @@ class Test
 		    tag << @ip.to_s
 		end
 	    else
-		tag = $mc.get("generic")
+		tag = $mc.get("w_generic")
 	    end
 	    tag
 	end

@@ -12,6 +12,9 @@
 #
 
 module Report
+    ##
+    ## Exception raised to abort zonecheck
+    ##
     class FatalError < StandardError
     end
 
@@ -143,15 +146,15 @@ module Report
 		@publish.h1($mc.get("title_testres"))
 	    end
 	    if ! @info.empty?
-		@publish.h2($mc.get("info")) if !@rflag.tagonly
+		@publish.h2($mc.get("w_info")) if !@rflag.tagonly
 		@info.display
 	    end
 	    if ! @warning.empty?
-		@publish.h2($mc.get("warning")) if !@rflag.tagonly
+		@publish.h2($mc.get("w_warning")) if !@rflag.tagonly
 		@warning.display
 	    end
 	    if ! @fatal.empty?
-		@publish.h2($mc.get("fatal")) if !@rflag.tagonly
+		@publish.h2($mc.get("w_fatal")) if !@rflag.tagonly
 		@fatal.display
 	    end
 

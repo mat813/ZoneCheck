@@ -27,8 +27,8 @@ module Publisher
 
 	class Progress
 	    class PBar < TTY::ProgressBar
-		def unit            ; "T/s"  ; end
-		def unit_cvt(value) ;  value ; end
+		def unit            ; $mc.get("pgr_speed_unit") ; end
+		def unit_cvt(value) ; value                     ; end
 	    end
 
 	    def initialize(publisher)
@@ -84,11 +84,16 @@ module Publisher
 
 
 	def intro(domain)
-	    @o.puts "ZONE  : #{domain.name}"
+	    l10n_zone	= $mc.get("ns_zone").upcase
+	    l10n_ns	= $mc.get("ns_ns"  ).upcase
+	    sz		= [ l10n_zone.length, l10n_ns.length+3 ].max
+
+	    @o.printf "%-*s : %s\n", sz, l10n_zone, domain.name
 	    domain.ns.each_index { |i| 
 		n = domain.ns[i]
-		@o.printf "NS %2s : %s [%s]\n",
-		    i == 0 ? "<=" : "  ", n[0], n[1].join(", ")
+		@o.printf "%-*s : %s [%s]\n", 
+		    sz, i == 0 ? "#{l10n_ns} <=" : "#{l10n_ns}  ",
+		    n[0], n[1].join(", ")
 	    }
 	    @o.puts
 	end
@@ -128,7 +133,8 @@ module Publisher
 	    msg, xpl_lst = nil, nil
 	    if @rflag.tagonly
 		if desc.is_error?
-		    msg = "#{severity}[Unexpected]: #{testname}"
+		    l10n_unexpected = $mc.get("w_unexpected").capitalize
+		    msg = "#{severity}[#{l10n_unexpected}]: #{testname}"
 		else
 		    msg = "#{severity}: #{testname}"
 		end

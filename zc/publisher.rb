@@ -61,7 +61,7 @@ module Publisher
 	    xpl_elt = nil
 	    xpl.split(/\n/).each { |e|
 		if e =~ /^\[(\w+)]:\s*/
-		    xpl_elt     = [ $1, $', [] ]	#'
+		    xpl_elt     = [ $1, $', [] ]	#' <-- emacs
 		    xpl_lst << xpl_elt
 		else
 		    xpl_elt[2] << e
