@@ -118,6 +118,8 @@ module CheckNetworkAddress
 		rescue TimeoutError
 		    false
 		end
+	    rescue Errno::ECONNREFUSED
+		false
 	    ensure
 		thr.kill   unless thr.nil?
 		sock.close unless sock.nil?
