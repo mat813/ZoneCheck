@@ -5,16 +5,16 @@ version = 2.0.0
 		- base de donnees reseau (RIPE) 
 		- test connectivite avec plusieurs adresses IP 
 
-	portage sous windows (recuperer le resolver par defaut, ...)
 	integration avec la chaine de production
 
-	check for label_xpl defined elsewhere
 
 BEURK:
 	pour les sous zones (asso.fr , ....) ne pas faire les tests des MX
 
 version = 2.1.0
 	IDN
+	check for label_xpl defined elsewhere
+	portage sous windows (recuperer le resolver par defaut, ...)
 	special timeout return code
 	Tests:	- check coherence between parent glue and domain
 
@@ -42,6 +42,7 @@ version = 3.0.0
 	Test:	- comparaison de le resolution resolver parent avec ns
 		- Improve loopback delegation detection
 		
+	publisher/report print all tests with status
 
-version = 3.0.0
+version = 3.1.0
 	DNSSEC
