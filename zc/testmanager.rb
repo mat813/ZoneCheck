@@ -293,8 +293,14 @@ class TestManager
 			   when NilClass, FalseClass, Hash then Test::Failed
 			   else Test::Succeed
 			   end
-	rescue NResolv::RefusedError
-	    desc.err = "Answer refused"
+	rescue NResolv::ReplyError => e
+	    desc.err = case e.mesg 
+		       when NResolv::DNS::RCode::SERVFAIL
+			   "Serveur failure"
+		       when NResolv::DNS::RCode::REFUSED
+			   "Answer refused from serveur"
+		       else e.to_s
+		       end
 #	rescue Errno::EADDRNOTAVAIL
 #	    desc.err = "Network transport unavailable try option -4 or -6"
 	rescue NResolv::NResolvError => e

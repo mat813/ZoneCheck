@@ -31,12 +31,11 @@ module NResolv
     end
 
     class ReplyError    < NResolvError
+	attr_reader :mesg
+	def initialize(mesg=nil) ; @mesg = mesg                           ; end
+	def to_s                 ; (@mesg.nil? ? self.class : @mesg).to_s ; end
     end
     
-    class RefusedError  < NResolvError
-    end
-
-
     class DNS
 	##
 	## Abstract client class
@@ -72,7 +71,7 @@ module NResolv
 	    
 	    #
 	    # yield: resource, ttl, name, msg
-	    # exceptions: NoEntryError, NoDomainError, RefusedError
+	    # exceptions: NoEntryError, NoDomainError
 	    def each_resource(name, resource, rec=true, exception=true)
 		msg = NResolv::DNS::Message::Query::new
 		msg.rd = rec
@@ -85,13 +84,11 @@ module NResolv
 		end
 		case rpl.rcode
 		when RCode::NOERROR
-		when RCode::REFUSED
-		    raise RefusedError, "#{rpl.rcode}"
 		when RCode::NXDOMAIN
-		    raise NoDomainError, "#{rpl.rcode}" if exception
+		    raise NoDomainError, rpl.rcode if exception
 		    return
 		else
-		    raise ReplyError, "#{rpl.rcode}"
+		    raise ReplyError, rpl.rcode
 		end
 
 		count = 0
