@@ -14,7 +14,7 @@
 require 'thread'
 require 'framework'
 require 'report'
-require 'cache_attr'
+require 'cache'
 
 ##
 ##
@@ -22,7 +22,6 @@ require 'cache_attr'
 ##
 ## attributs: param, classes, cm, config, tests
 class TestManager
-    include CacheAttribute
 
     ##
     ## Exception: error in the test definition
@@ -81,7 +80,8 @@ class TestManager
 	@tests		= {}	# Hash of test  method name (tst_*)
 	@checks		= {}	# Hash of check method name (chk_*)
 	@classes	= []	# List of classes used by the methods above
-	cache_init
+	@cache = Cache::new
+	@cache.create(:cached_tst)
    end
 
 
@@ -190,7 +190,7 @@ class TestManager
 	@cm		= cm
 	@do_preeval	= do_preeval
 
-	cache_attr :cached_tst
+	@cache.clear(:cached_tst)
 
 	@iterer = { 
 	    CheckExtra          => proc { |bl| bl.call },
@@ -274,7 +274,7 @@ class TestManager
     #
     def test1(testname, ns=nil, ip=nil)
 	$dbg.msg(DBG::TESTS, "test: #{testname}")
-	cache_use(:cached_tst, [ testname, ns, ip ]) {
+	@cache.use(:cached_tst, [ testname, ns, ip ]) {
 	    # Retrieve the method representing the check
 	    klass   = @tests[testname]
 	    object  = @objects[klass]

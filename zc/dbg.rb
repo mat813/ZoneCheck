@@ -71,8 +71,12 @@ class DBG
     def enabled?(type) 
 	@lvl & type != 0
     end
+    alias [] enabled?
 
 
+    #
+    # Enable debugging for the specified type
+    #
     def []=(type, enable)
 	self.level = enable ? @lvl | type : @lvl & ~type
     end

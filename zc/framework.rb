@@ -11,7 +11,7 @@
 #
 #
 
-require 'cache_attr'
+require 'cache'
 require 'cachemanager'
 
 ##
@@ -19,9 +19,6 @@ require 'cachemanager'
 ##
 class Test
     DefaultDNS = NResolv::DNS::DefaultResolver
-
-
-    include CacheAttribute
 
     ##
     ## Abstract class for: Succeed, Failed, Error
@@ -172,7 +169,7 @@ class Test
 	@cm			= cm
 	@domain			= domain
 
-	cache_init
+	@cache = Cache::new
     end
 
 

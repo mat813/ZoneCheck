@@ -57,6 +57,7 @@ class MessageCatalog
 	lng
     end
 
+
     #
     # Initializer
     #
@@ -99,7 +100,8 @@ class MessageCatalog
     # Test if a file catalog is available
     #
     def available?(where, lng=@lang)
-	File::readable?(filepath(where, lng.clone.untaint))
+	lng = lng.clone.untaint if lng.tainted?
+	File::readable?(filepath(where, lng))
     end
 
 
@@ -152,14 +154,14 @@ class MessageCatalog
 		    tag = "#{prefix}_#{tag}" if prefix
 
 		    if @catalog.has_key?(tag)
-			raise SyntaxError, fmt_line(lineno,
-				"Tag '#{tag}' already defined")
+			raise SyntaxError,
+			    "Line #{lineno}: Tag '#{tag}' already defined"
 		    end
 
 		    while msg.gsub!(/\\$/, "")
 			if (line = io.gets).nil?
-			    raise SyntaxError, fmt_line(lineno, 
-				"new line expected after continuation mark")
+			    raise SyntaxError,
+				"Line #{lineno}: line expected after '\\'"
 			end
 			lineno += 1
 			line.chomp!
@@ -177,9 +179,9 @@ class MessageCatalog
 		    @catalog[tag] = @catalog[link]
 		    $dbg.msg(DBG::LOCALE, "linking #{tag} -> #{link}")
 
+		# ERROR
 		else
-		    raise SyntaxError, 
-			fmt_line(lineno, "malformed line")
+		    raise SyntaxError, "Line #{lineno}: malformed line"
 		end
 	    end
 	}
@@ -205,19 +207,8 @@ class MessageCatalog
     #
     def get(tag)
 	if (str = @catalog[tag]).nil?
-	    # WARN: not localized (programming error)
 	    raise EntryNotFound, "Tag '#{tag}' has not been localized"
 	end
 	str
-    end
-
-    ## [private] #########################################################
-
-    private
-    #
-    # Shortcut for formating text with line number prefixed
-    #
-    def fmt_line(lineno, txt)
-	"Line #{lineno}: #{txt}"
     end
 end
