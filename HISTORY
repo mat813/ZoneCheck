@@ -1,3 +1,23 @@
 # $Id$
 
+ZoneCheck  was initiated and  developped by engineers working at AFNIC
+in order to    check the  correct   configuration  of  a zone   before
+delegation of  a domain name  under .fr.   It's  development is  still
+coordinated by people working at AFNIC.
+
+
 * ZoneCheck 1.0
+
+ZoneCheck was created in 1995 by Benoit Grange and has been maintained
+by him  until 1997. The prototype was  a script using the dig command,
+which evolved   into  a  perl programme  based   on  the DNS  resolver
+Resolv5.  Vincent Gillet maintained the programme  in  1998, this task
+has been taken over by Erwan Mas  and Philippe Lubrano from 1998 until
+now.
+
+
+* ZoneCheck 2.0
+
+It is a rewrite   from scratch done  in  ruby at  the end of  2002  by
+Stephane D'Alu, so as to create a modular and extensible version.
+
