@@ -1079,8 +1079,6 @@ module Input
 	    p.domain.clear
 	    p.domain.name = "nic.fr"
 	    p.domain.autoconf(p.resolver.local)
-	    puts p.domain.name
-	    puts p.domain.ns
 
 	    Gtk::RC.parse_string(<<EOT
 style "package_label"
