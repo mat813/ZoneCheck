@@ -19,14 +19,15 @@ require 'publisher'
 ##
 class Param
     ##
-    ## Hold the flags used to describe output behaviour
+    ## Hold the flags used to describe report output behaviour
     ##
-    ## tagonly : only print tag or information suitable for parsing
-    ## one     : only print 1 message
-    ## intro   : display summary about checked domain
-    ## explain : explain the reason behind the test (if test failed)
-    ## testdesc: print a short description of the test being performed
-    ## counter : display a progress bar
+    ## tagonly      : only print tag or information suitable for parsing
+    ## one          : only print 1 message
+    ## intro        : display summary about checked domain
+    ## explain      : explain the reason behind the test (if test failed)
+    ## testdesc     : print a short description of the test being performed
+    ## counter      : display a progress bar
+    ## stop_on_fatal: stop on the first fatal error
     ##
     ## Correction are silently made to respect the following constaints:
     ##  - 'tagonly' doesn't support 'explain' (as displaying a tag
@@ -235,13 +236,14 @@ class Param
 
     attr_reader :configfile, :ipv4, :ipv6
     attr_writer :configfile, :ipv4, :ipv6
-    attr_reader :resolver
 
-    attr_reader :diagnostic
+    attr_reader :resolver, :dns
+
+
 
     attr_reader :client
 
-    attr_reader :report, :publisher
+    attr_reader :rflag, :report, :publisher
 
 
     attr_reader :batch
@@ -251,14 +253,11 @@ class Param
     attr_reader :domain
     attr_writer :domain
 
-    attr_reader :rflag
-
     attr_writer :debug
 
     attr_reader :testdir
     attr_writer :testdir
 
-    attr_reader :dns
 
     DefaultConfigFile = "zc.conf"
     DefaultTestDir    = "./test"
@@ -282,16 +281,8 @@ class Param
 
 	@publisher_class	= Publisher::Text
 	@report			= ProxyReport::new(Report::Straight)
-
 	@domain			= Domain::new
 	@rflag			= ReportFlag::new
-
-
-	@diagnostic		= nil
-	@info			= nil
-	@warning		= nil
-	@fatal			= nil
-	@ns			= nil
     end
 
     #
@@ -299,23 +290,23 @@ class Param
     #
     def self.cmdline_parse
 	opts = GetoptLong.new(
+		[ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ],
+        	[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
 		[ "--quiet",	"-q",	GetoptLong::NO_ARGUMENT       ],
-	        [ "--batch",    "-B",   GetoptLong::NO_ARGUMENT       ],
         	[ "--debug",    "-d",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--tagonly",  "-g",   GetoptLong::NO_ARGUMENT       ],
+	        [ "--batch",    "-B",   GetoptLong::NO_ARGUMENT       ],
+        	[ "--config",   "-c",   GetoptLong::REQUIRED_ARGUMENT ],
+        	[ "--testdir",  "-T",   GetoptLong::REQUIRED_ARGUMENT ],
+        	[ "--resolver", "-r",   GetoptLong::REQUIRED_ARGUMENT ],
+        	[ "--ns",       "-n",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--ipv4",	"-4",	GetoptLong::NO_ARGUMENT       ],
 		[ "--ipv6",	"-6",	GetoptLong::NO_ARGUMENT       ],
 		[ "--one",      "-1",	GetoptLong::NO_ARGUMENT       ],
-        	[ "--ns",       "-n",   GetoptLong::REQUIRED_ARGUMENT ],
-        	[ "--resolver", "-r",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--tagonly",  "-g",   GetoptLong::NO_ARGUMENT       ],
 		[ "--error",	"-e",	GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--transp",	"-t",	GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--verbose",  "-v",   GetoptLong::OPTIONAL_ARGUMENT ],
-		[ "--output",   "-o",   GetoptLong::REQUIRED_ARGUMENT ],
-        	[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
-        	[ "--testdir",  "-T",   GetoptLong::REQUIRED_ARGUMENT ],
-        	[ "--config",   "-c",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ] )
+		[ "--output",   "-o",   GetoptLong::REQUIRED_ARGUMENT ] )
 	opts.quiet = true
 
 	i = self.new
@@ -323,24 +314,24 @@ class Param
 	begin
 	    opts.each do |opt, arg|
 		case opt
+		when "--help"      then cmdline_usage(EXIT_USAGE, $stdout)
 		when "--version"
 		    puts "#{PROGNAME}: RCS version #{RCS_REVISION}"
 		    exit EXIT_OK
-		when "--batch"     then i.batch		= true
 		when "--debug"     then $dbg.level	= arg
-		when "--ipv6"      then i.ipv6          = true
-		when "--ipv4"      then i.ipv4          = true
-		when "--tagonly"   then i.rflag.tagonly	= true
-		when "--one"       then i.rflag.one	= true
+		when "--batch"     then i.batch		= true
 		when "--config"    then i.configfile    = arg
 		when "--testdir"   then i.testdir       = arg
-		when "--ns"        then i.domain.ns     = arg
 		when "--resolver"  then i.resolver      = arg
+		when "--ns"        then i.domain.ns     = arg
+		when "--ipv6"      then i.ipv6          = true
+		when "--ipv4"      then i.ipv4          = true
+		when "--one"       then i.rflag.one	= true
+		when "--tagonly"   then i.rflag.tagonly	= true
 		when "--error"     then i.error         = arg
 		when "--transp"    then i.transp        = arg
 		when "--verbose"   then i.verbose	= arg
 		when "--output"    then i.output        = arg
-		when "--help"      then cmdline_usage(EXIT_USAGE, $stdout)
 		end
 	    end
 
@@ -373,17 +364,18 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     -h, --help          Show this message
     -V, --version       Display RCS version and exit
     -B, --batch         Batch mode (read from stdin)
-    -g, --tagonly       Display only tag (suitable for scripting)
+    -T, --testdir       Location of the directory holding tests
+    -c, --config        Specify location of the configuration file
+    -r, --resolver      Resolver to use for guessing 'ns' information
+    -n, --ns            List of nameservers for the domain
     -1, --one           Only primite the most relevant message
+    -g, --tagonly       Display only tag (suitable for scripting)
     -e, --error         Behaviour in case of error (see error)
     -t, --transp        Transport/routing layer (see transp)
     -v, --verbose       Display extra information (see verbose)
     -o, --output        Output (see output)
-    -T, --testdir       Location of the directory holding tests
-    -c, --config        Specify location of the configuration file
     -4, --ipv4          Only check the zone with IPv4 connectivity
     -6, --ipv6          Only check the zone with IPv6 connectivity
-    -n, --ns            List of nameservers for the domain
 
   verbose:              [intro/explanation] [testdesc|counter]
     intro          [i]  Print summary for domain and associated nameservers
@@ -547,9 +539,8 @@ EOT
 	# Select transport layer
 	@client = NResolv::DNS::Client::Classic if @client.nil?
 
-	
 	# Set output publisher
-	@publisher = @publisher_class::new
+	@publisher = @publisher_class::new(@rflag)
 
 	# Set report object
 	@report.autoconf(@domain, @rflag, @publisher)

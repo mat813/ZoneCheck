@@ -100,7 +100,7 @@ class TestManager
     end
 
 
-    def test1(diag, method, testname, ns=nil, ip=nil) 
+    def test1(severity, method, testname, ns=nil, ip=nil) 
 	# Print test description
 	@publisher.synchronize {
 	    if @param.rflag.testdesc
@@ -113,23 +113,22 @@ class TestManager
 	    @publisher.counter.processed(1) if @param.rflag.counter
 	}
 
-	errmsg = nil
-	xpl    = nil
-	xtra   = nil
-	type   = Test::Error
-	args   = []
-	args   << ns if !ns.nil?
-	args   << ip if !ip.nil?
+	desc         = Test::Result::Desc::new(testname)
+	result_class = Test::Error
+	args = []
+	args << ns if !ns.nil?
+	args << ip if !ip.nil?
 	begin
-	    type = method.call(*args) ? Test::Succeed : Test::Failed
+	    result_class = method.call(*args) ? Test::Succeed : Test::Failed
 	rescue NResolv::RefusedError
-	    errmsg = "Connection refused"
+	    desc.err = "Connection refused"
 	rescue Exception => e
-	    errmsg = e.to_s
+	    desc.err = e.to_s
 	    raise if $dbg.enable?(DBG::DONT_RESCUE)
 	end
 	begin
-	    diag.add_answer(type.new(testname, errmsg, xpl, xtra, ns, ip))
+	    result = result_class::new(testname, desc, ns, ip)
+	    severity.add_result(result)
 	rescue Report::FatalError
 	    raise if @param.rflag.stop_on_fatal
 	end
@@ -163,11 +162,11 @@ class TestManager
 	    method  = object.method(testname)
 
 	    # Retrieve information relative to the test output
-	    diag    = case @config.action(testname)
-		      when Config::Warning then @param.report.warning
-		      when Config::Info    then @param.report.info
-		      when Config::Fatal   then @param.report.fatal
-		      end
+	    severity = case @config.action(testname)
+		       when Config::Warning then @param.report.warning
+		       when Config::Info    then @param.report.info
+		       when Config::Fatal   then @param.report.fatal
+		       end
 
 
 	    # Perform the test according to their "types"
@@ -176,7 +175,7 @@ class TestManager
 		# Test generic: 
 		#  => ARG: *none*
 	    when /^CheckGeneric::/
-		check_generic << [diag, method, testname]
+		check_generic << [severity, method, testname]
 		testcount += 1
 		
 		# Test specific to the nameserver:
@@ -186,7 +185,7 @@ class TestManager
 		    testcount += 1
 		    check_nameserver[name] ||= []
 		    check_nameserver[name] <<
-			[diag, method, testname, name]
+			[severity, method, testname, name]
 		}
 
 		# Test specific to the nameserver instance
@@ -197,7 +196,7 @@ class TestManager
 			testcount += 1
 			check_network_address[addr] ||= []
 			check_network_address[addr] <<
-			    [ diag, method, testname, ns_name, addr ]
+			    [ severity, method, testname, ns_name, addr ]
 		    }
 		}
 	    end

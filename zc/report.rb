@@ -23,10 +23,10 @@ module Report
 	def tagonly_supported? ; true ; end
 	def one_supported?     ; true ; end
 	
-	class Processor # ABSTRACT
-	    def initialize(rflag, publisher)
+	class Processor # --> ABSTRACT <--
+	    def initialize(rflag, publish)
 		@rflag		= rflag
-		@publisher	= publisher
+		@publish	= publish
 		@list		= []
 	    end
 
@@ -34,21 +34,21 @@ module Report
 
 	    def count  ; @list.length ; end
 
-	    def add_answer(answer)
-		@list << answer unless answer.ok?
+	    def add_result(result)
+		@list << result unless result.ok?
 	    end
 	    
-	    def name
+	    def severity
 		self.class.to_s =~ /([^:]+)$/
 		$1
 	    end
 
-	    def one
+	    def one 
 		@list.nil? ? nil : @list.first
 	    end
 
-	    def has_unexpected?
-		@list.each { |ans| return true if ans.is_unexpected? }
+	    def has_error?
+		@list.each { |res| return true if res.desc.is_error? }
 		false
 	    end
 
@@ -56,40 +56,33 @@ module Report
 		nlist = @list.dup
 
 		while ! nlist.empty?
-		    tags = [ ]
-		    
-		    ans = nlist.shift
-		    if !@rflag.tagonly
-			@publisher.msg1(ans.msg) 
-		    else
-			if ans.is_unexpected?
-			    @publisher.msg1("#{name}[Unexpected]: #{ans.testname}")
-			else
-			    @publisher.msg1("#{name}: #{ans.testname}")
-			end
-		    end
-		    if @rflag.explain && !@rflag.tagonly
-			@publisher.explanation(ans.explanation) 
-		    end
-		    tags << ans.tag
+		    # Get test result
+		    res		= nlist.shift
 
+		    # Initialize 
+		    whos	= [ res.tag ]
+		    desc	= res.desc.clone
+		    testname	= res.testname
+
+		    # Look for similare test results
 		    nlist.delete_if { |a|
-			if (a.msg == ans.msg && 
-			    a.explanation == ans.explanation)
-			    tags << a.tag
+			if (a.testname == res.testname) && (a.desc == res.desc)
+			    whos << a.tag
 			end
 		    }
-		    
-		    @publisher.list(tags)
-		    @publisher.vskip
+
+		    # Publish diagnostic
+		    @publish.diagnostic(severity, testname, desc, whos)
 		end
 	    end
 	end
 	
+
+
 	class Fatal   < Processor
-	    def add_answer(answer)
-		super(answer)
-		raise FatalError unless answer.ok?
+	    def add_result(result)
+		super(result)
+		raise FatalError unless result.ok?
 	    end
 	end
 	
@@ -100,76 +93,50 @@ module Report
 	end
 
 
-	def initialize(domain, rflag, publisher)
+
+
+	def initialize(domain, rflag, publish)
 	    @domain	= domain
 	    @rflag	= rflag
-	    @publisher	= publisher
-	    @fatal	= Fatal::new(rflag, publisher)
-	    @warning	= Warning::new(rflag, publisher)
-	    @info	= Info::new(rflag, publisher)
+	    @publish	= publish
+	    @fatal	= Fatal::new(rflag, publish)
+	    @warning	= Warning::new(rflag, publish)
+	    @info	= Info::new(rflag, publish)
 	end
 
 	def finish
 	    if @rflag.one
-		ans   = @info.one
-		ans ||= @warning.one
-		ans ||= @fatal.one
+		rtest = nil
+		rtest, severity = @info.one,    @info.severity    unless rtest
+		rtest, severity = @warning.one, @warning.severity unless rtest
+		rtest, severity = @fatal.one,   @fatal.severity   unless rtest
 
-		
-		i_tag = @rflag.tagonly ? "i" : $mc.get("i_tag")
-		w_tag = @rflag.tagonly ? "w" : $mc.get("w_tag")
-		f_tag = @rflag.tagonly ? "f" : $mc.get("f_tag")
-
-		i_tag = i_tag.upcase if @info.has_unexpected?
-		w_tag = w_tag.upcase if @warning.has_unexpected?
-		f_tag = f_tag.upcase if @fatal.has_unexpected?
-
-
-		@publisher.one(@domain.name, 
-			       @info.count,
-			       @warning.count,
-			       @fatal.count)
-
-
-#		@publisher.msg1("%-62s   %s" % [ 
-#				    @param.domain.name, summary])
-#		@publisher.msg1("  Warning: #{ans.tag}")
-#		@publisher.msg1("  #{ans.msg}")
-
-
+		@publish.diagnostic1(@domain.name, 
+				     @info.count,    @info.has_error?,
+				     @warning.count, @warning.has_error?,
+				     @fatal.count,   @fatal.has_error?,
+				     rtest, severity)
 		return
 	    end
 
 
 
-	    @publisher.h1("Test results")
+	    @publish.h1("Test results")
 	    if ! @info.empty?
-		@publisher.h2($mc.get("info")) if !@rflag.tagonly
+		@publish.h2($mc.get("info")) if !@rflag.tagonly
 		@info.display
 	    end
 	    if ! @warning.empty?
-		@publisher.h2($mc.get("warning")) if !@rflag.tagonly
+		@publish.h2($mc.get("warning")) if !@rflag.tagonly
 		@warning.display
 	    end
 	    if ! @fatal.empty?
-		@publisher.h2($mc.get("fatal")) if !@rflag.tagonly
+		@publish.h2($mc.get("fatal")) if !@rflag.tagonly
 		@fatal.display
 	    end
 
-
-	    warnings = @warning.count
-	    fatals   = @fatal.count
-	    
-	    if fatals == 0
-		tag = (warnings > 0) ? "res_succeed_but" : "res_succeed"
-	    else
-		if ! @rflag.stop_on_fatal # XXX: bad $
-		    tag = "res_failed_on"
-		else
-		    tag = (warnings > 0) ? "res_failed_and" : "res_failed"
-		end
-	    end
-	    printf $mc.get(tag), warnings
+	    @publish.status(@domain.name, 
+			      @info.count, @warning.count, @fatal.count)
 	end
 
 	attr_reader :fatal, :warning, :info

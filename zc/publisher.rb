@@ -26,12 +26,12 @@ module Publisher
 
 	#------------------------------------------------------------
 
-	attr_reader :counter
-	def initialize(ostream=$stdout)
-	    @ostream   = ostream
-	    @mutex     = Mutex::new
-	    @count_txt = $mc.get("test_progress")
-	    @counter   = PBar::new($stdout, 1, PBar::DisplayNoFinalStatus)
+	def initialize(rflag, ostream=$stdout)
+	    @rflag	= rflag
+	    @ostream	= ostream
+	    @mutex	= Mutex::new
+	    @count_txt	= $mc.get("test_progress")
+	    @counter	= PBar::new($stdout, 1, PBar::DisplayNoFinalStatus)
 	end
 
 
@@ -51,9 +51,9 @@ module Publisher
 	
 	#------------------------------------------------------------
 
-
-
-	#------------------------------------------------------------
+	def counter
+	    @counter
+	end
 
 	def testing(desc, ns, ip)
 	    xtra = if    ip then " (IP=#{ip})"
@@ -63,8 +63,6 @@ module Publisher
 	    
 	    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
 	end
-
-	#------------------------------------------------------------
 
 	def intro(domain)
 	    puts "DOMAIN: #{domain.name}"
@@ -77,13 +75,74 @@ module Publisher
 	    puts
 	end
 
-	def one(domainname, i_count, w_count, f_count)
-#		summary = "%1s%03d %1s%03d %1s%03d" % [ i_count, w_count, f_count]
+	def diagnostic1(domainname, 
+		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
+		res, severity)
 
-#	    printf "%-*s    %s\n", 
-#		MaxLineLength - 4 - summary.length, domainname, summary
+	    i_tag = @rflag.tagonly ? "i" : $mc.get("i_tag")
+	    w_tag = @rflag.tagonly ? "w" : $mc.get("w_tag")
+	    f_tag = @rflag.tagonly ? "f" : $mc.get("f_tag")
+	    
+	    i_tag = i_tag.upcase if i_unexp
+	    w_tag = w_tag.upcase if w_unexp
+	    f_tag = f_tag.upcase if f_unexp
+
+	    summary = "%1s%03d %1s%03d %1s%03d" % [ 
+		i_tag, i_count, 
+		w_tag, w_count, 
+		f_tag, f_count ]
+
+	    printf "%-*s    %s\n", 
+		MaxLineLength - 4 - summary.length, domainname, summary
+
+	    if @rflag.tagonly
+		msg1("  #{severity}: #{res.tag}")
+		msg1("  #{res.testname}")
+	    else
+		msg1("  #{severity}: #{res.tag}")
+		msg1("  #{res.desc.msg}")
+	    end
+
 	end
 
+
+	def status(domainname, i_count, w_count, f_count)
+	    if f_count == 0
+		tag = (w_count > 0) ? "res_succeed_but" : "res_succeed"
+	    else
+		if ! @rflag.stop_on_fatal # XXX: bad $
+		    tag = "res_failed_on"
+		else
+		    tag = (w_count > 0) ? "res_failed_and" : "res_failed"
+		end
+	    end
+	    printf $mc.get(tag), w_count
+	end
+
+
+	def diagnostic(severity, testname, desc, lst)
+	    msg, xpl = nil, nil
+	    if @rflag.tagonly
+		if desc.is_error?
+		    msg = "#{severity}[Unexpected]: #{testname}"
+		else
+		    msg = "#{severity}: #{testname}"
+		end
+	    else
+		msg = desc.msg
+	    end
+
+
+	    if @rflag.explain && !@rflag.tagonly
+		xpl = desc.xpl
+	    end
+	    
+	    msg1(msg)
+	    explanation(xpl)
+	    list(lst)
+	    vskip
+	end
+	    
 
 	#------------------------------------------------------------
 	def h1(h)

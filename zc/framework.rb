@@ -25,45 +25,65 @@ class Test
     ##
     ## Abstract class for: Succeed, Failed, Error
     ##
-    class Answer # --> ABSTRACT <--
-	attr_reader :testname, :ns, :ip
+    class Result # --> ABSTRACT <--
+	class Desc
+	    attr_writer :err, :msg, :xpl, :xtr
 
-	def initialize(testname, msg=nil, xpl=nil, xtra=nil, ns=nil, ip=nil)
-	    @testname = testname
-	    @msg      = msg	# Error message (if unexpected)
-	    @xpl      = xpl	# Test explanation
-	    @xtra     = xtra	# Extra information
-	    @ns       = ns
-	    @ip       = ip
+	    def initialize(testname=nil)
+		@testname	= testname
+		@err		= nil	# Error message
+		@msg		= nil	# Test message
+		@xpl		= nil	# Test explanation
+		@xtr		= nil	# Extra information
+	    end
+
+	    def hash
+		@testname.hash ^ @err.hash ^ @msg.hash ^ @xpl.hash ^ @xtr.hash
+	    end
+	    
+	    def eql?(other)
+		(@testname == other.instance_eval("@testname") &&
+		 @err      == other.instance_eval("@err")      &&
+		 @msg      == other.instance_eval("@msg")      &&
+		 @xpl      == other.instance_eval("@xpl")      &&
+		 @xtr      == other.instance_eval("@xtr"))
+	    end
+	    alias == eql?
+
+	    def is_error? ; !@err.nil? ; end
+
+	    def xpl
+		if @xpl 
+		then @xpl
+		else is_error? ? nil : $mc.get("#{@testname}_explain")
+		end
+	    end
+
+	    def msg
+		if is_error?
+		    "[TEST %s]: %s" % [ $mc.get("#{@testname}_testname"), @err] 
+		else
+		    $mc.get("#{@testname}_error")
+		end
+	    end
+	end
+
+
+
+
+
+	attr_reader :testname, :desc, :ns, :ip
+
+	def initialize(testname, desc, ns=nil, ip=nil)
+	    @testname	= testname
+	    @desc	= desc
+	    @ns		= ns
+	    @ip		= ip
 	end
 	
-	def is_unexpected?
-	    !@msg.nil?
-	end
-
-	def msg
-	    if is_unexpected?
-		"[TEST %s]: %s" % [ $mc.get("#{testname}_testname"), @msg] 
-	    else
-		$mc.get("#{testname}_error")
-	    end
-	end
-
-	def testdesc
-	    $mc.get("#{testname}_testname")
-	end
-
-
-	def explanation
-	    if @xpl
-		@xpl
-	    else
-		is_unexpected? ? nil : $mc.get("#{@testname}_explain")
-	    end
-	end
 
 	def eql?(other)
-	    self.instance_of?(Answer) && other.instance_of?(Answer) &&
+	    self.instance_of?(Result) && other.instance_of?(Result) &&
 		self.testname == other.testname                     &&
 		self.ns       == other.ns                           &&
 		self.ip       == other.ip
@@ -97,7 +117,7 @@ class Test
     ##
     ## Test that has Succeed
     ##
-    class Succeed < Answer
+    class Succeed < Result
 	def ok? ; true ; end
     end
 
@@ -106,16 +126,16 @@ class Test
     ##
     ## Test that has Failes
     ##
-    class Failed < Answer
+    class Failed < Result
 	def ok? ; false ; end
     end
 
 
 
     ##
-    ## Test that was unable to be completed due to error
+    ## Test that was unable to complet due to error
     ##
-    class Error < Answer
+    class Error < Result
 	def ok? ; false ; end
     end
 
