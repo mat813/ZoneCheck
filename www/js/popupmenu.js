@@ -15,17 +15,22 @@
 //
 //
 
-function getElementsByClassAndTag(className, tagName) {
-  var all      = document.getElementsByTagName(tagName);
-  var elements = new Array();
-  for (var e = 0; e < all.length; e++)
-    if (all[e].className == className)
-      elements[elements.length] = all[e];
-  return elements;
+// sanity check
+if (zc_publish_path == null)
+  alert("ZoneCheck internal error: zc_publish_path not initialized");
+
+
+/* 
+ * ZC_Popup
+ */
+function ZC_Popup(id) {
+    this.id   = id;
+    this.menu = null;
+    this.item = [];
 }
 
-function ZC_Popup_create() {
-  var row, cell;
+ZC_Popup.prototype.create = function() {
+  var row, cell, link;
   var self  = this
   var table = document.createElement('TABLE');
   var tbody = document.createElement('TBODY');
@@ -36,52 +41,40 @@ function ZC_Popup_create() {
   table.style.visibility = 'hidden';
   table.style.position   = "absolute";
 
-    
   // title bar
-  row = document.createElement('TR');
-  cell = document.createElement('TD');
-  cell.colSpan = 8;
-  cell.align = 'right';
-  cell.className = 'header';
+  row              = document.createElement('TR');
+  row.className    = 'zc_title';
+  cell             = document.createElement('TD');
+  cell.colSpan     = 8;
+  cell.align       = 'right';
   link             = document.createElement('A');
   link.href        = '#';
   link.onclick     = function() { self.hide();             return false; };
   link.onmouseover = function() { window.status = "close"; return true;  };
   link.onmouseout  = function() { window.status = "";      return true;  };
 
-  link.className = 'menuitem';
   var x = document.createTextNode('x');
   link.appendChild(x);
   cell.appendChild(link);
   row.appendChild(cell);
   tbody.appendChild(row);
   
+  // items
   for (var i = 0 ; i < this.item.length ; i++) {
-    row = document.createElement('TR');
-    cell = document.createElement('TD');
-    cell.colSpan = 8;
-    cell.align = 'left';
+    row            = document.createElement('TR');
+    row.className  = "zc_item";
+    cell           = document.createElement('TD');
+    cell.colSpan   = 8;
+    cell.align     = 'left';
     cell.innerHTML = this.item[i][0];
     cell.onclick   = this.item[i][1];
+    row.appendChild(cell);
+    tbody.appendChild(row);
   }
-  row.appendChild(cell);
-  tbody.appendChild(row);
   
   document["body"].appendChild(table);
   this.menu = table;
 }
-
-
-function ZC_Popup_add() {
-}
-
-function ZC_Popup(id) {
-    this.id   = id;
-    this.menu = null;
-    this.item = [];
-}
-
-ZC_Popup.prototype.create = ZC_Popup_create;
 
 ZC_Popup.prototype.hide   = function() {
   this.menu.style.visibility = 'hidden';
@@ -112,25 +105,33 @@ ZC_Popup.prototype.add    = function(label, func) {
   this.item.push([label, func])
 }
 
-function zc_yo() {
-  ctx = new ZC_Popup("contextmenu");
-  ctx.add("<IMG src='/zc/img/details.png'> toggle details",
-	  function () {
-	    var elements = document.getElementsByTagName('UL');
-	    for (var i = 0 ; i < elements.length ; i++) {
-	      if (elements[i].className == "zc_details") {
-		if (elements[i].style.display == "none") {
-		  elements[i].style.display = elements[i].style.display_old;
-		} else {
-		  elements[i].style.display_old = elements[i].style.display;
-		  elements[i].style.display = 'none';
-		}
-	      }
-	    }
-	  });
+
+/***********************************************************************/
+
+function zc_contextmenu_start() {
+  var hidefunc = function (className, tagName) {
+    var elt = document.getElementsByTagName(tagName);
+    for (var i = 0 ; i < elt.length ; i++) {
+      if (elt[i].className == className) {
+	if (elt[i].style.display == "none") {
+	  elt[i].style.display     = elt[i].style.display_old;
+	} else {
+	  elt[i].style.display_old = elt[i].style.display;
+	  elt[i].style.display     = "none";
+	}
+      }
+    }
+  };
+
+  var ctx = new ZC_Popup("zc_contextmenu");
+  ctx.add("<IMG src='" + zc_publish_path + "/img/details.png'>toggle details",
+	  function () { hidefunc('zc_details', 'UL'); });
+  ctx.add("<IMG src='" + zc_publish_path + "/img/ref.png'>toggle references",
+	  function () { hidefunc('zc_ref', 'UL'); });
+  ctx.add("<IMG src='" + zc_publish_path + "/img/element.png'>toggle elements",
+	  function () { hidefunc('zc_element', 'UL'); });
 
   ctx.create();
-
 
   document.oncontextmenu = function(event) { 
     if (event == null)       // fucking IE

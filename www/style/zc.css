@@ -24,7 +24,7 @@ P {
     font-style: normal;  
     font-size: 12px; 
     color: #333333; 
-    text-align: justify 
+    text-align: justify;
 }
 
 TD {  
@@ -83,7 +83,7 @@ UL.zc_ref {
 
     color: #333333; 
     font-weight: normal;
-    border: 2px solid #f7ad31
+    border: 2px solid #f7ad31;
 }
 
 SPAN.zc_ref { 
@@ -100,7 +100,7 @@ UL.zc_details {
 
     color: #333333; 
     font-weight: normal;
-    border: 2px solid #f7ad31
+    border: 2px solid #f7ad31;
 }
 
 DIV.zc_zinfo {
@@ -186,6 +186,7 @@ TABLE.zc_domain {
 
 TABLE.zc_domain TD {
     padding: 5;
+    border-color:  #0066b2;
 }
 
 TR.zc_zone { 
@@ -222,7 +223,12 @@ TABLE.zc_options TR.zc_title {
 */
 
 TABLE.zc_help { 
-    border: solid;
+    border: solid black;
+    border-collapse: collapse; 
+}
+
+TABLE.zc_help TD { 
+    border-color: black;
 }
 
 TABLE.zc_help TD.zc_key {
@@ -235,6 +241,31 @@ TABLE.zc_help TD.zc_title {
     font-style: italic;
 }
 
+/* Popups
+ */
+TABLE.zc_popup { 
+    background-color: #f0ece5;
+    border: 1px solid #1341af;
+}
+
+TABLE.zc_popup TR.zc_title { 
+    background-color: #1341af !important;
+}
+
+TABLE.zc_popup TR.zc_title TD { 
+    color: #f5b13d;
+}
+
+TABLE.zc_popup TR.zc_title A { 
+    color: #f5b13d;
+    font-weight: bold;
+    text-decoration: none; 
+}
+
+TABLE.zc_popup TR.zc_item:hover { 
+    background-color: #e4dcca;
+    cursor: pointer;
+}
 
 
 // .bleu { color: #0066b2 }

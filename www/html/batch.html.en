@@ -59,11 +59,11 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    </TD>
 	    <TD>
 	      <INPUT type="checkbox" name="explain"  value='t'>
-	      includes explanations
+	      explanations
 	    </TD>
 	    <TD>
 	      <INPUT type="checkbox" name="details"  value='t'>
-	      includes details
+	      details
 	    </TD>
 	  </TR>
 	  <TR>
@@ -304,12 +304,10 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
     
     <HR>
-Release: $Name$
-<BR>
-    <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
+Release: $Name$<BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Feb  6 16:50:45 CET 2003
+Last modified: Tue Feb 18 11:53:01 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

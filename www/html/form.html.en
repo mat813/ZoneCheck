@@ -69,8 +69,6 @@
 		     value="<%=$name%>"></TD>
 	  </TR>
 
-	  <TR><TD colspan="5"> </TD></TR>
-
 	  <TR class="zc_ns_prim">
 	    <TD><IMG src="/zc/img/primary.png" alt="">Primary</TD>
 	    <TD><INPUT name="ns0"  type="text" size=24 
@@ -406,7 +404,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Feb 18 12:17:44 CET 2003
+Last modified: Tue Feb 18 20:53:01 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>
