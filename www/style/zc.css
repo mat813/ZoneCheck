@@ -40,19 +40,21 @@ H3 {
 //}
 
 IMG.zc_logo { 
-//  float: right;
+//  float: left;
 //  margin-left: 0;
 }
 
 .zc_warning { 
     padding: 5px 5px 5px 5px; 
-    text-decoration: none;
-//  font-size: 18px;
-    color: red; 
-//  text-indent: 40px;
-//  font-weight: bold;
+    background-color: #f0ece5;
+    border-left: solid #f5b13d;
 }
 
+.zc_error {
+    padding: 5px 5px 5px 5px; 
+    background-color: #f0ece5;
+    border-left: solid #ff5809;
+}
 
 UL.zc_ref { 
     font-size: 12px;
@@ -65,6 +67,10 @@ UL.zc_ref {
     color: #333333; 
     font-weight: normal;
     border: 2px solid #f7ad31
+}
+
+SPAN.zc_ref { 
+    font-weight: bold;
 }
 
 UL.zc_details { 
@@ -115,7 +121,19 @@ TABLE#zc_pgr_pbar_in {
 }
 
 
+/*
+BLOCKQUOTE.zc_warning {
+    background-color: #eeeeee;
+    border: solid red;
+    color: black;
+}
 
+BLOCKQUOTE.zc_error {
+    background-color: #eeeeee;
+    border: double red;
+    color: black;
+}
+*/
 
 /*
  */
@@ -152,10 +170,9 @@ DIV.zc_status {
 
 
 
-SPAN.zc_ref { 
-  font-weight: bold;
-}
 
+/*
+*/
 TABLE.zc_domain {
     border-collapse: collapse;
     border: solid #0066B2; 
@@ -179,6 +196,9 @@ TR.zc_ns_prim {
     background-color: #e4dcca;
 }
 
+/*
+*/
+
 TABLE.zc_options {
     border: solid #f5b13d;
     background-color: #f0ece5;
@@ -191,21 +211,25 @@ TABLE.zc_options TR.zc_title {
     background-color: #e4dcca;
 }
 
-BLOCKQUOTE.zc_warning {
-    background-color: #eeeeee;
-    border: solid red;
-    color: black;
-}
 
-BLOCKQUOTE.zc_error {
-    background-color: #eeeeee;
-    border: double red;
-    color: black;
+/*
+*/
+
+TABLE.zc_help { 
+    border: solid;
 }
 
 TABLE.zc_help TD.zc_key {
     vertical-align: top;
 }
+
+TABLE.zc_help TD.zc_title {
+    background-color: #e4dcca;
+    border-top: solid;
+    font-style: italic;
+}
+
+
 
 // .bleu { color: #0066b2 }
 // .bleuvif { color: #1341AF }
