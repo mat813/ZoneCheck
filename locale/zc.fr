@@ -202,5 +202,5 @@ check_exists	: vérification '%s' définie dans les classes '%s' et '%s'
 [nresolv]
 rcode_servfail	: échec du serveur
 rcode_refused	: réponse refusée par le serveur
-rcode_nxdomain	: le domain n'existe pas
+rcode_nxdomain	: le domaine n'existe pas
 rcode_notimp	: requête non mise en oeuvre sur le serveur
