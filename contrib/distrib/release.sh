@@ -57,7 +57,7 @@ cp $tarname ${dest}
 
 info "- copy on savannah"
 #ln -s $tarname $tarlatest
-rsync -e "ssh -i $HOME/.ssh/zonecheck_savannah" -av $tarname $tarlatest zonecheck@subversions.gnu.org:/upload/zonecheck/src
+rsync -e ssh -av $tarname $tarlatest subversions.gnu.org:/upload/zonecheck/src
 
 info "- cleaning"
 rm -Rf $tmp

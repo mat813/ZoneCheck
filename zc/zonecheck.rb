@@ -160,13 +160,7 @@ class ZoneCheck
     #-- zonecheck ---------------------------------------------------------
 
     def do_check
-	@param.fs.autoconf
-	@param.option.autoconf
-	@param.rflag.autoconf
-	@param.publisher.autoconf(@param.rflag)
-	@param.network.autoconf
-	@param.resolver.autoconf
-	@param.test.autoconf
+	param_config_preamble
 
 	# Begin formatter
 	@param.publisher.engine.begin
@@ -177,6 +171,7 @@ class ZoneCheck
 	    cm = CacheManager::create(@param.resolver.local,
 				      @param.network.query_mode)
 	    if ! @param.batch
+		param_config_data
 		success = zc(cm)
 	    else
 		batchio = case @param.batch
@@ -190,6 +185,7 @@ class ZoneCheck
 		    if ! parse_batch(line)
 			@input.error($mc.get('xcp_zc_batch_parse'), EXIT_ERROR)
 		    end
+		    param_config_data
 		    success = false unless zc(cm)
 		}
 		batchio.close unless @param.batch == '-'
@@ -207,9 +203,22 @@ class ZoneCheck
     end
 
     def param_config_preamble
+	@param.fs.autoconf
+	@param.option.autoconf
+	@param.rflag.autoconf
+	@param.publisher.autoconf(@param.rflag)
+	@param.network.autoconf
+	@param.resolver.autoconf
+	@param.test.autoconf
     end
 
     def param_config_data
+	@param.info.clear
+	@param.info.autoconf
+	@param.publisher.engine.info = @param.info
+	@param.domain.autoconf(@param.resolver.local)
+	@param.report.autoconf(@param.domain, 
+			       @param.rflag, @param.publisher.engine)
     end
 
     def parse_batch(line)
@@ -224,13 +233,6 @@ class ZoneCheck
     end
 
     def zc(cm)
-	@param.info.clear
-	@param.info.autoconf
-	@param.publisher.engine.info = @param.info
-	@param.domain.autoconf(@param.resolver.local)
-	@param.report.autoconf(@param.domain, 
-			       @param.rflag, @param.publisher.engine)
-
 	starttime = Time::now
 
 	# Setup publisher (for the domain)
