@@ -98,8 +98,6 @@ expect_testtype : expecting test type (generic, extra, nameserver or address)
 expect_lexical  : unexpected character '%s'
 
 
-
-
 ##############################################################################
 ##############################################################################
 
@@ -491,6 +489,8 @@ explain : [none]
 [param]
 
 version: PROGNAME: version %s
+unsupported_domain: No mapping able to process '%s'
+
 
 [param_cli]
 usage: \
