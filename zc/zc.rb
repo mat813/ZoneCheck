@@ -163,6 +163,11 @@ $zc_contact	||= ZC_CONTACT
 $zc_config_dir	||= ZC_CONFIG_DIR
 $zc_config_file	||= ZC_CONFIG_FILE
 
+#
+# Custom
+#
+$zc_custom	||= 'zc-custom'
+
 
 # Resolver configuration
 $nresolv_rootserver_hintfile	= "#{$zc_config_dir}/rootservers"
@@ -257,9 +262,9 @@ end
 # Load eventual custom version
 #
 begin 
-    require 'zc-custom'
+    require $zc_custom
 rescue LoadError => e
-    $dbg.msg(DBG::INIT, "Unable to load 'zc-custom' (#{e})")
+    $dbg.msg(DBG::INIT, "Unable to require '#{$zc_custom}' (#{e})")
 end
 
 
