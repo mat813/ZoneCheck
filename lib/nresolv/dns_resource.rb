@@ -36,6 +36,32 @@ module NResolv
 		@@hash_resource[[klass.rclass, klass.rtype]] = klass
 	    end
 
+	    def self.has_fields(*attrs)
+		initializer_args = []
+		initializer_body = []
+
+		attrs.each_index { |index| attr = attrs[index]
+		    initializer_args << "_res_#{index}"
+		    initializer_body << "@#{attr} = _res_#{index}"
+
+		    class_eval "attr_reader :#{attr}"
+		}
+
+		class_eval <<-EOS
+		def _res_initializer(#{initializer_args.join(", ")})
+		    #{initializer_body.join("; ")}
+		end
+	        alias initialize _res_initializer
+	        private :_res_initializer
+		EOS
+	    end
+
+#	    def self.build_resource(klass, rtype)
+#		klass =~ /::([^:]+)/
+#		puts "class #{r
+#		puts klass
+#	    end
+
 	    def eql?(other)
 		return false unless self.class == other.class
 		siv = self.instance_variables
@@ -48,11 +74,7 @@ module NResolv
 
 	    module Generic
 		class TXT < Resource
-		    attr_reader :txtdata
-
-		    def initialize(txtdata)
-			@txtdata = txtdata
-		    end
+		    has_fields :txtdata
 
 		    def self::from_s(str)
 			self::new(str)
@@ -64,11 +86,7 @@ module NResolv
 		end
 
 		class CNAME < Resource
-		    attr_reader :cname
-
-		    def initialize(cname)
-			@cname = cname
-		    end
+		    has_fields :cname
 
 		    def self.from_s(str)
 			self::new(DNS::Name::from_s(str))
@@ -80,26 +98,11 @@ module NResolv
 		end
 
 		class SOA < Resource
-		    attr_reader :mname, :rname
-		    attr_reader :serial, :refresh, :retry, :expire, :minimum
-		    def initialize(mname, rname, 
-				   serial, refresh, retry_, expire, minimum)
-			@mname   = mname
-			@rname   = rname
-			@serial  = serial
-			@refresh = refresh
-			@retry   = retry_
-			@expire  = expire
-			@minimum = minimum
-		    end
+		    has_fields :mname, :rname, :serial, :refresh, :retry, :expire, :minimum
 		end
 
 		class NS < Resource
-		    attr_reader :name
-
-		    def initialize(name)
-			@name = name
-		    end
+		    has_fields :name
 
 		    def self.from_s(str)
 			self::new(DNS::Name::from_s(str))
@@ -111,34 +114,19 @@ module NResolv
 		end
 
 		class MX < Resource
-		    attr_reader :preference, :exchange
-		    def initialize(preference, exchange)
-			@preference = preference
-			@exchange   = exchange
-		    end
+		    has_fields :preference, :exchange
 		end
 		    
 		class PTR < Resource
-		    attr_reader :ptrdname
-		    def initialize(ptrdname)
-			@ptrdname = ptrdname
-		    end
+		    has_fields :ptrdname
 		end
 
 		class RP < Resource
-		    attr_reader :mailbox, :txtdname
-		    def initialize(mailbox, txtdname)
-			@mailbox  = mailbox
-			@txtdname = txtdname
-		    end
+		    has_fields :mailbox, :txtdname
 		end
 
 		class HINFO < Resource
-		    attr_reader :cpu, :os
-		    def initialize(cpu, os)
-			@cpu	= cpu
-			@os	= os
-		    end
+		    has_fields :cpu, :os
 		end
 
 		class ANY < Resource
@@ -157,12 +145,8 @@ module NResolv
 		    RClass = RClass::IN
 		    RType  = RType::A
 
-		    attr_reader :address
+		    has_fields :address
 		    
-		    def initialize(addr)
-			@address = addr
-		    end
-
 		    def self.from_s(str)
 			A::new(Address::IPv4::create(str))
 		    end
@@ -178,11 +162,7 @@ module NResolv
 		    RClass = RClass::IN
 		    RType  = RType::AAAA
 
-		    attr_reader :address
-
-		    def initialize(addr)
-			@address = addr
-		    end
+		    has_fields :address
 
 		    def self.from_s(str)
 			AAAA::new(Address::IPv6::create(str))
