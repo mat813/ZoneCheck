@@ -17,6 +17,103 @@ require 'gtk'
 class Param
     class GTK
 	MaxNS = 8
+	##
+	##
+	##
+	class Option < Gtk::VBox
+	    def initialize
+		super()
+		l10n_transport = "Transport"
+		l10n_error = "Error"
+		l10n_test = "Extra tests"
+
+
+
+		transp_f = Gtk::Frame::new(l10n_transport)
+		error_f  = Gtk::Frame::new(l10n_error)
+		test_f   = Gtk::Frame::new(l10n_test)
+
+		# Error
+		@ed = Gtk::RadioButton::new(nil, 
+					    $mc.get("iface_error_default"))
+		@aw = Gtk::RadioButton::new(@ed, 
+					    $mc.get("iface_error_allwarnings"))
+		@af = Gtk::RadioButton::new(@ed,
+					    $mc.get("iface_error_allfatals"))
+		@sf = Gtk::CheckButton::new($mc.get("iface_stop_on_first"))
+		@sf.active = true
+
+		tbl = Gtk::Table::new(2, 3, true)
+		tbl.attach(@ed, 0, 1, 0, 1)
+		tbl.attach(@aw, 1, 2, 0, 1)
+		tbl.attach(@af, 2, 3, 0, 1)
+		tbl.attach(@sf, 0, 3, 1, 2)
+		error_f.add(tbl)
+		
+
+		# Tests
+		@tst_mail = Gtk::CheckButton::new($mc.get("iface_test_mail"))
+		@tst_zcnt = Gtk::CheckButton::new($mc.get("iface_test_zone"))
+		@tst_ripe = Gtk::CheckButton::new($mc.get("iface_test_ripe"))
+		@db_ripe  = Gtk::Entry::new
+		@db_ripe.set_text("whois.ripe.net")
+		@tst_mail.active = @tst_zcnt.active = @tst_ripe.active = true
+
+		tbl = Gtk::Table::new(2, 3, true)
+		tbl.attach(@tst_mail, 0, 1, 0, 1)
+		tbl.attach(@tst_zcnt, 1, 2, 0, 1)
+		tbl.attach(Gtk::Label::new(""), 2, 3, 0, 1)
+		tbl.attach(@tst_ripe, 0, 1, 1, 2)
+		tbl.attach(@db_ripe , 1, 2, 1, 2)
+		test_f.add(tbl)
+
+		# Transport
+		@ipv4 = Gtk::CheckButton::new("IPv4")
+		@ipv6 = Gtk::CheckButton::new("IPv6")
+		@ipv6.active = @ipv4.active = true
+		unless $ipv6_stack
+		    @ipv6.active = false
+		    @ipv4.set_sensitive(false)
+		    @ipv6.set_sensitive(false)
+		end
+
+		@std = Gtk::RadioButton::new(nil,  "STD")
+		@udp = Gtk::RadioButton::new(@std, "UDP")
+		@tcp = Gtk::RadioButton::new(@std, "TCP")
+
+		tbl = Gtk::Table::new(2, 3, true)
+		tbl.attach(@ipv4, 0, 1, 0, 1)
+		tbl.attach(@ipv6, 1, 2, 0, 1)
+		tbl.attach(@std,  0, 1, 1, 2)
+		tbl.attach(@udp,  1, 2, 1, 2)
+		tbl.attach(@tcp,  2, 3, 1, 2)
+		transp_f.add(tbl)
+
+		#
+		pack_start(error_f)
+		pack_start(test_f)
+		pack_start(transp_f)
+
+
+		#
+		@tst_ripe.signal_connect("toggled") { |w|
+		    @db_ripe.set_sensitive(@tst_ripe.active)
+		}
+
+		proc = Proc::new { 
+		    if !@ipv4.active && !@ipv6.active
+			@ipv4.active = @ipv6.active = true
+		    end
+		}
+		@ipv4.signal_connect("toggled", &proc)
+		@ipv6.signal_connect("toggled", &proc)
+
+	    end
+	end
+
+	##
+	##
+	##
 	class Input < Gtk::VBox
 	    def initialize(param, sb)
 		super()
@@ -39,14 +136,14 @@ class Param
 		zone_f.add(hbox)
 
 		# NS
-		tbl  = Gtk::Table::new(2, 4, false)
+		tbl  = Gtk::Table::new(MaxNS, 4, false)
 		tbl.set_col_spacings(5)
 		tbl.set_row_spacings(2)
 		(0..MaxNS-1).each { |i|
 		    l10n_ns  = $mc.get(i == 0 ? "ns_primary" \
 				              : "ns_secondary").capitalize
 		    l10n_ips = $mc.get("ns_ips")
-		lbl_ns   = Gtk::Label::new(l10n_ns ).set_alignment(0, 1)
+		    lbl_ns   = Gtk::Label::new(l10n_ns ).set_alignment(0, 1)
 		    lbl_ips  = Gtk::Label::new(l10n_ips).set_alignment(0, 1)
 		    @ns[i]   = Gtk::Entry::new.set_usize(100, -1)
 		    @ips[i]  = Gtk::Entry::new.set_usize(250, -1)
@@ -154,10 +251,10 @@ class Param
 		    @ns [i].set_text("") ; @ips[i].set_text("")
 		}
 	    end
-
-
-
 	end
+
+
+
 	
 	def initialize
 	    @p    = Param::new
@@ -179,7 +276,7 @@ class Param
 
 
 	    input_dom = Input::new(@p, statusbar)
-	    options_note = Gtk::Frame::new
+	    options_note = Option::new
 	    info_note = Gtk::Frame::new
 	    
 
