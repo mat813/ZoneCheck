@@ -54,7 +54,7 @@ module Report
 		@publish.diag_start() unless @rflag.quiet
 
 		# Print 'generic' first
-		gentag = $mc.get('w_generic')	# XXX: not nice
+		gentag = $mc.get('word:generic')	# XXX: not nice
 		display(byhost[gentag], gentag)
 		byhost.delete(gentag)
 		

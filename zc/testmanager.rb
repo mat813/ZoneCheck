@@ -161,22 +161,24 @@ class TestManager
 	klass.public_instance_methods(true).each { |method| 	    
 	    case method
 	    # methods that represent a test
-	    when /^#{TestPrefix}/
-		if has_test?(method)
+	    when /^#{TestPrefix}(.*)/
+		testname = $1
+		if has_test?(testname)
 		    l10n_tag = $mc.get('xcp_testmanager_test_exists')
 		    raise DefinitionError, 
-			l10n_tag % [ method, klass, @tests[method] ]
+			l10n_tag % [ testname, klass, @tests[testname] ]
 		end
-		@tests[method] = klass
+		@tests[testname] = klass
 
 	    # methods that represent a check
-	    when /^#{CheckPrefix}/
-		if has_check?(method)
+	    when /^#{CheckPrefix}(.*)/
+		checkname = $1
+		if has_check?(checkname)
 		    l10n_tag = $mc.get('xcp_testmanager_check_exists')
 		    raise DefinitionError, 
-			l10n_tag % [ method, klass, @tests[method] ]
+			l10n_tag % [ checkname, klass, @tests[checkname] ]
 		end
-		@checks[method] = klass
+		@checks[checkname] = klass
 	    end
 	}
 
@@ -298,7 +300,7 @@ class TestManager
 	# Retrieve the method representing the check
 	klass   = @checks[checkname]
 	object  = @objects[klass]
-	method  = object.method(checkname)
+	method  = object.method(CheckPrefix + checkname)
 	
 	# Retrieve information relative to the test output
 	sev_report = case severity
@@ -308,11 +310,7 @@ class TestManager
 		     end
 
 	# Publish information about the test being executed
-	desc = if @param.rflag.tagonly
-	       then checkname
-	       else $mc.get("#{checkname}_testname")
-	       end
-	@publisher.progress.process(desc, ns, ip)
+	@publisher.progress.process(checkname, ns, ip)
 
 	# Perform the test
 	desc         = Test::Result::Desc::new(checkname)
@@ -325,7 +323,7 @@ class TestManager
 	    ensure
 		exectime = Time::now - starttime
 	    end
-	    desc.data    = data if data
+	    desc.details = data if data
 	    result_class = case data 
 			   when NilClass, FalseClass, Hash then Test::Failed
 			   else Test::Succeed
@@ -334,38 +332,38 @@ class TestManager
 	    info = "(#{e.resource.rdesc}: #{e.name})"
 	    name = case e.code
 		   when NResolv::DNS::RCode::SERVFAIL
-		       $mc.get('nresolv_rcode_servfail')
+		       $mc.get('nresolv:rcode:servfail')
 		   when NResolv::DNS::RCode::REFUSED
-		       $mc.get('nresolv_rcode_refused')
+		       $mc.get('nresolv:rcode:refused')
 		   when NResolv::DNS::RCode::NXDOMAIN
-		       $mc.get('nresolv_rcode_nxdomain')
+		       $mc.get('nresolv:rcode:nxdomain')
 		   when NResolv::DNS::RCode::NOTIMP
-		       $mc.get('nresolv_rcode_notimp')
+		       $mc.get('nresolv:rcode:notimp')
 		   else e.code.to_s
 		   end
-	    desc.err = "#{name} #{info}"
+	    desc.error = "#{name} #{info}"
 #	rescue Errno::EADDRNOTAVAIL
 #	    desc.err = "Network transport unavailable try option -4 or -6"
 	rescue NResolv::TimeoutError => e
-	    desc.err = "DNS Timeout"
+	    desc.error = "DNS Timeout"
 	rescue Timeout::Error => e
-	    desc.err = "Timeout"
+	    desc.error = "Timeout"
 	rescue NResolv::NResolvError => e
-	    desc.err = "Resolver error (#{e})"
+	    desc.error = "Resolver error (#{e})"
 	rescue ZCMail::ZCMailError => e
-	    desc.err = "Mail error (#{e})"
+	    desc.error = "Mail error (#{e})"
 	rescue Exception => e
 	    # XXX: this is a hack
 	    unless @param.rflag.stop_on_fatal
-		desc.err = 'Dependency issue? (allwarning/dontstop flag?)'
+		desc.error = 'Dependency issue? (allwarning/dontstop flag?)'
 	    else
-		desc.err = e.message
+		desc.error = e.message
 	    end
 	    raise if $dbg.enabled?(DBG::DONT_RESCUE)
 	ensure
 	    $dbg.msg(DBG::TESTS) { 
 		resstr  = result_class.to_s.gsub(/^.*::/, '')
-		where   = args.empty? ? "generic" : args.join('/')
+		where   = args.empty? ? 'generic' : args.join('/')
 		timestr = "%.2f" % exectime
 		"result: #{resstr} for #{checkname} [#{where}] (in #{timestr} sec)"
 	    }
@@ -390,7 +388,7 @@ class TestManager
 	    # Retrieve the method representing the test
 	    klass   = @tests[testname]
 	    object  = @objects[klass]
-	    method  = object.method(testname)
+	    method  = object.method(TestPrefix + testname)
 	    
 	    # Call the method
 	    args = []
@@ -430,11 +428,10 @@ class TestManager
 	    #  => compute the number of checking to perform
 	    begin
 		Config::TestSeqOrder.each { |family|
-		    testseq		= @config[family]
-		    next if testseq.nil?
+		    next unless rules = @config.rules[family]
 		    
 		    @iterer[family].call(proc { |*args|
-				testcount += testseq.preeval(self, args)
+				testcount += rules.preeval(self, args)
 			   })
 		}
 	    rescue Instruction::InstructionError, Report::FatalError => e
@@ -451,14 +448,13 @@ class TestManager
 
 	    # Perform the checking
 	    Config::TestSeqOrder.each { |family|
-		threadlist	= []
-		testseq		= @config[family]
-		next if testseq.nil?
+		next unless rules = @config.rules[family]
 
+		threadlist	= []
 		@iterer[family].call(proc { |*args|
 			threadlist << Thread::new {
 			    begin
-				testseq.eval(self, args)
+				rules.eval(self, args)
 			    rescue Report::FatalError
 				raise
 			    rescue Exception => e

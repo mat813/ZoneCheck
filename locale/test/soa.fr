@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="fr">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,150 +33,256 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[*]
-xpl_email_sntx: [ref]: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are converted by using the following rule:   <local-part>@<mail-domain>  ==>  <local-part>.<mail-domain> if <local-part> contains a dot in should be backslashed (for 'bind')
-
-[chk_soa]
-testname: présence d'un enregistrement SOA
-error   : Aucun enregistrement SOA présent sur le serveur
-ok	: Enregistrement SOA trouvé
-explain : [none]
-
-
-[chk_soa_auth]
-testname: réponse faisant autorité pour le SOA
-error   : La réponse pour le SOA ne fait pas autorité
-ok	: La réponse pour le SOA fait autorité
-explain : [none]
+  <!-- Shortcuts -->
+  <shortcut>
+    <explanation name="email_sntx">
+      <src type="ref" from="rfc" fid="rfc1034#p9">
+        <title>IETF RFC1034 (p.9), RFC1912 (p.3)</title>
+        <para>Email addresses are converted by using the following rule:
+          local-part@mail-domain  ==&gt;  local-part.mail-domain 
+          if local-part contains a dot in should be backslashed 
+          (for 'bind')</para>
+      </src>
+    </explanation>
+  </shortcut>
 
 
-[chk_soa_contact_sntx_at]
-testname: mauvaise utilisation du caractère '@' dans le 'contact' du SOA
-error   : Le contact contient le caractère '@'
-ok	: Aucune mauvaise utilisation du caractere '@' dans le 'contact' du SOA
-explain = xpl_email_sntx
+  <!-- Checks -->
+  <check name="soa">
+    <name>présence d'un enregistrement SOA</name>
+    <success>Enregistrement SOA trouvé</success>
+    <failure>Aucun enregistrement SOA présent sur le serveur</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_soa_contact_sntx]
-testname: caractères illégaux dans le contact du SOA
-error   : Le contact contient des caractères illégaux
-ok	: Aucun caractère illégal dans le contact du SOA
-explain = xpl_email_sntx
+  <check name="soa_auth">
+    <name>réponse faisant autorité pour le SOA</name>
+    <success>La réponse pour le SOA fait autorité</success>
+    <failure>La réponse pour le SOA ne fait pas autorité</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_soa_master_sntx]
-testname: caractères illégaux dans le 'master' du SOA
-error   : Le 'master' du SOA contient des caractères illégaux
-ok	: Aucun caractère illégal dans le 'master' du SOA
-explain = label_xpl
+  <check name="soa_contact_sntx_at">
+    <name>mauvaise utilisation du caractère '@' dans le 'contact' du SOA</name>
+    <success>Aucune mauvaise utilisation du caractere '@' dans le 'contact' du SOA</success>
+    <failure>Le contact contient le caractère '@'</failure>
+    <explanation sameas="shortcut:email_sntx"/>
+    <details/>
+  </check>
 
 
-[chk_soa_master_fq]
-testname: nom de serveur pleinement qualifié dans le 'master' du SOA
-error   : Le nom du serveur dans le 'master' du SOA n'est pas pleinement qualifié
-ok	: Le 'master' est pleinement qualifié
-explain : [none]
-details : Le point ('.') final est certainement manquant dans le fichier de configuration pour le serveur (%{mname}) indiqué en tant que maître dans le SOA.
+  <check name="soa_contact_sntx">
+    <name>caractères illégaux dans le contact du SOA</name>
+    <success>Aucun caractère illégal dans le contact du SOA</success>
+    <failure>Le contact contient des caractères illégaux</failure>
+    <explanation sameas="shortcut:email_sntx"/>
+    <details/>
+  </check>
 
 
-[chk_soa_serial_fmt_YYYYMMDDnn]
-testname: numéro de série de la forme AAAAMMJJnn
-error   : Le numéro de série n'est pas de la forme AAAAMMJJnn
-ok	: Le numéro de série suit bien la forme AAAAMMJJnn
-explain : [ref]: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day, nn=revision number).
-details : Le numéro de série %{serial} ne semble pas être au format YYYYMMDDnn.
+  <check name="soa_master_sntx">
+    <name>caractères illégaux dans le 'master' du SOA</name>
+    <success>Aucun caractère illégal dans le 'master' du SOA</success>
+    <failure>Le 'master' du SOA contient des caractères illégaux</failure>
+    <explanation sameas="shortcut:label"/>
+    <details/>
+  </check>
 
 
-[chk_soa_refresh_6h]
-testname: champ 'refresh' du SOA est à au moins 6 heures
-error   : Le champ 'refresh' doit être positionné à au moins 6 heures
-ok	: Le champ 'refresh' du SOA est à au moins 6 heures
-explain : [ref]: RFC1912 (p.3) et RIPE-203
-details : La valeur du champ 'refresh' est de %{refresh} sec, et devrait être de au moins 6 heures (21600 sec).
+  <check name="soa_master_fq">
+    <name>nom de serveur pleinement qualifié dans le 'master' du SOA</name>
+    <success>Le 'master' est pleinement qualifié</success>
+    <failure>Le nom du serveur dans le 'master' du SOA n'est pas pleinement qualifié</failure>
+    <explanation/>
+    <details><para>Le point ('.') final est certainement manquant dans
+      le fichier de configuration pour le serveur (<zcvar name="mname"/>)
+      indiqué en tant que maître dans le SOA.</para></details>
+  </check>
 
 
-[chk_soa_retry_refresh]
-testname: champ 'retry' du SOA inférieur à celui du 'refresh'
-error   : Le champ 'retry' doit être inférieur à celui du 'refresh'
-ok	: Le champ 'retry' du SOA inférieur à celui du 'refresh'
-explain : [ref]: IETF RFC1912 (p.4)\nThe 'retry' value is typically a fraction of the 'refresh' interval.
-details : La valeur du champ 'retry' est de %{retry} sec, et devrait être inférieure au 'refresh' (%{refresh} sec).
+  <check name="soa_serial_fmt_YYYYMMDDnn">
+    <name>numéro de série de la forme AAAAMMJJnn</name>
+    <success>Le numéro de série suit bien la forme AAAAMMJJnn</success>
+    <failure>Le numéro de série n'est pas de la forme AAAAMMJJnn</failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc1912#p3">
+        <title>RFC1912 (p.3)</title>
+        <para>The recommended syntax is YYYYMMDDnn (YYYY=year, MM=month,
+          DD=day, nn=revision number).</para>
+      </src>
+     </explanation>
+     <details><para>Le numéro de série <zcvar name="serial"/> ne semble pas 
+       être au format YYYYMMDDnn.</para></details>
+  </check>
 
 
-[chk_soa_retry_1h]
-testname: champ 'retry' du SOA est d'au moins 1 heure
-error   : Le champ 'retry' doit être d'au moins 1 heure
-ok	: Le champ 'retry' du SOA est d'au moins 1 heure
-explain : [ref]: RFC1912 (p.3) et RIPE-203
-details : La valeur du champ 'retry' est de %{retry} sec, et devrait être d'au moins 1 heure (3600 sec).
+  <check name="soa_refresh_6h">
+    <name>champ 'refresh' du SOA est à au moins 6 heures</name>
+    <success>Le champ 'refresh' du SOA est à au moins 6 heures</success>
+    <failure>Le champ 'refresh' doit être positionné à au moins 6 heures</failure>
+    <explanation>
+      <src type="ref">
+        <title>RFC1912 (p.3) and RIPE-203</title>
+        <para>Yo</para>
+      </src>
+    </explanation>
+    <details><para>La valeur du champ 'refresh' est de
+      <zcvar name="refresh"/> sec, et devrait être de au moins 
+      6 heures (21600 sec).</para></details>
+  </check>
 
 
-[chk_soa_expire_7d]
-testname: champ 'expire' du SOA est d'au moins 7 jours
-error   : Le champ 'expire' doit être d'au moins 7 jours
-ok	: Le champ 'expire' du SOA est d'au moins 7 jours
-explain : [ref]: IETF RFC1912 (p.4)\nAfter a zone is expired a secondary will still continue to try to contact the primary, but it will no longer provide nameservice for the zone. 2 to 4 weeks are suggested values.\n[ref]: AFNIC constraint\nA minimum of 1 week (7 days) is enforced.
-details : La valeur du champ 'expire' est de %{expire} sec, et devrait être d'au moins 7 jours (604800 sec).
+  <check name="soa_retry_refresh">
+    <name>champ 'retry' du SOA inférieur à celui du 'refresh'</name>
+    <success>Le champ 'retry' du SOA inférieur à celui du 'refresh'</success>
+    <failure>Le champ 'retry' doit être inférieur à celui du 'refresh'</failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc1912#p4">
+        <title>IETF RFC1912 (p.4)</title>
+        <para>The 'retry' value is typically a fraction of the 
+          'refresh' interval.</para>
+      </src>
+    </explanation>
+    <details><para>La valeur du champ 'retry' est de 
+      <zcvar name="retry"/> sec, et devrait être inférieure au 
+      'refresh' (<zcvar name="refresh"/> sec).</para></details>
+  </check>
 
 
-[chk_soa_expire_7refresh]
-testname: champ 'expire' est au moins 7 fois celui du 'refresh'
-error   : Le champ 'expire' doit être au moins 7 fois celui du 'refresh'
-ok	: Le champ 'expire' est au moins 7 fois celui du 'refresh'
-explain : [none]
-details : La valeur du champ 'expire' est de %{expire} sec, et devrait être 7 fois plus grande que celle du 'refresh' (%{refresh} sec).
+  <check name="soa_retry_1h">
+    <name>champ 'retry' du SOA est d'au moins 1 heure</name>
+    <success>Le champ 'retry' du SOA est d'au moins 1 heure</success>
+    <failure>Le champ 'retry' doit être d'au moins 1 heure</failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc1912#p3">
+        <title>RFC1912 (p.3) and RIPE-203</title>
+        <para>....</para>
+      </src>
+    </explanation>
+    <details><para>La valeur du champ 'retry' est de 
+      <zcvar name="retry"/> sec, et devrait être d'au moins 
+      1 heure (3600 sec).</para></details>
+  </check>
 
 
-[chk_soa_minimum_1d]
-testname: champ 'minimum' du SOA inférieur à 1 jour
-error   : Le champ 'minimum' doit être inférieur à 1 jour
-ok	: Le champ 'minimum' du SOA est inférieur à 1 jour
-explain : [ref]: RFC2308 (p.9) 5. Caching Negative Answers\nValues of one to three hours have been found to work well and would make sensible a default.  Values exceeding one day have been found to be problematic.
-details : La valeur du champ 'minimum' est de %{minimum} sec, et devrait être moins de 1 jour (86400 sec), la valeur recommandée est entre 1 et 3 heures.
+  <check name="soa_expire_7d">
+    <name>champ 'expire' du SOA est d'au moins 7 jours</name>
+    <success>Le champ 'expire' du SOA est d'au moins 7 jours</success>
+    <failure>Le champ 'expire' doit être d'au moins 7 jours</failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc1912#p4">
+        <title>IETF RFC1912 (p.4)</title>
+        <para>After a zone is expired a secondary will still continue
+          to try to contact the primary, but it will no longer provide
+          nameservice for the zone. 2 to 4 weeks are suggested values.</para>
+      </src>
+      <src type="ref" from="AFNIC">
+        <title>AFNIC constraint</title>
+        <para>A minimum of 1 week (7 days) is enforced.</para>
+      </src>
+    </explanation>
+    <details><para>La valeur du champ 'expire' est de 
+      <zcvar name="expire"/> sec, et devrait être d'au moins 7 jours
+      (604800 sec).</para></details>
+  </check>
 
 
-[chk_soa_ns_cname]
-testname: champ 'master' du SOA n'est pas un alias
-error   : Le champ 'master' du SOA ne doit pas pointer sur un alias CNAME
-ok	: Le champ 'master' du SOA n'est pas un alias
-explain = ns_cname_xpl
-details : Le serveur maître (%{master}) indiqué dans le SOA est un alias CNAME sur %{alias}.
+  <check name="soa_expire_7refresh">
+    <name>champ 'expire' est au moins 7 fois celui du 'refresh'</name>
+    <success>Le champ 'expire' est au moins 7 fois celui du 'refresh'</success>
+    <failure>Le champ 'expire' doit être au moins 7 fois celui du 'refresh'</failure>
+    <explanation/>
+    <details><para>La valeur du champ 'expire' est de 
+      <zcvar name="expire"/> sec, et devrait être 7 fois plus grande que 
+      celle du 'refresh' (<zcvar name="refresh"/> sec).</para></details>
+  </check>
 
 
-[chk_soa_vs_any]
-testname: cohérence entre enregistrements SOA et ANY
-error   : Enregistrements SOA et ANY incohérents
-ok	: Enregistrements SOA et ANY cohérents
-explain : [none]
+  <check name="soa_minimum_1d">
+    <name>champ 'minimum' du SOA inférieur à 1 jour</name>
+    <success>Le champ 'minimum' du SOA est inférieur à 1 jour</success>
+    <failure>Le champ 'minimum' doit être inférieur à 1 jour</failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc2308#p9#5">
+        <title>RFC2308 (p.9) 5. Caching Negative Answers</title>
+        <para>Values of one to three hours have been found to work well
+          and would make sensible a default. Values exceeding one day
+          have been found to be problematic.</para>
+      </src>
+   </explanation>
+   <details><para>La valeur du champ 'minimum' est de
+     <zcvar name="minimum"/> sec, et devrait être moins de 1 jour (86400 sec),
+     la valeur recommandée est entre 1 et 3 heures.</para></details>
+  </check>
 
 
-[chk_soa_coherence_serial]
-testname: cohérence du numéro de série avec celui du serveur primaire
-error   : Le numéro de série n'est pas cohérent avec celui du serveur primaire
-ok	: Le numéro de série est cohérent avec celui du serveur primaire
-explain : [none]
-details : Le numéro de série obtenu (%{serial_this}) est différent de celui indiqué sur %{host_ref} (%{serial_ref}).
+  <check name="soa_ns_cname">
+    <name>champ 'master' du SOA n'est pas un alias</name>
+    <success>Le champ 'master' du SOA n'est pas un alias</success>
+    <failure>Le champ 'master' du SOA ne doit pas pointer sur un alias CNAME</failure>
+    <explanation sameas="shortcut:ns_cname"/>
+    <details><para>Le serveur maître (<zcvar name="master"/>) indiqué dans
+      le SOA est un alias CNAME sur <zcvar name="alias"/>.</para></details>
+  </check>
 
 
-[chk_soa_coherence_contact]
-testname: cohérence du contact administratif avec celui du serveur primaire
-error   : Le contact n'est pas cohérent avec celui du serveur primaire
-ok	: Le contact est cohérent avec celui du serveur primaire
-explain : [none]
-details : Le contact obtenu (%{rname_this}) est différent de celui indiqué sur %{host_ref} (%{rname_ref}).
+  <check name="soa_vs_any">
+    <name>cohérence entre enregistrements SOA et ANY</name>
+    <success>Enregistrements SOA et ANY cohérents</success>
+    <failure>Enregistrements SOA et ANY incohérents</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_soa_coherence_master]
-testname: cohérence du champ 'master' du SOA avec celui du serveur primaire
-error   : Le champ 'master' du SOA est incohérent avec celui du serveur primaire
-ok	: Le champ 'master' du SOA est cohérent avec celui du serveur primaire
-explain : [none]
-details : Le serveur maître indiqué dans le SOA (%{mname_this}) est différent de celui indiqué sur %{host_ref} (%{mname_ref}).
+  <check name="soa_coherence_serial">
+    <name>cohérence du numéro de série avec celui du serveur primaire</name>
+    <success>Le numéro de série est cohérent avec celui du serveur primaire</success>
+    <failure>Le numéro de série n'est pas cohérent avec celui du serveur primaire</failure>
+    <explanation/>
+    <details><para>Le numéro de série obtenu (<zcvar name="serial_this"/>)
+      est différent de celui indiqué sur <zcvar name="host_ref"/>
+      (<zcvar name="serial_ref"/>).</para></details>
+  </check>
 
-[chk_soa_coherence]
-testname: cohérence du SOA avec celui du serveur primaire
-error   : Le SOA est incohérent avec celui du serveur primaire
-ok	: Le SOA est cohérent avec celui du serveur primaire
-explain : [none]
 
+  <check name="soa_coherence_contact">
+    <name>cohérence du contact administratif avec celui du serveur primaire</name>
+    <success>Le contact est cohérent avec celui du serveur primaire</success>
+    <failure>Le contact n'est pas cohérent avec celui du serveur primaire</failure>
+    <explanation/>
+    <details><para>Le contact obtenu (<zcvar name="rname_this"/>)
+      est différent de celui indiqué sur <zcvar name="host_ref"/>
+      (<zcvar name="rname_ref"/>).</para></details>
+  </check>
+
+
+  <check name="soa_coherence_master">
+    <name>cohérence du champ 'master' du SOA avec celui du serveur primaire</name>
+    <success>Le champ 'master' du SOA est cohérent avec celui du serveur primaire</success>
+    <failure>Le champ 'master' du SOA est incohérent avec celui du serveur primaire</failure>
+    <explanation/>
+    <details><para>Le serveur maître indiqué dans le SOA 
+      (<zcvar name="mname_this"/>) est différent de celui indiqué 
+      sur <zcvar name="host_ref"/> (<zcvar name="mname_ref"/>).</para></details>
+  </check>
+
+
+  <check name="soa_coherence">
+    <name>cohérence du SOA avec celui du serveur primaire</name>
+    <success>Le SOA est cohérent avec celui du serveur primaire</success>
+    <failure>Le SOA est incohérent avec celui du serveur primaire</failure>
+    <explanation/>
+    <details/>
+  </check>
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

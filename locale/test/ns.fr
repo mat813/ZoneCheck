@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="fr">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,49 +33,83 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[*]
-ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME is bad and may conflict badly with current BIND servers.  In fact, current BIND implementations will ignore such records, possibly leading to a lame delegation. There is a certain amount of security checking done in BIND to prevent spoofing DNS NS records.  Also, older BIND servers reportedly will get caught in an infinite query loop trying to figure out the address for the aliased nameserver, causing a continuous stream of DNS requests to be sent.
-
-
-
-[chk_ns]
-testname: présence d'un enregistrement NS
-error   : Aucun enregistrement NS présent sur le serveur
-ok	: Enregistrement NS présent sur le serveur
-explain : [none]
-
-
-[chk_ns_auth]
-testname: réponse autoritaire pour le NS
-error   : La réponse pour le NS n'est pas autoritaire
-ok	: La réponse pour le NS est autoritaire
-explain : [none]
-
-
-[chk_ns_sntx]
-testname: la syntaxe du NS réprésente un nom/domaine valide
-error   : la syntaxe du NS n'est pas correcte
-ok	: la syntaxe du NS est correcte
-explain = label_xpl
+  <!-- Shortcuts -->
+  <shortcut>
+    <explanation name="ns_cname">
+      <src type="ref" from="rfc" fid="rfc1912#p7">
+        <title>IETF RFC1912 (p.7)</title>
+        <para>Having NS records pointing to a CNAME is bad and may
+          conflict badly with current BIND servers. In fact, current 
+          BIND implementations will ignore such records, possibly leading
+          to a lame delegation. There is a certain amount of security
+          checking done in BIND to prevent spoofing DNS NS records.
+          Also, older BIND servers reportedly will get caught in an 
+          infinite query loop trying to figure out the address for the
+          aliased nameserver, causing a continuous stream of DNS requests
+          to be sent.</para>
+      </src>
+    </explanation>
+  </shortcut>
 
 
-[chk_ns_cname]
-testname: l'enregistrement NS n'est pas un alias
-error   : L'enregistrement NS ne peut pas être un alias (CNAME)
-ok	: L'enregistrement NS n'est pas un alias
-explain = ns_cname_xpl
+  <!-- Checks -->
+  <check name="ns">
+    <name>présence d'un enregistrement NS</name>
+    <success>Enregistrement NS présent sur le serveur</success>
+    <failure>Aucun enregistrement NS présent sur le serveur</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_ns_vs_any]
-testname: cohérence entre enregistrements NS et ANY
-error   : Enregistrements NS et ANY incohérents
-ok	: Enregistrements NS et ANY cohérents
-explain : [none]
+  <check name="ns_auth">
+    <name>réponse autoritaire pour le NS</name>
+    <success>La réponse pour le NS est autoritaire</success>
+    <failure>La réponse pour le NS n'est pas autoritaire</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_ns_ip]
-testname: enregistrement NS peut être résolu
-error   : L'adresse IP du serveur de noms n'existe pas
-ok	: L'adresse IP du serveur de noms a été trouvée
-explain : [none]
+  <check name="ns_sntx">
+    <name>la syntaxe du NS réprésente un nom/domaine valide</name>
+    <success>la syntaxe du NS est correcte</success>
+    <failure>la syntaxe du NS n'est pas correcte</failure>
+    <explanation sameas="shortcut:label"/>
+    <details/>
+  </check>
+
+
+  <check name="ns_cname">
+    <name>l'enregistrement NS n'est pas un alias</name>
+    <success>L'enregistrement NS n'est pas un alias</success>
+    <failure>L'enregistrement NS ne peut pas être un alias (CNAME)</failure>
+    <explanation sameas="shortcut:ns_cname"/>
+    <details/>
+  </check>
+
+
+  <check name="ns_vs_any">
+    <name>cohérence entre enregistrements NS et ANY</name>
+    <success>Enregistrements NS et ANY cohérents</success>
+    <failure>Enregistrements NS et ANY incohérents</failure>
+    <explanation/>
+    <details/>
+  </check>
+
+
+  <check name="ns_ip">
+    <name>enregistrement NS peut être résolu</name>
+    <success>L'adresse IP du serveur de noms a été trouvée</success>
+    <failure>L'adresse IP du serveur de noms n'existe pas</failure>
+    <explanation/>
+   <details/>
+  </check>
+
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

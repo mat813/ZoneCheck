@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="fr">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,85 +33,137 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[*]
-label_xpl : [ref]: IETF RFC1034 (p.11)\nLabels are only composed by letters ([A-Za-z]), digits ([0-9]) or dashes ('-') (not starting or ending with), and should be less than 63 characters; domain name (labels separated by '.') should be less than 255 characters. See also [ref]: IETF RFC1912 (2.1 Inconsistent, Missing, or Bad Data).
+  <!-- Shortcuts -->
+  <shortcut>
+    <explanation name="label">
+      <src type="ref" from="rfc" fid="rfc1034#p11">
+        <title>IETF RFC1034 (p.11)</title>
+        <para>Labels are only composed by letters ([A-Za-z]), digits ([0-9]) or dashes ('-') (not starting or ending with), and should be less than 63 characters; domain name (labels separated by '.') should be less than 255 characters. See also [ref]: IETF RFC1912 (2.1 Inconsistent, Missing, or Bad Data).</para>
+      </src>
+    </explanation>
 
-xpl_rfc2182 : [adv]: ZoneCheck\nTo avoid loosing all connectivity with the autoritative DNS in case of network outage it is advised to host the DNS on different networks. See also IETF RFC2182.\n[ref]: IETF RFC2182 (Abstract)\nThe Domain Name System requires that multiple servers exist for every delegated domain (zone).  This document discusses the selection of secondary servers for DNS zones.  Both the physical and topological location of each server are material considerations when selecting secondary servers.  The number of servers appropriate for a zone is also discussed, and some general secondary server maintenance issues considered.
-
-
-
-[chk_dn_sntx]
-testname: nom de domaine contenant des caractères illégaux
-error   : Le nom de domaine contient des caractères illégaux
-ok	: Le nom de domaine ne contient aucun caractère illégal
-explain = label_xpl
-
-
-[chk_dn_orp_hyph]
-testname: tiret ('-') au début ou à la fin du nom de domaine
-error   : Le nom de domaine commence ou finit par un tiret ('-')
-ok	: Aucune mauvaise utilisation du tiret ('-') dans le nom de domaine
-explain = label_xpl
-
-
-[chk_dn_dbl_hyph]
-testname: double tiret ('--') dans le nom de domaine
-error   : Le nom de domaine contient un double tiret ('--')
-ok	: Pas d'utilisation du double tiret ('--')
-explain : [ref]: IETF IDN project (internationalized domain names)\nThe double dash ('--') will have a special meaning for the domain name\nencoding, so it is strongly advised not to used it. See \n<URL:http://www.iana.org/cctld/specifications-policies-cctlds-01apr02.htm> (4. Tagged Domain Names.)
+    <explanation name="rfc2182">
+      <src type="adv" from="zonecheck">
+        <title>ZoneCheck</title>
+        <para>To avoid loosing all connectivity with the autoritative DNS
+          in case of network outage it is advised to host the DNS on
+          different networks.</para>
+      </src>
+      <src type="ref" from="rfc" fid="rfc2182">
+        <title>IETF RFC2182 (Abstract)</title>
+        <para>The Domain Name System requires that multiple servers exist for every delegated domain (zone).  This document discusses the selection of secondary servers for DNS zones.  Both the physical and topological location of each server are material considerations when selecting secondary servers.  The number of servers appropriate for a zone is also discussed, and some general secondary server maintenance issues considered.</para>
+      </src>
+    </explanation>
+  </shortcut>
 
 
-[chk_one_ns]
-testname: présence de serveurs de nom gérant le domaine
-error   : Au moins un serveur de nom est requis
-ok	: Au moins un serveur de nom présent
-explain = xpl_rfc2182
+  <!-- Checks -->
+  <check name="dn_sntx">
+    <name>nom de domaine contenant des caractères illégaux</name>
+    <success>Le nom de domaine ne contient aucun caractère illégal</success>
+    <failure>Le nom de domaine contient des caractères illégaux</failure>
+    <explanation sameas="shortcut:label"/>
+    <details/>
+  </check>
 
 
-[chk_several_ns]
-testname: présence d'au moins deux serveurs de noms pour le domaine
-error   : Au moins deux serveurs de noms sont nécessaires
-ok	: Au moins deux serveurs de noms présents
-explain = xpl_rfc2182
+  <check name="dn_orp_hyph">
+    <name>tiret ('-') au début ou à la fin du nom de domaine</name>
+    <success>Aucune mauvaise utilisation du tiret ('-') dans le nom de domaine</success>
+    <failure>Le nom de domaine commence ou finit par un tiret ('-')</failure>
+    <explanation sameas="shortcut:label"/>
+    <details/>
+  </check>
 
 
-[chk_ip_distinct]
-testname: adresses IP identiques parmi les serveurs
-error   : Toutes les adresses IP doivent être distinctes
-ok	: Toutes les adresses IP sont distinctes
-explain = xpl_rfc2182
-details : Les serveurs de noms %{ns} utilisent la même adresse IP (%{ip}).
+  <check name="dn_dbl_hyph">
+    <name>double tiret ('--') dans le nom de domaine</name>
+    <success>Pas d'utilisation du double tiret ('--')</success>
+    <failure>Le nom de domaine contient un double tiret ('--')</failure>
+    <explanation>
+      <src type="ref">
+        <title>IETF IDN project (internationalized domain names)</title>
+        <para>The double dash ('--') will have a special meaning for
+          the domain name encoding, so it is strongly advised not to
+          used it. See <uri link="http://www.iana.org/cctld/specifications-policies-cctlds-01apr02.htm">http://www.iana.org/cctld/specifications-policies-cctlds-01apr02.htm</uri> (4. Tagged Domain Names.)</para>
+      </src>
+    </explanation>
+    <details/>
+  </check>
+
+  <check name="one_ns">
+    <name>présence de serveurs de nom gérant le domaine</name>
+    <success>Au moins un serveur de nom présent</success>
+    <failure>Au moins un serveur de nom est requis</failure>
+    <explanation sameas="rfc2182"/>
+    <details/>
+  </check>
 
 
-[chk_ip_same_net]
-testname: serveurs de noms sur le même sous réseau
-error   : Des serveurs sont sur le même sous réseau
-ok	: Aucun serveur de nom n'est sous le même sous réseau
-explain = xpl_rfc2182
-details : Les sous réseaux suivants sont utilisés par plusieurs hôtes: %{subnets}. Essayez de déplacer certains hôtes sur un autre sous réseau.
+  <check name="several_ns">
+    <name>présence d'au moins deux serveurs de noms pour le domaine</name>
+    <success>Au moins deux serveurs de noms présents</success>
+    <failure>Au moins deux serveurs de noms sont nécessaires</failure>
+    <explanation sameas="rfc2182"/>
+    <details/>
+  </check>
 
 
-[chk_ip_all_same_net]
-testname: serveurs de noms tous sur le même sous réseau
-error   : Les serveurs de noms sont tous sur le même sous réseau
-ok	: Les serveurs de noms ne sont pas tous sur le même sous réseau
-explain = xpl_rfc2182
-details : Tous les serveurs de noms sont dans le sous réseau %{subnet}. Essayez d'en déplacer quelques uns sur un autre sous réseau.
+  <check name="ip_distinct">
+    <name>adresses IP identiques parmi les serveurs</name>
+    <success>Toutes les adresses IP sont distinctes</success>
+    <failure>Toutes les adresses IP doivent être distinctes</failure>
+    <explanation sameas="rfc2182"/>
+    <details><para>Les serveurs de noms <zcvar name="ns"/> utilisent la
+      même adresse IP (<zcvar name="ip"/>).</para></details>
+  </check>
 
 
-[chk_delegation_udp512]
-testname: delegation response fit in a 512 byte UDP packet
-error   : Delegation response won't fit in a 512 byte UDP packet
-ok      : Delagation response fit in a 512 byte UDP packet
-explain : [none]
-details : For a query of %{bytes} bytes, it won't be possible to send all the nameserver.
+  <check name="ip_same_net">
+    <name>serveurs de noms sur le même sous réseau</name>
+    <success>Aucun serveur de nom n'est sous le même sous réseau</success>
+    <failure>Des serveurs sont sur le même sous réseau</failure>
+    <explanation sameas="rfc2182"/>
+    <details><para>Les sous réseaux suivants sont utilisés par plusieurs
+      hôtes: <zcvar name="subnets"/>. Essayez de déplacer certains hôtes
+      sur un autre sous réseau.</para></details>
+  </check>
 
 
-[chk_delegation_udp512_additional]
-testname: delegation response with additional fit in a 512 byte UDP packet
-error   : Delegation response with additional won't fit in a 512 byte UDP packet
-ok      : Delagation response with additional fit in a 512 byte UDP packet
-explain : [none]
-details : For a query of %{bytes} bytes, it won't be possible to send all the nameserver with the corresponding glues.
+  <check name="ip_all_same_net">
+    <name>serveurs de noms tous sur le même sous réseau</name>
+    <success>Les serveurs de noms ne sont pas tous sur le même sous réseau</success>
+    <failure>Les serveurs de noms sont tous sur le même sous réseau</failure>
+    <explanation sameas="rfc2182"/>
+    <details><para>Tous les serveurs de noms sont dans le sous réseau
+      <zcvar name="subnet"/>. Essayez d'en déplacer quelques uns sur un
+      autre sous réseau.</para></details>
+  </check>
 
+
+  <check name="delegation_udp512">
+    <name>delegation response fit in a 512 byte UDP packet</name>
+    <success>Delagation response fit in a 512 byte UDP packet</success>
+    <failure>Delegation response won't fit in a 512 byte UDP packet</failure>
+    <explanation/>
+    <details><para>For a query of <zcvar name="bytes"/> bytes, it won't
+      be possible to send all the nameserver.</para></details>
+  </check>
+
+
+  <check name="delegation_udp512_additional">
+    <name>delegation response with additional fit in a 512 byte UDP packet</name>
+    <success>Delagation response with additional fit in a 512 byte UDP packet</success>
+    <failure>Delegation response with additional won't fit in a 512 byte UDP packet</failure>
+    <explanation/>
+    <details><para>For a query of <zcvar name="bytes"/> bytes, it won't
+      be possible to send all the nameserver with the corresponding
+      glues.</para></details>
+  </check>
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

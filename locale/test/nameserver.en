@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,17 +33,44 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[chk_ip_private]
-testname: address in a private network
-error   : Address is part of a private subnet
-ok	: Address is not part of a private subnet
-explain : [ref]: IETF RFC1918 (3. Private Address Space)\nThe Internet Assigned Numbers Authority (IANA) has reserved the following three blocks of the IP address space for private internets: 10/8, 172.16/12, 192.168/16.
+  <check name="ip_private">
+    <name>address in a private network</name>
+    <success>Address is not part of a private subnet</success>
+    <failure>Address is part of a private subnet</failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc1918">
+        <title>IETF RFC1918 (3. Private Address Space)</title>
+        <para>The Internet Assigned Numbers Authority (IANA) has reserved
+          the following three blocks of the IP address space for private
+          internets: 10/8, 172.16/12, 192.168/16.</para>
+      </src>
+    </explanation>
+    <details/>
+  </check>
 
 
-[chk_ip_bogon]
-testname: address shouldn't be part of a bogon prefix
-error   : Address listed in the bogon list
-ok	: Address is not listed ion the bogon list
-details : The address %{addresses} belongs to a bogon prefix.
-explain : [ref]: <URL:http://www.cymru.com/Bogons/>\nA bogon prefix is a route that should never appear in the Internet routing table. A packet routed over the public Internet (not including over VPN or other tunnels) should never have a source address in a bogon range. These are commonly found as the source addresses of DDoS attacks.
+  <check name="ip_bogon">
+    <name>address shouldn't be part of a bogon prefix</name>
+    <success>Address is not listed on the bogon list</success>
+    <failure>Address listed on the bogon list</failure>
+    <explanation>
+      <src type="ref">
+        <title>http://www.cymru.com/Bogons/</title>
+        <para>A bogon prefix is a route that should never appear in the
+          Internet routing table. A packet routed over the public Internet
+          (not including over VPN or other tunnels) should never have a
+          source address in a bogon range. These are commonly found as the
+          source addresses of DDoS attacks.</para>
+      </src>
+    </explanation>
+    <details><para>The address <zcvar name="addresses"/> belongs to a bogon
+      prefix.</para></details>
+  </check>
+
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

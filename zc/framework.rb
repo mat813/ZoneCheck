@@ -44,66 +44,25 @@ class Test
     ##
     class Result # --> ABSTRACT <--
 	class Desc
-	    attr_writer :err, :msg, :xpl, :xtr, :data
+	    attr_writer :error, :details
+	    attr_reader :error, :details
 
 	    def initialize(testname=nil)
 		@testname	= testname
-		@err		= nil	# Error message
-		@msg		= nil	# Test message
-		@xpl		= nil	# Test explanation
-		@xtr		= nil	# Extra information
-		@data		= nil
+		@error		= nil	# Error message (ie: Exception)
+		@details	= nil
 	    end
 
 	    def hash
-		@testname.hash ^ @err.hash ^ @msg.hash ^ 
-		    @xpl.hash ^ @xtr.hash ^ @data.hash
+		@testname.hash ^ @error.hash ^ @msg.details
 	    end
 	    
 	    def eql?(other)
-		(@testname == other.instance_eval('@testname') &&
-		 @err      == other.instance_eval('@err')      &&
-		 @msg      == other.instance_eval('@msg')      &&
-		 @xpl      == other.instance_eval('@xpl')      &&
-		 @xtr      == other.instance_eval('@xtr')      &&
-		 @data     == other.instance_eval('@data'))
+		(@testname    == other.instance_eval('@testname')    &&
+		 @error       == other.instance_eval('@error')       &&
+		 @details     == other.instance_eval('@details'))
 	    end
 	    alias == eql?
-
-	    def is_error? ; !@err.nil? ; end
-
-	    def xpl
-		if @xpl 
-		    @xpl
-		elsif is_error?
-		    nil
-		else
-		    x = $mc.get("#{@testname}_explain")
-		    x == MessageCatalog::None ? nil : x
-		end
-	    end
-
-	    def dtl
-		return nil if @data.nil?
-		
-		d = $mc.get("#{@testname}_details")
-		if d == MessageCatalog::None
-		    nil
-		else
-		    d = d.dup
-		    @data.each_pair { |k, v|
-			d.gsub!(/%\{#{k}\}/, v.to_s) }
-		    d
-		end
-	    end
-
-	    def msg
-		if is_error?
-		    "[TEST %s]: %s" % [$mc.get("#{@testname}_testname"), @err]
-		else
-		    $mc.get("#{@testname}_error")
-		end
-	    end
 	end
 
 
@@ -135,7 +94,7 @@ class Test
 	def tag
 	    if ! @ns.nil?				# NS
 	    then @ip.nil? ? "#{@ns}" : "#{@ns}/#{ip}"	# NS/IP
-	    else $mc.get('w_generic')			# generic
+	    else $mc.get('word:generic')		# generic
 	    end
 	end
     end
@@ -152,7 +111,7 @@ class Test
 
     
     ##
-    ## Test that has Failes
+    ## Test that has Failed
     ##
     class Failed < Result
 	def ok? ; false ; end
@@ -161,11 +120,14 @@ class Test
 
 
     ##
-    ## Test that was unable to complet due to error
+    ## Test that was unable to complete due to Error
     ##
     class Error < Result
 	def ok? ; false ; end
     end
+
+
+
 
     def initialize(network, config, cm, domain)
 	@network	= network
@@ -233,7 +195,7 @@ class Test
 
     #-- Shortcuts -----------------------------------------------
     def const(name)
-	@config.const(name)
+	@config.constants[name]
     end
 
     def rec(ip=nil, dom=@domain.name, force=false)
@@ -306,8 +268,7 @@ end
 
 
 ##
-##
-##
+## Hold tests that are not directed DNS related
 ##
 module CheckExtra
 end

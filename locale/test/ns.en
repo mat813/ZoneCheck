@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,49 +33,83 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[*]
-ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME is bad and may conflict badly with current BIND servers.  In fact, current BIND implementations will ignore such records, possibly leading to a lame delegation. There is a certain amount of security checking done in BIND to prevent spoofing DNS NS records.  Also, older BIND servers reportedly will get caught in an infinite query loop trying to figure out the address for the aliased nameserver, causing a continuous stream of DNS requests to be sent.
-
-
-
-[chk_ns]
-testname: NS record present
-error   : No NS record found on server
-ok	: NS record found
-explain : [none]
-
-
-[chk_ns_auth]
-testname: NS authoritative answer
-error   : The NS answer is not authoritative
-ok	: The NS answer is authoritative
-explain : [none]
-
-
-[chk_ns_sntx]
-testname: NS name has a valid domain/hostname syntax
-error   : NS name syntax is not correct
-ok	: NS name syntax is correct
-explain = label_xpl
+  <!-- Shortcuts -->
+  <shortcut>
+    <explanation name="ns_cname">
+      <src type="ref" from="rfc" fid="rfc1912#p7">
+        <title>IETF RFC1912 (p.7)</title>
+        <para>Having NS records pointing to a CNAME is bad and may
+          conflict badly with current BIND servers. In fact, current 
+          BIND implementations will ignore such records, possibly leading
+          to a lame delegation. There is a certain amount of security
+          checking done in BIND to prevent spoofing DNS NS records.
+          Also, older BIND servers reportedly will get caught in an 
+          infinite query loop trying to figure out the address for the
+          aliased nameserver, causing a continuous stream of DNS requests
+          to be sent.</para>
+      </src>
+    </explanation>
+  </shortcut>
 
 
-[chk_ns_cname]
-testname: NS is not an alias
-error   : NS is not allowed to point to a CNAME alias
-ok	: NS is not an alias
-explain = ns_cname_xpl
+  <!-- Checks -->
+  <check name="ns">
+    <name>NS record present</name>
+    <success>NS record found</success>
+    <failure>No NS record found on server</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_ns_vs_any]
-testname: coherence between NS and ANY records
-error   : NS and ANY request disagree
-ok	: NS and ANY agree
-explain : [none]
+  <check name="ns_auth">
+    <name>NS authoritative answer</name>
+    <success>The NS answer is authoritative</success>
+    <failure>The NS answer is not authoritative</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_ns_ip]
-testname: NS can be resolved
-error   : The IP addresses of the zone nameserver can't be found
-ok	: IP addresses of the zone naemserver have been found
-explain : [none]
+  <check name="ns_sntx">
+    <name>NS name has a valid domain/hostname syntax</name>
+    <success>NS name syntax is correct</success>
+    <failure>NS name syntax is not correct</failure>
+    <explanation sameas="shortcut:label"/>
+    <details/>
+  </check>
+
+
+  <check name="ns_cname">
+    <name>NS is not an alias</name>
+    <success>NS is not an alias</success>
+    <failure>NS is not allowed to point to a CNAME alias</failure>
+    <explanation sameas="shortcut:ns_cname"/>
+    <details/>
+  </check>
+
+
+  <check name="ns_vs_any">
+    <name>coherence between NS and ANY records</name>
+    <success>NS and ANY agree</success>
+    <failure>NS and ANY request disagree</failure>
+    <explanation/>
+    <details/>
+  </check>
+
+
+  <check name="ns_ip">
+    <name>NS can be resolved</name>
+    <success>IP addresses of the zone nameserver have been found</success>
+    <failure>The IP addresses of the zone nameserver can't be found</failure>
+    <explanation/>
+    <details/>
+  </check>
+
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

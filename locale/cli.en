@@ -1,11 +1,7 @@
-# $Id$
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,86 +32,92 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-input_cli_usage: \
-usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname\n\
-        --lang          Select another language (en, fr, ...)\n\
-    -d, --debug         Select debugging messages to print\n\
-    -h, --help          Show this message\n\
-    -V, --version       Display version and exit\n\
-    -B, --batch         Batch mode (read from file or stdin '-')\n\
-    -c, --config        Specify location of the configuration file\n\
-        --testdir       Location of the directory holding tests\n\
-    -C, --category      Only perform test for the specified category\n\
-    -T, --test          Name of the test to perform\n\
-        --testlist      List all the available tests\n\
-        --testdesc      Give a description (name,expl,error) of the test\n\
-    -r, --resolver      Resolver to use for guessing 'ns' information\n\
-    -n, --ns            List of nameservers for the domain\n\
-                           (ex: ns1;ns2=ip1,ip2;ns3=ip3)\n\
-    -q, --quiet         Don't display extra titles\n\
-    -1, --one           Only display the most relevant message\n\
-    -g, --tagonly       Display only tag (suitable for scripting)\n\
-    -v, --verbose       Display extra information (see verbose)\n\
-    -o, --output        Output (see output)\n\
-    -e, --error         Behaviour in case of error (see error)\n\
-    -t, --transp        Transport/routing layer (see transp)\n\
-    -4, --ipv4          Only check the zone with IPv4 connectivity\n\
-    -6, --ipv6          Only check the zone with IPv6 connectivity\n\
-        --option        Set extra options (-,-opt,opt,opt=foo)\n\
-\n\
-  verbose:              [intro/testname/explain/details]\n\
-                        [reportok|fatalonly] [testdesc|counter]\n\
-    intro          [i]  Print summary for domain and associated nameservers\n\
-    testname       [n]  Print the test name\n\
-    explain        [x]  Print an explanation for failed tests\n\
-    details        [d]  Print a detailed description of the failure\n\
-    reportok       [o]  Still report passed test\n\
-    fatalonly      [f]  Print fatal errors only\n\
-    testdesc       [t]  Print the test description before running it\n\
-    counter        [c]  Print a test counter\n\
-\n\
-  output:               [byseverity|byhost] [text|html]\n\
-    byseverity    *[bs] Output is sorted/merged by severity\n\
-    byhost         [bh] Output is sorted/merged by host\n\
-    text          *[t]  Output plain text\n\
-    html           [h]  Output HTML\n\
-\n\
-  error:                [allfatal|allwarning|dfltseverity] [stop|nostop]\n\
-    allfatal       [af] All error are considered fatal\n\
-    allwarning     [aw] All error are considered warning\n\
-    dfltseverity  *[ds] Use the severity associated with the test\n\
-    stop          *[s]  Stop on the first fatal error\n\
-    nostop         [ns] Never stop (even on fatal error)\n\
-\n\
-  transp:               [ipv4/ipv6] [udp|tcp|std]\n\
-    ipv4          *[4]  Use IPv4 routing protocol\n\
-    ipv6          *[6]  Use IPv6 routing protocol\n\
-    udp            [u]  Use UDP transport layer\n\
-    tcp            [t]  Use TCP transport layer\n\
-    std           *[s]  Use UDP with fallback to TCP for truncated messages\n\
-\n\
-  Batch Mode:\n\
-   Process domain from file or stdin, with 1 per line. The syntax is:\n\
-      DOM=domainname\n\
-   or DOM=domainname NS=ns1;ns2=ip1,ip2\n\
-\n\
-  Categories:\n\
-    allow=[+|]    disallow=[-|!]    subcomponent=:    separator=,\n\
-    ex: dns:soa,!dns,+\n\
-        don't perform DNS tests that are not SOA related\n\
-\n\
-\n\
-EXAMPLES:\n\
-  PROGNAME -6 --verbose=i,x,d afnic.fr.\n\
-    Test the 'afnic.fr.' domain with IPv6 only connectivity, print\n\
-    a summary information about the tested domain as well as explanations\n\
-    and details of failed tests\n\
-\n\
-  PROGNAME -v c -1 -B -\n\
-    Work in batch mode, where domains are read from stdin, a progress bar\n\
-    indicates how many tests remain, and only short report is written\n\
-\n\
-  PROGNAME --testdesc error -T chk_soa\n\
-    Ask for the 'error' message associated with the test 'chk_soa'\n
+<tag name="input_cli_usage">
+usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname
+        --lang          Select another language (en, fr, ...)
+    -d, --debug         Select debugging messages to print
+    -h, --help          Show this message
+    -V, --version       Display version and exit
+    -B, --batch         Batch mode (read from file or stdin '-')
+    -c, --config        Specify location of the configuration file
+        --testdir       Location of the directory holding tests
+    -C, --category      Only perform test for the specified category
+    -T, --test          Name of the test to perform
+        --testlist      List all the available tests
+        --testdesc      Give a description (name,expl,error) of the test
+    -r, --resolver      Resolver to use for guessing 'ns' information
+    -n, --ns            List of nameservers for the domain
+                           (ex: ns1;ns2=ip1,ip2;ns3=ip3)
+    -q, --quiet         Don't display extra titles
+    -1, --one           Only display the most relevant message
+    -g, --tagonly       Display only tag (suitable for scripting)
+    -v, --verbose       Display extra information (see verbose)
+    -o, --output        Output (see output)
+    -e, --error         Behaviour in case of error (see error)
+    -t, --transp        Transport/routing layer (see transp)
+    -4, --ipv4          Only check the zone with IPv4 connectivity
+    -6, --ipv6          Only check the zone with IPv6 connectivity
+        --option        Set extra options (-,-opt,opt,opt=foo)
 
+  verbose:              [intro/testname/explain/details]
+                        [reportok|fatalonly] [testdesc|counter]
+    intro          [i]  Print summary for domain and associated nameservers
+    testname       [n]  Print the test name
+    explain        [x]  Print an explanation for failed tests
+    details        [d]  Print a detailed description of the failure
+    reportok       [o]  Still report passed test
+    fatalonly      [f]  Print fatal errors only
+    testdesc       [t]  Print the test description before running it
+    counter        [c]  Print a test counter
+
+  output:               [byseverity|byhost] [text|html]
+    byseverity    *[bs] Output is sorted/merged by severity
+    byhost         [bh] Output is sorted/merged by host
+    text          *[t]  Output plain text
+    html           [h]  Output HTML
+
+  error:                [allfatal|allwarning|dfltseverity] [stop|nostop]
+    allfatal       [af] All error are considered fatal
+    allwarning     [aw] All error are considered warning
+    dfltseverity  *[ds] Use the severity associated with the test
+    stop          *[s]  Stop on the first fatal error
+    nostop         [ns] Never stop (even on fatal error)
+
+  transp:               [ipv4/ipv6] [udp|tcp|std]
+    ipv4          *[4]  Use IPv4 routing protocol
+    ipv6          *[6]  Use IPv6 routing protocol
+    udp            [u]  Use UDP transport layer
+    tcp            [t]  Use TCP transport layer
+    std           *[s]  Use UDP with fallback to TCP for truncated messages
+
+  Batch Mode:
+   Process domain from file or stdin, with 1 per line. The syntax is:
+      DOM=domainname
+   or DOM=domainname NS=ns1;ns2=ip1,ip2
+
+  Categories:
+    allow=[+|]    disallow=[-|!]    subcomponent=:    separator=,
+    ex: dns:soa,!dns,+
+        don't perform DNS tests that are not SOA related
+
+
+EXAMPLES:
+  PROGNAME -6 --verbose=i,x,d afnic.fr.
+    Test the 'afnic.fr.' domain with IPv6 only connectivity, print
+    a summary information about the tested domain as well as explanations
+    and details of failed tests
+
+  PROGNAME -v c -1 -B -
+    Work in batch mode, where domains are read from stdin, a progress bar
+    indicates how many tests remain, and only short report is written
+
+  PROGNAME --testdesc error -T chk_soa
+    Ask for the 'error' message associated with the test 'chk_soa'
+</tag>
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

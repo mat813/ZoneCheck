@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="fr">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,22 +33,43 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[*]
-xpl_loopback: [ref]: IETF RFC1912 (p.13 4.1. Boot file setup)\nThese are set up to either provide nameservice for "special" addresses, or to help eliminate accidental queries for broadcast or local address to be sent off to the root nameservers.  All of these files will contain NS and SOA records just like the other zone files you maintain.
+  <!-- Shortcuts -->
+  <shortcut>
+    <explanation name="loopback">
+      <src type="ref" from="rfc" fid="rfc1912#p13#4.1">
+        <title>IETF RFC1912 (p.13 4.1. Boot file setup)</title>
+        <para>These are set up to either provide nameservice for "special"
+          addresses, or to help eliminate accidental queries for broadcast
+          or local address to be sent off to the root nameservers. All of
+          these files will contain NS and SOA records just like the other
+          zone files you maintain.</para>
+      </src>
+     </explanation>
+  </shortcut>
 
 
+  <!-- Checks -->
+  <check name="loopback_delegation">
+    <name>délégation du 'loopback'</name>
+    <success>Le domaine du 'loopback' a bien été délégué</success>
+    <failure>Le domaine du 'loopback' n'est pas délégué</failure>
+    <explanation sameas="shortcut:loopback"/>
+    <details/>
+  </check>
 
-[chk_loopback_delegation]
-testname: délégation du 'loopback'
-error   : Le domaine du 'loopback' n'est pas délégué
-ok	: Le domaine du 'loopback' a bien été délégué
-explain = xpl_loopback
+
+  <check name="loopback_host">
+    <name>'loopback' resolvable</name>
+    <success>Il est possible de résoudre le 'loopback'</success>
+    <failure>Impossible de résoudre le 'loopback'</failure>
+    <explanation sameas="shortcut:loopback"/>
+    <details/>
+  </check>
 
 
-[chk_loopback_host]
-testname: 'loopback' resolvable
-error   : Impossible de résoudre le 'loopback'
-ok	: Il est possible de résoudre le 'loopback'
-explain = xpl_loopback
-
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

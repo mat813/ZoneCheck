@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="fr">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,92 +33,79 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-#
-# Word
-#
-w_generic	: générique
-w_warning	: avertissement
-w_warning_id	: a
-w_fatal		: fatal
-w_fatal_id	: f
-w_info		: info
-w_info_id	: i
-w_ok		: ok
-w_ok_id		: o
-w_testing	: teste
-w_unexpected	: inattendu
-w_line          : ligne
-w_error		: erreur
-w_perfect	: parfait
-w_quit		: quitte
-w_abort		: interrompt
-w_details	: détails
-w_references	: références
-w_elements	: éléments
-w_form          : formulaire
-w_name		: nom
+<!-- Word -->
+<section name="word">
+  <tag name="generic">générique</tag>
+  <tag name="warning">avertissement</tag>
+  <tag name="warning_id">a</tag>
+  <tag name="fatal">fatal</tag>
+  <tag name="fatal_id">f</tag>
+  <tag name="info">info</tag>
+  <tag name="info_id">i</tag>
+  <tag name="ok">ok</tag>
+  <tag name="ok_id">o</tag>
+  <tag name="testing">teste</tag>
+  <tag name="unexpected">inattendu</tag>
+  <tag name="line">ligne</tag>
+  <tag name="error">erreur</tag>
+  <tag name="perfect">parfait</tag>
+  <tag name="quit">quitte</tag>
+  <tag name="abort">interrompt</tag>
+  <tag name="details">détails</tag>
+  <tag name="references">références</tag>
+  <tag name="elements">éléments</tag>
+  <tag name="form">formulaire</tag>
+  <tag name="name">nom</tag>
+</section>
 
-
-#
-# Titles
-#
-t_batch		: traitement par lots
-t_single	: domaine simple
+<!-- Titles -->
+<tag name="t_batch">traitement par lots</tag>
+<tag name="t_single">domaine simple</tag>
 
 
-#
-# Tag
-#
-tag_ref		: Réf
-tag_adv		: Conseil
+<!-- Tag -->
+<tag name="tag_ref">Réf</tag>
+<tag name="tag_adv">Conseil</tag>
 
 
-#
-#
-#
-res_succeed_but : SUCCES (mais %d avertissement(s))
-res_succeed	: SUCCES
-res_failed	: ECHEC
-res_failed_and	: ECHEC (et %d avertissement(s))
+<!-- -->
+<tag name="res_succeed_but">SUCCES (mais %d avertissement(s))</tag>
+<tag name="res_succeed">SUCCES</tag>
+<tag name="res_failed">ECHEC</tag>
+<tag name="res_failed_and">ECHEC (et %d avertissement(s))</tag>
 
-ns_batch	: lot
-ns_zone         : zone
-ns_ns		: ns
-ns_primary      : primaire
-ns_secondary    : secondaire
-ns_ips		: IPs
+<tag name="ns_batch">lot</tag>
+<tag name="ns_zone">zone</tag>
+<tag name="ns_ns">ns</tag>
+<tag name="ns_primary">primaire</tag>
+<tag name="ns_secondary">secondaire</tag>
+<tag name="ns_ips">IPs</tag>
 
-title_zoneinfo  : Information sur la Zone
-title_progress  : Progression
-title_testres   : Résultat des tests
-title_status    : Statut final
+<tag name="title_zoneinfo">Information sur la Zone</tag>
+<tag name="title_progress">Progression</tag>
+<tag name="title_testres">Résultat des tests</tag>
+<tag name="title_status">Statut final</tag>
 
-pgr_progress    : Progression
-pgr_test        : Tests
-pgr_time        : Temps
-pgr_speed       : Vitesse
-pgr_speed_unit  : T/s
-pgr_na		: N/A
+<tag name="pgr_progress">Progression</tag>
+<tag name="pgr_test">Tests</tag>
+<tag name="pgr_time">Temps</tag>
+<tag name="pgr_speed">Vitesse</tag>
+<tag name="pgr_speed_unit">T/s</tag>
+<tag name="pgr_na">N/A</tag>
 
-#
-#
-#
-problem_file	: problème à l'ouverture/lecture du fichier: %s
+<!-- -->
+<tag name="problem_file">problème à l'ouverture/lecture du fichier: %s</tag>
 
-#
-# Input
-#
-[input]
-unsupported	: méthode d'entrée '%s' non supportée
-suspicious	: méthode d'entrée '%s' douteuse
-version		: PROGNAME: version %s
-unsupported_domain: Impossible d'établir une correspondance pour '%s'
+<!-- Input -->
+<tag name="input_unsupported">méthode d'entrée '%s' non supportée</tag>
+<tag name="input_suspicious">méthode d'entrée '%s' douteuse</tag>
+<tag name="input_version">PROGNAME: version %s</tag>
+<tag name="input_unsupported_domain">Impossible d'établir une correspondance pour '%s'</tag>
 
 
-#
-# Parser
-#
+<!-- Parser -->
 [config]
 section_exists	: section '%s' déjà définie
 section_unknown	: section '%s' inconnue ou indisponnible
@@ -156,11 +140,8 @@ expect_testtype	: type de test (generic, extra, nameserver ou address) attendu
 expect_lexical	: caractère '%s' inattendu
 
 
-#
-# Exceptions
-#
-[xcp_zc]
-batch_parse	: Impossible d'analyser la ligne par lot
+<!-- Exceptions -->
+<tag name="xcp_zc_batch_parse">Impossible d'analyser la ligne par lot</tag>
 
 [xcp_param]
 fqdn_required	: Nom de domaine absolument qualifié attendu
@@ -198,8 +179,14 @@ test_exists	: test '%s' défini dans les classes '%s' et '%s'
 check_exists	: vérification '%s' définie dans les classes '%s' et '%s'
 
 
-[nresolv]
-rcode_servfail	: échec du serveur
-rcode_refused	: réponse refusée par le serveur
-rcode_nxdomain	: le domaine n'existe pas
-rcode_notimp	: requête non mise en oeuvre sur le serveur
+<section name="nresolv:rcode">
+  <tag name="servfail">échec du serveur</tag>
+  <tag name="refused">réponse refusée par le serveur</tag>
+  <tag name="nxdomain">le domaine n'existe pas</tag>
+  <tag name="notimp">requête non mise en oeuvre sur le serveur</tag>
+</section>
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

@@ -49,7 +49,7 @@ module Publisher
 	    def initialize(publisher)
 		@publisher	= publisher
 		@o		= publisher.output
-		@l10n_testing	= $mc.get("w_testing").capitalize
+		@l10n_testing	= $mc.get("word:testing").capitalize
 	    end
 	    
 	    # Start progression
@@ -166,9 +166,9 @@ EOT
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get("w_info_id")
-	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get("w_warning_id")
-	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get("w_fatal_id")
+	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get("word:info_id")
+	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get("word:warning_id")
+	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get("word:fatal_id")
 	    
 	    i_tag = i_tag.upcase if i_unexp
 	    w_tag = w_tag.upcase if w_unexp
@@ -184,7 +184,7 @@ EOT
 	    @o.puts "<TABLE width=\"100%\">"
 	    @o.puts "<TR class=\"zc-title\"><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
 	    if res.nil?
-		l10n_perfect = $mc.get("w_perfect").capitalize
+		l10n_perfect = $mc.get("word:perfect").capitalize
 		@o.puts "<TR><TD colspan=\"2\"><B>#{l10n_perfect}</B></TD></TR>"
 		@o.puts "<TR><TD colspan=\"2\">&nbsp;</TD></TR>"
 

@@ -19,18 +19,99 @@
 #
 
 module Text
-    class Format
+    module Formater
         LEFT_ALIGN  = 0
         RIGHT_ALIGN = 1
         FILLED      = 2
         JUSTIFY     = 3
+	MaxLineLength = 79
 
-        attr_accessor :width
-        attr_accessor :tag
-	attr_accessor :style
 
-        def build_line(line, width, tag='', last=false)
-	    case @style
+	#
+	# Draw an L-shapped box (as below) arround the text
+	#
+	# | 
+	# | 
+	# `----- -- -- - -  -
+	#
+	def self.lbox(text, decoration=[ '|', '`', '-', ' ' ])
+	    finalline = decoration[1] + 
+		decoration[2]*5 + decoration[3] + 
+		decoration[2]*2 + decoration[3] + 
+		decoration[2]*2 + decoration[3] + 
+		decoration[2]   + decoration[3] + 
+		decoration[2]   + decoration[3]*2 + 
+		decoration[2]
+
+	    (text.split(/\n/).collect { |l| 
+		 "#{decoration[0]} #{l}" } << finalline << '').join("\n")
+	end
+
+	#
+	# Draw a title box as below
+	#        _____________
+	#      ,-------------.|
+	# ~~~~ |    title    || ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	#      `-------------'
+	#
+	def self.title(title, maxlen=MaxLineLength)
+	    txtlen = [title.length, maxlen-20].min
+	    txt    = title[0..txtlen]
+	    [   '       ' + '_'*(8+txtlen),
+		'     ,' +  '-'*(8+txtlen) + '.|',
+		'~~~~ |    '  +  txt  +  '    || ' + '~'*(maxlen-19-txtlen),
+		'     `'+ '-' * (8+txtlen) + "'",
+		'' ].join("\n")
+	end
+
+
+	#
+	# Itemize a text as below
+	#
+	# => item1 on
+	#    several lines
+	# => item2
+	#
+	def self.item(text, bullet="=> ", offset=bullet.size)
+	    lines  = text.split(/\n/)
+	    spacer = " " * offset
+
+	    ([   bullet + lines[0] ] + 
+	     lines[1..-1].collect { |line| spacer + line } + 
+	     ['']).join("\n")
+	end
+
+	
+        def self.paragraph(text, width=78, tag='    ', style=LEFT_ALIGN)
+	    out   = [ ]
+            words = text.split(/\s+/)
+            words.shift if words[0].empty?
+
+            first_width = width - tag.size
+            line  = words.shift
+            while w = words.shift
+                break unless (w.size + line.size) < (first_width - 1)
+		line << ' ' << w
+            end
+            out << build_line(line, width, tag, style, w.nil?) unless line.nil?
+
+            line  = w
+            while w = words.shift
+                if (w.size + line.size < (width - 1))
+		    line << ' ' << w
+                else
+                    out << build_line(line, width,'', style, w.nil?) unless line.nil?
+                    line = w
+                end
+            end
+	    out << build_line(line, width, '', style, true) unless line.nil?
+
+            out.join('')
+        end
+
+
+        def self.build_line(line, width, tag='', style=LEFT_ALIGN, last=false)
+	    case style
 	    when JUSTIFY
 		return line if     last || line.empty?
 		return line unless line =~ /\S+\s+\S+/
@@ -53,39 +134,6 @@ module Text
 	    else 
 		tag + line + "\n"
 	    end
-        end
-
-        def format(text)
-	    out   = [ ]
-            words = text.split(/\s+/)
-            words.shift if words[0].empty?
-
-            first_width = @width - @tag.size
-            line  = words.shift
-            while w = words.shift
-                break unless (w.size + line.size) < (first_width - 1)
-		line << ' ' << w
-            end
-            out << build_line(line, @width, @tag, w.nil?) unless line.nil?
-
-            line  = w
-            while w = words.shift
-                if (w.size + line.size < (@width - 1))
-		    line << ' ' << w
-                else
-                    out << build_line(line, @width,'', w.nil?) unless line.nil?
-                    line = w
-                end
-            end
-	    out << build_line(line, @width, '', true) unless line.nil?
-
-            out.join('')
-        end
-
-        def initialize
-            @width	= 78
-            @tag	= '    '
-            @style	= LEFT_ALIGN
         end
     end
 end

@@ -48,7 +48,7 @@ class NResolv
 		    return RootServer::new(YAML::load(io)) }
 	    end
 
-	    ICANN	= RootServer::new ({ 
+	    ICANN	= RootServer::new({ 
 		'a.root-servers.net.' => [ '198.41.0.4'     ],
 		'b.root-servers.net.' => [ '128.9.0.107'    ],
 		'c.root-servers.net.' => [ '192.33.4.12'    ],

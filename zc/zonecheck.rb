@@ -69,7 +69,7 @@ class ZoneCheck
 
 	# Sanity check on Input Method
 	if ! (im =~ /^\w+$/)
-	    l10n_error = $mc.get('w_error').upcase
+	    l10n_error = $mc.get('word:error').upcase
 	    l10n_input = $mc.get('input_suspicious') % [ im ]
 	    $console.stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
@@ -80,7 +80,7 @@ class ZoneCheck
 	begin
 	    require "input/#{im}"
 	rescue LoadError => e
-	    l10n_error = $mc.get('w_error').upcase
+	    l10n_error = $mc.get('word:error').upcase
 	    l10n_input = $mc.get('input_unsupported') % [ im ]
 	    $console.stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
@@ -115,7 +115,7 @@ class ZoneCheck
 
 	    # Load configuration
 	    @config = Config::new(@test_manager)
-	    @config.read(@param.fs.cfgfile)
+	    @config.load(@param.fs.cfgfile)
 	    @config.validate(@test_manager)
 
 	    # Interaction
@@ -138,7 +138,7 @@ class ZoneCheck
 	    @input.error(e.to_s, EXIT_ERROR)
 	rescue Config::SyntaxError => e
 	    @input.error("%s %d: %s\n\t(%s)" % [ 
-			     $mc.get('w_line').capitalize, e.pos.y, e.to_s,
+			     $mc.get('word:line').capitalize, e.pos.y, e.to_s,
 			     e.path ], EXIT_ERROR)
 	rescue Config::ConfigError => e
 	    @input.error(e.to_s, EXIT_ERROR)
@@ -238,7 +238,7 @@ class ZoneCheck
 	@param.publisher.engine.setup(@param.domain.name)
 
 	# Retrieve specific configuration
-	if (cfg = @config[@param.domain.name]).nil?
+	if (cfg = @config.profile(@param.domain.name)).nil?
 	    l10n_error = $mc.get('input_unsupported_domain')
 	    @param.publisher.engine.error(l10n_error % @param.domain.name)
 	    return false

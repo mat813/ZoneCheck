@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,57 +33,81 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
+
+  <!-- Checks -->
+  <check name="ns_reverse">
+    <name>nameserver IP reverse</name>
+    <success>Reverse for nameserver IP address found</success>
+    <failure>Can't find reverse for the nameserver IP address</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-
-[chk_ns_reverse]
-testname: nameserver IP reverse
-error   : Can't find reverse for the nameserver IP address
-ok	: Reverse for nameserver IP address found
-explain : [none]
-
-
-[chk_ns_matching_reverse]
-testname: nameserver IP reverse matching nameserver name
-error   : Reverse for the nameserver IP address doesn't match
-ok	: Reverse matching nameserver name
-explain : [none]
+  <check name="ns_matching_reverse">
+    <name>nameserver IP reverse matching nameserver name</name>
+    <success>Reverse matching nameserver name</success>
+    <failure>Reverse for the nameserver IP address doesn't match</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_not_recursive]
-testname: nameserver doesn't allow recursion
-error	: The nameserver allow recursive queries
-ok	: The nameserver is not recursive
-explain	: [ref]: info\nIf you configure your nameserver to answer recursive queries, it means that you allow your nameserver to be used by anyone to resolve any kind of queries.
+  <check name="not_recursive">
+    <name>nameserver doesn't allow recursion</name>
+    <success>The anameserver is not recursive</success>
+    <failure>The nameserver allow recursive queries</failure>
+    <explanation>
+      <src type="ref">
+        <title>ZoneCheck</title>
+        <para>If you configure your nameserver to answer recursive
+          queries, it means that you allow your nameserver to be used
+          by anyone to resolve any kind of queries.</para>
+      </src>
+    </explanation>
+    <details/>
+  </check>
 
 
-[chk_correct_recursive_flag]
-testname: check if server is really recursive
-error   : Server claims to be recursive but is not
-ok	: Server is recursive has stated
-explain : [none]
+  <check name="correct_recursive_flag">
+    <name>check if server is really recursive</name>
+    <success>Server is recursive as stated</success>
+    <failure>Server claims to be recursive but is not</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_given_nsprim_vs_soa]
-testname: given primary nameserver is primary
-error   : The primary nameserver doesn't match the given one
-ok	: The primary nameserver match the given one
-details : The primary nameserver (%{primary}) doesn't match the given one (%{given_primary}).
-explain : [none]
+  <check name="given_nsprim_vs_soa">
+    <name>given primary nameserver is primary</name>
+    <success>The primary nameserver matches the given one</success>
+    <failure>The primary nameserver doesn't match the given one</failure>
+    <explanation/>
+    <details><para>The primary nameserver (<zcvar name="primary"/>)
+       doesn't match the given one
+       (<zcvar name="given_primary"/>).</para></details>
+  </check>
 
 
-[chk_given_ns_vs_ns]
-testname: correctness of given nameserver list
-error   : The nameserver list doesn't match the given one
-ok	: The nameserver list matches the given one
-details : The given nameserver list (%{list_from_param}) is not coherent with the one retrieved from the zone (%{list_from_ns}).
-explain : [none]
+  <check name="given_ns_vs_ns">
+    <name>correctness of given nameserver list</name>
+    <success>The nameserver list matches the given one</success>
+    <failure>The nameserver list doesn't match the given one</failure>
+    <explanation/>
+    <details><para>The given nameserver list (<zcvar name="list_from_param"/>)
+      is not coherent with the one retrieved from the zone
+      (<zcvar name="list_from_ns"/>).</para></details>
+  </check>
 
 
-### FIXME
+<!-- FIXME -->
 
+  <test name="recursive_server">
+    <name>test if server is recursive</name>
+  </test>
 
-[tst_recursive_server]
-testname: test if server is recursive
-error	: xxx
-explain : [none]
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

@@ -69,7 +69,7 @@ module Publisher
 	    def initialize(publisher)
 		@publisher	= publisher
 		@o		= publisher.output
-		@l10n_testing	= $mc.get('w_testing').capitalize
+		@l10n_testing	= $mc.get('word:testing').capitalize
 	    end
 	    
 	    # Start progression
@@ -181,7 +181,7 @@ module Publisher
 	#------------------------------------------------------------
 
 	def begin
-	    l10n_form        = $mc.get('w_form').capitalize
+	    l10n_form        = $mc.get('word:form').capitalize
 	    l10n_batch_form  = l10n_form+': '+$mc.get('t_batch' ).capitalize
 	    l10n_single_form = l10n_form+': '+$mc.get('t_single').capitalize
 
@@ -251,7 +251,7 @@ EOT
 
 	def end
 	    @o.puts HTML.jscript { 
-		"zc_contextmenu_setlocale(\"#{$mc.get('w_name')}\", \"#{$mc.get('w_details')}\", \"#{$mc.get('w_references')}\", \"#{$mc.get('w_elements')}\");\n" +
+		"zc_contextmenu_setlocale(\"#{$mc.get('word:name')}\", \"#{$mc.get('word:details')}\", \"#{$mc.get('word:references')}\", \"#{$mc.get('word:elements')}\");\n" +
 		    "zc_contextmenu_start();" }
 	    @o.print <<"EOT"
 
@@ -344,9 +344,9 @@ EOT
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get('w_info_id')
-	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get('w_warning_id')
-	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get('w_fatal_id')
+	    i_tag = @rflag.tagonly ? Config::Info   :$mc.get('word:info_id')
+	    w_tag = @rflag.tagonly ? Config::Warning:$mc.get('word:warning_id')
+	    f_tag = @rflag.tagonly ? Config::Fatal  :$mc.get('word:fatal_id')
 	    
 	    i_tag = i_tag.upcase if i_unexp
 	    w_tag = w_tag.upcase if w_unexp
@@ -362,7 +362,7 @@ EOT
 	    @o.puts "<table width=\"100%\">"
 	    @o.puts "<tr class=\"zc-title\"><td width=\"100%\">#{domainname}</td><td>#{summary}</td></tr>"
 	    if res.nil?
-		l10n_perfect = $mc.get('w_perfect').capitalize
+		l10n_perfect = $mc.get('word:perfect').capitalize
 		@o.puts "<tr><td colspan=\"2\"><b>#{l10n_perfect}</b></td></tr>"
 		@o.puts "<tr><td colspan=\"2\">&nbsp;</td></tr>"
 
@@ -397,7 +397,7 @@ EOT
 	    logo			= severity_tag + ".png"
 	    l10n_severity_shorttag	= if @rflag.tagonly
 					  then #{severity_tag}
-					  else $mc.get("w_#{severity_tag}_id")
+					  else $mc.get("word:#{severity_tag}_id")
 					  end
 
 	    # Message

@@ -130,7 +130,7 @@ module Input
 	end
 
 	def error(str, errcode=nil, io=$console.stdout)
-	    l10n_error = $mc.get('w_error').upcase
+	    l10n_error = $mc.get('word:error').upcase
 	    io.puts @cgi.header({ 'type'    => 'text/plain',
 				  'charset' => $console.encoding })
 	    io.puts "#{l10n_error}: #{str}"

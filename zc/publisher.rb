@@ -71,21 +71,5 @@ module Publisher
 
 	def begin ; end
 	def end   ; end
-
-	protected
-	def xpl_split(xpl)
-	    return nil if xpl.nil?
-	    xpl_lst = [ ]
-	    xpl_elt = nil
-	    xpl.split(/\n/).each { |e|
-		if e =~ /^\[(\w+)\]:\s*/
-		    xpl_elt     = [ $1, $', [] ]	#' <-- emacs
-		    xpl_lst << xpl_elt
-		else
-		    xpl_elt[2] << e
-		end
-	    }
-	    xpl_lst
-	end
     end
 end

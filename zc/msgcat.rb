@@ -31,6 +31,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 
+require 'rexml/document'
 require 'dbg'
 
 
@@ -58,9 +59,22 @@ require 'dbg'
 ##  - method readfile: inode is always 0 on Windows
 ##      we replace the inode number by the filename if the inode is 0
 ##
-class MessageCatalog
+
+# BUG: @lang / @language / @country?
+class MsgCat
     TagRegex	= /[\w\/]+/
-    None	= '[none]'
+
+
+    TAG		= 'tag'
+    CHECK	= 'check'
+    TEST	= 'test'
+
+    NAME	= 'name'
+    FAILURE	= 'failure'
+    SUCCESS	= 'success'
+    EXPLANATION	= 'explanation'
+    DETAILS	= 'details'
+
 
     ##
     ## Exception: the corresponding message catalog is not installed
@@ -91,15 +105,22 @@ class MessageCatalog
 	$dbg.msg(DBG::LOCALE) {"fallback for language is set to '#{dfltlang}'"}
 	@dfltlang	= dfltlang
 	@directory	= directory
-	@catalog	= {}
 	@loaded		= {}
 	@catfiles	= []
 	@language	= nil
 	@country	= nil
+	clear
     end
     
     attr_writer :language, :country
 
+
+    def clear
+	@tag		= {}
+	@check		= {}
+	@test		= {}
+	@shortcut	= { EXPLANATION => {}, DETAILS => {} }
+    end
 
     #
     # Test if a file catalog is available
@@ -109,17 +130,6 @@ class MessageCatalog
         false
     end
 
-
-    #
-    # Clear all messages
-    #
-    def clear
-	$dbg.msg(DBG::LOCALE, 'clearing message catalogue')
-	@catalog	= {}
-	@loaded		= {}
-	@catfiles	= []
-	@lang		= nil
-    end
 
 
     #
@@ -141,12 +151,30 @@ class MessageCatalog
     #
     # Get message associated with the 'tag'
     #
-    def get(tag)
-	if (str = @catalog[tag]).nil?
-	    raise EntryNotFound, "Tag '#{tag}' has not been localized"
+    def get(tag, type=TAG, subtype=nil)
+	begin
+	    case type
+	    when TAG
+		@tag.fetch(tag)
+	    when CHECK
+		res = @check.fetch(tag)[subtype]
+		if res && (sameas = res.attributes['sameas'])
+		    res = case sameas
+			  when /^shortcut:(.*)$/ then @shortcut[subtype][$1]
+			  else	 		      @check[sameas][subtype]
+			  end
+		end
+		res
+	    when TEST
+		@test.fetch(tag)[subtype]
+	    end
+	rescue IndexError
+	    category = "#{type}/#{subtype}" if type != TAG
+	    raise EntryNotFound, 
+		"Entity '#{tag}' (#{category}) has not been defined/localized"
 	end
-	str
     end
+
 
 
     #
@@ -155,10 +183,10 @@ class MessageCatalog
     #
     def reload
 	$dbg.msg(DBG::LOCALE, 'reloading message catalogue')
-	@catalog	= {}
+	clear
 	@loaded		= {}
 	@catfiles.each { |where| 
- 	    catch (:loaded) {
+ 	    catch(:loaded) {
 		filepath(where).each { |fp|
 		    if File::readable?(fp)
 			readfile(fp) ; throw :loaded
@@ -215,61 +243,58 @@ class MessageCatalog
 	lineno   = 0
 
 	File::open(msgfile) { |io|
-	    while line = io.gets
-		lineno += 1
-		line.chomp!
-		next if line =~ /^\s*\#/
-		next if line.empty?
+	    doc = REXML::Document::new(io)
 
-		case line
-		# Prefix section
-		when /^\[(#{TagRegex}|\*)\]\s*$/
-		    prefix = $1 == '*' ? nil : $1 
-		    $dbg.msg(DBG::LOCALE) {
-			if prefix.nil?
-			then "removing prefix"
-			else "using prefix: #{prefix}"
-			end
-		    }
-
-		# Definition
-		when /^(#{TagRegex})\s*:\s*(.*?)\s*$/
-		    tag, msg = $1, $2
-		    tag = "#{prefix}_#{tag}" if prefix
-
-		    if @catalog.has_key?(tag)
-			raise SyntaxError,
-			    "Line #{lineno}: Tag '#{tag}' already defined (in #{msgfile})"
-		    end
-
-		    while msg.gsub!(/\\$/, '')
-			if (line = io.gets).nil?
-			    raise SyntaxError,
-				"Line #{lineno}: line expected after '\\' (in #{msgfile})"
-			end
-			lineno += 1
-			line.chomp!
-			msg << line
-		    end
-
-		    msg.gsub!(/\\n/, "\n")
-		    @catalog[tag] = msg
-		    $dbg.msg(DBG::LOCALE, "adding locale: #{tag}")
-
-		# Link
-		when /^(#{TagRegex})\s*=\s*(#{TagRegex})\s*$/
-		    tag, link = $1, $2
-		    tag = "#{prefix}_#{tag}" if prefix
-		    @catalog[tag] = @catalog[link]
-		    $dbg.msg(DBG::LOCALE, "linking #{tag} -> #{link}")
-
-		# ERROR
-		else
-		    raise SyntaxError, "Line #{lineno}: malformed line (in #{msgfile})"
+	    # Tag
+	    doc.elements.each("//tag")  { |element| 
+		# create prefix from parent sections
+		prefix = ''
+		xmlsection = element.parent
+		while xmlsection.name == 'section'
+		    prefix += xmlsection.attributes['name'] + ':'
+		    xmlsection = xmlsection.parent
 		end
-	    end
-	}
 
+		name = prefix + element.attributes['name'] 
+		$dbg.msg(DBG::LOCALE) { "locale tag: #{name}" }
+		@tag[name] = element.text
+	    }
+
+	    # Shortcut
+	    doc.elements.each("msgcat/shortcut")  { |shortcut|
+		shortcut.elements.each { |element|
+		    name	= element.attributes['name']
+		    @shortcut[element.name][name] = element
+		}
+	    }
+
+	    # Check
+	    doc.elements.each("msgcat/check")  { |element|
+		checkname	= element.attributes['name']
+		name		= element.elements[NAME]
+		success		= element.elements[SUCCESS]
+		failure		= element.elements[FAILURE]
+		explanation	= element.elements[EXPLANATION]
+		details		= element.elements[DETAILS]
+
+		explanation = nil if explanation.elements.empty?
+		details     = nil if details.elements.empty?
+
+		@check[checkname] = {
+		    NAME	=> name,
+		    SUCCESS	=> success,	FAILURE	=> failure,
+		    EXPLANATION => explanation,	DETAILS	=> details }
+	    }
+
+	    # Test
+	    doc.elements.each("msgcat/test")  { |element|
+		testname	= element.attributes['name']
+		name		= element.elements[NAME]
+
+		@test[testname] = {
+		    NAME	=> name }
+	    }
+	}
 	# Consider the file loaded
 	@loaded[file_id] = true
 
@@ -282,6 +307,6 @@ end
 # Include the 'with_msgcat' facility in every objects
 #
 def with_msgcat(*msgcat_list)
-    return unless $mc && $mc.kind_of?(MessageCatalog)
+    return unless $mc && $mc.kind_of?(MsgCat)
     msgcat_list.each { |msgcat| $mc.read(msgcat) }
 end

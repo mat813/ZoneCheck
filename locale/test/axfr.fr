@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="fr">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,22 +33,33 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[chk_axfr]
-testname: transfert de zone possible
-error   : Transfert de zone impossible
-ok	: Transfert de zone réussi
-explain : [none]
+  <check name="axfr">
+    <name>transfert de zone possible</name>
+    <success>Transfert de zone réussi</success>
+    <failure>Transfert de zone impossible</failure>
+    <explanation/>
+    <details/>
+  </check>
 
-[chk_axfr_empty]
-testname: transfert de zone ne contenant aucune donnée
-error   : Le transfert de zone ne contient pas de données
-ok	: Le transfert de zone contient des données
-explain : [none]
+  <check name="axfr_empty">
+    <name>transfert de zone ne contenant aucune donnée</name>
+    <success>Le transfert de zone contient des données</success>
+    <failure>Le transfert de zone ne contient pas de données</failure>
+    <explanation/>
+    <details/>
+  </check>
 
-[chk_axfr_valid_labels]
-testname: transfert de zone contenant des labels invalides
-error   : Le transfert de zone contient des labels invalides
-ok	: Le transfert de zone ne contient aucun label invalide
-explain = label_xpl
+  <check name="axfr_valid_labels">
+    <name>transfert de zone contenant des labels invalides</name>
+    <success>Le transfert de zone ne contient aucun label invalide</success>
+    <failure>Le transfert de zone contient des labels invalides</failure>
+    <explanation sameas="shortcut:label"/>
+    <details/>
+  </check>
 
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

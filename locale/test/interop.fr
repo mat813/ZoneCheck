@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="fr">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,19 +33,27 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
+
+  <!-- Checks -->
+  <check name="aaaa">
+    <name>comportement lors de demande d'un enregistrement AAAA</name>
+    <success>Comportement correct lors de la demande d'un AAAA</success>
+    <failure>Mauvais comportement lors de la demande d'un AAAA</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_aaaa]
-testname: comportement lors de demande d'un enregistrement AAAA
-error   : Mauvais comportement lors de la demande d'un AAAA
-ok	: Comportement correct lors de la demande d'un AAAA
-explain : [none]
+  <check name="cname">
+    <name>behaviour against CNAME query</name>
+    <success>Correct behaviour against CNAME query</success>
+    <failure>Misbehaviour against CNAME query</failure>
+    <explanation/>
+    <details/>
+  </check>
 
-
-[chk_cname]
-testname: behaviour against CNAME query
-error   : Misbehaviour against CNAME query
-ok	: Correct behaviour against CNAME query
-explain : [none]
-
-
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

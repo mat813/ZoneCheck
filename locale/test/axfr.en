@@ -1,12 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
-# 
+<!-- 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
 #
@@ -36,22 +32,33 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[chk_axfr]
-testname: zone transfer possible
-error   : Zone transfer not possible
-ok	: Zone transfer is possible
-explain : [none]
+  <check name="axfr">
+    <name>zone transfer possible</name>
+    <success>Zone transfer is possible</success>
+    <failure>Zone transfer not possible</failure>
+    <explanation/>
+    <details/>
+  </check>
 
-[chk_axfr_empty]
-testname: zone transfer contains data
-error   : Zone transfer is empty
-ok	: Zone transfer returned data
-explain : [none]
+  <check name="axfr_empty">
+    <name>zone transfer contains data</name>
+    <success>Zone transfer returned data</success>
+    <failure>Zone transfer is empty</failure>
+    <explanation/>
+    <details/>
+  </check>
 
-[chk_axfr_valid_labels]
-testname: zone transfer contains valid labels
-error   : Zone transfer contains invalid label(s)
-ok	: Zone transfer contains only valid label(s)
-explain = label_xpl
+  <check name="axfr_valid_labels">
+    <name>zone transfer contains valid labels</name>
+    <success>Zone transfer contains only valid label(s)</success>
+    <failure>Zone transfer contains invalid label(s)</failure>
+    <explanation sameas="shortcut:label"/>
+    <details/>
+  </check>
 
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

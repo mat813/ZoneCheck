@@ -127,7 +127,7 @@ module Input
 	end
 
 	def error(str, errcode=nil, io=$console.stderr)
-	    l10n_error = $mc.get('w_error').upcase
+	    l10n_error = $mc.get('word:error').upcase
 	    io.puts "#{l10n_error}: #{str}"
 	    exit errcode unless errcode.nil?
 	end

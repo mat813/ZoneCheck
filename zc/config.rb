@@ -18,12 +18,8 @@
 require 'framework'
 require 'nresolv'
 
-
-require 'config/pos'
-require 'config/token'
-require 'config/lexer'
-require 'config/parser'
-
+require 'rexml/document'
+require 'instructions'
 
 ##
 ## Hold the information about the zc.conf configuration file
@@ -32,7 +28,10 @@ class Config
     Warning		= "w"		# Warning severity
     Fatal		= "f"		# Fatal severity
     Info		= "i"		# Informational
+
     Skip		= "S"		# Don't run the test
+    Ok			= "o"		# Reserved
+
 
     TestSeqOrder	= [ CheckGeneric, CheckNameServer, 
 	                    CheckNetworkAddress, CheckExtra ]
@@ -78,116 +77,164 @@ class Config
 
 
     ##
+    ## Hold mapping information between a 'zone' and a 'profile'
     ##
-    ##
-    ##
-    class ByDomain
-	def initialize(parent, domain, test_manager)
-	    @domain		= domain
-	    @test_manager	= test_manager
-	    @parent		= parent
-	    @constants		= {}
-	    @test_seq		= {}
+    class ZoneMapping
+	def initialize
+	    @data = {}
 	end
 
-
-	#
-	# Set tests sequence for the 'family'
-	#
-	def []=(family, sequence)
-	    if ! TestSeqOrder.include?(family)
-		raise ArgumentError, $mc.get("config_family_unknown") % [ 
-		    family.to_s ]
-	    end
-	    @test_seq[family] = sequence
+	# Store a new mapping
+	def []=(zone, profilename)
+	    zone = NResolv::DNS::Name::create(zone)
+	    $dbg.msg(DBG::CONFIG, "adding mapping: #{zone} -> #{profilename}")
+	    @data[zone] = profilename
 	end
 
-
-	#
-	# Retrieve tests sequence
-	#
-	def [](family)
-	    if ! TestSeqOrder.include?(family)
-		raise ArgumentError, $mc.get("config_family_unknown") % [ 
-		    family.to_s ]
-	    end
-	    @test_seq[family]
-	end
-
-
-	#
-	# Add a new constant
-	#
-	def newconst(name, value)
-	    # Check if constant is currently registered
-	    if @constants.has_key?(name)
-		raise ArgumentError, $mc.get("xcp_config_constexists") % [name]
-	    end
-	    # Debug
-	    $dbg.msg(DBG::CONFIG, "adding constant: #{name} (in #{@domain})")
-	    # Register constant
-	    @constants[name] = value
-	end
-
-
-	#
-	# Retrieve the constant value
-	#
-	def const(name)
-	    @constants[name] || @parent.const(name)
-	end
-
-	#
-	#
-	#
-	def check_wanted?(checkname, category)
-	    
-	end
-
-	#
-	# Read the configuration file
-	#
-	def read(configfile)
-	    # Parse the configuration file
-	    cfgfile = Config.cfgfile(configfile)
-	    $dbg.msg(DBG::CONFIG, "domain config file: #{configfile}")
-	    $dbg.msg(DBG::CONFIG, "reading file: #{cfgfile}")
-	    begin
-		io = File::open(cfgfile)
-		parser = Config::Parser::new(Config::Lexer::new(io))
-		constants, test_seq = parser.parse_cfg_specific
-		io.close
-	    rescue SystemCallError # for the Errno::ENOENT error
-		raise ConfigError, $mc.get("problem_file") % configfile
-	    end
-
-	    # Add elements
-	    begin
-		# Set tests sequences
-		test_seq.each  { |family, sequence| self[family] = sequence }
-		# Add constants
-		constants.each { |name, value|      newconst(name, value)   }
-	    rescue ArgumentError => e
-		raise ConfigError, e
-	    end
-	end
-
-
-	#
-	# Validate the loaded configuration file
-	#  (ie: check the existence of all used methods chk_* and tst_*)
-	#
-	def validate(testmanager)
-	    @test_seq.each_value { |b| 
-		begin
-		    b.semcheck(testmanager) 
-		rescue StandardError => e
-		    raise ConfigError, $mc.get("config_for_domain") % [ 
-			e.message, @domain ]
-		end
+	# Returns the best mapping for a zone (longuest match)
+	def [](zone)
+	    depth, profilename = -1, nil
+	    @data.each { |tld, name|
+		next unless zone.in_domain?(tld) && (depth < tld.depth)
+		depth, profilename = tld.depth, name
 	    }
+	    profilename
+	end
+	
+	# Iterate on all the couple |zone, profile|
+	def each(&bloc)
+	    @data.each &bloc
 	end
     end
+
+
+    ##
+    ## Store the different profiles
+    ##
+    class Profiles
+	def initialize
+	    @data = {}
+	end
+
+	# Store a new profile
+	def <<(profile)
+	    $dbg.msg(DBG::CONFIG, "adding profile: #{profile.name}")
+	    @data[profile.name] = profile
+	end
+
+	# Retrieve a profile by its name
+	def [](name)
+	    @data[name]
+	end
+
+	# Iterate on |profile|
+	def each(&block)
+	    @data.each_value &block
+	end
+    end
+
+
+    ##
+    ## Store constants and allow inheritence from parent
+    ## 
+    class Constants
+	attr_reader :parent
+	def initialize(parent = nil)
+	    @parent	= parent
+	    @data	= {}
+	end
+
+	def []=(name, value)
+	    $dbg.msg(DBG::CONFIG, "adding constant: #{name}")
+	    @data[name] = value
+	end
+
+	def [](name)
+	    @data[name] || (@parent ? @parent[name] : nil)
+	end
+    end
+
+
+
+    class Preconf
+	def initialize
+	end
+    end
+
+    class Profile
+	attr_reader :name, :rules, :constants
+
+	def validate(testmanager)
+	    @rules.each_value { |rules| rules.validate(testmanager) }
+	end
+
+	
+	def initialize(xmlprofile, parent=nil)
+	    @name	= xmlprofile.attributes['name']
+	    @constants	= Constants::new(parent.constants)
+	    @rules	= {}
+
+	    $dbg.msg(DBG::CONFIG, "processing profile: #{@name}")
+
+	    xmlprofile.elements.each("const") { |element|
+		name  = element.attributes["name"]
+		value = element.attributes["value"]
+		@constants[name]=value.untaint
+	    }
+
+	    xmlprofile.elements.each("rules") { |element|
+		klass  = element.attributes["class"]
+		klass = case klass
+			when 'generic'    then CheckGeneric
+			when 'nameserver' then CheckNameServer
+			when 'address'    then CheckNetworkAddress
+			when 'extra'      then CheckExtra
+			end
+
+		@rules[klass] = parse_block(element)
+	    }
+	end
+
+	#-- [private] -----------------------------------------------
+	private
+
+
+	def parse_block(rule)
+	    block = Instruction::Block::new
+	    rule.each_child { |elt|
+		next unless elt.kind_of?(REXML::Element)
+		block << case elt.name
+			 when 'check' then parse_check(elt)
+			 when 'case'  then parse_case(elt)
+			 end
+	    }
+	    block
+	end
+	
+	def parse_check(xmlelt)
+	    Instruction::Check::new(xmlelt.attributes['name'],
+				    xmlelt.attributes['severity'],
+				    xmlelt.attributes['catagory'])
+	end
+
+	def parse_case(xmlelt)
+	    when_stmt, else_stmt = {}, nil
+	    xmlelt.each_child { |elt|
+		next unless elt.kind_of?(REXML::Element)
+		case elt.name
+		when 'when' 
+		    when_stmt[elt.attributes['value']] = parse_block(elt)
+		when 'else'
+		    else_stmt = parse_block(elt)
+		end
+	    }
+	    Instruction::Switch::new(xmlelt.attributes['test'],
+				     when_stmt, else_stmt)
+	end
+    end
+
+
+
 
 
     #
@@ -195,55 +242,14 @@ class Config
     #
     def initialize(test_manager)
 	@test_manager	= test_manager
-	@constants	= {}
-	@conf		= {}
+    end
+
+
+    def clear
+	@constants	= Constants::new
+	@profiles	= Profiles::new
+	@mapping	= ZoneMapping::new
 	@overrideconf	= nil
-    end
-
-
-    #
-    # Retrieve configuration for the specified domain
-    #  (retrieving the longest match)
-    #
-    def [](domain)
-	return @overrideconf if @overrideconf
-
-	depth = -1;
-	cfg   = nil
-	@conf.keys.each { |dom|
-	    next unless domain.in_domain?(dom) && (depth < dom.depth)
-	    depth = dom.depth
-	    cfg   = @conf[dom]
-	}
-	cfg
-    end
-
-
-    #
-    # Retrieve the constant value
-    #
-    def const(name)
-	begin
-	    @constants.fetch(name)
-	rescue IndexError
-	    # WARN: not localized (programming error)
-	    raise IndexError, 
-		"Trying to fetch undefined constant '#{name}'"
-	end
-    end
-
-    #
-    # Add a new constant
-    #
-    def newconst(name, value)
-	# Check if constant is currently registered
-	if @constants.has_key?(name)
-	    raise ArgumentError, $mc.get("xcp_config_constexists") % [ name ]
-	end
-	# Debug
-	$dbg.msg(DBG::CONFIG, "adding constant: #{name}")
-	# Register constant
-	@constants[name] = value
     end
 
 
@@ -255,7 +261,7 @@ class Config
 	@overrideconf = ByDomain::new(self, NResolv::DNS::Name::Root, 
 				   @test_manager)
 	Config::TestSeqOrder.each { |family|
-	    @overrideconf[family] = Instruction::Node::Block::new
+	    @overrideconf[family] = Instruction::Block::new
 	}
 
 	# Populate with the requested check
@@ -268,69 +274,70 @@ class Config
 
 	    # Add the new instruction
 	    family = @test_manager.family(checkname)
-	    instr  = Instruction::Node::Check::new(checkname, 
+	    instr  = Instruction::Check::new(checkname, 
 						   Config::Fatal, "none")
 	    @overrideconf[family] << instr
 	}
     end
 
 
-    #
-    # Add a new configuration profile
-    #
-    def newconf(domain, file)
-	# Check if this specific configuration is already registered
-	if @conf.has_key?(domain)
-	    raise ArgumentError, $mc.get("xcp_config_confexists") % [ domain ]
-	end
-
-	# Debug
-	$dbg.msg(DBG::CONFIG, "adding config for: #{domain}")
-
-	# Read and register specific configuration
-	if file.nil?
-	    # Create a blackhole
-	    cfg = nil
-	else
-	    # Create a new profile and read it from the configuration file
-	    cfg = ByDomain::new(self, domain, @test_manager)
-	    cfg.read(file)
-	end
-	@conf[domain] = cfg
-    end
 
 
 
     #
     # Read the configuration file
     #
-    def read(configfile)
+    def load(configfile)
+	clear
 	# Parse the configuration file
 	cfgfile = Config.cfgfile(configfile)
-	$dbg.msg(DBG::CONFIG, "main config file: #{configfile}")
+	$dbg.msg(DBG::CONFIG, "loading main configuration: #{configfile}")
 	$dbg.msg(DBG::CONFIG, "reading file: #{cfgfile}")
+
+	io, main = nil, nil
 	begin
-	    io = File::open(cfgfile)
-	    parser = Config::Parser::new(Config::Lexer::new(io))
-	    config, constants, useconf = parser.parse_cfg_main
-	    io.close
+	    io   = File::open(cfgfile)
+	    main = REXML::Document::new(io)
 	rescue SystemCallError # for the Errno::ENOENT error
 	    raise ConfigError, $mc.get("problem_file") % configfile
+	rescue REXML::ParseException => e
+	    puts "YO: #{e.position} / #{e.line} / #{e.message}"
+	ensure
+	    io.close unless io.nil?
 	end
 
-	
-	# Add elements
-	begin
-	    # Add constants
-	    constants.each { |k, v| newconst(k, v) }
+	main.root.elements.each("const") { |element|
+	    name  = element.attributes["name"]
+	    value = element.attributes["value"]
+	    @constants[name] =value.untaint
+	}
 
-	    # Create/Load domain specific configuration
-	    useconf.each { |domain, filename|
-		newconf(NResolv::DNS::Name::create(domain), filename)
-	    }
-	rescue ArgumentError => e
-	    raise ConfigError, e
-	end
+	main.root.elements.each("map") { |element|
+	    zone    = element.attributes["zone"]
+	    profile = element.attributes["profile"]
+	    @mapping[zone] = profile.untaint
+	}
+
+
+	@mapping.each { |zone, profilename|
+	    next if @profiles[profilename]
+	    rulesfile ="#{profilename}.rules"
+	    cfgfile = Config.cfgfile(rulesfile)
+	    $dbg.msg(DBG::CONFIG, "loading profile: #{rulesfile}")
+	    $dbg.msg(DBG::CONFIG, "reading file: #{cfgfile}")
+	    io = nil
+	    begin
+		io = File::open(cfgfile)
+		doc = REXML::Document::new(io)
+	    rescue SystemCallError # for the Errno::ENOENT error
+		raise ConfigError, $mc.get("problem_file") % configfile
+	    rescue REXML::ParseException => e
+		puts "YO: #{e.position} / #{e.line} / #{e.message}"
+	    end
+	    @profiles << Profile::new(doc.root.elements[1], self)
+
+	}
+
     end
 
 
@@ -339,6 +346,17 @@ class Config
     #  (ie: check the existence of all used methods chk_* and tst_*)
     #
     def validate(testmanager)
-	@conf.each_value { |c| c.validate(testmanager) }
+	@profiles.each { |c| c.validate(testmanager) }
     end
+
+    #
+    # Retrieve the bet profile for the zone
+    #
+    def profile(zone)
+	@profiles[@mapping[zone]]
+    end
+
+
+    attr_reader :constants
 end
+

@@ -42,11 +42,76 @@ module Publisher
 	Mime		= "text/plain"
 	MaxLineLength	= 79
 
+	class XMLTransform
+	    def initialize(const={})
+		@const	= const
+	    end
+
+	    def apply(xmlnode, var={})
+		case xmlnode
+		when REXML::Element
+		    case xmlnode.name
+		    when MsgCat::NAME, MsgCat::FAILURE, MsgCat::SUCCESS
+			do_text(xmlnode, var)
+		    when MsgCat::EXPLANATION
+			xmlnode.elements.to_a('src').collect { |xmlsrc|
+			    type = xmlsrc.attributes['type']
+
+			    type = $mc.get("tag_#{type}")
+
+			    type + ': ' +xmlsrc.elements['title'].text + "\n" +
+			    xmlsrc.elements.to_a('para').collect { |xmlpara|
+				fmt_para(do_text(xmlpara, var)) }.join
+			}.join("\n")
+		    when MsgCat::DETAILS
+			xmlnode.elements.to_a('para').collect { |xmlpara|
+			    fmt_para(do_text(xmlpara, var)) }.join
+		    else
+			do_text(xmlnode, var)
+		    end
+		when REXML::Text
+		    xmlnode.value
+		when REXML::Comment
+		    ''
+		end
+	    end
+
+	    #-- [private] -----------------------------------------------
+	    private
+	    def fmt_para(text, width=MaxLineLength-7, tag='  ')
+		::Text::Formater.paragraph(text, width, tag)
+	    end
+
+	    def do_text(xmlnode, var={})
+		case xmlnode
+		when REXML::Element
+		    case xmlnode.name
+		    when 'zcvar'
+			name = xmlnode.attributes['name']
+			var[name].to_s
+		    when 'zcconst'
+			""
+		    else
+			xmlnode.to_a.collect { |xmlchild| 
+			    do_text(xmlchild, var) }.join
+		    end
+		when REXML::Text
+		    xmlnode.value
+		when REXML::Comment
+		    ''
+		end
+	    end
+	end
+
+
+
 	##
-	## Class for displaying progression information about
-	## the tests being performed.
+	## Display progression information about the tests being performed.
 	##
 	class Progress
+	    ##
+	    ## Progession bar implementation
+	    ## 
 	    class PBar
 		BarSize	= 37
 
@@ -168,7 +233,7 @@ module Publisher
 				  then PBar::new(@o, 1)
 				  else nil
 				  end
-		@l10n_testing	= $mc.get('w_testing').capitalize
+		@l10n_testing	= $mc.get('word:testing').capitalize
 	    end
 	    
 	    # Start progression
@@ -192,7 +257,7 @@ module Publisher
 	    end
 	    
 	    # Process an item
-	    def process(desc, ns, ip)
+	    def process(checkname, ns, ip)
 		# Counter
 		if @counter
 		    @counter.processed(1)
@@ -204,8 +269,13 @@ module Publisher
 			   elsif ns then " (NS=#{ns})"
 			   else          ''
 			   end
-	    
-		    @o.puts "#{@l10n_testing}: #{desc}#{xtra}"
+		    if @publisher.rflag.tagonly
+			@o.puts "Testing: #{checkname}#{xtra}"
+		    else
+			desc = @publisher.xmltrans.apply($mc.get(checkname, 
+						MsgCat::CHECK, MsgCat::NAME))
+			@o.puts "#{@l10n_testing}: #{desc}#{xtra}"
+		    end
 		end
 	    end
 	end
@@ -214,18 +284,16 @@ module Publisher
 
 	def initialize(rflag, info, ostream=$stdout)
 	    super(rflag, info, ostream)
-	    @count_txt	= $mc.get('title_progress')
 	    @progress	= Progress::new(self)
+	    @xmltrans	= XMLTransform::new
 	end
 
+	attr_reader :xmltrans
 
 	#------------------------------------------------------------
 	
 	def error(text)
-	    paragraph = ::Text::Format::new
-	    paragraph.width = 72
-	    paragraph.tag   = $mc.get('w_error').upcase + ': '
-	    @o.puts paragraph.format(text)
+	    ::Text::Formater::new(text, 72, $mc.get('word:error').upcase+': ')
 	end
 
 
@@ -250,23 +318,22 @@ module Publisher
 	end
 
 	def diag_section(title)
-	    txtlen = [title.length, MaxLineLength-20].min
-	    txt    = title[0..txtlen]
-	    @o.print "       ", "_" * (8+txtlen), "\n"
-	    @o.print "     ,", "-" * (8+txtlen), ".|\n"
-	    @o.print "~~~~ |    #{txt}    || ", 
-		"~" * (MaxLineLength-19-txtlen), "\n"
-	    @o.print "     `", "-" * (8+txtlen), "'\n"
-	    @o.print "\n"
+	    @o.print ::Text::Formater.title(title, MaxLineLength)
 	end
 
 	def diagnostic1(domainname, 
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get('w_info_id')
-	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get('w_warning_id')
-	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get('w_fatal_id')
+	    if @rflag.tagonly
+		i_tag = Config::Info
+		w_tag = Config::Warning
+		f_tag = Config::Fatal
+	    else
+		i_tag = $mc.get('word:info_id')
+		w_tag = $mc.get('word:warning_id')
+		f_tag = $mc.get('word:fatal_id')
+	    end
 	    
 	    i_tag = i_tag.upcase if i_unexp
 	    w_tag = w_tag.upcase if w_unexp
@@ -291,80 +358,67 @@ module Publisher
 
 
 	def diagnostic(severity, testname, desc, lst)
-	    msg, xpl_lst = nil, nil
-
 	    # Testname
-	    if @rflag.testname
-		l10n_name = $mc.get("#{testname}_testname")
+	    if @rflag.testname && !@rflag.tagonly
+		l10n_name = @xmltrans.apply($mc.get(testname, 
+					    MsgCat::CHECK, MsgCat::NAME))
 		@o.puts "[> #{l10n_name}"
 	    end
 
-	    # Severity
-	    severity_tag		= Config.severity2tag(severity)
-	    l10n_severity_shorttag	= if @rflag.tagonly
-					  then #{severity_tag}
-					  else $mc.get("w_#{severity_tag}_id")
-					  end
+	    # Status messsage
+	    status_tag		= Config.severity2tag(severity)
+	    status_shorttag	= severity || Config::Ok
 
-	    # Message
-	    msg = if severity.nil?
-		      $mc.get("#{testname}_ok")
-		  else
-		      if @rflag.tagonly
-			  if desc.is_error?
-			  then "#{severity}: [Unexpected] #{testname}"
-			  else "#{severity}: #{testname}"
-			  end
-		      else
-			  msg = desc.msg
-		      end
-		  end
+	    if @rflag.tagonly
+		status = desc.error ? "[Unexpected] #{testname}" : testname
+		@o.puts "#{status_shorttag}> #{status}"
+	    else
+		l10n_status_shorttag	= $mc.get("word:#{status_tag}_id")
+		status = if severity.nil?
+			     @xmltrans.apply($mc.get(testname, 
+					      MsgCat::CHECK, MsgCat::SUCCESS))
+			 elsif desc.error
+			     l10n_name = @xmltrans.apply($mc.get(testname, 
+					      MsgCat::CHECK, MsgCat::NAME))
+			     "[TEST #{l10n_name}]: #{desc.error}"
+			 else
+			     @xmltrans.apply($mc.get(testname, 
+					      MsgCat::CHECK, MsgCat::FAILURE))
+			 end
+		@o.puts "#{l10n_status_shorttag}> #{status}"
+	    end
 	    
-	    @o.puts "#{l10n_severity_shorttag}> #{msg}"
-
-	    if !severity.nil?
-		txtfmt		= ::Text::Format::new
-		txtfmt.width	= 72
-		txtfmt.tag	= "  "
+	    # Explanation & Details
+	    #  => only in case of failure (ie: not for Ok or Error)
+	    #     not when in 'tag only' mode
+	    if !severity.nil? && desc.error.nil? && !@rflag.tagonly
+		# Explanation
+		if @rflag.explain 
+		    explanation = $mc.get(testname, 
+					  MsgCat::CHECK, MsgCat::EXPLANATION)
+		    if explanation
+			text = @xmltrans.apply(explanation)
+			@o.print ::Text::Formater.lbox(text, 
+						     [ ' |', ' `', '-', ' ' ])
+		    end
+		end
 
 		# Details
-		if @rflag.details && desc.dtl
-		    txtfmt.format(desc.dtl).split(/\n/).each { |l|
-			@o.puts " : #{l}" }
-		    @o.puts ' `..... .. .. . .  .'
-		end
-
-		# Explanation
-		if @rflag.explain && !@rflag.tagonly
-		    xpl_lst = xpl_split(desc.xpl)
-		end
-		
-		if xpl_lst
-		    xpl_lst.each { |t, h, b|
-			tag = $mc.get("tag_#{t}")
-			@o.puts " | #{tag}: #{h}"
-			b.each { |t|
-			    txtfmt.format(t).split(/\n/).each { |l|
-				@o.puts " |  #{l}" }
-			}
-		    }
-		    @o.puts ' `----- -- -- - -  -'
+		if @rflag.details && desc.details
+		    details = $mc.get(testname, MsgCat::CHECK, MsgCat::DETAILS)
+		    if details
+			text = @xmltrans.apply(details, desc.details)
+			@o.print ::Text::Formater.lbox(text,
+						     [ ' :', ' `', '.', ' ' ])
+		    end
 		end
 	    end
 		
 	    # Elements
-	    lst.each { |elt|
-		lines  = elt.split(/\n/)
-		
-		if !lines.empty?
-		    @o.puts "=> #{lines[0]}"
-		    lines[1..-1].each { |e|
-			@o.puts "   #{e}"
-		    }
-		end
-	    }
+	    lst.each { |elt| @o.print ::Text::Formater.item(elt) }
 
-	    @o.puts ""
+	    # Blank
+	    @o.puts ''
 	end
 	    
 

@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,57 +33,83 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
 
-
-[chk_ns_reverse]
-testname: existance du nom correspondant à l'adresse IP du serveur
-error   : Impossible de trouver le nom correspondant à l'adresse IP du serveur
-ok	: Le nom correspondant à l'adresse IP du serveur a été trouvé
-explain : [none]
-
-
-[chk_ns_matching_reverse]
-testname: vérification du nom correspondant à l'adresse IP du serveur
-error   : Incoherence entre le nom correspondant à l'adresse IP et celui du serveur
-ok	: Le nom correspondant à l'adresse IP correspond au nom du serveur
-explain : [none]
+  <!-- Checks -->
+  <check name="ns_reverse">
+    <name>existance du nom correspondant à l'adresse IP du serveur</name>
+    <success>Le nom correspondant à l'adresse IP du serveur a été trouvé</success>
+    <failure>Impossible de trouver le nom correspondant à l'adresse IP du serveur</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_not_recursive]
-testname: serveur de nom n'autorisant pas la récursion
-error	: Le serveur de nom autorise les requêtes récursives
-ok	: Le serveur de nom n'est pas récursif
-explain	: [ref]: info\nSi vous configurez le serveur de nom pour répondre aux requêtes récursives, cela implique que vous acceptez que n'importe qui l'utilise pour résoudre n'importe quel type de reqêtes.
+  <check name="ns_matching_reverse">
+    <name>vérification du nom correspondant à l'adresse IP du serveur</name>
+    <success>Le nom correspondant à l'adresse IP correspond au nom du serveur</success>
+    <failure>Incoherence entre le nom correspondant à l'adresse IP et celui du serveur</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_correct_recursive_flag]
-testname: serveur de nom réellement récursif
-error   : Le serveur dit être récursif mais ne l'est pas
-ok	: Le serveur est récursif comme annoncé
-explain : [none]
+  <check name="not_recursive">
+    <name>serveur de nom n'autorisant pas la récursion</name>
+    <success>Le serveur de nom n'est pas récursif</success>
+    <failure>Le serveur de nom autorise les requêtes récursives</failure>
+    <explanation>
+      <src type="ref">
+        <title>ZoneCheck</title>
+        <para>Si vous configurez le serveur de noms pour répondre aux
+          requêtes récursives, cela implique que vous acceptez que 
+          n'importe qui l'utilise pour résoudre n'importe quel type
+          de requêtes.</para>
+      </src>
+    </explanation>
+    <details/>
+  </check>
 
 
-[chk_given_nsprim_vs_soa]
-testname: serveur de nom donné comme primaire est primaire
-error   : Le serveur de nom primaire ne correspond pas à celui donné
-details : Le serveur de nom primaire (%{primary}) ne correspond pas à celui indiqué (%{given_primary}).
-ok	: Le serveur de nom primaire correspond à celui donné
-explain : [none]
+  <check name="correct_recursive_flag">
+    <name>serveur de nom réellement récursif</name>
+    <success>Le serveur est récursif comme annoncé</success>
+    <failure>Le serveur dit être récursif mais ne l'est pas</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_given_ns_vs_ns]
-testname: cohérence avec la liste des serveurs de noms donnée
-error   : La liste des serveurs récupérée ne correspond pas à celle donnée
-ok	: La liste des serveurs recuperée correspond à celle donnée
-details : La liste des serveurs de noms donnée (%{list_from_param}) n'est pas cohérente avec celle récupérée sur la zone (%{list_from_ns}).
-explain : [none]
+  <check name="given_nsprim_vs_soa">
+    <name>serveur de nom donné comme primaire est primaire</name>
+    <success>Le serveur de nom primaire correspond à celui donné</success>
+    <failure>Le serveur de nom primaire ne correspond pas à celui donné</failure>
+    <explanation/>
+    <details><para>Le serveur de nom primaire (<zcvar name="primary"/>)
+      ne correspond pas à celui indiqué 
+      (<zcvar name="given_primary"/>).</para></details>
+  </check>
 
 
-### FIXME
+  <check name="given_ns_vs_ns">
+    <name>cohérence avec la liste des serveurs de noms donnée</name>
+    <success>La liste des serveurs recuperée correspond à celle donnée</success>
+    <failure>La liste des serveurs récupérée ne correspond pas à celle donnée</failure>
+    <explanation/>
+    <details><para>La liste des serveurs de noms donnée 
+      (<zcvar name="list_from_param"/>) n'est pas cohérente avec celle
+      récupérée sur la zone (<zcvar name="list_from_ns"/>).</para></details>
+  </check>
 
 
-[tst_recursive_server]
-testname: test if server is recursive
-error	: xxx
-explain : [none]
+<!-- FIXME -->
+
+  <test name="recursive_server">
+    <name>test if server is recursive</name>
+  </test>
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,30 +33,56 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
+
+  <!-- Shortcuts -->
+  <shortcut>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc2870#p1">
+       <title>IETF RFC2870 (p.1)</title>
+       <para>The Internet Corporation for Assigned Names and Numbers
+         (ICANN) has become responsible for the operation of the 
+         root servers. The ICANN has appointed a Root Server System
+         Advisory Committee (RSSAC) to give technical and operational
+         advice to the ICANN board. The ICANN and the RSSAC look to the
+         IETF to provide engineering standards.</para>
+      </src>
+    </explanation>
+  </shortcut>
 
 
-[*]
-xpl_rootserver_vs_icann : [ref]: IETF RFC2870 (p.1)\nThe Internet Corporation for Assigned Names and Numbers (ICANN) has become responsible for the operation of the root servers. The ICANN has appointed a Root Server System Advisory Committee (RSSAC) to give technical and operational advice to the ICANN board.  The ICANN and the RSSAC look to the IETF to provide engineering standards.
+  <!-- Checks -->
+  <check name="root_servers">
+    <name>root-servers list present</name>
+    <success>Root-servers found</success>
+    <failure>Root-servers are not available</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
+  <check name="root_servers_ns_vs_icann">
+    <name>root-servers list identical to ICANN</name>
+    <success>Root-servers list is coherent with ICANN</success>
+    <failure>Root-servers list is not coherent with ICANN</failure>
+    <explanation sameas="rootserver_vs_icann"/>
+    <details><para>The root-server list (<zcvar name="rs_list"/>) is not
+      identicall to ICANN list (<zcvar name="ref_list"/>).</para></details>
+  </check>
 
-[chk_root_servers]
-testname: root-servers list present
-error   : Root-servers are not available
-ok	: Root-servers found
-explain : [none]
+
+  <check name="root_servers_ip_vs_icann">
+    <name>root-servers addresses identical to ICANN</name>
+    <success>Root-servers IP addresses are coherent with ICANN</success>
+    <failure>Root-servers IP addresses are not coherent with ICANN</failure>
+    <explanation sameas="rootserver_vs_icann"/>
+    <details><para>The root-server <zcvar name="rs"/> addresses 
+      (<zcvar name="rs_addr"/>) are not the same as the ICANN 
+      addresses (<zcvar name="ref_addr"/>).</para></details>
+  </check>
 
 
-[chk_root_servers_ns_vs_icann]
-testname: root-servers list identical to ICANN
-error   : Root-servers list is not coherent with ICANN
-ok	: Root-servers list is coherent with ICANN
-explain = xpl_rootserver_vs_icann
-details : The root-server list (%{rs_list}) is not identicall to ICANN list (%{ref_list}).
-
-[chk_root_servers_ip_vs_icann]
-testname: root-servers addresses identical to ICANN
-error   : Root-servers IP addresses are not coherent with ICANN
-ok	: Root-servers IP addresses are coherent with ICANN
-explain = xpl_rootserver_vs_icann
-details : The root-server %{rs} addresses (%{rs_addr}) are not the same as the ICANN addresses (%{ref_addr}).
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

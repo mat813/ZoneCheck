@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,29 +33,46 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
+  <shortcut>
+    <explanation name="connectivity_udp_tcp">
+      <src type="ref" from="rfc" fid="rfc1035#p32#4.2">
+        <title>IETF RFC1035 (p.32 4.2. Transport)</title>
+        <para>The DNS assumes that messages will be transmitted as 
+          datagrams or in a byte stream carried by a virtual circuit.
+          While virtual circuits can be used for any DNS activity, 
+          datagrams are preferred for queries due to their lower 
+          overhead and better performance.</para>
+      </src>
+    </explanation>
+  </shortcut>
 
-[*]
-xpl_connectivity_udp_tcp : [ref]: IETF RFC1035 (p.32 4.2. Transport)\nThe DNS assumes that messages will be transmitted as datagrams or in a byte stream carried by a virtual circuit. While virtual circuits can be used for any DNS activity, datagrams are preferred for queries due to their lower overhead and better performance.
+  <check name="icmp">
+    <name>réponses aux requêtes ICMP</name>
+    <success>L'hôte répond aux requêtes ICMP</success>
+    <failure>L'hôte ne répond pas aux requêtes ICMP (présence d'un pare-feu?)</failure>
+    <explanation sameas="shortcut:connectivity_udp_tcp"/>
+    <details/>
+  </check>
 
+  <check name="udp">
+    <name>connectivité UDP</name>
+    <success>Le serveur répond aux requêtes DNS en UDP sur le port 53</success>
+    <failure>Le serveur n'écoute pas ou ne répond pas en UDP sur le port 53</failure>
+    <explanation sameas="shortcut:connectivity_udp_tcp"/>
+    <details/>
+  </check>
 
+  <check name="tcp">
+    <name>connectivité TCP</name>
+    <success>Le serveur répond aux requêtes DNS en TCP sur le port 53</success>
+    <failure>Le serveur n'écoute pas ou ne répond pas en TCP sur le port 53</failure>
+    <explanation sameas="shortcut:connectivity_udp_tcp"/>
+    <details/>
+  </check>
 
-[chk_icmp]
-testname: réponses aux requêtes ICMP
-error   : L'hôte ne répond pas aux requêtes ICMP (présence d'un pare-feu?)
-ok	: L'hôte répond aux requêtes ICMP
-explain : [none]
-
-
-[chk_udp]
-testname: connectivité UDP
-error   : Le serveur n'écoute pas ou ne répond pas en UDP sur le port 53
-ok	: Le serveur répond aux requêtes DNS en UDP sur le port 53
-explain = xpl_connectivity_udp_tcp
-
-
-[chk_tcp]
-testname: connectivité TCP
-error   : Le serveur n'écoute pas ou ne répond pas en TCP sur le port 53
-ok	: Le serveur répond aux requêtes DNS en TCP sur le port 53
-explain = xpl_connectivity_udp_tcp
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

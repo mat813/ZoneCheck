@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,60 +33,94 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[chk_mx]
-testname: MX record present
-error   : No MX record found on server
-ok	: MX record found
-explain : [ref]: IETF RFC1912 (p.7)\nPut MX records even on hosts that aren't intended to send or receive e-mail.  If there is a security problem involving one of these hosts, some people will mistakenly send mail to postmaster or root at the site without checking first to see if it is a "real" host or just a terminal or personal computer that's not set up to accept e-mail.
-
-
-[chk_mx_auth]
-testname: MX authoritative answer
-error   : The MX answer is not authoritative
-ok	: The MX answer is authoritative
-explain : [none]
-
-
-[chk_mx_sntx]
-testname: MX syntax is valid for an hostname
-error   : MX syntax is not correct
-ok	: MX syntax is correct
-explain = label_xpl
-
-
-[chk_mx_cname]
-testname: MX is not an alias
-error   : MX is not allowed to point to a CNAME alias
-ok	: MX is not an alias
-explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
+  <check name="mx">
+    <name>MX record present</name>
+    <success>MX record found</success>
+    <failure>No MX record found on server</failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc1912#p7">
+        <title>IETF RFC1912 (p.7)</title>
+        <para>Put MX records even on hosts that aren't intended to
+          send or receive e-mail. If there is a security problem
+          involving one of these hosts, some people will mistakenly
+          send mail to postmaster or root at the site without checking
+          first to see if it is a "real" host or just a terminal or 
+          personal computer that's not set up to accept e-mail.</para>
+       </src>
+     </explanation>
+     <details/>
+  </check>
 
 
-[chk_mx_no_wildcard]
-testname: absence of wildcard MX
-error   : A wilcard MX is present
-ok	: No wildcard MX found
-explain : [none]
+  <check name="mx_auth">
+    <name>MX authoritative answer</name>
+    <success>The MX answer is authoritative</success>
+    <failure>The MX answer is not authoritative</failure>
+    <explanation/>
+    <details/>
+  </check>
 
 
-[chk_mx_ip]
-testname: MX can be resolved
-error   : The IP address of the Mail eXchanger can't be resolved
-ok	: The IP address of the Mail eXchanger is resolvable
-explain : [none]
-details : The MX %{mx} representing the host name doesn't have an IP address.
-
-[chk_mx_vs_any]
-testname: coherence between MX and ANY records
-error   : MX and ANY request disagree
-ok	: MX and ANY agree
-explain : [none]
+  <check name="mx_sntx">
+    <name>MX syntax is valid for a hostname</name>
+    <success>MX syntax is correct</success>
+    <failure>MX syntax is not correct</failure>
+    <explanation sameas="shortcut:label"/>
+    <details/>
+  </check>
 
 
-### FIXME
+  <check name="mx_cname">
+    <name>MX is not an alias</name>
+    <success>MX is not an alias</success>
+    <failure>MX is not allowed to point to a CNAME alias</failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc974">
+        <title>IETF RFC974</title>
+        <para>MX records shall not point to an alias defined by a CNAME.</para>
+      </src>
+    </explanation>
+    <details/>
+  </check>
 
 
-[tst_mail_by_mx_or_a]
-testname: test if mail is delivered using MX or A/AAAA
-error	: xxx
-explain : [none]
+  <check name="mx_no_wildcard">
+    <name>absence of wildcard MX</name>
+    <success>No wildcard MX found</success>
+    <failure>A wilcard MX is present</failure>
+    <explanation/>
+    <details/>
+  </check>
+
+
+  <check name="mx_ip">
+    <name>MX can be resolved</name>
+    <success>The IP address of the Mail eXchanger is resolvable</success>
+    <failure>The IP address of the Mail eXchanger can't be resolved</failure>
+    <explanation/>
+    <details><para>The MX <zcvar name="mx"/> representing the host name
+      doesn't have an IP address.</para></details>
+  </check>
+
+
+  <check name="mx_vs_any">
+    <name>coherence between MX and ANY records</name>
+    <success>MX and ANY agree</success>
+    <failure>MX and ANY request disagree</failure>
+    <explanation/>
+    <details/>
+  </check>
+
+
+<!-- FIXME -->
+
+  <test name="mail_by_mx_or_a">
+    <name>test if mail is delivered using MX or A/AAAA</name>
+  </test>
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

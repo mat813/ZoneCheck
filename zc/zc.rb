@@ -138,7 +138,7 @@ end
 #  A greater safe level is unfortunately not possible due to some 
 #  low level operations in the NResolv library
 #
-$SAFE = 1
+$SAFE = 0	# REXML BUG
 
 
 #
@@ -237,7 +237,7 @@ begin
     $console = Console::new
     
     # Initialize the message catalog
-    $mc = MessageCatalog::new(ZC_LOCALIZATION_DIR, ZC_MSGCAT_FALLBACK)
+    $mc = MsgCat::new(ZC_LOCALIZATION_DIR, ZC_MSGCAT_FALLBACK)
 
     # Add watcher for notification of locale changes
     #  ... and force update

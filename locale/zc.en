@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,171 +33,159 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-#
-# Word
-#
-w_generic	: generic
-w_warning	: warning
-w_warning_id	: w
-w_fatal		: fatal
-w_fatal_id	: f
-w_info		: info
-w_info_id	: i
-w_ok		: ok
-w_ok_id		: o
-w_testing	: testing
-w_unexpected	: unexpected
-w_line          : line
-w_error		: error
-w_perfect	: perfect
-w_quit		: quit
-w_abort		: abort
-w_details	: details
-w_references	: references
-w_elements	: elements
-w_form          : form
-w_name		: name
-
-
-#
-# Titles
-#
-t_batch		: batch
-t_single	: single
+<!-- Word -->
+<section name="word">
+  <tag name="generic">generic</tag>
+  <tag name="warning">warning</tag>
+  <tag name="warning_id">w</tag>
+  <tag name="fatal">fatal</tag>
+  <tag name="fatal_id">f</tag>
+  <tag name="info">info</tag>
+  <tag name="info_id">i</tag>
+  <tag name="ok">ok</tag>
+  <tag name="ok_id">o</tag>
+  <tag name="testing">testing</tag>
+  <tag name="unexpected">unexpected</tag>
+  <tag name="line">line</tag>
+  <tag name="error">error</tag>
+  <tag name="perfect">perfect</tag>
+  <tag name="quit">quit</tag>
+  <tag name="abort">abort</tag>
+  <tag name="details">details</tag>
+  <tag name="references">references</tag>
+  <tag name="elements">elements</tag>
+  <tag name="form">form</tag>
+  <tag name="name">name</tag>
+</section>
 
 
-#
-# Tag
-#
-tag_ref		: Ref
-tag_adv		: Adv
+<section name="config">
+</section>
+
+<!-- Titles -->
+<tag name="t_batch">batch</tag>
+<tag name="t_single">single</tag>
 
 
-#
-#
-#
-res_succeed_but : SUCCEED (but %d warning(s))
-res_succeed	: SUCCEED
-res_failed	: FAILED
-res_failed_and	: FAILED (and %d warning(s))
+<!-- Tag -->
+<tag name="tag_ref">Ref</tag>
+<tag name="tag_adv">Adv</tag>
 
-ns_batch	: batch
-ns_zone         : zone
-ns_ns		: ns
-ns_primary      : primary
-ns_secondary    : secondary
-ns_ips		: IPs
+<!-- -->
+<tag name="res_succeed_but">SUCCEED (but %d warning(s))</tag>
+<tag name="res_succeed">SUCCEED</tag>
+<tag name="res_failed">FAILED</tag>
+<tag name="res_failed_and">FAILED (and %d warning(s))</tag>
 
-title_zoneinfo  : Zone information
-title_progress  : Progress
-title_testres   : Test results
-title_status    : Final status
+<tag name="ns_batch">batch</tag>
+<tag name="ns_zone">zone</tag>
+<tag name="ns_ns">ns</tag>
+<tag name="ns_primary">primary</tag>
+<tag name="ns_secondary">secondary</tag>
+<tag name="ns_ips">IPs</tag>
 
-pgr_progress    : Progression
-pgr_test        : Tests
-pgr_time        : Time
-pgr_speed       : Speed
-pgr_speed_unit  : T/s
-pgr_na		: N/A
+<tag name="title_zoneinfo">Zone information</tag>
+<tag name="title_progress">Progress</tag>
+<tag name="title_testres">Test results</tag>
+<tag name="title_status">Final status</tag>
 
-
-#
-#
-#
-problem_file	: problem while opening/reading file: %s
-
-#
-# Input
-#
-[input]
-unsupported	: Input method '%s' unsupported
-suspicious	: Input method '%s' suspicious
-version		: PROGNAME: version %s
-unsupported_domain: No mapping able to process '%s'
+<tag name="pgr_progress">Progression</tag>
+<tag name="pgr_test">Tests</tag>
+<tag name="pgr_time">Time</tag>
+<tag name="pgr_speed">Speed</tag>
+<tag name="pgr_speed_unit">T/s</tag>
+<tag name="pgr_na">N/A</tag>
 
 
-#
-# Parser
-#
-[config]
-section_exists	: section '%s' already defined
-section_unknown	: unknown or unavailable section '%s'
-constant_exists	: constant '%s' already defined
-param_exists	: parameter '%s' already defined
-param_unknown	: unknown parameter '%s'
-wrong_arg_number: wrong number of arguments (%s for %s) in '%s'
-dcl_map_exists	: map for "%s" already specified
-dcl_unknown	: unknown declaration '%s'
-method_unknown	: method '%s' unavailable
-for_domain	: %s for domain %s
-family_unknown	: unknown family '%s'
+<!-- -->
+<tag name="problem_file">problem while opening/reading file: %s</tag>
+
+<!-- Input -->
+<tag name="input_unsupported">Input method '%s' unsupported</tag>
+<tag name="input_suspicious">Input method '%s' suspicious</tag>
+<tag name="input_version">PROGNAME: version %s</tag>
+<tag name="input_unsupported_domain">No mapping able to process '%s'</tag>
 
 
-expect_string	: string expected
-expect_symbol	: symbol expected
-expect_keyword	: '%s' keyword expected
-expect_token	: '%s' expected
-expect_cfg_main	: expecting constant declaration or useconf
-expect_cfg_specific: expecting constant declaration or testseq
-
-expect_checkname: check method (ie: chk_*) expected
-expect_testname	: test method (ie: tst_*) expected
-expect_severity_level : expect severity level (w,i,f,S)
-expect_category	: expecting category
-expect_constname: expecting constant declaration
-expect_value	: expecting string value for constant assignment
-expect_domain	: expecting domain name
-expect_filename	: expecting file name
-expect_testtype	: expecting test type (generic, extra, nameserver or address)
-
-expect_lexical	: unexpected character '%s'
+<!-- Parser -->
+<tag name="config_section_exists">section '%s' already defined</tag>
+<tag name="config_section_unknown">unknown or unavailable section '%s'</tag>
+<tag name="config_constant_exists">constant '%s' already defined</tag>
+<tag name="config_param_exists">parameter '%s' already defined</tag>
+<tag name="config_param_unknown">unknown parameter '%s'</tag>
+<tag name="config_wrong_arg_number">wrong number of arguments (%s for %s) in '%s'</tag>
+<tag name="config_dcl_map_exists">map for "%s" already specified</tag>
+<tag name="config_dcl_unknown">unknown declaration '%s'</tag>
+<tag name="config_method_unknown">method '%s' unavailable</tag>
+<tag name="config_for_domain">%s for domain %s</tag>
+<tag name="config_family_unknown">unknown family '%s'</tag>
 
 
-#
-# Exceptions
-#
-[xcp_zc]
-batch_parse	: Unable to parse batch line
+<tag name="config_expect_string">string expected</tag>
+<tag name="config_expect_symbol">symbol expected</tag>
+<tag name="config_expect_keyword">'%s' keyword expected</tag>
+<tag name="config_expect_token">'%s' expected</tag>
+<tag name="config_expect_cfg_main">expecting constant declaration or useconf</tag>
+<tag name="config_expect_cfg_specific">expecting constant declaration or testseq</tag>
 
-[xcp_param]
-fqdn_required	: Absolute domain name required
-batch_nodomain	: No domainname expected for batch mode
-domain_expected	: One domainname expected
-primary_soa	: Unable to find primary nameserver (SOA)
-nameservers_ns	: Unable to find nameservers (NS)
-prim_ns_soa	: Unable to identify primary nameserver (NS vs SOA)
-nameserver_ips	: Unable to find nameserver IP address(es) for %s
-ns_bad_ips	: Given IP address(es) for %s not matching DNS records
-output_support	: Selected output class doesn't support '%s'
-ip_no_stack	: %s not supported on that host
-unknown_modopt	: Unknown modifier '%s' for '%s' option
-local_resolver	: IP address expected for the local resolver
+<tag name="config_expect_checkname">check method (ie: chk_*) expected</tag>
+<tag name="config_expect_testname">test method (ie: tst_*) expected</tag>
+<tag name="config_expect_severity_level">expect severity level (w,i,f,S)</tag>
+<tag name="config_expect_category">expecting category</tag>
+<tag name="config_expect_constname">expecting constant declaration</tag>
+<tag name="config_expect_value">expecting string value for constant assignment</tag>
+<tag name="config_expect_domain">expecting domain name</tag>
+<tag name="config_expect_filename">expecting file name</tag>
+<tag name="config_expect_testtype">expecting test type (generic, extra, nameserver or address)</tag>
 
-[xcp_config]
-malformed_cmd	: malformed command
-nosection	: no section defined
-unknownsection	: unknown section '%s'
-constexists	: constant '%s' already declared
-testexists	: test '%s' already listed
-confexists	: configuration for '%s' already listed
-unknowntest	: unknown test '%s'
-badsection	: section '%s' couldn't be used in this context
-unexpected_token: unexpected '%s' token
-unexpected_test	: unexpected test (missing 'when'?)
-whenexists	: key '%s' in 'when' statement already defined
-elseexists	: else already used
-unknown_sectopt	: unknown option '%s' for section '%s'
-missing_sectopt	: missing option for section '%s'
-
-[xcp_testmanager]
-badclass	: class '%s' doesn't derive from %s
-test_exists	: test '%s' defined in classes '%s' and '%s'
-check_exists	: check '%s' defined int class '%s' and '%s'
+<tag name="config_expect_lexical">unexpected character '%s'</tag>
 
 
-[nresolv]
-rcode_servfail	: server failure
-rcode_refused	: answer refused from server
-rcode_nxdomain	: domain doesn't exist
-rcode_notimp	: query not implemented on server
+<!-- Exceptions -->
+<tag name="xcp_zc_batch_parse">Unable to parse batch line</tag>
+
+<tag name="xcp_param_fqdn_required">Absolute domain name required</tag>
+<tag name="xcp_param_batch_nodomain">No domainname expected for batch mode</tag>
+<tag name="xcp_param_domain_expected">One domainname expected</tag>
+<tag name="xcp_param_primary_soa">Unable to find primary nameserver (SOA)</tag>
+<tag name="xcp_param_nameservers_ns">Unable to find nameservers (NS)</tag>
+<tag name="xcp_param_prim_ns_soa">Unable to identify primary nameserver (NS vs SOA)</tag>
+<tag name="xcp_param_nameserver_ips">Unable to find nameserver IP address(es) for %s</tag>
+<tag name="xcp_param_ns_bad_ips">Given IP address(es) for %s not matching DNS records</tag>
+<tag name="xcp_param_output_support">Selected output class doesn't support '%s'</tag>
+<tag name="xcp_param_ip_no_stack">%s not supported on that host</tag>
+<tag name="xcp_param_unknown_modopt">Unknown modifier '%s' for '%s' option</tag>
+<tag name="xcp_param_local_resolver">IP address expected for the local resolver</tag>
+
+<tag name="xcp_config_malformed_cmd">malformed command</tag>
+<tag name="xcp_config_nosection">no section defined</tag>
+<tag name="xcp_config_unknownsection">unknown section '%s'</tag>
+<tag name="xcp_config_constexists">constant '%s' already declared</tag>
+<tag name="xcp_config_testexists">test '%s' already listed</tag>
+<tag name="xcp_config_confexists">configuration for '%s' already listed</tag>
+<tag name="xcp_config_unknowntest">unknown test '%s'</tag>
+<tag name="xcp_config_badsection">section '%s' couldn't be used in this context</tag>
+<tag name="xcp_config_unexpected_token">unexpected '%s' token</tag>
+<tag name="xcp_config_unexpected_test">unexpected test (missing 'when'?)</tag>
+<tag name="xcp_config_whenexists">key '%s' in 'when' statement already defined</tag>
+<tag name="xcp_config_elseexists">else already used</tag>
+<tag name="xcp_config_unknown_sectopt">unknown option '%s' for section '%s'</tag>
+<tag name="xcp_config_missing_sectopt">missing option for section '%s'</tag>
+
+<tag name="xcp_testmanager_badclass">class '%s' doesn't derive from %s</tag>
+<tag name="xcp_testmanager_test_exists">test '%s' defined in classes '%s' and '%s'</tag>
+<tag name="xcp_testmanager_check_exists">check '%s' defined int class '%s' and '%s'</tag>
+
+<section name="nresolv:rcode">
+  <tag name="servfail">server failure</tag>
+  <tag name="refused">answer refused from server</tag>
+  <tag name="nxdomain">domain doesn't exist</tag>
+  <tag name="notimp">query not implemented on server</tag>
+</section>
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

@@ -53,7 +53,7 @@ module Publisher
                 hbox  = Gtk::HBox::new(false)
                 hbox.pack_start(Gtk::Image::new(Gtk::Stock::QUIT), 
 				false, false, 2)
-                hbox.pack_start(Gtk::Label::new($mc.get("w_quit").capitalize),
+                hbox.pack_start(Gtk::Label::new($mc.get("word:quit").capitalize),
 				false, false, 0)
 		@quit = Gtk::Alignment::new(0.5, 0.5, 0, 0)
 		@quit.child = hbox
@@ -61,7 +61,7 @@ module Publisher
                 hbox = Gtk::HBox::new(false)
                 hbox.pack_start(Gtk::Image::new(Gtk::Stock::CANCEL), 
 				false, false, 2)
-                hbox.pack_start(Gtk::Label::new($mc.get("w_abort").capitalize),
+                hbox.pack_start(Gtk::Label::new($mc.get("word:abort").capitalize),
 				false, false, 0)
 		@abort = Gtk::Alignment::new(0.5, 0.5, 0, 0)
 		@abort.child = hbox
@@ -468,9 +468,9 @@ module Publisher
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? "i" : $mc.get("i_tag")
-	    w_tag = @rflag.tagonly ? "w" : $mc.get("w_tag")
-	    f_tag = @rflag.tagonly ? "f" : $mc.get("f_tag")
+	    i_tag = @rflag.tagonly ? "i" : $mc.get('word:info_id')
+	    w_tag = @rflag.tagonly ? "w" : $mc.get('word:warning_id')
+	    f_tag = @rflag.tagonly ? "f" : $mc.get('word:fatal_id')
 	    
 	    i_tag = i_tag.upcase if i_unexp
 	    w_tag = w_tag.upcase if w_unexp
@@ -649,7 +649,7 @@ module Publisher
 	    # Change "Abort" to "Quit"
 	    @quit.signal_handler_disconnect(@quit_sigclicked)
 	    @quit.set_face(LeaveButton::QUIT)
-#	    @quit.child.text = $mc.get("w_quit")
+#	    @quit.child.text = $mc.get("word:quit")
 	    @quit.signal_connect("clicked") { q.push("end") }
 
 	    # Wait...

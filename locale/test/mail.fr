@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="fr">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,61 +33,114 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[*]
-xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay when it processes a message from a non-local sender to a non-local recipient. These days, junk emailers abuse this capability at an alarming rate. They use the stolen capacity to greatly increase the amount of spam they can deliver.\n[adv]: ZoneCheck\nIl est possible d'effectuer un test plus exhaustif en utilisant la commande suivante: "telnet relay-test.mail-abuse.org", pour plus d'informations regardez <URL:http://www.mail-abuse.org/>\n
-
-
-
-[chk_mail_openrelay_domain]
-testname: domain délégué est un openrelay
-error   : Le MX principal pour le domaine est un openrelay
-ok	: Le MX principal pour le domaine n'est pas un openrelay
-explain = xpl_openrelay
-details : La machine indiquée pour la réception du courrier (%{mailhost}) du domaine semble être un openrelay, elle permet l'envoi de mél de %{from_host} à %{to_host}.
-
-
-[chk_mail_openrelay_hostmaster]
-testname: domain of the hostmaster email is not an openrelay
-error   : Le MX principal pour le "hostmaster" est un openrelay
-ok	: Le MX principal pour le "hostmaster" n'est pas un openrelay
-explain = xpl_openrelay
-details : La machine indiquée pour la réception du courrier (%{mailhost}) pour le "hostmaster" (%{hostmaster}) semble être un openrelay, elle permet l'envoi de mél de %{from_host} à %{to_host}.
-
-
-[chk_mail_delivery_postmaster]
-testname: envoie de mél au "postmaster"
-error   : Le "postmaster" ne peut pas être contacté par mél
-ok	: Le "postmaster" peut être contacté par mél
-explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved mailbox "Postmaster".
-details : Impossible d'envoyer un email au "postmaster" (%{postmaster}) à travers les relais: %{mxlist}.
+  <!-- Shortcuts -->
+  <shortcut>
+    <explanation name="openrelay">
+      <src type="ref">
+        <title>MAPS</title>
+        <para>An Internet mail server performs third-party relay when
+          it processes a message from a non-local sender to a non-local
+          recipient. These days, junk emailers abuse this capability at
+          an alarming rate. They use the stolen capacity to greatly
+          increase the amount of spam they can deliver.</para>
+      </src>
+      <src type="adv" from="zonecheck">
+        <title>ZoneCheck</title>
+        <para>You can perform more complete testing by using the following
+          command: "telnet relay-test.mail-abuse.org", for more information
+          take a look at <uri link="http://www.mail-abuse.org/">http://www.mail-abuse.org/</uri></para>
+      </src>
+    </explanation>
+  </shortcut>
 
 
-[chk_mail_delivery_hostmaster]
-testname: envoie de mél au "hostmaster"
-error   : Le "hostmaster" ne peut pas être contacté par mél
-ok	: Le "hostmaster" peut être contacté par mel
-explain : [none]
-details : Impossible d'envoyer un email au "hostmaster" (%{hostmaster}) à travers les relais: %{mxlist}.
+
+  <!-- Checks -->
+  <check name="mail_openrelay_domain">
+    <name>domain délégué est un openrelay</name>
+    <success>Le MX principal pour le domaine n'est pas un openrelay</success>
+    <failure>Le MX principal pour le domaine est un openrelay</failure>
+    <explanation sameas="shortcut:openrelay"/>
+    <details><para>La machine indiquée pour la réception du courrier
+      (<zcvar name="mailhost"/>) du domaine semble être un openrelay, 
+      elle permet l'envoi de mél de <zcvar name="from_host"/> à
+      <zcvar name="to_host"/>.</para></details>
+  </check>
 
 
-[chk_mail_hostmaster_mx_cname]
-testname: l'enregistrement MX du "hostmaster" n'est pas un alias
-error   : L'enregistrement MX du "hostmaster" ne peut pas être un alias (CNAME)
-ok	: L'enregistrement MX du "hostmaster" n'est pas un alias
-explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
+  <check name="mail_openrelay_hostmaster">
+    <name>domain of the hostmaster email is not an openrelay</name>
+    <success>Le MX principal pour le "hostmaster" n'est pas un openrelay</success>
+    <failure>Le MX principal pour le "hostmaster" est un openrelay</failure>
+    <explanation sameas="shortcut:openrelay"/>
+    <details><para>La machine indiquée pour la réception du courrier
+      (<zcvar name="mailhost"/>) pour le "hostmaster" 
+      (<zcvar name="hostmaster"/>) semble être un openrelay, elle permet
+      l'envoi de mél de <zcvar name="from_host"/> à
+      <zcvar name="to_host"/>.</para></details>
+  </check>
 
 
-[chk_mail_mx_or_addr]
-testname: domaine capable de recevoir du courrier (MX, A, AAAA)
-error   : Le domaine n'a pas de MX ou d'addresse pour delivrer le courrier
-ok      : Le domaine est capable de recevoir du courrier
-explain	: [none]
+  <check name="mail_delivery_postmaster">
+    <name>envoie de mél au "postmaster"</name>
+    <success>Le "postmaster" peut être contacté par mél</success>
+    <failure>Le "postmaster" ne peut pas être contacté par mél</failure>
+    <explanation>
+      <src type="ref" from="rfc1123#p51#5.2.7">
+        <title>IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)</title>
+        <para>A host that supports a receiver-SMTP MUST support the
+          reserved mailbox "Postmaster".</para>
+      </src>
+    </explanation>
+    <details><para>Impossible d'envoyer un email au "postmaster"
+      (<zcvar name="postmaster"/>) à travers les relais:
+      <zcvar name="mxlist"/>.</para></details>
+  </check>
 
-### FIXME
+
+  <check name="mail_delivery_hostmaster">
+    <name>envoie de mél au "hostmaster"</name>
+    <success>Le "hostmaster" peut être contacté par mel</success>
+    <failure>Le "hostmaster" ne peut pas être contacté par mél</failure>
+    <explanation/>
+    <details><para>Impossible d'envoyer un email au "hostmaster"
+      (<zcvar name="hostmaster"/>) à travers les relais:
+      <zcvar name="mxlist"/>.</para></details>
+  </check>
 
 
-[tst_mail_delivery]
-testname: test if mail delivery possible
-error	: xxx
-explain	: [none]
+  <check name="mail_hostmaster_mx_cname">
+    <name>l'enregistrement MX du "hostmaster" n'est pas un alias</name>
+    <success>L'enregistrement MX du "hostmaster" n'est pas un alias</success>
+    <failure>L'enregistrement MX du "hostmaster" ne peut pas être un alias (CNAME)</failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc974">
+        <title>IETF RFC974</title>
+        <para>MX records shall not point to an alias defined by a CNAME.</para>
+      </src>
+    </explanation>
+    <details/>
+  </check>
+
+
+  <check name="mail_mx_or_addr">
+    <name>domaine capable de recevoir du courrier (MX, A, AAAA)</name>
+    <success>Le domaine est capable de recevoir du courrier</success>
+    <failure>Le domaine n'a pas de MX ou d'addresse pour delivrer le courrier</failure>
+    <explanation/>
+    <details/>
+  </check>
+
+
+<!-- FIXME -->
+
+  <test name="mail_delivery">
+    <name>test if mail delivery possible</name>
+  </test>
+
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>
