@@ -379,9 +379,9 @@ module Input
 		@hbbox.pack_start(@clear)
 		
 		# Final packaging
-		pack_start(zone_f)
-		pack_start(ns_f)
-		pack_start(@hbbox)
+		pack_start(zone_f, true,  true)
+		pack_start(ns_f,   true,  true)
+		pack_start(@hbbox, false, true)
 
 		# Signal handler
 		@check.signal_connect("clicked") { |w| 
@@ -582,40 +582,34 @@ module Input
 		
 
 		
-		menuitem = Gtk::MenuItem::new("Mode")
-		menubar.append(menuitem)
-		
+		# Mode menu
 		menu = Gtk::Menu::new
-		menuitem.set_submenu(menu)
-
-		exp_mitem = Gtk::CheckMenuItem::new("Expert")
-		menu.append(exp_mitem)
-		
+		mode_mitem   = Gtk::MenuItem::new("Mode")
+		mode_mitem.set_submenu(menu)
 		single_mitem = Gtk::RadioMenuItem::new(nil, "Single")
 		grp = single_mitem.group
 		menu.append(single_mitem)
-		batch_mitem = Gtk::RadioMenuItem::new(grp, "Batch")
+		batch_mitem  = Gtk::RadioMenuItem::new(grp, "Batch")
 		menu.append(batch_mitem)
-
-		
-
+		exp_mitem    = Gtk::CheckMenuItem::new("Expert")
+		menu.append(exp_mitem)
 #		sep = Gtk::SeparatorMenuItem::new
 #		menu.append(sep)
-		
-		quit_mitem = Gtk::ImageMenuItem::new(Gtk::Stock::QUIT)
+		quit_mitem   = Gtk::ImageMenuItem::new(Gtk::Stock::QUIT)
 		menu.append(quit_mitem)
-
-		help_mitem=menuitem = Gtk::MenuItem::new("Help")
-		menuitem.set_right_justified(true)
-		menubar.append(menuitem)
-		help_mitem.signal_connect("activate") {
-		    help = Gtk::MessageDialog::new(@window, Gtk::MessageDialog::MODAL, Gtk::MessageDialog::INFO, Gtk::MessageDialog::BUTTONS_OK, "I'm here to help you")
-		    help.set_title("Help")
-		    help.run
-		    help.destroy
-		}
+		menubar.append(mode_mitem)
 		
-		    
+		# Help menu
+		menu       = Gtk::Menu::new
+		help_mitem = Gtk::MenuItem::new("Help")
+		help_mitem.set_right_justified(true)
+		help_mitem.set_submenu(menu)
+		about_mitem = Gtk::MenuItem::new("About")
+		menu.append(about_mitem)
+		menubar.append(help_mitem)
+
+
+		# Notebook
 		notebook = Gtk::Notebook::new
 		notebook.set_tab_pos(Gtk::POS_TOP)
 		notebook.append_page @input,   Gtk::Label::new("Input")
@@ -623,16 +617,27 @@ module Input
 		notebook.append_page @options, Gtk::Label::new("Options")
 #		notebook.append_page @expert,  Gtk::Label::new("Expert")
 		
-		exp_mitem.signal_connect("toggled") { |w|
-		    if w.active?
-			notebook.append_page(@expert, Gtk::Label::new("Expert"))
-#			notebook.set_current_page(notebook.page_num(@expert))
-		    else
-			notebook.remove_page(notebook.page_num(@expert))
-		    end
-		}
+		
+		vbox = Gtk::VBox::new(false)
+		vbox.pack_start(menubar,    false, true)
+		vbox.pack_start(notebook,   true,  true)
+		vbox.pack_start(@statusbar, false, true)
 		
 
+		# Signal
+		about_mitem.signal_connect("activate") {
+		    txt  = "Version: #{$zc_version}\n"
+		    txt += "Maintainer: #{ZC_MAINTAINER}"
+
+		    about = Gtk::MessageDialog::new(@window, 
+					 Gtk::MessageDialog::MODAL,
+					 Gtk::MessageDialog::INFO,
+					 Gtk::MessageDialog::BUTTONS_OK, txt)
+		    about.set_title("About")
+		    about.run
+		    about.destroy
+		}
+		
 		batch_mitem.signal_connect("toggled") { |w|
 		    if w.active? then @batch.show else @batch.hide end
 		}
@@ -641,16 +646,17 @@ module Input
 		    if w.active? then @input.show else @input.hide end
 		}
 
+		exp_mitem.signal_connect("toggled") { |w|
+		    if w.active?
+			notebook.append_page(@expert, Gtk::Label::new("Expert"))
+#			notebook.set_current_page(notebook.page_num(@expert))
+		    else
+			notebook.remove_page(notebook.page_num(@expert))
+		    end
+		}
 
-		vbox = Gtk::VBox::new(false)
-		vbox.pack_start(menubar,    false, true)
-		vbox.pack_start(notebook,   true,  true)
-		vbox.pack_start(@statusbar, false, true)
-		
-		button = Gtk::Button::new("Hello World")
-		button.signal_connect("clicked") {|*args| hello(*args) }
-		button.signal_connect("clicked") {|*args| @window.destroy }
-		
+
+		#
 		@window.add(vbox)
 		@window.show_all
 		@batch.hide
