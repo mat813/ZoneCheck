@@ -32,6 +32,7 @@
 #
 
 require 'socket'
+require 'timeout'
 
 
 ##
@@ -44,11 +45,17 @@ class ZCMail
     class ZCMailError < StandardError
     end
 
-    def initialize(mhost, mip)
+    def initialize(mhost, mip, tout=nil)
 	@myhostname = Socket::gethostname
 	@mhost      = mhost
 	@mip        = mip
-	@mrelay     = TCPSocket::new(mip, 25)
+	@mrelay     = nil
+    end
+
+    def open(tout=nil)
+	Timeout::timeout(tout) {
+	    @mrelay = TCPSocket::new(@mip, 25)
+	}
     end
 
     def fake_info(user, mdest, mfrom)

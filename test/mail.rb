@@ -40,12 +40,15 @@
 require 'framework'
 require 'mail'
 
+
 module CheckExtra
     ##
     ## Check domain NS records
     ##
     class Mail < Test
 	with_msgcat 'test/mail.%s'
+
+	CONNECTION_TIMEOUT = 20
 
 	#-- Initialisation ------------------------------------------
 	def initialize(*args)
@@ -77,18 +80,16 @@ module CheckExtra
 	    raise "No host servicing mail for domain #{mdom}" if mip.nil?
 
 	    # Execute test on mailhost
-	    mrelay = nil
+	    mrelay = ZCMail::new(mdom, mip.to_s)
+	    mrelay.open(CONNECTION_TIMEOUT)
 	    begin
-		mrelay = ZCMail::new(mdom, mip.to_s)
 		mrelay.banner
 		mrelay.helo(@fake_host)
 		mrelay.fake_info(@fake_user, @fake_dest, @fake_from)
 		yield mrelay
 	    ensure
-		if mrelay
-		    mrelay.quit
-		    mrelay.close
-		end
+		mrelay.quit
+		mrelay.close
 	    end
 	end
 	

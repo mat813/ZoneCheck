@@ -329,6 +329,8 @@ class TestManager
 	    desc.err = "#{name} #{info}"
 #	rescue Errno::EADDRNOTAVAIL
 #	    desc.err = "Network transport unavailable try option -4 or -6"
+	rescue Timeout::Error => e
+	    desc.err = "Timeout"
 	rescue NResolv::NResolvError => e
 	    desc.err = "Resolver error (#{e})"
 	rescue ZCMail::ZCMailError => e
