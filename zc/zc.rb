@@ -152,9 +152,9 @@ $LOAD_PATH << ZC_DIR << ZC_LIB
 #
 # Version / Name / Contact
 #
-$zc_version	= ZC_VERSION
-$zc_name	= ZC_NAME
-$zc_contact	= ZC_CONTACT
+$zc_version	||= ZC_VERSION
+$zc_name	||= ZC_NAME
+$zc_contact	||= ZC_CONTACT
 
 
 #
