@@ -62,12 +62,12 @@ ZC_INSTALL_PATH		= (ENV['ZC_INSTALL_PATH'] || (ENV['HOME'] || '/homes/sdalu') + 
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
-ZC_CONFIG_DIR		= "#{ZC_INSTALL_PATH}/etc/zonecheck"
-ZC_LOCALIZATION_DIR	= "#{ZC_INSTALL_PATH}/locale"
-ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
+ZC_CONFIG_DIR		= ENV['ZC_CONFIG_DIR']       || "#{ZC_INSTALL_PATH}/etc/zonecheck"
+ZC_LOCALIZATION_DIR	= ENV['ZC_LOCALIZATION_DIR'] || "#{ZC_INSTALL_PATH}/locale"
+ZC_TEST_DIR		= ENV['ZC_TEST_DIR']         || "#{ZC_INSTALL_PATH}/test"
 
 ## Configuration
-ZC_CONFIG_FILE		= 'zc.conf'
+ZC_CONFIG_FILE		= ENV['ZC_CONFIG_FILE'] || 'zc.conf'
 
 ## Lang
 ZC_LANG_FILE		= 'zc.%s'
@@ -85,7 +85,7 @@ ZC_CGI_EXT		= 'cgi'
 ZC_GTK_ENV_KEYS		= [] #[ 'DISPLAY' ]
 
 ## Publisher
-ZC_HTML_PATH		= "#{ZC_INSTALL_PATH}/www"
+ZC_HTML_PATH		= ENV['ZC_HTML_PATH'] || "#{ZC_INSTALL_PATH}/www"
 
 
 ## Contact / Details
