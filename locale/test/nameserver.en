@@ -18,5 +18,5 @@
 [chk_private_ip]
 testname: address in a private network
 error   : Address is part of a private subnet
-explain : [ref] : IETF RFC1918 (3. Private Address Space)\nThe Internet Assigned Numbers Authority (IANA) has reserved the\nfollowing three blocks of the IP address space for private internets:\n10.0.0.0        -   10.255.255.255  (10/8 prefix)\n172.16.0.0      -   172.31.255.255  (172.16/12 prefix)\n192.168.0.0     -   192.168.255.255 (192.168/16 prefix).
+explain : [ref] : IETF RFC1918 (3. Private Address Space)\nThe Internet Assigned Numbers Authority (IANA) has reserved the\nfollowing three blocks of the IP address space for private internets: 10/8, 172.16/12, 192.168/16.
 
