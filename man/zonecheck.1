@@ -257,6 +257,9 @@ All error are considered as fatals.
 \fBallwarning\fR, \fBaw\fR
 All error are considered as warnings.
 .TP
+\fBdfltseverity\fR, \fBds\fR [default]
+Use the severity associated with the test.
+.TP
 \fBstop\fR, \fBs\fR [default]
 Stop on the first fatal error.
 .br
@@ -266,7 +269,7 @@ Stop on the first fatal error.
 Never stop (even on fatal error). This generally result in a lot of errors or unexpected results due to the previous fatal error.
 .
 .IP \fINOTE:\fB
-The following set are mutually exclusive: [\fBallfatal\fR|\fBallwarning\fR] and [\fBstop\fR|\fBnostop\fR].
+The following set are mutually exclusive: [\fBallfatal\fR|\fBallwarning\fR|\fBdfltseverity\fR] and [\fBstop\fR|\fBnostop\fR].
 .RE
 .
 .TP
