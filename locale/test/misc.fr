@@ -51,3 +51,12 @@ error   : La liste des serveurs récupérée ne correspond pas à celle donnée
 ok	: La liste des serveurs recuperée correspond à celle donnée
 details : La liste des serveurs de noms donnée (%{list_from_param}) n'est pas cohérente avec celle récupérée sur la zone (%{list_from_ns}).
 explain : [none]
+
+
+### FIXME
+
+
+[tst_recursive_server]
+testname: test if server is recursive
+error	: xxx
+explain : [none]

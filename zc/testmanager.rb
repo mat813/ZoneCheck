@@ -361,36 +361,36 @@ class TestManager
 	testcount             = 0
 	domainname_s          = @param.domain.name.to_s
 
-	begin
-	    # Do a pre-evaluation of the code
-	    if @do_preeval
-		# Sanity check for debugging
-		if $dbg.enabled?(DBG::NOCACHE)
-		    raise "Debugging with preeval and NOCACHE is not adviced"
-		end
-
-		# Do the pre-evaluation
-		#  => compute the number of checking to perform
-		begin
-		    Config::TestSeqOrder.each { |family|
-			testseq		= @config[family]
-			next if testseq.nil?
-			
-			@iterer[family].call(proc { |*args|
-				testcount += testseq.preeval(self, args)
-			   })
-		    }
-		rescue Instruction::InstructionError,
-			NResolv::NResolvError => e
-		    $dbg.msg(DBG::TESTS, "disabling preeval: #{e}")
-		    @do_preeval = false
-		    testcount   = 0
-		end
+	# Do a pre-evaluation of the code
+	if @do_preeval
+	    # Sanity check for debugging
+	    if $dbg.enabled?(DBG::NOCACHE)
+		raise "Debugging with preeval and NOCACHE is not adviced"
 	    end
 
+	    # Do the pre-evaluation
+	    #  => compute the number of checking to perform
+	    begin
+		Config::TestSeqOrder.each { |family|
+		    testseq		= @config[family]
+		    next if testseq.nil?
+		    
+		    @iterer[family].call(proc { |*args|
+				testcount += testseq.preeval(self, args)
+			   })
+		}
+	    rescue Instruction::InstructionError, Report::FatalError => e
+		$dbg.msg(DBG::TESTS, "disabling preeval: #{e}")
+		@do_preeval = false
+		testcount   = 0
+	    end
+	end
+
+	# Perform the tests
+	begin
 	    # Counter start
 	    @publisher.progress.start(testcount)
-	    
+
 	    # Perform the checking
 	    Config::TestSeqOrder.each { |family|
 		threadlist	= []

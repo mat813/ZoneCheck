@@ -295,7 +295,8 @@ EOT
 
 		desc = "<IMG src=\"#{@publish_path}/img/#{logo}.png\" alt= \"#{desc}\">"
 
-		@o.puts tbl_ns % [ css, desc, ns_ip[0], ns_ip[1].join(", ") ]
+		@o.puts tbl_ns % [ css, desc, 
+		    ns_ip[0].to_s, ns_ip[1].join(", ") ]
 	    }
 	    @o.puts tbl_end
 	    @o.puts "</DIV>"

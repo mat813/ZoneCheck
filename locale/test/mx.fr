@@ -70,3 +70,10 @@ ok	: Enregistrements MX et ANY cohérents
 explain : [none]
 
 
+### FIXME
+
+
+[tst_mail_by_mx_or_a]
+testname: test if mail is delevired using MX or A/AAAA
+error	: xxx
+explain : [none]

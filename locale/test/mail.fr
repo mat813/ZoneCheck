@@ -64,3 +64,11 @@ error   : L'enregistrement MX du 'hostmaster' ne peut pas être un alias (CNAME)
 ok	: L'enregistrement MX du 'hostmaster' n'est pas un alias
 explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
 
+
+### FIXME
+
+
+[tst_mail_is_for_tld]
+testname: test if mail is for a tld
+error	: xxx
+explain	: [none]

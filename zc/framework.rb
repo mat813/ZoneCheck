@@ -123,7 +123,7 @@ class Test
 	    if ! @ns.nil?
 		tag = @ns.to_s
 		if ! @ip.nil?
-		    tag << "/"
+		    tag << " / "
 		    tag << @ip.to_s
 		end
 	    else

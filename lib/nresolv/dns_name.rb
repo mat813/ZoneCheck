@@ -45,7 +45,7 @@ class NResolv
 		    def self.from_s(str)
 			self.new(str.to_s.gsub(/\\\./, '.'))
 		    end
-		    def to_s        ; @string.gsub(/\./, '\.')       ; end
+		    def to_s        ; @downcase.gsub(/\./, '\.')     ; end
 		  
 		    def root?       ; @string.empty?                 ; end
 		    def wildcard?   ; @string == "*"                 ; end

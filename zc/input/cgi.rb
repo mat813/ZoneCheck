@@ -71,7 +71,7 @@ module Input
     class CGI
 	with_msgcat "cgi.%s"
 
-	MaxNS = 8	# Maximum number of NS taken into account
+	MaxNS = 20       # Maximum number of NS taken into account
 
 	def initialize
 	    @cgi  = ::CGI::new
@@ -167,29 +167,40 @@ module Input
 	    else
 		ns_list = [ ]
 		(0..MaxNS-1).each { |i|
-		    next unless cgi_ns = @cgi.params["ns#{i}"] || ""
-		    next unless cgi_ns.length > 0
-		    next if     (ns = cgi_ns[0]).empty?
-		    
+		    next unless cgi_ns = @cgi.params["ns#{i}"]
+		    next unless !cgi_ns.empty?
+		    next unless ns = cgi_ns[0]
+		    next unless !ns.empty?
+                   
 		    cgi_ips = @cgi.params["ips#{i}"] || ""
 		    if cgi_ips.nil? || cgi_ips.length == 0 
 			ns_list << [ ns ]
 		    else
-			# XXX: cgi_ips[x].empty?
 			ips = cgi_ips.collect { |a| 
 			    a.split(/\s*,\s*|\s+/) }.flatten.compact
 			ns_list << [ ns, ips ]
 		    end
 		}
+
+#		i       = 0
+#		while ((cgi_ns = @cgi.params["ns#{i}"])			&&
+#		       !cgi_ns.empty?					&&
+#		       (ns = cgi_ns[0])					&&
+#		       !ns.empty?) do
+#		    cgi_ips = @cgi.params["ips#{i}"] || []
+#		    if cgi_ips.nil? || cgi_ips.length == 0 
+#			ns_list << [ ns ]
+#		    else
+#			ips = cgi_ips.collect { |a| 
+#			    a.split(/\s*,\s*|\s+/) }.flatten.compact
+#			ns_list << [ ns, ips ]
+#		    end
+#		    i += 1
+#		end
+
 		if ! ns_list.empty?
 		    p.domain.ns   = ns_list.collect { |ns, ips|
-			if ips
-			    ips_str = ips.join(",")
-			    "#{ns}=#{ips_str}" 
-			else
-			    ns
-			end
-		    }.join(";")
+			ips ? "#{ns}=#{ips.join(',')}" : ns }.join(";")
 		end
 	    end
 

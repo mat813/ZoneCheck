@@ -225,7 +225,7 @@ module Publisher
 		n = domain.ns[i]
 		@o.printf "%-*s : %s [%s]\n", 
 		    sz, i == 0 ? "#{l10n_ns} <=" : "#{l10n_ns}  ",
-		    n[0], n[1].join(", ")
+		    n[0].to_s, n[1].join(", ")
 	    }
 	    @o.puts
 	end

@@ -69,7 +69,7 @@ module Report
 	## Fatal/Warning/Info results 
 	##
 	class Fatal	< Processor
-	    def add_result(result)
+	    def <<(result)
 		super(result)
 		raise FatalError unless result.ok?
 	    end

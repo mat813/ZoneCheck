@@ -64,6 +64,10 @@ error   : The hostmaster MX is not allow to point to a CNAME alias
 ok	: The hostmaster MX is not an alias
 explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
 
+
+### FIXME
+
+
 [tst_mail_is_for_tld]
 testname: test if mail is for a tld
 error	: xxx
