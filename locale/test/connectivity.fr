@@ -45,7 +45,7 @@ xpl_connectivity_udp_tcp : [ref]: IETF RFC1035 (p.32 4.2. Transport)\nThe DNS as
 
 [chk_icmp]
 testname: réponses aux requêtes ICMP
-error   : L'hôte ne srépond pas aux requêtes ICMP (présence d'un pare-feu?)
+error   : L'hôte ne répond pas aux requêtes ICMP (présence d'un pare-feu?)
 ok	: L'hôte répond aux requêtes ICMP
 explain : [none]
 
