@@ -22,11 +22,12 @@ class NResolv
 	    @@hash_resource = {}
 
 	    # Constant shortcut
-	    def rclass      ; self.class::RClass ; end
-	    def rtype       ; self.class::RType  ; end
-	    def self.rclass ; self::RClass       ; end
-	    def self.rtype  ; self::RType        ; end
-
+	    def rclass      ; self.class::RClass             ; end
+	    def rtype       ; self.class::RType              ; end
+	    def rdesc       ; "#{rclass}/#{rtype}"           ; end
+	    def self.rclass ; self::RClass                   ; end
+	    def self.rtype  ; self::RType                    ; end
+	    def self.rdesc  ; "#{self.rclass}/#{self.rtype}" ; end
 
 	    def self.fetch_class(rclass, rtype)
 		begin

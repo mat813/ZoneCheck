@@ -35,7 +35,15 @@ class NResolv
 	class DNSNResolvError < NResolvError
 	    attr_reader :mesg
 	    def initialize(mesg=nil) ; @mesg = mesg ; end
-	    def to_s ; (@mesg.nil? ? self.class : @mesg).to_s ; end
+	    def to_s ; (mesg.nil? ? self.class : mesg).to_s ; end
+	end
+
+	class ReplyError    < DNSNResolvError
+	    attr_reader :code, :name, :resource
+	    def mesg ; @code ; end
+	    def initialize(code, name, resource) 
+		@code, @name, @resource = code, name, resource
+	    end
 	end
 
 	class NoEntryError  < DNSNResolvError
@@ -44,8 +52,6 @@ class NResolv
 	class NoDomainError < NoEntryError
 	end
 
-	class ReplyError    < DNSNResolvError
-	end
     
 	##
 	## Abstract client class
@@ -111,7 +117,7 @@ class NResolv
 		    raise NoDomainError, rpl.rcode if exception
 		    return
 		else
-		    raise ReplyError, rpl.rcode
+		    raise ReplyError::new(rpl.rcode, name, resource)
 		end
 
 		count = 0
@@ -281,7 +287,7 @@ class NResolv
 			addrlist << r.address if rtypes.include?(r.rtype) }
 		elsif ignore.include?(rpl.rcode)
 		    return nil
-		else raise ReplyError, rpl.rcode
+		else raise ReplyError::new(rpl.rcode, name, resource)
 		end
 		addrlist
 	    end

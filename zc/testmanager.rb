@@ -314,12 +314,13 @@ class TestManager
 			   else Test::Succeed
 			   end
 	rescue NResolv::DNS::ReplyError => e
-	    desc.err = case e.mesg 
+	    info = "(#{e.resource.rdesc}: #{e.name})"
+	    desc.err = case e.code
 		       when NResolv::DNS::RCode::SERVFAIL
-			   "Server failure"
+			   "Server failure #{info}"
 		       when NResolv::DNS::RCode::REFUSED
-			   "Answer refused from server"
-		       else e.to_s
+			   "Answer refused from server #{info}"
+		       else "#{e.code} #{info}"
 		       end
 #	rescue Errno::EADDRNOTAVAIL
 #	    desc.err = "Network transport unavailable try option -4 or -6"
