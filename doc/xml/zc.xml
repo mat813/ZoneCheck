@@ -4,7 +4,7 @@
 [
 <!ENTITY version "0.01">
 <!ENTITY supercopy "SUPERCOPYRIGHT &copy;&reg;">
-<!ENTITY faq SYSTEM "faq.xml">
+<!ENTITY faq SYSTEM "common/faq.xml">
 ]>
 
 

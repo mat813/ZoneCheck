@@ -119,12 +119,28 @@ install-doc:
 	$(INSTALL) -m 0644 README TODO INSTALL BUGS $(DOCDIR)/zc
 	@echo
 
+
+
+
 realclean:
 	find . -type f -name '*~' -exec rm {} \;
+	rm -Rf $(TOPDIR)/doc/tmp
+	rm -Rf $(TOPDIR)/doc/html
 
 FAQ: doc/xml/FAQ.xml doc/xml/common/faq.xml doc/misc/style.dsl
 	rm -Rf $(TOPDIR)/doc/tmp/FAQ
 	mkdir -p $(TOPDIR)/doc/tmp/FAQ
 	sed 3d < doc/xml/FAQ.xml > doc/xml/_fix_FAQ.xml
 	(cd $(TOPDIR)/doc/tmp/FAQ && jade -t xml -d $(TOPDIR)/doc/misc/style.dsl\#html /usr/local/share/sgml/docbook/dsssl/modular/dtds/decls/xml.dcl $(TOPDIR)/doc/xml/_fix_FAQ.xml)
+	rm doc/xml/_fix_FAQ.xml
 	$(HTML2TXT) doc/tmp/FAQ/* > FAQ
+
+distrib: FAQ
+
+doc-html: doc/xml/zc.xml doc/xml/common/faq.xml doc/misc/style.dsl
+	rm -Rf $(TOPDIR)/doc/html
+	mkdir -p $(TOPDIR)/doc/html
+	sed 3d < doc/xml/zc.xml > doc/xml/_fix_zc.xml
+	(cd $(TOPDIR)/doc/html && jade -t xml -d $(TOPDIR)/doc/misc/style.dsl\#html /usr/local/share/sgml/docbook/dsssl/modular/dtds/decls/xml.dcl $(TOPDIR)/doc/xml/_fix_zc.xml)
+	rm doc/xml/_fix_zc.xml
+	cp doc/misc/docbook.css doc/html/
