@@ -137,10 +137,11 @@ $SAFE = 1
 
 
 #
+# Ensure '.' is not one of the possible path (too much trouble)
 # Add zonecheck directories to ruby path
 #
+$LOAD_PATH.delete_if { |path| path == "." }
 $LOAD_PATH << ZC_DIR << ZC_LIB
-
 
 #
 # Requirement
