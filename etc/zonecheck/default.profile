@@ -18,6 +18,7 @@
       <!-- IP address check -->
       <check name="ip_distinct"     severity="f" category="ip"/>
       <check name="ip_all_same_net" severity="w" category="ip"/>
+      <check name="all_same_asn"    severity="w" category="ip"/>
 
       <!-- Interop -->
       <check name="delegation_udp512" severity="f" category="dns:interop"/>
