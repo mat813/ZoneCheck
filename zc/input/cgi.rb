@@ -37,16 +37,16 @@ module Input
     ##  - quiet
     ##  - one
     ##  - verbose  = [ i|intro, n|testname, x|explain, d|details, 
-    ##                 o|reportok, t|testdesc, c|counter ]
+    ##                 t|testdesc, c|counter, o|reportok ]
     ##      - intro
     ##      - testname
     ##      - explain
     ##      - details
+    ##      - progress = [ t|testdesc | c|counter ]
     ##      - reportok
-    ##      - progress = [ testdesc | counter ]
-    ##  - output   = [ straight, consolidation, text, html ]
-    ##      - format   = html|text
-    ##      - report   = byseverity|byhost
+    ##  - output   = [ bs|byseverity, bh|byhost, text, html ]
+    ##      - report   = bs|byseverity | bh|byhost
+    ##      - format   = h|html | t|text
     ##  - error    = [ af|allfatal, aw|allwarning, std|standard,
     ##                s|stop, ns|nostop ]
     ##      - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]
