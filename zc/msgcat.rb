@@ -170,13 +170,13 @@ class MessageCatalog
 
 		    if @catalog.has_key?(tag)
 			raise SyntaxError,
-			    "Line #{lineno}: Tag '#{tag}' already defined"
+			    "Line #{lineno}: Tag '#{tag}' already defined (in #{msgfile})"
 		    end
 
 		    while msg.gsub!(/\\$/, "")
 			if (line = io.gets).nil?
 			    raise SyntaxError,
-				"Line #{lineno}: line expected after '\\'"
+				"Line #{lineno}: line expected after '\\' (in #{msgfile})"
 			end
 			lineno += 1
 			line.chomp!
@@ -196,7 +196,7 @@ class MessageCatalog
 
 		# ERROR
 		else
-		    raise SyntaxError, "Line #{lineno}: malformed line"
+		    raise SyntaxError, "Line #{lineno}: malformed line (in #{msgfile})"
 		end
 	    end
 	}

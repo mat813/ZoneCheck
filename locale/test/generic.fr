@@ -1,0 +1,73 @@
+# $Id$
+
+# 
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2002/08/02 13:58:17
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+[*]
+label_xpl : [ref]: IETF RFC1034 (p.11)\nLabels are only composed by letters ([A-Za-z]), digits ([0-9]) or dashes\n('-') (not starting or ending with), and should be less than 63 characters;\ndomain name (labels separated by '.') should be less than 255 characters.\nSee also [ref]: IETF RFC1912 (2.1 Inconsistent, Missing, or Bad Data).
+
+xpl_rfc2182 : [adv]: AFNIC\nTo avoid loosing all connectivity with the autoritative DNS in case\n of network outage it is advised to host the DNS on different networks.\nSee also IETF RFC2182.\n[ref]: IETF RFC2182 (Abstract)\nThe Domain Name System requires that multiple servers exist for every\ndelegated domain (zone).  This document discusses the selection of\nsecondary servers for DNS zones.  Both the physical and topological\nlocation of each server are material considerations when selecting\nsecondary servers.  The number of servers appropriate for a zone is\nalso discussed, and some general secondary server maintenance issues\nconsidered.
+
+
+
+[chk_dn_sntx]
+testname: illegal symbols in domain name
+error   : The domain name contains illegal symbols
+explain = label_xpl
+
+
+[chk_dn_orp_hyph]
+testname: dash ('-') at start or beginning of domain name
+error   : The domain name start or end with a dash ('-')
+explain = label_xpl
+
+
+[chk_dn_dbl_hyph]
+testname: double hyphen in domain name
+error   : The domain name contains a double hyphen
+explain : [ref]: IETF IDN project (internationalized domain names)\nThe double dash ('--') will have a special meaning for the domain name\nencoding, so it is strongly advised not to used it. See \n<URL:http://www.iana.org/cctld/specifications-policies-cctlds-01apr02.htm> (4. Tagged Domain Names.)
+
+
+[chk_one_ns]
+testname: one nameserver for the domain 
+error   : At least one nameserver is requiered
+explain = xpl_rfc2182
+
+
+[chk_several_ns]
+testname: at least two nameserver for the domain
+error   : At least two nameserver are necessary
+explain = xpl_rfc2182
+
+
+[chk_distinct_ip]
+testname: identical addresses
+error   : All addresses should be distinct
+explain = xpl_rfc2182
+details : The nameservers %{ns} are using the same IP address (%{ip}). See RFC2182.
+
+
+[chk_same_net]
+testname: nameserver addresses on same subnet
+error   : IP addresses on the same subnet
+explain = xpl_rfc2182
+details : The following subnets are used by several hosts: %{subnets}. Try moving some of their hosts to another subnet.
+
+
+[chk_all_same_net]
+testname: nameserver addresses are all on the same subnet
+error   : IP addresses are all on the same subnet
+explain = xpl_rfc2182
+details : All the servers are in the subnet %{subnet}, try moving some of them  to another subnet.

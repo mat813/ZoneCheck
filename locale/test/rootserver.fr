@@ -1,0 +1,39 @@
+# $Id$
+
+# 
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2002/08/02 13:58:17
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+
+[*]
+xpl_rootserver_vs_icann : [ref]: IETF RFC2870 (p.1)\nThe Internet Corporation for Assigned Names and Numbers (ICANN)\nhas become responsible for the operation of the root servers.\nThe ICANN has appointed a Root Server System Advisory Committee\n(RSSAC) to give technical and operational advice to the ICANN\nboard.  The ICANN and the RSSAC look to the IETF to provide\nengineering standards.
+
+
+
+[chk_root_servers]
+testname: root servers list present
+error   : Root Servers are not available
+explain : [none]
+
+
+[chk_root_servers_ns_vs_icann]
+testname: root servers list identical to ICANN
+error   : Root Servers list is not coherent with ICANN
+explain = xpl_rootserver_vs_icann
+
+
+[chk_root_servers_ip_vs_icann]
+testname: root servers addresses identical to ICANN
+error   : Root Servers IP addresses are not coherent with ICANN
+explain = xpl_rootserver_vs_icann

@@ -1,0 +1,22 @@
+# $Id$
+
+# 
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2002/08/02 13:58:17
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+[chk_private_ip]
+testname: address in a private network
+error   : Address is part of a private subnet
+explain : [ref]: IETF RFC1918 (3. Private Address Space)\nThe Internet Assigned Numbers Authority (IANA) has reserved the\nfollowing three blocks of the IP address space for private internets: 10/8, 172.16/12, 192.168/16.
+

@@ -1,0 +1,41 @@
+# $Id$
+
+# 
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2002/08/02 13:58:17
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+
+
+[chk_ns_reverse]
+testname: Nameserver IP reverse
+error   : Can't find reverse for the nameserver IP address
+explain : [none]
+
+
+[chk_correct_recursive_flag]
+testname: check if server is really recursive
+error   : server claims to be recursive but is not
+explain : [none]
+
+
+[chk_given_nsprim_vs_soa]
+testname: given primary nameserver is primary
+error   : The primary nameserver doesn't match the given one
+explain : [none]
+
+
+[chk_given_ns_vs_ns]
+testname: correctness of given nameserver list
+error   : The nameserver list doesn't match the given one
+explain : [none]

@@ -1,0 +1,48 @@
+# $Id$
+
+# 
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2002/09/25 19:14:21
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+[*]
+xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay when it processes a\nmessage from a non-local sender to a non-local recipient. These days,\njunk emailers abuse this capability at an alarming rate. They use the\nstolen capacity to greatly increase the amount of spam they can deliver.\n[adv]: AFNIC\nYou can perform more complete testing by using the following command:\n"telnet relay-test.mail-abuse.org", for more information take a look at\n<URL:http://www.mail-abuse.org/>
+
+
+
+[chk_mail_openrelay_domain]
+testname: delegated domain is not an openrelay
+error   : The best MX for the domain is an openrelay
+explain = xpl_openrelay
+details : The mailhost (%{mailhost}) used for receiving email for your domain seems to act as an open relay, it is allowing mail from %{from_host} to %{to_host}.
+
+
+[chk_mail_openrelay_hostmaster]
+testname: domain of the hostmaster email is not an openrelay
+error   : The best MX for the hostmaster address is an openrelay
+explain = xpl_openrelay
+details : The mailhost (%{mailhost}) used for the hostmaster address (%{hostmaster}) seems to act as an open relay, it is allowing mail from %{from_host} to %{to_host}.
+
+
+[chk_mail_postmaster]
+testname: 'postmaster' email address for the domain is valid
+error   : The postmaster can't be contacted by email
+explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved\nmailbox "Postmaster".
+details : The postmaster address (%{postmaster}) doesn't exist.
+
+
+[chk_mail_hostmaster]
+testname: hostmaster email address is valid
+error   : The hostmaster can't be contacted by email
+explain : [none]
+details : The hostmaster address (%{hostmaster}) doesn't exist.
