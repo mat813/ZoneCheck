@@ -377,13 +377,19 @@
 	</TR>
     </TABLE>
 
+    <HR>
+    <p>
+      <a href="http://validator.w3.org/check/referer"><img border="0"
+          src="http://www.w3.org/Icons/valid-html401"
+          alt="Valid HTML 4.01!" height="31" width="88"></a>
+    </p>
 
     <!-- What / Who / When -->
     <HR>
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr  3 14:14:02 CEST 2003
+Last modified: Thu Apr  3 14:19:43 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
