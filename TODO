@@ -3,6 +3,7 @@
 CLASS OK:
 zc/msgcat.rb
 zc/dbg.rb
+zc/param.rb
 
 TODO:
 
@@ -20,7 +21,6 @@ TODO:
 - escape HTML code
 - meaningfull exit code
 
-- check for domain name not in useconf
 - categories
 
 
@@ -46,9 +46,8 @@ NOT ABLE TODO?
 
 2003-01-16 sdalu@nic.fr
 	implement AXFR tests (only framework exists)
-
-2003-01-16 sdalu@nic.fr
 	progress bar for HTML publisher
+	have a useconf strict
 
 DONE:
 2003-01-16 sdalu@nic.fr

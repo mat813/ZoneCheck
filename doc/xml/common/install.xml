@@ -36,6 +36,9 @@
 		<para>Apache2: <ulink url="http://httpd.apache.org/">http://httpd.apache.org/</ulink></para>
 	      </listitem>
 	      <listitem>
+		<para>eruby: <ulink url="http://www.modruby.net/">http://www.modruby.net/</ulink></para>
+	      </listitem>
+	      <listitem>
 		<para>Mozilla: <ulink url="http://www.mozilla.org/">http://www.mozilla.org/</ulink></para>
 	      </listitem>
 	    </itemizedlist>
@@ -61,7 +64,7 @@
 |      |   |-- ...              #   ...
 |      |   `-- fr               #   French version
 |      |-- locale               # Localisation files (zonecheck)
-|      |   `-- test		#   localisation for the test set
+|      |   `-- test             #   localisation for the test set
 |      |-- test                 # test set
 |      |-- lib                  # Extra libraries (NResolv, Address, ...)
 |      `-- zc                   # core components
@@ -74,6 +77,17 @@
     <section>
       <title>HTML</title>
       <para>toto</para>
+<screen>
+SetEnv ZC_INSTALL_PATH /homes/sdalu/ZC.CVS/zc
+ExtFilterDefine eruby mode=output cmd="/usr/local/bin/eruby -n -"
+AddOutputFilter eruby .erb
+    ScriptAlias /cgi-bin/ "/usr/local/www/cgi-bin/"
+    Alias /zc/formfill.js "/homes/sdalu/ZC.CVS/zc/html/formfill.js"
+    Alias /zc/progress.js "/homes/sdalu/ZC.CVS/zc/html/progress.js"
+    Alias /zc/zc.css "/homes/sdalu/ZC.CVS/zc/html/zc.css"
+    Alias /zc/img/ "/homes/sdalu/ZC.CVS/zc/html/img/"
+    Alias /zc/ "/homes/sdalu/ZC.CVS/zc/html/en/"
+</screen>
     </section>
 
 <!-- 

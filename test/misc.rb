@@ -50,7 +50,7 @@ module CheckNetworkAddress
 	end
 
 
-	# DESC: Ensure that a server claiming to be recursive is it really
+	# DESC: Ensure that a server claiming to be recursive really is it
 	def chk_correct_recursive_flag(ns, ip)
 	    return true unless rec(ip)
 

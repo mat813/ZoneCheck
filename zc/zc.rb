@@ -283,34 +283,38 @@ class ZoneCheck
 	@param.publisher.engine.begin
 	
 	# 
-	if ! @param.batch
-	    cm = CacheManager::create(@param.resolver.local,
-				      @param.network.query_mode)
-
-	    @param.domain.autoconf(@param.resolver.local)
-	    @param.report.autoconf(@param.domain, 
-				   @param.rflag, @param.publisher.engine)
-	    zc(cm)
-	else
-	    cm = CacheManager::create(@param.resolver.local, 
-				      @param.network.query_mode)
-	    batchio = case @param.batch
-		      when "-"              then $stdin
-		      when String           then File::open(@param.batch) 
-		      when Param::BatchData then @param.batch
-		      end
-	    batchio.each_line { |line|
-		next if line =~ /^\s*$/
-		next if line =~ /^\#/
-		if ! parse_batch(line)
-		    @input.error($mc.get("xcp_zc_batch_parse"), EXIT_ERROR)
-		end
+	begin
+	    if ! @param.batch
+		cm = CacheManager::create(@param.resolver.local,
+					  @param.network.query_mode)
+		
 		@param.domain.autoconf(@param.resolver.local)
 		@param.report.autoconf(@param.domain, 
 				       @param.rflag, @param.publisher.engine)
 		zc(cm)
-	    }
-	    batchio.close unless @param.batch == "-"
+	    else
+		cm = CacheManager::create(@param.resolver.local, 
+					  @param.network.query_mode)
+		batchio = case @param.batch
+			  when "-"              then $stdin
+			  when String           then File::open(@param.batch) 
+			  when Param::BatchData then @param.batch
+			  end
+		batchio.each_line { |line|
+		    next if line =~ /^\s*$/
+		    next if line =~ /^\#/
+		    if ! parse_batch(line)
+			@input.error($mc.get("xcp_zc_batch_parse"), EXIT_ERROR)
+		    end
+		    @param.domain.autoconf(@param.resolver.local)
+		    @param.report.autoconf(@param.domain, 
+					 @param.rflag, @param.publisher.engine)
+		    zc(cm)
+		}
+		batchio.close unless @param.batch == "-"
+	    end
+	rescue Param::ParamError => e
+	    @param.publisher.engine.error(e.message)
 	end
 
 	# End formatter

@@ -45,11 +45,12 @@ IMG.zc_logo {
 }
 
 .zc_warning { 
+    padding: 5px 5px 5px 5px; 
     text-decoration: none;
-    font-size: 18px;
+//  font-size: 18px;
     color: red; 
-    text-indent: 40px;
-    font-weight: bold;
+//  text-indent: 40px;
+//  font-weight: bold;
 }
 
 
