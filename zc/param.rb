@@ -171,7 +171,7 @@ class Param
 	    @ns_input = [ ]
 	    ns.split(/\s*;\s*/).each { |entry|
 		ips  = []
-		if entry =~ /^(.*)=(.*)$/
+		if entry =~ /^(.*?)\s*=\s*(.*)$/
 		    host_str, ips_str = $1, $2
 		    host = NResolv::DNS::Name::create(host_str, true)
 		    ips_str.split(/\s*,\s*|\s+/).each { |str|

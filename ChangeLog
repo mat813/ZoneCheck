@@ -1,4 +1,6 @@
 # $Id$
+2003-04-29  Stephane D'Alu  <sdalu@nic.fr>
+	* all: GPL version fixed to v2
 	
 2003-04-28  Stephane D'Alu  <sdalu@nic.fr>
 	* report: now provide 'byseverity' and 'byhost'
