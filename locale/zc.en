@@ -288,10 +288,11 @@ testname: SOA 'expire' at least 7 days
 error   : The 'expire' period must be at least 7 days
 explain : [ref]: IETF RFC1912 (p.4)\nAfter a zone is expired a secondary will still continue to try to contact\nthe primary, but it will no longer provide nameservice for the zone.\n2 to 4 weeks are suggested values.\n[ref]: AFNIC constraint\nA minimum of 1 week (7 days) is enforced.
 
-[chk_soa_expire_refresh]
+[chk_soa_expire_7refresh]
 testname: SOA 'expire' at least 7 times 'refresh'
 error   : The 'expire' period must be at least 7 times greater than 'refresh'
 explain : [none]
+details : The expire (%{expire} sec) is not at least 7 times greater than the refresh (%{refresh} sec), you should correct one of them.
 
 [chk_soa_minimum_3h]
 testname: SOA 'minimum' less than 3 hours
