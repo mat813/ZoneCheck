@@ -146,18 +146,18 @@
 
   <check name="all_same_asn">
     <name>serveurs de noms appartenant tous au même AS</name>
-    <success>Tous les serveurs de noms ne font parti du même AS</success>
-    <failure>Les serveurs de nom font tous parti du même AS</failure>
+    <success>Tous les serveurs de noms ne font partie du même AS</success>
+    <failure>Les serveurs de nom font tous partie du même AS</failure>
     <explanation>
       <src type="adv" from="zonecheck">
         <title>ZoneCheck</title>
         <para>Afin d'éviter de perdre la connectivité avec les serveurs
-          DNS authoritaires en cas de problèmes de routage dans
-          le Système Autonome, il est consillé d'héberger les serveurs
+          DNS autoritaires en cas de problèmes de routage dans
+          le Système Autonome, il est conseillé d'héberger les serveurs
           sur différents AS.</para>
       </src>
     </explanation>
-    <details><para>Tous les serveurs de noms font parti du même 
+    <details><para>Tous les serveurs de noms font partie du même 
       Système Autonome (AS numéro <zcvar name="asn"/>), essayez d'en
       héberger certains sur un autre.</para></details>
   </check>
