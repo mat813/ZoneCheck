@@ -40,12 +40,12 @@ class Locale
     #  The settings are based on: LanguageCode_CountryCode.Encoding
     #
     def self.normlang(lng)
-	unless lng =~ LANGRegex
+	unless md = LANGRegex.match(lng)
 	    raise ArgumentError, "Suspicious language selection: #{lng}"
 	end
-	lang  =       $1.downcase
-        lang += '_' + $2.upcase   if $2
-        lang += '.' + $3.downcase if $3
+	lang  =       md[1].downcase
+        lang += '_' + md[2].upcase   if md[2]
+        lang += '.' + md[3].downcase if md[3]
         lang.untaint
     end
 
@@ -53,10 +53,10 @@ class Locale
     # Split lang between Language, Country, Encoding
     #
     def self.splitlang(lng)
-	unless lng =~ LANGRegex
+	unless md = LANGRegex.match(lng)
 	    raise ArgumentError, "Suspicious language selection: #{lng}"
 	end
-        [ $1, $2, $3 ]
+        [ md[1], md[2], md[3] ]
     end
 
 
