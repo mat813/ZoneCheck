@@ -296,9 +296,9 @@ class TestManager
 	rescue NResolv::DNS::ReplyError => e
 	    desc.err = case e.mesg 
 		       when NResolv::DNS::RCode::SERVFAIL
-			   "Serveur failure"
+			   "Server failure"
 		       when NResolv::DNS::RCode::REFUSED
-			   "Answer refused from serveur"
+			   "Answer refused from server"
 		       else e.to_s
 		       end
 #	rescue Errno::EADDRNOTAVAIL
