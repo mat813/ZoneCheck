@@ -1,14 +1,8 @@
 # $Id$
 
-CLASS OK:
-zc/msgcat.rb
-zc/dbg.rb
-zc/param.rb
-
 version = 2.0.0
 	Implement AXFR tests (only framework exists)
 	Test loopback delegation v6
-	Cache status is wrong
 	Translation in french
 	Check name from_s methode
 
@@ -24,9 +18,8 @@ version = 2.0.0
 	Include sample code to show how to use the DBG class
 	check for label_xpl defined elsewhere
 
-	check for differences between IE/Mozilla/...
+	check for differences between IE/Mozilla/Konqueror/...
 	reorganize javascript (espetially for localisation)
-	finish full configuration of the html_publish_path
 	form.erb memorize options
 
 	fix behaviour in case of test failed

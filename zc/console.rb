@@ -15,6 +15,10 @@
 #
 #
 
+#
+# XXX: NEED CLEANUP
+#
+
 class Console
     ##
     ## Exception: requested encoding is not possible (conversion lose)
