@@ -28,6 +28,8 @@ ZC_TEST_DIR		= "#{ZC_DIR}/test"
 
 ZC_LANG_DEFAULT		= "en"
 
+ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
+ZC_CGI_EXT		= "cgi"
 
 #
 # Identification
@@ -104,12 +106,12 @@ raise "Default locale (#{ZC_LANG_DEFAULT}) not found" if $mc.nil?
 
 # Test for IPv6 stack
 #  WARN: doesn't implies that we have IPv6 connectivity
-begin
-    UDPSocket::new(Socket::AF_INET6).close
-    $ipv6_stack = true
-rescue SocketError
-    @ipv6_stack = false
-end
+$ipv6_stack = begin
+		  UDPSocket::new(Socket::AF_INET6).close
+		  true
+	      rescue SocketError
+		  false
+	      end
 
 
 ##
@@ -131,7 +133,11 @@ class ZoneCheck
     #
     def configure
 	begin
-	    param = PROGNAME =~ /\.cgi$/ ? Param::CGI::new : Param::CLI::new
+	    param = if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
+		       (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
+		    then Param::CGI::new
+		    else Param::CLI::new
+		    end
 	    param.usage(EXIT_USAGE) if (@param = param.parse).nil?
 	rescue Param::ParamError => e
 	    $stderr.puts "ERROR: #{e}"
