@@ -29,6 +29,12 @@ class Param
     ##  - resolver
     ##
     class CGI
+	MaxNS = 8
+
+	##
+	## Wrapper for batch data, so that they have the same kind
+	## of IO interfaces as File or STDIN
+	##
 	class BatchData
 	    def initialize(data)
 		@data = data.split(/\n/)
@@ -125,7 +131,7 @@ class Param
 		@p.domain.ns = @cgi["ns"].join(";")
 	    else
 		ns_list = [ ]
-		(0..7).each { |i|
+		(0..MaxNS-1).each { |i|
 		    next unless cgi_ns = @cgi["ns#{i}"]
 		    next unless cgi_ns.length > 0
 		    next if     (ns = cgi_ns[0]).empty?

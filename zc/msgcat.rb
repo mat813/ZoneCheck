@@ -18,7 +18,7 @@
 ## line       : '#' comment              # a comment
 ##            | tag ':' definition       # a tag definition
 ##            | tag '=' tag              # a link to another tag
-##            | '[' prefix ']'           # a prefic to append to other tags
+##            | '[' prefix ']'           # a prefix to append to other tags
 ##
 ## prefix     : tag                      # the tag to use as prefix
 ##            | '*'                      # don't use a prefix
@@ -48,6 +48,7 @@ class MessageCatalog
 
     #
     # Normalize lang
+    #  and raise exception is the parameter is suspicious
     #
     def self.normlang(lng)
 	unless lng =~ /^\w+(:?\.[\w\-]+)?$/

@@ -24,7 +24,7 @@ ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
 ZC_LANG_FILE		= "zc.%s"
 ZC_LANG_DEFAULT		= "en"
 
-ZC_INPUT_METHODS	= [ "cli", "cgi", "gtk" ]
+ZC_INPUT_METHODS	= [ "cli", "cgi" ]
 
 ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
 ZC_CGI_EXT		= "cgi"

@@ -28,12 +28,6 @@ NOT ABLE TODO?
 	Document the class hierarchy with graphics if possible
 	Include sample code to show how to use the DBG class
 	
-2002-10-17 sdalu@nic.fr
-	Better separation between config and param
-	config should be read and passed to param, which implies
-	that param should be able to modify the list of tests to perform
-	(=> PB comes from whois.ripe.net for GTK/CGI)
-
 2002-10-18 sdalu@nic.fr
 	Implement XML param and XML publisher
 

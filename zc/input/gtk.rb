@@ -19,6 +19,9 @@ require 'thread'
 require 'gtk'
 
 class Param
+    ##
+    ## Processing parameters from GTK
+    ##
     class GTK
 	MaxNS = 8
 	##

@@ -1,0 +1,27 @@
+# $Id$
+
+CGI:
+
+lang <string>
+batchdata <text>
+quiet <bool>
+one   <bool>
+verbose
+  intro    <bool>
+  explain  <bool>
+  progress [ <none> | counter | testdesc ]
+output
+  format [ html | text ]
+error
+  errorlvl  [ | allfatal | allwarning ]
+  errorstop [ stop | nostop ]
+transp
+  transp3 [ ipv4 / ipv6 ]
+  transp4 [ udp | tcp | std ]
+category
+  chkmail   <bool>
+  chkwhois  <bool>
+  chkzone   <bool>
+ns
+  ns0..ns7, ips0..ips7
+zone <string>
