@@ -62,11 +62,7 @@ module Publisher
 	    if f_count == 0
 		tag = (w_count > 0) ? "res_succeed_but" : "res_succeed"
 	    else
-		if ! @rflag.stop_on_fatal # XXX: bad $
-		    tag = "res_failed_on"
-		else
-		    tag = (w_count > 0) ? "res_failed_and" : "res_failed"
-		end
+		tag = (w_count > 0) ? "res_failed_and" : "res_failed"
 	    end
 	    $mc.get(tag) % [ w_count ]
 	end

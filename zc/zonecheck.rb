@@ -247,25 +247,20 @@ class ZoneCheck
 	
 	# Initialise and check
 	@test_manager.init(cfg, cm, @param)
-	success = begin
-		      @test_manager.check
-		      true
-		  rescue Report::FatalError
-		      false
-		  end
+	status = @test_manager.check
 	
 	# Finish diagnostic (in case of pending output)
 	@param.report.finish
 
 	# Lastaction hook
-	lastaction(success)
+	lastaction(status)
 
 	# Return status
-	return success
+	return status
     end
 
 
-    def lastaction(success)
+    def lastaction(status)
     end
 
 

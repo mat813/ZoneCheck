@@ -83,7 +83,6 @@ tag_adv		: Adv
 res_succeed_but : SUCCEED (but %d warning(s))
 res_succeed	: SUCCEED
 res_failed	: FAILED
-res_failed_on	: FAILED (on warning)
 res_failed_and	: FAILED (and %d warning(s))
 
 ns_batch	: batch

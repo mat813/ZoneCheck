@@ -83,7 +83,6 @@ tag_adv		: Conseil
 res_succeed_but : SUCCES (mais %d avertissement(s))
 res_succeed	: SUCCES
 res_failed	: ECHEC
-res_failed_on	: ECHEC (sur avertissement)
 res_failed_and	: ECHEC (et %d avertissement(s))
 
 ns_batch	: lot

@@ -466,16 +466,24 @@ class TestManager
 		threadlist.each { |thr| thr.join }
 	    }
 
-	    # Counter end on success
-	    @publisher.progress.done(domainname_s)
+	    # Counter final status
+	    if @param.report.fatal.empty?
+	    then @publisher.progress.done(domainname_s)
+	    else @publisher.progress.failed(domainname_s)
+	    end
+
 	rescue Report::FatalError
-	    # Counter end on failure
+	    if @param.report.fatal.empty?
+		raise "BUG: FatalError with no fatal error stored in report"
+	    end
 	    @publisher.progress.failed(domainname_s)
-	    # Reraise exception
-	    raise
+
 	ensure
 	    # Counter cleanup
 	    @publisher.progress.finish
 	end
+
+	# Status
+	@param.report.fatal.empty?
     end
 end
