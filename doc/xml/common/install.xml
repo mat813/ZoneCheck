@@ -15,6 +15,16 @@
 	</listitem>
 	
 	<listitem>
+	  <para>For UTF-8 unaware terminal:
+            <itemizedlist>
+	      <listitem>
+		<para>Ruby Iconv: <ulink url="http://raa.ruby-lang.org/list.rhtml?name=iconv">http://raa.ruby-lang.org/list.rhtml?name=iconv</ulink></para>
+	      </listitem>
+	    </itemizedlist>
+          </para>
+	</listitem>
+
+	<listitem>
 	  <para>For the GTK interface:
             <itemizedlist>
 	      <listitem>
@@ -26,9 +36,7 @@
 	    </itemizedlist>
           </para>
 	</listitem>
-      </itemizedlist>
 
-      <itemizedlist>
 	<listitem>
 	  <para>For the CGI interface (other servers or clients can be used):
             <itemizedlist>

@@ -100,6 +100,20 @@
       </answer>
     </qandaentry>
    
+      <qandaentry>
+	<question>
+	  <para>Why did I get strange characters when using a locale
+	  other than US/English?</para>
+	</question>
+	<answer>
+	  <para>The default encoding is UTF-8, either you can
+	  configure your terminal to use UTF-8, or you can specify
+	  the desired encoding  after the locale by using a dot 
+	  as separator (ex: LANG=fr.latin1); in the last case 
+	  the ruby-iconv package should have been installed</para>
+	</answer>
+      </qandaentry>
+
 <!--
       <qandaentry>
 	<question>
