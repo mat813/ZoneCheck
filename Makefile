@@ -98,6 +98,7 @@ install-common:
 	$(INSTALL) -d $(ETCDIR)
 	$(INSTALL) -b -m 0644 etc/zc.conf $(ETCDIR)
 	$(INSTALL) -b -m 0644 etc/zc.conf.fr $(ETCDIR)
+	$(INSTALL) -b -m 0644 etc/zc.conf.arpa $(ETCDIR)
 	@echo "*************************"
 	@echo "** If you already had a zc.conf file it has been renamed"
 	@echo "**   to zc.conf.old"

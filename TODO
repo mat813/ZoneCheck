@@ -4,6 +4,7 @@ version = 2.0.0
 	Tests:	- Implement AXFR tests (only framework exists)
 		- base de donnees reseau (RIR) 
 		- test connectivite avec plusieurs adresses IP 
+		- Improve loopback delegation detection
 
 	integration avec la chaine de production
 	display erreur messages when in CGI no zone has been given
@@ -46,7 +47,6 @@ version = 3.0.0
 	Finish implementing nresolv (Bitstring, DNSSEC, unknown records)
 
 	Test:	- comparaison de le resolution resolver parent avec ns
-		- Improve loopback delegation detection
 		
 	publisher/report print all tests with status
 
