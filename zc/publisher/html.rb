@@ -348,8 +348,6 @@ module Publisher
     </script>
     <script src="#{@publish_path}/js/progress.js"  type="text/javascript">
     </script>
-    <script src="#{@publish_path}/js/popupmenu.js" type="text/javascript">
-    </script>
   </head>
   <body>
     <img class="zc-logo" alt="ZoneCheck" src="#{@publish_path}/img/logo.png">

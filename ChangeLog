@@ -5,6 +5,7 @@
 	* locale: removed wrong explanation for ping (french)
 	* zc: automatically use ruby-libxml implementation if available
 	* zc: fixed handling of preset
+	* test: all_same_asn test activated in the default profile
 	
 2003-12-01  ZoneCheck-2.0.0
 	* publisher: protect quote in javascript string
