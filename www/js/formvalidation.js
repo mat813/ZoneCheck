@@ -20,8 +20,11 @@ function zc_form_setlocale(emptyzone) {
 }
 
 function zc_form_valid(form) {
-  if (form["zone"].value.length == 0) {
-    alert("Zone Empty");
+  var zone = form["zone"].value;
+  zone = zone.replace(/^\s+/,'').replace(/\s+$/,'');
+
+  if (zone.length == 0) {
+    alert(zc_form_l_emptyzone);
     return 0;
   } else {
     return 1;
@@ -29,18 +32,10 @@ function zc_form_valid(form) {
 }
 
 function zc_form_check(form) {
-  if (zc_formvalid(form))
+  if (zc_form_valid(form))
     form.submit();
   return 0;
 }	  
-
-function zc_form_guess(form) {
-  form.action="";
-  form.method="get";
-  if (zc_formvalid(form))
-    form.submit();
-  return 0;
-}
 
 function zc_form_clear(form) {
   var i;

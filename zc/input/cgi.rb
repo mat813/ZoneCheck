@@ -78,6 +78,9 @@ module Input
 	end
 
 	def parse(p)
+	    # Direct script invocation is not authorized
+	    return false if @cgi.params.empty?
+
 	    # Lang
 	    # => The message catalogue need to be replaced
 	    if @cgi.has_key?("lang")
@@ -208,7 +211,12 @@ module Input
 	    if p.batch.nil?
 		zone = @cgi["zone"]
 		zone.strip! if zone
-		return false if zone.nil? || zone.empty?
+		if zone.nil? || zone.empty?
+		    if ENV.has_key?('HTTP_REFERER')
+		    then redirect(ENV['HTTP_REFERER'], EXIT_USAGE)
+		    else return false
+		    end
+		end
 		p.domain.name = zone
 	    end
 
@@ -216,11 +224,21 @@ module Input
 	    true
 	end
 
+	def redirect(url, errcode, txt=nil, io=$stdout)
+	    io.puts @cgi.header({ "status"   => "REDIRECT",
+				  "location" => url,
+				  "type"     => "text/plain",
+				  "charset"  => "UTF-8" })
+	    io.puts txt if txt
+	    exit errcode unless errcode.nil?
+	end
+
 	def interact(p, c, tm)
 	    # XXX: not good place
 	    p.rflag.autoconf
 	    p.publisher.autoconf(p.rflag)
-	    puts @cgi.header({ "type"    => p.publisher.engine.class::Mime,
+	    puts @cgi.header({ "nph"     => true,
+			       "type"    => p.publisher.engine.class::Mime,
 			       "charset" => "UTF-8" })
 	    true
 	end

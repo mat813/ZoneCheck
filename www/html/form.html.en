@@ -44,6 +44,10 @@
 
 
     <SCRIPT src="HTML_PATH/js/formvalidation.js" type="text/javascript"></SCRIPT>
+    <SCRIPT type="text/javascript">
+      zc_form_setlocale("You need to give at least a zone to test.");
+    </SCRIPT>
+
     <TITLE>Zone Check</TITLE>
   </HEAD>
 
@@ -148,8 +152,15 @@
 	    <TD><INPUT name="ips7" type="text" size=35 value=""></TD>
 	  </TR>
       </TABLE>
-      <INPUT type="submit" value=" Check! " onClick="zc_form_check(this.form)">
-      <INPUT type="button" value=" Clear "  onClick="zc_form_clear(this.form)">
+
+      <!-- Buttons -->
+      <SCRIPT>
+	document.writeln('<INPUT type="button" value=" Check! " onClick="zc_form_check(this.form)">')
+	document.writeln('<INPUT type="button" value=" Clear "  onClick="zc_form_clear(this.form)">')
+      </SCRIPT>
+      <NOSCRIPT>
+	<INPUT type="submit" value=" Check! ">
+      </NOSCRIPT>
 
       <!-- Options -->
       <H2>Options</H2>
@@ -430,7 +441,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Apr 22 14:07:18 CEST 2003
+Last modified: Mon Apr 28 13:54:32 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

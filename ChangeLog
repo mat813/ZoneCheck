@@ -1,5 +1,10 @@
 # $Id$
 	
+2003-04-28  Stephane D'Alu  <sdalu@nic.fr>
+	* report: now provide 'byseverity' and 'byhost'
+	* report: can generate the list of successful tests
+	* publisher: able to report 'testname'
+	
 2003-03-21  Stephane D'Alu  <sdalu@nic.fr>
 	* test: added chk_mail_hostmaster_mx_cname
 	* zc: IPv4 stack detection
