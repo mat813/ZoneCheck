@@ -17,12 +17,6 @@
     <const name="soa:retry:min"   value="900"/>
     <const name="soa:retry:max"   value="28800"/>
 
-    <!-- For openrelay testing -->
-    <const name="fake_mail_user" value="zonecheck"/>
-    <const name="fake_mail_dest" value="nic.fr"/>
-    <const name="fake_mail_from" value="afnic.fr"/>
-    <const name="fake_mail_host" value="relay2.nic.fr"/>
-
     <rules class="generic">
       <!-- Domain name check -->
       <check name="dn_sntx"     severity="f" category="dns:sntx"/>

@@ -7,12 +7,6 @@
            longdesc="delegation under .fr/.re done by AFNIC registry">
     <const name="registry" value="AFNIC"/>
 
-    <!-- For openrelay testing -->
-    <const name="fake_mail_user" value="zonecheck"/>
-    <const name="fake_mail_dest" value="nic.fr"/>
-    <const name="fake_mail_from" value="afnic.fr"/>
-    <const name="fake_mail_host" value="relay2.nic.fr"/>
-
     <!-- Minimum and maximum for SOA fields -->
     <!--  min: 0  / max: 2147483647         -->
     <const name="soa:expire:min"  value="604800"/>
