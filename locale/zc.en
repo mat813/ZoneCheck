@@ -15,7 +15,7 @@
 #
 #
 
-
+#
 # Word
 #
 w_generic	: generic
@@ -33,11 +33,17 @@ w_perfect	: perfect
 w_quit		: quit
 w_abort		: abort
 
+
+#
 # Tag
 #
 tag_ref		: Ref
 tag_adv		: Adv
 
+
+#
+#
+#
 res_succeed_but : SUCCEED (but %d warning(s))
 res_succeed	: SUCCEED
 res_failed	: FAILED
@@ -63,83 +69,90 @@ pgr_speed       : Speed
 pgr_speed_unit  : T/s
 
 
-input_unsupported: Input method '%s' unsupported
-input_suspicious:  Input method '%s' suspicious
+#
+# Input
+#
+[input]
+unsupported	: Input method '%s' unsupported
+suspicious	: Input method '%s' suspicious
+version		: PROGNAME: version %s
+unsupported_domain: No mapping able to process '%s'
 
+
+
+#
+# Parser
+#
 [config]
-section_exists : section '%s' already defined
-section_unknown: unknown or unavailable section '%s'
-constant_exists: constant '%s' already defined
-param_exists   : parameter '%s' already defined
-param_unknown  : unknown parameter '%s'
+section_exists	: section '%s' already defined
+section_unknown	: unknown or unavailable section '%s'
+constant_exists	: constant '%s' already defined
+param_exists	: parameter '%s' already defined
+param_unknown	: unknown parameter '%s'
 wrong_arg_number: wrong number of arguments (%s for %s) in '%s'
-dcl_map_exists : map for "%s" already specified
-dcl_unknown    : unknown declaration '%s'
-method_unknown : method '%s' unavailable
-for_domain     : %s for domain %s
-family_unknown : unknown family '%s'
+dcl_map_exists	: map for "%s" already specified
+dcl_unknown	: unknown declaration '%s'
+method_unknown	: method '%s' unavailable
+for_domain	: %s for domain %s
+family_unknown	: unknown family '%s'
 
 
-expect_string  : string expected
-expect_symbol  : symbol expected
-expect_keyword : '%s' keyword expected
-expect_token   : '%s' expected
-expect_cfg_main: expecting constant declaration or useconf
+expect_string	: string expected
+expect_symbol	: symbol expected
+expect_keyword	: '%s' keyword expected
+expect_token	: '%s' expected
+expect_cfg_main	: expecting constant declaration or useconf
 expect_cfg_specific: expecting constant declaration or testseq
 
 expect_checkname: check method (ie: chk_*) expected
-expect_testname : test method (ie: tst_*) expected
+expect_testname	: test method (ie: tst_*) expected
 expect_severity_level : expect severity level (w,i,f,S)
-expect_category : expecting category
+expect_category	: expecting category
 expect_constname: expecting constant declaration
-expect_value    : expecting string value for constant assignment
-expect_domain   : expecting domain name
-expect_filename : expecting file name
-expect_testtype : expecting test type (generic, extra, nameserver or address)
+expect_value	: expecting string value for constant assignment
+expect_domain	: expecting domain name
+expect_filename	: expecting file name
+expect_testtype	: expecting test type (generic, extra, nameserver or address)
 
-expect_lexical  : unexpected character '%s'
+expect_lexical	: unexpected character '%s'
 
 
-##############################################################################
-##############################################################################
+#
+# Exceptions
+#
+[xcp_zc]
+batch_parse	: Unable to parse batch line
 
-[xcp]
-param_fqdn_required  : Absolute domain name required
-param_batch_nodomain : No domainname expected for batch mode
-param_domain_expected: One domainname expected
-param_primary_soa    : Unable to find primary nameserver (SOA)
-param_nameservers_ns : Unable to find nameservers (NS)
-param_prim_ns_soa    : Unable to identify primary nameserver (NS vs SOA)
-param_nameserver_ips : Unable to find nameserver IP address(es) for %s
-param_output_support : Selected output class doesn't support '%s'
-param_ipv6_no_stack  : IPv6 not supported on that host
-param_unknown_modopt : unknown modifier '%s' for '%s' option
-zc_batch_parse       : Unable to parse batch line
-param_local_resolver : Unable to use local resolver '%s'
+[xcp_param]
+fqdn_required	: Absolute domain name required
+batch_nodomain	: No domainname expected for batch mode
+domain_expected	: One domainname expected
+primary_soa	: Unable to find primary nameserver (SOA)
+nameservers_ns	: Unable to find nameservers (NS)
+prim_ns_soa	: Unable to identify primary nameserver (NS vs SOA)
+nameserver_ips	: Unable to find nameserver IP address(es) for %s
+output_support	: Selected output class doesn't support '%s'
+ipv6_no_stack	: IPv6 not supported on that host
+unknown_modopt	: unknown modifier '%s' for '%s' option
+local_resolver	: Unable to use local resolver '%s'
 
 [xcp_config]
-malformed_cmd   : malformed command
-nosection       : no section defined
-unknownsection  : unknown section '%s'
-constexists     : constant '%s' already declared
-testexists      : test '%s' already listed
-confexists      : configuration for '%s' already listed
-unknowntest     : unknown test '%s'
-badsection      : section '%s' couldn't be used in this context
+malformed_cmd	: malformed command
+nosection	: no section defined
+unknownsection	: unknown section '%s'
+constexists	: constant '%s' already declared
+testexists	: test '%s' already listed
+confexists	: configuration for '%s' already listed
+unknowntest	: unknown test '%s'
+badsection	: section '%s' couldn't be used in this context
 unexpected_token: unexpected '%s' token
-unexpected_test : unexpected test (missing 'when'?)
-whenexists      : key '%s' in 'when' statement already defined
-elseexists      : else already used
-unknown_sectopt : unknown option '%s' for section '%s'
-missing_sectopt : missing option for section '%s'
+unexpected_test	: unexpected test (missing 'when'?)
+whenexists	: key '%s' in 'when' statement already defined
+elseexists	: else already used
+unknown_sectopt	: unknown option '%s' for section '%s'
+missing_sectopt	: missing option for section '%s'
 
 [xcp_testmanager]
-badclass    : class '%s' doesn't derive from %s
-test_exists : test '%s' defined in classes '%s' and '%s'
-check_exists: check '%s' defined int class '%s' and '%s'
-
-
-[param]
-version: PROGNAME: version %s
-unsupported_domain: No mapping able to process '%s'
-
+badclass	: class '%s' doesn't derive from %s
+test_exists	: test '%s' defined in classes '%s' and '%s'
+check_exists	: check '%s' defined int class '%s' and '%s'

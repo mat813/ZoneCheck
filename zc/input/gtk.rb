@@ -904,7 +904,7 @@ module Input
 		case opt
 		when "--help"      then usage(EXIT_USAGE, $stdout)
 		when "--version"
-		    puts $mc.get("param_version").gsub("PROGNAME", PROGNAME) % 
+		    puts $mc.get("input_version").gsub("PROGNAME", PROGNAME) % 
 			[ $zc_version ]
 		    exit EXIT_OK
 		when "--debug"     then $dbg.level	    = arg

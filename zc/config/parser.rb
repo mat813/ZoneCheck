@@ -21,11 +21,12 @@ require 'instructions'
 ##
 ##
 class Config
+    ##
+    ##
+    ##
     class Parser
 	KnownParam = [ "transp", "output", "verbose", "error" ]
-	##
-	##
-	##
+
 	def initialize(lexer)
 	    @lex = lexer
 	end

@@ -17,7 +17,10 @@
 
 class Config
     ##
-    ##
+    ## Keyword: case | when | else | end
+    ## Symbol : [a-zA-Z0-9:]+
+    ## String : ".." | '..'
+    ## Char   : { } [ ] = ; 
     ##
     class Lexer
 	##

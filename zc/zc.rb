@@ -243,7 +243,7 @@ class ZoneCheck
 
 	# Retrieve specific configuration
 	if (cfg = @config[@param.domain.name]).nil?
-	    l10n_error = $mc.get("param_unsupported_domain")
+	    l10n_error = $mc.get("input_unsupported_domain")
 	    @param.publisher.engine.error(l10n_error % @param.domain.name)
 	    return false
 	end

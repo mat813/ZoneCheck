@@ -15,42 +15,52 @@
 #
 #
 
-i_tag : i
-w_tag : w
-f_tag : f
-
-
-w_generic	: générique
+#
+# Word
+#
+w_generic	: génerique
 w_warning	: avertissement
+w_warning_id	: a
 w_fatal		: fatal
-w_info		: information
-w_unexpected	: imprévu
+w_fatal_id	: f
+w_info		: info
+w_info_id	: i
+w_testing	: testing
+w_unexpected	: innattendu
 w_line          : ligne
 w_error		: erreur
+w_perfect	: parfait
+w_quit		: quite
+w_abort		: interrompt
 
-xpltag_ref	: Réf
 
-res_succeed_but : SUCCES (mais %d avertissement(s))\n
-res_succeed	: SUCCES\n
-res_failed	: ECHEC\n
-res_failed_on	: ECHEC (sur avertissement)\n
-res_failed_and	: ECHEC (et %d avertissement(s))\n
-warning_fmt	: Warning: %s\n
-fatal_fmt	: Fatal  : %s\n
-info_fmt	: Info   : %s\n
-testing_fmt     : Testing : %s\n
-test_progress   : Tests in progress
+#
+# Tag
+#
+tag_ref		: Réf
+tag_adv		: Csl
 
+
+#
+#
+#
+res_succeed_but : SUCCES (mais %d avertissement(s))
+res_succeed	: SUCCES
+res_failed	: ECHEC
+res_failed_on	: ECHEC (sur avertissement)
+res_failed_and	: ECHEC (et %d avertissment(s))
+
+ns_batch	: lot
 ns_zone         : zone
 ns_ns		: ns
 ns_primary      : primaire
 ns_secondary    : secondaire
 ns_ips		: IPs
 
-title_zoneinfo  : Information sur la zone
-title_progress  : Progression
-title_testres   : Résultat des tests
-title_status    : Status final
+title_zoneinfo  : Information sur la Zone
+title_progress  : Progress
+title_testres   : Test results
+title_status    : Final status
 
 pgr_progress    : Progression
 pgr_test        : Tests
@@ -58,433 +68,92 @@ pgr_time        : Temps
 pgr_speed       : Vitesse
 pgr_speed_unit  : T/s
 
-##############################################################################
-##############################################################################
-
-xcp_param_fqdn_required  : Nom de domaine pleinement qualifié requis
-xcp_param_batch_nodomain : Aucun nom de domaine attendu lors du traitement par lots
-xcp_param_domain_expected: Un nom de domaine est attendu
-xcp_param_primary_soa    : Impossible de trouver le primaire (SOA)
-xcp_param_nameservers_ns : Impossible de trouver les serveurs de noms (NS)
-xcp_param_prim_ns_soa    : Impossible d'identifier le primaire (NS vs SOA)
-xcp_param_nameserver_ips : Impossible de trouver les addresses IPs pour %s
-xcp_param_output_support : La classe de sortie choisie ne support pas '%s'
-xcp_param_ipv6_no_stack  : IPv6 n'est pas supporté sur cette machine
-xcp_param_unknown_modopt : modificateur '%s' inconnu pour l'option '%s'
-xcp_config_malformed     : commande malformée
-xcp_config_nosection     : pas de section définie
-xcp_config_unknownsection: section '%s' inconnue
-xcp_config_constexists   : constante '%s' déjà déclarée
-xcp_config_testexists    : test '%s' déjà listé
-xcp_config_unknowntest   : test '%s' inconnu
-xcp_config_ordering      : problème d'ordre avec '%s'
-xcp_zc_batch_parse       : Impossible d'analyser la ligne de traitement par lots
-
-##############################################################################
-##############################################################################
 
 #
-# Tests
+# Input
 #
-
-label_xpl : [ref]: IETF RFC1034 (p.11)\nLabels are only composed by letters ([A-Za-z]), digits ([0-9]) or dashes\n('-') (not starting or ending with), and should be less than 63 characters;\ndomain name (labels separated by '.') should be less than 255 characters.
-
-cname_xpl : [ref]: IETF RFC1912 (p.6)\nA CNAME record is not allowed to coexist with any other data.
-
-
-ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME is bad and may conflict badly\nwith current BIND servers.  In fact, current BIND implementations\nwill ignore such records, possibly leading to a lame delegation.\nThere is a certain amount of security checking done in BIND to\nprevent spoofing DNS NS records.  Also, older BIND servers reportedly\nwill get caught in an infinite query loop trying to figure out the\naddress for the aliased nameserver, causing a continuous stream of\nDNS requests to be sent.
-
-
-loopback_xpl: [ref]: DNS & BIND (2nd edition) (p.61)\nNo one was given responsibility for the loopback network and system\nuse it for a loopback address, so it is the responsibility of everyone.\nIf it wasn't configured the request would eventually reach the root\nname server (increasing network traffic, and adding local delay) and\nthere is no guarantee that the answer would be 'localhost'
-
-openrelay_xpl: [ref]: ????\nYou can perform a more complete test by using the following command:\n"telnet relay-test.mail-abuse.org", for more information look at\n<URL:http://www.mail-abuse.org/>
-
-
-#
-# Domain name check
-#
-
-[chk_dn_alpha]
-testname: illegal symbols in domain name
-error   : The domain name contains illegal symbols
-explain = label_xpl
-
-[chk_dn_orp_hyph]
-testname: dash ('-') at start or beginning of domain name
-error   : The domain name start or end with a dash ('-')
-explain = label_xpl
-
-[chk_dn_dbl_hyph]
-testname: double hyphen in domain name
-error   : The domain name contains a double hyphen
-explain : [ref]: IETF IDN project (internationalized domain names)\nThe double dash ('--') will have a special meaning for the domain name\nencoding, so it is strongly advised not to used it.
+[input]
+unsupported	: méthode d'entrée '%s' non supported
+suspicious	: Input method '%s' suspicious
+version		: PROGNAME: version %s
+unsupported_domain: No mapping able to process '%s'
 
 
 
 #
-# IP address check
+# Parser
 #
-
-[chk_one_ns]
-testname: one nameserver for the domain 
-error   : At least one nameserver is requiered
-explain : [none]
-
-[chk_several_ns]
-testname: at least two nameserver for the domain
-error   : At least two nameserver are necessary
-explain : [none]
-
-[chk_distinct_ip]
-testname: identical addresses
-error   : All addresses should be distinct
-explain : [none]
-
-[chk_same_net]
-testname: nameserver addresses on same subnet
-error   : IP addresses on the same subnet
-explain : \
-[ref]: AFNIC advise\n\
-  To avoid loosing all connectivity with the autoritative DNS in case\n\
-  of network outage it is advised to host the DNS on different networks.
-
-[chk_private_ip]
-testname: address in a private network
-error   : Address is part of a private subnet
-explain : [none]
+[config]
+section_exists	: section '%s' already defined
+section_unknown	: unknown or unavailable section '%s'
+constant_exists	: constant '%s' already defined
+param_exists	: parameter '%s' already defined
+param_unknown	: unknown parameter '%s'
+wrong_arg_number: wrong number of arguments (%s for %s) in '%s'
+dcl_map_exists	: map for "%s" already specified
+dcl_unknown	: unknown declaration '%s'
+method_unknown	: method '%s' unavailable
+for_domain	: %s for domain %s
+family_unknown	: unknown family '%s'
 
 
+expect_string	: string expected
+expect_symbol	: symbol expected
+expect_keyword	: '%s' keyword expected
+expect_token	: '%s' expected
+expect_cfg_main	: expecting constant declaration or useconf
+expect_cfg_specific: expecting constant declaration or testseq
 
-#
-# Connectivity
-#
+expect_checkname: check method (ie: chk_*) expected
+expect_testname	: test method (ie: tst_*) expected
+expect_severity_level : expect severity level (w,i,f,S)
+expect_category	: expecting category
+expect_constname: expecting constant declaration
+expect_value	: expecting string value for constant assignment
+expect_domain	: expecting domain name
+expect_filename	: expecting file name
+expect_testtype	: expecting test type (generic, extra, nameserver or address)
 
-[chk_icmp]
-testname: ICMP answer
-error   : Host doesn't seems to be alive (firewall?)
-explain : [none]
-
-[chk_udp]
-testname: UDP connectivity
-error   : Server doesn't listen/answer for UDP protocol
-explain : [none]
-
-[chk_tcp]
-testname: TCP connectivity
-error   : Server doesn't listen/answer for TCP protocol
-explain : [none]
-
+expect_lexical	: unexpected character '%s'
 
 
 #
-# Root servers
+# Exceptions
 #
-
-[chk_root_servers]
-testname: root servers list present
-error   : Root Servers are not available
-explain : [none]
-
-[chk_root_servers_ns_vs_iana]
-testname: root servers list identical to IANA
-error   : Root Servers list is not coherent with IANA
-explain : [none]
-
-[chk_root_servers_ip_vs_iana]
-testname: root servers addresses identical to IANA
-error   : Root Servers IP addresses are not coherent with IANA
-explain : [none]
-
-
-
-#
-# Loopback
-#
-
-[chk_loopback_delegation]
-testname: loopback delegation
-error   : Loopback domain is not delegated.
-explain = loopback_xpl
-
-[chk_loopback_host]
-testname: loopback is resolvable
-error   : Loopback is not resolvable
-explain = loopback_xpl
-
-
-
-#
-# SOA
-#
-
-[chk_soa]
-testname: SOA record present
-error   : No SOA record found on server
-explain : [none]
-
-
-[chk_soa_auth]
-testname: SOA authoritative answer
-error   : The SOA answer is not authoritative
-explain : [none]
-
-
-[chk_soa_sntx_contact_at]
-testname: illegal characters in SOA contact name
-error   : The contact name contains illegal characters
-explain : [ref]: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are converted by using the following rule:\n   <local-part>@<mail-domain>  ==>  <local-part>.<mail-domain>\nif <local-part> contains a dot in should be backslashed (for 'bind')
-
-[chk_soa_sntx_master]
-testname: illegal characters in SOA master nameserver
-error   : The SOA master nameserver contains illegal characters
-explain : [none]
-
-[chk_soa_serial_fmt]
-testname: serial number of the form YYYYMMDDnn
-error   : The format of the serial number is not YYYYMMDDnn
-explain : [ref]: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day,\nnn=revision number).
-
-[chk_soa_refresh_6h]
-testname: SOA 'refresh' at least 6 hours
-error   : The 'refresh' period should be at least 6 hours
-explain : [none]
-
-[chk_soa_retry_refresh]
-testname: SOA 'retry' lower than 'refresh'
-error   : The 'retry' period must be lower than the 'refresh' period
-explain : [ref]: IETF RFC1912 (p.4)\nThe 'retry' value is typically a fraction of the 'refresh' interval.
-
-[chk_soa_retry_1h]
-testname: SOA 'retry' at least 1 hour
-error   : The 'retry' period should be at least 1 hour
-explain : [none]
-
-[chk_soa_expire_7d]
-testname: SOA 'expire' at least 7 days
-error   : The 'expire' period must be at least 7 days
-explain : [ref]: IETF RFC1912 (p.4)\nAfter a zone is expired a secondary will still continue to try to contact\nthe primary, but it will no longer provide nameservice for the zone.\n2 to 4 weeks are suggested values.\n[ref]: AFNIC constraint\nA minimum of 1 week (7 days) is enforced.
-
-[chk_soa_expire_refresh]
-testname: SOA 'expire' at least 7 times 'refresh'
-error   : The 'expire' period must be at least 7 times greater than 'refresh'
-explain : [none]
-
-[chk_soa_minimum_24h]
-testname: SOA 'minimum' at least 24 hours
-error   : The 'minimum' period must be at least 24 hours
-explain : [ref]: IETF RFC1912 (p.4)\n  The default TTL for resource records: how long data will remain in other\n  nameserves' cache. 1 to 5 days are typical values.\n[ref]: AFNIC constraint\n  A minimum of 1 day (24h) is enforced.
-
-[chk_soa_ttl]
-testname: SOA 'TTL' equal 'minimum'
-error   : The 'TTL' should be equal to the 'minimum'
-explain : [none]
-
-[chk_soa_ns_cname]
-testname: SOA nameserver is not an alias
-error   : SOA nameserver is not allowed to point to a CNAME alias
-explain = ns_cname_xpl
-
-[chk_soa_vs_any]
-testname: coherence between SOA and ANY records
-error   : SOA and ANY request disagree
-explain : [none]
-
-
-
-#
-# NS
-#
-
-[chk_ns]
-testname: NS record present
-error   : No NS record found on server
-explain : [none]
-
-[chk_ns_auth]
-testname: NS authoritative answer
-error   : The NS answer is not authoritative
-explain : [none]
-
-[chk_ns_sntx]
-testname: NS name has a valid domain/hostname syntax
-error   : NS name syntax is not correct
-explain : [none]
-
-[chk_ns_cname]
-testname: NS is not an alias
-error   : NS is not allowed to point to a CNAME alias
-explain = ns_cname_xpl
-
-[chk_ns_vs_any]
-testname: coherence between NS and ANY records
-error   : NS and ANY request disagree
-explain : [none]
-
-[chk_ns_ip]
-testname: NS can be resolved
-error   : The IP addresses of the zone nameserver can't be found
-explain : [none]
-
-[chk_ns_reverse]
-testname: Nameserver IP reverse
-error   : Can't find reverse for the nameserver IP address
-explain : [none]
-
-
-
-#
-# MX
-#
-
-[chk_mx]
-testname: MX record present
-error   : No MX record found on server
-explain : [ref]: IETF RFC1912 (p.7)\nPut MX records even on hosts that aren't intended to send or receive\ne-mail.  If there is a security problem involving one of these hosts,\nsome people will mistakenly send mail to postmaster or root at the\nsite without checking first to see if it is a "real" host or just a\nterminal or personal computer that's not set up to accept e-mail.
-
-[chk_mx_auth]
-testname: MX authoritative answer
-error   : The MX answer is not authoritative
-explain : [none]
-
-[chk_mx_sntx]
-testname: MX syntax is valid for an hostname
-error   : MX syntax is not correct
-explain : [none]
-
-[chk_mx_cname]
-testname: MX is not an alias
-error   : MX is not allowed to point to a CNAME alias
-explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
-
-[chk_mx_ip]
-testname: MX can be resolved
-error   : The IP address of the Mail eXchanger can't be resolved
-explain : [none]
-
-[chk_mx_vs_any]
-testname: coherence between MX and ANY records
-error   : MX and ANY request disagree
-explain : [none]
-
-
-
-#
-# Coherence with given parameters
-#
-
-[chk_given_nsprim_vs_soa]
-testname: given primary nameserver is primary
-error   : The primary nameserver doesn't match the given one
-explain : [none]
-
-[chk_given_ns_vs_ns]
-testname: correctness of given nameserver list
-error   : The nameserver list doesn't match the given one
-explain : [none]
-
-
-
-#
-# Mail
-#
-
-[chk_mail_openrelay_domain]
-testname: delegated domain is not an openrelay
-error   : The best MX for the domain is an openrelay
-explain = openrelay_xpl
-
-[chk_mail_openrelay_hostmaster]
-testname: domain of the hostmaster email is not an openrelay
-error   : The best MX for the hostmaster address is an openrelay
-explain = openrelay_xpl
-
-[chk_mail_postmaster]
-testname: 'postmaster' email address for the domain is valid
-error   : The postmaster can't be contacted by email
-explain : [none]
-
-[chk_mail_hostmaster]
-testname: hostmaster email address is valid
-error   : The hostmaster can't be contacted by email
-explain : [none]
-
-
-
-
-
-
-## USAGE #####################################################################
-##############################################################################
-
-[param]
-
-version: PROGNAME: version %s
-
-usage: \
-usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
-    -q, --quiet         N'affiche pas de titres supplémentaires\n\
-    -h, --help          Affiche ce message d'aide\n\
-    -V, --version       Affiche la version et quitte\n\
-    -B, --batch         Traitement par lots (depuis fichier ou stdin '-')\n\
-    -c, --config        Emplacement du fichier de configuration\n\
-        --testdir       Emplacement du répertoire de tests\n\
-    -C, --category      Exécute uniquement les tests de cette catégorie\n\
-    -T, --test          Nom du test à exécuter\n\
-        --testlist      Liste tous les tests disponnibles\n\
-        --testdesc      Donne une description du test\n\
-    -r, --resolver      Serveur à utiliser pour la résolution des 'ns'\n\
-    -n, --ns            Liste des serveurs de nom du domaine\n\
-    -1, --one           Affiche uniquement le message le plus significatif\n\
-    -g, --tagonly       Affiche uniquement les tags (idéal pour scripts)\n\
-    -e, --error         Comportement en cas d'erreurs (voir error)\n\
-    -t, --transp        Couche de routage/transport (voir transp)\n\
-    -v, --verbose       Affichage d'informations supplémentaires (voir verbose)\n\
-    -o, --output        Sortie (voir output)\n\
-    -4, --ipv4          Teste la zone en IPv4 uniquement\n\
-    -6, --ipv6          Teste la zone en IPv6 uniquement\n\
-\n\
-  verbose:              [intro/explain] [testdesc|counter]\n\
-    intro          [i]  Affiche un résumé: domain et serveurs associés\n\
-    explain        [x]  Affiche une explication pour les tests en échecs\n\
-    testdesc       [t]  Affiche la description du tests avant de l'exécuter\n\
-    counter        [c]  Affiche une barre de progression\n\
-\n\
-  output:               [straigh|consolidation] [text|html]\n\
-    straight      *[s]  Affiche le résultat sans (trop) de traitement\n\
-    consolidation  [c]  Rafine les résultats avant l'affichage\n\
-    text          *[t]  Sortie au format texte\n\
-    html           [h]  Sortie au format HTML\n\
-\n\
-  error:                [allfatal|allwarning] [stop|nostop]\n\
-    allfatal       [af] Toutes les erreurs sont considérées fatales\n\
-    allwarning     [aw] Toutes les erreurs sont considérées en avertissement\n\
-    stop          *[s]  Arrête à la première erreur fatale\n\
-    nostop         [ns] Continue même en cas d'erreur fatale\n\
-\n\
-  transp:               [ipv4/ipv6] [udp|tcp|std]\n\
-    ipv4          *[4]  Utilise le protocol de routage IPv4\n\
-    ipv6          *[6]  Utilise le protocol de routage IPv6\n\
-    udp            [u]  Utilise la couche de transport UDP\n\
-    tcp            [t]  Utilise la couche de transport TCP\n\
-    std           *[s]  Utilise UDP avec repli sur TCP (messages tronqués)\n\
-\n\
-  Traitement par lots:\n\
-    - traite les domaines depuis un fichier ou stdin, avec 1 domaine par ligne\n\
-      la syntaxe est la suivante:\n\
-      DOM=domainname\n\
-   ou DOM=domainname NS=ns1;ns2=ip1,ip2\n\
-\n\
-\n\
-EXEMPLES:\n\
-  PROGNAME -6 --verbose=x,i afnic.fr.\n\
-    Teste le domaine 'afnic.fr.' en IPv6 seulement, affiche un résumé des\n\
-    informations sur le domaine testé et des explications en cas d'échecs\n\
-\n\
-  PROGNAME -v c -1 -B -\n\
-    Effectue un traitement par lot, où les domaines sont lus depuis 'stdin'\n\
-    une barre de progression indique le nombre de tests restant et seulement\n\
-    une courte description est affichée\n\
-\n\
-  PROGNAME --testdesc error -T chk_soa\n\
-    Demande le message d'erreur ('error') associé avec le test 'chk_soa'\n
+[xcp_zc]
+batch_parse	: Unable to parse batch line
+
+[xcp_param]
+fqdn_required	: Absolute domain name required
+batch_nodomain	: No domainname expected for batch mode
+domain_expected	: One domainname expected
+primary_soa	: Unable to find primary nameserver (SOA)
+nameservers_ns	: Unable to find nameservers (NS)
+prim_ns_soa	: Unable to identify primary nameserver (NS vs SOA)
+nameserver_ips	: Unable to find nameserver IP address(es) for %s
+output_support	: Selected output class doesn't support '%s'
+ipv6_no_stack	: IPv6 not supported on that host
+unknown_modopt	: unknown modifier '%s' for '%s' option
+local_resolver	: Unable to use local resolver '%s'
+
+[xcp_config]
+malformed_cmd	: malformed command
+nosection	: no section defined
+unknownsection	: unknown section '%s'
+constexists	: constant '%s' already declared
+testexists	: test '%s' already listed
+confexists	: configuration for '%s' already listed
+unknowntest	: unknown test '%s'
+badsection	: section '%s' couldn't be used in this context
+unexpected_token: unexpected '%s' token
+unexpected_test	: unexpected test (missing 'when'?)
+whenexists	: key '%s' in 'when' statement already defined
+elseexists	: else already used
+unknown_sectopt	: unknown option '%s' for section '%s'
+missing_sectopt	: missing option for section '%s'
+
+[xcp_testmanager]
+badclass	: class '%s' doesn't derive from %s
+test_exists	: test '%s' defined in classes '%s' and '%s'
+check_exists	: check '%s' defined int class '%s' and '%s'
 

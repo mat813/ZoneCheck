@@ -19,12 +19,14 @@
 ##
 ##
 class Config
+    ##
+    ## Store the token position
+    ## 
     class Pos
 	attr_reader :x, :y
 
 	def initialize(x, y)
-	    @x = x
-	    @y = y
+	    @x, @y = x, y
 	end
     end
 end
