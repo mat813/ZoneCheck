@@ -61,7 +61,7 @@ module CheckExtra
 	    pref, exch = 65536, nil
 
 	    mxlist = mx(bestresolverip(name), name)
-	    mxlist = mx(nil, mdom) if mxlist.empty?
+	    mxlist = mx(nil, name) if mxlist.empty?
 	    mxlist.each { |m|
 		if m.preference < pref
 		    pref, exch = m.preference, m.exchange
@@ -73,6 +73,7 @@ module CheckExtra
 	def mhosttest(mdom, mhost)
 	    # Mailhost and IP 
 	    mip   = addresses(mhost, bestresolverip(mhost))[0]
+	    mip   = addresses(mhost, nil)[0] if mip.nil?
 	    raise "No host servicing mail for domain #{mdom}" if mip.nil?
 
 	    # Execute test on mailhost
