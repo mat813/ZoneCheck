@@ -83,6 +83,10 @@ The DNS is a critical resource for every network application, quite important to
 \fIZoneCheck\fP is intended to help solving misconfigurations or inconsistencies usually revealed by an increase in the latency of the application, up to the output of unexpected/inconsistant results.
 .
 .SH OPTIONS
+.IP \fINOTE:\fB
+It doesn't necessary make sense to combine some options together, it
+that case the most recent option will be taken into account, silently
+discarding the other.
 .TP
 \fB--quiet\fR, \fB-q\fR
 Don't display extra titles.
@@ -110,7 +114,7 @@ The available options are:
  
   0x2000 : Disable caching
   0x4000 : Don't try to rescue exceptions
-  0x8000 : Crazy Debug, don't try it...
+  0x8000 : Crazy Debug, don't try this at home!
 .TP
 \fB--help\fR, \fB-h\fR
 Show a short description of the different options available in \fIZoneCheck\fR.
@@ -145,8 +149,8 @@ The syntax for the catgory description is as follow:
 .
 .TP
 \fB--test\fR, \fB-T\fR \fItestname\fR
-\fItestname\fR is the test to perform. Note that in that
-case the severity for failing to pass it is \fBfatal\fR.
+\fItestname\fR is the test to perform. In this case failing to pass
+the test is considered as fatal.
 .
 .TP
 \fB--testlist\fR
@@ -167,7 +171,7 @@ should already have been delegated.
 .TP
 \fB--ns\fR, \fB-n\fR \fInslist\fR
 List of nameservers for the domain. Nameservers name are separated by 
-a semicolon, the name can be followed by the equal '=' sign and its
+a semicolon, the name can be followed by the equal sign and its
 IP addresses separated by a colon.
 .br
 This can give the following example: ns1;ns2=ip1,ip2;ns3=ip3
@@ -236,7 +240,7 @@ Output HTML.
 Output XML. (experimental)
 .TP
 \fBgtk\fR, \fBg\fR
-Use a GTK window to display the result. (Requires GTK binding)
+Use a GTK window to display the result (requires GTK binding).
 .
 .IP \fINOTE:\fB
 The following set are mutually exclusive: [\fBbyseverity\fR|\fBbyhost\fR] and [\fBtext\fR|\fBhtml\fR].
@@ -315,17 +319,36 @@ the program.
 .I ZC_INPUT
 The variable as the same effect as the undocumented \fBINPUT\fR parameter,
 it allows to chose the input interface used by \fIZoneCheck\fR, the currently
-supported values are: \fBcli\fR, \fBcgi\fR, \fBgtk\fR (requires GTK/ruby binding).
+supported values are: \fBcli\fR, \fBcgi\fR, \fBgtk\fR (requires GTK/ruby binding). But other interfaces doesn't accept the same parameters as the one described here.
 .
 .SH "EXIT STATUS"
 The following exit status can be reported by \fIZoneCheck\fR:
-  0 : Everything went fine
-  1 : The program completed but the result is negative
-  2 : The user aborted the program before completion
-  3 : An error unrelated to the result occured
-  9 : The user didn't bother reading the man page
+.TP
+0
+Everything went fine, no fatal errors were reported, the domain configuration
+is correct.
+.TP
+1
+The program completed but some tests failed with a fatal severity, the
+domain is NOT correctly configured.
+.TP
+2
+The program completed but some tests failed due with a fatal severity
+due to \fItimeout\fR occuring, the domain has been considered as NOT correctly
+configured, but you could want to check again later. \fIThis is currently 
+not implemented.\fR
+.TP
+3
+The user aborted the program before it's completion.
+.TP
+4
+An error which is not directly related to the tests performed has occured
+(ie: something went wrong).
+.TP
+9
+The user (you?) didn't bother reading the man page...
 .
-.SH "FILES / DIRECTORIES"
+.SH "FILES"
 .TP
 \fB\fI/usr/local/etc/zc.conf\fB\fR
 The default configuration file.
@@ -344,12 +367,12 @@ Contains a website sample for the web interface.
 .
 .SH EXAMPLES
 .LP
-Test the 'afnic.fr.' domain with IPv6 only connectivity, print
+Test the domain_name with IPv6 only connectivity, print
 a summary information about the tested domain as well as explanations
 and details of failed tests.
 .RS
 .nf
-\fBzonecheck -6 --verbose=i,x,d afnic.fr.\fP
+\fBzonecheck -6 --verbose=i,x,d domain_name\fP
 .fi
 .RE
 .LP
@@ -368,12 +391,22 @@ Ask for the 'error' message associated with the test 'chk_soa'.
 .fi
 .RE
 .LP
-If you want to test your domain, you will certainly like to use these
-parameters (the use of IPv4 as been forced because now people have
-computer with IPv6 stack but very few have the IPv6 connectivity).
+Only print tests which have failed and the result (succeed/failed),
+this would be ideal for giving people, through email fir example, 
+a short description of why their domains are not correctly configured.
 .RS
 .nf
-\fBzonecheck -4 -vi,x,d,c my_domain_name\fP
+\fBzonecheck -q -vn,d,x,f domain_name\fP
+.fi
+.RE
+.LP
+If you want to test your domain, you will certainly like to use these
+parameters (the use of IPv4 only as been forced because now people have
+computer with IPv6 stack but very few have the IPv6 connectivity, so
+autodetection will failed).
+.RS
+.nf
+\fBzonecheck -4 -vi,x,d,c domain_name\fP
 .fi
 .RE
 .
