@@ -86,8 +86,12 @@
 
     <section>
       <title>CGI</title>
-      <para>Here is an exemple of Apache2 configuration file,
-      assuming ZoneCheck has been installed for used in /zc/
+      <para>Here is an exemple of 
+      <ulink url="httpd.apache.org">Apache2</ulink> configuration file,
+      assuming ZoneCheck has been installed in
+      <filename class="directory">/usr/local</filename> (PREFIX=/usr/local)
+      and for html pages generated in the
+      <filename class="directory">/zc/</filename> namespace (HTML_PATH=/zc).
 <screen>
 ExtFilterDefine eruby mode=output cmd="/usr/local/bin/erb -n -"
 AddOutputFilter eruby .erb
