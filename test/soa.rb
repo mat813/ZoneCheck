@@ -83,7 +83,7 @@ module CheckNetworkAddress
 
 	# DESC: coherence between 'retry' and 'refresh'
 	def chk_soa_retry_refresh(ns, ip)
-	    return true if soa(ip).retry < soa(ip).refresh
+	    return true if soa(ip).retry <= soa(ip).refresh
 	    { "retry" => soa(ip).retry, "refresh" => soa(ip).refresh }
 	end
 	
