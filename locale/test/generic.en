@@ -115,7 +115,7 @@
     <success>All addresses are distinct</success>
     <failure>All addresses should be distinct</failure>
     <explanation sameas="shortcut:rfc2182"/>
-    <details><para> : The nameservers <zcvar name="ns"/> are using the 
+    <details><para>The nameservers <zcvar name="ns"/> are using the 
       same IP address (<zcvar name="ip"/>).</para></details>
   </check>
 
