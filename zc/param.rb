@@ -623,7 +623,7 @@ class Param
 	    @publisher
 	end
 
-	def autoconf(rflag)
+	def autoconf(rflag, info)
 	    # Set publisher class (if not already done)
 	    if @publisher_class.nil?
 		require 'publisher/text'
@@ -631,7 +631,7 @@ class Param
 	    end
 
 	    # Set output publisher
-	    @publisher = @publisher_class::new(rflag, $console.stdout)
+	    @publisher = @publisher_class::new(rflag, info, $console.stdout)
 
 	    $dbg.msg(DBG::AUTOCONF) { "Publish using #{@publisher_class}" }
 	end
@@ -639,7 +639,7 @@ class Param
 
 
     ##
-    ## Hold optionnal information
+    ## Hold optionnal input information
     ##
     class Option
 	def initialize
@@ -679,6 +679,28 @@ class Param
 
 
     ##
+    ## Hold information (statistics, ...)
+    ##
+    class Info
+	attr_reader :testingtime, :testcount, :nscount
+	attr_writer :testingtime, :testcount, :nscount
+
+	def initialize
+	end
+
+	def clear
+	    @testingtime	= nil
+	    @testcount		= 0
+	    @nscount		= 0
+	end
+
+	def autoconf
+	end
+    end
+
+
+
+    ##
     ## Exception: Parameter errors (ie: usage)
     ##
     class ParamError < StandardError
@@ -703,7 +725,7 @@ class Param
     # ATTRIBUTS
     #
     attr_reader :publisher, :fs, :network, :resolver, :rflag, :test, :report
-    attr_reader :option
+    attr_reader :option, :info
     attr_reader :batch, :domain
     attr_writer :batch, :domain
 
@@ -722,6 +744,7 @@ class Param
 	@domain		= Domain::new
 	@rflag		= ReportFlag::new
 	@option		= Option::new
+	@info		= Info::new
     end
 
 

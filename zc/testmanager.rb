@@ -292,6 +292,9 @@ class TestManager
 	    where  = args.empty? ? "generic" : args.join('/')
 	    "checking: #{checkname} [#{where}]" }
 
+	# Stat
+	@param.info.testcount += 1
+
 	# Retrieve the method representing the check
 	klass   = @checks[checkname]
 	object  = @objects[klass]
@@ -408,9 +411,13 @@ class TestManager
     # according to the program parameters
     #
     def check
-	threadlist            = []
-	testcount             = 0
-	domainname_s          = @param.domain.name.to_s
+	threadlist	= []
+	testcount	= 0
+	domainname_s	= @param.domain.name.to_s
+	starttime	= Time::now
+
+	# Stats
+	@param.info.nscount = @param.domain.ns.size
 
 	# Do a pre-evaluation of the code
 	if @do_preeval
@@ -481,6 +488,8 @@ class TestManager
 	ensure
 	    # Counter cleanup
 	    @publisher.progress.finish
+	    # Total testing time
+	    @param.info.testingtime = Time::now - starttime
 	end
 
 	# Status

@@ -212,8 +212,8 @@ module Publisher
 
 	#------------------------------------------------------------
 
-	def initialize(rflag, ostream=$stdout)
-	    super(rflag, ostream)
+	def initialize(rflag, info, ostream=$stdout)
+	    super(rflag, info, ostream)
 	    @count_txt	= $mc.get('title_progress')
 	    @progress	= Progress::new(self)
 	end

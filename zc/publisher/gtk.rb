@@ -353,8 +353,8 @@ module Publisher
 
 	attr_reader :pixmap
 
-	def initialize(rflag, ostream=$stdout)
-	    super(rflag, ostream)
+	def initialize(rflag, info, ostream=$stdout)
+	    super(rflag, info, ostream)
 
 	    #
 	    Thread::new { Gtk::main() }

@@ -42,9 +42,11 @@ module Publisher
     class Template # --> ABSTRACT <--
 	attr_reader :progress
 	attr_reader :rflag
+	attr_reader :info
 
-	def initialize(rflag, ostream=$stdout)
+	def initialize(rflag, info, ostream=$stdout)
 	    @rflag	= rflag
+	    @info	= info
 	    @o		= ostream
 	    @mutex	= Mutex::new
 	end

@@ -165,8 +165,8 @@ module Publisher
 
 	#------------------------------------------------------------
 
-	def initialize(rflag, ostream=$stdout)
-	    super(rflag, ostream)
+	def initialize(rflag, info, ostream=$stdout)
+	    super(rflag, info, ostream)
 	    @progress		= Progress::new(self)
 	    @publish_path	= ZC_HTML_PATH.gsub(/\/+$/, '')
 	end
@@ -204,7 +204,7 @@ module Publisher
     <link rel="bookmark" title="#{l10n_batch_form}"
 	  href="#{@publish_path}/#{$langpath}/batch.html"   type="text/html">
     <link rel="bookmark" title="#{l10n_single_form}"
-	  href="#{@publish_path}/#{$langpath}/"             type="text/html">
+	  href="#{@publish_path}/#{langpath}/"              type="text/html">
 
     <link rel="section" title="#{$mc.get('title_zoneinfo')}"
           href="#t_zoneinfo"                                type="text/html">
@@ -266,6 +266,7 @@ EOT
 	     src="http://www.w3.org/Icons/valid-html401"
 	     alt="Valid HTML 4.01!"></a>
     </span>
+Statistics: #{"%d tests in %.2f sec accros %d nameservers" % [info.testcount, info.testingtime, info.nscount]}
 Release: #{$zc_name}-#{CGI::escapeHTML($zc_version)} <br>
 Last generated: #{Time::now}
 <!-- <br> Contact: #{$zc_contact} -->

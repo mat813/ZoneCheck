@@ -160,7 +160,7 @@ class ZoneCheck
     #-- zonecheck ---------------------------------------------------------
 
     def do_check
-	param_autoconf_preamble
+	param_config_preamble
 
 	# Begin formatter
 	@param.publisher.engine.begin
@@ -171,7 +171,7 @@ class ZoneCheck
 	    cm = CacheManager::create(@param.resolver.local,
 				      @param.network.query_mode)
 	    if ! @param.batch
-		param_autoconf_data
+		param_config_data
 		success = zc(cm)
 	    else
 		batchio = case @param.batch
@@ -185,7 +185,7 @@ class ZoneCheck
 		    if ! parse_batch(line)
 			@input.error($mc.get('xcp_zc_batch_parse'), EXIT_ERROR)
 		    end
-		    param_autoconf_data
+		    param_config_data
 		    success = false unless zc(cm)
 		}
 		batchio.close unless @param.batch == '-'
@@ -202,17 +202,19 @@ class ZoneCheck
 	return success
     end
 
-    def param_autoconf_preamble
+    def param_config_preamble
 	@param.fs.autoconf
 	@param.option.autoconf
 	@param.rflag.autoconf
-	@param.publisher.autoconf(@param.rflag)
+	@param.publisher.autoconf(@param.rflag, @param.info) # XXX: info
 	@param.network.autoconf
 	@param.resolver.autoconf
 	@param.test.autoconf
     end
 
-    def param_autoconf_data
+    def param_config_data
+	@param.info.clear
+	@param.info.autoconf
 	@param.domain.autoconf(@param.resolver.local)
 	@param.report.autoconf(@param.domain, 
 			       @param.rflag, @param.publisher.engine)
