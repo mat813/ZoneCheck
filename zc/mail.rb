@@ -11,6 +11,13 @@
 #
 #
 
+#####
+#
+# TODO:
+#   - cleanup (removed reference to nic.fr, afnic.fr, zonecheck)
+#
+
+
 require 'socket'
 
 #m = MailTest::new("hyperion.nic.fr", "192.134.4.116")

@@ -4,7 +4,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -26,6 +26,8 @@ module Publisher
 	def method_missing(method, *args)
 	end
     end
+
+
 
     ##
     ##
@@ -59,6 +61,7 @@ module Publisher
 	def begin ; end
 	def end   ; end
     end
+
 
     
     ##
@@ -382,4 +385,3 @@ EOT
 	end
     end
 end
-

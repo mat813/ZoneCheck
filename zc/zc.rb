@@ -11,10 +11,6 @@
 # CONTRIBUTORS:
 #
 #
-# HISTORIC:
-#  - First version was developped by
-#  - C++ prototype was developped by 
-#
 
 
 #
@@ -26,9 +22,11 @@ ZC_INSTALL_PATH		= "/homes/sdalu/ZC.CVS/zc"
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
-ZC_LOCALIZATION_FILE	= "#{ZC_DIR}/zc.en"
+ZC_LOCALIZATION_FILE	= "#{ZC_DIR}/zc.%s"
 ZC_CONFIG_FILE		= "#{ZC_DIR}/zc.conf"
 ZC_TEST_DIR		= "#{ZC_DIR}/test"
+
+ZC_LANG_DEFAULT		= "en"
 
 
 #
@@ -46,7 +44,7 @@ ZC_VERSION	= (Proc::new {
 ZC_MAINTAINER   = "Stephane D'Alu <sdalu@nic.fr>"
 PROGNAME	= File.basename($0)
 
-$zc_version = ZC_VERSION
+$zc_version	= ZC_VERSION
 
 
 #
@@ -59,6 +57,7 @@ $LOAD_PATH << ZC_DIR << ZC_LIB
 # Requirement
 #
 require 'getoptlong'
+
 require 'nresolv'
 require 'ext'
 
@@ -88,9 +87,24 @@ $dbg = DBG::new
 
 #
 # Internationalisation
+#  WARN: default locale is mandatory as no human messages are
+#        present in the code (except debugging)
 #
-$mc = MessageCatalog::new(ZC_LOCALIZATION_FILE)
+[ ENV["LANG"], ZC_LANG_DEFAULT ].compact.each { |lang|
+    localefile = ZC_LOCALIZATION_FILE % [ lang ]
+    if File.readable?(localefile)
+	$mc = MessageCatalog::new(localefile)
+	break
+    end
+    $dbg.msg(DBG::LOCALE, "Unable to find locale for '#{lang}'")
+}
+raise "Default locale (#{ZC_LANG_DEFAULT}) not found" if $mc.nil?
 
+
+
+##
+##
+##
 class ZoneCheck
     def initialize
 	@param		= nil
@@ -100,6 +114,7 @@ class ZoneCheck
 
     def destroy
     end
+
 
     #
     # Parse command line
@@ -259,8 +274,10 @@ class ZoneCheck
 end
 
 
+
 #
-#
+# Launch ZoneCheck
+#  (if not in slave method)
 #
 if ! $zc_slavemode
     exit ZoneCheck::new.start ? EXIT_OK : EXIT_FAILED

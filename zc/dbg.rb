@@ -12,18 +12,25 @@
 #
 
 
+##
+##
+##
 class DBG
-    TEST_LOADING = 0x0001	# Display test loading status
-    CACHE_INFO   = 0x1000	# Display cache information
+    TEST_LOADING = 0x0001	# Test loading status
+    LOCALE       = 0x0002	# Localization / Internationalisation
+    AUTOCONF     = 0x0100       # Autoconf
+    CACHE_INFO   = 0x1000	# Information about cached object
+
     NOCACHE      = 0x2000	# Disable caching
     DONT_RESCUE  = 0x4000	# Don't try to rescue some exceptions
-    CRAZYDEBUG   = 0x8000	# Crazy Debug, the name says it all
-    AUTOCONF     = 0x0100       # Information about autoconf
+    CRAZYDEBUG   = 0x8000	# Crazy Debug, don't try it...
+
 
     C = { 
-	TEST_LOADING => "test",
-	CACHE_INFO   => "cache",
-	AUTOCONF     => "autoconf",
+	TEST_LOADING	=> "test",
+	LOCALE		=> "locale",
+	AUTOCONF	=> "autoconf",
+	CACHE_INFO	=> "cache",
     }
 
 
@@ -43,6 +50,8 @@ class DBG
     end
 
     def level=(lvl)
+	oldcrazy = enable?(CRAZYDEBUG)
+
 	case lvl
 	when String
 	    @lvl = lvl =~ /^0x/ ? lvl.hex : lvl.to_i
@@ -53,10 +62,12 @@ class DBG
 	end
 	
 	# enable/disable CrazyDebug
-	set_trace_func (enable?(CRAZYDEBUG) ? CrazyDebug_Proc : nil)
+	if    enable?(CRAZYDEBUG) then set_trace_func(CrazyDebug_Proc)
+	elsif oldcrazy            then set_trace_func(nil)
+	end
     end
 
     def msg(type, str)
-	@output.puts "DBG[#{C[type]}]: #{str}" if (@lvl & type) != 0
+	@output.puts "DBG[#{C[type]}]: #{str}" if enable?(type)
     end
 end

@@ -11,3 +11,11 @@
 - more checking in is_cname? (framework.rb)
 - cache status is wrong
 - see for improvement of options testlist and testdesc
+- finish implementing nresolv (Bitstring, DNSSEC, unknown records)
+- try removing give_testlist give_testdesc from the zc.rb start method
+- create a 'locale' directory
+- to translation in french ;)
+- finish internationalisation
+- try zonecheck with the native thread ruby implementation
+- implement the consolidation mode for output
+- use "taint"

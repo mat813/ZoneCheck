@@ -4,7 +4,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -13,6 +13,17 @@
 
 ##
 ## Message catalog for L10N
+##
+## The format of the message catalog is as follow:
+## line   : '#' comment              # a comment
+##        | tag ':' definition       # a tag definition
+##        | tag '=' tag              # a link to another tag
+##        | '[' prefix ']'           # a prefic to append to other tags
+##
+## prefix : tag                      # the tag to use as prefix
+##        | '*'                      # don't use a prefix
+##
+## tag    : [a-zA-Z0-9_]
 ##
 class MessageCatalog
     class EntryNotFound < StandardError

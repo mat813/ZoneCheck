@@ -16,10 +16,16 @@ require 'cgi'
 require 'report'
 require 'publisher'
 
+
+
 ##
 ## Parameters of the ZoneCheck application
 ##
 class Param
+
+    ##
+    ## Processing parameters from CGI (Common Gateway Interface)
+    ##
     class CGI
 	def initialize
 	    @p    = Param::new
@@ -29,6 +35,18 @@ class Param
 	    # CGI interpreter
 	    cgi = ::CGI::new
 	    
+	    # Lang
+#	    if cgi["lang"].length == 1
+#		lang = cgi["lang"][0]
+#		if lang =~ /^\w+$/ # Security
+#		    localefile = ZC_LOCALIZATION_FILE % [ lang ]
+#		    if File.readable?(localefile)
+#			$mc = MessageCatalog::new(localefile)
+#		    end
+#		end
+#	    end
+
+
 	    # Verbose
 	    if cgi.has_key?("verbose")
 		@p.verbose = cgi["verbose"].join(",")
@@ -70,7 +88,7 @@ class Param
 		cat << "whois" if cgi.has_key?("chkwhois")
 		cat << "zone"  if cgi.has_key?("chkzone")
 		if ! cat.empty?
-		    cat << "dns"
+		    cat << "connectivity" << "dns"
 		    @p.category = cat.join(",")
 		end
 	    end
@@ -117,8 +135,10 @@ class Param
 	end
     end
 
+
+
     ##
-    ##
+    ## Processing parameters from CLI (Command Line Interface)
     ##
     class CLI
 	def initialize
@@ -230,7 +250,7 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
         --testdesc      Give a description of the test
     -r, --resolver      Resolver to use for guessing 'ns' information
     -n, --ns            List of nameservers for the domain
-    -1, --one           Only primite the most relevant message
+    -1, --one           Only display the most relevant message
     -g, --tagonly       Display only tag (suitable for scripting)
     -e, --error         Behaviour in case of error (see error)
     -t, --transp        Transport/routing layer (see transp)
@@ -265,7 +285,7 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     std           *[s]  Use UDP with fallback to TCP for truncated messages
 
   Batch Mode: 
-    - process domain from stdin, with 1 per line. The syntax is:
+    - process domain from file or stdin, with 1 per line. The syntax is:
       DOM=domainname
    or DOM=domainname NS=ns1;ns2=ip1,ip2
     
@@ -277,8 +297,8 @@ EXAMPLES:
     failed tests
 
   #{PROGNAME} -v c -1 -B -
-    Work in batch mode, where domain are read from stdin, a progress bar
-    indicates how many tests remains, and only short report is written
+    Work in batch mode, where domains are read from stdin, a progress bar
+    indicates how many tests remain, and only short report is written
 
   #{PROGNAME} --testdesc error -T chk_soa
     Ask for the 'error' message associated with the test 'chk_soa'
@@ -319,9 +339,7 @@ EOT
 	end
 
 	def tagonly=(val)
-	    if @tagonly = val
-		@explain = false
-	    end
+	    @explain = false if @tagonly = val
 	end
 
 	def explain=(val)
@@ -329,15 +347,11 @@ EOT
 	end
 
 	def testdesc=(val)
-	    if @testdesc = val
-		@counter = false
-	    end
+	    @counter = false if @testdesc = val
 	end
 	
 	def counter=(val)
-	    if @counter = val
-		@testdesc = false
-	    end
+	    @testdesc = false if @counter = val
 	end
     end
 
@@ -562,17 +576,11 @@ EOT
 	@rflag			= ReportFlag::new
     end
 
-    #
-    #
-    #
 
+    #
+    #
+    #
     def give_testdesc=(string)
-#	case string
-#	when /^(\w+):(\w+)$/ then type, tag = $1,     $2
-#	when /^(\w+)$/       then type, tag = "name", $1
-#	else raise ParamError, "bad syntax for testdesc option"
-#	end
-
 	suf = case string
 	      when "name"  then "testname"
 	      when "expl"  then "explain"

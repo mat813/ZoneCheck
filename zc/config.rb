@@ -55,8 +55,8 @@ class Config
 	@test_action	= {}
 
 	@order		= 0
-	@order_switch	= { CheckGeneric => 0, CheckNameServer => 1,  
-	                    CheckNetworkAddress => 2, CheckExtra => 3 }
+	@order_switch	= { CheckGeneric        => 0, CheckNameServer => 1,  
+	                    CheckNetworkAddress => 2, CheckExtra      => 3 }
     end
 
 

@@ -4,7 +4,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -33,7 +33,7 @@ module CheckNetworkAddress
     ##   the tests won't be affected by the transport flags
     ## 
     class Connectivity < Test
-	ZC_Category = "dns"
+	ZC_Category = "connectivity"
 
 	#-- Tests ---------------------------------------------------
 	# DESC: Test TCP connectivity with DNS server

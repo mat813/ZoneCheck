@@ -4,7 +4,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -109,8 +109,9 @@ class TestManager
 
 
     def test1(severity, method, testname, ns=nil, ip=nil) 
-	# Print test description
+	# Publish information about the test being executed
 	@publisher.synchronize {
+	    # Test description
 	    if @param.rflag.testdesc
 		desc = if @param.rflag.tagonly
 		       then testname
@@ -118,7 +119,10 @@ class TestManager
 		       end
 		@publisher.testing(desc, ns, ip)
 	    end
-	    @publisher.counter.processed(1) if @param.rflag.counter
+	    # Test counter
+	    if @param.rflag.counter
+		@publisher.counter.processed(1) 
+	    end
 	}
 
 	desc         = Test::Result::Desc::new(testname)
@@ -251,10 +255,12 @@ class TestManager
 	    # Do CheckExtra
 	    check_extra.each { |args| test1(*args) }
 
-	    # Counter end
+	    # Counter end on success
 	    @publisher.counter.done(domainname_s)   if @param.rflag.counter
 	rescue Report::FatalError
+	    # Counter end on failure
 	    @publisher.counter.failed(domainname_s) if @param.rflag.counter
+	    # Reraise exception
 	    raise
 	ensure
 	    # Counter cleanup
