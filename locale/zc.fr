@@ -58,9 +58,9 @@ ns_secondary    : secondaire
 ns_ips		: IPs
 
 title_zoneinfo  : Information sur la Zone
-title_progress  : Progress
-title_testres   : Test results
-title_status    : Final status
+title_progress  : Progression
+title_testres   : Résultat des tests
+title_status    : Status final
 
 pgr_progress    : Progression
 pgr_test        : Tests

@@ -52,7 +52,7 @@ module Publisher
 	    def initialize(publisher)
 		@publisher	= publisher
 		@o		= publisher.output
-		@l10n_testing	= $mc.get("w_testing")
+		@l10n_testing	= $mc.get("w_testing").capitalize
 	    end
 	    
 	    # Start progression
