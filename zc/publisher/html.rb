@@ -116,22 +116,27 @@ module Publisher
 	    
 	    # Process an item
 	    def process(desc, ns, ip)
+		# Don't bother, if there is no output asked
+		return unless (@publisher.rflag.counter ||
+			       @publisher.rflag.testdesc)
+
 		xtra = if    ip then " (IP=#{ip})"
 		       elsif ns then " (NS=#{ns})"
 		       else          ""
 		       end
+		msg = CGI::escapeHTML("#{desc}#{xtra}")
 
 		# Counter
 		if @publisher.rflag.counter
-		    @o.puts HTML.jscript { 
-			"zc_pgr_process(\"#{desc} #{xtra}\")" }
+		    @o.puts HTML.jscript {
+			"zc_pgr_process(\"#{msg}\")" }
 		    @o.puts HTML.nscript {
-			"<LI>#{@l10n_testing}: #{desc}#{xtra}</LI>" }
+			"<LI>#{@l10n_testing}: #{msg}</LI>" }
 		end
 
 		# Test description
 		if @publisher.rflag.testdesc
-		    @o.puts "<LI>#{@l10n_testing}: #{desc}#{xtra}</LI>"
+		    @o.puts "<LI>#{@l10n_testing}: #{msg}</LI>"
 		end
 
 		# Flush
