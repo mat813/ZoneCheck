@@ -37,7 +37,8 @@ module Gtk
 	def initialize(*args)
 	    if (args.length > 1)
 		lhs = case args[0]
-		      when Symbol     then Gtk::Image::new(args[0])
+		      when Symbol     then Gtk::Image::new(args[0], 
+							 Gtk::IconSize::BUTTON)
 		      when Gtk::Image then args[0]
 		      else return _initialize(*args) 
 		      end
