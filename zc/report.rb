@@ -150,16 +150,17 @@ module Report
 
 
 
-	    if ! @rflag.quiet
+	    if !@rflag.quiet && !(@info.empty?    && 
+				  @warning.empty? && @fatal.empty?)
 		@publish.h1($mc.get("title_testres"))
-	    end
 	    
-	    @info   .display($mc.get("w_info"))    unless @info.empty?
-	    @warning.display($mc.get("w_warning")) unless @warning.empty?
-	    @fatal  .display($mc.get("w_fatal"))   unless @fatal.empty?
+		@info   .display($mc.get("w_info"))    unless @info.empty?
+		@warning.display($mc.get("w_warning")) unless @warning.empty?
+		@fatal  .display($mc.get("w_fatal"))   unless @fatal.empty?
+	    end
 
 	    @publish.status(@domain.name, 
-			      @info.count, @warning.count, @fatal.count)
+			    @info.count, @warning.count, @fatal.count)
 	end
 
 	attr_reader :fatal, :warning, :info
