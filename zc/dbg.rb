@@ -121,7 +121,7 @@ class DBG
 
 	# enable/disable NResolv
 	if enabled?(NRESOLV) ^ old_nresolv
-	    $nresolv_dbg = enabled?(NRESOLV) ? 0xffff : 0x0000
+	    NResolv::Dbg.level = enabled?(NRESOLV) ? 0xffff : 0x0000
 	end
 
 	# enable/disable CrazyDebug

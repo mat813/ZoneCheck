@@ -388,7 +388,11 @@ class NResolv
 			begin
 			    nmsg = udp.query(msg).send.wait
 			    if nmsg.tc
-				Dbg.msg(DBG::RESOLVER, 'falling back to TCP')
+				Dbg.msg(DBG::RESOLVER) {
+				    name, resource = msg.question[0]
+				    info = "(#{resource.rdesc}: #{name})"
+				    "falling back to TCP #{info}"
+				}
 				nmsg = tcp.query(msg).send.wait
 				if nmsg.tc
 				    Dbg.msg(DBG::RESOLVER,

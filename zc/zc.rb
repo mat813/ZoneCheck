@@ -178,7 +178,7 @@ $zc_xml_parser	||= ZC_XML_PARSER
 
 # Resolver configuration
 $nresolv_rootserver_hintfile	= "#{$zc_config_dir}/rootservers"
-$nresolv_dbg			= 0xffff
+$nresolv_dbg			= 0x0000
 
 
 #
