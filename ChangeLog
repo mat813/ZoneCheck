@@ -9,6 +9,7 @@
 	* install: WWWDIR option allows changing static web page directory
 	* nresolv: UDP retry a little less aggressive
 	* publisher: option 'nojavascript' and 'ihtml' for html
+	* misc: B rootserver IP addresse changed
 	
 2003-01-20  ZoneCheck-2.0.2
 	* test: fixed bugs in mail_delivery_{postmaster,hostmaster}

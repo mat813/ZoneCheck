@@ -17,7 +17,7 @@
 #
 
 a.root-servers.net.: [ 198.41.0.4     ]
-b.root-servers.net.: [ 128.9.0.107    ]
+b.root-servers.net.: [ 192.228.79.201 ]
 c.root-servers.net.: [ 192.33.4.12    ]
 d.root-servers.net.: [ 128.8.10.90    ]
 e.root-servers.net.: [ 192.203.230.10 ]
