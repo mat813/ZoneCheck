@@ -73,8 +73,8 @@ module Input
 			$mc.reload
 		    end
 		when "--batch"     then p.batch			= arg
-		when "--config"    then p.fs.cfgfile		= arg
-		when "--testdir"   then p.fs.testdir		= arg
+		when "--config"    then p.fs.cfgfile		= arg.untaint
+		when "--testdir"   then p.fs.testdir		= arg.untaint
 		when "--category"  then p.test.categories	= arg
 		when "--test"      then p.test.tests		= arg
 		when "--testlist"  then p.test.list		= true
