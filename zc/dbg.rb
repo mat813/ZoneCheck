@@ -23,7 +23,7 @@ class DBG
     #
     # Debugging types
     #
-    LOADING	 = 0x0001	# Test loading
+    LOADING	 = 0x0001	# Loading tests
     LOCALE       = 0x0002	# Localization / Internationalisation
     CONFIG       = 0x0004	# Configuration
     PARSER       = 0x0008	# Parser

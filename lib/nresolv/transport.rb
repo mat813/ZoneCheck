@@ -149,7 +149,7 @@ class NResolv
 				"unhandled message (id=#{msg.msgid})")
 		    end
 		rescue Message::DecodingError => e
-		    Dbg.msg(DBG::TRANSPORT, "Ignoring packet (#{e})")
+		    Dbg.msg(DBG::TRANSPORT, "ignoring packet (#{e})")
 		rescue Exception => e
 		    $stderr.puts "Host: #{@host}"
 		    $stderr.puts "Unexpected exception while decoding: #{e}"

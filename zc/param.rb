@@ -24,7 +24,7 @@ require 'publisher'
 ##
 ## Parameters of the ZoneCheck application
 ## 
-## All the subclasses have an 'autoconf' method, which should be
+## All the subclasses have an 'autoconf' method, which must be
 ## used to finish configuring the class.
 ##
 class Param
@@ -419,7 +419,7 @@ class Param
 		     [ @ipv4 ? "IPv4" : nil, 
 		       @ipv6 ? "IPv6" : nil].compact.join("/"))
 
-	    # Select mode
+	    # Select mode (UDP/TCP/STD)
 	    @query_mode = NResolv::DNS::Client::STD if @query_mode.nil?
 	    # Debug
 	    @query_mode.to_s =~ /([^:]+)$/
@@ -603,14 +603,14 @@ class Param
     # Create parameters
     #
     def initialize
-	@publisher		= Publisher::new
-	@fs			= FSData::new
-	@network		= Network::new
-	@resolver		= Resolver::new
-	@test			= Test::new
-	@report			= ProxyReport::new
-	@domain			= Domain::new
-	@rflag			= ReportFlag::new
+	@publisher	= Publisher::new
+	@fs		= FSData::new
+	@network	= Network::new
+	@resolver	= Resolver::new
+	@test		= Test::new
+	@report		= ProxyReport::new
+	@domain		= Domain::new
+	@rflag		= ReportFlag::new
     end
 
 

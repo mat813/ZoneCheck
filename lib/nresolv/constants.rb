@@ -15,6 +15,11 @@
 #
 #
 
+
+##
+## See RFC 2929
+##
+##
 class NResolv
     class ValueHolder
 	attr_reader :name, :value
@@ -63,7 +68,7 @@ class NResolv
 	    begin
 		@@hash_by_name[self].fetch(name)
 	    rescue IndexError
-		raise IndexError, "key name '#{name}' not found in #{self}"
+		raise IndexError, "name '#{name}' not found in #{self}"
 	    end
 	end
 	
@@ -71,17 +76,12 @@ class NResolv
 	    begin
 		@@hash_by_value[self].fetch(value)
 	    rescue IndexError
-		raise IndexError, "key value '#{value}' not found in #{self}"
+		raise IndexError, "value '#{value}' not found in #{self}"
 	    end
 	end
 	
-	def self.maxlen
-	    @@maxlen[self]
-	end
-	
-	def self.filler(token)
-	    token * self.maxlen
-	end
+	def self.maxlen        ; @@maxlen[self]      ; end
+	def self.filler(token) ; token * self.maxlen ; end
     end
 
 
@@ -91,11 +91,11 @@ class NResolv
 	## Op. code
 	##
 	class OpCode < ValueHolder
-	    QUERY	= OpCode::new("QUERY" , 0)
-	    IQUERY	= OpCode::new("IQUERY", 1)
-	    STATUS	= OpCode::new("STATUS", 2)
-	    NOTIFY	= OpCode::new("NOTIDY", 4)
-	    UPDATE	= OpCode::new("UPDATE", 5)
+	    QUERY	= OpCode::new("Query" , 0)	# RFC 1035
+	    IQUERY	= OpCode::new("IQuery", 1)	# RFC 1035
+	    STATUS	= OpCode::new("Status", 2)	# RFC 1035
+	    NOTIFY	= OpCode::new("Notidy", 4)	# RFC 1996
+	    UPDATE	= OpCode::new("Update", 5)	# RFC 2136
 	end
 
 
@@ -103,17 +103,24 @@ class NResolv
 	## Return code
 	##
 	class RCode < ValueHolder
-	    NOERROR	= RCode::new("NOERROR",  0)
-	    FORMERR	= RCode::new("FORMERR",  1)
-	    SERVFAIL	= RCode::new("SERVFAIL", 2)
-	    NXDOMAIN	= RCode::new("NXDOMAIN", 3)
-	    NOTIMP	= RCode::new("NOTIMP",   4)
-	    REFUSED	= RCode::new("REFUSED",  5)
-	    YXDOMAIN	= RCode::new("YXDOMAIN", 6)
-	    YXRRSET	= RCode::new("YXRRSET",  7)
-	    NXRRSET	= RCode::new("NXRRSET",  8)
-	    NOTAUTH	= RCode::new("NOTAUTH",  9)
-	    NOTZONE	= RCode::new("NOTZONE", 10)
+	    NOERROR	= RCode::new("NoError",  0)	# RFC 1035
+	    FORMERR	= RCode::new("FormErr",  1)	# RFC 1035
+	    SERVFAIL	= RCode::new("ServFail", 2)	# RFC 1035
+	    NXDOMAIN	= RCode::new("NXDomain", 3)	# RFC 1035
+	    NOTIMP	= RCode::new("NotImp",   4)	# RFC 1035
+	    REFUSED	= RCode::new("Refused",  5)	# RFC 1035
+	    YXDOMAIN	= RCode::new("YXDomain", 6)	# RFC 2136
+	    YXRRSET	= RCode::new("YXRRSet",  7)	# RFC 2136
+	    NXRRSET	= RCode::new("NXRRSet",  8)	# RFC 2136
+	    NOTAUTH	= RCode::new("NotAuth",  9)	# RFC 2136
+	    NOTZONE	= RCode::new("NotZone", 10)	# RFC 2136
+#	    BADVERS	= RCode::new("BADVERS", 16)	# RFC 2671 (in OPT RR)
+	    BADSIG	= RCode::new("BADSIG",  16)	# RFC 2845
+	    BADKEY	= RCode::new("BADKEY",  17)	# RFC 2845
+	    BADTIME	= RCode::new("BADTIME", 18)	# RFC 2845
+	    BADMODE	= RCode::new("BADMODE", 19)	# RFC 2930
+	    BADNAME	= RCode::new("BADNAME", 20)	# RFC 2930
+	    BADALG	= RCode::new("BADALG",  21)	# RFC 2930
 	end
 
 
@@ -122,11 +129,10 @@ class NResolv
 	##
 	class RClass < ValueHolder
 	    IN		= RClass::new("IN",      1)
-	    CH		= RClass::new("CH",      2)
-	    CHAOS	= RClass::new("CHAOS",   3)
-	    HS		= RClass::new("HS",      4)
-	    NONE	= RClass::new("NONE",  254)
-	    ANY		= RClass::new("ANY",   255)
+	    CHAOS	= RClass::new("CH",      3)	# Moon 1981
+	    HS		= RClass::new("HS",      4)	# Dyer 1987
+	    NONE	= RClass::new("NONE",  254)	# RFC 2136
+	    ANY		= RClass::new("ANY",   255)	# RFC 1035
 	end
 	
 
