@@ -16,13 +16,15 @@ testname: root servers list present
 error   : Root Servers are not available
 explain : [none]
 
-[chk_root_servers_ns_vs_iana]
-testname: root servers list identical to IANA
-error   : Root Servers list is not coherent with IANA
-explain : [none]
+[chk_root_servers_ns_vs_icann]
+testname: root servers list identical to ICANN
+error   : Root Servers list is not coherent with ICANN
+explain : rootserver_vs_icann
 
-[chk_root_servers_ip_vs_iana]
-testname: root servers addresses identical to IANA
-error   : Root Servers IP addresses are not coherent with IANA
-explain : [none]
+[chk_root_servers_ip_vs_icann]
+testname: root servers addresses identical to ICANN
+error   : Root Servers IP addresses are not coherent with ICANN
+explain : rootserver_vs_icann
 
+[*]
+rootserver_vs_icann : [ref]: IETF RFC2870 (p.1)\nThe Internet Corporation for Assigned Names and Numbers (ICANN)\nhas become responsible for the operation of the root servers.\nThe ICANN has appointed a Root Server System Advisory Committee\n(RSSAC) to give technical and operational advice to the ICANN\nboard.  The ICANN and the RSSAC look to the IETF to provide\nengineering standards.
