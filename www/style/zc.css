@@ -54,13 +54,13 @@ H1 {
 
 H2 {  
     font-size: 14px;
-    color: #1341AF;
+    color: #1341af;
     font-weight: bold;
 }
 
 H3 {
     font-size: 12px; 
-    color: #1341AF; 
+    color: #1341af; 
     font-weight: bold;
 }
 
@@ -270,7 +270,8 @@ TABLE.zc-help TD.zc-title {
 TABLE.zc-popup { 
     background-color: #f0ece5;
     color: #333333; 
-    border: 1px solid #1341af;
+    border: 3px groove #1341af;
+    border-collapse:  collapse; 
 }
 
 TABLE.zc-popup TR.zc-title { 
@@ -281,10 +282,18 @@ TABLE.zc-popup TR.zc-title TD {
     color: #f5b13d;
 }
 
+TABLE.zc-popup TR.zc-title TD.zc-title { 
+    font-weight: bold;
+}
+
 TABLE.zc-popup TR.zc-title A { 
     color: #f5b13d;
     font-weight: bold;
     text-decoration: none; 
+}
+
+TABLE.zc-popup TR.zc-title A:hover { 
+    color: #ff5809;
 }
 
 TABLE.zc-popup TR.zc-item:hover { 

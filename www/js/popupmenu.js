@@ -23,10 +23,11 @@ if (zc_publish_path == null)
 /* 
  * ZC_Popup
  */
-function ZC_Popup(id) {
-    this.id   = id;
-    this.menu = null;
-    this.item = [];
+function ZC_Popup(id, title) {
+    this.id    = id;
+    this.title = title
+    this.menu  = null;
+    this.item  = [];
 }
 
 ZC_Popup.prototype.create = function() {
@@ -44,8 +45,17 @@ ZC_Popup.prototype.create = function() {
   // title bar
   row              = document.createElement('TR');
   row.className    = 'zc-title';
+
+
   cell             = document.createElement('TD');
-  cell.colSpan     = 8;
+  cell.className   = 'zc-title';
+  cell.colSpan     = 7;
+  if (this.title) 
+    cell.innerHTML = this.title;
+  row.appendChild(cell);
+
+  cell             = document.createElement('TD');
+  cell.colSpan     = 1;
   cell.align       = 'right';
   link             = document.createElement('A');
   link.href        = '#';
@@ -129,12 +139,15 @@ function zc_contextmenu_start() {
     }
   };
 
-  var ctx = new ZC_Popup("zc_contextmenu");
-  ctx.add("<IMG src='"+ zc_publish_path+"/img/details.png'>"+zc_l10n_details,
+  var ctx = new ZC_Popup("zc_contextmenu", "+/-");
+  ctx.add("<IMG src='"+ zc_publish_path+"/img/details.png'>"+
+	  "&nbsp;"+zc_l10n_details,
 	  function () { hidefunc('zc-details', 'UL'); });
-  ctx.add("<IMG src='"+ zc_publish_path+"/img/ref.png'>"   +zc_l10n_references,
+  ctx.add("<IMG src='"+ zc_publish_path+"/img/ref.png'>"+
+	  "&nbsp;"   +zc_l10n_references,
 	  function () { hidefunc('zc-ref', 'UL'); });
-  ctx.add("<IMG src='"+ zc_publish_path+"/img/element.png'>"+zc_l10n_elements,
+  ctx.add("<IMG src='"+ zc_publish_path+"/img/element.png'>"+
+	  "&nbsp;"+zc_l10n_elements,
 	  function () { hidefunc('zc-element', 'UL'); });
 
   ctx.create();
