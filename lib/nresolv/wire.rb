@@ -69,6 +69,13 @@ module NResolv
 			self::new(Name::wire_decode(decoder))
 		    end
 		end
+		
+		class RP
+		    def self.wire_decode(decoder)
+			self::new(Name::wire_decode(decoder),
+				  Name::wire_decode(decoder))
+		    end
+		end
 	    end
 
 	    module IN

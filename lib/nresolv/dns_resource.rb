@@ -125,6 +125,14 @@ module NResolv
 		    end
 		end
 
+		class RP < Resource
+		    attr_reader :mailbox, :txtdname
+		    def initialize(mailbox, txtdname)
+			@mailbox  = mailbox
+			@txtdname = txtdname
+		    end
+		end
+
 		class ANY < Resource
 		    def initialize
 			raise RuntimeError, 
@@ -213,6 +221,12 @@ module NResolv
 		class PTR < Generic::PTR
 		    RClass = RClass::IN
 		    RType  = RType::PTR
+		    add_resource(self)
+		end
+
+		class RP < Generic::RP
+		    RClass = RClass::IN
+		    RType  = RType::RP
 		    add_resource(self)
 		end
 
