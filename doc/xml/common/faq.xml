@@ -26,14 +26,15 @@
     
     <qandaentry>
       <question>
-	<para>I want to use an interface other than the CLI</para>
+	<para>I want to use an interface other than the CLI.</para>
       </question>
       <answer>
 	<para>Use the environment variable <envar>ZC_INPUT</envar>
 	  set to your input mode, or use the command line option
 	  <option>--INPUT=<replaceable>im</replaceable></option>.
 	  The input modes currently supported are <literal>CLI</literal>,
-          <literal>CGI</literal> and <literal>GTK</literal></para>
+          <literal>CGI</literal>, <literal>inetd</literal> 
+	  and <literal>GTK</literal></para>
       </answer>
     </qandaentry>
     
@@ -110,18 +111,18 @@
 	  configure your terminal to use UTF-8, or you can specify
 	  the desired encoding  after the locale by using a dot 
 	  as separator (ex: LANG=fr.latin1); in the last case 
-	  the ruby-iconv package should have been installed</para>
+	  the ruby-iconv package should have been installed.</para>
 	</answer>
       </qandaentry>
 
     <qandaentry>
       <question>
 	<para>ZoneCheck complains about the lack of TCP connectivity
-	for a djbdns/tinydns name server</para>
+	for a djbdns/tinydns name server.</para>
       </question>
       <answer>
 	<para>Unfortunately, by default, djbdns/tinydns does not
-	listen with TCP. See <ulink
+	listen on TCP. See <ulink
 	url="http://cr.yp.to/djbdns/tcp.html"/> to enable it.</para>
       </answer>
     </qandaentry>

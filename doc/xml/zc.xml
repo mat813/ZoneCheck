@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" 
  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" 
 [
-<!ENTITY version "0.01">
+<!ENTITY version "$Name$">
 <!ENTITY faq     SYSTEM "common/faq.xml">
 <!ENTITY config  SYSTEM "common/config.xml">
 <!ENTITY install SYSTEM "common/install.xml">
@@ -18,16 +18,24 @@
     </author>
     <copyright>
       <year>2002</year>
-      <holder role="mailto:nic@nic.fr">AFNIC</holder>
+      <holder role="mailto:zonecheck@nic.fr">AFNIC</holder>
     </copyright>
     <legalnotice>
       <para>This legal mumbo jumbo will stop evil.</para>
     </legalnotice>
 
-    <releaseinfo>ZORG</releaseinfo>
+    <releaseinfo>&version;</releaseinfo>
 
     <abstract>
-      <para>This is a simple XML sample version &version;. It is good for nothing but processing.</para>
+      <para>The DNS is a critical resource for every network
+      application, quite important to ensure that a zone or domain
+      name is correctly configured in the DNS.
+
+      ZoneCheck is intended to help solving misconfigurations or
+      inconsistencies usually revealed by an increase in the latency
+      of the application, up to the output of unexpected/inconsistant
+      results.
+      </para>
     </abstract>
   </bookinfo>
   
@@ -79,13 +87,45 @@
 
 	<itemizedlist>
 	  <listitem>
-	    <para><option>-q</option>, <option>--quiet</option></para>
-            <para>don't display extra titles</para>
+	    <para><option>--lang</option></para>
+	    <para>Select another language (en, fr, ...). 
+            The syntax is the same as for the environment variable
+            <envar>LANG</envar>.</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-d <replaceable>lvl</replaceable></option>, 
+                  <option>--quiet <replaceable>lvl</replaceable></option></para>
+            <para> Select the debugging messages to print or activate
+            debugging code.  This parameter will override the value of
+            the environment variable ZC_DEBUG.</para>
+
+	    <para> The available options are:
+<segmentedlist>
+<?dbhtml list-presentation="table"?>
+<segtitle>Code</segtitle>
+<segtitle>Description</segtitle>
+<seglistitem><seg>0x0001</seg><seg>Loading tests</seg></seglistitem>
+<seglistitem><seg>0x0002</seg><seg>Localization / Internationalisation</seg></seglistitem>
+<seglistitem><seg>0x0004</seg><seg>Configuration</seg></seglistitem>
+<seglistitem><seg>0x0008</seg><seg>Parser</seg></seglistitem>
+<seglistitem><seg>0x0010</seg><seg>Tests performed</seg></seglistitem>
+<seglistitem><seg>0x0100</seg><seg>Autoconf</seg></seglistitem>
+<seglistitem><seg>0x0200</seg><seg>Debugging messages from tests</seg></seglistitem>
+<seglistitem><seg>0x0800</seg><seg>Debugger itself</seg></seglistitem>
+<seglistitem><seg>0x1000</seg><seg>Information about cached object</seg></seglistitem>
+
+<seglistitem><seg>0x2000</seg><seg>Disable caching</seg></seglistitem>
+<seglistitem><seg>0x4000</seg><seg>Don't try to rescue exceptions</seg></seglistitem>
+<seglistitem><seg>0x8000</seg><seg>Crazy Debug, don't try this at home!</seg></seglistitem>
+</segmentedlist>
+
+            </para>
 	  </listitem>
 
 	  <listitem>
 	    <para><option>-h</option>, <option>--help</option></para>
-            <para>show an help message and exit</para>
+            <para>Show a short description of the different options  available  in <application>ZoneCheck</application></para>
 	  </listitem>
 
 	  <listitem>
@@ -93,6 +133,13 @@
 	    <para>print the <application>ZoneCheck</application>
             version and exit</para>
 	  </listitem>
+
+
+	  <listitem>
+	    <para><option>-q</option>, <option>--quiet</option></para>
+	    <para>don't display extra titles</para>
+	  </listitem>
+
 
 	  <listitem>
 	    <para><option>-B <replaceable>where</replaceable></option>, 

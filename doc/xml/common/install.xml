@@ -78,6 +78,8 @@
 |      |-- test                 # test set
 |      |-- lib                  # Extra libraries (NResolv, Address, ...)
 |      `-- zc                   # core components
+|-- man
+|   `-- man1                    # Man pages
 `-- share
     `-- doc
         `-- zc                  # Documentation</screen>
@@ -87,7 +89,7 @@
     <section>
       <title>CGI</title>
       <para>Here is an exemple of 
-      <ulink url="httpd.apache.org">Apache2</ulink> configuration file,
+      <ulink url="http://httpd.apache.org">Apache2</ulink> configuration file,
       assuming ZoneCheck has been installed in
       <filename class="directory">/usr/local</filename> (PREFIX=/usr/local)
       and for html pages generated in the
@@ -111,6 +113,29 @@ Alias       /zc/            /usr/local/libexec/zc/www/html/
 &lt;/Directory&gt;
 
 </screen>
+</para>
+    </section>
+
+  <section>
+    <title>inetd</title>
+    <para>First you need to edit the file <filename>/etc/services</filename>,
+      which contains information regarding the known services
+     available in the Internet to add the following line:
+<screen>
+zonecheck       1904/tcp  # ZoneCheck service
+</screen>
+
+You also need to configure <application>inetd</application>, so that
+it is listening for the new zonecheck service, this is done by adding
+the line:
+<screen>
+zonecheck stream tcp nowait root /usr/local/bin/zonecheck zonecheck --INPUT=inetd
+</screen>
+
+If you have an IPv6 stack installed but don't have the connectivity
+with the outside world add the option <option>-4</option> to the
+<command>zonecheck</command> command.
+
 </para>
     </section>
 
