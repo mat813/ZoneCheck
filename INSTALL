@@ -1,10 +1,16 @@
 # $Id$
 
 To install ZoneCheck 2 (the executable is simply named zc), you will
-need the Ruby environement and GNU Make (sometimes called gmake)
+need the Ruby environment and GNU Make (sometimes called gmake)
 
 Ruby can be found as a package or port in every serious
-Unix. Otherwise, see <URL:http://www.rubycentral.com/>.
+Unix. Otherwise, see <URL:http://www.rubycentral.com/> and
+<URL:http://www.ruby-lang.org/>
+
+WARNING: you need the Ruby version 1.8.0 which is currently in the
+preview stage and so it is possible that a binary package is not
+available for your operating system (some 1.7.x version could be
+enough, but no garantee are given)
 
 Once Ruby is installed, just "make install" will install everything
 somewhere under /usr/local. If you prefer another place, type "make
