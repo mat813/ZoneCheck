@@ -109,6 +109,20 @@
       </answer>
     </qandaentry>
 
+      <qandaentry>
+	<question>
+	  <para>ZoneCheck crash when reading configuration files or
+	    the message catalog</para>
+	</question>
+	<answer>
+	  <para>REXML is used to parse the XML files, but it only
+           checks for well formed XML and doesn't perform validation
+           against the DTD, so when you edit the configuration file or
+           the message catalog you should ensure that the files are valid,
+           for that you can you <application>xmllint</application>
+           for example.</para>
+	</answer>
+      </qandaentry>
 <!--
       <qandaentry>
 	<question>
