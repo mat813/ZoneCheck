@@ -16,20 +16,21 @@ w_tag : w
 f_tag : f
 
 
-w_generic	: generic
-w_warning	: warning
+w_generic	: générique
+w_warning	: avertissement
 w_fatal		: fatal
-w_info		: info
-w_unexpected	: unexpected
-w_line          : line
+w_info		: information
+w_unexpected	: imprévu
+w_line          : ligne
+w_error		: erreur
 
-xpltag_ref	: Ref
+xpltag_ref	: Réf
 
-res_succeed_but : SUCCEED (but %d warning(s))\n
-res_succeed	: SUCCEED\n
-res_failed	: FAILED\n
-res_failed_on	: FAILED (on warning)\n
-res_failed_and	: FAILED (and %d warning(s))\n
+res_succeed_but : SUCCES (mais %d avertissement(s))\n
+res_succeed	: SUCCES\n
+res_failed	: ECHEC\n
+res_failed_on	: ECHEC (sur avertissement)\n
+res_failed_and	: ECHEC (et %d avertissment(s))\n
 warning_fmt	: Warning: %s\n
 fatal_fmt	: Fatal  : %s\n
 info_fmt	: Info   : %s\n
@@ -42,9 +43,9 @@ ns_primary      : primaire
 ns_secondary    : secondaire
 
 title_zoneinfo  : Information sur la zone
-title_progress  : Progress
-title_testres   : Test results
-title_status    : Final status
+title_progress  : Progression
+title_testres   : Résultat des tests
+title_status    : Status final
 
 pgr_progress    : Progression
 pgr_test        : Tests
@@ -55,23 +56,23 @@ pgr_speed_unit  : T/s
 ##############################################################################
 ##############################################################################
 
-xcp_param_fqdn_required  : Absolute domain name required
-xcp_param_batch_nodomain : No domainname expected for batch mode
-xcp_param_domain_expected: One domainname expected
-xcp_param_primary_soa    : Unable to find primary nameserver (SOA)
-xcp_param_nameservers_ns : Unable to find nameservers (NS)
-xcp_param_prim_ns_soa    : Unable to identify primary nameserver (NS vs SOA)
-xcp_param_nameserver_ips : Unable to find nameserver IP address(es) for %s
-xcp_param_output_support : Selected output class doesn't support '%s'
-xcp_param_ipv6_no_stack  : IPv6 not supported on that host
-xcp_param_unknown_modopt : unknown modifier '%s' for %s option
-xcp_config_malformed     : malformed command
-xcp_config_nosection     : no section defined
-xcp_config_unknownsection: unknown section %s
-xcp_config_constexists   : constant '%s' already declared
-xcp_config_testexists    : test '%s' already listed
-xcp_config_unknowntest   : unknown test '%s'
-xcp_config_ordering      : ordering problem with '%s'
+xcp_param_fqdn_required  : Nom de domaine pleinement qualifié requis
+xcp_param_batch_nodomain : Aucun nom de domaine attendu lors du traitement par lots
+xcp_param_domain_expected: Un nom de domaine est attendu
+xcp_param_primary_soa    : Impossible de trouver le primaire (SOA)
+xcp_param_nameservers_ns : Impossible de trouver les serveurs de noms (NS)
+xcp_param_prim_ns_soa    : Impossible d'identifier le primaire (NS vs SOA)
+xcp_param_nameserver_ips : Impossible de trouver les addresses IPs pour %s
+xcp_param_output_support : La classe de sortie choisie ne support pas '%s'
+xcp_param_ipv6_no_stack  : IPv6 n'est pas supporté sur cette machine
+xcp_param_unknown_modopt : modificateur '%s' inconnu pour l'option '%s'
+xcp_config_malformed     : commande malformée
+xcp_config_nosection     : pas de section définie
+xcp_config_unknownsection: section '%s' inconnue
+xcp_config_constexists   : constante '%s' déjà déclarée
+xcp_config_testexists    : test '%s' déjà listé
+xcp_config_unknowntest   : test '%s' inconnu
+xcp_config_ordering      : problème d'ordre avec '%s'
 
 ##############################################################################
 ##############################################################################
@@ -425,7 +426,7 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     -T, --test          Nom du test à exécuter\n\
         --testlist      Liste tous les tests disponnibles\n\
         --testdesc      Donne une description du test\n\
-    -r, --resolver      Resolver to use for guessing 'ns' information\n\
+    -r, --resolver      Serveur à utiliser pour la résolution des 'ns'\n\
     -n, --ns            Liste des serveurs de nom du domaine\n\
     -1, --one           Affiche uniquement le message le plus significatif\n\
     -g, --tagonly       Affiche uniquement les tags (idéal pour scripts)\n\
@@ -438,13 +439,13 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
 \n\
   verbose:              [intro/explain] [testdesc|counter]\n\
     intro          [i]  Affiche un résumé: domain et serveurs associés\n\
-    explain        [x]  Affiche une explication pour les tests en échec\n\
+    explain        [x]  Affiche une explication pour les tests en échecs\n\
     testdesc       [t]  Affiche la description du tests avant de l'exécuter\n\
     counter        [c]  Affiche une barre de progression\n\
 \n\
   output:               [straigh|consolidation] [text|html]\n\
-    straight      *[s]  Print output without processing (or very few)\n\
-    consolidation  [c]  Try to merge some results before output\n\
+    straight      *[s]  Affiche le résultat sans (trop) de traitement\n\
+    consolidation  [c]  Rafine les résultats avant l'affichage\n\
     text          *[t]  Sortie au format texte\n\
     html           [h]  Sortie au format HTML\n\
 \n\
@@ -452,14 +453,14 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     allfatal       [af] Toutes les erreurs sont considérées fatales\n\
     allwarning     [aw] Toutes les erreurs sont considérées en avertissement\n\
     stop          *[s]  Arrête à la première erreur fatale\n\
-    nostop         [ns] Continue même un cas d'erreur fatale\n\
+    nostop         [ns] Continue même en cas d'erreur fatale\n\
 \n\
   transp:               [ipv4/ipv6] [udp|tcp|std]\n\
     ipv4          *[4]  Utilise le protocol de routage IPv4\n\
     ipv6          *[6]  Utilise le protocol de routage IPv6\n\
     udp            [u]  Utilise la couche de transport UDP\n\
     tcp            [t]  Utilise la couche de transport TCP\n\
-    std           *[s]  Utilise UDP avec repli sur TCP (messages tronques)\n\
+    std           *[s]  Utilise UDP avec repli sur TCP (messages tronqués)\n\
 \n\
   Traitement par lots:\n\
     - traite les domaines depuis un fichier ou stdin, avec 1 domaine par ligne\n\

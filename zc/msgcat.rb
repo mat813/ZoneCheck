@@ -28,9 +28,12 @@
 ##
 ## tag        : [a-zA-Z0-9_]
 ##
+##
+## WARN: this file is not localized (due to chicken and egg problem)
+##
 class MessageCatalog
     ##
-    ## Syntax error, while parsing the file
+    ## Exception: Syntax error, while parsing the file
     ##
     class SyntaxError < StandardError
     end

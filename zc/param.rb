@@ -58,15 +58,16 @@ class Param
 	    cgi = ::CGI::new
 	    
 	    # Lang
-#	    if cgi["lang"].length == 1
-#		lang = cgi["lang"][0]
-#		if lang =~ /^\w+$/ # Security
-#		    localefile = ZC_LOCALIZATION_FILE % [ lang ]
-#		    if File.readable?(localefile)
-#			$mc = MessageCatalog::new(localefile)
-#		    end
-#		end
-#	    end
+	    # => The message catalogue need to be replaced
+	    if cgi["lang"].length == 1
+		lang = cgi["lang"][0]
+		if lang =~ /^\w+(:?\.\w+)$/ # Security checking
+		    localefile = (ZC_LOCALIZATION_FILE % [ lang ]).untaint
+		    if File.readable?(localefile)
+			$mc = MessageCatalog::new(localefile)
+		    end
+		end
+	    end
 
 	    # Batch
 	    if cgi.has_key?("batchdata")
@@ -119,7 +120,7 @@ class Param
 		cat << "whois" if cgi.has_key?("chkwhois")
 		cat << "zone"  if cgi.has_key?("chkzone")
 		if ! cat.empty?
-		    cat << "connectivity" << "dns"
+		    cat << "connectivity" << "dns"	# XXX: VERY BAD
 		    @p.category = cat.join(",")
 		end
 	    end
@@ -276,6 +277,11 @@ EOT
 	def usage(errcode, io=$stderr)
 	    io.print $mc.get("param_usage").gsub("PROGNAME", PROGNAME)
 	    exit errcode unless errcode.nil?
+	end
+
+	def error(str, io=$stderr)
+	    l10n_error = $mc.get("w_error").upcase
+	    io.puts "#{l10n_error}: #{str}"
 	end
     end
 
@@ -583,7 +589,7 @@ EOT
 	      when "expl"  then "explain"
 	      when "error" then "error"
 	      else raise ParamError, 
-		      $mc.gt("xcp_param_unknown_modopt") % [ type, "testdesc" ]
+		$mc.get("xcp_param_unknown_modopt") % [ type, "testdesc" ]
 	      end
 	
 	@give_testdesc = suf
@@ -627,7 +633,7 @@ EOT
 		@rflag.stop_on_fatal = false
 	    else
 		raise ParamError,
-		    $mc.gt("xcp_param_unknown_modopt") % [ token, "error" ]
+		    $mc.get("xcp_param_unknown_modopt") % [ token, "error" ]
 	    end
 	}
     end
@@ -649,7 +655,7 @@ EOT
 		@rflag.counter	= true
 	    else
 		raise ParamError,
-		    $mc.gt("xcp_param_unknown_modopt") % [ token, "verbose" ]
+		    $mc.get("xcp_param_unknown_modopt") % [ token, "verbose" ]
 	    end
 	}
     end
@@ -673,7 +679,7 @@ EOT
 		@client = NResolv::DNS::Client::Classic
 	    else
 		raise ParamError,
-		    $mc.gt("xcp_param_unknown_modopt") % [ token, "transp" ]
+		    $mc.get("xcp_param_unknown_modopt") % [ token, "transp" ]
 	    end
 	}
     end
@@ -695,7 +701,7 @@ EOT
 		@publisher_class = Publisher::HTML
 	    else
 		raise ParamError,
-		    $mc.gt("xcp_param_unknown_modopt") % [ token, "output" ]
+		    $mc.get("xcp_param_unknown_modopt") % [ token, "output" ]
 	    end
 	}
     end

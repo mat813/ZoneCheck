@@ -96,7 +96,9 @@ $dbg.level=ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 #        present in the code (except debugging)
 #
 lang = ENV["LANG"]
-raise "Suspicious LANG variable: #{lang}" unless lang =~ /^\w{2,5}$/
+if !lang.nil? && ! (lang =~ /^\w+(:?\.\w+)$/)
+    raise "Suspicious LANG variable: #{lang}"
+end
 [ lang.untaint, ZC_LANG_DEFAULT ].compact.each { |lang|
     localefile = ZC_LOCALIZATION_FILE % [ lang ]
     if File.readable?(localefile)
@@ -137,15 +139,15 @@ class ZoneCheck
     # Parse command line
     #
     def configure
+	param = if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
+		   (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
+		then Param::CGI::new
+		else Param::CLI::new
+		end
 	begin
-	    param = if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
-		       (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
-		    then Param::CGI::new
-		    else Param::CLI::new
-		    end
 	    param.usage(EXIT_USAGE) if (@param = param.parse).nil?
 	rescue Param::ParamError => e
-	    $stderr.puts "ERROR: #{e}"		# XXX: I18N
+	    param.error(e.to_s)
 	    exit EXIT_ERROR
 	end
     end
