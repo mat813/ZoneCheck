@@ -133,7 +133,8 @@ $dbg.level=ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 $ipv6_stack = begin
 		  UDPSocket::new(Socket::AF_INET6).close
 		  true
-	      rescue Errno::EAFNOSUPPORT
+	      rescue NameError,      # if Socket::AF_INET6 doesn't exist
+		     SystemCallError # for the Errno::EAFNOSUPPORT error
 		  false
 	      end
 
