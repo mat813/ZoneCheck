@@ -27,7 +27,7 @@ explain = label_xpl
 [chk_dn_dbl_hyph]
 testname: double hyphen in domain name
 error   : The domain name contains a double hyphen
-explain : [ref]: IETF IDN project (internationalized domain names)\nThe double dash ('--') will have a special meaning for the domain name\nencoding, so it is strongly advised not to used it.
+explain : [ref]: IETF IDN project (internationalized domain names)\nThe double dash ('--') will have a special meaning for the domain name\nencoding, so it is strongly advised not to used it. See \nhttp://www.iana.org/cctld/specifications-policies-cctlds-01apr02.htm (4. Tagged Domain Names.)
 
 
 [chk_one_ns]
