@@ -76,20 +76,25 @@ module CheckNetworkAddress
 	    #  if no one is listening          => Errno::ECONNREFUSED
 	    #  if there is a firewal (timeout) => Errno::EINVAL
 	    #                                     Errno::ECONNRESET
+	    # The total timeout has been forced to 8 seconds
+	    #  as with the chk_udp test
 	    msg		= NResolv::DNS::Message::Query::new
 	    msg.question.add(@domain.name, NResolv::DNS::Resource::IN::ANY)
 	    rawmsg	= msg.to_wire
 	    sock	= nil
 	    begin
-		sock	= TCPSocket::new(ip.to_s, NResolv::DNS::Port)
-		sock.write([rawmsg.length].pack('n'))
-		sock.write(rawmsg)
-		lenhdr	= sock.read(2)
-		return false if lenhdr.nil? || lenhdr.size != 2
-		len	= lenhdr.unpack('n')[0]
-		reply	= sock.read(len)
+		timeout(8) {
+		    sock	= TCPSocket::new(ip.to_s, NResolv::DNS::Port)
+		    sock.write([rawmsg.length].pack('n'))
+		    sock.write(rawmsg)
+		    lenhdr	= sock.read(2)
+		    return false if lenhdr.nil? || lenhdr.size != 2
+		    len		= lenhdr.unpack('n')[0]
+		    reply	= sock.read(len)
+		}
 		true
-	    rescue Errno::ECONNREFUSED, Errno::ECONNRESET, Errno::EINVAL
+	    rescue Errno::ECONNREFUSED, Errno::ECONNRESET, Errno::EINVAL,
+		    TimeoutError
 		false
 	    ensure
 		sock.close unless sock.nil?
@@ -112,13 +117,9 @@ module CheckNetworkAddress
 		thr = Thread::new {
 		    (1..25).each { sock.write(rawmsg) ; sleep(0.2) }
 		}
-		begin
-		    timeout(8) { sock.recv(NResolv::DNS::UDPSize) }
-		    true
-		rescue TimeoutError
-		    false
-		end
-	    rescue Errno::ECONNREFUSED
+		timeout(8) { sock.recv(NResolv::DNS::UDPSize) }
+		true
+	    rescue Errno::ECONNREFUSED, TimeoutError
 		false
 	    ensure
 		thr.kill   unless thr.nil?
