@@ -17,3 +17,6 @@
 2003-03-25	sdalu@nic.fr
 - pl. failed for dig @ns3.ikp.pl ns3.ikp.pl cname
 
+2003-05-06	sdalu@nic.fr
+- airnz.com.fr doesn't have A/AAAA or MX, a test should exists
+  => mhosttest raise an exception in that case (why wasn't it working?)

@@ -61,6 +61,7 @@ testname: enregistrement MX peut être résolu
 error   : L'adresse IP de l'enregistrement MX ne peut pas être résolue
 ok	: L'adresse IP de l'enregistrement MX a été trouvée
 explain : [none]
+details : Le MX %{mx} ne possede pas d'addresse IP.
 
 
 [chk_mx_vs_any]
