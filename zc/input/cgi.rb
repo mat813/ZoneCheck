@@ -194,10 +194,12 @@ module Input
 	    end
 
 	    # Zone/Domain
-	    zone = @cgi["zone"]
-	    zone.strip! if zone
-	    return false if zone.nil? || zone.empty?
-	    p.domain.name = zone
+	    if p.batch.nil?
+		zone = @cgi["zone"]
+		zone.strip! if zone
+		return false if zone.nil? || zone.empty?
+		p.domain.name = zone
+	    end
 
 	    # Ok
 	    true
