@@ -55,8 +55,8 @@
     
     <qandaentry>
       <question>
-	<para>I would like to easily test ZoneCheck without doing a
-	  <command>make install</command></para>
+	<para>I would like to easily test ZoneCheck without doing a full
+	  installation.</para>
       </question>
       <answer>
 	<para>You can define the environment variable
@@ -75,7 +75,7 @@
 	  perform this test, so you should set the constants 
 	  <constant>ping4</constant> and <constant>ping6</constant> in 
 	  the configuration file so that the <application>ping</application>
-	  is correctly invoked: stop after 5 echo request, doesn't
+	  is correctly invoked: stop after 5 echo requests, doesn't
 	  output messages, and return an exit code of 0 in case of success.
 	</para>
 	<para>If you are using ZoneCheck on the Window plateform, you better

@@ -2,19 +2,20 @@
 
 For the impatient: ruby ./install.rb all
 
-To install ZoneCheck 2 (the executable is simply named zonecheck), you
-will need the Ruby environment.
+You will need Ruby to install ZoneCheck, after the installation the
+executable will be available under the named of 'zonecheck'
 
 Ruby can be found as a package or port in every serious
 Unix. Otherwise, see <URL:http://www.ruby-lang.org/> and
 <URL:http://www.rubycentral.com/>, or if you are a Windows user, you
-can find a version of ruby in cygwin <URL:http://www.cygwin.com/>.
+can find a version of ruby in the cygwin distribution
+<URL:http://www.cygwin.com/>.
 
 WARNING:
  - you need at least the version 1.8 of Ruby.
  - it is not advised for now to use 'rubyinstaller'
     <URL:http://rubyinstaller.sourceforge.net/> as some constantes
-    are not defined.
+    allowing to detect errors in network connectivity are not defined.
 
 
 
