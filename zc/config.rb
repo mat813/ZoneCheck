@@ -37,6 +37,16 @@ class Config
     TestSeqOrder	= [ CheckGeneric, CheckNameServer, 
 	                    CheckNetworkAddress, CheckExtra ]
 
+    def self.severity2tag(severity)
+	case severity
+	when NilClass        then "ok"
+	when Config::Info    then "info"
+	when Config::Warning then "warning"
+	when Config::Fatal   then "fatal"
+	else raise ArgumentError, "unknown severity: #{severity}"
+	end
+    end
+
     #
     # Create a full filename from a configfile
     #  XXX: unix specific '/'

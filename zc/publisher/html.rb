@@ -362,8 +362,12 @@ EOT
 	    end
 
 	    # Message
-	    severity_tag	= severity2tag(severity)
-	    logo		= severity_tag + ".png"
+	    severity_tag		= Config.severity2tag(severity)
+	    logo			= severity_tag + ".png"
+	    l10n_severity_shorttag	= if @rflag.tagonly
+					  then #{severity_tag}
+					  else $mc.get("w_#{severity_tag}_id")
+					  end
 
 	    msg = if severity.nil?
 		      $mc.get("#{testname}_ok")
@@ -378,7 +382,7 @@ EOT
 		      end
 		  end
 	    
-	    @o.puts "<DIV class=\"zc-msg\"><IMG src=\"#{@publish_path}/img/#{logo}\" alt=\"\"> #{msg}</DIV>"
+	    @o.puts "<DIV class=\"zc-msg\"><IMG src=\"#{@publish_path}/img/#{logo}\" alt=\"#{l10n_severity_shorttag}:\"> #{msg}</DIV>"
 		
 	    if !severity.nil?
 		# Details

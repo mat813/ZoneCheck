@@ -264,8 +264,8 @@ class Param
     class ProxyReport
 	attr_reader :info, :warning, :fatal
 	
-	def initialize(report_class)
-	    @report_class	= report_class
+	def initialize
+	    @report_class	= nil
 	    @info_attrname	= :info
 	    @warning_attrname	= :warning
 	    @fatal_attrname	= :fatal
@@ -300,6 +300,12 @@ class Param
 	end
 
 	def autoconf(domain, rflag, publisher)
+	    # Set publisher class (if not already done)
+	    if @report_class.nil?
+		require 'report/byseverity'
+		@report_class = ::Report::BySeverity
+	    end
+
 	    @report	= @report_class::new(domain, rflag, publisher)
 	    @info       = @report.method(@info_attrname).call
 	    @warning    = @report.method(@warning_attrname).call
@@ -580,7 +586,7 @@ class Param
 	@network		= Network::new
 	@resolver		= Resolver::new
 	@test			= Test::new
-	@report			= ProxyReport::new(Report::Straight)
+	@report			= ProxyReport::new
 	@domain			= Domain::new
 	@rflag			= ReportFlag::new
     end
@@ -647,10 +653,11 @@ class Param
 	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
-	    when "s", "straight"
-		@report.reporter  = Report::Straight
-	    when "c", "consolidation"
-		@report.reporter  = Report::Consolidation
+	    when "bs", "byseverity"
+		require 'report/byseverity'
+		@report.reporter  = Report::BySeverity
+	    when "bh", "byhost"
+		@report.reporter  = Report::ByHost
 	    when "t", "text"
 		require 'publisher/text'
 		@publisher.engine = ::Publisher::Text

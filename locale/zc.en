@@ -31,6 +31,8 @@ w_fatal		: fatal
 w_fatal_id	: f
 w_info		: info
 w_info_id	: i
+w_ok		: ok
+w_ok_id		: o
 w_testing	: testing
 w_unexpected	: unexpected
 w_line          : line
@@ -43,7 +45,6 @@ w_references	: references
 w_elements	: elements
 w_form          : form
 w_name		: name
-w_ok		: ok
 
 
 #

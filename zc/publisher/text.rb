@@ -32,7 +32,7 @@ module Publisher
 	##
 	class Progress
 	    class PBar
-		BarSize			= 37
+		BarSize	= 37
 
 		def initialize(output, precision)
 		    @output	= output
@@ -277,7 +277,11 @@ module Publisher
 	    end
 
 	    # Message
-	    severity_tag	= severity2tag(severity)
+	    severity_tag		= Config.severity2tag(severity)
+	    l10n_severity_shorttag	= if @rflag.tagonly
+					  then #{severity_tag}
+					  else $mc.get("w_#{severity_tag}_id")
+					  end
 
 	    msg = if severity.nil?
 		      $mc.get("#{testname}_ok")
@@ -292,7 +296,7 @@ module Publisher
 		      end
 		  end
 	    
-	    @o.puts msg
+	    @o.puts "#{l10n_severity_shorttag}> #{msg}"
 
 	    if !severity.nil?
 		# Details

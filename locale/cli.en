@@ -47,14 +47,16 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
 \n\
   verbose:              [intro/explain/details] [testdesc|counter]\n\
     intro          [i]  Print summary for domain and associated nameservers\n\
+    testname       [n]  Print the test name\n\
     explain        [x]  Print an explanation for failed tests\n\
     details        [d]  Print a detailed description of the failure\n\
+    reportok       [o]  Still report passed test\n\
     testdesc       [t]  Print the test description before running it\n\
     counter        [c]  Print a test counter\n\
 \n\
   output:               [straigh|consolidation] [text|html]\n\
-    straight      *[s]  Print output without processing (or very few)\n\
-    consolidation  [c]  Try to merge some results before output\n\
+    byseverity    *[bs] Output is sorted/merged by severity\n\
+    byhost         [bh] Output is sorted/merged by host\n\
     text          *[t]  Output plain text\n\
     html           [h]  Output HTML\n\
 \n\

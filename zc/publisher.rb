@@ -42,16 +42,6 @@ module Publisher
 	def setup(domain_name)
 	end
 
-	def severity2tag(severity)
-	    case severity
-	    when NilClass        then "ok"
-	    when Config::Info    then "info"
-	    when Config::Warning then "warning"
-	    when Config::Fatal   then "fatal"
-	    else raise ArgumentError, "unknown severity: #{severity}"
-	    end
-	end
-
 	def status(domainname, i_count, w_count, f_count)
 	    if f_count == 0
 		tag = (w_count > 0) ? "res_succeed_but" : "res_succeed"
