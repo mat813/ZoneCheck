@@ -64,8 +64,8 @@
 
   <check name="root_servers_ns_vs_icann">
     <name>root-servers list identical to ICANN</name>
-    <success>Root-servers list is coherent with ICANN</success>
-    <failure>Root-servers list is not coherent with ICANN</failure>
+    <success>Root-servers list is consistent with ICANN</success>
+    <failure>Root-servers list is not consistent with ICANN</failure>
     <explanation sameas="shortcut:rootserver_vs_icann"/>
     <details><para>The root-server list (<zcvar name="rs_list"/>) is not
       identicall to ICANN list (<zcvar name="ref_list"/>).</para></details>
@@ -74,8 +74,8 @@
 
   <check name="root_servers_ip_vs_icann">
     <name>root-servers addresses identical to ICANN</name>
-    <success>Root-servers IP addresses are coherent with ICANN</success>
-    <failure>Root-servers IP addresses are not coherent with ICANN</failure>
+    <success>Root-servers IP addresses are consistent with ICANN</success>
+    <failure>Root-servers IP addresses are not consistent with ICANN</failure>
     <explanation sameas="shortcut:rootserver_vs_icann"/>
     <details><para>The root-server <zcvar name="rs"/> addresses 
       (<zcvar name="rs_addr"/>) are not the same as the ICANN 

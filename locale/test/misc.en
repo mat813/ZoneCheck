@@ -97,7 +97,7 @@
     <failure>The nameserver list doesn't match the given one</failure>
     <explanation/>
     <details><para>The given nameserver list (<zcvar name="list_from_param"/>)
-      is not coherent with the one retrieved from the zone
+      is not consistent with the one retrieved from the zone
       (<zcvar name="list_from_ns"/>).</para></details>
   </check>
 

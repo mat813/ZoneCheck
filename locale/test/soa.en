@@ -236,8 +236,8 @@
 
   <check name="soa_coherence_serial">
     <name>coherence of serial number with primary nameserver</name>
-    <success>The serial number is coherent with primary nameserver</success>
-    <failure>The serial number is not coherent with primary nameserver</failure>
+    <success>The serial number is consistent with primary nameserver</success>
+    <failure>The serial number is not consistent with primary nameserver</failure>
     <explanation/>
     <details><para>got serial <zcvar name="serial_this"/> instead of 
       <zcvar name="serial_ref"/> as on <zcvar name="host_ref"/>.</para></details>
@@ -246,8 +246,8 @@
 
   <check name="soa_coherence_contact">
     <name>coherence of administrative contact with primary nameserver</name>
-    <success>The contact is coherent with primary nameserver</success>
-    <failure>The contact is not coherent with primary nameserver</failure>
+    <success>The contact is consistent with primary nameserver</success>
+    <failure>The contact is not consistent with primary nameserver</failure>
     <explanation/>
     <details><para>got contact <zcvar name="rname_this"/> instead of
       <zcvar name="rname_ref"/> as on <zcvar name="host_ref"/>.</para></details>
@@ -256,8 +256,8 @@
 
   <check name="soa_coherence_master">
     <name>coherence of master with primary nameserver</name>
-    <success>The master is coherent with primary nameserver</success>
-    <failure>The master is not coherent with primary nameserver</failure>
+    <success>The master is consistent with primary nameserver</success>
+    <failure>The master is not consistent with primary nameserver</failure>
     <explanation/>
     <details><para>Got master <zcvar name="mname_this"/> instead of 
       <zcvar name="mname_ref"/> as on <zcvar name="host_ref"/>.</para></details>
@@ -266,8 +266,8 @@
 
   <check name="soa_coherence">
     <name>coherence of SOA with primary nameserver</name>
-    <success>The SOA is coherent with primary nameserver</success>
-    <failure>The SAO is not coherent with primary nameserver</failure>
+    <success>The SOA is consistent with primary nameserver</success>
+    <failure>The SAO is not consistent with primary nameserver</failure>
     <explanation/>
     <details/>
   </check>
