@@ -14,7 +14,7 @@
 require 'cgi'
 
 
-class Param
+module Input
     ##
     ## Processing parameters from CGI (Common Gateway Interface)
     ##
@@ -68,49 +68,50 @@ class Param
 
 	    # Batch
 	    if @cgi.has_key?("batchdata")
-		@p.batch = BatchData::new(@cgi["batchdata"][0])
+		p.batch = BatchData::new(@cgi["batchdata"][0])
 	    end
 
 	    # Quiet, One
-	    @p.rflag.quiet = true if @cgi.has_key?("quiet")
-	    @p.rflag.one   = true if @cgi.has_key?("one")
+	    p.rflag.quiet = true if @cgi.has_key?("quiet")
+	    p.rflag.one   = true if @cgi.has_key?("one")
 
 
 	    # Verbose
 	    if @cgi.has_key?("verbose")
-		@p.verbose = @cgi["verbose"].join(",")
+		p.verbose = @cgi["verbose"].join(",")
 	    else
-		@p.verbose = "intro"             if @cgi.has_key?("intro")
-		@p.verbose = "explain"           if @cgi.has_key?("explain")
-		@p.verbose = @cgi["progress"][0] if @cgi.has_key?("progress")
+		p.verbose = "intro"             if @cgi.has_key?("intro")
+		p.verbose = "explain"           if @cgi.has_key?("explain")
+		p.verbose = "details"		if @cgi.has_key?("details")
+		p.verbose = @cgi["progress"][0] if @cgi.has_key?("progress")
 	    end
 
 	    # Output
 	    if @cgi.has_key?("output")
-		@p.output = @cgi["output"].join(",")
+		p.output = @cgi["output"].join(",")
 	    else
-		@p.output = @cgi["format"].join(",")
+		p.output = @cgi["format"].join(",")
 	    end
 
 	    # Error
 	    if @cgi.has_key?("error")
-		@p.error  = @cgi["error"].join(",")
+		p.error  = @cgi["error"].join(",")
 	    else
 		errorlvl  = @cgi["errorlvl"].delete_if { |e| e =~ /^\s*$/ }
 		errorstop = @cgi.has_key?("errorstop") ? "stop" : "nostop"
-		@p.error  = (errorlvl + [ errorstop ]).join(",")
+		p.error  = (errorlvl + [ errorstop ]).join(",")
 	    end
 
 	    # Transp
 	    if @cgi.has_key?("transp")
-		@p.transp = @cgi["transp"].join(",")
+		p.transp = @cgi["transp"].join(",")
 	    else
-		@p.transp = (@cgi["transp3"] + @cgi["transp4"]).join(",")
+		p.transp = (@cgi["transp3"] + @cgi["transp4"]).join(",")
 	    end
 
 	    # Category
 	    if @cgi.has_key?("category")
-		@p.category = @cgi["category"].join(",")
+		p.category = @cgi["category"].join(",")
 	    else
 		cat = [ ]
 		cat << "mail"  if @cgi.has_key?("chkmail")
@@ -118,13 +119,13 @@ class Param
 		cat << "zone"  if @cgi.has_key?("chkzone")
 		if ! cat.empty?
 		    cat << "connectivity" << "dns"	# XXX: VERY BAD
-		    @p.test.categories = cat.join(",")
+		    p.test.categories = cat.join(",")
 		end
 	    end
 	    
 	    # NS and IPs
 	    if @cgi.has_key?("ns")
-		@p.domain.ns = @cgi["ns"].join(";")
+		p.domain.ns = @cgi["ns"].join(";")
 	    else
 		ns_list = [ ]
 		(0..MaxNS-1).each { |i|
@@ -143,7 +144,7 @@ class Param
 		    end
 		}
 		if ! ns_list.empty?
-		    @p.domain.ns   = ns_list.collect { |ns, ips|
+		    p.domain.ns   = ns_list.collect { |ns, ips|
 			if ips
 			    ips_str = ips.join(",")
 			    "#{ns}=#{ips_str}" 
@@ -156,17 +157,17 @@ class Param
 
 	    # Zone/Domain
 	    # XXX: todo check!!!
-	    @p.domain.name = @cgi["zone"]
+	    p.domain.name = @cgi["zone"]
 
 	    # Ok
-	    @p
+	    p
 	end
 
-	def interact(config)
+	def interact(p, c, tm)
 	    # XXX: not good place
-	    @p.rflag.autoconf
-	    @p.publisher.autoconf(@p.rflag)
-	    puts @cgi.header(@p.publisher.engine.class::Mime)
+	    p.rflag.autoconf
+	    p.publisher.autoconf(p.rflag)
+	    puts @cgi.header(p.publisher.engine.class::Mime)
 	    true
 	end
 

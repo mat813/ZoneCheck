@@ -12,9 +12,9 @@
 #
 
 require 'getoptlong'
+require 'param'
 
-
-class Param
+module Input
     ##
     ## Processing parameters from CLI (Command Line Interface)
     ##
@@ -94,11 +94,13 @@ EOT
 	def args_analyse(p)
 	    if p.batch
 		if !ARGV.empty?
-		    raise ParamError, $mc.get("xcp_param_batch_nodomain")
+		    raise Param::ParamError, 
+			$mc.get("xcp_param_batch_nodomain")
 		end
 	    else
 		if !(ARGV.length == 1)
-		    raise ParamError, $mc.get("xcp_param_domain_expected") 
+		    raise Param::ParamError, 
+			$mc.get("xcp_param_domain_expected") 
 		end
 		p.domain.name = ARGV[0]
 	    end
@@ -114,7 +116,7 @@ EOT
 	    true
 	end
 
-	def interact(p)
+	def interact(p, c, tm)
 	    true
 	end
 

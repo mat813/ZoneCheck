@@ -11,42 +11,209 @@
 #
 #
 
+
+#
+# TODO:
+#  - having the local resolver changed working
+#
+
 require 'getoptlong'
 require 'thread'
 
-require 'gtk'
+require 'gtk2'
 
+Gtk.init
 
-class Param
+module Input
     ##
     ## Processing parameters from GTK
     ##
     class GTK
 	MaxNS = 8
 	##
+	## Expert
 	##
+	class Expert < Gtk::VBox
+	    def initialize(main)
+		# Parent constructor
+		super()
+		
+		# Localisation
+		l10n_debug	= $mc.get("iface_label_debug")
+		l10n_output	= $mc.get("iface_label_output")
+		l10n_advanced	= $mc.get("iface_label_advanced")
+
+		# Debug
+		debug_f = Gtk::Frame::new(l10n_debug)
+
+		i, j = 0, 0
+		tbl = Gtk::Table::new(1, 3, true)
+		[   [ :d_loading,    "iface_dbg_loading",    DBG::LOADING    ],
+		    [ :d_locale,     "iface_dbg_locale",     DBG::LOCALE     ],
+		    [ :d_config,     "iface_dbg_config",     DBG::CONFIG     ],
+		    [ :d_parser,     "iface_dbg_parser",     DBG::PARSER     ],
+		    [ :d_tests,      "iface_dbg_tests",      DBG::TESTS      ],
+		    [ :d_autoconf,   "iface_dbg_autoconf",   DBG::AUTOCONF   ],
+		    [ :d_dbg,        "iface_dbg_dbg",        DBG::DBG        ],
+		    [ :d_cache_info, "iface_dbg_cache_info", DBG::CACHE_INFO ],
+		    [ :d_nocache,    "iface_dbg_nocache",    DBG::NOCACHE    ],
+		    [ :d_dont_rescue,"iface_dbg_dont_rescue",DBG::DONT_RESCUE],
+		    [ :d_crazydebug, "iface_dbg_crazydebug", DBG::CRAZYDEBUG ]
+		].each { |var, tag, lvl|
+		    l10n  = $mc.get(tag)
+		    button=instance_eval("@#{var}=Gtk::CheckButton::new(l10n)")
+		    button.active = $dbg.enabled?(lvl)
+		    button.signal_connect("clicked") { |w|
+			$dbg[lvl] = w.active?
+		    }
+
+		    i, j = 0, j+1 if i > 2
+		    tbl.attach(button, i, i += 1, j, j + 1)
+		}
+
+		debug_f.add(tbl)
+
+
+		# Output
+		output_f = Gtk::Frame::new(l10n_output)
+		@o_one   = Gtk::CheckButton::new("one line")
+		@o_quiet = Gtk::CheckButton::new("quiet")
+		@o_tag   = Gtk::CheckButton::new("tag only")
+
+		menu = Gtk::Menu::new
+		menu.append(Gtk::MenuItem.new("plain text"))
+		menu.append(Gtk::MenuItem.new("HTML"))
+		menu.append(Gtk::MenuItem.new("GTK"))
+		@o_type = Gtk::OptionMenu::new
+		@o_type.set_menu(menu)
+
+		menu = Gtk::Menu::new
+		menu.append(Gtk::MenuItem.new("straight"))
+		menu.append(Gtk::MenuItem.new("consolidation"))
+		@o_process = Gtk::OptionMenu::new
+		@o_process.set_menu(menu)
+
+		tbl = Gtk::Table::new(2, 3, true)
+		tbl.attach(@o_one,       0, 1, 0, 1)
+		tbl.attach(@o_tag,       1, 2, 0, 1)
+		tbl.attach(@o_quiet,     2, 3, 0, 1)
+		tbl.attach(@o_type,      0, 1, 1, 2)
+		tbl.attach(@o_process,   1, 2, 1, 2)
+
+		output_f.add(tbl)
+
+		# Advanced
+		advanced_f = Gtk::Frame::new(l10n_advanced)
+
+		@a_useresolver = Gtk::CheckButton::new("local resolver")
+		@a_useresolver.signal_connect("clicked") { |w|
+		    @a_resolver.set_sensitive(w.active?)
+		    @a_resolver.set_text("")
+		}
+		@a_useresolver.set_sensitive(false)
+		@a_resolver = Gtk::Entry::new
+		@a_resolver.set_sensitive(false)
+		
+		@a_test = Gtk::CheckButton::new("test only")
+		@a_test.signal_connect("clicked") { |w|
+		    @a_testname.set_sensitive(w.active?)
+		}
+		@a_testname = Gtk::Combo::new
+		@a_testname.entry.set_editable(false)
+		@a_testname.set_popdown_strings(main.testmanager.list.sort)
+		@a_testname.set_sensitive(false)
+		
+		tbl = Gtk::Table::new(1, 3, true)
+		tbl.attach(@a_useresolver, 0, 1, 0, 1)
+		tbl.attach(@a_resolver,    1, 3, 0, 1)
+		tbl.attach(@a_test,        0, 1, 1, 2)
+		tbl.attach(@a_testname,    1, 3, 1, 2)
+		
+		advanced_f.add(tbl)
+
+		#
+		pack_start(output_f)
+		pack_start(advanced_f)
+		pack_start(debug_f)
+	    end
+
+	    def one      ; @o_one.active?                                 ; end
+	    def quiet    ; @o_quiet.active?                               ; end
+	    def tagonly  ; @o_tag.active?                                 ; end
+	    def testname ; @a_test.active? ? @a_testname.entry.text : nil ; end
+	    def resolver ; @a_useresolver.active? ? @a_resolver.text: nil ; end
+
+	    def output 
+		output = []
+		output << case @o_type.history
+			  when 0 then "text"
+			  when 1 then "html"
+			  when 2 then "gtk"
+			  end
+		output << case @o_process.history
+			  when 0 then "straight"
+			  when 1 then "consolidation"
+			  end
+		output.join(",")
+	    end
+	end
+
+
+
+	##
+	## Option
 	##
 	class Option < Gtk::VBox
 	    def initialize(main)
+		# Parent constructor
 		super()
-		l10n_transport = "Transport"
-		l10n_error = "Error"
-		l10n_test = "Extra tests"
 
+		# Localisation
+		l10n_transport		= $mc.get("iface_label_transport")
+		l10n_error		= $mc.get("iface_label_error")
+		l10n_test		= $mc.get("iface_label_extra_tests")
+		l10n_output		= $mc.get("iface_label_output")
+		l10n_output_zone	= $mc.get("iface_output_zone")
+		l10n_output_explain	= $mc.get("iface_output_explain")
+		l10n_output_details	= $mc.get("iface_output_details")
+		l10n_output_progbar	= $mc.get("iface_output_progressbar")
+		l10n_output_desc	= $mc.get("iface_output_description")
+		l10n_output_nothing	= $mc.get("iface_output_nothing")
+		l10n_error_default	= $mc.get("iface_error_default")
+		l10n_error_allwarning	= $mc.get("iface_error_allwarnings")
+		l10n_error_allfatal	= $mc.get("iface_error_allfatals")
+		l10n_error_on_first	= $mc.get("iface_stop_on_first")
 
+		# Output
+		output_f = Gtk::Frame::new(l10n_output)
 
-		transp_f = Gtk::Frame::new(l10n_transport)
-		error_f  = Gtk::Frame::new(l10n_error)
-		test_f   = Gtk::Frame::new(l10n_test)
+		@o_zone    = Gtk::CheckButton::new(l10n_output_zone)
+		@o_explain = Gtk::CheckButton::new(l10n_output_explain)
+		@o_details = Gtk::CheckButton::new(l10n_output_details)
+		@o_zone.active = @o_explain.active = @o_details.active = true
+		
+		@o_prog    = Gtk::RadioButton::new(nil,    l10n_output_progbar)
+		@o_desc    = Gtk::RadioButton::new(@o_prog,l10n_output_desc)
+		@o_nothing = Gtk::RadioButton::new(@o_prog,l10n_output_nothing)
+		@o_prog.active = true
+
+		tbl = Gtk::Table::new(2, 3, true)
+		tbl.attach(@o_zone,    0, 1, 0, 1)
+		tbl.attach(@o_explain, 1, 2, 0, 1)
+		tbl.attach(@o_details, 2, 3, 0, 1)
+		tbl.attach(@o_prog,    0, 1, 1, 2)
+		tbl.attach(@o_desc,    1, 2, 1, 2)
+		tbl.attach(@o_nothing, 2, 3, 1, 2)
+		output_f.add(tbl)
+
 
 		# Error
-		@ed = Gtk::RadioButton::new(nil, 
-					    $mc.get("iface_error_default"))
-		@aw = Gtk::RadioButton::new(@ed, 
-					    $mc.get("iface_error_allwarnings"))
-		@af = Gtk::RadioButton::new(@ed,
-					    $mc.get("iface_error_allfatals"))
-		@sf = Gtk::CheckButton::new($mc.get("iface_stop_on_first"))
+		error_f = Gtk::Frame::new(l10n_error)
+
+		@ed = Gtk::RadioButton::new(nil, l10n_error_default)
+		@aw = Gtk::RadioButton::new(@ed, l10n_error_allwarning)
+		@af = Gtk::RadioButton::new(@ed,l10n_error_allfatal)
+		@sf = Gtk::CheckButton::new(l10n_error_on_first)
 		@sf.active = true
 
 		tbl = Gtk::Table::new(2, 3, true)
@@ -58,22 +225,23 @@ class Param
 		
 
 		# Tests
+		test_f   = Gtk::Frame::new(l10n_test)
+
 		@tst_mail = Gtk::CheckButton::new($mc.get("iface_test_mail"))
 		@tst_zcnt = Gtk::CheckButton::new($mc.get("iface_test_zone"))
 		@tst_ripe = Gtk::CheckButton::new($mc.get("iface_test_ripe"))
-		@db_ripe  = Gtk::Entry::new
-		@db_ripe.set_text(main.config.const("ripe_database"))
 		@tst_mail.active = @tst_zcnt.active = @tst_ripe.active = true
 
-		tbl = Gtk::Table::new(2, 3, true)
+		tbl = Gtk::Table::new(1, 3, true)
 		tbl.attach(@tst_mail, 0, 1, 0, 1)
 		tbl.attach(@tst_zcnt, 1, 2, 0, 1)
-		tbl.attach(Gtk::Label::new(""), 2, 3, 0, 1)
-		tbl.attach(@tst_ripe, 0, 1, 1, 2)
-		tbl.attach(@db_ripe , 1, 2, 1, 2)
+		tbl.attach(@tst_ripe, 2, 3, 0, 1)
 		test_f.add(tbl)
 
+
 		# Transport
+		transp_f = Gtk::Frame::new(l10n_transport)
+
 		@ipv4 = Gtk::CheckButton::new("IPv4")
 		@ipv6 = Gtk::CheckButton::new("IPv6")
 		@ipv6.active = @ipv4.active = true
@@ -82,6 +250,13 @@ class Param
 		    @ipv4.set_sensitive(false)
 		    @ipv6.set_sensitive(false)
 		end
+
+		@ipv4.signal_connect("toggled") {
+		    @ipv6.active = true if !@ipv4.active? && !@ipv6.active?
+		}
+		@ipv6.signal_connect("toggled") {
+		    @ipv4.active = true if !@ipv4.active? && !@ipv6.active?
+		}
 
 		@std = Gtk::RadioButton::new(nil,  "STD")
 		@udp = Gtk::RadioButton::new(@std, "UDP")
@@ -95,139 +270,65 @@ class Param
 		tbl.attach(@tcp,  2, 3, 1, 2)
 		transp_f.add(tbl)
 
+
 		#
+		pack_start(output_f)
 		pack_start(error_f)
 		pack_start(test_f)
 		pack_start(transp_f)
-
-
-		#
-		@tst_ripe.signal_connect("toggled") { |w|
-		    @db_ripe.set_sensitive(@tst_ripe.active)
-		}
-
-		proc = Proc::new { 
-		    if !@ipv4.active && !@ipv6.active
-			@ipv4.active = @ipv6.active = true
-		    end
-		}
-		@ipv4.signal_connect("toggled", &proc)
-		@ipv6.signal_connect("toggled", &proc)
-
 	    end
-	end
 
-	##
-	##
-	##
-	class Tests < Gtk::VBox
-	    def initialize(main)
-		super()
-		tbl = Gtk::Table::new(1, 2)
-		i = 0
-		
-		@test = {}
-		@tcat = {}
-
-		main.config.test_list.each { |testname|
-		    cat = main.config.category(testname)
-		    @tcat[cat] = [] unless @tcat.has_key?(cat)
-		    @tcat[cat] << testname
-		}
-		
-		@tcat.each_pair { |cat, tests|
-		    # Category
-		    catbtn = Gtk::CheckButton::new(cat)
-		    catbtn.child.set_name("category.package_label")
-		    catbtn.active = true
-		    catbtn.signal_connect("toggled") { |w|
-			@tcat[cat].each { |testname|
-			    tst    = @test[testname]
-			    active = w.active?
-			    tst.set_sensitive(active)
-			    tst.active = active
-			}
-		    }
-		    tbl.attach(catbtn, 0, 2, i, i+1)
-		    i += 1
-
-
-		    # Tests
-		    tests.each { |testname|
-			l10n_testname = $mc.get("#{testname}_testname")
-			lbl = Gtk::Label::new(l10n_testname).set_alignment(0, 0.5)
-			tbl.attach(lbl, 1, 2, i, i+1, Gtk::EXPAND | Gtk::FILL)
-			
-			tst = @test[testname] = Gtk::CheckButton::new(testname)
-			tst.active = true
-			tbl.attach(tst, 0, 1, i, i+1, Gtk::SHRINK | Gtk::FILL)
-			i += 1
-		    }
-		}
-		scrolled_window = Gtk::ScrolledWindow.new
-#		scrolled_window.border_width(10)
-		scrolled_window.set_policy(Gtk::POLICY_NEVER,
-					   Gtk::POLICY_AUTOMATIC)
-
-#		box2 = Gtk::VBox.new(false, 0)
-#		box2.border_width(10)
-		scrolled_window.add_with_viewport(tbl);
-		tbl.set_focus_vadjustment(scrolled_window.get_vadjustment)
-#		box2.pack_start(tbl)
-		
-		pack_start(scrolled_window, true, true, 0)
-
+	    def transp
+		transp = []
+		transp << "ipv4"	if @ipv4.active?
+		transp << "ipv6"	if @ipv6.active?
+		transp << "std"		if @std.active?
+		transp << "udp"		if @udp.active?
+		transp << "tcp"		if @tcp.active?
+		transp.join(",")
 	    end
-	end
 
-	##
-	##
-	##
-	class Constants < Gtk::VBox
-	    def initialize(main)
-		super()
-		
-		@const = []
-		
-		# Build constant table
-		tbl = Gtk::Table::new(1, 2)
-		i = 0
-		main.config.const_list.each { |name|
-		    lbl       = Gtk::Label::new(name).set_alignment(0, 0.5)
-		    @const[i] = Gtk::Entry::new
-		    @const[i].set_text(main.config.const(name))
+	    def verbose
+		verbose = []
+		verbose << "intro"	if @o_zone.active?
+		verbose << "details"	if @o_details.active?
+		verbose << "explain"	if @o_explain.active?
+		verbose << "testdesc"	if @o_desc.active?
+		verbose << "counter"	if @o_prog.active?
+		verbose.join(",")
+	    end
 
-		    tbl.attach(lbl,       0, 1, i, i+1, Gtk::SHRINK|Gtk::FILL)
-		    tbl.attach(@const[i], 1, 2, i, i+1, Gtk::EXPAND|Gtk::FILL)
-		    i += 1
-		}
-
-		# Scrolling
-		scrolled_window = Gtk::ScrolledWindow.new
-		scrolled_window.set_policy(Gtk::POLICY_NEVER,
-					   Gtk::POLICY_AUTOMATIC)
-		scrolled_window.add_with_viewport(tbl);
-		tbl.set_focus_vadjustment(scrolled_window.get_vadjustment)
-		
-		#
-		pack_start(scrolled_window)
-
+	    def error
+		error = []
+		error << "allfatal"	if @af.active?
+		error << "allwarning"	if @aw.active?
+		error << "stop"		if @sf.active?
+		error.join(",")
 	    end
 	end
 
 
 	##
-	##
+	## Input
 	##
 	class Input < Gtk::VBox
-	    def initialize(param, config, sb)
+	    def initialize(main)
+		# Parent constructor
 		super()
 		
+		# Locallisation
+		l10n_check		= $mc.get("iface_label_check")
+		l10n_guess		= $mc.get("iface_label_guess")
+		l10n_clear		= $mc.get("iface_label_clear")
+		l10n_primary		= $mc.get("ns_primary")
+		l10n_secondary		= $mc.get("ns_secondary")
+		l10n_ips		= $mc.get("ns_ips")
+		l10n_ns			= $mc.get("ns_ns")
+
 		# 
-		@p	= param
-		@sb	= sb
 		@ns	= []
 		@ips	= []
+
 
 		# Zone
 		l10n_zone = $mc.get("ns_zone").capitalize
@@ -245,26 +346,25 @@ class Param
 		tbl.set_col_spacings(5)
 		tbl.set_row_spacings(2)
 		(0..MaxNS-1).each { |i|
-		    l10n_ns  = $mc.get(i == 0 ? "ns_primary" \
-				              : "ns_secondary").capitalize
-		    l10n_ips = $mc.get("ns_ips")
-		    lbl_ns   = Gtk::Label::new(l10n_ns ).set_alignment(0, 1)
-		    lbl_ips  = Gtk::Label::new(l10n_ips).set_alignment(0, 1)
-		    @ns[i]   = Gtk::Entry::new.set_usize(100, -1)
-		    @ips[i]  = Gtk::Entry::new.set_usize(250, -1)
+		    l10n_ns_t = (i == 0 ? l10n_primary			\
+				        : l10n_secondary).capitalize
+		    lbl_ns    = Gtk::Label::new(l10n_ns_t).set_alignment(0, 1)
+		    lbl_ips   = Gtk::Label::new(l10n_ips ).set_alignment(0, 1)
+		    @ns[i]    = Gtk::Entry::new.set_size_request(120, -1)
+		    @ips[i]   = Gtk::Entry::new.set_size_request(320, -1)
 		    tbl.attach(lbl_ns,  0, 1, i, i+1, Gtk::SHRINK | Gtk::FILL)
 		    tbl.attach(@ns[i],  1, 2, i, i+1)
 		    tbl.attach(lbl_ips, 2, 3, i, i+1, Gtk::SHRINK | Gtk::FILL)
 		    tbl.attach(@ips[i], 3, 4, i, i+1)
 		}
 		
-		ns_f = Gtk::Frame::new($mc.get("ns_ns").upcase)
+		ns_f = Gtk::Frame::new(l10n_ns.upcase)
 		ns_f.add(tbl)
 		
 		# Buttons
-		@check = Gtk::Button::new("Check")
-		@guess = Gtk::Button::new("Guess")
-		@clear = Gtk::Button::new("Clear")
+		@check = Gtk::Button::new(l10n_check)
+		@guess = Gtk::Button::new(l10n_guess)
+		@clear = Gtk::Button::new(l10n_clear)
 
 		@hbbox  = Gtk::HButtonBox::new
 		@hbbox.pack_start(@check)
@@ -280,24 +380,35 @@ class Param
 
 		#
 		@check.signal_connect("clicked") { |w| 
-		    @p.domain.name = input_dom.domain
-		    @p.ipv4 = true
-		    @p.verbose = "intro"
-		    @q.push @p
+		    @hbbox.set_sensitive(false)
+		    begin
+			main.set_expert
+			main.set_options
+			main.set_domain
+			main.release
+		    rescue => e
+			main.statusbar.push(1, e.message)
+			puts e.message
+			puts e.backtrace.join("\n")
+			puts "FUCK"
+		    end
+		    @hbbox.set_sensitive(true)
 		}
 
 		@guess.signal_connect("clicked") { |w|
 		    @hbbox.set_sensitive(false)
 		    begin
-			@p.domain.clear
-			@p.domain.name = domain
-			@p.domain.ns   = self.ns
-			@p.domain.autoconf(@p.resolver.local)
-			self.ns = @p.domain.ns
-			sb.push(1, "Name servers and/or addresses guessed")
+			main.set_expert
+			main.set_options
+			main.set_domain
+			main.statusbar.push(1, "Name servers and/or addresses guessed")
 		    rescue => e
-			sb.push(1, e.to_s)
+			main.statusbar.push(1, e.message)
+			puts e.message
+			puts e.backtrace.join("\n")
+			puts "FUCK"
 		    end
+		    
 		    @hbbox.set_sensitive(true)
 		}
 
@@ -306,32 +417,28 @@ class Param
 		    (@ns + @ips + [ @zone ]).each  { |w| w.set_text("") } 
 		    @hbbox.set_sensitive(true)
 		}
-
-
-
 	    end
 
 	    def domain
-		@zone.get_text
+		@zone.text
 	    end
-
+	    
 	    def ns
 		ns_list = [ ]
 		(0..MaxNS-1).each { |i|
-		    ns  = @ns [i].get_text.strip
-		    ips = @ips[i].get_text.strip.split(/\s*,\s*|\s+/)
+		    ns  = @ns [i].text.strip
+		    ips = @ips[i].text.strip.split(/\s*,\s*|\s+/)
 		    next if ns.empty?
-
+		    
 		    if ips.empty?
-			ns_list << [ ns ]
-		    else
-			ns_list << [ ns, ips ]
+		    then ns_list << [ ns ]
+		    else ns_list << [ ns, ips ]
 		    end
 		}
 		if ! ns_list.empty?
 		    ns_list.collect { |ns, ips|
 			if ips
-			then ips_str = ips.join(",") ; "#{ns}=#{ips_str}" 
+			then ips_str = ips.join(", ") ; "#{ns}=#{ips_str}" 
 			else ns
 			end
 		    }.join(";")
@@ -339,21 +446,146 @@ class Param
 		    nil
 		end
 	    end
-
+	    
 	    def ns=(ns_list) 
 		if ns_list.length > MaxNS
 		    raise ArgumentError, "Too many nameservers to display them"
 		end
-
+		
 		i = 0
 		ns_list.each_index { |i|
 		    @ns [i].set_text(ns_list[i][0].to_s)
 		    @ips[i].set_text(ns_list[i][1].join(", "))
 		}
-
+		
 		(i+1..MaxNS-1).each { |i|
 		    @ns [i].set_text("") ; @ips[i].set_text("")
 		}
+	    end
+	end
+
+
+	class Main
+	    attr_reader :config, :statusbar, :testmanager
+
+	    
+
+	    def initialize(param, config, testmanager)
+		@p		= param
+		@config		= config
+		@testmanager	= testmanager
+		@window		= nil
+		@q		= Queue::new
+	    end
+	    
+	    def create
+		@window = Gtk::Window::new
+		@window.set_title("ZoneCheck")
+		@window.signal_connect("delete_event") {|*args| delete_event(*args) }
+		@window.signal_connect("destroy") {|*args| Gtk::main_quit }
+		@window.border_width = 0
+		
+		
+		menubar   = Gtk::MenuBar::new
+		@statusbar = Gtk::Statusbar::new
+		@statusbar.push(1, "Toto")
+		
+		
+		@input   = Input::new(self)
+		@options = Option::new(self)
+		@expert  = Expert::new(self)
+		@info_note = Gtk::Frame::new
+		
+		
+		
+		
+		menuitem = Gtk::MenuItem::new("mode")
+		menubar.append(menuitem)
+		
+		menu = Gtk::Menu::new
+		menuitem.set_submenu(menu)
+		
+		std_mitem = Gtk::RadioMenuItem::new(nil, "Standard")
+		grp = std_mitem.group
+		menu.append(std_mitem)
+		exp_mitem = Gtk::RadioMenuItem::new(grp, "Expert")
+		menu.append(exp_mitem)
+		
+		    
+		menuitem = Gtk::MenuItem::new("help")
+		menuitem.set_right_justified(true)
+		menubar.append(menuitem)
+		
+		    
+		std_mitem.signal_connect("toggled") { |w|
+		    if w.active?
+			@expert.hide
+		    end
+		}
+		exp_mitem.signal_connect("toggled") { |w|
+		    if w.active?
+			@expert.show
+		    end
+		}
+		    
+		notebook = Gtk::Notebook::new
+		notebook.set_tab_pos(Gtk::POS_TOP)
+		notebook.append_page @input,   Gtk::Label::new("Input")
+		notebook.append_page @options, Gtk::Label::new("Options")
+		notebook.append_page @expert,  Gtk::Label::new("Expert")
+		
+		
+		vbox = Gtk::VBox::new
+		vbox.pack_start(menubar)
+		vbox.pack_start(notebook)
+		vbox.pack_start(@statusbar)
+		
+		button = Gtk::Button::new("Hello World")
+		button.signal_connect("clicked") {|*args| hello(*args) }
+		button.signal_connect("clicked") {|*args| @window.destroy }
+		
+		@window.add(vbox)
+		@window.show_all
+	    end
+	    
+	    def release
+		puts "RELEASE"
+		@q.push nil
+	    end
+
+	    def wait
+		@q.pop
+	    end
+
+	    def destroy
+		@window.destroy
+	    end
+
+	    def set_expert
+		@p.rflag.one	= @expert.one
+		@p.rflag.tagonly= @expert.tagonly
+		@p.rflag.quiet	= @expert.quiet
+		@p.output	= @expert.output
+		@p.test.tests	= @expert.testname
+#		@p.resolver.local = @expert.resolver
+#		@p.resolver.autoconf
+	    end
+
+	    def set_options
+		@p.transp	= @options.transp
+		@p.verbose	= @options.verbose
+		@p.error	= @options.error
+	    end
+
+	    def set_domain
+		@p.domain.clear
+		@p.domain.name = @input.domain
+		@p.domain.ns   = @input.ns
+		if @config[@p.domain.name].nil?
+		    raise "#{@input.domain} is not in our TLD map"
+		end
+		@p.domain.autoconf(@p.resolver.local)
+		@input.ns = @p.domain.ns
 	    end
 	end
 
@@ -366,7 +598,7 @@ class Param
 		[ "--resolver",	"-r",   GetoptLong::REQUIRED_ARGUMENT ] ]
         end
 
-	def opts_analyse
+	def opts_analyse(p)
 	    @opts.each do |opt, arg|
 		case opt
 		when "--help"      then usage(EXIT_USAGE, $stdout)
@@ -375,25 +607,26 @@ class Param
 			[ $zc_version ]
 		    exit EXIT_OK
 		when "--debug"     then $dbg.level	    = arg
-		when "--config"    then @p.fs.cfgfile       = arg
-		when "--testdir"   then @p.fs.testdir       = arg
-		when "--resolver"  then @p.resolver.local   = arg
+		when "--config"    then p.fs.cfgfile        = arg
+		when "--testdir"   then p.fs.testdir        = arg
+		when "--resolver"  then p.resolver.local    = arg
 		end
 	    end
 	end
 
 	
 	def initialize
-	    @p    = Param::new
 	    @opts = GetoptLong.new(* opts_definition)
 	    @opts.quiet = true
 	    Thread::new { Gtk::main() }
-	    @q = Queue::new
 	end
 	
-	attr_reader :config, :statusbar
+	attr_reader :config, :statusbar, :testmanager
 
-	def interact(config)
+	def interact(p, c, tm)
+	    @config = c
+	    @testmanager = tm
+
 	    Gtk::RC.parse_string(<<EOT
 style "package_label"
 {
@@ -403,96 +636,22 @@ font = '-adobe-helvetica-bold-r-normal-*-*-120-*-*-*-*-*-*'
 widget "*package_label" style "package_label"
 EOT
 )
-	    @config = config
-	    window = Gtk::Window::new
-	    window.signal_connect("delete_event") {|*args| delete_event(*args) }
-	    window.signal_connect("destroy") {|*args| destroy(*args) }
-	    window.border_width = 10
-	    
-	    window.set_title("ZoneCheck")
-	    
-	    menubar   = Gtk::MenuBar::new
-	    @statusbar = Gtk::Statusbar::new
-	    @statusbar.push(1, "Toto")
-
-
-	    @input   = Input::new(@p, config, @statusbar)
-	    @options = Option::new(self)
-	    @tests   = Tests::new(self)
-	    @const   = Constants::new(self)
-	    info_note = Gtk::Frame::new
-
-
-	    menuitem = Gtk::MenuItem::new("help")
-	    menuitem.right_justify
-	    menubar.append(menuitem)
-
-
-
-	    menuitem = Gtk::MenuItem::new("mode")
-	    menubar.append(menuitem)
-	    
-
-
-
-	    menu = Gtk::Menu::new
-	    menuitem.set_submenu(menu)
-
-	    std_mitem = Gtk::RadioMenuItem::new(nil, "Standard")
-	    grp = std_mitem.group
-	    menu.append(std_mitem)
-	    exp_mitem = Gtk::RadioMenuItem::new(grp, "Expert")
-	    menu.append(exp_mitem)
-	    
-	    std_mitem.signal_connect("toggled") { |w|
-		if w.active?
-		    @options.show
-		    @tests.hide
-		    @const.hide
-		end
-	    }
-	    exp_mitem.signal_connect("toggled") { |w|
-		if w.active?
-		    @options.hide
-		    @tests.show
-		    @const.show
-		end
-	    }
-
-
-
-	    notebook = Gtk::Notebook::new
-	    notebook.set_tab_pos(Gtk::POS_TOP)
-	    notebook.append_page @input,   Gtk::Label::new("Input")
-	    notebook.append_page @options, Gtk::Label::new("Options")
-	    notebook.append_page @tests,   Gtk::Label::new("Tests")
-	    notebook.append_page @const,   Gtk::Label::new("Constants")
-
-
-	    vbox = Gtk::VBox::new
-	    vbox.pack_start(menubar)
-	    vbox.pack_start(notebook)
-	    vbox.pack_start(@statusbar)
-
-	    button = Gtk::Button::new("Hello World")
-	    button.signal_connect("clicked") {|*args| hello(*args) }
-	    button.signal_connect("clicked") {|*args| window.destroy }
-	
-	    window.add(vbox)
-
-	    window.show_all
-	    @q.pop
+	    main = Main::new(p, c, tm)
+	    main.create
+	    main.wait
+	    main.destroy
 	end
 
-	def parse
+	def parse(p)
 	    begin
-		opts_analyse
+		opts_analyse(p)
 	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
 		return nil
 	    end
-	    @p.fs.autoconf
-	    @p.resolver.autoconf
-	    @p
+	    p.fs.autoconf
+	    p.resolver.autoconf
+	    p
+
 	end
 	def usage(errcode, io=$stderr)
 	    io.print $mc.get("param_cli_usage").gsub("PROGNAME", PROGNAME)
@@ -500,3 +659,4 @@ EOT
 	end
     end
 end
+
