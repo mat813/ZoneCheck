@@ -1,9 +1,15 @@
 # $Id$
+200?-??-??  ZoneCheck-2.0.???
+	* test: added chk_soa_coherence
+	* l10n: improved chk_mx_ip description
+	* etc: deal with ip6.int as with arpa
+	
 2003-09-01  ZoneCheck-2.0.0b7
 	* i18n/l10n: better handling of locale (and encoding)
 	* input: added inetd mode
 	* doc: man page for zonecheck cli
 	* doc: general documentation has been sligthy completed
+	* all: minor bug fixes
 	
 2003-08-11  ZoneCheck-2.0.0b6
 	* input: removed excessive sanity check for input parameter

@@ -77,7 +77,7 @@ testname: MX can be resolved
 error   : The IP address of the Mail eXchanger can't be resolved
 ok	: The IP address of the Mail eXchanger is resolvable
 explain : [none]
-details : The MX %{mx} doesn't have an IP address.
+details : The MX %{mx} representing the host name doesn't have an IP address.
 
 [chk_mx_vs_any]
 testname: coherence between MX and ANY records

@@ -19,6 +19,7 @@ version = 2.1.0
 		- Improve loopback delegation detection
 	Round robin on dns record in NResolv for address resolution
 	Check for authoritative answer in NResolv
+	tst_loopback: check for A or AAAA record corresponding to PTR
 
 version = 3.0.0
 	stand alone package for resolver library

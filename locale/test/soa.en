@@ -176,3 +176,10 @@ error   : The master is not coherent with primary nameserver
 ok	: The master is coherent with primary nameserver
 explain : [none]
 details : got master %{mname_this} instead of %{mname_ref} as on %{host_ref}.
+
+[chk_soa_coherence]
+testname: coherence of SOA with primary nameserver
+error   : The SAO is not coherent with primary nameserver
+ok	: The SOA is coherent with primary nameserver
+explain : [none]
+

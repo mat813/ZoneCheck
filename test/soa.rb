@@ -158,5 +158,13 @@ module CheckNetworkAddress
 	      'host_ref'   => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
 	      'mname_this' => mname_other }
 	end
+
+	# DESC: coherence of soa with primary
+	def chk_soa_coherence(ns,ip)
+	    serial_ref   = soa(@domain.ns[0][1][0]).serial
+	    serial_other = soa(ip).serial
+	    return true if serial_ref != serial_other
+	    soa(@domain.ns[0][1][0]) == soa(ip)
+	end
     end
 end

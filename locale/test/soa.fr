@@ -176,3 +176,10 @@ error   : Le champ 'master' du SOA est incohérent avec celui du serveur primair
 ok	: Le champ 'master' du SOA est cohérent avec celui du serveur primaire
 explain : [none]
 details : Le serveur maître indiqué dans le SOA (%{mname_this}) est différent de celui indiqué sur %{host_ref} (%{mname_ref}).
+
+[chk_soa_coherence]
+testname: cohérence du SOA avec celui du serveur primaire
+error   : Le SOA est incohérent avec celui du serveur primaire
+ok	: Le SOA est cohérent avec celui du serveur primaire
+explain : [none]
+
