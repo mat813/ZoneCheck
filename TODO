@@ -3,3 +3,8 @@
 - test loopback v6
 - verifier que certains test ne sont fait que si recursif
 - cachemanager destroy method (and use it)
+- check for SOA not necessary in NS
+- ping6 is ping on digital unix
+- try to remove the need of a tagonly_supported in Report
+- implement HTML / XML publisher
+- implement tree based inference for Report
