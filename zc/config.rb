@@ -132,7 +132,7 @@ class Config
     #
     # Read the configuration file
     #
-    def read(configfile)
+    def read(configfile, sections=nil)
 	lineno    = 0
 	File.open(configfile) { |io|
 	    while line = io.gets
@@ -152,7 +152,9 @@ class Config
 		    end
 		else
 		    if reader
-			reader.call(line, lineno)
+			if sections.nil? || sections.include?(section)
+			    reader.call(line, lineno)
+			end
 		    else
 			raise SyntaxError,
 			    "line #{lineno}: no section defined"
@@ -193,6 +195,9 @@ class Config
 	    raise SyntaxError, "line #{lineno}: malformed command"
 	end
 	name, value = $1, $2
+
+	# WARN: It's configuration writer fault
+	value.untaint
 	
 	# Add constant
 	begin
