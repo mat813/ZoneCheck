@@ -145,7 +145,6 @@ class MessageCatalog
     # Test if a file catalog is available
     #
     def available?(where, lng=@lang)
-	lng   = self.class::normlang(lng) unless lng == @lang
         filepath(where, lng).each { |fp| return true if File::readable?(fp) }
         false
     end
@@ -224,7 +223,7 @@ class MessageCatalog
     #       test for fr_CA and next fr
     #
     def filepath(where, lng=@lang)
-	lng   = self.class::normlang(lng) unless lng == @lang
+	lng   = self.class::normlang(lng) unless lng.id == @lang.id
         language, country, encoding = self.class::splitlang(lng)
 	where = "#{@directory}/#{where}"  unless where[0] == ?/
 	fp = [ where % [ language ] ]
