@@ -83,7 +83,7 @@ class Test
 
 	    def msg
 		if is_error?
-		    "[TEST %s]: %s" % [ $mc.get("#{@testname}_testname"), @err] 
+		    "[TEST %s]: %s" % [$mc.get("#{@testname}_testname"), @err]
 		else
 		    $mc.get("#{@testname}_error")
 		end
@@ -117,16 +117,10 @@ class Test
 	end
 
 	def tag
-	    if ! @ns.nil?
-		tag = @ns.to_s
-		if ! @ip.nil?
-		    tag << " / "
-		    tag << @ip.to_s
-		end
-	    else
-		tag = $mc.get("w_generic")
+	    if ! @ns.nil?				# NS
+	    then @ip.nil? ? "#{@ns}" : "#{@ns}/#{ip}"	# NS/IP
+	    else $mc.get("w_generic")			# generic
 	    end
-	    tag
 	end
     end
 
