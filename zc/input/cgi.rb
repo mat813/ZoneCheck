@@ -219,7 +219,7 @@ module Input
 	    end
 
 	    # Option
-	    if @cgi.has_key("option")
+	    if @cgi.has_key?("option")
 		p.option << @cgi.params["option"].join(",")
 	    end
 
