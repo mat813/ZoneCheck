@@ -133,6 +133,14 @@ module NResolv
 		    end
 		end
 
+		class HINFO < Resource
+		    attr_reader :cpu, :os
+		    def initialize(cpu, os)
+			@cpu	= cpu
+			@os	= os
+		    end
+		end
+
 		class ANY < Resource
 		    def initialize
 			raise RuntimeError, 
@@ -227,6 +235,12 @@ module NResolv
 		class RP < Generic::RP
 		    RClass = RClass::IN
 		    RType  = RType::RP
+		    add_resource(self)
+		end
+
+		class HINFO < Generic::HINFO
+		    RClass = RClass::IN
+		    RType  = RType::HINFO
 		    add_resource(self)
 		end
 

@@ -76,6 +76,12 @@ module NResolv
 				  Name::wire_decode(decoder))
 		    end
 		end
+
+		class HINFO
+		    def self.wire_decode(decoder)
+			self::new(decoder.get_string, decoder.get_string)
+		    end
+		end
 	    end
 
 	    module IN
