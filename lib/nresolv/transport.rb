@@ -18,7 +18,8 @@ require 'sync'
 require 'fcntl'
 require 'timeout'
 
-require 'nresolv/parsing'
+require 'nresolv/dns'
+
 
 #
 # requester = Requester::ConnectedUDP::new(address)
@@ -135,6 +136,7 @@ module NResolv
 		    STDERR.puts("DNS message decoding error: #{e}")
 		rescue Exception => e
 		    STDERR.puts "Unexpected exception while decoding: #{e}"
+		    STDERR.puts e.backtrace.join("\n")
 		end
 	    end
 
@@ -163,7 +165,7 @@ module NResolv
 		def eql?(other)
 		    (self.type == other.type) && (self.msgid == other.msgid)
 		end
-		alias eql? ==
+		alias == eql?
 		    
 		# return a hash value
 		def hash
@@ -311,18 +313,20 @@ module NResolv
  			@msgid     = msg.msgid
                         @sock      = requester.handler
 			@sema      = Queue::new
+			raise "OOOPS" if @sema.nil?
 			@dflttout  = 2
 			UDPRetrySequence.each { |tout| @dflttout += tout }
                     end
 
                     def send
 			sock = @requester.handler
+			sema = @sema
                         @thread = Thread::new {
 			    begin 
 				sock.write(@rawmsg)
-				@sema.push(nil)
+				sema.push(nil)
 			    rescue Exception => e
-				@sema.puch(e)
+				sema.puch(e)
 			    end
 			    DNSThreadGroup.add Thread.current
                             UDPRetrySequence.each { |timeout|
@@ -330,12 +334,14 @@ module NResolv
                                 sock.write(@rawmsg)
                             }
                         }
-			e = @sema.pop
+			puts "YARGL" if @sema.nil?
+			e = sema.pop
 			raise e unless e.nil?
                         self
                     end
 
 		    def close
+			puts "CLOSE"
 			thread, sema, @thread, @sema = @thread, @sema
 			thread.kill    if thread
 			sema.push(nil) if sema
