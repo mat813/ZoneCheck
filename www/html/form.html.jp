@@ -195,7 +195,7 @@
 	      語</TD>
 	  </TR>	    
 
-	  <TR></TR>
+	  <TR><TD></TD></TR>
 	  <TR class="zc_title"><TD colspan="4">Error report</TD></TR>
 	  <TR>
 	    <TD></TD>
@@ -212,7 +212,7 @@
 	      don't stop on fatal</TD>
 	  </TR>
 
-	  <TR></TR>
+	  <TR><TD></TD></TR>
 	  <TR class="zc_title"><TD colspan="4">Extra tests performed</TD></TR>
 	  <TR>
 	    <TD></TD>
@@ -224,7 +224,7 @@
 	      <ACRONYM title="Regional Internet Registry">RIR</ACRONYM>のデータベース</TD>
 	  </TR>
 
-	  <TR></TR>
+	  <TR><TD></TD></TR>
 	  <TR class="zc_title"><TD colspan="4">Transport layer</TD></TR>
 	  <TR>
 	    <TD></TD>
@@ -248,7 +248,7 @@
 
     <!-- Propaganda -->
     <H2 id="benefit">Benefit</H2>
-    <P> Among the tests performed you can find checking for: 
+    <P> Among the tests performed you can find checking for: </P>
     <UL>
       <LI>authoritative nameserver for your zone, ensuring you will
 	be able to use your domain from outside your network.</LI>
@@ -258,7 +258,7 @@
       <LI>check for mail delivery, so that you don't become the 
 	pray of spammer	and be 
 	<A href="http://www.mail-abuse.org/">blacklisted</A></LI>
-    </UL></P>
+    </UL>
 
 
     <!-- Help -->
@@ -390,7 +390,7 @@
 リリーズ: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr  3 12:17:29 CEST 2003
+Last modified: Thu Apr  3 14:16:17 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

@@ -50,7 +50,7 @@
   </HEAD>
 
   <BODY>
-    <P id="lang">Lang: <A href="HTML_PATH/en/">EN</A> / FR / <A href="HTML_PATH/jp/">JP</A></P>
+    <P id="lang">Lang: <A href="HTML_PATH/en/">EN</A> / FR</P>
     <P id="beta">BETA</P>
 
     <!-- Logo -->
@@ -193,7 +193,7 @@
 	      </SELECT></TD>
 	  </TR>	    
 
-	  <TR></TR>
+	  <TR><TD></TD></TR>
 	  <TR class="zc_title"><TD colspan="4">Rapport d'erreurs</TD></TR>
 	  <TR>
 	    <TD></TD>
@@ -210,7 +210,7 @@
 	      continue après fatal</TD>
 	  </TR>
 
-	  <TR></TR>
+	  <TR><TD></TD></TR>
 	  <TR class="zc_title"><TD colspan="4">Tests supplémentaires effectués</TD></TR>
 	  <TR>
 	    <TD></TD>
@@ -222,7 +222,7 @@
 	      bases de données <ACRONYM title="Regional Internet Registry">RIR</ACRONYM></TD>
 	  </TR>
 
-	  <TR></TR>
+	  <TR><TD></TD></TR>
 	  <TR class="zc_title"><TD colspan="4">Couche de transport</TD></TR>
 	  <TR>
 	    <TD></TD>
@@ -246,7 +246,7 @@
 
     <!-- Propaganda -->
     <H2 id="benefit">Bénéfices</H2>
-    <P> Parmi les tests effectués on peut trouver: 
+    <P> Parmi les tests effectués on peut trouver: </P>
     <UL>
       <LI>serveur autoritaire pour la zone, assurant qu'il est possible
 	d'utiliser le domaine à l'extérieur de votre réseau ;</LI>
@@ -256,7 +256,7 @@
       <LI>vérification de la distribution du courrier, afin de ne pas
 	devenir la proie des spammers et finir en 
 	<A href="http://www.mail-abuse.org/">liste noire</A></LI>
-    </UL></P>
+    </UL>
 
 
     <!-- Help -->
@@ -393,7 +393,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Apr  2 21:10:24 CEST 2003
+Last modified: Thu Apr  3 14:15:47 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

@@ -47,7 +47,7 @@
   </HEAD>
 
   <BODY>
-    <P id="lang">Lang: <A href="HTML_PATH/en/batch.html">EN</A> / FR / <A href="HTML_PATH/jp/batch.html">JP</A></P>
+    <P id="lang">Lang: <A href="HTML_PATH/en/batch.html">EN</A> / FR</P>
     <P id="beta">BETA<BR>format non standard</P>
 
     <!-- Logo -->
@@ -123,7 +123,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    </TD>
 	  </TR>	    
 
-	  <TR></TR>
+	  <TR><TD></TD></TR>
 	  <TR class="zc_title"><TD colspan="4">Rapport d'erreurs</TD></TR>
 	  <TR>
 	    <TD></TD>
@@ -142,7 +142,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TR>
 
 	  
-	  <TR></TR>
+	  <TR><TD></TD></TR>
 	  <TR class="zc_title"><TD colspan="4">Tests supplémentaires effectués</TD></TR>
 	  <TR>
 	    <TD></TD>
@@ -155,7 +155,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TR>
 
 
-	  <TR></TR>
+	  <TR><TD></TD></TR>
 	  <TR class="zc_title"><TD colspan="4">Couche de transport</TD></TR>
 	  <TR>
 	    <TD></TD>
@@ -179,7 +179,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
     <!-- Propaganda -->
     <H2 id="benefit">Bénéfices</H2>
-    <P> Parmi les tests effectués on peut trouver: 
+    <P> Parmi les tests effectués on peut trouver: </P>
     <UL>
       <LI>serveur autoritaire pour la zone, assurant qu'il est possible
 	d'utiliser le domaine à l'extérieur de votre réseau ;</LI>
@@ -189,7 +189,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
       <LI>vérification de la distribution du courrier, afin de ne pas
 	devenir la proie des spammers et finir en 
 	<A href="http://www.mail-abuse.org/">liste noire</A></LI>
-    </UL></P>
+    </UL>
 
 
     <!-- Help -->
@@ -334,7 +334,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Apr  2 21:16:34 CEST 2003
+Last modified: Thu Apr  3 14:17:16 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
