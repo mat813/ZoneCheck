@@ -194,8 +194,8 @@ module Input
 		when '--debug'     then $dbg.level		= arg
 		when '--lang'      then $locale.lang		= arg
 		when '--batch'     then p.batch			= arg
-		when '--config'    then p.preconf.cfgfile	= arg.untaint
-		when '--testdir'   then p.preconf.testdir	= arg.untaint
+		when '--config'    then p.preconf.cfgfile = arg.dup.untaint
+		when '--testdir'   then p.preconf.testdir = arg.dup.untaint
 		when '--profile'   then p.preconf.profile	= arg
 		when '--category'  then p.test.categories	= arg
 		when '--test'      then p.test.tests		= arg
