@@ -46,7 +46,7 @@ class Installer
 	ENV['PREFIX'    ] ||= '/usr/local'
 	ENV['PROGNAME'  ] ||= 'zonecheck'
 	ENV['HTML_PATH' ] ||= "/#{ENV['PROGNAME']}"
-	ENV['ETCDIST'   ] ||= '-dist'
+	ENV['ETCDIST'   ] ||= ''
 	ENV['CHROOT'    ] ||= ''
 
 	ENV['LIBEXEC'   ] ||= "#{ENV['PREFIX']}/libexec"

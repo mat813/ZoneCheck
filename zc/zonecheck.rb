@@ -122,29 +122,29 @@ class ZoneCheck
 	    
 	    # Preset
 	    if @input.allow_preset
-		begin
-		    presetname = @param.preconf.preset
-		    if !presetname.nil? && @config.presets[presetname].nil?
-			raise Config::ConfigError,
-			    $mc.get('config:unknown_preset') % presetname
-		    end
+		presetname = @param.preconf.preset
+		if !presetname.nil? && @config.presets[presetname].nil?
+		    raise Config::ConfigError,
+			$mc.get('config:unknown_preset') % presetname
+		end
+		presetname ||= Config::Preset_Default
 
-		    presetname ||= Config::Preset_Default
-		    if preset = @config.presets[presetname]
+		if preset = @config.presets[presetname]
+		    begin
 			# Can be reverted
 			@param.verbose = preset['verbose'] if preset['verbose']
-			@param.transp  = preset['transp']  if preset['transp']
-			@param.output  = preset['output']  if preset['output']
-			@param.error   = preset['error']   if preset['error']
+			@param.transp  = preset['transp' ] if preset['transp' ]
+			@param.output  = preset['output' ] if preset['output' ]
+			@param.error   = preset['error'  ] if preset['error'  ]
 
 			# Cannot be reverted
 			@param.rflag.quiet = true if preset['quiet']
-			@param.rflag.one   = true if preset['one']
+			@param.rflag.one   = true if preset['one'  ]
+		    rescue Param::ParamError => e
+			raise Config::ConfigError,
+			    ($mc.get('config:error_in_preset') % presetname) +
+			    " (#{e.message})"
 		    end
-		rescue Param::ParamError => e
-		    raise Config::ConfigError,
-			($mc.get('config:error_in_preset') % presetname) +
-			" (#{e.message})"
 		end
 	    end
 
