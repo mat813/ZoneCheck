@@ -19,7 +19,7 @@
 
 <HTML>
   <HEAD>
-    <META http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP">
+    <META http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
 
     <LINK rel="stylesheet" href="HTML_PATH/style/zc.css"   type="text/css">
     <LINK rel="icon"       href="HTML_PATH/img/zc-fav.png" type="image/png">
@@ -390,7 +390,7 @@
 リリーズ: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Apr  2 21:37:05 CEST 2003
+Last modified: Thu Apr  3 12:17:29 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
