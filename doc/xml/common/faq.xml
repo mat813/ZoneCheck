@@ -114,6 +114,18 @@
 	</answer>
       </qandaentry>
 
+    <qandaentry>
+      <question>
+	<para>ZoneCheck complains about the lack of TCP connectivity
+	for a djbdns/tinydns name server</para>
+      </question>
+      <answer>
+	<para>Unfortunately, by default, djbdns/tinydns does not
+	listen with TCP. See <ulink
+	url="http://cr.yp.to/djbdns/tcp.html"/> to enable it.</para>
+      </answer>
+    </qandaentry>
+
 <!--
       <qandaentry>
 	<question>
