@@ -628,8 +628,8 @@ class Param
 		case arg
 		when /^-$/		then @opt = { }
 		when /^-(\w+)$/		then @opt.delete($1)
-		when /^+?(\w+)$/	then @opt[$1] = true
-		when /^+?(\w+)=(\w+)$/	then @opt[$1] = $2
+		when /^\+?(\w+)$/	then @opt[$1] = true
+		when /^\+?(\w+)=(\w+)$/	then @opt[$1] = $2
 		else raise "Bad option specification"
 		end
 	    }
