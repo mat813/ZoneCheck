@@ -125,18 +125,18 @@ module Publisher
 		@pbar  = Gtk::ProgressBar::new(adj)
 		@tname = Gtk::Label::new("???").set_alignment(0, 0.5)
 
-		attach(lbl_progress, 0, 2, 0, 1)
-		attach(lbl_test    , 2, 3, 0, 1)
-		attach(lbl_speed   , 3, 4, 0, 1)
-		attach(lbl_time    , 4, 5, 0, 1)
+		attach(lbl_progress, 0, 2, 0, 1, 0, Gtk::SHRINK)
+		attach(lbl_test    , 2, 3, 0, 1, 0, Gtk::SHRINK)
+		attach(lbl_speed   , 3, 4, 0, 1, 0, Gtk::SHRINK)
+		attach(lbl_time    , 4, 5, 0, 1, 0, Gtk::SHRINK)
 
-		attach(@pct        , 0, 1, 1, 2)
-		attach(@pbar       , 1, 2, 1, 2)
-		attach(@tests      , 2, 3, 1, 2)
-		attach(@speed      , 3, 4, 1, 2)
-		attach(@eta        , 4, 5, 1, 2)
+		attach(@pct        , 0, 1, 1, 2, 0, Gtk::SHRINK)
+		attach(@pbar       , 1, 2, 1, 2, 0, Gtk::SHRINK)
+		attach(@tests      , 2, 3, 1, 2, 0, Gtk::SHRINK)
+		attach(@speed      , 3, 4, 1, 2, 0, Gtk::SHRINK)
+		attach(@eta        , 4, 5, 1, 2, 0, Gtk::SHRINK)
 
-		attach(@tname      , 0, 5, 2, 3)
+		attach(@tname      , 0, 5, 2, 3, Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK)
 
 		@publisher = publisher
 		@o = publisher.output
@@ -260,25 +260,25 @@ module Publisher
 	    window.border_width = 10
 	    window.set_title("ZoneCheck result")
 
-	    toto = Gtk::VBox::new
-	    toto.add(@progress)
 
-	    @output = Gtk::VBox::new
+	    @output = Gtk::VBox::new(false)
 	    
 	    style = Gtk::Style::new
 
 	    scrolled_window = Gtk::ScrolledWindow.new
-	    scrolled_window.set_policy(Gtk::POLICY_NEVER,
-				       Gtk::POLICY_AUTOMATIC)
+	    scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC,
+				       Gtk::POLICY_ALWAYS)
 	    scrolled_window.add_with_viewport(@output);
 	    @output.set_focus_vadjustment(scrolled_window.get_vadjustment)
 
-	    toto.add(scrolled_window)
-
+	    toto = Gtk::VBox::new(false)
+	    toto.pack_start(@progress)
+	    toto.pack_start(scrolled_window)
+	    scrolled_window.set_usize(500, 400)
 
 
 	    window.add(toto)
-	    window.realize
+
 
 	    @pixmap1, @mask1 = Gdk::Pixmap::create_from_xpm_d(window.window,
 							      style.white,
@@ -289,6 +289,10 @@ module Publisher
 	    @pixmap3, @mask3 = Gdk::Pixmap::create_from_xpm_d(window.window,
 							      style.white,
 							      $mini_page_xpm)
+
+	    @ctree = Gtk::CTree::new([ "Tree" ], 0)
+	    @ctree.column_titles_hide
+	    @output.pack_start(@ctree)
 
 	    window.show_all
 	    
@@ -301,11 +305,10 @@ module Publisher
 
 	def setup(domain_name)
 	    if ! @rflag.quiet
-		lbl = Gtk::Label::new("ZoneCheck: #{domain_name}")
-		lbl.set_alignment(0, 0.5)
-		lbl.set_name("H1")
-		lbl.show_all
-		@output.pack_start(lbl)
+		@parent = @ctree.insert_node(nil, nil, [domain_name.to_s], 5,
+				   @pixmap1, @mask1, @pixmap2, @mask2,
+				   false, true)
+#		lbl.set_name("H1")
 	    end
 	end
 
@@ -313,31 +316,23 @@ module Publisher
 
 
 	def intro(domain)
+	    parent = nil
 	    unless rflag.quiet
-		lbl = Gtk::Label::new($mc.get("title_zoneinfo"))
-		lbl.set_alignment(0, 0.5)
-		lbl.set_name("H2")
-		lbl.show_all
-		@output.pack_start(lbl)
+		title = $mc.get("title_zoneinfo")
+		parent = @ctree.insert_node(@parent, nil, [title], 5,
+					    @pixmap1, @mask1, @pixmap2, @mask2,
+					    false, true)
+#		lbl.set_name("H2")
 	    end
 
 
-	    tbl = Gtk::Table::new(1, 3, false)
-	    tbl.set_col_spacings(5)
-	    tbl.set_row_spacings(2)
 	    
 	    l10n_zone  = $mc.get("ns_zone").capitalize
-	    lbl_zone   = Gtk::Label::new(l10n_zone)
-	    lbl_zone.set_alignment(0, 0.5)
-	    lbl_domain = Gtk::Label::new(domain.name.to_s)
-	    lbl_domain.set_alignment(0, 0.5)
 	    
-	    i = 0
+	    @ctree.insert_node(parent, nil, [ "#{l10n_zone}: #{domain.name.to_s}"], 5,
+					@pixmap1, @mask1, @pixmap2, @mask2,
+					false, true)
 
-	    tbl.attach(lbl_zone,   0, 1, i, i+1)
-	    tbl.attach(lbl_domain, 1, 3, i, i+1)
-
-	    i += 1
 
 
 	    domain.ns.each_index { |idx| 
@@ -350,24 +345,12 @@ module Publisher
 		    desc = $mc.get("ns_secondary").capitalize
 		end
 
-		lbl_desc = Gtk::Label::new(desc)
-		lbl_desc.set_alignment(0, 0.5)
-		lbl_desc.set_name(name)
-		lbl_ns   = Gtk::Label::new(ns_ip[0].to_s)
-		lbl_ns.set_alignment(0, 0.5)
-		lbl_ips  = Gtk::Label::new(ns_ip[1].join(", "))
-		lbl_ips.set_alignment(0, 0.5)
+		str = "#{desc}: #{ns_ip[0].to_s} (#{ns_ip[1].join(", ")})"
+		@ctree.insert_node(parent, nil, [ str ], 5,
+					@pixmap1, @mask1, @pixmap2, @mask2,
+					false, true)
 
-		tbl.attach(lbl_desc, 0, 1, i, i+1)
-		tbl.attach(lbl_ns  , 1, 2, i, i+1)
-		tbl.attach(lbl_ips , 2, 3, i, i+1)
-		i += 1
 	    }
-
-	    tbl.show_all
-
-	    @output.pack_start(tbl)
-	    
 	end
 
 	def diagnostic1(domainname, 
@@ -405,14 +388,6 @@ module Publisher
 
 
 	def diagnostic(severity, testname, desc, lst)
-	    if @ctree.nil?
-		@ctree = Gtk::CTree::new([ "Tree" ], 0)
-		@ctree.column_titles_hide
-	    @ctree.show_all
-		
-		@output.pack_start(@ctree)
-	    end
-	    
 	    msg, xpl_lst = nil, nil
 	    if @rflag.tagonly
 		if desc.is_error?
@@ -428,46 +403,45 @@ module Publisher
 		xpl_lst = xpl_split(desc.xpl)
 	    end
 	    
-	    parent = @ctree.insert_node(nil, nil, [msg], 5,
+	    parent = @ctree.insert_node(@parent, nil, [msg], 5,
 					@pixmap1, @mask1, @pixmap2, @mask2,
 					false, true)
 
-	    @o.puts "<DIV class=\"zc_diag\">"
-	    @o.puts "<DIV class=\"zc_title\">#{msg}</DIV>"
 
 	    if xpl_lst
-		parent = @ctree.insert_node(parent, nil, ["Explanation"], 5,
-					   @pixmap1, @mask1, @pixmap2, @mask2,
-					   false, true)
-		sibling = nil
+		xpl_parent = @ctree.insert_node(parent, nil, 
+						["Explanation"], 5,
+						@pixmap1, @mask1, @pixmap2, @mask2,
+						false, true)
+		ref_sibling = nil
 
-		@o.puts "<UL class=\"zc_ref\">"
 		xpl_lst.each { |t, h, b|
 		    l10n_tag = $mc.get("xpltag_#{t}")
 		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>') }
-		    sibling = @ctree.insert_node(parent, sibling, [ "#{l10n_tag}: #{h}\n" + b.join("\n")], 5,
-						@pixmap3, @mask3, nil, nil,
-						true, false)
+		    ref_sibling = @ctree.insert_node(xpl_parent, ref_sibling, 
+						     [ "#{l10n_tag}: #{h}" ], 5,
+					@pixmap1, @mask1, @pixmap2, @mask2,
 
-
-		    @o.puts "<LI>"
-		    @o.puts "<SPAN class=\"zc_ref\">#{l10n_tag}: #{h}</SPAN>"
-		    @o.puts "<BR>"
-		    @o.puts b.join(" ")
-		    @o.puts "</LI>"
+						     false, false)
+		    b.each { |l|
+			@ctree.insert_node(ref_sibling, nil,
+					   [ l ], 5, 
+					   nil, nil, nil, nil,
+					   true, false)
+		    }
 		}
-		puts "</UL>"
+
 	    end
 
 	    if ! lst.empty?
 		parent = @ctree.insert_node(parent, nil, ["Affected host(s)"], 5,
-					    @pixmap3, @mask3, nil, nil,
+					@pixmap1, @mask1, @pixmap2, @mask2,
 					    false, true)
 		sibling = nil
 		lst.each { |elt| 
-		sibling = @ctree.insert_node(parent, sibling, [elt], 5,
-					    @pixmap3, @mask3, nil, nil,
-					    true, false)
+		    @ctree.insert_node(parent, nil, [elt], 5,
+				       @pixmap3, @mask3, nil, nil,
+				       true, false)
 		}
 	    end
 
@@ -495,21 +469,16 @@ module Publisher
 	#------------------------------------------------------------
 
 	def h1(h)
-	    puts "H1"
-	    lbl = Gtk::Label::new(h.capitalize)
-	    lbl.set_alignment(0, 0.5)
-	    lbl.set_name("H2")
-	    lbl.show_all
-	    @output.pack_start(lbl)
+	    @h1 = @parent = @ctree.insert_node(@parent, nil, [ h.capitalize ], 5,
+					 @pixmap1, @mask1, @pixmap2, @mask2,
+					 false, true)
 	end
 
 	def h2(h)
-	    puts "H2"
-	    lbl = Gtk::Label::new("---- #{h.capitalize} ----")
-	    lbl.set_alignment(0, 0.5)
-	    lbl.set_name("H3")
-	    lbl.show_all
-	    @output.pack_start(lbl)
+	    parent = @h1.nil? ? @parent : @h1
+	    @h2 = @parent = @ctree.insert_node(parent, nil, [ h.capitalize ], 5,
+					 @pixmap1, @mask1, @pixmap2, @mask2,
+					 false, true)
 	end
     end
 end
