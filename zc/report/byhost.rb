@@ -40,7 +40,8 @@ module Report
     ##
     class ByHost < Template
 	def display_std
-	    if !(@info.empty? && @warning.empty? && @fatal.empty?)
+	    if (!(@info.empty? && @warning.empty? && @fatal.empty?) || 
+		@rflag.reportok)
 		@publish.diag_start() unless @rflag.quiet
 
 		# Sorting by 'host'
