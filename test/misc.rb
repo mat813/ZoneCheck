@@ -89,6 +89,11 @@ module CheckNetworkAddress
 		                                    .sort.join(', ') }
 	end
 
+	# DESC: Ensure that a sesrver is not recursive
+	def chk_not_recursive(ns, ip)
+	    ! rec(ip)
+	end
+
 	# DESC: Ensure that a server claiming to be recursive really is it
 	def chk_correct_recursive_flag(ns, ip)
 	    return true unless rec(ip)

@@ -53,10 +53,17 @@ ok	: Reverse matching nameserver name
 explain : [none]
 
 
+[chk_not_recursive]
+testname: nameserver doesn't allow recursion
+error	: The nameserver allow recursive queries
+ok	: The nameserver is not recursive
+explain	: [ref]: info\nIf you configure your nameserver to answer recursive queries,\nit means that you allow your nameserver to be used by anyone\nto resolve any kind of queries.
+
+
 [chk_correct_recursive_flag]
 testname: check if server is really recursive
-error   : server claims to be recursive but is not
-ok	: server is recursive has stated
+error   : Server claims to be recursive but is not
+ok	: Server is recursive has stated
 explain : [none]
 
 

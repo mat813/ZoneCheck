@@ -53,6 +53,13 @@ ok	: Le nom correspondant à l'adresse IP correspond au nom du serveur
 explain : [none]
 
 
+[chk_not_recursive]
+testname: serveur de nom n'autorisant pas la récursion
+error	: Le serveur de nom autorise les requêtes récursives
+ok	: Le serveur de nom n'est pas récursif
+explain	: [ref]: info\nSi vous configurez le serveur de nom pour répondre aux\nrequêtes récursives, cela implique que vous acceptez que n'importe\nqui l'utilise pour résoudre n'importe quel type de reqêtes.
+
+
 [chk_correct_recursive_flag]
 testname: serveur de nom réellement récursif
 error   : Le serveur dit être récursif mais ne l'est pas
