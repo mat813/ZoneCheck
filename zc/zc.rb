@@ -146,6 +146,8 @@ class ZoneCheck
 	@input = if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
 		    (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
 		 then Param::CGI::new
+#		 elsif ENV.has_key?("DISPLAY")
+#		 then Param::GTK::new
 		 else Param::CLI::new
 		 end
 	begin
