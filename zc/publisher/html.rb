@@ -266,7 +266,7 @@ EOT
 	     src="http://www.w3.org/Icons/valid-html401"
 	     alt="Valid HTML 4.01!"></a>
     </span>
-Statistics: #{"%d tests in %.2f sec accros %d nameservers" % [info.testcount, info.testingtime, info.nscount]}
+Statistics: #{"%d tests in %.2f sec accros %d nameservers" % [info.testcount, info.testingtime, info.nscount]} <br>
 Release: #{$zc_name}-#{CGI::escapeHTML($zc_version)} <br>
 Last generated: #{Time::now}
 <!-- <br> Contact: #{$zc_contact} -->

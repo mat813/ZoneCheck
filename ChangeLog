@@ -9,6 +9,7 @@
 	* nresolv: able to encode NS, A, AAAA records
 	* zc: fixed wrong exit code when 'no stop on fatal' was enabled
 	* zc: option --resolver is not necessary anymore on windows
+	* zc: added statistics for web page
 
 2003-10-02  ZoneCheck-2.0.0b8
 	* test: added chk_soa_coherence
