@@ -36,6 +36,8 @@ module Input
     ## Processing parameters from GTK
     ##
     class GTK
+	with_msgcat "iface.%s"
+
 	MaxNS = 8
 
 	##

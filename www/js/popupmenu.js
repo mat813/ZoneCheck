@@ -108,6 +108,9 @@ ZC_Popup.prototype.add    = function(label, func) {
 
 /***********************************************************************/
 
+function zc_contextmenu_setlocale() {
+}
+
 function zc_contextmenu_start() {
   var hidefunc = function (className, tagName) {
     var elt = document.getElementsByTagName(tagName);

@@ -15,19 +15,18 @@
 #
 #
 
-i_tag : i
-w_tag : w
-f_tag : f
-
 w_generic	: generic
 w_warning	: warning
+w_warning_id	: w
 w_fatal		: fatal
+w_fatal_id	: f
 w_info		: info
+w_info_id	: i
+w_testing	: testing
 w_unexpected	: unexpected
 w_line          : line
 w_error		: error
 w_perfect	: perfect
-
 w_quit		: quit
 w_abort		: abort
 
@@ -39,10 +38,6 @@ res_succeed	: SUCCEED
 res_failed	: FAILED
 res_failed_on	: FAILED (on warning)
 res_failed_and	: FAILED (and %d warning(s))
-warning_fmt	: Warning: %s\n
-fatal_fmt	: Fatal  : %s\n
-info_fmt	: Info   : %s\n
-testing_fmt     : Testing: %s\n
 test_progress   : Tests in progress
 
 ns_batch	: batch
@@ -141,93 +136,6 @@ missing_sectopt : missing option for section '%s'
 badclass    : class '%s' doesn't derive from %s
 test_exists : test '%s' defined in classes '%s' and '%s'
 check_exists: check '%s' defined int class '%s' and '%s'
-
-##############################################################################
-##############################################################################
-[iface]
-label_transport		: Transport
-label_error		: Error
-label_extra_tests	: Extra tests
-label_output		: Output
-label_check		: Check
-label_guess		: Guess
-label_clear		: Clear
-label_debug		: Debug
-label_advanced		: Advanced
-stop_on_first		: stop on first fatal
-error_default		: default severity
-error_allwarnings	: all warnings
-error_allfatals		: all fatals
-test_mail		: mail delivery
-test_zone		: zone content
-test_ripe		: RIPE database
-output_explain		: explain
-output_details		: details
-output_zone		: zone summary
-output_progressbar	: progress bar
-output_nothing		: nothing
-output_description	: description
-dbg_loading		: loading
-dbg_locale		: locale
-dbg_config		: config
-dbg_parser		: parser
-dbg_tests		: tests
-dbg_autoconf		: autoconf
-dbg_dbg			: debugger
-dbg_cache_info		: cache information
-dbg_nocache		: no cache
-dbg_dont_rescue		: don't rescue
-dbg_crazydebug		: crazy debug
-
-batch_example		: example:\nDOM=domain\nDOM=domain NS=ns1;ns2=1.2.34,2001:1547::1
-
-batch_save		: Open Batch File
-batch_open		: Save Batch File
-
-file_overwrite		: Overwrite file: %s
-file_gotdirectory	: Can't read directory
-
-xcp_toomany_nameservers : Too many nameservers
-
-[iface_tooltip]
-input/simple/zone : Enter zone to check
-input/simple/nameserver/name: Enter nameserver name
-input/simple/nameserver/addresses: Enter nameserver IP addresses (coma separated)
-input/batch/data: Enter the list of Zone that you want to test
-input/batch/save: Save current batch data
-input/batch/open: Set batch data from existing file
-input/simple/guess: Try to fill the nameserver information for an existing zone
-input/clear: Clear all the input information
-input/check: Start the ZoneCheck verification
-
-option/output/summary: Give summary information about the zone tested
-option/output/explain: Give explanation and references
-option/output/details: Give detailed information
-option/output/progress: Show a progress bar
-option/output/description: Show current test name
-option/output/nothing: Don't display progress information
-option/error/default: Use the severity assigned in the configuration file
-option/error/allwarnings: All errors are considered as warnings
-option/error/allfatals: All errors are considered as fatals
-option/error/stoponfirst: Stop on first fatal error
-option/transp/ipv4: Use IPv4 protocol
-option/transp/ipv6: Use IPv6 protocol (new internet protocol)
-option/transp/std: Use UDP and fallback to TCP in case of truncated anser
-option/transp/udp: Use UDP protocol for all queries
-option/transp/tcp: Use TCP protocol for all queries
-
-expert/output/oneline: Print a short answer
-expert/output/tagonly: Only print tag (ideal for scripting)
-expert/output/quiet: Try to minimize ouput messages
-expert/output/format: Select output format
-expert/output/report: Select report analyse/processing
-expert/advanced/resolver: Select an alternative local resolver
-expert/advanced/testonly: Select the unique test you want to make
-
-
-##############################################################################
-##############################################################################
-
 
 
 ## USAGE #####################################################################

@@ -23,6 +23,8 @@
 #  - only load javascript when needed
 #
 
+require 'config'
+
 module Publisher
     ##
     ##
@@ -48,8 +50,9 @@ module Publisher
 	class Progress
 	    # Initialization
 	    def initialize(publisher)
-		@publisher = publisher
-		@o         = publisher.output
+		@publisher	= publisher
+		@o		= publisher.output
+		@l10n_testing	= $mc.get("w_testing")
 	    end
 	    
 	    # Start progression
@@ -121,17 +124,12 @@ module Publisher
 		    @o.puts HTML.jscript { 
 			"zc_pgr_process(\"#{desc} #{xtra}\")" }
 		    @o.puts HTML.nscript {
-			"<LI>" +
-			    $mc.get("testing_fmt") % [ "#{desc}#{xtra}" ] +
-			    "</LI>"
-		    }
+			"<LI>#{@l10n_testing}: #{desc}#{xtra}</LI>" }
 		end
 
 		# Test description
 		if @publisher.rflag.testdesc
-		    @o.puts "<LI>"
-		    @o.printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
-		    @o.puts "</LI>"
+		    @o.puts "<LI>#{@l10n_testing}: #{desc}#{xtra}</LI>"
 		end
 
 		# Flush
@@ -190,6 +188,7 @@ EOT
 	end
 
 	def end
+	    @o.puts HTML.jscript { "zc_contextmenu_setlocale();" }
 	    @o.puts HTML.jscript { "zc_contextmenu_start();" }
 	    @o.print <<"EOT"
   </BODY>
@@ -253,9 +252,9 @@ EOT
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? "i" : $mc.get("i_tag")
-	    w_tag = @rflag.tagonly ? "w" : $mc.get("w_tag")
-	    f_tag = @rflag.tagonly ? "f" : $mc.get("f_tag")
+	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get("w_info_id")
+	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get("w_warning_id")
+	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get("w_fatal_id")
 	    
 	    i_tag = i_tag.upcase if i_unexp
 	    w_tag = w_tag.upcase if w_unexp

@@ -16,6 +16,7 @@
 #
 
 require 'textfmt'
+require 'config'
 
 module Publisher
     ##
@@ -37,11 +38,12 @@ module Publisher
 		BarSize			= 37
 
 		def initialize(output, precision)
-		    @output     = output
-		    @precision  = precision
-		    @unit	= $mc.get("pgr_speed_unit")
-		    @mutex	= Mutex::new
-		    @updater	= nil
+		    @output		= output
+		    @precision		= precision
+		    @mutex		= Mutex::new
+		    @updater		= nil
+		    @l10n_unit		= $mc.get("pgr_speed_unit")
+		    @l10n_testing	= $mc.get("w_testing").capitalize
 		end
 		
 		def start(length)
@@ -99,8 +101,8 @@ module Publisher
 				  else @processed / @totaltime
 				  end
 		    speed_s	= if speed < 0.0 
-				  then "--.--%s" % [ @unit ]
-				  else "%7.2f%s" % [ speed, @unit ]
+				  then "--.--%s" % [ @l10n_unit ]
+				  else "%7.2f%s" % [ speed, @l10n_unit ]
 				  end
 		    
 		    if @length > 0 then
@@ -187,7 +189,7 @@ module Publisher
 			   else          ""
 			   end
 	    
-		    @o.printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
+		    @o.puts "#{@l10n_testing}: #{desc}#{xtra}"
 		end
 	    end
 	end
@@ -206,7 +208,7 @@ module Publisher
 	def error(text)
 	    paragraph = ::Text::Format::new
 	    paragraph.width = 72
-	    paragraph.tag   = "ERROR: "
+	    paragraph.tag   = $mc.get("w_error").upcase + ": "
 	    @o.puts paragraph.format(text)
 	end
 
@@ -234,9 +236,9 @@ module Publisher
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? "i" : $mc.get("i_tag")
-	    w_tag = @rflag.tagonly ? "w" : $mc.get("w_tag")
-	    f_tag = @rflag.tagonly ? "f" : $mc.get("f_tag")
+	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get("w_info_id")
+	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get("w_warning_id")
+	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get("w_fatal_id")
 	    
 	    i_tag = i_tag.upcase if i_unexp
 	    w_tag = w_tag.upcase if w_unexp

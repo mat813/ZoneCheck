@@ -161,11 +161,6 @@ class Test
 	def ok? ; false ; end
     end
 
-
-    def self.with_msgcat(*msgcat_list)
-	msgcat_list.each { |msgcat| $mc.read(msgcat) }
-    end
-
     def initialize(network, config, cm, domain)
 	@network	= network
 	@config		= config

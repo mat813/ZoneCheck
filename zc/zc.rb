@@ -169,6 +169,11 @@ rescue => e
     exit EXIT_ERROR
 end
 
+# Include the 'with_msgcat' facility in every objects
+def with_msgcat(*msgcat_list)
+    msgcat_list.each { |msgcat| $mc.read(msgcat) }
+end
+
 
 ##
 ##
