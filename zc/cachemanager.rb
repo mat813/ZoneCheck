@@ -259,6 +259,12 @@ class CacheManager
 	}
     end	
 
+    # TXT record
+    def txt(name, force=nil)
+	@cache.use(:ptr, name, force) {
+	    get_resources(name,       NResolv::DNS::Resource::IN::TXT)
+	}
+    end
     
     #-- Shortcuts ----------------------------------------------------
     def rec(domainname, force=nil)

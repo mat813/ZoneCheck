@@ -159,6 +159,19 @@ module CheckGeneric
 		     end
 	    return { 'subnet' => "#{subnet}/#{prefix}" }
 	end
+
+	# DESC: Addresses should avoid belonging ALL to the same AS
+	def chk_all_same_asn
+	    asn = ip.collect { |addr|
+		aname = NResolv::DNS::Name::create(addr.to_dnsform +
+						   '.asn.routeviews.org.')
+		txtres = @cm[nil].txt(aname, NResolv::DNS::Resource::IN::TXT)
+		txtres[0].txtdata[0]
+	    }
+	    asn.uniq!
+	    return true if asn.size > 1
+	    return { 'asn' => asn[0] }
+	end
     end
 
 

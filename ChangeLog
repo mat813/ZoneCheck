@@ -6,6 +6,7 @@
 	* zc: renamed profile fr to afnic
 	* test: improved ip_bogon to handle NXDOMAIN responses
 	* test: tcp connectivity has an 8 seconds timeout
+	* nresolv: fix decoding of TXT records
 	
 2003-11-18  ZoneCheck-2.0.0b10
 	* misc: fixed bug in installer

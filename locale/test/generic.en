@@ -139,6 +139,23 @@
       subnet.</para></details>
   </check>
 
+  <check name="all_same_asn">
+    <name>nameservers belong all to the same AS</name>
+    <success>All nameservers are not part of the same AS</success>
+    <failure>Nameservers are all part of the same AS</failure>
+    <explanation>
+      <src type="adv" from="zonecheck">
+        <title>ZoneCheck</title>
+        <para>To avoid loosing all connectivity with the autoritative DNS
+          in case of a routing problem inside your Autonomous System,
+          it is advised to host the DNS on different AS.</para>
+      </src>
+    </explanation>
+    <details><para>All the nameservers are part of the same 
+      Autonomous System (AS number <zcvar name="asn"/>), try to have some
+      of them hosted on another AS.</para></details>
+  </check>
+
   <check name="delegation_udp512">
     <name>delegation response fit in a 512 byte UDP packet</name>
     <success>Delagation response fit in a 512 byte UDP packet</success>
