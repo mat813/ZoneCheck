@@ -34,32 +34,53 @@ module CheckExtra
 	    exch
 	end
 
-	#-- Tests ---------------------------------------------------
-	# DESC: Check that the MX
-	def chk_mail_openrelay_domain
-	    # Mailhost to use to contact the person responsible for the domain
-	    mdom  = soa(bestresolver).rname.domain
+	def mhosttest(mdom)
+	    # Mailhost and IP 
 	    mhost = bestmx(mdom)
 	    mip   = addresses(mhost, bestresolver(mhost))[0]
-	    puts "DOM=#{mdom}   HOST=#{mhost}   IP=#{mip}"
 
+	    puts "DOM=#{mdom}   HOST=#{mhost}   IP=#{mip}"
+	    # Execute test on mailhost
 	    mrelay = nil
 	    begin
 		mrelay = ZCMail::new(mdom, mip.to_s)
-		mrelay.test_openrelay
+		mrelay.banner
+		yield mrelay
 	    ensure
+		mrelay.quit
 		mrelay.close if mrelay
 	    end
 	end
-
-#	def chk_mail_openrelay_hostmaster
-#	    
-#	end
 	
+	
+	def openrelay(mdom)
+	    mhosttest(mdom) { |mrelay| return mrelay.test_openrelay }
+	end
+
+	def testuser(user, mdom)
+	    mhosttest(mdom) { |mrelay| return mrelay.test_userexists(user) }
+	end
+
+	#-- Tests ---------------------------------------------------
+	# DESC: Check that the best MX for hostmaster is not an openrelay
+	def chk_mail_openrelay_hostmaster
+	    ! openrelay(soa(bestresolver).rname.domain)
+	end
+
+	# DESC: Check that the best MX for the domain is not an openrelay
+	def chk_mail_openrelay_domain
+	    ! openrelay(@domain_name)
+	end
+
+	# DESC: Check that hostmaster address is valid
 	def chk_mail_hostmaster
+	    rname = soa(bestresolver).rname
+	    testuser(rname[0], rname.domain)
 	end
 	
-#	def chk_mail_postmaster
-#	end
+	# DESC: Check that postmaster address is valid
+	def chk_mail_postmaster
+	    testuser("postmaster", @domain_name)
+	end
     end
 end

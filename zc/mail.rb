@@ -104,6 +104,7 @@ class ZCMail
 	    else raise ZCMailError, "parsing error"
 	    end
 	end
+	# NOT REACHED
     end
 
     def banner          ; cmd(nil)                    ; end
@@ -120,21 +121,22 @@ class ZCMail
 
 
     def test_userexists(user)
-	mail_from("#{@user}@#{mdest}")
-	rcpt_to(to)
+	mail_from("#{@user}@#{@mdest}")
+	res = rcpt_to(user)[0] == 250
 	rset
+	res
     end
 
     def test_openrelay(count=1)
 	tests = [ @openrelay_testlist[0] ]
 
 	tests.each { |name, from, to|
-	    puts name
+	    puts "name: from=#{from} to=#{to}"
 	    
 	    if (r = mail_from(from)[0]) == 250
 		return true unless rcpt_to(to)[0] == 554
 	    else
-		puts "OOPS: #{r}"
+		raise ZCMailError, "Unexpected return code #{r}"
 	    end
 	    rset
 	    false

@@ -282,3 +282,23 @@ error   : The primary nameserver doesn't match the given one
 [chk_given_ns_vs_ns]
 testname: correctness of given nameserver list
 error   : The nameserver list doesn't match the given one
+
+
+#
+#
+#
+[chk_mail_openrelay_domain]
+testname: delegated domain is not an openrelay
+error   : The best MX for the domain is an openrelay
+
+[chk_mail_openrelay_hostmaster]
+testname: domain of the hostmaster email is not an openrelay
+error   : The best MX for the hostmaster address is an openrelay
+
+[chk_mail_postmaster]
+testname: 'postmaster' email address for the domain is valid
+error   : The postmaster can't be contacted by email
+
+[chk_mail_hostmaster]
+testname: hostmaster email address is valid
+error   : The hostmaster can't be contacted by email

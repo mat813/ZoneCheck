@@ -38,6 +38,8 @@ class Param
 		[ "--testdir",	        GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--dnsonly",  "-D",   GetoptLong::NO_ARGUMENT       ],
 		[ "--test",     "-T",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--testlist",         GetoptLong::NO_ARGUMENT       ],
+		[ "--testdesc",         GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--resolver",	"-r",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--ns",	"-n",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--ipv4",	"-4",	GetoptLong::NO_ARGUMENT       ],
@@ -65,6 +67,8 @@ class Param
 		when "--testdir"   then @p.testdir       = arg
 		when "--dnsonly"   then @p.dnsonly	 = true
 		when "--test"      then @p.test          = arg
+		when "--testlist"  then @p
+		when "--testdesc"  then @p
 		when "--resolver"  then @p.resolver      = arg
 		when "--ns"        then @p.domain.ns     = arg
 		when "--ipv6"      then @p.ipv6          = true
@@ -123,6 +127,8 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
         --testdir       Location of the directory holding tests
     -D, --dnsonly       Only perform DNS related tests
     -T, --test          Name of the test to perform
+        --testlist      List all the available tests
+        --testdesc      Give a description of the test
     -r, --resolver      Resolver to use for guessing 'ns' information
     -n, --ns            List of nameservers for the domain
     -1, --one           Only primite the most relevant message
@@ -166,7 +172,17 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     
 
 EXAMPLES:
-  #{PROGNAME} -4 --verbose=x,i afnic.fr.
+  #{PROGNAME} -6 --verbose=x,i afnic.fr.
+    Test the 'afnic.fr.' domain with IPv6 only connectivity, print
+    a summary information about the tested domain and explanation of
+    failed tests
+
+  #{PROGNAME} -v c -1 -B -
+    Work in batch mode, where domain are read from stdin, a progress bar
+    indicates how many tests remains, and only short report is written
+
+  #{PROGNAME} -T error chk_soa
+    Ask for the 'error' message associated with the test 'chk_soa'
 EOT
        exit errcode unless errcode.nil? #'
 	end
