@@ -169,8 +169,7 @@ module CheckGeneric
 		txtres[0].txtdata[0]
 	    }
 	    asn.uniq!
-	    return true if asn.size > 1
-	    return { 'asn' => asn[0] }
+	    asn.size > 1 ? true : { 'asn' => asn[0] }
 	end
     end
 
