@@ -43,8 +43,8 @@
 
 module MyXML
     Implementation = (Proc::new {
-			  if $zc_xml_implementation
-			      $zc_xml_implementation.intern
+			  if $zc_xml_parser
+			      $zc_xml_parser.intern
 			  else
 			      begin
 				  require 'xml/libxml'
@@ -81,7 +81,7 @@ when :libxml
 #-- BEGIN: libxml specific --------------------------------------------
 if ENV['XML_CATALOG_FILES'].nil?
     $stderr.print <<EOT
-When using the 'libxml' implementation, you should define
+When using the 'libxml' parser, you should define
 the environment variable XML_CATALOG_FILES to point to
 #{ZC_INSTALL_PATH}/zc/data/catalog.xml
 
@@ -238,6 +238,6 @@ end
 #-- END: REXML specific -----------------------------------------------
 
 else
-    raise "Unsupported XML implementation (#{MyXML::Implementation})"
+    raise "Unsupported XML parser (#{MyXML::Implementation})"
 end
 
