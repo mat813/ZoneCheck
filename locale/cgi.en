@@ -22,30 +22,42 @@
 #
 
 input_cgi_usage: \
-You can't invoke directly the CGI script\n\
-     parameters:\n\
-      - lang\n\
-      - quiet\n\
-      - one\n\
-      - verbose = [ intro, explain, details, testdesc, counter ]\n\
-          - intro    = true|false   -> 'intro'  |\n\
-          - explain  = true|false   -> 'explain'|\n\
-          - details  = true|false   -> 'details'|\n\
-          - progress = testdesc|counter\n\
-      - output  = [ straight, consolidation, text, html ]\n\
-          - format   = html|text\n\
-      - error   = [ allfatal, allwarning, stop, nostop, standard ]\n\
-          - errorlvl  = allfatal|allwarning\n\
-          - dontstop  = true|false  -> 'nostop'|'stop'\n\
-      - transp  = [ ipv4, ipv6, udp, tcp, std ]\n\
-          - transp3   = ipv4, ipv6\n\
-          - transp4   = udp|tcp|std\n\
-      - category\n\
-          - chkmail   = true|false  -> '!mail'    |\n\
-          - chkrir    = true|false  -> '!rir'     |\n\
-          - chkzone   = true|false  -> '!dns:axfr'|\n\
-      - ns\n\
-          - ns0  .. nsX\n\
-          - ips0 .. ipsX\n\
-      - zone\n\
+=> You can't invoke directly the CGI script!\n\
+   Use one of the available form present on the site instead.\n\
+\n\
+Follow a quick summary of the possible parameters for more information\n\
+see the ZoneCheck documentation.\n\
+\n\
+parameters:\n\
+ - lang     = [ fr | en | ... ]\n\
+ - quiet\n\
+ - one\n\
+ - verbose  = [ i|intro, x|explain, d|details, t|testdesc, c|counter ]\n\
+     - intro\n\
+     - explain\n\
+     - details\n\
+     - progress = [ testdesc | counter ]\n\
+ - output   = [ straight, consolidation, text, html ]\n\
+     - format   = html|text\n\
+ - error    = [ af|allfatal, aw|allwarning, std|standard,\n\
+                s|stop, ns|nostop ]\n\
+     - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]\n\
+     - dontstop \n\
+ - transp   = [ ipv4, ipv6, udp, tcp, std ]\n\
+     - transp3   = [ ipv4, ipv6 ]\n\
+     - transp4   = [ udp | tcp | std ]\n\
+ - category = cat1,!cat2:subcat1,cat2,!cat3,+\n\
+     - chkmail (!mail)\n\
+     - chkrir  (!rir)\n\
+     - chkzone (!dns:axfr)\n\
+ - ns       = ns1=ip1,ip2;ns2=ip3;ns3\n\
+               (WARNING: in URL '%3b' should be used instead of ';')\n\
+     - ns0  .. nsX   = nameserver name\n\
+     - ips0 .. ipsX  = coma separated ip addresses\n\
+ - zone     = zone to test\n\
+\n\
+exemples:\n\
+ - zone=afnic.fr&intro&progress=testdesc&transp=ipv4,ipv6,std\n\
+ - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr\n\
+ - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr=192.93.0.1&ns=ns2.nic.fr&ns=bns3.nic.fr
 

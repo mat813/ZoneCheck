@@ -8,6 +8,7 @@ version = 2.0.0
 	integration avec la chaine de production
 	display erreur messages when in CGI no zone has been given
 	write help page describing how to interpret zonecheck results
+	problem with @input.error when in html due to header (for batch)
 
 form =	autofilling of zc form
 

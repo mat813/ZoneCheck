@@ -954,8 +954,14 @@ EOT
 	    true
 	end
 
-	def usage(errcode, io=$stderr)
+	def usage(errcode, io=$console.stderr)
 	    io.print $mc.get("input_gtk_usage").gsub("PROGNAME", PROGNAME)
+	    exit errcode unless errcode.nil?
+	end
+
+	def error(str, errcode=nil, io=$console.stderr)
+	    l10n_error = $mc.get("w_error").upcase
+	    io.puts "#{l10n_error}: #{str}"
 	    exit errcode unless errcode.nil?
 	end
     end

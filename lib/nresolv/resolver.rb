@@ -24,19 +24,22 @@ require 'nresolv/config'
 require 'nresolv/dbg'
 
 class NResolv
-    class NoEntryError  < NResolvError
-    end
-
-    class NoDomainError < NoEntryError
-    end
-
-    class ReplyError    < NResolvError
-	attr_reader :mesg
-	def initialize(mesg=nil) ; @mesg = mesg                           ; end
-	def to_s                 ; (@mesg.nil? ? self.class : @mesg).to_s ; end
-    end
-    
     class DNS
+	class DNSNResolvError < NResolvError
+	    attr_reader :mesg
+	    def initialize(mesg=nil) ; @mesg = mesg ; end
+	    def to_s ; (@mesg.nil? ? self.class : @mesg).to_s ; end
+	end
+
+	class NoEntryError  < DNSNResolvError
+	end
+
+	class NoDomainError < NoEntryError
+	end
+
+	class ReplyError    < DNSNResolvError
+	end
+    
 	##
 	## Abstract client class
 	##  - support multiple servers
@@ -74,7 +77,7 @@ class NResolv
 
 	    def getnames(address)
 		ret = []
-		each_name(address) {|name| ret << name}
+		each_name(address) { |name| ret << name }
 		return ret
 	    end
 
@@ -82,8 +85,7 @@ class NResolv
 	    def getresources(name, resource, rec=true, exception=true)
 		ret = [ ]
 		each_resource(name, resource, rec, exception) {|resource,| 
-		    ret << resource
-		}
+		    ret << resource }
 		return ret
 	    end
 

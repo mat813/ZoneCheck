@@ -54,7 +54,7 @@ class Address
 	    rescue InvalidAddress
 	    end
 	}
-	raise InvalidAddress, "can't interpret '#{arg.inspect}' as address"
+	raise InvalidAddress, "can't interpret #{arg.inspect} as address"
     end
 end
 

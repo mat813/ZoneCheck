@@ -22,6 +22,9 @@ module Input
     ##
     ## Processing parameters from CGI (Common Gateway Interface)
     ##
+    ## WARN: don't forget to update locale/cgi.*
+    ##
+    ##
     ## For obvious security reasons the following parameters shouldn't
     ## be set through the CGI:
     ##  - configfile
@@ -30,30 +33,36 @@ module Input
     ##  - resolver
     ##
     ## parameters:
-    ##  - lang
+    ##  - lang     = [ fr | en | ... ]
     ##  - quiet
     ##  - one
-    ##  - verbose = [ intro, explain, details, testdesc, counter ]
-    ##      - intro    = true|false   -> 'intro'  |
-    ##      - explain  = true|false   -> 'explain'|
-    ##      - details  = true|false   -> 'details'|
-    ##      - progress = testdesc|counter
-    ##  - output  = [ straight, consolidation, text, html ]
+    ##  - verbose  = [ i|intro, x|explain, d|details, t|testdesc, c|counter ]
+    ##      - intro
+    ##      - explain
+    ##      - details
+    ##      - progress = [ testdesc | counter ]
+    ##  - output   = [ straight, consolidation, text, html ]
     ##      - format   = html|text
-    ##  - error   = [ allfatal, allwarning, stop, nostop, standard ]
-    ##      - errorlvl  = allfatal|allwarning
-    ##      - dontstop  = true|false  -> 'nostop'|'stop'
-    ##  - transp  = [ ipv4, ipv6, udp, tcp, std ]
-    ##      - transp3   = ipv4, ipv6
-    ##      - transp4   = udp|tcp|std
-    ##  - category
-    ##      - chkmail   = true|false  -> '!mail'    |
-    ##      - chkrir    = true|false  -> '!rir'     |
-    ##      - chkzone   = true|false  -> '!dns:axfr'|
-    ##  - ns
-    ##      - ns0  .. nsX
-    ##      - ips0 .. ipsX
-    ##  - zone
+    ##  - error    = [ af|allfatal, aw|allwarning, std|standard,
+    ##                s|stop, ns|nostop ]
+    ##      - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]
+    ##      - dontstop 
+    ##  - transp   = [ ipv4, ipv6, udp, tcp, std ]
+    ##      - transp3   = [ ipv4, ipv6 ]
+    ##      - transp4   = [ udp | tcp | std ]
+    ##  - category = cat1,!cat2:subcat1,cat2,!cat3,+
+    ##      - chkmail (!mail)
+    ##      - chkrir  (!rir)
+    ##      - chkzone (!dns:axfr)
+    ##  - ns       = ns1=ip1,ip2;ns2=ip3;ns3
+    ##      - ns0  .. nsX   = nameserver name
+    ##      - ips0 .. ipsX  = coma separated ip addresses
+    ##  - zone     = zone to test
+    ##
+    ## exemple:
+    ##  zone=afnic.fr&intro&progress=testdesc&transp=ipv4,ipv6,std
+    ##  zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr
+    ##  zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr=192.93.0.1&ns=ns2.nic.fr&ns=bns3.nic.fr
     ##
     class CGI
 	with_msgcat "cgi.%s"
@@ -199,7 +208,11 @@ module Input
 	    exit errcode unless errcode.nil?
 	end
 
-	def error(str, errcode=nil, io=$stderr)
+	def error(str, errcode=nil, io=$stdout)
+	    l10n_error = $mc.get("w_error").upcase
+	    io.puts @cgi.header({ "type"    => "text/plain",
+				  "charset" => "UTF-8" })
+	    io.puts "#{l10n_error}: #{str}"
 	    exit errcode unless errcode.nil?
 	end
     end

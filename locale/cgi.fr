@@ -22,4 +22,42 @@
 #
 
 input_cgi_usage: \
-Ce script CGI ne peut pas etre directement invoque
+=> Ce script CGI ne peut pas etre directement invoque!\n\
+   Utilisez un des formulaires present sur le site a la place.\n\
+\n\
+Ci-dessus se trouve un resume des parametres possibles, pour plus\n\
+d'information veuillez consulter la documentation de ZoneCheck.\n\
+\n\
+parametres:\n\
+ - lang     = [ fr | en | ... ]\n\
+ - quiet\n\
+ - one\n\
+ - verbose  = [ i|intro, x|explain, d|details, t|testdesc, c|counter ]\n\
+     - intro\n\
+     - explain\n\
+     - details\n\
+     - progress = [ testdesc | counter ]\n\
+ - output   = [ straight, consolidation, text, html ]\n\
+     - format   = html|text\n\
+ - error    = [ af|allfatal, aw|allwarning, std|standard,\n\
+                s|stop, ns|nostop ]\n\
+     - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]\n\
+     - dontstop \n\
+ - transp   = [ ipv4, ipv6, udp, tcp, std ]\n\
+     - transp3   = [ ipv4, ipv6 ]\n\
+     - transp4   = [ udp | tcp | std ]\n\
+ - category = cat1,!cat2:subcat1,cat2,!cat3,+\n\
+     - chkmail (!mail)\n\
+     - chkrir  (!rir)\n\
+     - chkzone (!dns:axfr)\n\
+ - ns       = ns1=ip1,ip2;ns2=ip3;ns3\n\
+               (ATTENTION: utiliser '%3b' dans l'URL a la place de ';')\n\
+     - ns0  .. nsX   = serveur de nom\n\
+     - ips0 .. ipsX  = addresses IPs separees par une virgule\n\
+ - zone     = zone a tester\n\
+\n\
+exemples:\n\
+ - zone=afnic.fr&intro&progress=testdesc&transp=ipv4,ipv6,std\n\
+ - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr\n\
+ - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr=192.93.0.1&ns=ns2.nic.fr&ns=bns3.nic.fr
+

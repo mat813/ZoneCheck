@@ -191,8 +191,14 @@ module Publisher
     <LINK rel="section" title="#{$mc.get("title_status")}"
           href="#t_status"                                 type="text/html">
 
+
+    <!-- Favicon -->
+    <LINK rel="icon"       href="#{@publish_path}/img/zc-fav.png" type="image/png">
+
+
     <!-- Style -->
-    <LINK rel="stylesheet" href="#{@publish_path}/style/zc.css" type="text/css">
+    <LINK rel="stylesheet" href="#{@publish_path}/style/zc.css"   type="text/css">
+
     <STYLE>
         UL.zc_ref LI { 
             list-style: url(#{@publish_path}/img/ref.png)     disc }

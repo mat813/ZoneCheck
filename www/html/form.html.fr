@@ -21,7 +21,9 @@
   <HEAD>
     <META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-    <LINK rel="stylesheet" href="HTML_PATH/style/zc.css" type="text/css">
+    <LINK rel="stylesheet" href="HTML_PATH/style/zc.css"   type="text/css">
+    <LINK rel="icon"       href="HTML_PATH/img/zc-fav.png" type="image/png">
+
     <LINK rel="start" title="ZoneCheck page principale"
 	  type="text/html"
 	  href="HTML_PATH/">
@@ -48,7 +50,7 @@
   </HEAD>
 
   <BODY>
-    <P id="lang"><A href="HTML_PATH/en/">EN</A></P>
+    <P id="lang">Lang: <A href="HTML_PATH/en/">EN</A> / FR</P>
     <P id="beta">BETA</P>
 
     <!-- Logo -->
@@ -391,7 +393,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Apr  1 11:02:10 CEST 2003
+Last modified: Tue Apr  1 17:25:25 CEST 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

@@ -164,7 +164,7 @@ class Param
 		if entry =~ /^(.*)=(.*)$/
 		    host_str, ips_str = $1, $2
 		    host = NResolv::DNS::Name::create(host_str, true)
-		    ips_str.split(/\s*,\s*/).each { |str|
+		    ips_str.split(/\s*,\s*|\s+/).each { |str|
 			ips << Address::create(str)
 		    }
 		else
