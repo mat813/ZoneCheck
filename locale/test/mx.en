@@ -90,6 +90,6 @@ explain : [none]
 
 
 [tst_mail_by_mx_or_a]
-testname: test if mail is delevired using MX or A/AAAA
+testname: test if mail is delivered using MX or A/AAAA
 error	: xxx
 explain : [none]

@@ -449,8 +449,12 @@ EOT
 		l10n_title = $mc.get("title_status")
 		@o.puts "<H2 id=\"t_status\">#{l10n_title}</H2>"
 	    end
-	    @o.print "<DIV class=\"zc-status\">", 
-		super(domainname, i_count, w_count, f_count), "</DIV>"
+
+	    @o.puts "<DIV class=\"zc-status\">"
+	    @o.puts "<!-- ???? -->"
+	    @o.puts super(domainname, i_count, w_count, f_count)
+	    @o.puts "</DIV>"
+
 	    @o.puts "<BR>"
 	    if @rflag.quiet
 		@o.puts "<HR width=\"60%\">"

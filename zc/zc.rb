@@ -5,7 +5,7 @@
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
 #
-# CREATED     : Stephane D'Alu <sdalu@nic.fr>
+# CREATED     : 2002/07/18 10:29:53
 # REVISION    : $Revision$ 
 # DATE        : $Date$
 #
@@ -82,7 +82,7 @@ ZC_CGI_EXT		= "cgi"
 ZC_GTK_ENV_KEYS		= [] #[ "DISPLAY" ]
 
 ## Publisher
-ZC_HTML_PATH		= "/zc" # no trailing /
+ZC_HTML_PATH		= "/zc"
 
 ## Contact / Details
 ZC_COPYRIGHT		= "AFNIC (c) 2003"
@@ -491,15 +491,5 @@ if ! $zc_slavemode
     $zc_name	= ZC_NAME
     $zc_contact	= ZC_CONTACT
 
-    begin
-	exit ZoneCheck::new::start ? EXIT_OK : EXIT_FAILED
-    rescue Config::SyntaxError => e
-	puts e.message
-	puts e.at.x
-	puts e.at.y
-    rescue Param::ParamError => e
-	puts e.class
-	puts e.message
-	puts e.backtrace.join("\n")
-    end
+    exit ZoneCheck::new::start ? EXIT_OK : EXIT_FAILED
 end
