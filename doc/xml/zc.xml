@@ -4,8 +4,9 @@
 [
 <!ENTITY version "0.01">
 <!ENTITY supercopy "SUPERCOPYRIGHT &copy;&reg;">
-<!ENTITY faq SYSTEM "common/faq.xml">
-<!ENTITY config SYSTEM "common/config.xml">
+<!ENTITY faq     SYSTEM "common/faq.xml">
+<!ENTITY config  SYSTEM "common/config.xml">
+<!ENTITY install SYSTEM "common/install.xml">
 ]>
 
 
@@ -33,66 +34,7 @@
   
   <chapter>
     <title>Installation</title>
-    <section>
-      <title>Requirement</title>
-  
-      <itemizedlist>
-	<listitem>
-	  <para>For the ZoneCheck core components:
-            <itemizedlist>
-	      <listitem>
-		<para>Ruby: <ulink url="http://www.ruby-lang.org/">http://www.ruby-lang.org/</ulink></para>
-	      </listitem>
-	    </itemizedlist>
-          </para>
-	</listitem>
-	
-	<listitem>
-	  <para>For the GTK interface
-            <itemizedlist>
-	      <listitem>
-		<para>GTK2 libraries: <ulink url="http://www.gtk.org/">http://www.gtk.org/</ulink></para>
-	      </listitem>
-	      <listitem>
-		<para>Gnome2 ruby binding: <ulink url="http://ruby-gnome2.sourceforge.net/">http://ruby-gnome2.sourceforge.net/</ulink></para>
-	      </listitem>
-	    </itemizedlist>
-          </para>
-	</listitem>
-      </itemizedlist>
-    </section>
-
-
-    <section>
-      <title>Directory layout</title>
-      <screen>PREFIX
-|-- bin
-|   `-- zc                      # Command line
-|-- etc
-|   `-- zc.conf                 # Configuration file
-|-- libexec
-|   `--zc
-|      |-- cgi-bin
-|      |   `-- zc.cgi           # CGI
-|      |-- html                 # HTML directory (javascript, css, pics, ...)
-|      |   |-- en               #   English version
-|      |   |-- ...              #   ...
-|      |   `-- fr               #   French version
-|      |-- locale               # Localisation files
-|      |-- test                 # test set
-|      |-- lib                  # Extra libraries (NResolv, Address, ...)
-|      `-- zc                   # core components
-`-- share
-    `-- doc
-        `-- zc                  # Documentation</screen>
-    </section>
-
-
-    <section>
-      <title>HTML</title>
-      <para>toto</para>
-    </section>
-
+      &install;
   </chapter>
 
 
@@ -275,18 +217,17 @@ NS    : ns3.nic.fr. [192.134.0.49, 2001:660:1180:1:192:134::49]
       <para>toto
 
 
-<figure><title>The Pythagorean Theorum Illustrated</title>
+<screenshot>
 <graphic scalefit="1" scale="50%" fileref="../pics/gtk_input.png"/>
-</figure>
+</screenshot>
 
-
-<figure><title>The Pythagorean Theorum Illustrated</title>
+<screenshot>
 <graphic scalefit="1" scale="50%" fileref="../pics/gtk_option.png"/>
-</figure>
+</screenshot>
 
-<figure><title>The Pythagorean Theorum Illustrated</title>
+<screenshot>
 <graphic scalefit="1" scale="50%" fileref="../pics/gtk_expert.png"/>
-</figure>
+</screenshot>
 
 
 
@@ -309,7 +250,7 @@ NS    : ns3.nic.fr. [192.134.0.49, 2001:660:1180:1:192:134::49]
       </section>
 
       <section>
-	<title>Graphical Interface</title>
+	<title>GTK</title>
       <para>toto</para>
       </section>
     </section>
@@ -321,6 +262,44 @@ NS    : ns3.nic.fr. [192.134.0.49, 2001:660:1180:1:192:134::49]
     <title>FAQ</title>
       
  &faq;  
+
+  </chapter>
+
+
+  <chapter>
+    <title>Writing tests</title>
+    
+    <section>
+      <title>Available methods</title>
+      <para>titi</para>
+    </section>
+
+    <section>
+      <title>Framework</title>
+      <para>titi</para>
+    </section>
+
+    <section>
+      <title>Localisation</title>
+      <para>The format of the message catalog is as follow:
+<screen> line       : '#' comment              # a comment
+            | tag ':' definition       # a tag definition
+            | tag '=' tag              # a link to another tag
+            | '[' prefix ']'           # a prefix to append to other tags
+
+ prefix     : tag                      # the tag to use as prefix
+            | '*'                      # don't use a prefix
+
+ definition : string                   # a string
+            | string '\' definition    # with posibility of continuation '\'
+
+ tag        : [a-zA-Z0-9_]+</screen>
+
+
+
+</para>
+    </section>
+
 
   </chapter>
 

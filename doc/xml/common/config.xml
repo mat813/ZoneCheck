@@ -1,24 +1,122 @@
 <!-- $Id$ -->
 
   <section>
-    <title>config</title>
+    <title>sections</title>
+    <para>A section declaration follow the rules:
+<screen>     section  : name argument '{' commands '}' ';'
+     name     : symbol
+     argument : (string)?
+     commands : (section_specific_command ';')*
+     symbol   : [a-zA-Z0-9_]+
+     string   : "([^\\\"]|\\[\\\"])*"</screen>
+</para>
+
+    <section>
+      <title>config</title>
+      <para>
+<screen>     section_specific_command : option_selection
+     option_selection         : symbol '=' string</screen>
+</para>
+
+<para>
+<screen>config {
+    transp   = "ipv4,ipv6,std";
+    output   = "straight,text";
+    verbose  = "explain,details,intro,counter";
+    error    = "standard";
+    resolver = "127.0.0.1";
+};</screen>
+</para>
+
+    </section>
+
+    <section>
+      <title>constant</title>
+      <para>toto
+<screen>     section_specific_command : affectation
+     affectation              : symbol '=' string</screen>
+
+</para>
+
+<para>
+<screen>constant {
+    # For connectivity testing
+    #  the '%s' will be replaced by the IP address
+    ping4                 = "ping  -q -c 5 %s > /dev/null";
+    ping6                 = "ping6 -q -c 5 %s > /dev/null";
+
+    # HTML path for generated pages
+    publish_html_path     = "/zc/";
+};</screen>
+</para>
+
+
+    </section>
+
+    <section>
+      <title>useconf</title>
+      <para>toto
+<screen>     section_specific_command : domain_mapping
+     domain_mapping           : 'map' domainname filename
+     domainname               : string
+     filename                 : string</screen>
+</para>
+
+<para>
+<screen>useconf {
+    map "fr."         "zc.conf.fr";
+    map "arpa."       "zc.conf.arpa";
+    map "."           "zc.conf.root";
+};</screen>
+</para>
+
+
+    </section>
+
+    <section>
+      <title>testseq</title>
+      <para>toto
+<screen>     commands                 : block
+     block                    : (check ';' | switch)*
+     check                    : checkname  severity  category
+     switch                   : 'case' testname ('when' symbol block)+ 
+                                                ('else' block)? 'end'
+     testname                 : symbol    # with prefix 'tst_'
+     checkname                : symbol    # with prefix 'chk_'
+     severity                 : 'f' | 'w' | 'i'</screen>
+
+</para>
+
+<para>
+<screen>testseq "address" {
+    chk_given_ip			f	dns;
+    chk_given_nsprim_vs_soa		f	dns;
+    case tst_mail_by_mx_or_a
+    when MX
+        # MX
+	chk_mx				f	dns;
+	chk_mx_auth			f	dns;
+	chk_mx_sntx			f	dns;
+    end
+};</screen>
+</para>
+
+    </section>
+
+
+  </section>
+
+
+  <section>
+    <title>zonecheck configuration (<filename>zc.conf</filename>)</title>
     <para>toto</para>
   </section>
 
   <section>
-    <title>constant</title>
+    <title>zone specific configuration</title>
     <para>toto</para>
   </section>
 
-  <section>
-    <title>useconf</title>
-    <para>toto</para>
-   </section>
-
-  <section>
-   <title>testseq</title>
-    <para>toto</para>
-  </section>
 
 
 <!-- 

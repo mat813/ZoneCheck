@@ -1,0 +1,89 @@
+<!-- $Id$ -->
+
+    <section>
+      <title>Requirement</title>
+  
+      <itemizedlist>
+	<listitem>
+	  <para>For the ZoneCheck core components:
+            <itemizedlist>
+	      <listitem>
+		<para>Ruby: <ulink url="http://www.ruby-lang.org/">http://www.ruby-lang.org/</ulink></para>
+	      </listitem>
+	    </itemizedlist>
+          </para>
+	</listitem>
+	
+	<listitem>
+	  <para>For the GTK interface:
+            <itemizedlist>
+	      <listitem>
+		<para>GTK2 libraries: <ulink url="http://www.gtk.org/">http://www.gtk.org/</ulink></para>
+	      </listitem>
+	      <listitem>
+		<para>Gnome2 ruby binding: <ulink url="http://ruby-gnome2.sourceforge.net/">http://ruby-gnome2.sourceforge.net/</ulink></para>
+	      </listitem>
+	    </itemizedlist>
+          </para>
+	</listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+	<listitem>
+	  <para>For the CGI interface (other servers or clients can be used):
+            <itemizedlist>
+	      <listitem>
+		<para>Apache2: <ulink url="http://httpd.apache.org/">http://httpd.apache.org/</ulink></para>
+	      </listitem>
+	      <listitem>
+		<para>Mozilla: <ulink url="http://www.mozilla.org/">http://www.mozilla.org/</ulink></para>
+	      </listitem>
+	    </itemizedlist>
+          </para>
+	</listitem>
+      </itemizedlist>
+   </section>
+
+
+    <section>
+      <title>Directory layout</title>
+      <screen>PREFIX
+|-- bin
+|   `-- zc                      # Command line
+|-- etc
+|   `-- zc.conf                 # Configuration file
+|-- libexec
+|   `--zc
+|      |-- cgi-bin
+|      |   `-- zc.cgi           # CGI
+|      |-- html                 # HTML directory (javascript, css, pics, ...)
+|      |   |-- en               #   English version
+|      |   |-- ...              #   ...
+|      |   `-- fr               #   French version
+|      |-- locale               # Localisation files (zonecheck)
+|      |   `-- test		#   localisation for the test set
+|      |-- test                 # test set
+|      |-- lib                  # Extra libraries (NResolv, Address, ...)
+|      `-- zc                   # core components
+`-- share
+    `-- doc
+        `-- zc                  # Documentation</screen>
+    </section>
+
+
+    <section>
+      <title>HTML</title>
+      <para>toto</para>
+    </section>
+
+<!-- 
+  Local Variables:
+  mode: xml
+  sgml-declaration: "../chapter.decl"
+  sgml-indent-data: t
+  sgml-omittag: nil
+  sgml-always-quote-attributes: t
+  sgml-parent-document: ("../zc.xml" "part" "chapter")
+  End:
+-->
+
