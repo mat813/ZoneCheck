@@ -30,7 +30,7 @@ require 'dbg'
 ## definition : string                   # a string
 ##            | string '\' definition    # with posibility of continuation '\'
 ##
-## tag        : [a-zA-Z0-9_]+
+## tag        : [a-zA-Z0-9_/]+
 ##
 ##
 ## WARN: this file is not localized
@@ -40,6 +40,8 @@ require 'dbg'
 ##      we replace the inode number by the filename if the inode is 0
 ##
 class MessageCatalog
+    TagRegex = /[\w\/]+/
+
     ##
     ## Exception: Syntax error, while parsing the file
     ##
@@ -150,7 +152,7 @@ class MessageCatalog
 
 		case line
 		# Prefix section
-		when /^\[(\w+|\*)]\s*$/
+		when /^\[(#{TagRegex}|\*)]\s*$/
 		    prefix = $1 == "*" ? nil : $1 
 		    if prefix.nil?
 		    then $dbg.msg(DBG::LOCALE, "removing prefix")
@@ -158,7 +160,7 @@ class MessageCatalog
 		    end
 
 		# Definition
-		when /^(\w+)\s*:\s*(.*?)\s*$/
+		when /^(#{TagRegex})\s*:\s*(.*?)\s*$/
 		    tag, msg = $1, $2
 		    tag = "#{prefix}_#{tag}" if prefix
 
@@ -182,7 +184,7 @@ class MessageCatalog
 		    $dbg.msg(DBG::LOCALE, "adding locale: #{tag}")
 
 		# Link
-		when /^(\w+)\s*=\s*(\w+)\s*$/
+		when /^(#{TagRegex})\s*=\s*(#{TagRegex})\s*$/
 		    tag, link = $1, $2
 		    tag = "#{prefix}_#{tag}" if prefix
 		    @catalog[tag] = @catalog[link]
