@@ -11,8 +11,6 @@ version = 2.0.0
 	write help page describing how to interpret zonecheck results
 	problem with @input.error when in html due to header (for batch)
 
-form =	autofilling of zc form
-
 BEURK:
 	pour les sous zones (asso.fr , ....) ne pas faire les tests des MX
 

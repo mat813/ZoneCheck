@@ -357,7 +357,11 @@ EOT
 		   end
 
 	    @o.puts "<DIV class=\"zc_diag\">"
-	    @o.puts "<DIV class=\"zc_title\"><IMG src=\"#{@publish_path}/img/#{logo}.png\" alt=\"\"> #{msg}</DIV>"
+
+#	    l10n_name = $mc.get("#{testname}_testname")
+#	    @o.puts "<DIV class=\"zc_name\"><IMG src=\"#{@publish_path}/img/element.png\" alt=\"\"> #{l10n_name}</DIV>"
+
+	    @o.puts "<DIV class=\"zc_msg\"><IMG src=\"#{@publish_path}/img/#{logo}.png\" alt=\"\"> #{msg}</DIV>"
 
 	    if @rflag.details && desc.dtl
 		@o.puts "<UL class=\"zc_details\">"

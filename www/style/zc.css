@@ -164,7 +164,13 @@ DIV.zc_diag {
     padding-left: 5ex;
 }
 
-DIV.zc_diag DIV.zc_title { 
+DIV.zc_diag DIV.zc_name { 
+    font-size: 12px; 
+    color: #333333; 
+    font-weight: bold;
+}
+
+DIV.zc_diag DIV.zc_msg { 
     font-size: 12px; 
     color: #1341AF; 
     font-weight: bold;

@@ -261,6 +261,7 @@
 
     <!-- Help -->
     <H2 id="help">Aide</H2>
+    <H3>Formulaires</H3>
     <TABLE rules="rows" class="zc_help">
 	<TR><TD class="zc_title" colspan="2">Information sur la zone</TD></TR>
 	<TR>
@@ -387,6 +388,15 @@
 	</TR>
     </TABLE>
 
+    <H3>Résultats</H3>
+    <UL>
+      <LI>le mot <I>générique</I> signifie que l'erreur est soit
+	indépendante soit présente sur tous les serveurs de noms,</LI>
+      <LI>lorsqu'une erreur est entre [crochets], cela signifie
+	que le test a échoué du à une raison externe, cette raison
+	est affiche à coté.</LI>
+    </UL>
+
 
     <!-- What / Who / When -->
     <HR>
@@ -397,7 +407,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr  3 14:23:22 CEST 2003
+Last modified: Thu Apr  3 16:48:24 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

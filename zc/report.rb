@@ -167,6 +167,5 @@ module Report
 	end
 
 	attr_reader :fatal, :warning, :info
-	attr_reader :param
     end
 end

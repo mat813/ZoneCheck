@@ -192,6 +192,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
     <!-- Help -->
     <H2 id="help">Aide</H2>
+    <H3>Formulaires</H3>
     <TABLE rules="rows" class="zc_help">
 	<TR><TD class="zc_title" colspan="2">Information sur la zone</TD></TR>
 	<TR>
@@ -313,7 +314,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    dans la base des RIRs</TD>
 	</TR>
 
-	<TR><TD class="zc_title" colspan="2">Options: Transport layer</TD></TR>
+	<TR><TD class="zc_title" colspan="2">Options: Couche de transport</TD></TR>
 	<TR>
 	  <TD class="zc_key">IPv4, IPv6</TD>
 	  <TD>Sélectionne la couche de routage (si aucune n'est sélectionné
@@ -326,6 +327,14 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	</TR>
     </TABLE>
 
+    <H3>Résultats</H3>
+    <UL>
+      <LI>le mot <I>générique</I> signifie que l'erreur est soit
+	indépendante soit présente sur tous les serveurs de noms,</LI>
+      <LI>lorsqu'une erreur est entre [crochets], cela signifie
+	que le test a échoué du à une raison externe, cette raison
+	est affiche à coté.</LI>
+    </UL>
 
     <!-- What / Who / When -->
     <HR>
@@ -333,10 +342,10 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	 href="http://validator.w3.org/check/referer"><img border="0"
           src="http://www.w3.org/Icons/valid-html401"
           alt="Valid HTML 4.01!" height="31" width="88"></a>
-Release: $Name$ <BR>
+Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr  3 14:25:45 CEST 2003
+Last modified: Thu Apr  3 16:47:45 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

@@ -263,6 +263,7 @@
 
     <!-- Help -->
     <H2 id="help">Help</H2>
+    <H3>Form</H3>
     <TABLE rules="rows" class="zc_help">
 	<TR><TD class="zc_title" colspan="2">Zone Information</TD></TR>
 	<TR>
@@ -384,6 +385,14 @@
 	</TR>
     </TABLE>
 
+    <H3>Results</H3>
+    <UL>
+      <LI>the word <I>generic</I> means that the error is eitheir
+	unrelated or present on all nameservers,</LI>
+      <LI>when an error is between [brackets], this means that the test
+	failed for external reason, this reason is displayed next to it</LI>
+    </UL>
+
 
     <!-- What / Who / When -->
     <HR>
@@ -394,7 +403,7 @@
 リリーズ: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr  3 14:36:28 CEST 2003
+Last modified: Thu Apr  3 17:19:33 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
