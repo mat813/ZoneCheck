@@ -88,7 +88,8 @@ class ZoneCheck
     #
     def configure
 	begin
-	    Param::cmdline_usage(EXIT_USAGE) if (@param = Param::cmdline_parse).nil?
+	    param = Param::CLI::new
+	    param.usage(EXIT_USAGE) if (@param = param.parse).nil?
 	rescue Param::ParamError => e
 	    $stderr.puts "ERROR: #{e}"
 	    exit EXIT_ERROR
@@ -197,7 +198,8 @@ class ZoneCheck
 	    ok = zc(cm)
 	else
 	    cm = CacheManager::create(Test::DefaultDNS, @param.client)
-	    $stdin.each_line { |line|
+	    batchio = @param.batch == "-" ? $stdin : File::open(@param.batch) 
+	    batchio.each_line { |line|
 		next if line =~ /^\s*$/
 		next if line =~ /^\#/
 		if ! parse_batch(line)
@@ -207,6 +209,7 @@ class ZoneCheck
 		@param.autoconf
 		ok = false unless zc(cm)
 	    }
+	    batchio.close unless @param.batch == "-"
 	end
     end
 

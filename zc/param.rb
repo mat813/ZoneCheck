@@ -33,7 +33,7 @@ class Param
 		[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
 		[ "--quiet",	"-q",	GetoptLong::NO_ARGUMENT       ],
 		[ "--debug",	"-d",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--batch",	"-B",   GetoptLong::NO_ARGUMENT       ],
+		[ "--batch",	"-B",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--config",	"-c",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--testdir",	        GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--dnsonly",  "-D",   GetoptLong::NO_ARGUMENT       ],
@@ -60,7 +60,7 @@ class Param
 		    puts "#{PROGNAME}: version #{$zc_version}"
 		    exit EXIT_OK
 		when "--debug"     then $dbg.level	 = arg
-		when "--batch"     then @p.batch	 = true
+		when "--batch"     then @p.batch	 = arg
 		when "--config"    then @p.configfile    = arg
 		when "--testdir"   then @p.testdir       = arg
 		when "--dnsonly"   then @p.dnsonly	 = true
@@ -118,7 +118,7 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     -q, --quiet         Quiet mode, doesn't print visual candy.
     -h, --help          Show this message
     -V, --version       Display version and exit
-    -B, --batch         Batch mode (read from stdin)
+    -B, --batch         Batch mode (read from file or stdin '-')
     -c, --config        Specify location of the configuration file
         --testdir       Location of the directory holding tests
     -D, --dnsonly       Only perform DNS related tests
@@ -171,11 +171,6 @@ EOT
        exit errcode unless errcode.nil? #'
 	end
     end
-
-    def self.cmdline_parse
-	CLI::new.parse
-    end
-
 
 
 
