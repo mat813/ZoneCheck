@@ -325,7 +325,7 @@ EOT
 	    if xpl_lst
 		@o.puts "<UL class=\"zc_ref\">"
 		xpl_lst.each { |t, h, b|
-		    l10n_tag = $mc.get("xpltag_#{t}")
+		    l10n_tag = $mc.get("tag_#{t}")
 		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>') }
 		    @o.puts "<LI>"
 		    @o.puts "<SPAN class=\"zc_ref\">#{l10n_tag}: #{h}</SPAN>"

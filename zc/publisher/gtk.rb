@@ -563,7 +563,7 @@ module Publisher
 		tbl.set_row_spacings(2)
 		idx = 0
 		xpl_lst.each { |t, h, b|
-		    l10n_tag = $mc.get("xpltag_#{t}")
+		    l10n_tag = $mc.get("tag_#{t}")
 		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '\1') }
 		    img = Gtk::Image::new(*self.pixmap[:reference])
 		    lbl = Gtk::Label::new("#{l10n_tag}: #{h}")

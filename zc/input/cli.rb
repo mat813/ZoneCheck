@@ -117,7 +117,7 @@ EOT
 		opts_analyse(p)
 		args_analyse(p) unless p.test.list || p.test.desctype
 	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
-		false
+		return false
 	    end
 	    true
 	end

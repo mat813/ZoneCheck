@@ -70,7 +70,6 @@ module Input
 	    p.rflag.quiet = true if @cgi.has_key?("quiet")
 	    p.rflag.one   = true if @cgi.has_key?("one")
 
-
 	    # Verbose
 	    if @cgi.has_key?("verbose")
 		p.verbose = @cgi.params["verbose"].join(",")
@@ -119,7 +118,7 @@ module Input
 		    p.test.categories = cat.join(",")
 		end
 	    end
-	    
+
 	    # NS and IPs
 	    if @cgi.has_key?("ns")
 		p.domain.ns = @cgi.params["ns"].join(";")
@@ -157,7 +156,7 @@ module Input
 	    p.domain.name = @cgi.params["zone"]
 
 	    # Ok
-	    p
+	    true
 	end
 
 	def interact(p, c, tm)

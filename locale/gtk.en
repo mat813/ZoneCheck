@@ -96,3 +96,12 @@ expert/advanced/resolver: Select an alternative local resolver
 expert/advanced/testonly: Select the unique test you want to make
 
 
+
+[*]
+input_gtk_usage: \
+usage: PROGNAME: [-hV] [-c conf] [-r resolver]\n\
+    -h, --help          Show this message\n\
+    -V, --version       Display version and exit\n\
+    -c, --config        Specify location of the configuration file\n\
+        --testdir       Location of the directory holding tests\n\
+    -r, --resolver      Resolver to use for guessing 'ns' information\n

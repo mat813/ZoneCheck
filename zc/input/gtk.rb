@@ -946,16 +946,17 @@ EOT
 	def parse(p)
 	    begin
 		opts_analyse(p)
+		return false unless ARGV.empty?
 	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
-		return nil
+		return false
 	    end
 	    p.fs.autoconf
 	    p.resolver.autoconf
-	    p
-
+	    true
 	end
+
 	def usage(errcode, io=$stderr)
-	    io.print $mc.get("param_cli_usage").gsub("PROGNAME", PROGNAME)
+	    io.print $mc.get("input_gtk_usage").gsub("PROGNAME", PROGNAME)
 	    exit errcode unless errcode.nil?
 	end
     end

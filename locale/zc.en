@@ -15,6 +15,9 @@
 #
 #
 
+
+# Word
+#
 w_generic	: generic
 w_warning	: warning
 w_warning_id	: w
@@ -30,15 +33,16 @@ w_perfect	: perfect
 w_quit		: quit
 w_abort		: abort
 
-xpltag_ref	: Ref
-xpltag_adv	: Adv
+# Tag
+#
+tag_ref		: Ref
+tag_adv		: Adv
 
 res_succeed_but : SUCCEED (but %d warning(s))
 res_succeed	: SUCCEED
 res_failed	: FAILED
 res_failed_on	: FAILED (on warning)
 res_failed_and	: FAILED (and %d warning(s))
-test_progress   : Tests in progress
 
 ns_batch	: batch
 ns_zone         : zone
@@ -74,9 +78,6 @@ dcl_unknown    : unknown declaration '%s'
 method_unknown : method '%s' unavailable
 for_domain     : %s for domain %s
 family_unknown : unknown family '%s'
-
-
-
 
 
 expect_string  : string expected
@@ -138,11 +139,7 @@ test_exists : test '%s' defined in classes '%s' and '%s'
 check_exists: check '%s' defined int class '%s' and '%s'
 
 
-## USAGE #####################################################################
-##############################################################################
-
 [param]
-
 version: PROGNAME: version %s
 unsupported_domain: No mapping able to process '%s'
 

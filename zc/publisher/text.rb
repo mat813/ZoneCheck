@@ -38,12 +38,11 @@ module Publisher
 		BarSize			= 37
 
 		def initialize(output, precision)
-		    @output		= output
-		    @precision		= precision
-		    @mutex		= Mutex::new
-		    @updater		= nil
-		    @l10n_unit		= $mc.get("pgr_speed_unit")
-		    @l10n_testing	= $mc.get("w_testing").capitalize
+		    @output	= output
+		    @precision	= precision
+		    @mutex	= Mutex::new
+		    @updater	= nil
+		    @l10n_unit	= $mc.get("pgr_speed_unit")
 		end
 		
 		def start(length)
@@ -147,12 +146,13 @@ module Publisher
 
 	    # Initialization
 	    def initialize(publisher)
-		@publisher  = publisher
-		@o          = publisher.output
-		@counter    = if @publisher.rflag.counter && @o.tty?
-			      then PBar::new(@o, 1)
-			      else nil
-			      end
+		@publisher	= publisher
+		@o		= publisher.output
+		@counte		= if @publisher.rflag.counter && @o.tty?
+				  then PBar::new(@o, 1)
+				  else nil
+				  end
+		@l10n_testing	= $mc.get("w_testing").capitalize
 	    end
 	    
 	    # Start progression
@@ -198,7 +198,7 @@ module Publisher
 
 	def initialize(rflag, ostream=$stdout)
 	    super(rflag, ostream)
-	    @count_txt	= $mc.get("test_progress")
+	    @count_txt	= $mc.get("title_progress")
 	    @progress	= Progress::new(self)
 	end
 
@@ -294,7 +294,7 @@ module Publisher
 	    
 	    if xpl_lst
 		xpl_lst.each { |t, h, b|
-		    tag = $mc.get("xpltag_#{t}")
+		    tag = $mc.get("tag_#{t}")
 		    @o.puts " | #{tag}: #{h}"
 		    b.each { |l| @o.puts " |  #{l}" }
 		}
