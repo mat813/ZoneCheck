@@ -149,6 +149,7 @@ module Input
 			if $mc.available?(ZC_LANG_FILE, arg)
 			    $mc.lang = arg
 			    $mc.reload
+			    $console.encoding = $mc.encoding
 			end
 		    when '--config'    then p.fs.cfgfile	= arg.untaint
 		    when '--testdir'   then p.fs.testdir	= arg.untaint

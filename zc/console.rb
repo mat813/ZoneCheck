@@ -108,8 +108,8 @@ class Console
 	return false if @iconv    == false	# Don't support convertion
 
 	@iconv		= case encoding
-			  when NilClass, 'utf8' then nil
-			  else Iconv::new(encoding, 'utf8')
+			  when NilClass, 'UTF-8' then nil
+			  else Iconv::new(encoding, 'UTF-8')
 			  end
 	@encoding	= encoding
     end

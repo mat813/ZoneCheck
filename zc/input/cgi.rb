@@ -150,6 +150,7 @@ module Input
 		    if $mc.available?(ZC_LANG_FILE, lang)
 			$mc.lang = lang
 			$mc.reload
+			$console.encoding = $mc.encoding
 		    end
 		rescue ArgumentError
 		end

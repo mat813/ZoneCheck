@@ -181,6 +181,7 @@ module Input
 		    if $mc.available?(ZC_LANG_FILE, arg)
 			$mc.lang = arg
 			$mc.reload
+			$console.encoding = $mc.encoding
 		    end
 		when '--batch'     then p.batch			= arg
 		when '--config'    then p.fs.cfgfile		= arg.untaint
