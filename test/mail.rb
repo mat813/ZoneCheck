@@ -37,6 +37,7 @@
 #       due to bestresolverip not correctly implemented
 #
 
+require 'timeout'
 require 'framework'
 require 'mail'
 
@@ -57,6 +58,8 @@ module CheckExtra
 	    @fake_from = const('fake_mail_from')
 	    @fake_user = const('fake_mail_user')
 	    @fake_host = const('fake_mail_host')
+	    @timeout_open    = const('smtp:open:timeout').to_i
+	    @timeout_session = const('smtp:session:timeout').to_i
 	end
 
 	#-- Shortcuts -----------------------------------------------
@@ -81,14 +84,16 @@ module CheckExtra
 
 	    # Execute test on mailhost
 	    mrelay = ZCMail::new(mdom, mip.to_s, dbgio)
-	    mrelay.open(CONNECTION_TIMEOUT)
+	    mrelay.open(@timeout_open)
 	    begin
+              Timeout::timeout(@timeout_session) {
 		mrelay.banner
 		mrelay.helo(@fake_host)
 		mrelay.fake_info(@fake_user, @fake_dest, @fake_from)
 		yield mrelay
+                mrelay.quit
+              }
 	    ensure
-		mrelay.quit
 		mrelay.close
 	    end
 	end

@@ -26,3 +26,6 @@ configinfo:
 
 install:
 	@$(ZC_INSTALLER) all
+
+default:
+	$(MAKE) RUBY=`which ruby` install
