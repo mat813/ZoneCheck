@@ -76,6 +76,29 @@ class NResolv
 	    end
 
 	    def self.from_winreg
+		nameserver = []
+		search     = nil
+
+		# Use of 'nslookup'
+		nslookup_info = `nslookup 127.0.0.1`.split(/\r?\n/)
+		nslookup_info[1] =~ /^[^:]+:\s*(.*?)\s*$/
+
+		nameserver << $1 unless $1.nil?
+
+		# Autoconf for missing information
+		if nameserver.empty?
+		    nameserver = ['0.0.0.0'] 
+		end
+		if search.nil?
+		    search = Socket.gethostname =~ /\./ ? [$'] : [] #' <- emacs
+		end
+		
+		# Create domain list
+		search.map! { |domain| Name::create(domain, true) }
+		search << Name::Root
+
+		# Create config
+		self::new(nameserver, search)
 	    end
 
 	    def initialize(nameserver, search=[Name::Root], absdepth=3)
@@ -110,7 +133,10 @@ class NResolv
 	    end
 	end
 	
-	DefaultConfig = Config::from_resolv
+	DefaultConfig = case RUBY_PLATFORM
+	                when /cygwin/, /mswin32/ then Config::from_winreg
+	                else                          Config::from_resolv
+	                end
     end
 end
 
