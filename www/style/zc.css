@@ -134,6 +134,9 @@ TR.zc_ns_prim {
 TABLE.zc_options {
     background-color: #e0ffff;
 }
+TABLE.zc_options TD {
+    padding: 2px 1ex;
+}
 
 TABLE.zc_options TR.zc_title {
     background-color: #e2eeff;

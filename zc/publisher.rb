@@ -72,32 +72,36 @@ module Publisher
 	    end
 
 	    def initialize(publisher)
-		@publisher = publisher
-		@counter = PBar::new($stdout, 1, PBar::DisplayNoFinalStatus)
+		@publisher  = publisher
+		@o          = publisher.output
+		@do_counter = @publisher.rflag.counter && @o.tty?
+		if @do_counter
+		    @counter = PBar::new(@o, 1, PBar::DisplayNoFinalStatus)
+		end
 	    end
 	    
 	    def start(count)
-		return unless @publisher.rflag.counter
+		return unless @do_counter
 		@counter.start(count)
 	    end
 	    
 	    def done(desc)
-		return unless @publisher.rflag.counter
+		return unless @do_counter
 		@counter.done(desc)
 	    end
 	    
 	    def failed(desc)
-		return unless @publisher.rflag.counter
+		return unless @do_counter
 		@counter.failed(desc)
 	    end
 	    
 	    def finish
-		return unless @publisher.rflag.counter
+		return unless @do_counter
 		@counter.finish
 	    end
 	    
 	    def process(desc, ns, ip)
-		if @publisher.rflag.counter
+		if @do_counter
 		    @counter.processed(1)
 		end
 		if @publisher.rflag.testdesc
@@ -106,7 +110,7 @@ module Publisher
 			   else          ""
 			   end
 	    
-		    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
+		    @o.printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
 		end
 	    end
 	end

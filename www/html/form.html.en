@@ -31,6 +31,9 @@
     <P>For detailed information on how to fill this form see the 
       <A href="#help">help</A> section.</P>
       
+    <P>If you need to perform the <I>ZoneCheck</I> operation for several
+      domains, you can use the <A href="batch.html">batch form</A></P>
+
     <BLOCKQUOTE class="zc_warning">
       <UL>
 	<LI>The time required to completely verify a zone can take
@@ -39,10 +42,6 @@
 	  If it takes more than a minute it's generally means we are
 	  encountering problems accessing your nameservers 
 	  (configuration error, firewall, ...) and are waiting for timeout.
-	</LI>
-	<LI> You could see some entries in your logs as being an attack
-	  from our network <B>this is not the case</B>, it's the result
-	  of ZoneCheck doing its job.
 	</LI>
       </UL>
     </BLOCKQUOTE>
@@ -130,11 +129,11 @@
 	    <TD></TD>
 	    <TD>
 	      <INPUT type="checkbox" name="intro"    value='t' checked>
-	      Zone summary
+	      zone summary
 	    </TD>
 	    <TD>
 	      <INPUT type="checkbox" name="explain"  value='t' checked>
-	      Includes explanations
+	      includes explanations
 	    </TD>
 	    <TD>
 	    </TD>
@@ -182,22 +181,22 @@
 	    <TD></TD>
 	    <TD>
 	      <INPUT type="radio" name="errorlvl" value="" CHECKED>
-	      Default error
+	      default error
 	    </TD>
 	    <TD>
 	      <INPUT type="radio" name="errorlvl" value="allfatal">
-	      All fatals
+	      all fatals
 	    </TD>
 	    <TD>
 	      <INPUT type="radio" name="errorlvl" value="allwarning">
-	      All warnings
+	      all warnings
 	    </TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
 	    <TD>
 	      <INPUT type="checkbox" name="errorstop" value="stop" checked>
-	      Stop on first fatal
+	      stop on first fatal
 	    </TD>
 	  </TR>
 
@@ -208,17 +207,17 @@
 	    <TD></TD>
 	    <TD>
 	      <INPUT type="checkbox" name="chkmail" value='t' checked>
-	      Check mail delivery
+	      mail delivery
 	    </TD>
 	    <TD>
 	      <INPUT type="checkbox" name="chkzone" value='t' checked>
-	      Check zone content
+	      zone content
 	    </TD>
 	  <TR>
 	    <TD></TD>
 	    <TD>
 	      <INPUT type="checkbox" name="chkwhois" value='t' checked>
-	      Check <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A>
+	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A>
 	    </TD>
 	    <TD>
 	      using <INPUT name="whois" value="whois.ripe.net">
@@ -302,12 +301,12 @@
 	  </TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Zone summary</TD>
+	  <TD class="zc_key">zone summary</TD>
 	  <TD>Includes a summary about the zone and its nameservers in 
 	    the generated report</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Includes explanations</TD>
+	  <TD class="zc_key">includes explanations</TD>
 	  <TD>Includes an explanation (when the test failed) about 
 	    what was the purpose of the test and why you should fixed it.</TD>
 	</TR>
@@ -326,33 +325,33 @@
 	  <TD>Give a short description of the test when it is performed.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Default error</TD>
+	  <TD class="zc_key">default error</TD>
 	  <TD>Errors are reported with the default severity associated 
 	    with them.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">All fatals</TD>
+	  <TD class="zc_key">all fatals</TD>
 	  <TD>All errors are considered fatals.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">All warnings</TD>
+	  <TD class="zc_key">all warnings</TD>
 	  <TD>All errors are considered warnings.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Stop on first fatal</TD>
+	  <TD class="zc_key">stop on first fatal</TD>
 	  <TD>The report stop on the first fatal error.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Check mail delivery</TD>
+	  <TD class="zc_key">mail delivery</TD>
 	  <TD>Perform extra checking on the mail delivery daemon.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Check zone content</TD>
+	  <TD class="zc_key">zone content</TD>
 	  <TD>Perform additional tests on the zone retrieved after
 	    a <I>zone transfert</I>.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Check RIPE database</TD>
+	  <TD class="zc_key">RIPE database</TD>
 	  <TD>????</TD>
 	</TR>
 	<TR>
@@ -372,7 +371,7 @@
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Oct  4 15:02:12 CEST 2002
+Last modified: Fri Oct  4 19:19:24 CEST 2002
 <!-- hhmts end -->
   </BODY>
 </HTML>
