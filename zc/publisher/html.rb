@@ -365,7 +365,7 @@ EOT
 	end
 
 	def h2(h)
-	    @o.puts "<H3 class=\"zc_warning\">---- #{h.capitalize} ----</H3>"
+	    @o.puts "<H3 class=\"zc_severity\">---- #{h.capitalize} ----</H3>"
 	end
     end
 end
