@@ -36,7 +36,7 @@ ZC_CGI_EXT		= "cgi"
 CVS_NAME	= %q$Name$
 ZC_VERSION	= (Proc::new { 
 		       n = CVS_NAME.split[1]
-		       n = n.match(/^ZC-(.*)/) unless n.nil?
+		       n = /^ZC-(.*)/.match(n) unless n.nil?
 		       n = n[1]                unless n.nil?
 		       n = n.gsub(/_/, ".")    unless n.nil?
 		       
@@ -98,7 +98,7 @@ $dbg.level=ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 $ipv6_stack = begin
 		  UDPSocket::new(Socket::AF_INET6).close
 		  true
-	      rescue SocketError
+	      rescue Errno::EAFNOSUPPORT
 		  false
 	      end
 
