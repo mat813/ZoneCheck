@@ -893,6 +893,7 @@ module Input
 	def opts_definition
 	    [   [ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ],
 		[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
+		[ "--lang",		GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--debug",	"-d",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--config",	"-c",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--testdir",	        GetoptLong::REQUIRED_ARGUMENT ],
@@ -907,6 +908,11 @@ module Input
 		    puts $mc.get("input_version").gsub("PROGNAME", PROGNAME) % 
 			[ $zc_version ]
 		    exit EXIT_OK
+		when "--lang"
+		    if $mc.available?(ZC_LANG_FILE, arg)
+			$mc.lang = arg
+			$mc.reload
+		    end
 		when "--debug"     then $dbg.level	    = arg
 		when "--config"    then p.fs.cfgfile        = arg
 		when "--testdir"   then p.fs.testdir        = arg

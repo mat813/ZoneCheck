@@ -18,6 +18,7 @@
 input_cli_usage: \
 usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     -q, --quiet         N'affiche pas de titres suplémentaires\n\
+        --lang          Choisi une autre langue (en, fr, ...)\n\
     -h, --help          Affiche ce message\n\
     -V, --version       Affiche le numéro de version et quitte\n\
     -B, --batch         Mode en lots (lit depuis un fichier ou stdin '-')\n\

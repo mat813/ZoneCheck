@@ -53,9 +53,8 @@ module Input
 		begin
 		    lang = @cgi["lang"]
 		    if $mc.available?(ZC_LANG_FILE, lang)
-			$mc.clear
 			$mc.lang = lang
-			$mc.read(ZC_LANG_FILE)
+			$mc.reload
 		    end
 		rescue ArgumentError
 		end

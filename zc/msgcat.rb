@@ -80,6 +80,7 @@ class MessageCatalog
 	@directory	= directory
 	@catalog	= {}
 	@loaded		= {}
+	@catfiles	= []
 	@lang		= nil
     end
 
@@ -99,6 +100,65 @@ class MessageCatalog
 
 
     #
+    # Test if a file catalog is available
+    #
+    def available?(where, lng=@lang)
+	lng = lng.clone.untaint if lng.tainted?
+	File::readable?(filepath(where, lng))
+    end
+
+
+    #
+    # Clear all messages
+    #
+    def clear
+	$dbg.msg(DBG::LOCALE, "clearing message catalogue")
+	@catalog	= {}
+	@loaded		= {}
+	@catfiles	= []
+	@lang		= nil
+    end
+
+
+    #
+    # Read catalog (from the template filename)
+    #  (the occurence of %s is replaced by the language name)
+    #
+    def read(where)
+	if res = readfile(filepath(where))
+	    @catfiles << where
+	end
+	res
+    end
+	
+
+    #
+    # Get message associated with the 'tag'
+    #
+    def get(tag)
+	if (str = @catalog[tag]).nil?
+	    raise EntryNotFound, "Tag '#{tag}' has not been localized"
+	end
+	str
+    end
+
+
+    #
+    # Reload the message catalogs
+    #  (allowing to take into account a new locale)
+    #
+    def reload
+	$dbg.msg(DBG::LOCALE, "reloading message catalogue")
+	@catalog	= {}
+	@loaded		= {}
+	@catfiles.each { |where| 
+	    readfile(filepath(where)) }
+    end
+
+    ## PRIVATE ##
+    private
+
+    #
     # Establish the filepath from the template file
     #  - %s is replace by lang
     #  - if not fullpath the default directory is prepend
@@ -111,24 +171,8 @@ class MessageCatalog
 
 
     #
-    # Test if a file catalog is available
-    #
-    def available?(where, lng=@lang)
-	lng = lng.clone.untaint if lng.tainted?
-	File::readable?(filepath(where, lng))
-    end
-
-
-    #
-    # Read catalog (from the template filename, see 'filepath')
-    #
-    def read(where)
-	readfile(filepath(where))
-    end
-	
-
-    #
     # Read catalog file
+    #  (return false if the file was already loaded, true otherwise)
     #
     def readfile(msgfile)
 	# Check for already loaded catalog
@@ -137,7 +181,7 @@ class MessageCatalog
 	                                                : msgfile ]
 	if @loaded.has_key?(file_id)
 	    $dbg.msg(DBG::LOCALE, "file already loaded: #{msgfile}")
-	    return
+	    return false
 	end
 
 
@@ -203,27 +247,7 @@ class MessageCatalog
 
 	# Consider the file loaded
 	@loaded[file_id] = true
-    end
 
-
-    #
-    # Clear all messages
-    #
-    def clear
-	$dbg.msg(DBG::LOCALE, "clearing message catalogue")
-	@catalog = {}
-	@loaded  = {}
-	@lang    = nil
-    end
-
-
-    #
-    # Get message associated with the 'tag'
-    #
-    def get(tag)
-	if (str = @catalog[tag]).nil?
-	    raise EntryNotFound, "Tag '#{tag}' has not been localized"
-	end
-	str
+	return true
     end
 end

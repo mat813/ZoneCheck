@@ -160,8 +160,19 @@ $ipv6_stack = begin
 #  WARN: default locale is mandatory as no human messages are
 #        present in the code (except debugging)
 #
+
+# Initialize the message catolog system
 $mc = MessageCatalog::new(ZC_LOCALIZATION_DIR)
+
+# Include the 'with_msgcat' facility in every objects
+def with_msgcat(*msgcat_list)
+    msgcat_list.each { |msgcat| $mc.read(msgcat) }
+end
+
+# Load the default locale
 begin
+    # Assume that if the ZC_LANG_FILE is available for a locale
+    #  all the other necessary files are also available for that locale
     [ ENV["LANG"], ZC_LANG_DEFAULT ].compact.each { |lang|
 	if $mc.available?(ZC_LANG_FILE, lang)
 	    $dbg.msg(DBG::LOCALE, "Using locale: #{lang}")
@@ -176,11 +187,6 @@ rescue => e
     raise if $zc_slavemode
     $stderr.puts "ERROR: #{e.to_s}"
     exit EXIT_ERROR
-end
-
-# Include the 'with_msgcat' facility in every objects
-def with_msgcat(*msgcat_list)
-    msgcat_list.each { |msgcat| $mc.read(msgcat) }
 end
 
 

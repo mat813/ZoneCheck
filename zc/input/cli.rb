@@ -34,6 +34,7 @@ module Input
 	    [   [ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ],
 		[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
 		[ "--quiet",	"-q",	GetoptLong::NO_ARGUMENT       ],
+		[ "--lang",		GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--debug",	"-d",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--batch",	"-B",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--config",	"-c",   GetoptLong::REQUIRED_ARGUMENT ],
@@ -64,7 +65,13 @@ module Input
 		    puts $mc.get("input_version").gsub("PROGNAME", PROGNAME) % 
 			[ $zc_version ]
 		    exit EXIT_OK
+		when "--quiet"     then p.rflag.quiet		= true
 		when "--debug"     then $dbg.level		= arg
+		when "--lang"
+		    if $mc.available?(ZC_LANG_FILE, arg)
+			$mc.lang = arg
+			$mc.reload
+		    end
 		when "--batch"     then p.batch			= arg
 		when "--config"    then p.fs.cfgfile		= arg
 		when "--testdir"   then p.fs.testdir		= arg
@@ -78,7 +85,6 @@ module Input
 		when "--ipv4"      then p.network.ipv4		= true
 		when "--one"       then p.rflag.one		= true
 		when "--tagonly"   then p.rflag.tagonly		= true
-		when "--quiet"     then p.rflag.quiet		= true
 		when "--error"     then p.error			= arg
 		when "--transp"    then p.transp		= arg
 		when "--verbose"   then p.verbose		= arg
