@@ -1,6 +1,6 @@
 # $Id$
 
-version = 2.0.0
+version = 2.1.0
 	Tests:	- Implement AXFR tests (only framework exists)
 		- base de donnees reseau (RIR) 
 		- test connectivite avec plusieurs adresses IP 
@@ -9,7 +9,6 @@ version = 2.0.0
 	handle in test1 the case when a 'test' (ie: switch) fails
 	make it more clear that 'primary' is not the primary when hidden in SOA
 
-version = 2.1.0
 	Finish xml publisher and DTD
 	IDN
 	check for label_xpl defined elsewhere
@@ -17,9 +16,10 @@ version = 2.1.0
 	special timeout return code
 	Tests:	- check coherence between parent glue and domain
 		- Improve loopback delegation detection
+		- chk_soa (should check for EXACTLY one record)
+		- tst_loopback: check for A or AAAA record corresponding to PTR
 	Round robin on dns record in NResolv for address resolution
 	Check for authoritative answer in NResolv
-	tst_loopback: check for A or AAAA record corresponding to PTR
 
 version = 3.0.0
 	stand alone package for resolver library

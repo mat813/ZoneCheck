@@ -3,6 +3,7 @@
 	* test: added chk_soa_coherence
 	* l10n: improved chk_mx_ip description
 	* etc: deal with ip6.int as with arpa
+	* main: change handling of custom version (no more slave mode)
 	
 2003-09-01  ZoneCheck-2.0.0b7
 	* i18n/l10n: better handling of locale (and encoding)
