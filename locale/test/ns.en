@@ -28,7 +28,7 @@ explain : [none]
 [chk_ns_sntx]
 testname: NS name has a valid domain/hostname syntax
 error   : NS name syntax is not correct
-explain : [none]
+explain : label_xpl
 
 [chk_ns_cname]
 testname: NS is not an alias

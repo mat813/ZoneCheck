@@ -28,7 +28,7 @@ explain : [none]
 [chk_mx_sntx]
 testname: MX syntax is valid for an hostname
 error   : MX syntax is not correct
-explain : [none]
+explain : label_xpl
 
 [chk_mx_cname]
 testname: MX is not an alias
