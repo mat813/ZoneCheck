@@ -12,6 +12,14 @@
 #
 
 
+#####
+#
+# TODO:
+#  - escape html text
+#  - clean up html
+#  - use const for html path
+#
+
 require 'thread'
 require 'xtra'
 
@@ -128,13 +136,13 @@ module Publisher
 
 
 	def intro(domain)
-	    puts "ZONE  : #{domain.name}"
+	    @o.puts "ZONE  : #{domain.name}"
 	    domain.ns.each_index { |i| 
 		n = domain.ns[i]
-		printf "NS %2s : %s [%s]\n",
+		@o.printf "NS %2s : %s [%s]\n",
 		    i == 0 ? "<=" : "  ", n[0], n[1].join(", ")
 	    }
-	    puts
+	    @o.puts
 	end
 
 	def diagnostic1(domainname, 
@@ -158,11 +166,11 @@ module Publisher
 		MaxLineLength - 4 - summary.length, domainname, summary
 
 	    if @rflag.tagonly
-		puts "  #{severity}: #{res.tag}"
-		puts "  #{res.testname}"
+		@o.puts "  #{severity}: #{res.tag}"
+		@o.puts "  #{res.testname}"
 	    else
-		puts "  #{severity}: #{res.tag}"
-		puts "  #{res.desc.msg}"
+		@o.puts "  #{severity}: #{res.tag}"
+		@o.puts "  #{res.desc.msg}"
 	    end
 
 	end
@@ -185,26 +193,26 @@ module Publisher
 		xpl = desc.xpl
 	    end
 	    
-	    puts msg
+	    @o.puts msg
 	    explanation(xpl)
 
 	    lst.each { |elt|
 		lines  = elt.split(/\n/)
 		
 		if !lines.empty?
-		    puts "=> #{lines[0]}"
+		    @o.puts "=> #{lines[0]}"
 		    lines[1..-1].each { |e|
-			puts "   #{e}"
+			@o.puts "   #{e}"
 		    }
 		end
 	    }
 
-	    puts ""
+	    @o.puts ""
 	end
 	    
 
 	def status(domainname, i_count, w_count, f_count)
-	    print "==> ", super(domainname, i_count, w_count, f_count)
+	    @o.print "==> ", super(domainname, i_count, w_count, f_count)
 	end
 
 
@@ -215,20 +223,20 @@ module Publisher
 	def h2(h)
 	    txtlen = [h.length, MaxLineLength-20].min
 	    txt    = h.capitalize[0..txtlen]
-	    print "       ", "_" * (8+txtlen), "\n"
-	    print "     ,", "-" * (8+txtlen), ".|\n"
-	    print "~~~~ |    #{txt}    || ", 
+	    @o.print "       ", "_" * (8+txtlen), "\n"
+	    @o.print "     ,", "-" * (8+txtlen), ".|\n"
+	    @o.print "~~~~ |    #{txt}    || ", 
 		"~" * (MaxLineLength-19-txtlen), "\n"
-	    print "     `", "-" * (8+txtlen), "'\n"
-	    print "\n"
+	    @o.print "     `", "-" * (8+txtlen), "'\n"
+	    @o.print "\n"
 	end
 
 	def explanation(xpl)
 	    return unless xpl
 	    xpl.split(/\n/).each { |e|
-		puts " | #{e}"
+		@o.puts " | #{e}"
 	    }
-	    puts " `----- -- -- - -  -"
+	    @o.puts " `----- -- -- - -  -"
 	end
     end
 
@@ -260,7 +268,20 @@ module Publisher
 			else "<H2>#{$mc.get("title_progress")}</H2>"
 			end
 		if @publisher.rflag.counter
-		    @o.puts HTML.jscript { "zc_pgr_start(#{count})" }
+		    @o.puts HTML.jscript {
+			title_progress = $mc.get("title_progress")
+			pgr_progress   = $mc.get("pgr_progress")
+			pgr_test       = $mc.get("pgr_test")
+			pgr_speed      = $mc.get("pgr_speed")
+			pgr_time       = $mc.get("pgr_time")
+
+			str = if @publisher.rflag.quiet
+			      then "zc_pgr_locale(null, \"#{pgr_progress}\", \"#{pgr_test}\", \"#{pgr_speed}\", \"#{pgr_time}\");"
+			      else "zc_pgr_locale(\"#{title_progress}\", \"#{pgr_progress}\", \"#{pgr_test}\", \"#{pgr_speed}\", \"#{pgr_time}\");"
+			      end
+			str += "zc_pgr_start(#{count});"
+			str
+		    }
 		    @o.puts HTML.nscript { title + "<UL>" }
 		end
 		if @publisher.rflag.testdesc
@@ -303,9 +324,9 @@ module Publisher
 		end
 
 		if @publisher.rflag.testdesc
-		    puts "<LI>"
-		    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
-		    puts "</LI>"
+		    @o.puts "<LI>"
+		    @o.printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
+		    @o.puts "</LI>"
 		end
 		@o.flush
 	    end
@@ -324,7 +345,7 @@ module Publisher
 
 	def begin
 	    # XXX: javascript only if counter
-	    print <<"EOT"
+	    @o.print <<"EOT"
 <HTML>
   <HEAD>
     <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -339,7 +360,7 @@ EOT
 	end
 
 	def end
-	    print <<"EOT"
+	    @o.print <<"EOT"
   </BODY>
 </HTML>
 EOT
@@ -348,7 +369,7 @@ EOT
 
 	def setup(domain_name)
 	    if ! @rflag.quiet
-		puts "<H1>ZoneCheck: #{domain_name}</H1>"
+		@o.puts "<H1>ZoneCheck: #{domain_name}</H1>"
 	    end
 	end
 
@@ -363,13 +384,13 @@ EOT
 
 
 	    unless rflag.quiet
-		puts "<H2>#{$mc.get("title_zoneinfo")}</H2>"
+		@o.puts "<H2>#{$mc.get("title_zoneinfo")}</H2>"
 	    end
 
 
-	    puts "<DIV class=\"zc_zinfo\">"
-	    puts tbl_beg
-	    puts tbl_zone % [ $mc.get("ns_zone").capitalize, domain.name ]
+	    @o.puts "<DIV class=\"zc_zinfo\">"
+	    @o.puts tbl_beg
+	    @o.puts tbl_zone % [ $mc.get("ns_zone").capitalize, domain.name ]
 	    domain.ns.each_index { |i| 
 		ns_ip = domain.ns[i]
 		if i == 0
@@ -380,10 +401,10 @@ EOT
 		    desc = $mc.get("ns_secondary").capitalize
 		end
 
-		puts tbl_ns % [ css, desc, ns_ip[0], ns_ip[1].join(", ") ]
+		@o.puts tbl_ns % [ css, desc, ns_ip[0], ns_ip[1].join(", ") ]
 	    }
-	    puts tbl_end
-	    puts "</DIV>"
+	    @o.puts tbl_end
+	    @o.puts "</DIV>"
 	    @o.flush
 	end
 
@@ -411,13 +432,13 @@ EOT
 		msg = res.desc.msg
 	    end
 
-	    puts "<DIV class=\"zc_diag1\">"
-	    puts "<TABLE width=\"100%\">"
-	    puts "<TR><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
-	    puts "<TR><TD colspan=\"2\">#{severity}: #{res.tag}</TD></TR>"
-	    puts "<TR><TD colspan=\"2\">#{msg}</TD></TR>"
-	    puts "</TABLE>"
-	    puts "</DIV>"
+	    @o.puts "<DIV class=\"zc_diag1\">"
+	    @o.puts "<TABLE width=\"100%\">"
+	    @o.puts "<TR><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
+	    @o.puts "<TR><TD colspan=\"2\">#{severity}: #{res.tag}</TD></TR>"
+	    @o.puts "<TR><TD colspan=\"2\">#{msg}</TD></TR>"
+	    @o.puts "</TABLE>"
+	    @o.puts "</DIV>"
 	end
 
 
@@ -453,7 +474,7 @@ EOT
 	    @o.puts "<DIV class=\"zc_title\">#{msg}</DIV>"
 
 	    if xpl_lst
-		puts "<UL class=\"zc_ref\">"
+		@o.puts "<UL class=\"zc_ref\">"
 		xpl_lst.each { |h, t|
 		    h =~ /^\[(\w+)\]:\s*/
 		    @o.puts "<LI>"
@@ -478,14 +499,14 @@ EOT
 
 	def status(domainname, i_count, w_count, f_count)
 	    unless @rflag.quiet
-		puts "<H2>#{$mc.get("title_status")}</H2>"
+		@o.puts "<H2>#{$mc.get("title_status")}</H2>"
 	    end
-	    print "<DIV class=\"zc_status\">", 
+	    @o.print "<DIV class=\"zc_status\">", 
 		super(domainname, i_count, w_count, f_count), "</DIV>"
-	    puts "<BR>"
+	    @o.puts "<BR>"
 	    if @rflag.quiet
-		puts "<HR width=\"60%\">"
-		puts "<BR>"
+		@o.puts "<HR width=\"60%\">"
+		@o.puts "<BR>"
 	    end
 	end
 

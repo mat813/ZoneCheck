@@ -22,7 +22,7 @@
   <BODY>
     <H1>ZoneCheck</H1>
 
-    <P> The ZoneCheck program (freely available <A href="toto">here</A>
+    <P>The ZoneCheck program (freely available <A href="toto">here</A>
       for download) performs several tests on your zone (or
       domain name) to ensure that it is correctly configured and can be
       safely delegated, providing a certain quality to your domain (see the
@@ -371,7 +371,7 @@
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Oct  4 19:19:24 CEST 2002
+Last modified: Fri Oct  4 21:13:29 CEST 2002
 <!-- hhmts end -->
   </BODY>
 </HTML>

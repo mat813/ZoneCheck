@@ -34,10 +34,10 @@ H3 {
 
 // TABLE[rules=rows] TD { border-top: solid }
 
-TABLE[rules=rows]    { //border-collapse: collapse; 
-                       border: solid #0066B2; 
-                       border-color: #0066B2; 
-}
+//TABLE[rules=rows]    { //border-collapse: collapse; 
+//                       border: solid #0066B2; 
+//                       border-color: #0066B2; 
+//}
 
 
 .warning { 
@@ -79,6 +79,26 @@ DIV.zc_zinfo {
     padding-left: 5ex;
 }
 
+
+/*
+ * Progress bar
+ */
+
+DIV#zc_pgr_pbar { 
+    margin-left: 5ex;
+}
+
+TABLE#zc_pgr_pbar_out { 
+    border: 1px solid black;
+}
+
+TABLE#zc_pgr_pbar_in { 
+    margin: 5px;
+}
+
+
+/*
+ */
 UL.zc_test { 
     padding-left: 5ex;
     list-style-type: none;
@@ -111,6 +131,7 @@ SPAN.zc_ref {
 
 TABLE.zc_domain {
     border-collapse: collapse;
+    border: solid #0066B2; 
 }
 
 TABLE.zc_domain TD {

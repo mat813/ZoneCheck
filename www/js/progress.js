@@ -11,14 +11,7 @@
 //
 //
 
-
-zc_pgr_starttime = (new Date()).getTime();
-zc_pgr_lasttime  = zc_pgr_starttime;
-zc_pgr_processed = 0;
-zc_pgr_totaltime = 0;
-zc_pgr_precision = 1000;
-zc_pgr_totalsize = 0;
-
+//
 function zc_sec_to_timestr(sec) {
   if (sec < 0)
     return "--:--";
@@ -38,6 +31,7 @@ function zc_sec_to_timestr(sec) {
   }
 }
 
+//
 function zc_speed_tostr(speed) {
   if (speed < 0)
     return "--.--";
@@ -56,12 +50,75 @@ function zc_pgr_off(id) {
   document.getElementById(id).style.display = "none";
 }
 
+// remove id (so that it can be reused)
+function zc_pgr_clear_id(id) {
+  document.getElementById(id).id = "";
+}
+
+//
+function zc_pgr_locale(tprogress, progress, test, speed, time) {
+  zc_pgr_l_title_progress = tprogress;
+  zc_pgr_l_progress       = progress;
+  zc_pgr_l_test           = test;
+  zc_pgr_l_speed          = speed;
+  zc_pgr_l_time           = time;
+}
 
 // start progress bar
 function zc_pgr_start(count) {
-  zc_pgr_totalsize = count
-  document.write("<H2  id=\"zc_pgr_title\">Progress</H2>");
-  document.write("<DIV id=\"zc_pgr_pbar\"></DIV>");
+  zc_pgr_starttime = (new Date()).getTime();
+  zc_pgr_lasttime  = zc_pgr_starttime;
+  zc_pgr_processed = 0;
+  zc_pgr_totaltime = 0;
+  zc_pgr_precision = 1000;
+  zc_pgr_totalsize = 0;
+  zc_pgr_totalsize = count;
+
+  s  = "";
+  if (zc_pgr_l_title_progress != null) {
+    s += "<H2  id=\"zc_pgr_title\">" + zc_pgr_l_title_progress + "</H2>";
+  }
+
+  s += "<DIV id=\"zc_pgr_pbar\">";
+  s += "<TABLE id=\"zc_pgr_pbar_out\"><TR><TD>";
+  s += "<TABLE id=\"zc_pgr_pbar_in\" style='border-collapse: collapse;'>";
+  s += "<TR>";
+  s += "<TD colspan=3>" + zc_pgr_l_progress + "Progression</TD>";
+  s += "<TD style='width: 2em;'></TD>"
+  s += "<TD style='text-align: center;'>&nbsp;&nbsp;" + zc_pgr_l_test + "&nbsp;&nbsp;</TD>";
+  s += "<TD style='text-align: center;'>&nbsp;&nbsp;" + zc_pgr_l_speed + "&nbsp;&nbsp;</TD>";
+  s += "<TD style='text-align: center;'>&nbsp;&nbsp;" + zc_pgr_l_time + "&nbsp;&nbsp;</TD>";
+  s += "</TR>";
+  s += "<TR>";
+  s += "<TD id=\"zc_pgr_pct\"   style='text-align: right; width: 4em'></TD>";
+  s += "<TD id=\"zc_pgr_pct1\"  style='border: solid; background-color: #123456;'></TD>";
+  s += "<TD id=\"zc_pgr_pct2\"  style='border: solid;'></TD>";
+  s += "<TD></TD>";
+  s += "<TD id=\"zc_pgr_proc\"  style='text-align: center;'></TD>";
+  s += "<TD id=\"zc_pgr_speed\" style='text-align: center;'></TD>";
+  s += "<TD id=\"zc_pgr_eta\"   style='text-align: center;'></TD>";
+  s += "</TR>";
+  s += "<TR><TD colspan=7>&nbsp;</TD></TR>";
+  s += "<TR>";
+  s += "<TD id=\"zc_pgr_desc\" colspan=7></TD>";
+  s += "</TR>";
+  s += "</TABLE>";
+  s += "</TD><TR></TABLE>";
+  s += "</DIV>";
+  document.write(s);
+
+  zc_pgr_update(0, -1, -1, "...");
+}
+
+function zc_pgr_update(pct, speed, eta, desc) {
+  // write progress bar
+  document.getElementById("zc_pgr_pct"  ).innerHTML = pct + "%&nbsp;";
+  document.getElementById("zc_pgr_pct1" ).style.width = 3 * pct;
+  document.getElementById("zc_pgr_pct2" ).style.width = 3 * (100-pct);
+  document.getElementById("zc_pgr_proc" ).innerHTML = zc_pgr_processed;
+  document.getElementById("zc_pgr_speed").innerHTML = zc_speed_tostr(speed);
+  document.getElementById("zc_pgr_eta"  ).innerHTML = zc_sec_to_timestr(eta);
+  document.getElementById("zc_pgr_desc" ).innerHTML = desc;
 }
 
 // process element in progress bar
@@ -87,33 +144,26 @@ function zc_pgr_process(desc) {
   // estimated time
   eta   = speed < 0 ? -1.0 : Math.ceil((zc_pgr_totalsize - zc_pgr_processed) / speed);
 
-  // write progress bar
-
-  str = "";
-  str += "<TABLE class=\"zc_test\">";
-  str += "<TR>";
-  str += "<TD colspan=3>Progression</TD>";
-  str += "<TD>Tests</TD>";
-  str += "<TD>Speed</TD>";
-  str += "<TD>Time</TD>";
-  str += "</TR>";
-  str += "<TR>";
-  str += "<TD style='text-align: right; width: 4em'>" + pct + "%&nbsp;</TD>";
-  str += "<TD style='border: solid; background-color: #123456; width:" + 3 * pct + "px'></TD>";
-  str += "<TD style='border: solid; width:" + 3 * (100 - pct) + "px'></TD>";
-  str += "<TD style='text-align: right; witdh: 4ex;'>" + zc_pgr_processed + "</TD>";
-  str += "<TD style='text-align: right; width: 6ex;'>" + zc_speed_tostr(speed) + "</TD>";
-  str += "<TD style='text-align: right; width: 8ex;'>" + zc_sec_to_timestr(eta) + "</TD>";
-  str += "</TR>";
-  str += "<TR>";
-  str += "<TD colspan=5>" + desc + "</TD>";
-  str += "</TR>";
-  str += "</TABLE>";
-  document.getElementById("zc_pgr_pbar").innerHTML = str;
+  zc_pgr_update(pct, speed, eta, desc);
 }
+
+
 
 // finish progress bar
 function zc_pgr_finish() {
-  zc_pgr_off("zc_pgr_title");
-  zc_pgr_off("zc_pgr_pbar");
+  if (zc_pgr_l_title_progress != null) {
+    zc_pgr_off("zc_pgr_title");
+    zc_pgr_clear_id("zc_pgr_title"   );
+  }
+  zc_pgr_off("zc_pgr_pbar" );
+  zc_pgr_clear_id("zc_pgr_pbar"    );
+  zc_pgr_clear_id("zc_pgr_pbar_out");
+  zc_pgr_clear_id("zc_pgr_pbar_in" );
+  zc_pgr_clear_id("zc_pgr_pct"     );
+  zc_pgr_clear_id("zc_pgr_pct1"    );
+  zc_pgr_clear_id("zc_pgr_pct2"    );
+  zc_pgr_clear_id("zc_pgr_proc"    );
+  zc_pgr_clear_id("zc_pgr_speed"   );
+  zc_pgr_clear_id("zc_pgr_eta"     );
+  zc_pgr_clear_id("zc_pgr_desc"    );
 }

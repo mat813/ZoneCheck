@@ -39,6 +39,12 @@ title_zoneinfo  : Zone information
 title_progress  : Progress
 title_testres   : Test results
 title_status    : Final status
+title_progress  : Progress
+
+pgr_progress    : Progression
+pgr_test        : Tests
+pgr_time        : Time
+pgr_speed       : Speed
 
 
 label_xpl : [ref]: IETF RFC1034 (p.11)\nLabels are only composed by letters ([A-Za-z]), digits ([0-9]) or dashes\n('-') (not starting or ending with), and should be less than 63 characters;\ndomain name (labels separated by '.') should be less than 255 characters.
