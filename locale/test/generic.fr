@@ -58,21 +58,21 @@ error   : Au moins deux serveurs de noms sont nécessaires
 explain = xpl_rfc2182
 
 
-[chk_distinct_ip]
+[chk_ip_distinct]
 testname: adresses IP identiques parmi les serveurs
 error   : Toutes les adresses IP doivent être distinctes
 explain = xpl_rfc2182
 details : Les serveurs de noms %{ns} utilisent la même adresse IP (%{ip}).
 
 
-[chk_same_net]
+[chk_ip_same_net]
 testname: serveurs de noms sur le même sous réseau
 error   : Des serveurs sont sur le même sous réseau
 explain = xpl_rfc2182
 details : Les sous réseaux suivants sont utilisés par plusieurs hôtes: %{subnets}. Essayez de déplacer certains hôtes sur un autre sous réseau.
 
 
-[chk_all_same_net]
+[chk_ip_all_same_net]
 testname: serveurs de noms tous sur le même sous réseau
 error   : Les serveurs de noms sont tous sur le même sous réseau
 explain = xpl_rfc2182

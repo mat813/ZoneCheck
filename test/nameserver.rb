@@ -43,13 +43,13 @@ module CheckNameServer
 
 	#-- Checks --------------------------------------------------
 	# DESC: Nameserver IP addresses should be public!
-	def chk_private_ip(ns)
+	def chk_ip_private(ns)
 	    ip(ns).each { |addr| return false if addr.private? }
 	    true
 	end
 
 	# DESC:
-	def chk_bogon(ns)
+	def chk_ip_bogon(ns)
 	    bogon = []
 	    ip(ns).each { |addr|
 		bname = NResolv::DNS::Name::create(addr.to_dnsform +

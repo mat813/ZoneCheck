@@ -89,7 +89,7 @@ module CheckGeneric
 
 	#-- Checks --------------------------------------------------
 	# DESC: Addresses should be distincts
-	def chk_distinct_ip
+	def chk_ip_distinct
 	    # Ok all addresses are distincts
 	    return true if ip == ip.uniq
 	    
@@ -108,7 +108,7 @@ module CheckGeneric
 	end
 
 	# DESC: Addresses should avoid belonging to the same network
-	def chk_same_net
+	def chk_ip_same_net
 	    # Only keep list of hosts on same subnet
 	    same_net = by_subnet.dup.delete_if { |k, v| v.size < 2 }
 		
@@ -130,7 +130,7 @@ module CheckGeneric
 
 	# DESC: Addresses should avoid belonging ALL to the same network
 	# WARN: Test is wrong in case of IPv4 and IPv6
-	def chk_all_same_net
+	def chk_ip_all_same_net
 	    # Ok not all hosts are on the same subnet
 	    return true unless ((by_subnet.size           == 1) && 
 				(by_subnet.values[0].size >  1))
