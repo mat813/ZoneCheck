@@ -193,7 +193,6 @@
 	      </SELECT>
 	      format</TD>
 	    <TD><SELECT name="lang">
-		<OPTION value=""           > Default
 		<OPTION value="en" SELECTED> English
 		<OPTION value="fr"         > Fran&ccedil;ais
 	      </SELECT>
@@ -431,7 +430,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr 18 15:32:02 CEST 2003
+Last modified: Tue Apr 22 14:07:18 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

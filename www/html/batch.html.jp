@@ -127,7 +127,6 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	      </SELECT> format
 	    </TD>
 	    <TD><SELECT name="lang">
-		<OPTION value=""           > Default
 		<OPTION value="en" SELECTED> English
 		<OPTION value="fr"         > Fran&ccedil;ais
 	      </SELECT> Language
@@ -376,7 +375,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr 18 13:43:33 CEST 2003
+Last modified: Tue Apr 22 14:07:08 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

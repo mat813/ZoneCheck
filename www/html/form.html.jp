@@ -200,7 +200,6 @@
 	      </SELECT>
 	      format</TD>
 	    <TD><SELECT name="lang">
-		<OPTION value=""           > Default
 		<OPTION value="en" SELECTED> 英
 		<OPTION value="fr"         > フランス
 	      </SELECT>
@@ -438,7 +437,7 @@
 リリーズ: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr 18 15:32:32 CEST 2003
+Last modified: Tue Apr 22 14:07:34 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
