@@ -145,7 +145,8 @@ class Param
 	    self.ns   = ns   unless ns.nil?
 	end
 
-	attr_reader :name, :ns, :addresses, :cache
+	attr_reader :cache, :name, :ns, :addresses
+	attr_writer :cache
 
 	def clear
 	    @name	= nil
