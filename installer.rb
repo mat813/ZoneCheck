@@ -55,14 +55,14 @@ class Installer
 	ENV['DOCDIR'    ] ||= "#{ENV['PREFIX']}/share/doc"
 	ENV['ETCDIR'    ] ||= "#{ENV['PREFIX']}/etc"
 	ENV['CGIDIR'    ] ||= "#{ENV['LIBEXEC']}/#{ENV['PROGNAME']}/cgi-bin"
-        ENV['WWWDIR'    ] ||= "#{ENV['PREFIX']}/www"
+        ENV['WWWDIR'    ] ||= "#{ENV['LIBEXEC']}/#{ENV['PROGNAME']}/www"
 
 	ENV['VERSION'	] ||= VERSION
 
 	@installdir    = "#{ENV['LIBEXEC']}/#{ENV['PROGNAME']}"
 	@confdir       = "#{ENV['ETCDIR']}/#{ENV['PROGNAME']}#{ENV['ETCDIST']}"
 	@zc            = "#{@installdir}/zc/zc.rb"
-	@wwwdir        = "#{ENV['WWWDIR']}/#{ENV['PROGNAME']}"
+	@wwwdir        = "#{ENV['WWWDIR']}"
 
 	@ch_installdir = "#{ENV['CHROOT']}#{@installdir}"
 	@ch_confdir    = "#{ENV['CHROOT']}#{@confdir}"

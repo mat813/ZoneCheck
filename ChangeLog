@@ -1,6 +1,6 @@
 # $Id$
 
-2003-01-??  ZoneCheck-2.0.3
+2003-03-08  ZoneCheck-2.0.3
 	* dbg: fixed debuging output for nresolv
 	* dbg: added smtp transaction as debuging information for mail
 	* doc: fixed apache configuration example
