@@ -243,8 +243,8 @@ EOT
 	     src="http://www.w3.org/Icons/valid-html401"
 	     alt="Valid HTML 4.01!"></a>
     </SPAN>
-Release: #{$zc_version} <BR>
-Last modified: #{Time::now}
+Release: #{$zc_name}-#{$zc_version} <BR>
+Last generated: #{Time::now}
 
   </BODY>
 </HTML>

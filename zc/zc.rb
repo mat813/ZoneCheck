@@ -69,6 +69,7 @@ ZC_HTML_PATH		= "/zc" # no trailing /
 # Identification
 #
 ZC_CVS_NAME	= %q$Name$
+ZC_NAME		= "ZoneCheck"
 ZC_VERSION	= (Proc::new { 
 		       n = ZC_CVS_NAME.split[1]
 		       n = /^ZC-(.*)/.match(n) unless n.nil?
@@ -461,6 +462,7 @@ end
 #
 if ! $zc_slavemode
     $zc_version	= ZC_VERSION
+    $zc_name	= ZC_NAME
 
     begin
 	exit ZoneCheck::new.start ? EXIT_OK : EXIT_FAILED

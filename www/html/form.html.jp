@@ -88,7 +88,7 @@
     </BLOCKQUOTE>
     
     <!-- Form -->
-    <FORM name="zcform" method="POST" action="HTML_PATH/cgi-bin/zc.cgi">
+    <FORM name="zcform" method="GET" action="HTML_PATH/cgi-bin/zc.cgi">
       <!-- Basic information -->
       <H2>Zone information</H2>
       <TABLE class="zc-domain">
@@ -410,7 +410,7 @@
 リリーズ: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr  4 11:17:06 CEST 2003
+Last modified: Fri Apr  4 11:43:07 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
