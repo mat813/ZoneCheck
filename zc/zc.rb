@@ -41,6 +41,7 @@
 
 ZC_INSTALL_PATH		= ENV["ZC_INSTALL_PATH"].untaint || (ENV["HOME"].untaint || "/homes/sdalu") + "/ZC.CVS/zc"
 
+
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
@@ -144,12 +145,19 @@ require 'testmanager'
 # Debugger object
 #  (earlier initialization, can also be set via input interface)
 #
-$dbg = DBG::new
-$dbg.level=ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
+$dbg       = DBG::new
+$dbg.level = ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 
 
-# Test for IPv6 stack detection
-#  WARN: doesn't implies that we have IPv6 connectivity
+# IPv4/IPv6 stack detection
+#  WARN: doesn't implies that we have the connectivity
+$ipv4_stack = begin
+		  UDPSocket::new(Socket::AF_INET).close
+		  true
+	      rescue NameError,      # if Socket::AF_INET doesn't exist
+		     SystemCallError # for the Errno::EAFNOSUPPORT error
+		  false
+	      end
 $ipv6_stack = begin
 		  UDPSocket::new(Socket::AF_INET6).close
 		  true
@@ -158,15 +166,6 @@ $ipv6_stack = begin
 		  false
 	      end
 
-# Test for IPv4 stack detection
-#  WARN: doesn't implies that we have IPv4 connectivity
-$ipv4_stack = begin
-		  UDPSocket::new(Socket::AF_INET).close
-		  true
-	      rescue NameError,      # if Socket::AF_INET doesn't exist
-		     SystemCallError # for the Errno::EAFNOSUPPORT error
-		  false
-	      end
 
 #
 # Internationalisation
@@ -204,10 +203,11 @@ end
 
 
 #
-# Console
+# Console (needed for localisation)
 #
 $console = Console::new
 $console.encoding = $mc.encoding
+
 
 ##
 ##

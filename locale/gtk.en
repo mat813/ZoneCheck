@@ -35,15 +35,17 @@ stop_on_first		: stop on first fatal
 error_default		: default severity
 error_allwarnings	: all warnings
 error_allfatals		: all fatals
+error_reportok		: erport ok
 test_mail		: mail delivery
 test_zone		: zone content
 test_rir		: RIR databases
+output_zone		: zone summary
+output_testname		: test name
 output_explain		: explain
 output_details		: details
-output_zone		: zone summary
 output_progressbar	: progress bar
-output_nothing		: nothing
 output_description	: description
+output_nothing		: nothing
 dbg_loading		: loading
 dbg_locale		: locale
 dbg_config		: config
@@ -78,6 +80,7 @@ input/clear: Clear all the input information
 input/check: Start the ZoneCheck verification
 
 option/output/summary: Give summary information about the zone tested
+option/output/testname: Give the name of the test
 option/output/explain: Give explanation and references
 option/output/details: Give detailed information
 option/output/progress: Show a progress bar
@@ -87,6 +90,7 @@ option/error/default: Use the severity assigned in the configuration file
 option/error/allwarnings: All errors are considered as warnings
 option/error/allfatals: All errors are considered as fatals
 option/error/stoponfirst: Stop on first fatal error
+option/error/reportok: Report even succesful test
 option/transp/ipv4: Use IPv4 protocol
 option/transp/ipv6: Use IPv6 protocol (new internet protocol)
 option/transp/std: Use UDP and fallback to TCP in case of truncated anser

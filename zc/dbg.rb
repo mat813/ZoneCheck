@@ -23,17 +23,17 @@ class DBG
     #
     # Debugging types
     #
-    LOADING	 = 0x0001	# Test loading status
+    LOADING	 = 0x0001	# Test loading
     LOCALE       = 0x0002	# Localization / Internationalisation
     CONFIG       = 0x0004	# Configuration
     PARSER       = 0x0008	# Parser
-    TESTS        = 0x0010	# Tests
+    TESTS        = 0x0010	# Tests performed
     AUTOCONF     = 0x0100       # Autoconf
-    DBG          = 0x0800	# The debugger itself
+    DBG          = 0x0800	# Debugger itself
     CACHE_INFO   = 0x1000	# Information about cached object
 
     NOCACHE      = 0x2000	# Disable caching
-    DONT_RESCUE  = 0x4000	# Don't try to rescue some exceptions
+    DONT_RESCUE  = 0x4000	# Don't try to rescue exceptions
     CRAZYDEBUG   = 0x8000	# Crazy Debug, don't try it...
 
     #

@@ -25,7 +25,9 @@ require 'dbg'
 class Cache
     Nothing = Object::new	# Another way to express nil
 
+    #
     # Initialize the cache mechanisme
+    #
     def initialize(name="0x%x"%__id__)
 	@name  = name
 	@mutex = Sync::new
@@ -33,13 +35,17 @@ class Cache
     end
 
 
+    #
     # Is caching enabled?
+    #
     def enabled?
 	! $dbg.enabled?(DBG::NOCACHE)
     end
 
 
+    #
     # Clear the items (all if none specified)
+    #
     def clear(*items)
 	@mutex.synchronize {
 	    # Clear item content
@@ -57,7 +63,9 @@ class Cache
     end
 
 
+    #
     # Define cacheable item
+    #
     def create(*items)
 	items.each { |item| 
 	    # Sanity check
@@ -70,7 +78,9 @@ class Cache
     end
 
 
+    #
     # Use a cacheable item
+    #
     def use(item, args=nil, force=false)
 	# Sanity check
 	if ! @list.has_key?(item)

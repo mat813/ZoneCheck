@@ -18,10 +18,63 @@
 require 'getoptlong'
 require 'param'
 
+##
+## Processing parameters from CLI (Command Line Interface)
+##
+## WARN: don't forget to update locale/cli.*
+##
+## usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
+##     -q, --quiet         Don't display extra titles
+##         --lang          Select another language (en, fr, ...)
+##     -h, --help          Show this message
+##     -V, --version       Display version and exit
+##     -B, --batch         Batch mode (read from file or stdin '-')
+##     -c, --config        Specify location of the configuration file
+##         --testdir       Location of the directory holding tests
+##     -C, --category      Only perform test for the specified category
+##     -T, --test          Name of the test to perform
+##         --testlist      List all the available tests
+##         --testdesc      Give a description (name,expl,error) of the test
+##     -r, --resolver      Resolver to use for guessing 'ns' information
+##     -n, --ns            List of nameservers for the domain
+##     -1, --one           Only display the most relevant message
+##     -g, --tagonly       Display only tag (suitable for scripting)
+##     -e, --error         Behaviour in case of error (see error)
+##     -t, --transp        Transport/routing layer (see transp)
+##     -v, --verbose       Display extra information (see verbose)
+##     -o, --output        Output (see output)
+##     -4, --ipv4          Only check the zone with IPv4 connectivity
+##     -6, --ipv6          Only check the zone with IPv6 connectivity
+## 
+##   verbose:              [intro/explain/details] [testdesc|counter]
+##     intro          [i]  Print summary for domain and associated nameservers
+##     testname       [n]  Print the test name
+##     explain        [x]  Print an explanation for failed tests
+##     details        [d]  Print a detailed description of the failure
+##     reportok       [o]  Still report passed test
+##     testdesc       [t]  Print the test description before running it
+##     counter        [c]  Print a test counter
+## 
+##   output:               [byseverity|byhost] [text|html]
+##     byseverity    *[bs] Output is sorted/merged by severity
+##     byhost         [bh] Output is sorted/merged by host
+##     text          *[t]  Output plain text
+##     html           [h]  Output HTML
+## 
+##   error:                [allfatal|allwarning] [stop|nostop]
+##     allfatal       [af] All error are considered fatal
+##     allwarning     [aw] All error are considered warning
+##     stop          *[s]  Stop on the first fatal error
+##     nostop         [ns] Never stop (even on fatal error)
+## 
+##   transp:               [ipv4/ipv6] [udp|tcp|std]
+##     ipv4          *[4]  Use IPv4 routing protocol
+##     ipv6          *[6]  Use IPv6 routing protocol
+##     udp            [u]  Use UDP transport layer
+##     tcp            [t]  Use TCP transport layer
+##     std           *[s]  Use UDP with fallback to TCP for truncated messages
+##
 module Input
-    ##
-    ## Processing parameters from CLI (Command Line Interface)
-    ##
     class CLI
 	with_msgcat "cli.%s"
 
@@ -53,6 +106,8 @@ module Input
 		[ "--transp",	"-t",	GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--verbose",	"-v",   GetoptLong::OPTIONAL_ARGUMENT ],
 		[ "--output",	"-o",   GetoptLong::REQUIRED_ARGUMENT ],
+		#
+		# Let's have some fun
 		[ "--makecoffee",       GetoptLong::NO_ARGUMENT       ],
 		[ "--coffee",           GetoptLong::NO_ARGUMENT       ] ]
         end
@@ -90,6 +145,8 @@ module Input
 		when "--transp"    then p.transp		= arg
 		when "--verbose"   then p.verbose		= arg
 		when "--output"    then p.output		= arg
+		#
+		# Let's have some fun
 		when "--makecoffee"
 		    $console.stdout.print <<EOT
 #{PROGNAME}: I'm not currently designed for that task.

@@ -31,14 +31,15 @@ Gtk.init
 # Tooltips
 #
 
+##
+## Processing parameters from GTK
+##
 module Input
-    ##
-    ## Processing parameters from GTK
-    ##
     class GTK
 	with_msgcat "gtk.%s"
 
-	MaxNS = 8
+	MaxNS			= 8
+	DefaultBatchFile	= "batch.txt"
 
 	##
 	## Expert
@@ -52,37 +53,6 @@ module Input
 		l10n_debug	= $mc.get("iface_label_debug")
 		l10n_output	= $mc.get("iface_label_output")
 		l10n_advanced	= $mc.get("iface_label_advanced")
-
-		# Debug
-		debug_f = Gtk::Frame::new(l10n_debug)
-
-		i, j = 0, 0
-		tbl = Gtk::Table::new(1, 3, true)
-		[   [ :d_loading,    "iface_dbg_loading",    DBG::LOADING    ],
-		    [ :d_locale,     "iface_dbg_locale",     DBG::LOCALE     ],
-		    [ :d_config,     "iface_dbg_config",     DBG::CONFIG     ],
-		    [ :d_parser,     "iface_dbg_parser",     DBG::PARSER     ],
-		    [ :d_tests,      "iface_dbg_tests",      DBG::TESTS      ],
-		    [ :d_autoconf,   "iface_dbg_autoconf",   DBG::AUTOCONF   ],
-		    [ :d_dbg,        "iface_dbg_dbg",        DBG::DBG        ],
-		    [ :d_cache_info, "iface_dbg_cache_info", DBG::CACHE_INFO ],
-		    [ :d_nocache,    "iface_dbg_nocache",    DBG::NOCACHE    ],
-		    [ :d_dont_rescue,"iface_dbg_dont_rescue",DBG::DONT_RESCUE],
-		    [ :d_crazydebug, "iface_dbg_crazydebug", DBG::CRAZYDEBUG ]
-		].each { |var, tag, lvl|
-		    l10n  = $mc.get(tag)
-		    button=instance_eval("@#{var}=Gtk::CheckButton::new(l10n)")
-		    button.active = $dbg.enabled?(lvl)
-		    button.signal_connect("clicked") { |w|
-			$dbg[lvl] = w.active?
-		    }
-
-		    i, j = 0, j+1 if i > 2
-		    tbl.attach(button, i, i += 1, j, j + 1)
-		}
-
-		debug_f.add(tbl)
-
 
 		# Output
 		output_f = Gtk::Frame::new(l10n_output)
@@ -99,8 +69,8 @@ module Input
 		@o_type.set_history(2)
 
 		menu = Gtk::Menu::new
-		menu.append(Gtk::MenuItem::new("straight"))
-		menu.append(Gtk::MenuItem::new("consolidation"))
+		menu.append(Gtk::MenuItem::new("by severity"))
+		menu.append(Gtk::MenuItem::new("by host"))
 		@o_process = Gtk::OptionMenu::new
 		@o_process.set_menu(menu)
 
@@ -152,6 +122,34 @@ module Input
 		main.set_tip(@a_test,        "expert/advanced/testonly")
 		main.set_tip(@a_testname,    "expert/advanced/testonly")
 
+		# Debug
+		debug_f = Gtk::Frame::new(l10n_debug)
+
+		i, j = 0, 0
+		tbl = Gtk::Table::new(1, 3, true)
+		[   [ :d_loading,    "iface_dbg_loading",    DBG::LOADING    ],
+		    [ :d_locale,     "iface_dbg_locale",     DBG::LOCALE     ],
+		    [ :d_config,     "iface_dbg_config",     DBG::CONFIG     ],
+		    [ :d_parser,     "iface_dbg_parser",     DBG::PARSER     ],
+		    [ :d_tests,      "iface_dbg_tests",      DBG::TESTS      ],
+		    [ :d_autoconf,   "iface_dbg_autoconf",   DBG::AUTOCONF   ],
+		    [ :d_dbg,        "iface_dbg_dbg",        DBG::DBG        ],
+		    [ :d_cache_info, "iface_dbg_cache_info", DBG::CACHE_INFO ],
+		    [ :d_nocache,    "iface_dbg_nocache",    DBG::NOCACHE    ],
+		    [ :d_dont_rescue,"iface_dbg_dont_rescue",DBG::DONT_RESCUE],
+		    [ :d_crazydebug, "iface_dbg_crazydebug", DBG::CRAZYDEBUG ]
+		].each { |var, tag, lvl|
+		    l10n  = $mc.get(tag)
+		    button=instance_eval("@#{var}=Gtk::CheckButton::new(l10n)")
+		    button.active = $dbg.enabled?(lvl)
+		    button.signal_connect("clicked") {|w| $dbg[lvl]=w.active?}
+		    i, j = 0, j+1 if i > 2
+		    tbl.attach(button, i, i += 1, j, j + 1)
+		}
+
+		debug_f.add(tbl)
+
+
 		#
 		pack_start(output_f)
 		pack_start(advanced_f)
@@ -175,8 +173,8 @@ module Input
 			  when 2 then "gtk"
 			  end
 		output << case @o_process.history
-			  when 0 then "straight"
-			  when 1 then "consolidation"
+			  when 0 then "byseverity"
+			  when 1 then "byhost"
 			  end
 		output.join(",")
 	    end
@@ -198,6 +196,7 @@ module Input
 		l10n_test		= $mc.get("iface_label_extra_tests")
 		l10n_output		= $mc.get("iface_label_output")
 		l10n_output_zone	= $mc.get("iface_output_zone")
+		l10n_output_testname	= $mc.get("iface_output_testname")
 		l10n_output_explain	= $mc.get("iface_output_explain")
 		l10n_output_details	= $mc.get("iface_output_details")
 		l10n_output_progbar	= $mc.get("iface_output_progressbar")
@@ -207,35 +206,41 @@ module Input
 		l10n_error_allwarning	= $mc.get("iface_error_allwarnings")
 		l10n_error_allfatal	= $mc.get("iface_error_allfatals")
 		l10n_error_on_first	= $mc.get("iface_stop_on_first")
+		l10n_error_reportok	= $mc.get("iface_error_reportok")
 
 		# Output
 		output_f = Gtk::Frame::new(l10n_output)
 
 		@o_zone    = Gtk::CheckButton::new(l10n_output_zone)
+		@o_zone.active = true
+
+		@o_testname= Gtk::CheckButton::new(l10n_output_testname)
 		@o_explain = Gtk::CheckButton::new(l10n_output_explain)
 		@o_details = Gtk::CheckButton::new(l10n_output_details)
-		@o_zone.active = @o_explain.active = @o_details.active = true
+		@o_explain.active = @o_details.active = true
 		
 		@o_prog    = Gtk::RadioButton::new(        l10n_output_progbar)
 		@o_desc    = Gtk::RadioButton::new(@o_prog,l10n_output_desc)
 		@o_nothing = Gtk::RadioButton::new(@o_prog,l10n_output_nothing)
 		@o_prog.active = true
 
-		tbl = Gtk::Table::new(2, 3, true)
-		tbl.attach(@o_zone,    0, 1, 0, 1)
-		tbl.attach(@o_explain, 1, 2, 0, 1)
-		tbl.attach(@o_details, 2, 3, 0, 1)
-		tbl.attach(@o_prog,    0, 1, 1, 2)
-		tbl.attach(@o_desc,    1, 2, 1, 2)
-		tbl.attach(@o_nothing, 2, 3, 1, 2)
+		tbl = Gtk::Table::new(3, 3, true)
+		tbl.attach(@o_zone,     0, 1, 0, 1)
+		tbl.attach(@o_testname, 0, 1, 1, 2)
+		tbl.attach(@o_explain,  1, 2, 1, 2)
+		tbl.attach(@o_details,  2, 3, 1, 2)
+		tbl.attach(@o_prog,     0, 1, 2, 3)
+		tbl.attach(@o_desc,     1, 2, 2, 3)
+		tbl.attach(@o_nothing,  2, 3, 2, 3)
 		output_f.add(tbl)
 
-		main.set_tip(@o_zone,    "option/output/summary")
-		main.set_tip(@o_explain, "option/output/explain")
-		main.set_tip(@o_details, "option/output/details")
-		main.set_tip(@o_prog,    "option/output/progress")
-		main.set_tip(@o_desc,    "option/output/description")
-		main.set_tip(@o_nothing, "option/output/nothing")
+		main.set_tip(@o_zone,     "option/output/summary")
+		main.set_tip(@o_testname, "option/output/testname")
+		main.set_tip(@o_explain,  "option/output/explain")
+		main.set_tip(@o_details,  "option/output/details")
+		main.set_tip(@o_prog,     "option/output/progress")
+		main.set_tip(@o_desc,     "option/output/description")
+		main.set_tip(@o_nothing,  "option/output/nothing")
 
 		# Error
 		error_f = Gtk::Frame::new(l10n_error)
@@ -244,6 +249,7 @@ module Input
 		@aw = Gtk::RadioButton::new(@ed, l10n_error_allwarning)
 		@af = Gtk::RadioButton::new(@ed, l10n_error_allfatal)
 		@sf = Gtk::CheckButton::new(l10n_error_on_first)
+		@ro = Gtk::CheckButton::new(l10n_error_reportok)
 		@sf.active = true
 
 		tbl = Gtk::Table::new(2, 3, true)
@@ -251,12 +257,14 @@ module Input
 		tbl.attach(@aw, 1, 2, 0, 1)
 		tbl.attach(@af, 2, 3, 0, 1)
 		tbl.attach(@sf, 0, 1, 1, 2)
+		tbl.attach(@ro, 2, 3, 1, 2)
 		error_f.add(tbl)
 
 		main.set_tip(@ed, "option/error/default")
 		main.set_tip(@aw, "option/error/allwarnings")
 		main.set_tip(@af, "option/error/allfatals")
 		main.set_tip(@sf, "option/error/stoponfirst")
+		main.set_tip(@ro, "option/error/reportok")
 		
 		# Tests
 		test_f   = Gtk::Frame::new(l10n_test)
@@ -338,10 +346,12 @@ module Input
 	    def verbose
 		verbose = []
 		verbose << "intro"		if @o_zone.active?
+		verbose << "testname"		if @o_testname.active?
 		verbose << "details"		if @o_details.active?
 		verbose << "explain"		if @o_explain.active?
 		verbose << "testdesc"		if @o_desc.active?
 		verbose << "counter"		if @o_prog.active?
+		verbose << "reportok"		if @ro.active? # XXX
 		verbose.join(",")
 	    end
 
@@ -554,14 +564,15 @@ module Input
 		l10n_file_gotdirectory	= $mc.get("iface_file_gotdirectory")
 		l10n_file_overwrite	= $mc.get("iface_file_overwrite")
 
-		# Batch
+		# Open/Save 
 		open = Gtk::Button::new(Gtk::Stock::OPEN)
 		save = Gtk::Button::new(Gtk::Stock::SAVE)
-		hbbox = Gtk::HButtonBox::new
-		hbbox.layout_style = Gtk::HButtonBox::START
-		hbbox.pack_start(open)
-		hbbox.pack_start(save)
+		file_hbbox = Gtk::HButtonBox::new
+		file_hbbox.layout_style = Gtk::HButtonBox::START
+		file_hbbox.pack_start(open)
+		file_hbbox.pack_start(save)
 
+		# Batch
 		@batch = Gtk::TextView::new
 
 		info = Gtk::Label::new($mc.get("iface_batch_example"))
@@ -572,9 +583,9 @@ module Input
 		scroller.add_with_viewport(@batch)
 
 		vbox = Gtk::VBox::new(false, 5)
-		vbox.pack_start(hbbox,    false, true)
-		vbox.pack_start(scroller, true,  true)
-		vbox.pack_start(info,     false, true)
+		vbox.pack_start(file_hbbox, false, true)
+		vbox.pack_start(scroller,   true,  true)
+		vbox.pack_start(info,       false, true)
 	    
 		batch_f = Gtk::Frame::new(l10n_batch)
 		batch_f.add(vbox)
@@ -621,15 +632,19 @@ module Input
 		}
 
 		save.signal_connect("clicked") {
+		    # Create file selection
 		    fs = Gtk::FileSelection::new(l10n_batch_save)
 		    fs.set_modal(true)
 		    fs.set_transient_for(main.window)
 		    fs.hide_fileop_buttons
-		    fs.set_filename("batch.txt")
+		    fs.set_filename(DefaultBatchFile)
 		    
+		    # Cancel Button
 		    fs.cancel_button.signal_connect("clicked") {
-			fs.destroy
+			fs.destroy 
 		    }
+
+		    # Ok Button
 		    fs.ok_button.signal_connect("clicked") {
 			doit = true
 			doit &= fs.filename[-1] != File::SEPARATOR[0]
@@ -662,18 +677,24 @@ module Input
 			    end
 			end
 		    }
+
+		    # Display file selection
 		    fs.show
 		}
 
 		open.signal_connect("clicked") {
+		    # Create file selection
 		    fs = Gtk::FileSelection::new(l10n_batch_open)
 		    fs.set_modal(true)
 		    fs.set_transient_for(main.window)
 		    fs.hide_fileop_buttons
 		    
+		    # Cancel Button
 		    fs.cancel_button.signal_connect("clicked") {
 			fs.destroy
 		    }
+
+		    # Ok Button
 		    fs.ok_button.signal_connect("clicked") {
 			if fs.filename[-1] != File::SEPARATOR[0]
 			    if File.directory?(fs.filename)
@@ -693,6 +714,8 @@ module Input
 			    fs.destroy
 			end
 		    }
+
+		    # Display file selection
 		    fs.show
 		}
 	    end
@@ -820,6 +843,7 @@ module Input
 		exp_mitem.signal_connect("toggled") { |w|
 		    if w.active?
 			notebook.append_page(@expert, Gtk::Label::new("Expert"))
+#			@expert.set_sensitive(false)
 #			notebook.set_current_page(notebook.page_num(@expert))
 		    else
 			notebook.remove_page(notebook.page_num(@expert))
@@ -966,3 +990,4 @@ EOT
 	end
     end
 end
+

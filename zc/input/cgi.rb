@@ -18,56 +18,56 @@
 require 'cgi'
 
 
+##
+## Processing parameters from CGI (Common Gateway Interface)
+##
+## WARN: don't forget to update locale/cgi.*
+##
+##
+## For obvious security reasons the following parameters shouldn't
+## be set through the CGI:
+##  - configfile
+##  - testdir
+##  - debug
+##  - resolver
+##
+## parameters:
+##  - lang     = [ fr | en | ... ]
+##  - quiet
+##  - one
+##  - verbose  = [ i|intro, n|testname, x|explain, d|details, 
+##                 t|testdesc, c|counter, o|reportok ]
+##      - intro
+##      - testname
+##      - explain
+##      - details
+##      - progress = [ t|testdesc | c|counter ]
+##      - reportok
+##  - output   = [ bs|byseverity, bh|byhost, text, html ]
+##      - report   = bs|byseverity | bh|byhost
+##      - format   = h|html | t|text
+##  - error    = [ af|allfatal, aw|allwarning, std|standard,
+##                s|stop, ns|nostop ]
+##      - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]
+##      - dontstop 
+##  - transp   = [ ipv4, ipv6, udp, tcp, std ]
+##      - transp3   = [ ipv4, ipv6 ]
+##      - transp4   = [ udp | tcp | std ]
+##  - category = cat1,!cat2:subcat1,cat2,!cat3,+
+##      - chkmail (!mail)
+##      - chkrir  (!rir)
+##      - chkzone (!dns:axfr)
+##  - ns       = ns1=ip1,ip2;ns2=ip3;ns3
+##      - ns0  .. nsX   = nameserver name
+##      - ips0 .. ipsX  = coma separated ip addresses
+##  - zone     = zone to test
+##
+## exemple:
+##  zone=afnic.fr&intro&progress=testdesc&transp=ipv4,ipv6,std
+##  zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr
+##  zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr=192.93.0.1&ns=ns2.nic.fr&ns=bns3.nic.fr
+##
 module Input
-    ##
-    ## Processing parameters from CGI (Common Gateway Interface)
-    ##
-    ## WARN: don't forget to update locale/cgi.*
-    ##
-    ##
-    ## For obvious security reasons the following parameters shouldn't
-    ## be set through the CGI:
-    ##  - configfile
-    ##  - testdir
-    ##  - debug
-    ##  - resolver
-    ##
-    ## parameters:
-    ##  - lang     = [ fr | en | ... ]
-    ##  - quiet
-    ##  - one
-    ##  - verbose  = [ i|intro, n|testname, x|explain, d|details, 
-    ##                 t|testdesc, c|counter, o|reportok ]
-    ##      - intro
-    ##      - testname
-    ##      - explain
-    ##      - details
-    ##      - progress = [ t|testdesc | c|counter ]
-    ##      - reportok
-    ##  - output   = [ bs|byseverity, bh|byhost, text, html ]
-    ##      - report   = bs|byseverity | bh|byhost
-    ##      - format   = h|html | t|text
-    ##  - error    = [ af|allfatal, aw|allwarning, std|standard,
-    ##                s|stop, ns|nostop ]
-    ##      - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]
-    ##      - dontstop 
-    ##  - transp   = [ ipv4, ipv6, udp, tcp, std ]
-    ##      - transp3   = [ ipv4, ipv6 ]
-    ##      - transp4   = [ udp | tcp | std ]
-    ##  - category = cat1,!cat2:subcat1,cat2,!cat3,+
-    ##      - chkmail (!mail)
-    ##      - chkrir  (!rir)
-    ##      - chkzone (!dns:axfr)
-    ##  - ns       = ns1=ip1,ip2;ns2=ip3;ns3
-    ##      - ns0  .. nsX   = nameserver name
-    ##      - ips0 .. ipsX  = coma separated ip addresses
-    ##  - zone     = zone to test
-    ##
-    ## exemple:
-    ##  zone=afnic.fr&intro&progress=testdesc&transp=ipv4,ipv6,std
-    ##  zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr
-    ##  zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr=192.93.0.1&ns=ns2.nic.fr&ns=bns3.nic.fr
-    ##
     class CGI
 	with_msgcat "cgi.%s"
 
