@@ -111,10 +111,12 @@ PROGNAME	= File.basename($0)
 #
 # Constants
 #
-EXIT_OK		=  0	# Everything went fine
+EXIT_OK		=  0	# Everything went fine, no fatal error, domain ok
 EXIT_FAILED	=  1	# The program completed but the result is negative
-EXIT_ABORTED	=  2	# The user aborted the program before completion
-EXIT_ERROR      =  3	# An error unrelated to the result occured
+EXIT_TIMEOUT	=  2	# The program completed but the result is negative
+			#  due to timeout.
+EXIT_ABORTED	=  3	# The user aborted the program before completion
+EXIT_ERROR      =  4	# An error unrelated to the result occured
 EXIT_USAGE	=  9	# The user didn't bother reading the man page
 
 
@@ -313,7 +315,9 @@ class ZoneCheck
 	    @config.validate(@test_manager)
 
 	    # Interaction
-	    @input.interact(@param, @config, @test_manager)
+	    unless @input.interact(@param, @config, @test_manager)
+		exit EXIT_ABORTED 
+	    end
 
 	    # Test selection
 	    @config.overrideconf(@param.test.tests) if @param.test.tests

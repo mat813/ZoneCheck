@@ -32,7 +32,7 @@
 #
 
 require 'cgi'
-
+require 'param'
 
 ##
 ## Processing parameters from CGI (Common Gateway Interface)

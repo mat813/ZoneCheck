@@ -33,6 +33,7 @@
 
 require 'getoptlong'
 require 'thread'
+require 'param'
 
 require 'gtk2'
 require 'ext/gtk'
@@ -1085,7 +1086,7 @@ EOT
 	    main = Main::new(p, c, tm)
 	    main.create
 	    Gtk::main()
-	    exit EXIT_ABORTED if main.aborted
+	    return ! main.aborted
 	end
 
 	def parse(p)
