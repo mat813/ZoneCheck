@@ -36,7 +36,11 @@ class NResolv
 	    module Generic
 		class TXT
 		    def self.wire_decode(decoder)
-			self::new(decoder.get_string)
+			txt = []
+			while !decoder.empty?
+			    txt << decoder.get_string
+			end
+			self::new(txt)
 		    end
 		end
 
@@ -255,6 +259,10 @@ class NResolv
 		    raise DecodingError::NoMoreData, 'limit exceeded' if @limit<@index+1+len
 		    index, @index = @index, @index + 1 + len
 		    @data[index + 1, len]
+		end
+
+		def empty?
+		    @limit == @index
 		end
 
 		def skip(size)
