@@ -96,10 +96,10 @@ PROGNAME	= File.basename($0)
 # Constants
 #
 EXIT_OK		=  0	# Everything went fine
-EXIT_USAGE	= -1	# The user didn't bother reading the man page
-EXIT_ABORTED	=  2	# The user aborted the program before completion
 EXIT_FAILED	=  1	# The program completed but the result is negative
+EXIT_ABORTED	=  2	# The user aborted the program before completion
 EXIT_ERROR      =  3	# An error unrelated to the result occured
+EXIT_USAGE	=  9	# The user didn't bother reading the man page
 
 
 #
