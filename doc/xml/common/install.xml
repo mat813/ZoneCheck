@@ -62,9 +62,9 @@
 |   `-- zonecheck		# Configuration directory
 |      |-- zc.conf		#   Main configuration file
 |      |-- rootservers		#   List of the root servers (YAML file)
-|      |-- reverse.rules	#   Rules for checking reverse delegation
+|      |-- reverse.profile	#   Profile for checking reverse delegation
 |      |-- ...			#   ...
-|      `-- default.rules	#   Default set of rules to be used
+|      `-- default.profile	#   Default set of rules to be used
 |-- libexec
 |   `--zonecheck
 |      |-- cgi-bin
@@ -92,14 +92,14 @@
       and for html pages generated in the
       <filename class="directory">/zc/</filename> namespace (HTML_PATH=/zc).
 <screen>
-AliasMatch  ^/zc/?$         /usr/local/libexec/zonecheck/www/html/form.html
-AliasMatch  ^/zc/(en|fr)/?$ /usr/local/libexec/zonecheck/www/html/form.html.$1
-AliasMatch  ^/zc/(en|fr)/(.*)$ /usr/local/libexec/zonecheck/www/html/$2.$1
-ScriptAlias /zc/cgi-bin/    /usr/local/libexec/zonecheck/cgi-bin/
-Alias       /zc/js/         /usr/local/libexec/zonecheck/www/js/
-Alias       /zc/style/      /usr/local/libexec/zonecheck/www/style/
-Alias       /zc/img/        /usr/local/libexec/zonecheck/www/img/
-Alias       /zc/            /usr/local/libexec/zonecheck/www/html/
+AliasMatch  ^/zonecheck/?$         /usr/local/libexec/zonecheck/www/html/form.html
+AliasMatch  ^/zonecheck/(en|fr)/?$ /usr/local/libexec/zonecheck/www/html/form.html.$1
+AliasMatch  ^/zonecheck/(en|fr)/(.*)$ /usr/local/libexec/zonecheck/www/html/$2.$1
+ScriptAlias /zonecheck/cgi-bin/    /usr/local/libexec/zonecheck/cgi-bin/
+Alias       /zonecheck/js/         /usr/local/libexec/zonecheck/www/js/
+Alias       /zonecheck/style/      /usr/local/libexec/zonecheck/www/style/
+Alias       /zonecheck/img/        /usr/local/libexec/zonecheck/www/img/
+Alias       /zonecheck/            /usr/local/libexec/zonecheck/www/html/
 
 &lt;Directory /usr/local/libexec/zonecheck/cgi-bin/&gt;
     Options ExecCGI 

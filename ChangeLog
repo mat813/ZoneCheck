@@ -2,6 +2,8 @@
 
 2003-01-??  ZoneCheck-2.0.3
 	* dbg: fixed debuging output for nresolv
+	* doc: fixed apache configuration example
+	* zc: fixed locale interpretation
 	
 2003-01-20  ZoneCheck-2.0.2
 	* test: fixed bugs in mail_delivery_{postmaster,hostmaster}

@@ -334,6 +334,13 @@ the program.
 The variable as the same effect as the undocumented \fBINPUT\fR parameter,
 it allows to chose the input interface used by \fIZoneCheck\fR, the currently
 supported values are: \fBcli\fR, \fBcgi\fR, \fBinetd\fR and \fBgtk\fR (requires GTK/ruby binding). But other interfaces doesn't accept the same parameters as the one described here.
+.TP
+.I ZC_IP_STACK
+Restrict the IP stack available to IPv4 or IPv6, for that set it respectively to 4 or 6.
+This is particularly useful if you have an IPv6 stack on your computer but don't have the connectivity, in that case define ZC_IP_STACK=4.
+.TP
+.I ZC_XML_PARSER
+If ruby-libxml is installed, this parser will be used instead of rexml for speed improvement, but you can force the use of rexml by setting ZC_XML_PARSER to rexml.
 .
 .SH "EXIT STATUS"
 The following exit status can be reported by \fIZoneCheck\fR:
