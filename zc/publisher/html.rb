@@ -246,13 +246,12 @@ EOT
 
 	    if xpl_lst
 		@o.puts "<UL class=\"zc_ref\">"
-		xpl_lst.each { |h, t|
-		    h =~ /^\[(\w+)\]:\s*/
-		    tag = $mc.get("xpltag_#{$1}")
+		xpl_lst.each { |t, h, b|
+		    tag = $mc.get("xpltag_#{t}")
 		    @o.puts "<LI>"
-		    @o.puts "<SPAN class=\"zc_ref\">#{tag}: #{$'}</SPAN>"
+		    @o.puts "<SPAN class=\"zc_ref\">#{tag}: #{h}</SPAN>"
 		    @o.puts "<BR>"
-		    @o.puts t.join(" ")
+		    @o.puts b.join(" ")
 		    @o.puts "</LI>"
 		}
 		puts "</UL>"

@@ -34,34 +34,30 @@ module Publisher
 	    def initialize(publisher)
 		@publisher  = publisher
 		@o          = publisher.output
-		@do_counter = @publisher.rflag.counter && @o.tty?
-		if @do_counter
-		    @counter = PBar::new(@o, 1, PBar::DisplayNoFinalStatus)
-		end
+		@counter    = if @publisher.rflag.counter && @o.tty?
+			      then PBar::new(@o, 1, PBar::DisplayNoFinalStatus)
+			      else nil
+			      end
 	    end
 	    
 	    def start(count)
-		return unless @do_counter
-		@counter.start(count)
+		@counter.start(count)	if @counter
 	    end
 	    
 	    def done(desc)
-		return unless @do_counter
-		@counter.done(desc)
+		@counter.done(desc)	if @counter
 	    end
 	    
 	    def failed(desc)
-		return unless @do_counter
-		@counter.failed(desc)
+		@counter.failed(desc)	if @counter
 	    end
 	    
 	    def finish
-		return unless @do_counter
-		@counter.finish
+		@counter.finish		if @counter
 	    end
 	    
 	    def process(desc, ns, ip)
-		if @do_counter
+		if @counter
 		    @counter.processed(1)
 		end
 		if @publisher.rflag.testdesc
@@ -148,11 +144,10 @@ module Publisher
 	    @o.puts msg
 
 	    if xpl_lst
-		xpl_lst.each { |h, t|
-		    h =~ /^\[(\w+)\]:\s*/
-		    tag = $mc.get("xpltag_#{$1}")
-		    @o.puts " | #{tag}: #{$'}"
-		    t.each { |l| @o.puts " | #{l}" }
+		xpl_lst.each { |t, h, b|
+		    tag = $mc.get("xpltag_#{t}")
+		    @o.puts " | #{tag}: #{h}"
+		    b.each { |l| @o.puts " | #{l}" }
 		}
 		@o.puts " `----- -- -- - -  -"
 	    end
