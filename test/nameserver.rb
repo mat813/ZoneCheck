@@ -22,7 +22,7 @@ module CheckNameServer
     ##   (see modules CheckNetworkAddress for that)
     ##
     class ServerAccess < Test
-	MsgCat = "test/nameserver.%s"
+	with_msgcat "test/nameserver.%s"
 
 	#-- Initialization ------------------------------------------
 	def initialize(*args)

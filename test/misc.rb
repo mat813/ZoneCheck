@@ -25,7 +25,7 @@ module CheckNetworkAddress
     ##
     ##
     class Misc < Test
-	MsgCat = "test/misc.%s"
+	with_msgcat "test/misc.%s"
 
 	#-- Checks --------------------------------------------------
 	# DESC:

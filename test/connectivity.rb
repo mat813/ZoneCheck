@@ -34,7 +34,7 @@ module CheckNetworkAddress
     ##   the tests won't be affected by the transport flags
     ## 
     class Connectivity < Test
-	MsgCat = "test/connectivity.%s"
+	with_msgcat "test/connectivity.%s"
 
 	def initialize(*args)
 	    super(*args)

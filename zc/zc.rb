@@ -374,7 +374,7 @@ class ZoneCheck
 
 	    # Create test manager
 	    @test_manager = TestManager::new
-	    @test_manager.add_allcheckclass
+	    @test_manager.add_allclasses
 
 	    # Load configuration
 	    @config = Config::new(@test_manager)

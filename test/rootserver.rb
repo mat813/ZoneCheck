@@ -16,7 +16,7 @@ require 'framework'
 
 module CheckNetworkAddress
     class RootServer < Test
-	MsgCat = "test/rootserver.%s"
+	with_msgcat "test/rootserver.%s"
 
 	#-- Checks --------------------------------------------------
 	# DESC: root server list should be available

@@ -88,7 +88,7 @@ class TestManager
     #
     # Add all the available classes that containts check methods
     #
-    def add_allcheckclass
+    def add_allclasses
 	# Add the test classes (they should have Test as superclass)
 	[ CheckGeneric, CheckNameServer, 
 	    CheckNetworkAddress, CheckExtra].each { |mod|
@@ -180,7 +180,7 @@ class TestManager
 
     #
     # Use the configuration object ('config') to instanciate each
-    # classes (but only once) that will be used to perform the tests.
+    # class (but only once) that will be used to perform the tests.
     #
     def init(config, cm, param, do_preeval=true)
 	@config		= config

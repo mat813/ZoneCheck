@@ -19,7 +19,7 @@ module CheckNetworkAddress
     ## Check domain MX record
     ##
     class MX < Test
-	MsgCat = "test/mx.%s"
+	with_msgcat "test/mx.%s"
 
 	#-- Checks --------------------------------------------------
 	# DESC: MX entries should exists

@@ -19,7 +19,7 @@ module CheckGeneric
     ## Check syntax validity of the domain name
     ##
     class DomainNameSyntax < Test
-	MsgCat = "test/generic.%s"
+	with_msgcat "test/generic.%s"
 
 	#-- Checks --------------------------------------------------
 	# DESC: A domainname should only contains A-Z a-Z 0-9 '-' '.'
@@ -44,7 +44,7 @@ module CheckGeneric
     ## Check basic absurdity with the nameserver IP addresses
     ##
     class ServerAddress < Test
-	MsgCat = "test/generic.%s"
+	with_msgcat "test/generic.%s"
 
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
@@ -147,7 +147,7 @@ module CheckGeneric
     ## Check for nameserver!
     ##
     class NameServers < Test
-	MsgCat = "test/generic.%s"
+	with_msgcat "test/generic.%s"
 
 	#-- Checks --------------------------------------------------
 	# DESC: A domain should have a nameserver!

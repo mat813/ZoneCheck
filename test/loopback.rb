@@ -25,7 +25,7 @@ module CheckNetworkAddress
     ## Check for loopback network delegation/resolution
     ## 
     class Loopback < Test
-	MsgCat = "test/loopback.%s"
+	with_msgcat "test/loopback.%s"
 
 	#-- Constants -----------------------------------------------
 	IPv4LoopbackName = NResolv::DNS::Name::create(Address::IPv4::Loopback)

@@ -163,16 +163,15 @@ class Test
     end
 
 
-
+    def self.with_msgcat(*msgcat_list)
+	msgcat_list.each { |msgcat| $mc.read(msgcat) }
+    end
 
     def initialize(config, cm, domain)
 	@attrcache_mutex	= Sync::new
 	@config			= config
 	@cm			= cm
 	@domain			= domain
-	if self.class.constants.include?("MsgCat")
-	    $mc.read(self.instance_eval("MsgCat"))
-	end
     end
 
 

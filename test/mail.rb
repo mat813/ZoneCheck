@@ -20,7 +20,7 @@ module CheckExtra
     ## Check domain NS records
     ##
     class Mail < Test
-	MsgCat = "test/mail.%s"
+	with_msgcat "test/mail.%s"
 
 	#-- Initialisation ------------------------------------------
 	def initialize(*args)

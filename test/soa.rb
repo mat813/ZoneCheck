@@ -19,7 +19,7 @@ module CheckNetworkAddress
     ## Check domain SOA record
     ##
     class SOA < Test
-	MsgCat = "test/soa.%s"
+	with_msgcat "test/soa.%s"
 
 	#-- Tests ---------------------------------------------------
 	# DESC: SOA entries should exists
