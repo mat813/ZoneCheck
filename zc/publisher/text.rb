@@ -148,7 +148,7 @@ module Publisher
 	    def initialize(publisher)
 		@publisher	= publisher
 		@o		= publisher.output
-		@counte		= if @publisher.rflag.counter && @o.tty?
+		@counter	= if @publisher.rflag.counter && @o.tty?
 				  then PBar::new(@o, 1)
 				  else nil
 				  end
