@@ -5,7 +5,7 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
@@ -21,7 +21,7 @@ module CheckGeneric
     class DomainNameSyntax < Test
 	#-- Tests ---------------------------------------------------
 	# DESC: A domainname should only contains A-Z a-Z 0-9 '-' '.'
-	def chk_dn_alpha
+	def chk_dn_sntx
 	    @domain.name.to_s =~ /^[A-Za-z0-9\-\.]+$/
 	end
 
@@ -45,15 +45,44 @@ module CheckGeneric
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
 	    super(*args)
-	    @ip        = nil
+	    @ip		= nil
+	    @same_net	= nil
 	end
 
 	#-- Shortcuts -----------------------------------------------
 	def ip
 	    cache_attribute("@ip") {
-		ip = @domain.ns.collect { |ns| ns[1] }
+		ip = @domain.ns.collect { |ns, ips| ips }
 		ip.flatten!
 		ip
+	    }
+	end
+
+	def ns_from_ip(ip)
+	    @domain.ns.each { |ns, ips|
+		return ns if ips.include?(ip)
+	    }
+	    nil
+	end
+
+	def same_net
+	    cache_attribute("@same_net") {
+		nethosts = {}
+
+		# Classifying host by subnet
+		ip.each { |i| 
+		    net = case i                     # decide of subnet size:
+			  when Address::IPv4 then i.prefix(28) # /28 for IPv4
+			  when Address::IPv6 then i.prefix(64) # /64 for IPv6
+			  end
+		    nethosts[net] = [ ] unless nethosts.has_key?(net)
+		    nethosts[net] << i
+		}
+		
+		# Only keep list of hosts on same subnet
+		nethosts.delete_if { |k, v| v.size < 2 }
+		
+		nethosts
 	    }
 	end
 
@@ -63,18 +92,39 @@ module CheckGeneric
 	    ip == ip.uniq
 	end
 
-	# DESC: Addresses should avoid to belong to the same network
+	# DESC: Addresses should avoid belonging to the same network
 	def chk_same_net
-	    prefix_list = ip.collect { |i| 
-		case i                               # decide of subnet size:
-		when Address::IPv4 then i.prefix(28) # /28 for IPv4
-		when Address::IPv6 then i.prefix(64) # /64 for IPv6
-		end
+	    # Ok all hosts are on different subnets
+	    return true if same_net.empty?
+
+	    # Create output data for failure
+	    subnetlist = []
+	    same_net.each { |k, v|
+		hlist   = (v.collect { |i| ns = ns_from_ip(i) }).join(", ")
+		prefix = case k
+			 when Address::IPv4 then 28
+			 when Address::IPv6 then 64
+			 end
+		subnetlist << "#{k}/#{prefix} (#{hlist})"
 	    }
-	    prefix_list == prefix_list.uniq
+	    return { "subnets" => subnetlist.join(", ") }
+	end
+
+	# DESC: Addresses should avoid belonging ALL to the same network
+	# WARN: Test is wrong in case of IPv4 and IPv6
+	def chk_all_same_net
+	    # Ok not all hosts are on the same subnet
+	    return true if same_net.empty? || same_net.size > 1
+
+	    # Create output data for failure
+	    subnet = same_net.keys[0]
+	    prefix = case subnet
+		     when Address::IPv4 then 28
+		     when Address::IPv6 then 64
+		     end
+	    return { "subnet" => "#{subnet}/#{prefix}" }
 	end
     end
-
 
 
     ##

@@ -119,7 +119,7 @@ openrelay_xpl: [ref]: ????\nYou can perform a more complete test by using the fo
 # Domain name check
 #
 
-[chk_dn_alpha]
+[chk_dn_sntx]
 testname: illegal symbols in domain name
 error   : The domain name contains illegal symbols
 explain = label_xpl
@@ -158,10 +158,18 @@ explain : [none]
 [chk_same_net]
 testname: nameserver addresses on same subnet
 error   : IP addresses on the same subnet
+explain : [none]
+details : The following subnets are used by several hosts: %{subnets}. Try moving some of their hosts to another subnet.
+
+
+[chk_all_same_net]
+testname: nameserver addresses are all on the same subnet
+error   : IP addresses are all on the same subnet
 explain : \
 [ref]: AFNIC advise\n\
   To avoid loosing all connectivity with the autoritative DNS in case\n\
-  of network outage it is advised to host the DNS on different networks.
+  of network outage it is advised to host the DNS on different networks.\n
+details : All the servers are in the subnet %{subnet}, try moving some of them  to another subnet.
 
 [chk_private_ip]
 testname: address in a private network

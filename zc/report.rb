@@ -76,6 +76,8 @@ module Report
 		    desc	= res.desc.clone
 		    testname	= res.testname
 
+		    @publish.diagnostic(severity, testname, res.desc, whos)
+		    next
 		    # Look for similare test results
 		    nlist.delete_if { |a|
 			if (a.testname == res.testname) && (a.desc == res.desc)

@@ -121,7 +121,12 @@ class TestManager
 	args << ns if !ns.nil?
 	args << ip if !ip.nil?
 	begin
-	    result_class = method.call(*args) ? Test::Succeed : Test::Failed
+	    data         = method.call(*args)
+	    desc.data    = data if data
+	    result_class = case data 
+			   when NilClass, FalseClass, Hash then Test::Failed
+			   else Test::Succeed
+			   end
 	rescue NResolv::RefusedError
 	    desc.err = "Answer refused"
 	rescue Errno::EADDRNOTAVAIL

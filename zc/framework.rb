@@ -27,7 +27,7 @@ class Test
     ##
     class Result # --> ABSTRACT <--
 	class Desc
-	    attr_writer :err, :msg, :xpl, :xtr
+	    attr_writer :err, :msg, :xpl, :xtr, :data
 
 	    def initialize(testname=nil)
 		@testname	= testname
@@ -35,6 +35,7 @@ class Test
 		@msg		= nil	# Test message
 		@xpl		= nil	# Test explanation
 		@xtr		= nil	# Extra information
+		@data		= nil
 	    end
 
 	    def hash
@@ -67,6 +68,21 @@ class Test
 		end
 	    end
 
+	    def dtl
+		return nil if @data.nil?
+		
+		d = $mc.get("#{@testname}_details")
+		if d == "[none]"
+		    nil
+		else
+		    d = d.dup
+		    @data.each_pair { |k, v|
+			d.gsub!(/%\{#{k}\}/, v)
+		    }
+		    d
+		end
+	    end
+
 	    def msg
 		if is_error?
 		    "[TEST %s]: %s" % [ $mc.get("#{@testname}_testname"), @err] 
@@ -80,7 +96,7 @@ class Test
 
 
 
-	attr_reader :testname, :desc, :ns, :ip
+	attr_reader :testname, :desc, :ns, :ip, :data
 
 	def initialize(testname, desc, ns=nil, ip=nil)
 	    @testname	= testname
@@ -113,10 +129,6 @@ class Test
 		tag = $mc.get("w_generic")
 	    end
 	    tag
-	end
-
-	def to_s
-	    @msg
 	end
     end
 

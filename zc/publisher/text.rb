@@ -12,7 +12,7 @@
 #
 
 require 'xtra/progress'
-
+require 'textfmt'
 
 module Publisher
     ##
@@ -163,6 +163,16 @@ module Publisher
 	    
 	    @o.puts msg
 
+	    if desc.dtl
+		txt = ::Text::Format::new
+		txt.width = 72
+		txt.tag   = "  "
+		txt.format(desc.dtl).split(/\n/).each { |l|
+		    @o.puts " : #{l}"
+		}
+		@o.puts " `..... .. .. . .  ."
+	    end
+	    
 	    if xpl_lst
 		xpl_lst.each { |t, h, b|
 		    tag = $mc.get("xpltag_#{t}")
