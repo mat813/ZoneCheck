@@ -5,6 +5,7 @@
 	* test: fix chk_aaaa test
 	* cfg: use -n to disable name resolution for ping commande
 	* test: use of alternative rootserver possible in chk_root_server_*
+	* test: chk_root_server_* now give detailed information
 	* test: checking of delegation response size chk_delegation_udp512*
 	* nresolv: able to encode NS, A, AAAA records
 	* zc: fixed wrong exit code when 'no stop on fatal' was enabled
@@ -12,6 +13,7 @@
 	* zc: added statistics for web page
 	* test: check for non recursive server (chk_not_recursive)
 	* misc: new installation procedure (using ruby only)
+	* misc: add zonecheck.spec
 	
 2003-10-02  ZoneCheck-2.0.0b8
 	* test: added chk_soa_coherence
