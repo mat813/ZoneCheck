@@ -275,9 +275,9 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    mail account associated with domain names.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">zone transfert</TD>
+	  <TD class="zc_key">zone transfer</TD>
 	  <TD>Perform additional tests on the zone retrieved after
-	    a <I>zone transfert</I>.</TD>
+	    a <I>zone transfer</I>.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">RIPE database</TD>

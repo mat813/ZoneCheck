@@ -229,7 +229,7 @@
 	    <TD><INPUT type="checkbox" name="chkmail" value='t' checked>
 	      mail delivery</TD>
 	    <TD><INPUT type="checkbox" name="chkzone" value='t' checked>
-	      zone transfert</TD>
+	      zone transfer</TD>
 	    <TD><INPUT type="checkbox" name="chkripe" value='t' checked>
 	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A></TD>
 	  </TR>
@@ -370,9 +370,9 @@
 	    mail account associated with domain names.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">zone transfert</TD>
+	  <TD class="zc_key">zone transfer</TD>
 	  <TD>Perform additional tests on the zone retrieved after
-	    a <I>zone transfert</I>.</TD>
+	    a <I>zone transfer</I>.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">RIPE database</TD>

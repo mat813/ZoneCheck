@@ -26,17 +26,17 @@ module CheckNetworkAddress
 	with_msgcat "test/axfr.%s"
 
 	#-- Checks --------------------------------------------------
-	# DESC: Zone transfert is possible
+	# DESC: Zone transfer is possible
 	def chk_axfr(ns, ip)
 	    true
 	end
 
-	# DESC: Zone transfert is not empty
+	# DESC: Zone transfer is not empty
 	def chk_axfr_empty(ns, ip)
 	    true
 	end
 
-	# DESC: Zone transfert containts only valid labels
+	# DESC: Zone transfer containts only valid labels
 	def chk_axfr_valid_labels(ns, ip)
 	    true
 	end
