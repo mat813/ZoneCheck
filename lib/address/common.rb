@@ -29,6 +29,7 @@ class Address
     attr_reader :address
 
     def namespace   ; ""                              ; end
+    def to_name     ; to_dnsform + "." + namespace    ; end
 
     def inspect     ; "#<#{self.class} #{self.to_s}>" ; end
     def hash        ; @address.hash                   ; end

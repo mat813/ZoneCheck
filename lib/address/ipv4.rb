@@ -92,8 +92,8 @@ class Address
 	    "%d.%d.%d.%d" % @address.unpack("CCCC")
 	end
 	
-	def to_name
-	    "%d.%d.%d.%d.#{namespace}" % @address.unpack('CCCC').reverse
+	def to_dnsform
+	    "%d.%d.%d.%d" % @address.unpack('CCCC').reverse
 	end
 
 	def protocol  ; Socket::AF_INET ; end

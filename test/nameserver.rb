@@ -38,8 +38,7 @@ module CheckNameServer
 	#-- Shortcuts -----------------------------------------------
 	def ip(ns)
 	    @cache.use(:ip, ns) {
-		@domain.ns.assoc(ns)[1]
-	    }
+		@domain.ns.assoc(ns)[1] }
 	end
 
 	#-- Checks --------------------------------------------------
@@ -47,6 +46,21 @@ module CheckNameServer
 	def chk_private_ip(ns)
 	    ip(ns).each { |addr| return false if addr.private? }
 	    true
+	end
+
+	# DESC:
+	def chk_bogon(ns)
+	    bogon = []
+	    ip(ns).each { |addr|
+		bname = NResolv::DNS::Name::create(addr.to_dnsform +
+						   ".bogons.cymru.com.")
+		case addr
+		when Address::IPv4
+		    bogon << addr unless @cm[nil].addresses(bname).empty?
+		end
+	    }
+	    return true if bogon.empty?
+	    { "addresses" => bogon.join(", ") }
 	end
     end
 end

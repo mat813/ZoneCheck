@@ -26,3 +26,9 @@ testname: adresse dans un réseau privé
 error   : L'adresse a été allouée dans un réseau privé
 explain : [ref]: IETF RFC1918 (3. Private Address Space)\nThe Internet Assigned Numbers Authority (IANA) has reserved the\nfollowing three blocks of the IP address space for private internets: 10/8, 172.16/12, 192.168/16.
 
+
+[chk_bogon]
+testname: addresse ne fait pas parti des 'bogon'
+error   : Addresse listee parmis les 'bogon'
+details : L'addresse %{addresses} appartient a un prefix 'bogon'.
+explain : [ref]: <URL:http://www.cymru.com/Bogons/>\nA bogon prefix is a route that should never appear in the Internet routing table.\nA packet routed over the public Internet (not including over VPN or other\ntunnels) should never have a source address in a bogon range. These are\ncommonly found as the source addresses of DDoS attacks.

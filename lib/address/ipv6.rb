@@ -197,9 +197,8 @@ class Address
 	    address
 	end
 	
-	def to_name
-	    @address.unpack("H32")[0].split(//).reverse.join(".") + "." +
-		namespace
+	def to_dnsform
+	    @address.unpack("H32")[0].split(//).reverse.join(".")
 	end
 
 	def protocol  ; Socket::AF_INET6 ; end
