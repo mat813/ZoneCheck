@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding="utf-8"?>
+<!DOCTYPE catalog
+   PUBLIC "-//OASIS/DTD Entity Resolution XML Catalog V1.0//EN"
+   "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+
+  <uri name="/html/docbook.xsl"
+       uri="/usr/local/share/xsl/docbook/html/docbook.xsl"/>
+  <uri name="/fo/docbook.xsl"
+       uri="/usr/local/share/xsl/docbook/fo/docbook.xsl"/>
+
+  <nextCatalog catalog="/usr/local/share/xml/docbook/4.2/catalog.xml"/>
+
+</catalog>

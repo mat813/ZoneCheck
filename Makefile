@@ -31,16 +31,17 @@ LN=ln			# Doesn't cross partition boundary
 CP=cp
 CHMOD=chmod
 
-XML2TEX =jade -t tex -d 
-XML2HTML=jade -t xml -d ../mystyle.dsl\#html /usr/local/share/sgml/docbook/dsssl/modular/dtds/decls/xml.dcl ../zc.xml
-HTML2TXT=lynx -nolist -dump
 
-ifndef SGML_CATALOG_FILES
-SGML_CATALOG_FILES=/usr/local/share/sgml/catalog:/usr/local/share/xml/docbook/catalog:/usr/local/share/sgml/docbook/dsssl/modular/catalog
-export SGML_CATALOG_FILES
-endif
+HTML2TXT=elinks -dump
+
 
 TOPDIR := $(shell if [ "$$PWD" != "" ]; then echo $$PWD; else pwd; fi)
+
+ifndef XML_CATALOG_FILES
+XML_CATALOG_FILES=$(TOPDIR)/doc/misc/catalog.xml
+export XML_CATALOG_FILES
+endif
+
 
 all: zc-bin
 
@@ -127,20 +128,16 @@ realclean:
 	rm -Rf $(TOPDIR)/doc/tmp
 	rm -Rf $(TOPDIR)/doc/html
 
-FAQ: doc/xml/FAQ.xml doc/xml/common/faq.xml doc/misc/style.dsl
+FAQ: doc/xml/FAQ.xml doc/xml/common/faq.xml doc/misc/html.xsl
 	rm -Rf $(TOPDIR)/doc/tmp/FAQ
 	mkdir -p $(TOPDIR)/doc/tmp/FAQ
-	sed 3d < doc/xml/FAQ.xml > doc/xml/_fix_FAQ.xml
-	(cd $(TOPDIR)/doc/tmp/FAQ && jade -t xml -d $(TOPDIR)/doc/misc/style.dsl\#html /usr/local/share/sgml/docbook/dsssl/modular/dtds/decls/xml.dcl $(TOPDIR)/doc/xml/_fix_FAQ.xml)
-	rm doc/xml/_fix_FAQ.xml
-	$(HTML2TXT) doc/tmp/FAQ/* > FAQ
+	(cd $(TOPDIR)/doc/tmp/FAQ && xsltproc -nonet $(TOPDIR)/doc/misc/html.xsl $(TOPDIR)/doc/xml/FAQ.xml > FAQ.html)
+	$(HTML2TXT) doc/tmp/FAQ/FAQ.html > FAQ
 
 distrib: FAQ
 
-doc-html: doc/xml/zc.xml doc/xml/common/faq.xml doc/misc/style.dsl
+doc-html: doc/xml/zc.xml doc/xml/common/faq.xml doc/misc/html.xsl
 	rm -Rf $(TOPDIR)/doc/html
 	mkdir -p $(TOPDIR)/doc/html
-	sed 3d < doc/xml/zc.xml > doc/xml/_fix_zc.xml
-	(cd $(TOPDIR)/doc/html && jade -t xml -d $(TOPDIR)/doc/misc/style.dsl\#html /usr/local/share/sgml/docbook/dsssl/modular/dtds/decls/xml.dcl $(TOPDIR)/doc/xml/_fix_zc.xml)
-	rm doc/xml/_fix_zc.xml
+	(cd $(TOPDIR)/doc/html && xsltproc -nonet $(TOPDIR)/doc/misc/html.xsl $(TOPDIR)/doc/xml/zc.xml)
 	cp doc/misc/docbook.css doc/html/
