@@ -64,74 +64,74 @@
 	  <TR class="zc_ns_prim">
 	    <TD>Primary</TD>
 	    <TD><INPUT name="ns0"  type="text" size=24 
-		       value="<%=$ns[0]%>" default=""></TD>
+		       value="<%=$ns[0]%>"></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips0" type="text" size=35
-		       value="<%=$ips[0]%>" default=""></TD>
+		       value="<%=$ips[0]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD>Secondary</TD>
 	    <TD><INPUT name="ns1"  type="text" size=24
-		       value="<%=$ns[1]%>" default=""></TD>
+		       value="<%=$ns[1]%>"></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips1" type="text" size=35
-		       value="<%=$ips[1]%>" default=""></TD>
+		       value="<%=$ips[1]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD>Secondary</TD>
 	    <TD><INPUT name="ns2"  type="text" size=24
-		       value="<%=$ns[2]%>" default=""></TD>
+		       value="<%=$ns[2]%>"></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips2" type="text" size=35
-		       value="<%=$ips[2]%>" default=""></TD>
+		       value="<%=$ips[2]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD>Secondary</TD>
 	    <TD><INPUT name="ns3"  type="text" size=24
-		       value="<%=$ns[3]%>" default=""></TD>
+		       value="<%=$ns[3]%>"></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips3" type="text" size=35
-		       value="<%=$ips[3]%>" default=""></TD>
+		       value="<%=$ips[3]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD>Secondary</TD>
 	    <TD><INPUT name="ns4"  type="text" size=24
-		       value="<%=$ns[4]%>" default=""></TD>
+		       value="<%=$ns[4]%>"></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips4" type="text" size=35
-		       value="<%=$ips[4]%>" default=""></TD>
+		       value="<%=$ips[4]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD>Secondary</TD>
 	    <TD><INPUT name="ns5"  type="text" size=24
-		       value="<%=$ns[5]%>" default=""></TD>
+		       value="<%=$ns[5]%>"></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips5" type="text" size=35
-		       value="<%=$ips[5]%>" default=""></TD>
+		       value="<%=$ips[5]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD>Secondary</TD>
 	    <TD><INPUT name="ns6"  type="text" size=24
-		       value="<%=$ns[6]%>" default=""></TD>
+		       value="<%=$ns[6]%>"></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips6" type="text" size=35
-		       value="<%=$ips[6]%>" default=""></TD>
+		       value="<%=$ips[6]%>"></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD>Secondary</TD>
 	    <TD><INPUT name="ns7"  type="text" size=24
-		       value="<%=$ns[7]%>" default=""></TD>
+		       value="<%=$ns[7]%>"></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
 	    <TD><INPUT name="ips7" type="text" size=35
-		       value="<%=$ips[7]%>" default=""></TD>
+		       value="<%=$ips[7]%>"></TD>
 	  </TR>
       </TABLE>
       <P>
@@ -414,7 +414,7 @@
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Jan 16 12:55:16 CET 2003
+Last modified: Thu Jan 16 12:59:23 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>
