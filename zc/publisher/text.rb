@@ -32,9 +32,6 @@ module Publisher
 	##
 	class Progress
 	    class PBar
-		EraseEndLine            = "\033[K" 
-		HideCursor              = "\033[?25l"
-		ShowCursor              = "\033[?25h"
 		BarSize			= 37
 
 		def initialize(output, precision)
@@ -52,7 +49,8 @@ module Publisher
 		    @processed	= 0
 		    @tick       = 0
 
-		    @output.print HideCursor, barstr
+		    @output.write $console.ctl["vi"]
+		    @output.print barstr
 
 		    @updater	= Thread::new { 
 			last_processed = nil
@@ -72,7 +70,9 @@ module Publisher
 				    last_processed = @processed
 				end
 
-				@output.print "\r", barstr, EraseEndLine
+				@output.write "\r"
+				@output.print barstr
+				@output.write $console.ctl["ce"]
 				@output.flush
 			    }
 			end
@@ -85,12 +85,12 @@ module Publisher
 
 		def done
 		    @mutex.synchronize { @updater.kill }
-		    @output.print "\r#{EraseEndLine}"
+		    @output.write "\r", $console.ctl["ce"]
 		    @output.flush
 		end
 		
 		def finish
-		    @output.print ShowCursor
+		    @output.write $console.ctl["ve"]
 		end
                 
 		protected

@@ -130,6 +130,7 @@ require 'ext/array'
 # ZoneCheck component
 require 'dbg'
 require 'msgcat'
+require 'console'
 require 'config'
 require 'param'
 require 'cachemanager'
@@ -153,6 +154,7 @@ $ipv6_stack = begin
 		     SystemCallError # for the Errno::EAFNOSUPPORT error
 		  false
 	      end
+
 
 #
 # Internationalisation
@@ -189,6 +191,12 @@ rescue => e
 end
 
 
+#
+# Console
+#
+$console = Console::new
+$console.encoding = $mc.encoding
+
 ##
 ##
 ##
@@ -222,7 +230,7 @@ class ZoneCheck
 	if ! (im =~ /^\w+$/)
 	    l10n_error = $mc.get("w_error").upcase
 	    l10n_input = $mc.get("input_suspicious") % [ im ]
-	    $stderr.puts "#{l10n_error}: #{l10n_input}"
+	    $console.stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
 	end
 	im.untaint
@@ -233,7 +241,7 @@ class ZoneCheck
 	rescue LoadError => e
 	    l10n_error = $mc.get("w_error").upcase
 	    l10n_input = $mc.get("input_unsupported") % [ im ]
-	    $stderr.puts "#{l10n_error}: #{l10n_input}"
+	    $console.stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
 	end
 	eval "Input::#{im.upcase}::new"
@@ -248,7 +256,6 @@ class ZoneCheck
     end
 
     def destroy
-#	puts "DESTROYED"
     end
 
 
@@ -359,9 +366,10 @@ class ZoneCheck
 
     #
     # Print the list of available tests
+    # XXX: should use publisher
     #
     def do_testlist
-	puts @test_manager.list.sort
+	$console.stdout.puts @test_manager.list.sort
 	true
     end
 
@@ -369,12 +377,13 @@ class ZoneCheck
     # Print the description of the tests
     #  If no selection is done (option -T), the description is
     #  printed for all the available tests
+    # XXX: should use publisher
     #
     def do_testdesc
 	suf = @param.test.desctype
 	list = @param.test.tests || @test_manager.list.sort
 	list.each { |test|
-	    puts $mc.get("#{test}_#{suf}")
+	    $console.stdout.puts $mc.get("#{test}_#{suf}")
 	}
 	true
     end

@@ -516,7 +516,7 @@ class Param
 	    end
 
 	    # Set output publisher
-	    @publisher = @publisher_class::new(rflag)
+	    @publisher = @publisher_class::new(rflag, $console.stdout)
 
 	    $dbg.msg(DBG::AUTOCONF, "Publish using #{@publisher_class}")
 	end

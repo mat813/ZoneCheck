@@ -62,8 +62,9 @@ module Input
 		case opt
 		when "--help"      then usage(EXIT_USAGE, $stdout)
 		when "--version"
-		    puts $mc.get("input_version").gsub("PROGNAME", PROGNAME) % 
-			[ $zc_version ]
+		    l10n_version = $mc.get("input_version") % $zc_version
+		    l10n_version.gsub!(/PROGNAME/, PROGNAME)
+		    $console.stdout.puts l10n_version
 		    exit EXIT_OK
 		when "--quiet"     then p.rflag.quiet		= true
 		when "--debug"     then $dbg.level		= arg
@@ -90,14 +91,14 @@ module Input
 		when "--verbose"   then p.verbose		= arg
 		when "--output"    then p.output		= arg
 		when "--makecoffee"
-		    print <<EOT
+		    $console.stdout.print <<EOT
 #{PROGNAME}: I'm not currently designed for that task.
-\tBut if you really want this option added in future version, 
+\tBut if you really want this option added in future release, 
 \tyou should see with the maintainer: \"#{ZC_MAINTAINER}\".
 EOT
 		    exit EXIT_OK
 		when "--coffee"
-		    puts "#{PROGNAME}: No thank you, I prefer tea."
+		    $console.stdout.puts "#{PROGNAME}: No thank you, I prefer tea."
 		    exit EXIT_OK
 		end
 	    end
@@ -132,12 +133,12 @@ EOT
 	    true
 	end
 
-	def usage(errcode, io=$stderr)
+	def usage(errcode, io=$console.stderr)
 	    io.print $mc.get("input_cli_usage").gsub("PROGNAME", PROGNAME)
 	    exit errcode unless errcode.nil?
 	end
 
-	def error(str, errcode=nil, io=$stderr)
+	def error(str, errcode=nil, io=$console.stderr)
 	    l10n_error = $mc.get("w_error").upcase
 	    io.puts "#{l10n_error}: #{str}"
 	    exit errcode unless errcode.nil?
