@@ -133,7 +133,7 @@ class ZoneCheck
 		      end
 
 	    # Everything fine?
-	    exit success ? EXIT_OK : EXIT_FAILED
+	    return success
 	rescue Param::ParamError   => e
 	    @input.error(e.to_s, EXIT_ERROR)
 	rescue Config::SyntaxError => e
