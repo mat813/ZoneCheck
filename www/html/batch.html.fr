@@ -82,7 +82,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	<TR class="zc-title"><TD colspan="4">Output</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="intro"    value='t' checked>
+	    <TD><INPUT type="checkbox" name="intro"    value='t'>
 	      résumé sur la zone</TD>
 	    <TD></TD>
 	    <TD></TD>
@@ -379,7 +379,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr 18 13:25:37 CEST 2003
+Last modified: Fri Apr 18 13:43:25 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
