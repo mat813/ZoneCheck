@@ -16,8 +16,8 @@ class DBG
     TEST_LOADING = 0x0001	# Display test loading status
     CACHE_INFO   = 0x1000	# Display cache information
     NOCACHE      = 0x2000	# Disable caching
-    CRAZYDEBUG   = 0x8000	# Crazy Debug, the name says it all
     DONT_RESCUE  = 0x4000	# Don't try to rescue some exceptions
+    CRAZYDEBUG   = 0x8000	# Crazy Debug, the name says it all
 
     C = { 
 	TEST_LOADING => "test",

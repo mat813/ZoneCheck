@@ -156,6 +156,9 @@ class Test
     #   the default DNS is querried
     #  WARN: this is necessary because the query could be in the
     #        domain being delegated
+    #  IDEA: a better way would be to use the cachemanager to fake
+    #        the nameserver NS, A and AAAA records retrieved by autoconf
+    #        unfortunately we have a NO_CACHE option in the debug mode
     def is_cname?(name, ip=nil, domain=@domain_name)
 	auth_domain = name.domain
 	unless auth_domain == domain

@@ -124,6 +124,8 @@ class TestManager
 	    desc.err = "Connection refused"
 	rescue Errno::EADDRNOTAVAIL
 	    desc.err = "Network transport unavailable try option -4 or -6"
+	rescue NResolv::NResolvError => e
+	    desc.err = "Resolver error (#{e})"
 	rescue Exception => e
 	    desc.err = "Dependency issue (allwarning flag?)"
 	    raise if $dbg.enable?(DBG::DONT_RESCUE)
