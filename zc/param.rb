@@ -316,7 +316,7 @@ class Param
 		case opt
 		when "--help"      then cmdline_usage(EXIT_USAGE, $stdout)
 		when "--version"
-		    puts "#{PROGNAME}: version #{VERSION}"
+		    puts "#{PROGNAME}: version #{ZC_VERSION}"
 		    exit EXIT_OK
 		when "--debug"     then $dbg.level	= arg
 		when "--batch"     then i.batch		= true

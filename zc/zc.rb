@@ -21,7 +21,13 @@ $LOAD_PATH << "../lib/"
 CVS_NAME	= %q$Name$
 RCS_ID		= %q$Id$
 RCS_REVISION	= RCS_ID.split[2]
-VERSION		= CVS_NAME.gsub(/_/, ".")
+ZC_VERSION	= (Proc::new { 
+		       if (n = CVS_NAME.match(/^ZC-(.*)/)).nil?
+			   "<unreleased>"
+		       else
+			   n[1]
+		       end
+		   }).call
 PROGNAME	= File.basename($0)
 
 
