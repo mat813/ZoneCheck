@@ -60,8 +60,12 @@ module Report
 		false
 	    end
 
-	    def display
+	    def display(title)
 		nlist = @list.dup
+
+		if !@rflag.tagonly
+		    @publish.diag_section(title)
+		end
 
 		while ! nlist.empty?
 		    # Get test result
@@ -145,18 +149,10 @@ module Report
 	    if ! @rflag.quiet
 		@publish.h1($mc.get("title_testres"))
 	    end
-	    if ! @info.empty?
-		@publish.h2($mc.get("w_info"))    if !@rflag.tagonly
-		@info.display
-	    end
-	    if ! @warning.empty?
-		@publish.h2($mc.get("w_warning")) if !@rflag.tagonly
-		@warning.display
-	    end
-	    if ! @fatal.empty?
-		@publish.h2($mc.get("w_fatal"))   if !@rflag.tagonly
-		@fatal.display
-	    end
+	    
+	    @info.display($mc.get("w_info"))       if ! @info.empty?
+	    @warning.display($mc.get("w_warning")) if ! @warning.empty?
+	    @fatal.display($mc.get("w_fatal"))     if ! @fatal.empty?
 
 	    @publish.status(@domain.name, 
 			      @info.count, @warning.count, @fatal.count)

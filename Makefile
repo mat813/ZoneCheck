@@ -31,8 +31,6 @@ LN=ln			# Doesn't cross partition boundary
 CP=cp
 CHMOD=chmod
 
-INPUT_METHODS = cgi cli
-
 all: zc-bin
 
 zc-bin: 

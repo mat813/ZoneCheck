@@ -11,10 +11,6 @@
 #
 #
     
-#
-# WARN: this file is LOADED by publisher
-#
-
 #####
 #
 # TODO:
@@ -189,6 +185,10 @@ EOT
 	    @o.puts tbl_end
 	    @o.puts "</DIV>"
 	    @o.flush
+	end
+
+	def diag_section(title)
+	    h2(title)
 	end
 
 	def diagnostic1(domainname, 

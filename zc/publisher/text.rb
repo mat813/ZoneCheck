@@ -11,11 +11,8 @@
 #
 #
 
-#
-# WARN: this file is LOADED by publisher
-#
-
 require 'xtra/progress'
+
 
 module Publisher
     ##
@@ -96,6 +93,10 @@ module Publisher
 		    n[0], n[1].join(", ")
 	    }
 	    @o.puts
+	end
+
+	def diag_section(title)
+	    h2(title)
 	end
 
 	def diagnostic1(domainname, 

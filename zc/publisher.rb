@@ -71,12 +71,3 @@ module Publisher
 	end
     end
 end
-
-
-
-#
-# Load implementing classes
-#
-load "publisher/text.rb"
-load "publisher/html.rb"
-#load "publisher/gtk.rb"

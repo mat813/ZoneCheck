@@ -11,10 +11,6 @@
 #
 #
     
-#
-# WARN: this file is LOADED by publisher
-#
-
 require 'thread'
 require 'gtk'
 require 'publisher/xpm_data'
@@ -37,13 +33,16 @@ module Publisher
 	    L_Warning = "warning"
 	    L_Info    = "info"
 	    L_Fatal   = "fatal"
+	    L_None    = "none"
+	    L_Ref     = "reference"
 
 	    def initialize(*args)
 		super(*args)
 
-		winroot = Gdk::Window::foreign_new(Gdk::Window::root_window)
+		@hh = Hash::new
 		
 		# Build Pixmap
+		winroot = Gdk::Window::foreign_new(Gdk::Window::root_window)
 		make_pixmap = Proc::new { |pixmap_data|
 		    Gdk::Pixmap::create_from_xpm_d(winroot, style.white,
 						   pixmap_data) 
@@ -60,6 +59,11 @@ module Publisher
 		@xpm_zone	= make_pixmap.call(XPM::Zone)
 		@xpm_primary	= make_pixmap.call(XPM::Primary)
 		@xpm_secondary	= make_pixmap.call(XPM::Secondary)
+		@xpm_none	= [ nil, nil ]
+	    end
+
+	    def forget_level(lvl)
+		@hh.delete(lvl)
 	    end
 
 	    def add_node(type, lvl, str, is_leaf, expanded)
@@ -74,14 +78,29 @@ module Publisher
 		    when L_Fatal   then [ @xpm_fatal,     @xpm_fatal     ]
 		    when L_H1      then [ @xpm_book_o,    @xpm_book_c    ]
 		    when L_H2      then [ @xpm_book_o,    @xpm_book_c    ]
+		    when L_None    then [ @xpm_none,      @xpm_none      ]
+		    when L_Ref     then [ @xpm_reference, @xpm_reference ]
 		    else                [ @xpm_book_o,    @xpm_book_c    ]
 		    end
 		sibling = nil
-		parent = nil
-		insert_node(parent, sibling, [ str ], 5,
-			    xpm_open[0],   xpm_open[1], 
-			    xpm_closed[0], xpm_closed[1],
-			    is_leaf, expanded)
+
+		pparent2 = if lvl.nil? || !@hh.has_key?(lvl)
+			   then @parent2
+			   else @hh[lvl]
+			   end
+
+		
+		parent2 = insert_node(pparent2, sibling, [ str ], 5,
+				     xpm_open[0],   xpm_open[1], 
+				     xpm_closed[0], xpm_closed[1],
+				     is_leaf, expanded)
+
+		case lvl
+		when NilClass
+		when String
+		    @hh[lvl] = pparent2
+		    @parent2 = is_leaf ? pparent2 : parent2
+		end
 	    end
 	end
 	
@@ -142,14 +161,10 @@ module Publisher
 		end
 
 		if @publisher.rflag.testdesc
-		    @parent = @publisher.parent
 		    @ctree  = @publisher.ctree
 		    if ! @publisher.rflag.quiet
-			@parent = @ctree.insert_node(@parent, nil, 
-						     [$mc.get("title_progress")], 5,
-				   @pixmap1, @mask1, @pixmap2, @mask2,
-				   false, true)
-
+			@ctree.add_node(Output::L_H1, "h1", 
+					$mc.get("title_progress"), false, true)
 		    end
 		end
 	    end
@@ -190,7 +205,7 @@ module Publisher
 		end
 
 		if @publisher.rflag.testdesc
-		    @ctree.add_node(Output::L_Element, nil,
+		    @publisher.ctree.add_node(Output::L_Element, "testdesc",
 				       "#{desc}#{xtra}", true, false)
 		end
 	    end
@@ -294,6 +309,10 @@ module Publisher
 	    @ctree = Output::new([ "Tree" ], 0)
 	    @ctree.set_row_height(18) # XXX: pixmap / font size
 	    @ctree.column_titles_hide
+	    @ctree.line_style = Gtk::CTree::LINES_NONE
+	    @ctree.set_expander_style(Gtk::CTree::EXPANDER_TRIANGLE)
+
+
 	    @output.pack_start(@ctree)
 
 	    window.show_all
@@ -307,9 +326,8 @@ module Publisher
 
 	def setup(domain_name)
 	    if ! @rflag.quiet
-		@ctree.add_node(Output::L_Root, "root",
+		@ctree.add_node(Output::L_Root, "root", 
 				domain_name.to_s, false, true)
-#		lbl.set_name("H1")
 	    end
 	end
 
@@ -317,33 +335,34 @@ module Publisher
 
 
 	def intro(domain)
-	    parent = @parent
-
 	    # Title
 	    unless rflag.quiet
-		title = $mc.get("title_zoneinfo")
-		@ctree.add_node(Output::L_H1, nil, title, false, true)
+		@ctree.add_node(Output::L_H1, "h1", 
+				$mc.get("title_zoneinfo"), false, true)
 	    end
 
 	    # Zone
-	    l10n_zone  = $mc.get("ns_zone").capitalize
-	    @ctree.add_node(Output::L_Zone, nil,
-			    "#{l10n_zone}: #{domain.name.to_s}", true, false)
+	    @ctree.add_node(Output::L_Zone, "zoneinfo",
+			    "#{domain.name.to_s}", true, false)
 
 	    # DNS (Primary / Secondary)
 	    domain.ns.each_index { |idx| 
 		ns_ip = domain.ns[idx]
 		if idx == 0
-		    desc = $mc.get("ns_primary").capitalize
-		    xpm  = @xpm_primary
-		else
-		    desc = $mc.get("ns_secondary").capitalize
-		    xpm  = @xpm_secondary
+		then logo = Output::L_Prim
+		else logo = Output::L_Sec
 		end
 
-		str = "#{desc}: #{ns_ip[0].to_s} (#{ns_ip[1].join(", ")})"
-		@ctree.add_node(Output::L_Prim, nil, str, true, false)
+		str = "#{ns_ip[0].to_s} (#{ns_ip[1].join(", ")})"
+		@ctree.add_node(logo, "zoneinfo", str, true, false)
 	    }
+	end
+
+	def diag_section(title)
+	    if !@rflag.quiet
+		@ctree.add_node(Output::L_H2, "h2", title.capitalize, false, true)
+		@ctree.forget_level("diagnostic")
+	    end
 	end
 
 	def diagnostic1(domainname, 
@@ -401,30 +420,34 @@ module Publisher
 		   when "Info"    then Output::L_Info
 		   when "Warning" then Output::L_Warning
 		   when "Fatal"   then Output::L_Fatal
+		   else raise RuntimError, "XXX: unknown severity: #{severity}"
 		   end
 
 
-	    @ctree.add_node(logo, nil, msg, false, true)
+	    @ctree.add_node(logo, "diagnostic", msg, false, true)
 
+	    @ctree.forget_level("diag_details")
 
 	    if xpl_lst
-		@ctree.add_node(Output::L_H1, nil, 
+		@ctree.add_node(Output::L_H1, "diag_details", 
 				"Explanation", false, true)
+		
+		@ctree.forget_level("ref")
 
 		xpl_lst.each { |t, h, b|
 		    l10n_tag = $mc.get("xpltag_#{t}")
-		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>') }
-		    @ctree.add_node(Output::L_H1, nil,
+		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '\1') }
+		    @ctree.add_node(Output::L_Ref, "ref",
 				    "#{l10n_tag}: #{h}", false, false)
 		    b.each { |l|
-			@ctree.add_node(Output::L_H1, nil, l, true, false)
+			@ctree.add_node(Output::L_None, nil, l, true, false)
 		    }
 		}
 
 	    end
 
 	    if ! lst.empty?
-		@ctree.add_node(Output::L_H1, nil,
+		@ctree.add_node(Output::L_H1, "diag_details",
 				"Affected host(s)", false, true)
 		sibling = nil
 		lst.each { |elt| 
@@ -470,6 +493,7 @@ module Publisher
 
 	def h2(h)
 	    @ctree.add_node(Output::L_H2, "h2", h.capitalize, false, true)
+	    @ctree.forget_level("diagnostic")
 	end
     end
 end

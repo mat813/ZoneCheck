@@ -24,6 +24,9 @@ w_unexpected	: unexpected
 w_line          : line
 w_error		: error
 
+w_quit		: quit
+w_abort		: abort
+
 xpltag_ref	: Ref
 
 res_succeed_but : SUCCEED (but %d warning(s))\n

@@ -463,7 +463,7 @@ class Param
     ##
     class Publisher
 	def initialize
-	    @publisher_class	= ::Publisher::Text
+	    @publisher_class	= nil
 	    @publisher		= nil
 	end
 	
@@ -475,6 +475,12 @@ class Param
 	end
 
 	def autoconf(rflag)
+	    # Set publisher class (if not already done)
+	    if @publisher_class.nil?
+		require 'publisher/text'
+		@publisher_class = ::Publisher::Text
+	    end
+
 	    # Set output publisher
 	    @publisher = @publisher_class::new(rflag)
 
@@ -560,10 +566,13 @@ class Param
 	    when "c", "consolidation"
 		@report.reporter  = Report::Consolidation
 	    when "t", "text"
+		require 'publisher/text'
 		@publisher.engine = ::Publisher::Text
 	    when "h", "html"
+		require 'publisher/html'
 		@publisher.engine = ::Publisher::HTML
 	    when "g", "gtk"
+		require 'publisher/gtk'
 		@publisher.engine = ::Publisher::GTK
 	    else
 		raise ParamError,
