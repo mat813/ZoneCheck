@@ -222,8 +222,14 @@ class Param
 		    raise ParamError, $mc.get("xcp_param_primary_soa")
 		end
 
-		# Retrieve NS and ensure the primary at first place
-		#  (based on SOA)
+		# Retrieve NS from the parent 
+		# and ensure the primary at first place (based on SOA)
+# XXX: need parsing of authoritative section in nresolv
+#		parentns  = dns.nameservers(@name.domain).collect { |e| 
+#		    e.to_s.untaint }
+#		cfg       = NResolv::DNS::Config::new(parentns)
+#		parentdns = NResolv::DNS::Client::STD::new(cfg)
+
 		begin
 		    @ns = [ ]
 		    dns.nameservers(@name).each { |n|

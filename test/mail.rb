@@ -118,27 +118,53 @@ module CheckExtra
 	end
 
 	# DESC: Check that hostmaster address is valid
-	def chk_mail_hostmaster
+	def chk_mail_delivery_hostmaster
 	    rname = soa(bestresolverip).rname
 	    mdom  = rname.domain
-	    mhost = bestmx(mdom) || mdom
 	    user  = "#{rname[0].data}@#{mdom}"
-	    return true if testuser(user, mdom, mhost)
+
+	    mxlist = mx(bestresolverip(mdom), mdom).sort { |a,b|
+		a.preference <=> b.preference }
+
+	    if mxlist.empty?
+		return true if testuser(user, mdom, mdom)
+	    else
+		mxlist.each { |m|
+		    begin
+			return true if testuser(user, mdom, m.exchange)
+			break
+		    rescue TimeoutError
+		    end
+		}
+	    end
 	    { "hostmaster" => user }
 	end
 	
 	# DESC: check for MX or A
 	def chk_mail_mx_or_addr
 	    ip = bestresolverip
-	    !mx(ip).empty? && !addresses(@domain.name, ip).empty?
+	    !mx(ip).empty? || !addresses(@domain.name, ip).empty?
 	end
 
 	# DESC: Check that postmaster address is valid
-	def chk_mail_postmaster
+	def chk_mail_delivery_postmaster
 	    mdom  = @domain.name
-	    mhost = bestmx(mdom) || mdom
 	    user  = "postmaster@#{mdom}"
-	    return true if testuser(user, mdom, mhost)
+
+	    mxlist = mx(bestresolverip(mdom), mdom).sort { |a,b|
+		a.preference <=> b.preference }
+
+	    if mxlist.empty?
+		return true if testuser(user, mdom, mdom)
+	    else
+		mxlist.each { |m|
+		    begin
+			return true if testuser(user, mdom, m.exchange)
+			break
+		    rescue TimeoutError
+		    end
+		}
+	    end
 	    { "postmaster" => user }
 	end
 

@@ -58,20 +58,20 @@ explain = xpl_openrelay
 details : The mailhost (%{mailhost}) used for the hostmaster address (%{hostmaster}) seems to act as an open relay, it is allowing mail from %{from_host} to %{to_host}.
 
 
-[chk_mail_postmaster]
-testname: 'postmaster' email address is valid
+[chk_mail_delivery_postmaster]
+testname: can deliver email to 'postmaster'
 error   : The postmaster can't be contacted by email
 ok	: The postmaster can be contacted by email
 explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved\nmailbox "Postmaster".
-details : The postmaster address (%{postmaster}) doesn't exist.
+details : Unable to send email to the postmaster address (%{postmaster}).
 
 
-[chk_mail_hostmaster]
-testname: hostmaster email address is valid
+[chk_mail_delivery_hostmaster]
+testname: can deliver email to hostmaster
 error   : The hostmaster can't be contacted by email
 ok	: The hostmaster can be contacted by email
 explain : [none]
-details : The hostmaster address (%{hostmaster}) doesn't exist.
+details : Unable to send email to the hostmaster address (%{hostmaster}).
 
 
 [chk_mail_hostmaster_mx_cname]
@@ -82,7 +82,7 @@ explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by 
 
 [chk_mail_mx_or_addr]
 testname: domain able to receive email (delivery using MX, A, AAAA)
-error   : The domain don't have an MX or an address for mail delivery
+error   : The domain doesn't have an MX or an address for mail delivery
 ok      : The domain is able to receive email
 explain	: [none]
 
