@@ -26,6 +26,8 @@ ZC_LANG_DEFAULT		= "en"
 ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
 ZC_CGI_EXT		= "cgi"
 
+ZC_LANG_CHECK	= /^\w+(:?\.[\w\-]+)?$/
+
 #
 # Identification
 #
@@ -96,7 +98,7 @@ $dbg.level=ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 #        present in the code (except debugging)
 #
 lang = ENV["LANG"]
-if !lang.nil? && ! (lang =~ /^\w+(:?\.\w+)$/)
+if !lang.nil? && ! (lang =~ ZC_LANG_CHECK)
     raise "Suspicious LANG variable: #{lang}"
 end
 [ lang.untaint, ZC_LANG_DEFAULT ].compact.each { |lang|

@@ -61,7 +61,7 @@ class Param
 	    # => The message catalogue need to be replaced
 	    if cgi["lang"].length == 1
 		lang = cgi["lang"][0]
-		if lang =~ /^\w+(:?\.\w+)$/ # Security checking
+		if lang =~ ZC_LANG_CHECK	# Security checking
 		    localefile = (ZC_LOCALIZATION_FILE % [ lang ]).untaint
 		    if File.readable?(localefile)
 			$mc = MessageCatalog::new(localefile)
