@@ -11,11 +11,28 @@
 #
 #
 
+#####
+#
+# WARN:
+#   - 'chk_icmp' contains system dependant 'ping' command
+#      although -q and -c option seems to be fairly standard,
+#      unfortunately 'ping' is not part of POSIX
+# 
+# OPEN:
+#   - 'chk_udp' perhaps used a SOA request instead of a 'server status'
+#     in case the tested DNS uses view
+#
+
 require 'framework'
 
 module CheckNetworkAddress
+    ##
+    ## Check nameserver connectivity (ICMP, UDP, TCP)
+    ## 
+    ## - as request are directly made to the DNS (no CacheManager)
+    ##   the tests won't be affected by the transport flags
+    ## 
     class Connectivity < Test
-	
 	#-- Tests ---------------------------------------------------
 	# DESC: Test TCP connectivity with DNS server
 	def chk_tcp(ns, ip)
@@ -36,19 +53,16 @@ module CheckNetworkAddress
 	# DESC: Test UDP connectivity with DNS server
 	def chk_udp(ns, ip)
 	    # The idea is to send 25 'server status' request in 5 seconds
-	    # if we received one answer (dont care about its content,
-	    # although generally 'Not Implemented') we consider it sucessful
+	    # if we received one answer within 8 seconds (dont care about 
+	    # its content, although generally 'Not Implemented')
+	    # we consider it sucessful
 	    msg        = NResolv::DNS::Message::Query::new
 	    msg.opcode = NResolv::DNS::OpCode::STATUS
 	    rawmsg     = msg.to_wire
 	    sock       = nil
 	    thr        = nil
 	    begin
-		# Dirty hack for finding which protocol to use
-		protocol = ip.to_s =~ /:/ ? Socket::AF_INET6 \
-		                          : Socket::AF_INET
-
-		sock = UDPSocket::new(protocol)
+		sock = UDPSocket::new(ip.protocol)
 		sock.connect(ip.to_s, NResolv::DNS::Port)
 		thr = Thread::new {
 		    (1..25).each { sock.write(rawmsg) ; sleep(0.2) }
@@ -65,8 +79,14 @@ module CheckNetworkAddress
 	    end
 	end
 
+	# DESC: Test if host is alive (watch for firewall)
 	def chk_icmp(ns, ip)
-	    true
+	    case ip
+	    when Address::IPv4
+		system("ping  -q -c 5 #{ip} > /dev/null")
+	    when Address::IPv6
+		system("ping6 -q -c 5 #{ip} > /dev/null")
+	    end
 	end
     end
 end
