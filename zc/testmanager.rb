@@ -179,6 +179,30 @@ class TestManager
 	@checks.has_key?(checkname)
     end
     
+    #
+    #
+    #
+    def wanted_check?(checkname, category)
+	return true unless @param.test.categories
+
+	@param.test.categories.each { |rule|
+	    if    (rule[0] == ?! || rule[0] == ?-)
+		negation, name = true,  rule[1..-1]
+	    elsif (rule[0] == ?+)
+		negation, name = false, rule[1..-1]
+	    else
+		negation, name = false, rule
+	    end
+
+	    return !negation if name.empty?
+
+	    if ((name == category) || 
+		!(category =~ /^#{Regexp.escape(name)}:/).nil?)
+		return !negation
+	    end
+	}
+	return false
+    end
     
     #
     # Return check family (ie: generic, nameserver, address, extra)

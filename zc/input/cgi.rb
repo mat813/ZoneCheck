@@ -101,11 +101,11 @@ module Input
 		p.category = @cgi.params["category"].join(",")
 	    else
 		cat = [ ]
-		cat << "mail"  if @cgi.has_key?("chkmail")
-		cat << "whois" if @cgi.has_key?("chkwhois")
-		cat << "zone"  if @cgi.has_key?("chkzone")
+		cat << "!mail"		unless @cgi.has_key?("chkmail")
+		cat << "!ripe"		unless @cgi.has_key?("chkripe")
+		cat << "!dns:axfr"	unless @cgi.has_key?("chkzone")
 		if ! cat.empty?
-		    cat << "connectivity" << "dns"	# XXX: VERY BAD
+		    cat << "+"
 		    p.test.categories = cat.join(",")
 		end
 	    end

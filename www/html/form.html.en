@@ -268,7 +268,7 @@
 	      zone content
 	    </TD>
 	    <TD>
-	      <INPUT type="checkbox" name="chkwhois" value='t' checked>
+	      <INPUT type="checkbox" name="chkripe" value='t' checked>
 	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A>
 	    </TD>
 	  </TR>
@@ -422,7 +422,7 @@ Release: $Name$
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Jan 21 17:13:01 CET 2003
+Last modified: Thu Feb  6 16:50:38 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

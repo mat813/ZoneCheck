@@ -372,7 +372,7 @@ class ZoneCheck
 
 	    # Test selection/limitation
 	    if @param.test.categories
-		@config.limittest(Config::L_Category, @param.test.categories)
+#		@config.limitcheck(Config::L_Category, @param.test.categories)
 	    end
 	    if @param.test.tests
 		@config.overrideconf(@param.test.tests)

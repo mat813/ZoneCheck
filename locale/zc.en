@@ -293,6 +293,11 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
       DOM=domainname\n\
    or DOM=domainname NS=ns1;ns2=ip1,ip2\n\
 \n\
+  Categories:\n\
+    allow=[+|]    disallow=[-|!]    subcomponent=:    separator=,\n\
+    ex: dns:soa,!dns,+\n\
+        don't perform dns tests that are not soa related\n\
+\n\
 \n\
 EXAMPLES:\n\
   PROGNAME -6 --verbose=i,x,d afnic.fr.\n\

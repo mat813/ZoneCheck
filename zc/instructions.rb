@@ -74,11 +74,13 @@ module Instruction
 	    end
 
 	    def preeval(testmanager, args)
-		1
+		testmanager.wanted_check?(name, category) ? 1 : 0;
 	    end
 
 	    def eval(testmanager, args)
-		testmanager.check1(name, severity, *args)
+		if testmanager.wanted_check?(name, category)
+		    testmanager.check1(name, severity, *args)
+		end
 	    end
 	end
 

@@ -260,13 +260,13 @@ module Input
 		test_f   = Gtk::Frame::new(l10n_test)
 
 		@tst_mail = Gtk::CheckButton::new($mc.get("iface_test_mail"))
-		@tst_zcnt = Gtk::CheckButton::new($mc.get("iface_test_zone"))
+		@tst_axfr = Gtk::CheckButton::new($mc.get("iface_test_zone"))
 		@tst_ripe = Gtk::CheckButton::new($mc.get("iface_test_ripe"))
-		@tst_mail.active = @tst_zcnt.active = @tst_ripe.active = true
+		@tst_mail.active = @tst_axfr.active = @tst_ripe.active = true
 
 		tbl = Gtk::Table::new(1, 3, true)
 		tbl.attach(@tst_mail, 0, 1, 0, 1)
-		tbl.attach(@tst_zcnt, 1, 2, 0, 1)
+		tbl.attach(@tst_axfr, 1, 2, 0, 1)
 		tbl.attach(@tst_ripe, 2, 3, 0, 1)
 		test_f.add(tbl)
 
@@ -314,31 +314,40 @@ module Input
 		pack_start(transp_f)
 	    end
 
+	    def categories
+		categories = []
+		categories << "!ripe"		unless @tst_ripe.active?
+		categories << "!mail"		unless @tst_mail.active?
+		categories << "!dns:axfr"	unless @tst_axfr.active?
+		categories << "+"		# accept by default
+		categories.join(",")
+	    end
+
 	    def transp
 		transp = []
-		transp << "ipv4"	if @ipv4.active?
-		transp << "ipv6"	if @ipv6.active?
-		transp << "std"		if @std.active?
-		transp << "udp"		if @udp.active?
-		transp << "tcp"		if @tcp.active?
+		transp << "ipv4"		if @ipv4.active?
+		transp << "ipv6"		if @ipv6.active?
+		transp << "std"			if @std.active?
+		transp << "udp"			if @udp.active?
+		transp << "tcp"			if @tcp.active?
 		transp.join(",")
 	    end
 
 	    def verbose
 		verbose = []
-		verbose << "intro"	if @o_zone.active?
-		verbose << "details"	if @o_details.active?
-		verbose << "explain"	if @o_explain.active?
-		verbose << "testdesc"	if @o_desc.active?
-		verbose << "counter"	if @o_prog.active?
+		verbose << "intro"		if @o_zone.active?
+		verbose << "details"		if @o_details.active?
+		verbose << "explain"		if @o_explain.active?
+		verbose << "testdesc"		if @o_desc.active?
+		verbose << "counter"		if @o_prog.active?
 		verbose.join(",")
 	    end
 
 	    def error
 		error = []
-		error << "allfatal"	if @af.active?
-		error << "allwarning"	if @aw.active?
-		error << "stop"		if @sf.active?
+		error << "allfatal"		if @af.active?
+		error << "allwarning"		if @aw.active?
+		error << "stop"			if @sf.active?
 		error.join(",")
 	    end
 	end
@@ -857,6 +866,7 @@ module Input
 	    end
 
 	    def set_options
+		@p.test.categories	= @options.categories
 		@p.transp		= @options.transp
 		@p.verbose		= @options.verbose
 		@p.error		= @options.error

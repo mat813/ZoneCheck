@@ -93,7 +93,7 @@ class Config
                                    #{Token::KW_else}    |
                                    #{Token::KW_end})(?=\W)/x
 			       [ $&, $', Token::KEYWORD, $1 ] #'
-			   when /^(\w+)/
+			   when /^([\w:]+)/
 			       [ $&, $', Token::SYMBOL, $1 ] #'
 			   when /^\"((?:[^\\\"]|\\[\"\\])*)\"/
 			       r = [ $&, $', Token::STRING, $1 ] #'

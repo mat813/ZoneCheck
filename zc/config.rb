@@ -34,9 +34,6 @@ class Config
     Info		= "i"		# Informational
     Skip		= "S"		# Don't run the test
 
-    L_Category		= "category"
-    L_Test		= "test"
-
     TestSeqOrder	= [ CheckGeneric, CheckNameServer, 
 	                    CheckNetworkAddress, CheckExtra ]
 
@@ -131,6 +128,12 @@ class Config
 	    @constants[name] || @parent.const(name)
 	end
 
+	#
+	#
+	#
+	def check_wanted?(checkname, category)
+	    
+	end
 
 	#
 	# Read the configuration file
@@ -202,23 +205,6 @@ class Config
 	cfg
     end
 
-
-
-    #
-    # Limit tests to perform to some categories
-    #
-    def limittest(type, limit=nil)
-	case type
-	when L_Category then @l_category = limit
-	when L_Test     then @l_test     = limit
-	else raise ArgumentError, "Wrong limitation type: #{type}"
-	end 
-	
-	if limit.nil?
-	then $dbg.msg(DBG::CONFIG, "no #{type} limitation")
-	else $dbg.msg(DBG::CONFIG, "limiting to #{type}: "+limit.join("/"))
-	end
-    end
 
     #
     # Retrieve the constant value
