@@ -100,6 +100,7 @@ class ZoneCheck
     def start 
 	begin
 	    # Input method selection
+	    argv_backup = ARGV.clone
 	    @input = ZoneCheck.input_method
 	    
 	    # Initialize parameters (from command line parsing)
@@ -130,12 +131,19 @@ class ZoneCheck
 		presetname ||= Config::Preset_Default
 
 		if preset = @config.presets[presetname]
+		    $dbg.msg(DBG::INIT) { 
+			"Using preset '#{preset}' (reloading parameters)" }
+
+		    # Create new argument
+		    @param = Param::new
+
+		    # Load preset
 		    begin
 			# Can be reverted
-			@param.verbose = preset['verbose'] if preset['verbose']
-			@param.transp  = preset['transp' ] if preset['transp' ]
-			@param.output  = preset['output' ] if preset['output' ]
-			@param.error   = preset['error'  ] if preset['error'  ]
+			[ 'verbose', 'transp',
+			    'output', 'error' ].each { |opt|
+			    @param.send("#{opt}=",preset[opt]) if preset[opt]
+			}
 
 			# Cannot be reverted
 			@param.rflag.quiet = true if preset['quiet']
@@ -145,6 +153,11 @@ class ZoneCheck
 			    ($mc.get('config:error_in_preset') % presetname) +
 			    " (#{e.message})"
 		    end
+
+		    # Restart argument parsing
+		    ARGV.replace(argv_backup)
+		    @input.restart
+		    @input.usage(EXIT_USAGE) unless @input.parse(@param)
 		end
 	    end
 

@@ -109,8 +109,11 @@ module Input
 	def allow_preset ; true ; end
 
 	def initialize
-	    @opts = GetoptLong.new(* opts_definition)
-	    @opts.quiet = true
+	    init
+	end
+
+	def restart
+	    init
 	end
 
 	def parse(p)
@@ -141,6 +144,10 @@ module Input
 
 	#-- PRIVATE -------------------------------------------------
 	private
+	def init
+	    @opts = GetoptLong.new(* opts_definition)
+	    @opts.quiet = true
+	end
 
 	def opts_definition
 	    [   [ '--help',	'-h',	GetoptLong::NO_ARGUMENT       ],

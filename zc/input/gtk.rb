@@ -1069,6 +1069,11 @@ module Input
 	    @opts.quiet = true
 	end
 	
+	def restart
+	    @opts = GetoptLong.new(* opts_definition)
+	    @opts.quiet = true
+	end
+
 	attr_reader :config, :statusbar, :testmanager
 
 	def interact(p, c, tm, io = $console.stdout)

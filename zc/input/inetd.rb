@@ -124,6 +124,9 @@ module Input
 	    @prompt = "zonecheck> "
 	end
 
+	def restart
+	end
+
 	def parse(p)
 	    begin
 		ipv6, ipv4 = false, false

@@ -99,6 +99,10 @@ module Input
 	    @cgi  = ::CGI::new
 	end
 
+	def restart
+	    @cgi  = ::CGI::new
+	end
+
 	def parse(p)
 	    # Direct script invocation is not authorized
 	    return false if @cgi.params.empty?
