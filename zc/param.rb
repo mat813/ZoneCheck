@@ -407,7 +407,7 @@ class Param
 	attr_writer :cfgfile, :testdir
 	
 	def initialize
-	    @cfgfile	= ZC_CONFIG_FILE
+	    @cfgfile	= $zc_config_file
 	    @testdir	= ZC_TEST_DIR
 	end
 

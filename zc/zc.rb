@@ -161,6 +161,7 @@ $zc_contact	||= ZC_CONTACT
 # Config directory
 # 
 $zc_config_dir	||= ZC_CONFIG_DIR
+$zc_config_file	||= ZC_CONFIG_FILE
 
 
 # Resolver configuration
