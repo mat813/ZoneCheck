@@ -11,12 +11,11 @@
 #
 #
 
-#
-# WARN: this file is LOADED by param
-#
-
+require 'getoptlong'
 require 'thread'
+
 require 'gtk'
+
 
 class Param
     ##

@@ -62,7 +62,6 @@ install-common:
 		-e "\$$_.gsub!(/^(ZC_CONFIG_FILE\s*=\s*).*/, '\1\"$(ETCDIR)/zc.conf\"')" \
 		-e "\$$_.gsub!(/^(ZC_LOCALIZATION_DIR\s*=\s*).*/, '\1\"$(LIBEXEC)/zc/locale\"')" \
 		-e "\$$_.gsub!(/^(ZC_TEST_DIR\s*=\s*).*/, '\1\"$(LIBEXEC)/zc/test\"')" \
-		-e "\$$_.gsub!(/^(ZC_INPUT_METHODS\s*=\s*).*/, '\1[ ' + '$(INPUT_METHODS)'.split.collect { |e| \"'#{e}'\" } . join(', ') + ' ]')" \
 		$(LIBEXEC)/zc/zc/zc.rb
 	$(CHMOD) 755 $(LIBEXEC)/zc/zc/zc.rb 
 

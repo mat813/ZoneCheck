@@ -56,6 +56,7 @@ pgr_speed_unit  : T/s
 
 
 input_unsupported: Input method '%s' unsupported
+input_suspicious:  Input method '%s' suspicious
 
 ##############################################################################
 ##############################################################################

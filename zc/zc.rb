@@ -24,8 +24,6 @@ ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
 ZC_LANG_FILE		= "zc.%s"
 ZC_LANG_DEFAULT		= "en"
 
-ZC_INPUT_METHODS	= [ "cli", "cgi" ]
-
 ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
 ZC_CGI_EXT		= "cgi"
 
@@ -148,7 +146,7 @@ class ZoneCheck
 	# Default Input Method
 	im = nil
 
-	# Check argument 
+	# Check meta argument 
 	ARGV.delete_if { |a|
 	    im = $1 if remove = a =~ /^--INPUT=(.*)/
 	    remove
@@ -157,27 +155,32 @@ class ZoneCheck
 	# Check environment variable ZC_INPUT
 	im ||= ENV["ZC_INPUT"]
 
-	# Try autoconfiguring
+	# Try autoconfiguration
 	im ||= if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
 		  (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
 	       then "cgi"
 	       else "cli"
 	       end
 
+	# Sanity check on Input Method
+	if ! (im =~ /^\w+$/)
+	    l10n_error = $mc.get("w_error").upcase
+	    l10n_input = $mc.get("input_suspicious") % [ im ]
+	    $stderr.puts "#{l10n_error}: #{l10n_input}"
+	    exit EXIT_ERROR
+	end
+	im.untaint
+
 	# Instanciate input method
-	if ! ZC_INPUT_METHODS.include?(im)
+	begin
+	    require "param/#{im}"
+	rescue LoadError => e
 	    l10n_error = $mc.get("w_error").upcase
 	    l10n_input = $mc.get("input_unsupported") % [ im ]
 	    $stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
 	end
-
-	@input = case im
-		 when "cli"  then Param::CLI::new
-		 when "cgi"  then Param::CGI::new
-		 when "gtk"  then Param::GTK::new
-		 else raise RuntimeError, "XXX: Fix ZC_INPUT_METHODS"
-		 end
+	@input = eval "Param::#{im.upcase}::new"
     end
 
     #

@@ -11,11 +11,8 @@
 #
 #
 
-#
-# WARN: this file is LOADED by param
-#
-
 require 'cgi'
+
 
 class Param
     ##

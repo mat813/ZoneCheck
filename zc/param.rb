@@ -596,6 +596,3 @@ class Param
 	}
     end
 end
-
-# Load input method
-ZC_INPUT_METHODS.each { |im| load "param/#{im}.rb" }
