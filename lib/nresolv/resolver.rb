@@ -61,7 +61,7 @@ class NResolv
 	class Client
 	    attr_reader :config
 
-	    def initialize(config=DefaultConfig)
+	    def initialize(config=Config::Default)
 		if self.class == Client
 		    raise RuntimeError, "#{self.class} is an abstract class"
 		end
@@ -299,7 +299,7 @@ class NResolv
 	    ## WARN: this could result dealing later with truncated messages
 	    ##
 	    class UDP < Client
-		def initialize(config=DefaultConfig)
+		def initialize(config=Config::Default)
 		    super(config)
 		    @requester = config.nameserver.collect { |ns|
 			NResolv::DNS::Requester::UDP::new(ns) }
@@ -335,7 +335,7 @@ class NResolv
 	    ##  (support multiple DNS servers)
 	    ##
 	    class TCP < Client
-		def initialize(config=DefaultConfig)
+		def initialize(config=Config::Default)
 		    super(config)
 		    @requester = config.nameserver.collect { |ns|
 			NResolv::DNS::Requester::TCP::new(ns) }
@@ -371,7 +371,7 @@ class NResolv
 	    ##  (support multiple DNS servers)
 	    ##
 	    class STD < Client
-		def initialize(config=DefaultConfig)
+		def initialize(config=Config::Default)
 		    super(config)
 		    @requester = config.nameserver.collect { |ns|
 			[ NResolv::DNS::Requester::UDP::new(ns),

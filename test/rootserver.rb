@@ -47,17 +47,18 @@ module CheckNetworkAddress
 
 	# DESC: root server list should be coherent with ICANN
 	def chk_root_servers_ns_vs_icann(ns, ip)
-	    rs_list = ns(ip, NResolv::DNS::Name::Root).collect { |n| n.name}
-	    unless rs_list.unsorted_eql?(NResolv::DNS::DefaultRootServer.keys)
+	    rs_list  = ns(ip, NResolv::DNS::Name::Root).collect { |n| n.name}
+	    ref_list = NResolv::DNS::RootServer::Default.keys
+	    unless rs_list.unsorted_eql?(ref_list)
 		return { 'rs_list'  => rs_list.join(', '),
-			 'ref_list' => NResolv::DNS::DefaultRootServer.keys.join(', ') }
+			 'ref_list' => ref_list.join(', ') }
 	    end
 	    true
 	end
 
 	# DESC: root server addresses should be coherent with ICANN
 	def chk_root_servers_ip_vs_icann(ns, ip)
-	    NResolv::DNS::DefaultRootServer.each { |rs, ips|
+	    NResolv::DNS::RootServer::Default.each { |rs, ips|
 		unless (rs_addr = addresses(rs, ip)).unsorted_eql?(ips)
 		    return { 'rs'       => rs,
 			     'rs_addr'  => rs_addr.join(', '),
