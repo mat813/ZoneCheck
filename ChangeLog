@@ -1,4 +1,13 @@
 # $Id$
+2003-08-11  ZoneCheck-2.0.0b6
+	* input: removed excessive sanity check for input parameter
+	* all: changed strings "" to '' when possible
+	* dbg: improved debugging facility (multiline, lazy evaluation)
+	* publisher: 'fatalonly' flag to only print fatal errors
+	* test: added dbgmsg to ease login of messages during test execution
+	* test: correct 'chk_recursive' test
+	* msgcat: reload method cleanup
+
 2003-04-29  Stephane D'Alu  <sdalu@nic.fr>
 	* all: GPL version fixed to v2
 	
