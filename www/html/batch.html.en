@@ -61,7 +61,7 @@
   </HEAD>
 
   <BODY>
-    <P id="lang">Lang: EN / <A href="HTML_PATH/fr/batch.html">FR</A></P>
+    <P id="lang">Lang: <B>EN</B> / <A href="HTML_PATH/fr/batch.html">FR</A></P>
     <P id="beta">BETA<BR>unstandardized template</P>
 
     <!-- Logo -->
@@ -389,7 +389,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Jun  9 21:26:49 CEST 2003
+Last modified: Mon Jun 16 22:12:25 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
