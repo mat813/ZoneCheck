@@ -135,6 +135,7 @@ module NResolv
 		rescue Message::DecodeError => e
 		    STDERR.puts("DNS message decoding error: #{e}")
 		rescue Exception => e
+		    STDERR.puts "Host: #{host}"
 		    STDERR.puts "Unexpected exception while decoding: #{e}"
 		    STDERR.puts e.backtrace.join("\n")
 		end
@@ -278,7 +279,11 @@ module NResolv
 		def connect_start
 		    return @sock unless @sock.nil?
 
-                    @sock   = UDPSocket::new
+		    # Dirty hack for finding which protocol to use
+		    protocol = @host =~ /:/ ? Socket::AF_INET6 \
+		                            : Socket::AF_INET
+
+                    @sock   = UDPSocket::new(protocol)
                     @sock.connect(@host, @port)
                     @sock.fcntl(Fcntl::F_SETFD, 1)
                     @thread = Thread::new {
