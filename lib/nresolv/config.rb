@@ -20,7 +20,7 @@
 
 #
 # PUBLIC
-#   Config.new(nameserver, search=[''], absdepth=3)
+#   Config.new(nameserver, search=[''], ndots=3)
 #   Config.from_resolv(filename='/etc/resolv.conf')
 #   Config#nameserver
 #   Config#candidates(name)
@@ -28,15 +28,62 @@
 #
 
 require 'socket'
+require 'yaml'
 
+require 'nresolv/dbg'
 
 class NResolv
     class DNS
 	##
 	##
 	##
+
+	class RootServer
+	    def initialize(filename=$nresolv_rootserver_hintfile)
+		data = nil
+		if ! filename.nil?
+		    begin
+			File::open(filename) { |io|
+			    data = YAML::load(io) }
+		    rescue SystemCallError => e
+			Dbg.msg(DBG::CONFIG, "Unable to read/parse rootserver hint file (#{filename})")
+		    end
+		end
+
+		data ||= { 
+			'a.root-servers.net.' => [ '198.41.0.4'     ],
+			'b.root-servers.net.' => [ '128.9.0.107'    ],
+			'c.root-servers.net.' => [ '192.33.4.12'    ],
+			'd.root-servers.net.' => [ '128.8.10.90'    ],
+			'e.root-servers.net.' => [ '192.203.230.10' ],
+			'f.root-servers.net.' => [ '192.5.5.241'    ],
+			'g.root-servers.net.' => [ '192.112.36.4'   ],
+			'h.root-servers.net.' => [ '128.63.2.53'    ],
+			'i.root-servers.net.' => [ '192.36.148.17'  ],
+			'j.root-servers.net.' => [ '192.58.128.30'  ],
+			'k.root-servers.net.' => [ '193.0.14.129'   ],
+			'l.root-servers.net.' => [ '198.32.64.12'   ],
+			'm.root-servers.net.' => [ '202.12.27.33'   ] }
+
+
+		@rootserver = { }
+		data.each { |k, v|
+		    @rootserver[NResolv::DNS::Name::create(k)] =
+			v.collect { |addr| Address::create(addr) }
+		}
+	    end
+
+	    def [](idx) ; @rootserver[idx]			; end
+	    def size    ; @rootserver.size			; end
+	    def each    ; @rootserver.each { |*a| yield a }	; end 
+	    def keys    ; @rootserver.keys			; end
+	end
+
+
+
 	class Config
 	    attr_reader :nameserver
+
 
 	    def self.from_resolv(filename='/etc/resolv.conf')
 		nameserver = []
@@ -101,22 +148,15 @@ class NResolv
 		self::new(nameserver, search)
 	    end
 
-	    def initialize(nameserver, search=[Name::Root], absdepth=3)
-		# Sanity check
-		search.each { |domain|
-		    unless domain.absolute?
-			raise ArgumentError, 
-			    'domains in the search list should be absolute'
-		    end
-		}
-		
+	    def initialize(nameserver, search=[Name::Root], ndots=3)
 		# Initialize attributs
 		@nameserver = case nameserver
 			      when Array then nameserver
 			      else [ nameserver ]
 			      end
-		@search     = search.uniq.freeze
-		@absdepth   = absdepth < 0 ? 0 : absdepth
+		@search     = search.collect { |domain|
+		    Name::create(domain, true) }.uniq.freeze
+		@ndots      = ndots < 0 ? 0 : ndots
 	    end
 	    
 	    def candidates(name)
@@ -125,18 +165,23 @@ class NResolv
 
 		if name.absolute?
 		then [ name ]
-		else if name.depth + 1 >= @absdepth
+		else if name.depth + 1 >= @ndots
 		     then [ Name::create(name, true) ]
 		     else @search.collect { |domain| domain.prepend(name) }
 		     end
 		end
 	    end
 	end
+
+#	RecConfig		= nil
+#	IterConfig		= nil
 	
-	DefaultConfig = case RUBY_PLATFORM
+	DefaultConfig		= case RUBY_PLATFORM
 	                when /cygwin/, /mswin32/ then Config::from_winreg
 	                else                          Config::from_resolv
 	                end
+
+	DefaultRootServer	= RootServer::new
     end
 end
 

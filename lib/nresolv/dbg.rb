@@ -25,12 +25,14 @@ class NResolv
 	WIRE		= 0x0002	# encoding/decoding
 	TRANSPORT	= 0x0004	# raw handling of messages
 	RESOLVER	= 0x0008	# resolver behaviour
-	
+	CONFIG		= 0x0010	# config
+
 	# Tag associated with some types
 	Tag = { 
 	    WIRE	=> 'wire',
 	    TRANSPORT	=> 'transport',
-	    RESOLVER	=> 'resolver'
+	    RESOLVER	=> 'resolver',
+	    CONFIG	=> 'config'
 	}
 	
 	# Initializer
@@ -75,5 +77,5 @@ class NResolv
 	end
     end
 
-    Dbg = DBG::new(0xffff)
+    Dbg = DBG::new($nresolv_dbg.nil? ? 0xffff: $nresolv_dbg)
 end

@@ -149,6 +149,11 @@ $LOAD_PATH.delete_if { |path| path == '.' }
 $LOAD_PATH << ZC_DIR << ZC_LIB
 
 
+# Resolver configuration
+$nresolv_rootserver_hintfile	= "#{ZC_CONFIG_DIR}/rootservers"
+$nresolv_dbg			= 0xffff
+
+
 #
 # Requirement
 #

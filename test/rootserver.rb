@@ -33,46 +33,11 @@
 #
 
 require 'framework'
-require 'yaml'
+
 
 module CheckNetworkAddress
     class RootServer < Test
 	with_msgcat 'test/rootserver.%s'
-
-	#-- Initialization ------------------------------------------
-	def initialize(*args)
-	    super(*args)
-	    @cache.create(:rootserver)
-	end
-
-	#-- Shortcuts -----------------------------------------------
-	def rootserver
-	    @cache.use(:rootserver) {
-		rootserver = {}
-
-		fname = begin
-			    const('rootservers')
-			rescue IndexError
-			    nil
-			end
-
-		if fname
-		    fname = const('rootservers').strip
-		    fname = "#{ZC_CONFIG_DIR}/#{fname}" unless fname[0] == ?/
-		    File::open(fname) { |io|
-			data = YAML::load(io) 
-			data.each { |k, v|
-			    rootserver[NResolv::DNS::Name::create(k)] =
-				v.collect { |addr| Address::create(addr) }
-			}
-		    }
-		else
-		    ns(nil, NResolv::DNS::Name::Root).each { |rsr| 
-			rootserver[rsr.name] = addresses(rsr.name) }
-		end
-		rootserver
-	    }
-	end
 
 	#-- Checks --------------------------------------------------
 	# DESC: root server list should be available
@@ -82,14 +47,23 @@ module CheckNetworkAddress
 
 	# DESC: root server list should be coherent with ICANN
 	def chk_root_servers_ns_vs_icann(ns, ip)
-	    (ns(ip, NResolv::DNS::Name::Root).collect { 
-		|n| n.name}).unsorted_eql?(rootserver.keys)
+	    rs_list = ns(ip, NResolv::DNS::Name::Root).collect { |n| n.name}
+	    unless rs_list.unsorted_eql?(NResolv::DNS::DefaultRootServer.keys)
+		return { 'rs_list'  => rs_list.join(', '),
+			 'ref_list' => NResolv::DNS::DefaultRootServer.keys.join(', ') }
+	    end
+	    true
 	end
 
 	# DESC: root server addresses should be coherent with ICANN
 	def chk_root_servers_ip_vs_icann(ns, ip)
-	    rootserver.each { |rs, ips|
-		return false unless addresses(rs, ip).unsorted_eql?(ips) }
+	    NResolv::DNS::DefaultRootServer.each { |rs, ips|
+		unless (rs_addr = addresses(rs, ip)).unsorted_eql?(ips)
+		    return { 'rs'       => rs,
+			     'rs_addr'  => rs_addr.join(', '),
+			     'ref_addr' => ips.join(', ') }
+		end
+	    }
 	    true
 	end
     end

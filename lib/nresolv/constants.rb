@@ -103,24 +103,25 @@ class NResolv
 	## Return code
 	##
 	class RCode < ValueHolder
-	    NOERROR	= RCode::new('NoError',  0)	# RFC 1035
-	    FORMERR	= RCode::new('FormErr',  1)	# RFC 1035
-	    SERVFAIL	= RCode::new('ServFail', 2)	# RFC 1035
-	    NXDOMAIN	= RCode::new('NXDomain', 3)	# RFC 1035
-	    NOTIMP	= RCode::new('NotImp',   4)	# RFC 1035
-	    REFUSED	= RCode::new('Refused',  5)	# RFC 1035
-	    YXDOMAIN	= RCode::new('YXDomain', 6)	# RFC 2136
-	    YXRRSET	= RCode::new('YXRRSet',  7)	# RFC 2136
-	    NXRRSET	= RCode::new('NXRRSet',  8)	# RFC 2136
-	    NOTAUTH	= RCode::new('NotAuth',  9)	# RFC 2136
-	    NOTZONE	= RCode::new('NotZone', 10)	# RFC 2136
-#	    BADVERS	= RCode::new('BADVERS', 16)	# RFC 2671 (in OPT RR)
-	    BADSIG	= RCode::new('BADSIG',  16)	# RFC 2845
-	    BADKEY	= RCode::new('BADKEY',  17)	# RFC 2845
-	    BADTIME	= RCode::new('BADTIME', 18)	# RFC 2845
-	    BADMODE	= RCode::new('BADMODE', 19)	# RFC 2930
-	    BADNAME	= RCode::new('BADNAME', 20)	# RFC 2930
-	    BADALG	= RCode::new('BADALG',  21)	# RFC 2930
+	    NOERROR	= RCode::new('NoError',     0)	# RFC 1035
+	    FORMERR	= RCode::new('FormErr',     1)	# RFC 1035
+	    SERVFAIL	= RCode::new('ServFail',    2)	# RFC 1035
+	    NXDOMAIN	= RCode::new('NXDomain',    3)	# RFC 1035
+	    NOTIMP	= RCode::new('NotImp',      4)	# RFC 1035
+	    REFUSED	= RCode::new('Refused',     5)	# RFC 1035
+	    YXDOMAIN	= RCode::new('YXDomain',    6)	# RFC 2136
+	    YXRRSET	= RCode::new('YXRRSet',     7)	# RFC 2136
+	    NXRRSET	= RCode::new('NXRRSet',     8)	# RFC 2136
+	    NOTAUTH	= RCode::new('NotAuth',     9)	# RFC 2136
+	    NOTZONE	= RCode::new('NotZone',	   10)	# RFC 2136
+#	    RESERVED15	= RCode::new('Reserved15', 15)
+#	    BADVERS	= RCode::new('BADVERS',    16)	# RFC 2671 (in OPT RR)
+	    BADSIG	= RCode::new('BADSIG',     16)	# RFC 2845
+	    BADKEY	= RCode::new('BADKEY',     17)	# RFC 2845
+	    BADTIME	= RCode::new('BADTIME',    18)	# RFC 2845
+	    BADMODE	= RCode::new('BADMODE',    19)	# RFC 2930
+	    BADNAME	= RCode::new('BADNAME',    20)	# RFC 2930
+	    BADALG	= RCode::new('BADALG',     21)	# RFC 2930
 	end
 
 

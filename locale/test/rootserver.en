@@ -44,21 +44,22 @@ xpl_rootserver_vs_icann : [ref]: IETF RFC2870 (p.1)\nThe Internet Corporation fo
 
 
 [chk_root_servers]
-testname: root servers list present
-error   : Root Servers are not available
-ok	: Root Servers found
+testname: root-servers list present
+error   : Root-servers are not available
+ok	: Root-servers found
 explain : [none]
 
 
 [chk_root_servers_ns_vs_icann]
-testname: root servers list identical to ICANN
-error   : Root Servers list is not coherent with ICANN
-ok	: Root Servers list is coherent with ICANN
+testname: root-servers list identical to ICANN
+error   : Root-servers list is not coherent with ICANN
+ok	: Root-servers list is coherent with ICANN
 explain = xpl_rootserver_vs_icann
-
+details : The root-server list (%{rs_list}) is not identicall to ICANN list (%{ref_list}).
 
 [chk_root_servers_ip_vs_icann]
-testname: root servers addresses identical to ICANN
-error   : Root Servers IP addresses are not coherent with ICANN
-ok	: Root Servers IP addresses are coherent with ICANN
+testname: root-servers addresses identical to ICANN
+error   : Root-servers IP addresses are not coherent with ICANN
+ok	: Root-servers IP addresses are coherent with ICANN
 explain = xpl_rootserver_vs_icann
+details : The root-server %{rs} addresses (%{rs_addr}) are not the same as the ICANN addresses (%{ref_addr}).
