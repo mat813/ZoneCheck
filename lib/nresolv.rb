@@ -29,7 +29,7 @@ require 'nresolv/dig_output'
 require 'address'
 
 module NResolv
-    def self.to_nameaddr(arg)
+    def self.to_name(arg)
         case arg
         when Address::IPv4, Address::IPv6, NResolv::DNS::Name
             arg

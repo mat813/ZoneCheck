@@ -163,7 +163,7 @@ class CacheManager
 
     #-- Shortcuts ----------------------------------------------------
     def addresses(host, order=Address::OrderDefault)
-	host = NResolv::to_nameaddr(host)
+	host = NResolv::to_name(host)
 	case host
 	when Address::IPv4, Address::IPv6
 	    [ host ]
