@@ -42,8 +42,8 @@ explain : [none]
 
 [chk_ns_sntx]
 testname: la syntaxe du NS réprésente un nom/domaine valide
-error   : la syntaxe du MS n'est pas correcte
-ok	: la syntaxe du MS est correcte
+error   : la syntaxe du NS n'est pas correcte
+ok	: la syntaxe du NS est correcte
 explain = label_xpl
 
 
@@ -64,5 +64,5 @@ explain : [none]
 [chk_ns_ip]
 testname: enregistrement NS peut être résolu
 error   : L'adresse IP du serveur de noms n'existe pas
-ok	: L'adresse IP du serveur de noms a ete trouvee
+ok	: L'adresse IP du serveur de noms a été trouvée
 explain : [none]

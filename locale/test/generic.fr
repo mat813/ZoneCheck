@@ -31,7 +31,7 @@ xpl_rfc2182 : [adv]: AFNIC\nTo avoid loosing all connectivity with the autoritat
 [chk_dn_sntx]
 testname: nom de domaine contenant des caractères illégaux
 error   : Le nom de domaine contient des caractères illégaux
-ok	: Le nom de domaine ne contient aucun caractere illegal
+ok	: Le nom de domaine ne contient aucun caractère illégal
 explain = label_xpl
 
 
@@ -52,14 +52,14 @@ explain : [ref]: IETF IDN project (internationalized domain names)\nThe double d
 [chk_one_ns]
 testname: présence de serveurs de nom gérant le domaine
 error   : Au moins un serveur de nom est requis
-ok	: Au moins un serveur de nom present
+ok	: Au moins un serveur de nom présent
 explain = xpl_rfc2182
 
 
 [chk_several_ns]
 testname: présence d'au moins deux serveurs de noms pour le domaine
 error   : Au moins deux serveurs de noms sont nécessaires
-ok	: Au moins deux serveurs de noms presents
+ok	: Au moins deux serveurs de noms présents
 explain = xpl_rfc2182
 
 
@@ -74,7 +74,7 @@ details : Les serveurs de noms %{ns} utilisent la même adresse IP (%{ip}).
 [chk_ip_same_net]
 testname: serveurs de noms sur le même sous réseau
 error   : Des serveurs sont sur le même sous réseau
-ok	: Aucun serveur de nom n'est sous le meme sous reseau
+ok	: Aucun serveur de noms n'est sous le même sous réseau
 explain = xpl_rfc2182
 details : Les sous réseaux suivants sont utilisés par plusieurs hôtes: %{subnets}. Essayez de déplacer certains hôtes sur un autre sous réseau.
 
@@ -82,6 +82,6 @@ details : Les sous réseaux suivants sont utilisés par plusieurs hôtes: %{subn
 [chk_ip_all_same_net]
 testname: serveurs de noms tous sur le même sous réseau
 error   : Les serveurs de noms sont tous sur le même sous réseau
-ok	: Les serveurs de noms ne sont pas tous sur le meme sous reseau
+ok	: Les serveurs de noms ne sont pas tous sur le même sous réseau
 explain = xpl_rfc2182
 details : Tous les serveurs de noms sont dans le sous réseau %{subnet}. Essayez d'en déplacer quelques uns sur un autre sous réseau.

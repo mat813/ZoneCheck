@@ -68,9 +68,9 @@ details : Le point ('.') final est certainement manquant dans le fichier de conf
 
 
 [chk_soa_serial_fmt_YYYYMMDDnn]
-testname: numéro de série de la forme YYYYMMDDnn
-error   : Le numéro de série n'est pas de la forme YYYYMMDDnn
-ok	: Le numero de serie suis bien la forme YYYYLLDDnn
+testname: numéro de série de la forme AAAAMMJJnn
+error   : Le numéro de série n'est pas de la forme AAAAMMJJnn
+ok	: Le numéro de série suit bien la forme AAAAMMJJnn
 explain : [ref]: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day,\nnn=revision number).
 details : Le numéro de série %{serial} ne semble pas être au format YYYYMMDDnn.
 
@@ -80,7 +80,7 @@ testname: champ 'refresh' du SOA est à au moins 6 heures
 error   : Le champ 'refresh' doit être positionné à au moins 6 heures
 ok	: Le champ 'refresh' du SOA est à au moins 6 heures
 explain : [none]
-details : La valeur du champ 'refresh' est de %{refresh} sec, et derait être de moins de 6 heures (21600 sec).
+details : La valeur du champ 'refresh' est de %{refresh} sec, et devrait être de moins de 6 heures (21600 sec).
 
 
 [chk_soa_retry_refresh]
@@ -108,17 +108,17 @@ details : La valeur du champ 'expire' est de %{expire} sec, et devrait être d'a
 
 
 [chk_soa_expire_7refresh]
-testname: champ 'expire' est d'au moins 7 fois celui du 'refresh'
+testname: champ 'expire' est au moins 7 fois celui du 'refresh'
 error   : Le champ 'expire' doit être au moins 7 fois celui du 'refresh'
-ok	: Le champ 'expire' est d'au moins 7 fois celui du 'refresh'
+ok	: Le champ 'expire' est au moins 7 fois celui du 'refresh'
 explain : [none]
-details : La valeur du champ 'expire' est de %{expire} sec, et devrait être 7 fois plus grand que celui du 'refresh' (%{refresh} sec).
+details : La valeur du champ 'expire' est de %{expire} sec, et devrait être 7 fois plus grande que celui du 'refresh' (%{refresh} sec).
 
 
 [chk_soa_minimum_3h]
 testname: champ 'minimum' du SOA inférieur à 3 heures
 error   : Le champ 'minimum' doit être inférieur à 3 heures
-ok	: Le champ 'minimum' du SOA inférieur à 3 heures
+ok	: Le champ 'minimum' du SOA est inférieur à 3 heures
 explain : [none]
 details : La valeur du champ 'minimum' est de %{minimum} sec, et devrait être moins de 3 heures (10800 sec).
 

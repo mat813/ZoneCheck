@@ -31,7 +31,7 @@ testname: domain délégué est un openrelay
 error   : Le MX principal pour le domaine est un openrelay
 ok	: Le MX principal pour le domaine n'est pas un openrelay
 explain = xpl_openrelay
-details : La machine indiqué pour la réception du courrier (%{mailhost}) du domaine semble être un "open relay", elle permet l'envoi de mél de %{from_host} à %{to_host}.
+details : La machine indiquée pour la réception du courrier (%{mailhost}) du domaine semble être un "open relay", elle permet l'envoi de mél de %{from_host} à %{to_host}.
 
 
 [chk_mail_openrelay_hostmaster]
@@ -39,13 +39,13 @@ testname: domain of the hostmaster email is not an openrelay
 error   : Le MX principal pour le 'hostmaster' est un openrelay
 ok	: Le MX principal pour le 'hostmaster' n'est pas un openrelay
 explain = xpl_openrelay
-details : La machine indiqué pour la réception du courrier (%{mailhost}) pour le "hostmaster" (%{hostmaster}) semble être un "open relay", elle permet l'envoi de mél de %{from_host} à %{to_host}.
+details : La machine indiquée pour la réception du courrier (%{mailhost}) pour le "hostmaster" (%{hostmaster}) semble être un "open relay", elle permet l'envoi de mél de %{from_host} à %{to_host}.
 
 
 [chk_mail_postmaster]
 testname: existence de l'adresse mél du 'postmaster'
 error   : Le 'postmaster' ne peut pas être contacté par mél
-ok	: Le 'postmaster' peut etre contacte par mel
+ok	: Le 'postmaster' peut être contacté par mél
 explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved\nmailbox "Postmaster".
 details : L'adresse du 'postmaster' (%{postmaster}) n'existe pas.
 

@@ -24,19 +24,19 @@
 [chk_mx]
 testname: enregistrement MX présent
 error   : Aucun enregistrement MX présent sur le serveur
-ok	: L'enregistrement MX est present sur le serveur
+ok	: L'enregistrement MX est présent sur le serveur
 explain : [ref]: IETF RFC1912 (p.7)\nPut MX records even on hosts that aren't intended to send or receive\ne-mail.  If there is a security problem involving one of these hosts,\nsome people will mistakenly send mail to postmaster or root at the\nsite without checking first to see if it is a "real" host or just a\nterminal or personal computer that's not set up to accept e-mail.
 
 
 [chk_mx_auth]
 testname: réponse autoritaire pour le MX
 error   : La réponse pour le MX n'est pas autoritaire
-ok	: La reponse pour le MX est autoritaire
+ok	: La réponse pour le MX est autoritaire
 explain : [none]
 
 
 [chk_mx_sntx]
-testname: syntaxe du MX réprésente un nom de machine valide
+testname: syntaxe du MX représente un nom de machine valide
 error   : La syntaxe du MX n'est pas correcte
 ok	: La syntaxe du MX est correcte
 explain = label_xpl
@@ -45,7 +45,7 @@ explain = label_xpl
 [chk_mx_cname]
 testname: l'enregistrement MX n'est pas un alias
 error   : L'enregistrement MX ne peut pas être un alias (CNAME)
-ok	: L'enregistrement MC n'est pas un alias
+ok	: L'enregistrement MX n'est pas un alias
 explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
 
 
@@ -59,14 +59,14 @@ explain : [none]
 [chk_mx_ip]
 testname: enregistrement MX peut être résolu
 error   : L'adresse IP de l'enregistrement MX ne peut pas être résolue
-ok	: L'adresse IP de l'enregistrement MX a ete trouve
+ok	: L'adresse IP de l'enregistrement MX a été trouvée
 explain : [none]
 
 
 [chk_mx_vs_any]
 testname: cohérence entre enregistrements MX et ANY
 error   : Enregistrements MX et ANY incohérents
-ok	: Enregistrements MX et ANY coherents
+ok	: Enregistrements MX et ANY cohérents
 explain : [none]
 
 

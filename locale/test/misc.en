@@ -51,3 +51,9 @@ error   : The nameserver list doesn't match the given one
 ok	: The nameserver list matches the given one
 details : The given nameserver list (%{list_from_param}) is not coherent with the one retrieved from the zone (%{list_from_ns}).
 explain : [none]
+
+
+[tst_recursive_server]
+testname: test if server is recursive
+error	: xxx
+explain : [none]

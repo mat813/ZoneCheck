@@ -116,7 +116,7 @@ param_unknown	: paramètre '%s' inconnu
 wrong_arg_number: mauvais nombre d'arguments (%s au lieu de %s) dans '%s'
 dcl_map_exists	: carte pour "%s" déjà définie
 dcl_unknown	: déclaration '%s' inconnue
-method_unknown	: méthode '%s' indisponnible
+method_unknown	: méthode '%s' indisponible
 for_domain	: %s pour le domaine %s
 family_unknown	: famille '%s' inconnue
 
@@ -125,8 +125,8 @@ expect_string	: chaîne attendue
 expect_symbol	: symbole attendu
 expect_keyword	: mot clé '%s' attendu
 expect_token	: '%s' attendu
-expect_cfg_main	: déclaration de constante ou 'useconf' attendu
-expect_cfg_specific: déclaration de constante ou 'testseq' attendu
+expect_cfg_main	: déclaration de constante ou 'useconf' attendue
+expect_cfg_specific: déclaration de constante ou 'testseq' attendue
 
 expect_checkname: méthode de vérification (ie: chk_*) attendue
 expect_testname	: méthode de test (ie: tst_*) attendue
@@ -148,7 +148,7 @@ expect_lexical	: caractère '%s' inattendu
 batch_parse	: Incapable d'analyser la ligne par lot
 
 [xcp_param]
-fqdn_required	: Nom de domaine absolument qualifie attendu
+fqdn_required	: Nom de domaine absolument qualifié attendu
 batch_nodomain	: Aucun nom de domaine n'est attendu pour le traitement en lots
 domain_expected	: UN nom de domaine attendu
 primary_soa	: Incapable de trouver le serveur de nom primaire (SOA)
@@ -169,9 +169,9 @@ testexists	: test '%s' déjà listé
 confexists	: configuration pour '%s' déjà listée
 unknowntest	: test '%s' inconnu
 badsection	: section '%s' ne peut pas être utilisée dans ce contexte
-unexpected_token: jeton '%s' inatendu
-unexpected_test	: test inatendu ('when' manquant?)
-whenexists	: clef '%s' déjà définie dans la déclaraion 'when'
+unexpected_token: jeton '%s' inattendu
+unexpected_test	: test inattendu ('when' manquant?)
+whenexists	: clef '%s' déjà définie dans la déclaration 'when'
 elseexists	: 'else' déjà utilisé
 unknown_sectopt	: option '%s' inconnue dans la section '%s'
 missing_sectopt	: option manquante pour la section '%s'
@@ -179,4 +179,4 @@ missing_sectopt	: option manquante pour la section '%s'
 [xcp_testmanager]
 badclass	: classe '%s' ne dérive pas de %s
 test_exists	: test '%s' défini dans les classes '%s' et '%s'
-check_exists	: vérification '%s' definie dans les classes '%s' et '%s'
+check_exists	: vérification '%s' définie dans les classes '%s' et '%s'

@@ -50,13 +50,13 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] nomdedomaine\n\
     testname       [n]  Affiche le nom du test\n\
     explain        [x]  Affiche une explication en cas d'échec du test\n\
     details        [d]  Affiche les details liés à l'échec du test\n\
-    reportok       [o]  Affiche quand meme les tests qui ont réussi\n\
+    reportok       [o]  Affiche quand même les tests qui ont réussi\n\
     testdesc       [t]  Affiche la description du test en cours\n\
     counter        [c]  Affiche une barre de progression\n\
 \n\
   output:               [byseverity|byhost] [text|html]\n\
-    byseverity    *[bs] Affiche les résultats trie/fusionne par severite\n\
-    byhost         [bh] Affiche les résultats trie/fusionne par machine\n\
+    byseverity    *[bs] Affiche les résultats classés par sévérité\n\
+    byhost         [bh] Affiche les résultats classés par machine\n\
     text          *[t]  Formatage en texte pur\n\
     html           [h]  Formatage en HTML\n\
 \n\

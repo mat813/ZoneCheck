@@ -24,7 +24,7 @@
 [chk_axfr]
 testname: transfert de zone possible
 error   : Transfert de zone impossible
-ok	: Transfert de zone reussi
+ok	: Transfert de zone réussi
 explain : [none]
 
 [chk_axfr_empty]
