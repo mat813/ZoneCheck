@@ -18,20 +18,20 @@
 input_cli_usage: \
 usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     -q, --quiet         N'affiche pas de titres suplémentaires\n\
-        --lang          Choisi une autre langue (en, fr, ...)\n\
+        --lang          Choisit une autre langue (en, fr, ...)\n\
     -h, --help          Affiche ce message\n\
     -V, --version       Affiche le numéro de version et quitte\n\
     -B, --batch         Mode en lots (lit depuis un fichier ou stdin '-')\n\
     -c, --config        Emplacement du fichier de configuration\n\
         --testdir       Emplacement du répertoire contenant les tests\n\
-    -C, --category      Limite les tests a un ensemble de catégories\n\
-    -T, --test          Nom du test a effectuer\n\
+    -C, --category      Limite les tests à un ensemble de catégories\n\
+    -T, --test          Nom du test à effectuer\n\
         --testlist      Liste tous les tests disponibles\n\
         --testdesc      Donne une description du test (name,expl,error)\n\
     -r, --resolver      Resolveur à utiliser pour déterminer les 'ns'\n\
-    -n, --ns            Liste des serveurs de nom pour le domaine\n\
+    -n, --ns            Liste des serveurs de noms pour le domaine\n\
     -1, --one           Affiche uniquement le message le plus significatif\n\
-    -g, --tagonly       Affiche uniquement les tags (ideal pour les scripts)\n\
+    -g, --tagonly       Affiche uniquement les tags (idéal pour les scripts)\n\
     -e, --error         Comportement en cas d'erreurs (voir error)\n\
     -t, --transp        Choix de la couche transport/routage (voir transp)\n\
     -v, --verbose       Niveau de détail des informations (voir verbose)\n\
@@ -40,11 +40,11 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     -6, --ipv6          Utilise uniquement IPv6 pour vérifier le domaine\n\
 \n\
   verbose:              [intro/explain/details] [testdesc|counter]\n\
-    intro          [i]  Affiche un résumé du domaine et ses serveurs\n\
+    intro          [i]  Affiche un résumé du domaine et de ses serveurs\n\
     explain        [x]  Affiche une explication en cas d'échec du test\n\
     details        [d]  Affiche les details liés à l'échec du test\n\
     testdesc       [t]  Affiche la description du test en cours\n\
-    counter        [c]  Affiche une bar de progression\n\
+    counter        [c]  Affiche une barre de progression\n\
 \n\
   output:               [straigh|consolidation] [text|html]\n\
     straight      *[s]  Affiche les résultats sans traitements (ou presque)\n\
@@ -53,8 +53,8 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     html           [h]  Formatage en HTML\n\
 \n\
   error:                [allfatal|allwarning] [stop|nostop]\n\
-    allfatal       [af] Tout échec est considérée comme fatale\n\
-    allwarning     [aw] Tout échec est considérée comme un avertissement\n\
+    allfatal       [af] Tout échec est considéré comme fatal\n\
+    allwarning     [aw] Tout échec est considéré comme un avertissement\n\
     stop          *[s]  Arrête dès le premier échec\n\
     nostop         [ns] Exécute tous les tests (même après échec fatal)\n\
 \n\
