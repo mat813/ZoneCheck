@@ -10,5 +10,4 @@
 - implement tree based inference for Report
 - more checking in is_cname? (framework.rb)
 - cache status is wrong
-- option pour lister les tests
-- option pour afficher les messages associes aux testes
+- see for improvement of options testlist and testdesc
