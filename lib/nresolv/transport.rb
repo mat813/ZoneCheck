@@ -312,39 +312,26 @@ module NResolv
                         @rawmsg    = msg.to_wire
  			@msgid     = msg.msgid
                         @sock      = requester.handler
-			@sema      = Queue::new
-			raise "OOOPS" if @sema.nil?
 			@dflttout  = 2
 			UDPRetrySequence.each { |tout| @dflttout += tout }
                     end
 
                     def send
 			sock = @requester.handler
-			sema = @sema
+			sock.write(@rawmsg)
                         @thread = Thread::new {
-			    begin 
-				sock.write(@rawmsg)
-				sema.push(nil)
-			    rescue Exception => e
-				sema.puch(e)
-			    end
 			    DNSThreadGroup.add Thread.current
                             UDPRetrySequence.each { |timeout|
                                 sleep timeout
                                 sock.write(@rawmsg)
                             }
                         }
-			puts "YARGL" if @sema.nil?
-			e = sema.pop
-			raise e unless e.nil?
                         self
                     end
 
 		    def close
-			puts "CLOSE"
-			thread, sema, @thread, @sema = @thread, @sema
+			thread, @thread = @thread
 			thread.kill    if thread
-			sema.push(nil) if sema
 			super()
 		    end
                 end
