@@ -231,6 +231,21 @@ EOT
 		"zc_contextmenu_setlocale(\"#{$mc.get("w_details")}\", \"#{$mc.get("w_references")}\", \"#{$mc.get("w_elements")}\");\n" +
 		    "zc_contextmenu_start();" }
 	    @o.print <<"EOT"
+
+    <HR>
+    <SPAN style="float: right;">
+      <a href="http://jigsaw.w3.org/css-validator/check/referer">
+	<img style="border:0;width:88px;height:31px"
+	     src="http://jigsaw.w3.org/css-validator/images/vcss" 
+	     alt="Valid CSS!"></a>
+      <a href="http://validator.w3.org/check/referer">
+	<img style="border:0;width:88px;height:31px"
+	     src="http://www.w3.org/Icons/valid-html401"
+	     alt="Valid HTML 4.01!"></a>
+    </SPAN>
+Release: #{$zc_version} <BR>
+Last modified: #{Time::now}
+
   </BODY>
 </HTML>
 EOT
