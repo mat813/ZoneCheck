@@ -163,7 +163,7 @@ module Input
 	def opts_analyse(p)
 	    @opts.each do |opt, arg|
 		case opt
-		when "--help"      then usage(EXIT_USAGE, $stdout)
+		when "--help"      then usage(EXIT_USAGE, $console.stdout)
 		when "--version"
 		    l10n_version = $mc.get("input_version") % $zc_version
 		    l10n_version.gsub!(/PROGNAME/, PROGNAME)
