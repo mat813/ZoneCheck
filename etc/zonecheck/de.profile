@@ -6,6 +6,16 @@
   <profile name="de">
     <const name="registry" value="DENIC"/>
 
+    <!-- min: 0  / max: 2147483647 -->
+    <const name="soa:expire:min"  value="604800"/>
+    <const name="soa:expire:max"  value="3600000"/>
+    <const name="soa:minimum:min" value="180"/>
+    <const name="soa:minimum:max" value="345600"/>
+    <const name="soa:refresh:min" value="3600"/>
+    <const name="soa:refresh:max" value="86400"/>
+    <const name="soa:retry:min"   value="900"/>
+    <const name="soa:retry:max"   value="28800"/>
+
     <!-- For openrelay testing -->
     <const name="fake_mail_user" value="zonecheck"/>
     <const name="fake_mail_dest" value="nic.fr"/>

@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE config PUBLIC "-//ZoneCheck//DTD Config V1.0//EN" "msgcat.dtd">
 <msgcat lang="en">
 <!-- $Id$ -->
 
@@ -55,7 +56,8 @@
   nslist           0+    Liste des serveurs de la zone
   set              1-2   Option à activer (see options)
   unset            1     Option à supprimer (see options)
-  preset           1     Configuration préselectionnée (supporté: classic)
+  preset           1     Préselection (supporté: classic, fatal)
+  show             1     Affiche des valeurs possibles (supporté: profiles)
 
 Options           Args
   lang             1     Choisit une autre langue (en, fr, ...)
@@ -63,6 +65,7 @@ Options           Args
   quiet            0     N'affiche pas de titres suplémentaires
   tagonly          0     Affiche uniquement les tags (idéal pour les scripts)
   category         1+    Limite les tests à un ensemble de catégories
+  profile          1     Force l'utilisation d'un profile
   verbose          1+    Niveau de détail des informations (voir verbose)
   output           1+    Format de sortie (see output)
   error            1+    Comportement en cas d'erreur (voir error)

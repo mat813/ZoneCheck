@@ -61,7 +61,8 @@ require 'param'
 ##   nslist           0+    Set the list of the zone nameservers
 ##   set              1-2   Option to set (see options)
 ##   unset            1     Option to unset (see options)
-##   preset           1     Preset configuration (supported: classic)
+##   preset           1     Preset configuration (supported: classic, fatal)
+##   show             1     Show possibles values (supported: profiles)
 ## 
 ## Options           Args
 ##   lang             1     Select another language (en, fr, ...)
@@ -69,6 +70,7 @@ require 'param'
 ##   quiet            0     Don't display extra titles
 ##   tagonly          0     Display only tag (suitable for scripting)
 ##   category         1+    Only perform test for the specified category
+##   profile          1     Force a profile to use
 ##   verbose          1+    Display extra information (see verbose)
 ##   output           1+    Output (see output)
 ##   error            1+    Behaviour in case of error (see error)
@@ -146,8 +148,8 @@ module Input
 		    when '--quiet'     then p.rflag.quiet	= true
 		    when '--debug'     then $dbg.level		= arg
 		    when '--lang'      then $locale.lang	= arg
-		    when '--config'    then p.fs.cfgfile	= arg.untaint
-		    when '--testdir'   then p.fs.testdir	= arg.untaint
+		    when '--config'    then p.preconf.cfgfile	= arg.untaint
+		    when '--testdir'   then p.preconf.testdir	= arg.untaint
 		    when '--resolver'  then p.resolver.local	= arg
 		    when '--ipv6'      then ipv6		= true
 		    when '--ipv4'      then ipv4		= true
@@ -196,7 +198,7 @@ module Input
 			else
 			    error($mc.get('input:inetd:unknown_preset') % $1)
 			end
-		    when /^set\s+(\w+)\s+(.*)$/
+		    when /^set\s+(\w+)\s+(.*?)\s*$/
 			case $1
 			when 'verbose'	then p.verbose		= $2
 			when 'output'	then p.output		= $2
@@ -208,6 +210,7 @@ module Input
 			when 'one'	then p.rflag.one	= true
 			when 'tagonly'	then p.rflag.tagonly	= true
 			when 'lang'	then $locale.lang	= $2
+			when 'profile'	then p.preconf.profile = c.profilename	= $2
 			end
 		    when /^nslist\s+(.*)/	   then p.domain.ns	= $1
 		    when /^(?:zone|domain)\s+(.*)/ then p.domain.name	= $1
@@ -216,6 +219,13 @@ module Input
 			case $1
 			when 'quiet'	then p.rflag.quiet	= false
 			when 'one'	then p.rflag.one	= false
+			when 'profile'	then p.preconf.profile = c.profilename	= nil
+			end
+		    # Show
+		    when /show\s+(\w+)$/
+			case $1
+			when 'profiles'
+			    c.profiles.each { |profile| io.puts profile.name }
 			end
 		    #
 		    when '?', 'help'
@@ -228,7 +238,7 @@ module Input
 		    else
 			error($mc.get('input:inetd:what'))
 		    end
-		rescue Param::ParamError => e
+		rescue Param::ParamError, Config::ConfigError => e
 		    error(e.to_s)
 		end
 

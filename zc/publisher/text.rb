@@ -308,6 +308,17 @@ module Publisher
 
 
 	#------------------------------------------------------------
+
+	def testdesc(testname, subtype)
+	    l10n = @xmltrans.apply($mc.get(testname, MsgCat::CHECK, subtype))
+	    case subtype
+	    when MsgCat::NAME, MsgCat::FAILURE, MsgCat::SUCCESS
+		l10n += "\n"
+	    end
+	    @o.puts testname + ':'
+	    @o.print l10n
+	    @o.puts
+	end
 	
 	def error(text)
 	    @o.print ::Text::Formater.paragraph(text, MaxLineLength,

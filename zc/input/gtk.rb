@@ -1054,8 +1054,8 @@ module Input
 		    exit EXIT_OK
 		when "--lang"     then $locale.lang         = arg
 		when "--debug"     then $dbg.level	    = arg
-		when "--config"    then p.fs.cfgfile        = arg
-		when "--testdir"   then p.fs.testdir        = arg
+		when "--config"    then p.preconf.cfgfile   = arg
+		when "--testdir"   then p.preconf.testdir   = arg
 		when "--resolver"  then p.resolver.local    = arg
 		end
 	    end
@@ -1104,7 +1104,7 @@ EOT
 	    rescue GetoptLong::Error
 		return false
 	    end
-	    p.fs.autoconf
+	    p.preconf.autoconf
 	    p.resolver.autoconf
 	    true
 	end

@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE config PUBLIC "-//ZoneCheck//DTD Config V1.0//EN" "msgcat.dtd">
 <msgcat lang="en">
 <!-- $Id$ -->
 
@@ -43,10 +44,12 @@
     -B, --batch         Batch mode (read from file or stdin '-')
     -c, --config        Specify location of the configuration file
         --testdir       Location of the directory holding tests
+    -P, --profile       Force uses of a particular profile
     -C, --category      Only perform test for the specified category
     -T, --test          Name of the test to perform
         --testlist      List all the available tests
-        --testdesc      Give a description (name,expl,error) of the test
+        --testdesc      Give a description of the test
+                           (values: name, failure, success, explanation)
     -r, --resolver      Resolver to use for guessing 'ns' information
     -n, --ns            List of nameservers for the domain
                            (ex: ns1;ns2=ip1,ip2;ns3=ip3)

@@ -34,7 +34,7 @@
 require 'dbg'
 require 'report'
 require 'publisher'
-
+require 'msgcat'
 
 
 ##
@@ -397,24 +397,28 @@ class Param
 
 
     ##
-    ## Hold information about file system
+    ## Hold information necessary for initializing configuration
+    ##  process.
     ##
     ## cfgfile: configuration file to use (zc.conf)
     ## testdir: directory where tests are located
+    ## profile: allow override of automatic profile selection
     ##
-    class FSData
-	attr_reader :cfgfile, :testdir
-	attr_writer :cfgfile, :testdir
+    class Preconf
+	attr_reader :cfgfile, :testdir, :profile
+	attr_writer :cfgfile, :testdir, :profile
 	
 	def initialize
 	    @cfgfile	= $zc_config_file
 	    @testdir	= ZC_TEST_DIR
+	    @profile	= nil
 	end
 
 	def autoconf
 	    # Debug
 	    $dbg.msg(DBG::AUTOCONF) { "Configuration file: #{@cfgfile}" }
 	    $dbg.msg(DBG::AUTOCONF) { "Tests directory: #{@testdir}"    }
+	    $dbg.msg(DBG::AUTOCONF) { "Asking for profile: #{profile}"  }
 	end
     end
 
@@ -562,15 +566,13 @@ class Param
 	end
 
 	def desctype=(string)
-	    suf = case string
-		  when 'name'  then 'testname'
-		  when 'expl'  then 'explain'
-		  when 'error' then 'error'
-		  else raise ParamError, 
-			  $mc.get('xcp_param_unknown_modopt') % [ string, 'testdesc' ]
-		  end
-	    
-	    @desctype = suf
+	    case string
+	    when MsgCat::NAME, MsgCat::EXPLANATION,
+		    MsgCat::SUCCESS, MsgCat::FAILURE
+		@desctype = string
+	    else raise ParamError, 
+		    $mc.get('xcp_param_unknown_modopt') % [string, 'testdesc']
+	    end
 	end
 
 	
@@ -724,8 +726,8 @@ class Param
     #
     # ATTRIBUTS
     #
-    attr_reader :publisher, :fs, :network, :resolver, :rflag, :test, :report
-    attr_reader :option, :info
+    attr_reader :publisher, :preconf, :network, :resolver, :rflag, 
+	        :test, :report, :option, :info
     attr_reader :batch, :domain
     attr_writer :batch, :domain
 
@@ -736,7 +738,7 @@ class Param
     #
     def initialize
 	@publisher	= Publisher::new
-	@fs		= FSData::new
+	@preconf	= Preconf::new
 	@network	= Network::new
 	@resolver	= Resolver::new
 	@test		= Test::new

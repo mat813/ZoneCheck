@@ -32,6 +32,7 @@ class Config
     Skip		= 'S'		# Don't run the test
     Ok			= 'o'		# Reserved
 
+    ProfileAutomatic	= 'automatic'
 
     E_PROFILE		= 'profile'	# XML Elements
     E_CONFIG		= 'config'	#      .
@@ -200,30 +201,35 @@ class Config
 	    @rules.each_value { |rules| rules.validate(testmanager) }
 	end
 
-	
-	def initialize(xmlprofile, parent=nil)
-	    @name	= xmlprofile.attributes[A_NAME]
-	    @constants	= Constants::new(parent.constants)
-	    @rules	= {}
+	def initialize(name, constants, rules)
+	    @name, @constants, @rules = name, constants, rules
+	end
 
-	    $dbg.msg(DBG::CONFIG, "processing profile: #{@name}")
+	def self.from_xmlprofile(xmlprofile, parent=nil)
+	    profilename	= xmlprofile.attributes[A_NAME]
+	    constants	= Constants::new(parent.constants)
+	    rules	= {}
+
+	    $dbg.msg(DBG::CONFIG, "processing profile: #{profilename}")
 
 	    xmlprofile.elements.each(E_CONST) { |element|
 		name  = element.attributes[A_NAME]
 		value = element.attributes[A_VALUE]
-		@constants[name]=value.untaint
+		constants[name]=value.untaint
 	    }
 
 	    xmlprofile.elements.each(E_RULES) { |element|
 		klass  = element.attributes[A_CLASS]
-		@rules[klass] = parse_block(element)
+		rules[klass] = parse_block(element)
 	    }
+
+	    self::new(profilename, constants, rules)
 	end
 
 	#-- [private] -----------------------------------------------
 	private
 
-	def parse_block(rule)
+	def self.parse_block(rule)
 	    block = Instruction::Block::new
 	    rule.each_child { |elt|
 		next unless elt.kind_of?(REXML::Element)
@@ -235,7 +241,7 @@ class Config
 	    block
 	end
 	
-	def parse_check(xmlelt)
+	def self.parse_check(xmlelt)
 	    name, severity, category = xmlelt.attributes[A_NAME], 
 		xmlelt.attributes[A_SEVERITY], xmlelt.attributes[A_CATEGORY]
 
@@ -243,7 +249,7 @@ class Config
 	    Instruction::Check::new(name, severity, category)
 	end
 
-	def parse_case(xmlelt)
+	def self.parse_case(xmlelt)
 	    when_stmt, else_stmt = {}, nil
 	    testname = xmlelt.attributes[A_TEST]
 	    xmlelt.each_child { |elt|
@@ -304,7 +310,7 @@ class Config
 
 	# Register it as an override profile
 	xmlprofile = REXML::Document::new(fakeconf).root.elements[E_PROFILE]
-	@profile_override = Profile::new(xmlprofile, self)
+	@profile_override = Profile::from_xmlprofile(xmlprofile, self)
     end
 
 
@@ -358,7 +364,7 @@ class Config
 	    rescue REXML::ParseException => e
 		puts "YO: #{e.position} / #{e.line} / #{e.message}"
 	    end
-	    @profiles << Profile::new(doc.root.elements[1], self)
+	    @profiles << Profile::from_xmlprofile(doc.root.elements[1], self)
 	}
     end
 
@@ -373,15 +379,34 @@ class Config
 
 
     #
-    # Retrieve the bet profile for the zone
+    # Force use of a particular profile
     #
-    def profile(zone)
-	return @profile_override if @profile_override
-	@profiles[@mapping[zone]]
+    def profilename=(name)
+	name = nil if name == ProfileAutomatic
+	if !name.nil? && @profiles[name].nil?
+	    raise ConfigError, "Profile '#{name}' doesn't exist" 
+	end
+	@profilename = name
     end
 
 
-    attr_reader :constants
+    #
+    # Retrieve the bet profile for the zone
+    #
+    def profile(zone)
+	pfile = selected_profile = @profiles[@profilename || @mapping[zone]]
+	if @profile_override
+	    # Ensure that the constants from the 'selected' profile
+	    # will be used even in overrided profile
+	    pfile = Profile::new(@profile_override.name,
+				 selected_profile.constants,
+				 @profile_override.rules)
+	end
+	pfile
+    end
+
+
+    attr_reader :constants, :profiles, :profilename
 
     #-- [private] ---------------------------------------------------------
     private
@@ -394,5 +419,6 @@ class Config
 	@profiles		= Profiles::new
 	@mapping		= ZoneMapping::new
 	@profile_override	= nil
+	@profilename		= nil
     end
 end

@@ -137,6 +137,7 @@ module CheckNetworkAddress
 	    ping_cmd = ping_tmpl % [ ip.to_s ]
 
 	    # Do ping
+	    dbgmsg(ns, ip) { "Executing: #{ping_cmd}" }
 	    system(ping_cmd)
 	end
     end

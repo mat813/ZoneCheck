@@ -49,10 +49,12 @@ require 'param'
 ##     -B, --batch         Batch mode (read from file or stdin '-')
 ##     -c, --config        Specify location of the configuration file
 ##         --testdir       Location of the directory holding tests
+##     -P, --profile       Force uses of a particular profile
 ##     -C, --category      Only perform test for the specified category
 ##     -T, --test          Name of the test to perform
 ##         --testlist      List all the available tests
-##         --testdesc      Give a description (name,expl,error) of the test
+##         --testdesc      Give a description of the test
+##                            (values: name, failure, success, explanation)
 ##     -r, --resolver      Resolver to use for guessing 'ns' information
 ##     -n, --ns            List of nameservers for the domain
 ##                            (ex: ns1;ns2=ip1,ip2;ns3=ip3)
@@ -146,6 +148,7 @@ module Input
 		[ '--config',	'-c',   GetoptLong::REQUIRED_ARGUMENT ],
 		[ '--testdir',	        GetoptLong::REQUIRED_ARGUMENT ],
 		[ '--category', '-C',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--profile',  '-P',   GetoptLong::REQUIRED_ARGUMENT ],
 		[ '--test',     '-T',   GetoptLong::REQUIRED_ARGUMENT ],
 		[ '--testlist',         GetoptLong::NO_ARGUMENT       ],
 		[ '--testdesc',         GetoptLong::REQUIRED_ARGUMENT ],
@@ -179,8 +182,9 @@ module Input
 		when '--debug'     then $dbg.level		= arg
 		when '--lang'      then $locale.lang		= arg
 		when '--batch'     then p.batch			= arg
-		when '--config'    then p.fs.cfgfile		= arg.untaint
-		when '--testdir'   then p.fs.testdir		= arg.untaint
+		when '--config'    then p.preconf.cfgfile	= arg.untaint
+		when '--testdir'   then p.preconf.testdir	= arg.untaint
+		when '--profile'   then p.preconf.profile	= arg
 		when '--category'  then p.test.categories	= arg
 		when '--test'      then p.test.tests		= arg
 		when '--testlist'  then p.test.list		= true

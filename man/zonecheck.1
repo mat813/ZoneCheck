@@ -136,6 +136,10 @@ Specify the location of the configuration file (default is \fI/usr/local/etc/zon
 Location of the directory holding the tests definition.
 .
 .TP
+\fB--profile\fR, \fB-P\fR \fIprofilename\fR
+Force uses of profile \fIprofilename\fR.
+.
+.TP
 \fB--category\fR, \fB-C\fR \fIcatlist\fR
 Limit the test to perform to the categories specified by \fIcatlist\fR.
 The syntax for the catgory description is as follow:
@@ -155,7 +159,7 @@ List all the tests available.
 .TP
 \fB--testdesc\fR \fIdesctype\fR
 Give a description of the test, the possible values for \fIdesctype\fR
-are \fBname\fR, \fBexpl\fR, \fBerror\fR.
+are \fBname\fR, \fBsuccess\fR, \fBfailure\fR, \fBexplanation\fR.
 .
 .TP
 \fB--resolver\fR, \fB-r\fR \fIresolver\fR

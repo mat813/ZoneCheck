@@ -72,6 +72,7 @@ require 'param'
 ##  - transp   = [ ipv4, ipv6, udp, tcp, std ]
 ##      - transp3   = [ ipv4, ipv6 ]
 ##      - transp4   = [ udp | tcp | std ]
+##  - profile  = profilename
 ##  - category = cat1,!cat2:subcat1,cat2,!cat3,+
 ##      - chkmail (!mail)
 ##      - chkrir  (!rir)
@@ -198,6 +199,11 @@ module Input
 	    else
 		p.transp = ((@cgi.params['transp3'] || []) + 
 			    (@cgi.params['transp4'] || [])).join(',')
+	    end
+
+	    # Profile
+	    if @cgi.has_key?('profile')
+		p.preconf.profile = @cgi['profile']
 	    end
 
 	    # Category

@@ -105,9 +105,10 @@ class ZoneCheck
 	    # Initialize parameters (from command line parsing)
 	    @param = Param::new
 	    @input.usage(EXIT_USAGE) unless @input.parse(@param)
+	    @param.preconf.autoconf
 
 	    # Load the test implementation
-	    TestManager.load(@param.fs.testdir)
+	    TestManager.load(@param.preconf.testdir)
 
 	    # Create test manager
 	    @test_manager = TestManager::new
@@ -115,8 +116,9 @@ class ZoneCheck
 
 	    # Load configuration
 	    @config = Config::new(@test_manager)
-	    @config.load(@param.fs.cfgfile)
+	    @config.load(@param.preconf.cfgfile)
 	    @config.validate(@test_manager)
+	    @config.profilename = @param.preconf.profile
 
 	    # Interaction
 	    unless @input.interact(@param, @config, @test_manager)
@@ -203,7 +205,6 @@ class ZoneCheck
     end
 
     def param_config_preamble
-	@param.fs.autoconf
 	@param.option.autoconf
 	@param.rflag.autoconf
 	@param.publisher.autoconf(@param.rflag)
@@ -289,14 +290,24 @@ class ZoneCheck
     # Print the description of the tests
     #  If no selection is done (option -T), the description is
     #  printed for all the available tests
-    # XXX: should use publisher
+    # XXX: should use other publisher than text
     #
     def do_testdesc
-	@param.test.autoconf
-	suf = @param.test.desctype
-	list = @param.test.tests || @test_manager.list.sort
-	list.each { |test|
-	    $console.stdout.puts $mc.get("#{test}_#{suf}") }
+	require 'publisher/text'
+	@param.publisher.engine = ::Publisher::Text
+
+	param_config_preamble
+
+	list		= @param.test.tests || @test_manager.list.sort
+	publisher	= @param.publisher.engine
+	profilename	= @config.profilename
+
+	publisher.constants = (@config.profiles[profilename] || 
+			       @config).constants
+
+	publisher.begin
+	list.each { |test| publisher.testdesc(test, @param.test.desctype) }
+	publisher.end
 	true
     end
 end
