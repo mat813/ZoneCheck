@@ -23,6 +23,9 @@ require 'publisher'
 
 ##
 ## Parameters of the ZoneCheck application
+## 
+## All the subclasses have an 'autoconf' method, which should be
+## used to finish configuring the class.
 ##
 class Param
     ##
@@ -38,7 +41,7 @@ class Param
     ## counter      : display a progress bar
     ## stop_on_fatal: stop on the first fatal error
     ##
-    ## Corrections are silently made to respect the following constaints:
+    ## Corrections are silently made to respect the following constraints:
     ##  - 'tagonly' doesn't support 'explain', 'details' (as displaying
     ##     a tag for an explanation is meaningless)
     ##  - 'testdesc' and 'counter' are exclusive
@@ -107,7 +110,7 @@ class Param
     ##              if element aren't specified they will be 'guessed'
     ##              when calling 'autoconf'
     ## addresses : list of ns addresses
-    ## cache     : should result be stored in external database (hook)
+    ## cache     : should result be stored in external database (for hooks)
     ##
     class Domain
 	def initialize(name=nil, ns=nil)

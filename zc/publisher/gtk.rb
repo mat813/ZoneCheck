@@ -425,6 +425,8 @@ module Publisher
 
 
 	def intro(domain)
+	    return unless @rflag.intro
+
 	    @o.add(Intro::new(self, domain))
 
 	    # Title

@@ -196,11 +196,12 @@ end
 class ZoneCheck
     #
     # Input method
+    #   (pseudo parameter in CLI: --INPUT=???)
     #
     def self.input_method
 	im = nil	# Input Method
 
-	# Check meta argument 
+	# Check meta argument
 	ARGV.delete_if { |a|
 	    im = $1 if remove = a =~ /^--INPUT=(.*)/
 	    remove
@@ -252,8 +253,12 @@ class ZoneCheck
     end
 
 
+    def lastaction(success)
+    end
+
+
     def zc(cm)
-	# Setup publisher domain
+	# Setup publisher (for the domain)
 	@param.publisher.engine.setup(@param.domain.name)
 
 	# Retrieve specific configuration
@@ -264,7 +269,7 @@ class ZoneCheck
 	end
 
 	# Display intro (ie: domain and nameserver summary)
-	@param.publisher.engine.intro(@param.domain) if @param.rflag.intro
+	@param.publisher.engine.intro(@param.domain)
 	
 	# Initialise and check
 	@test_manager.init(cfg, cm, @param)
@@ -277,7 +282,11 @@ class ZoneCheck
 	
 	# Finish diagnostic (in case of pending output)
 	@param.report.finish
-		
+
+	# Lastaction hook
+	lastaction(success)
+
+	# Return status
 	return success
     end
 
@@ -334,7 +343,7 @@ class ZoneCheck
 		    @param.domain.autoconf(@param.resolver.local)
 		    @param.report.autoconf(@param.domain, 
 					 @param.rflag, @param.publisher.engine)
-		    succed = false unless zc(cm)
+		    success = false unless zc(cm)
 		}
 		batchio.close unless @param.batch == "-"
 	    end

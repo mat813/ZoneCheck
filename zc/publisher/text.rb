@@ -214,6 +214,8 @@ module Publisher
 
 
 	def intro(domain)
+	    return unless @rflag.intro
+
 	    l10n_zone	= $mc.get("ns_zone").upcase
 	    l10n_ns	= $mc.get("ns_ns"  ).upcase
 	    sz		= [ l10n_zone.length, l10n_ns.length+3 ].max

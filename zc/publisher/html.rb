@@ -234,13 +234,15 @@ EOT
 
 
 	def intro(domain)
+	    return unless @rflag.intro
+
 	    tbl_beg   = '<TABLE rules="rows" class="zc_domain">'
 	    tbl_zone  = '<TR class="zc_zone"><TD>%s</TD><TD colspan="4">%s</TD></TR>'
 	    tbl_ns    = '<TR class="%s"><TD>%s</TD><TD>%s</TD><TD>%s</TD></TR>'
 	    tbl_end   = '</TABLE>'
 
 
-	    unless rflag.quiet
+	    unless @rflag.quiet
 		title = $mc.get("title_zoneinfo")
 		@o.puts "<H2 id=\"t_zoneinfo\">#{title}</H2>"
 	    end
