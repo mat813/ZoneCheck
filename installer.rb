@@ -225,16 +225,19 @@ end
 
 inst = Installer::new
 
+if ARGV.empty?
+    inst.configinfo 
+else
+    ARGV.each { |rule|
+	unless inst.respond_to?("rule_#{rule}")
+	    puts "ERROR: No rule '#{rule}' available"
+	    exit 1
+	end
+    }
 
-ARGV.each { |rule|
-    unless inst.respond_to?("rule_#{rule}")
-	puts "ERROR: No rule '#{rule}' available"
-	exit 1
-    end
-}
-
-ARGV.each { |rule|
-    inst.send "rule_#{rule}"
-}
-
-inst.info
+    ARGV.each { |rule|
+	inst.send "rule_#{rule}"
+    }
+    
+    inst.info
+end
