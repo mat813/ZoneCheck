@@ -201,7 +201,7 @@ class TestManager
 		#  => ARG: nameserver name; nameserver IP
 	    when /^CheckNetworkAddress::/ then 
 		@param.domain.ns.each { |ns_name, ns_addr_list|
-		    @param.address_wanted?(ns_addr_list).each { |addr|
+		    @param.network.address_wanted?(ns_addr_list).each { |addr|
 			testcount += 1
 			check_network_address[addr] ||= []
 			check_network_address[addr] <<

@@ -179,9 +179,8 @@ class Address
 	end
 	
 	def to_name
-	    # ip6.arpa should be searched too. [RFC3152]
 	    return (@address.unpack("H32")[0].split(//).reverse +
-		    ['ip6', 'int', '']).join(".")
+		    ['ip6', 'arpa', '']).join(".")
 	end
 
 	def protocol

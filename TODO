@@ -5,7 +5,6 @@
 - cachemanager destroy method (and use it)
 - check for SOA not necessary in NS
 - try to remove the need of a tagonly_supported in Report
-- implement HTML / XML publisher
 - implement tree based inference for Report
 - more checking in is_cname? (framework.rb)
 - cache status is wrong
@@ -34,3 +33,6 @@ NOT ABLE TODO?
 	config should be read and passed to param, which implies
 	that param should be able to modify the list of tests to perform
 	(=> PB comes from whois.ripe.net for GTK/CGI)
+
+2002-10-18 sdalu@nic.fr
+	Implement XML param and XML publisher

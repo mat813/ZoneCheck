@@ -24,8 +24,11 @@ ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
 ZC_LANG_FILE		= "zc.%s"
 ZC_LANG_DEFAULT		= "en"
 
+ZC_INPUT_METHODS	= [ "cli", "cgi", "gtk" ]
+
 ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
 ZC_CGI_EXT		= "cgi"
+
 
 #
 # Identification
@@ -60,7 +63,6 @@ $LOAD_PATH << ZC_DIR << ZC_LIB
 #
 # Requirement
 #
-require 'getoptlong'
 require 'socket'
 
 require 'nresolv'
@@ -143,19 +145,45 @@ class ZoneCheck
     # Parse command line
     #
     def configure
-	@input = case ENV["ZC_INPUT"]
+	# Default Input Method
+	im = nil
+
+	# Check argument 
+	ARGV.delete_if { |a|
+	    im = $1 if remove = a =~ /^--INPUT=(.*)/
+	    remove
+	}
+
+	# Check environment variable ZC_INPUT
+	im ||= ENV["ZC_INPUT"]
+
+	# Try autoconfiguring
+	im ||= if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
+		  (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
+	       then "cgi"
+	       else "cli"
+	       end
+
+	# Instanciate input method
+	if ! ZC_INPUT_METHODS.include?(im)
+	    l10n_error = $mc.get("w_error").upcase
+	    l10n_input = $mc.get("input_unsupported") % [ im ]
+	    $stderr.puts "#{l10n_error}: #{l10n_input}"
+	    exit EXIT_ERROR
+	end
+
+	@input = case im
 		 when "gtk"  then Param::GTK::new
 		 when "cli"  then Param::CLI::new
 		 when "cgi"  then Param::CGI::new
-		 else
-		     if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
-			(PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
-		     then Param::CGI::new
-		     else Param::CLI::new
-		     end
+		 else raise RuntimeError, "XXX: Fix ZC_INPUT_METHODS"
 		 end
+
+	# Configure
 	begin
-	    @input.usage(EXIT_USAGE) if (@param = @input.parse).nil?
+	    if (@param = @input.parse).nil? || !@input.interact(@param)
+		@input.usage(EXIT_USAGE)
+	    end
 	rescue Param::ParamError => e
 	    @input.error(e.to_s, EXIT_ERROR)
 	end
@@ -171,11 +199,11 @@ class ZoneCheck
     #  magic header are loaded.
     #
     def load_tests_implementation
-	$dbg.msg(DBG::TEST_LOADING, "directory: #{@param.testdir}")
-	Dir::open(@param.testdir) { |dir|
+	$dbg.msg(DBG::TEST_LOADING, "directory: #{@param.fs.testdir}")
+	Dir::open(@param.fs.testdir) { |dir|
 	    dir.each { |entry|
 		next unless entry =~ /\.rb$/
-		testfile = "#{@param.testdir}/#{entry}".untaint
+		testfile = "#{@param.fs.testdir}/#{entry}".untaint
 		next unless begin
 				File.open(testfile) { |io|
 			           io.gets =~ /^\#\s*ZCTEST\s+1\.0:?\W/
@@ -218,15 +246,16 @@ class ZoneCheck
     #
     # Read the 'zc.conf' configuration file
     #
-    def load_testlist
+    def load_config
 	@config = Config::new(@test_manager)
-	@config.limittest(Config::L_Category, @param.category)
-
-	if @param.test && !@param.test.empty?
-	    @config.limittest(Config::L_Test, @param.test)
+	if @param.test.categories
+	    @config.limittest(Config::L_Category, @param.test.categories)
+	end
+	if @param.test.tests
+	    @config.limittest(Config::L_Test, @param.test.tests)
 	end
 
-	@config.read(@param.configfile)
+	@config.read(@param.fs.cfgfile)
     end
 
 
@@ -277,10 +306,12 @@ class ZoneCheck
 	# 
 	if ! @param.batch
 	    @param.autoconf
-	    cm = CacheManager::create(Test::DefaultDNS, @param.client)
+	    cm = CacheManager::create(Test::DefaultDNS, 
+				      @param.network.query_mode)
 	    ok = zc(cm)
 	else
-	    cm = CacheManager::create(Test::DefaultDNS, @param.client)
+	    cm = CacheManager::create(Test::DefaultDNS, 
+				      @param.network.query_mode)
 	    batchio = case @param.batch
 		      when "-"                   then $stdin
 		      when String                then File::open(@param.batch) 
@@ -307,14 +338,14 @@ class ZoneCheck
 	    configure
 	    load_tests_implementation
 	    init_testmanager
-	    load_testlist
+	    load_config
 	    
-	    if @param.give_testlist
+	    if @param.test.list
 		puts @config.test_list.sort
 		exit EXIT_OK
 	    end
-	    if @param.give_testdesc
-		suf = @param.give_testdesc
+	    if @param.test.desctype
+		suf = @param.test.desctype
 		@config.test_list.each { |test|
 		    puts $mc.get("#{test}_#{suf}")
 		}

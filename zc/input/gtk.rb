@@ -262,6 +262,10 @@ class Param
 	    @q = Queue::new
 	end
 	
+	def interact(param)
+	    true
+	end
+
 	def parse
 	    window = Gtk::Window::new
 	    window.signal_connect("delete_event") {|*args| delete_event(*args) }

@@ -161,6 +161,10 @@ class Param
 	    @p
 	end
 
+	def interact(param)
+	    true
+	end
+
 	def usage(errcode, io=$stderr)
 	    io.print $mc.get("param_usage").gsub("PROGNAME", PROGNAME)
 	    exit errcode unless errcode.nil?

@@ -32,7 +32,7 @@ class Param
     ## counter      : display a progress bar
     ## stop_on_fatal: stop on the first fatal error
     ##
-    ## Correction are silently made to respect the following constaints:
+    ## Corrections are silently made to respect the following constaints:
     ##  - 'tagonly' doesn't support 'explain' (as displaying a tag
     ##     for an explanation is meaningless)
     ##  - 'testdesc' and 'counter' are exclusive
@@ -54,21 +54,22 @@ class Param
 	end
 
 	def tagonly=(val)
-	    @explain = false if @tagonly = val
+	    @explain  = false if @tagonly = val
 	end
 
 	def explain=(val)
-	    @explain = val unless @tagonly
+	    @explain  = val   if !@tagonly
 	end
 
 	def testdesc=(val)
-	    @counter = false if @testdesc = val
+	    @counter  = false if @testdesc = val
 	end
 	
 	def counter=(val)
 	    @testdesc = false if @counter = val
 	end
     end
+
 
 
     ##
@@ -195,8 +196,9 @@ class Param
     end
 
 
+
     ##
-    ##
+    ## As the Report class, but allow severity override
     ##
     class ProxyReport
 	attr_reader :info, :warning, :fatal
@@ -242,6 +244,8 @@ class Param
 		raise ParamError, 
 		    $mc.get("xcp_param_output_support") % [ "one"     ]
 	    end
+
+	    $dbg.msg(DBG::AUTOCONF, "Report using #{reporter}")
 	end
 
 	def finish
@@ -250,44 +254,174 @@ class Param
     end
 
 
-    attr_reader :configfile, :ipv4, :ipv6
-    attr_writer :configfile, :ipv4
 
-    attr_reader :resolver, :dns
+    ##
+    ## Hold information about file system
+    ##
+    ## cfgfile: configuration file to use (zc.conf)
+    ## testdir: directory where tests are located
+    ##
+    class FSData
+	attr_reader :cfgfile, :testdir
+	attr_writer :cfgfile, :testdir
+	
+	def initialize
+	    @cfgfile	= ZC_CONFIG_FILE
+	    @testdir	= ZC_TEST_DIR
+	end
+    end
 
 
 
-    attr_reader :client
+    ##
+    ## Hold information about the resolver behaviour
+    ## 
+    ## ipv4    : use IPv4 routing protocol
+    ## ipv6    : use IPv6 routing protocol
+    ## mode    : use the following mode for new resolvers: Classic / UDP / TCP 
+    ## resolver: local resolver to use
+    ##
+    ## WARN: the 'resolver' doesn't follow the ipv? or mode constraints
+    ##       as it is local and should be able to correctly operate in its
+    ##       own environment
+    ##
+    class Network
+	attr_reader :ipv4, :ipv6, :query_mode, :resolver
+	attr_writer :ipv4, :query_mode
 
-    attr_reader :rflag, :report, :publisher, :publisher_class
+	def initialize
+	    @ipv6		= nil
+	    @ipv4		= nil
+	    @query_mode		= nil
+	    @resolver		= nil
+	    @resolver_name	= nil
+	end
+
+	def ipv6=(bool)
+	    if bool && ! $ipv6_stack
+		raise ParamError, $mc.get("xcp_param_ipv6_no_stack")
+	    end
+	    @ipv6 = bool
+	end
+
+	def resolver=(resolv)
+	    case resolv
+	    when String
+		@resolver_name = resolv
+	    else
+		raise ArgumentError, "Wrong type for resolver object"
+	    end
+	end
+
+	def address_wanted?(address)
+	    case address
+	    when String
+		case address
+		when Address::IPv4::Regex then address if ipv4
+		when Address::IPv6::Regex then address if ipv6
+		else nil
+		end
+	    when Address::IPv4 then address if ipv4
+	    when Address::IPv6 then address if ipv6
+	    when Array
+		address.collect { |addr| address_wanted?(addr) }.compact
+	    else nil
+	    end
+	end
+
+	def autoconf
+	    # Select routing protocol
+	    @ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
+	    @ipv4 = false        if @ipv4.nil?
+	    @ipv6 = false        if @ipv6.nil? || !$ipv6_stack
+	    $dbg.msg(DBG::AUTOCONF, 
+		     "Routing protocol set to: " +
+		     [ @ipv4 ? "IPv4" : nil, 
+		       @ipv6 ? "IPv6" : nil].compact.join("/"))
+
+	    # Select local resolver
+	    if @resolver.nil?
+		@resolver = if @resolver_name.nil?
+				NResolv::DNS::DefaultResolver
+			    else 
+				cfg = NResolv::DNS::Config::new(@resolver_name)
+				NResolv::DNS::Client::Classic::new(cfg)
+			    end
+	    end
+
+	    # Select mode
+	    @query_mode = NResolv::DNS::Client::Classic if @query_mode.nil?
+	    @query_mode.to_s =~ /([^:]+)$/
+	    $dbg.msg(DBG::AUTOCONF, "Query mode set to: #{$1}")
+	end
+    end
+
+    ##
+    ## Hold information about the test
+    ## 
+    ## list      : limiting tests to this list
+    ## catagories: limiting tests to these categories
+    ## desctype  : description type (name, xpl, error, ...)
+    ##
+    class Test
+	attr_reader :list, :tests, :categories, :desctype
+	attr_writer :list
+
+	def initialize
+	    @list	= false
+	    @tests	= nil
+	    @categories	= nil
+	    @desctype   = nil
+	end
+
+	def desctype=(string)
+	    suf = case string
+		  when "name"  then "testname"
+		  when "expl"  then "explain"
+		  when "error" then "error"
+		  else raise ParamError, 
+			  $mc.get("xcp_param_unknown_modopt") % [ string, "testdesc" ]
+		  end
+	    
+	    @desctype = suf
+	end
+
+	
+	def tests=(string)
+	    return if string =~ /^\s*$/
+	    @tests = string.split(/\s*,\s*/)
+	end
+
+	def categories=(string)
+	    return if string =~ /^\s*$/
+	    @categories = string.split(/\s*,\s*/)
+	end
+    end
+
+
+    ##
+    ## Exception: Parameter errors (ie: usage)
+    ##
+    class ParamError < StandardError
+    end
+
+
+
+    attr_reader :rflag, :report, :test, :network, :fs
+    attr_reader :publisher, :publisher_class
 
 
     attr_reader :batch
     attr_writer :batch
     
-    attr_reader :category
-
-    attr_reader :test
-
     attr_reader :domain
     attr_writer :domain
 
     attr_writer :debug
 
-    attr_reader :give_testlist
-    attr_writer :give_testlist
-
-    attr_reader :give_testdesc
-    
-    attr_reader :testdir
-    attr_writer :testdir
 
 
-    ##
-    ## Parameter errors (ie: usage)
-    ##
-    class ParamError < StandardError
-    end
+
 
 
 
@@ -296,65 +430,20 @@ class Param
     #
     #
     def initialize
-	@dns			= NResolv::DNS::DefaultResolver
-	@configfile		= ZC_CONFIG_FILE
-	@testdir		= ZC_TEST_DIR
-	@ipv4			= nil
-	@ipv6			= nil
-
-	@testlist		= nil
-	@testdesc		= nil
-
-	@client			= NResolv::DNS::Client::Classic
-
-
 	@publisher_class	= Publisher::Text
+	@publisher		= nil
+
+	@fs			= FSData::new
+	@network		= Network::new
+	@test			= Test::new
 	@report			= ProxyReport::new(Report::Straight)
 	@domain			= Domain::new
 	@rflag			= ReportFlag::new
     end
 
 
-    #
-    #
-    #
-    def give_testdesc=(string)
-	suf = case string
-	      when "name"  then "testname"
-	      when "expl"  then "explain"
-	      when "error" then "error"
-	      else raise ParamError, 
-		$mc.get("xcp_param_unknown_modopt") % [ type, "testdesc" ]
-	      end
-	
-	@give_testdesc = suf
-    end
 
-    #
-    # WRITER: test
-    #
-    def test=(string)
-	@test = string.split(/\s*,\s*/)
-    end
 
-    #
-    # WRITER: ipv6
-    #
-    def ipv6=(bool)
-	if bool && ! $ipv6_stack
-	    raise ParamError, $mc.get("xcp_param_ipv6_no_stack")
-	end
-	@ipv6 = bool
-    end
-
-    #
-    # WRITER: category
-    #
-    def category=(string)
-	return if string =~ /^\s*$/
-	@category = [] if @category.nil?
-	@category.concat(string.split(/\s*,\s*/))
-    end
 
     
     #
@@ -402,30 +491,6 @@ class Param
     end
 
     #
-    # WRITER: verbose
-    #
-    def transp=(string)
-	return if string =~ /^\s*$/
-	string.split(/\s*,\s*/).each { |token|
-	    case token
-	    when "4", "ipv4"
-		ipv4 = true
-	    when "6", "ipv6"
-		ipv6 = true
-	    when "u", "udp"
-		@client = NResolv::DNS::Client::UDP
-	    when "t", "tcp"
-		@client = NResolv::DNS::Client::TCP
-	    when "s", "std"
-		@client = NResolv::DNS::Client::Classic
-	    else
-		raise ParamError,
-		    $mc.get("xcp_param_unknown_modopt") % [ token, "transp" ]
-	    end
-	}
-    end
-
-    #
     # WRITER: output
     #
     def output=(string)
@@ -448,34 +513,28 @@ class Param
     end
 
     #
+    # WRITER: transp
     #
-    #
-    def resolver=(resolv)
-	dns_config = NResolv::DNS::Config::new(resolv)
-	@resolver  = resolv
-	@dns       = NResolv::DNS::Client::Classic::new(dns_config)
-    end
-
-
-    #
-    #
-    #
-    def address_wanted?(address)
-	case address
-	when String
-	    case address
-	    when Address::IPv4::Regex then address if ipv4
-	    when Address::IPv6::Regex then address if ipv6
-	    else nil
+    def transp=(string)
+	return if string =~ /^\s*$/
+	string.split(/\s*,\s*/).each { |token|
+	    case token
+	    when "4", "ipv4"
+		@network.ipv4 = true
+	    when "6", "ipv6"
+		@network.ipv6 = true
+	    when "u", "udp"
+		@network.query_mode = NResolv::DNS::Client::UDP
+	    when "t", "tcp"
+		@network.query_mode = NResolv::DNS::Client::TCP
+	    when "s", "std"
+		@network.query_mode = NResolv::DNS::Client::Classic
+	    else
+		raise ParamError,
+		    $mc.get("xcp_param_unknown_modopt") % [token, "transp"]
 	    end
-	when Address::IPv4 then address if ipv4
-	when Address::IPv6 then address if ipv6
-	when Array
-	    address.collect { |addr| address_wanted?(addr) }.compact
-	else nil
-	end
+	}
     end
-
 
 
     #
@@ -494,25 +553,11 @@ class Param
     #       should not be part of autoconf
     #
     def autoconf
-	# Autoconf of domain information
-	@domain.autoconf(@dns)
-
-	# Select routing protocol
-	@ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
-	@ipv4 = false        if @ipv4.nil?
-	@ipv6 = false        if @ipv6.nil? || !$ipv6_stack
-	$dbg.msg(DBG::AUTOCONF, 
-		 "Routing protocol set to: " +
-		   [ @ipv4 ? "ipv4" : nil, 
-		     @ipv6 ? "ipv6" : nil].compact.join("/"))
-
-	# Set report object
+	@network.autoconf
+	@domain.autoconf(@network.resolver)
 	@report.autoconf(@domain, @rflag, @publisher)
-	$dbg.msg(DBG::AUTOCONF, "Report using #{@report.reporter}")
     end
 end
 
-
-load "param/cgi.rb"
-load "param/cli.rb"
-#load "param/gtk.rb"
+# Load input method
+ZC_INPUT_METHODS.each { |im| load "param/#{im}.rb" }

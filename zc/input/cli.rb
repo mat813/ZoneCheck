@@ -11,6 +11,8 @@
 #
 #
 
+require 'getoptlong'
+
 class Param
     ##
     ## Processing parameters from CLI (Command Line Interface)
@@ -56,25 +58,25 @@ class Param
 		    puts $mc.get("param_version").gsub("PROGNAME", PROGNAME) % 
 			[ $zc_version ]
 		    exit EXIT_OK
-		when "--debug"     then $dbg.level	 = arg
-		when "--batch"     then @p.batch	 = arg
-		when "--config"    then @p.configfile    = arg
-		when "--testdir"   then @p.testdir       = arg
-		when "--category"  then @p.category	 = arg
-		when "--test"      then @p.test          = arg
-		when "--testlist"  then @p.give_testlist = true
-		when "--testdesc"  then @p.give_testdesc = arg
-		when "--resolver"  then @p.resolver      = arg
-		when "--ns"        then @p.domain.ns     = arg
-		when "--ipv6"      then @p.ipv6          = true
-		when "--ipv4"      then @p.ipv4          = true
-		when "--one"       then @p.rflag.one	 = true
-		when "--tagonly"   then @p.rflag.tagonly = true
-		when "--quiet"     then @p.rflag.quiet   = true
-		when "--error"     then @p.error         = arg
-		when "--transp"    then @p.transp        = arg
-		when "--verbose"   then @p.verbose	 = arg
-		when "--output"    then @p.output        = arg
+		when "--debug"     then $dbg.level	    = arg
+		when "--batch"     then @p.batch	    = arg
+		when "--config"    then @p.fs.cfgfile       = arg
+		when "--testdir"   then @p.fs.testdir       = arg
+		when "--category"  then @p.test.categories  = arg
+		when "--test"      then @p.test.tests       = arg
+		when "--testlist"  then @p.test.list        = true
+		when "--testdesc"  then @p.test.desctype    = arg
+		when "--resolver"  then @p.network.resolver = arg
+		when "--ns"        then @p.domain.ns        = arg
+		when "--ipv6"      then @p.network.ipv6     = true
+		when "--ipv4"      then @p.network.ipv4     = true
+		when "--one"       then @p.rflag.one	    = true
+		when "--tagonly"   then @p.rflag.tagonly    = true
+		when "--quiet"     then @p.rflag.quiet      = true
+		when "--error"     then @p.error            = arg
+		when "--transp"    then @p.transp           = arg
+		when "--verbose"   then @p.verbose	    = arg
+		when "--output"    then @p.output           = arg
 		when "--makecoffee"
 		    print <<EOT
 #{PROGNAME}: I'm not currently designed for that task.
@@ -105,11 +107,15 @@ EOT
 	def parse
 	    begin
 		opts_analyse
-		args_analyse unless @p.give_testlist || @p.give_testdesc
+		args_analyse unless @p.test.list || @p.test.desctype
 	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
 		return nil
 	    end
 	    @p
+	end
+
+	def interact(param)
+	    true
 	end
 
 	def usage(errcode, io=$stderr)
