@@ -70,12 +70,11 @@ module CheckNetworkAddress
 
 	# DESC: Test UDP connectivity with DNS server
 	def chk_udp(ns, ip)
-	    # The idea is to send 25 'server status' request in 5 seconds
+	    # The idea is to send 25 'query' concerning the domain in 5 seconds
 	    #  if we received one answer within 8 seconds (dont care about 
-	    #  its content, although generally 'Not Implemented')
-	    #  we consider it sucessful
+	    #  its content, we consider it sucessful)
 	    msg        = NResolv::DNS::Message::Query::new
-	    msg.opcode = NResolv::DNS::OpCode::STATUS
+	    msg.question.add(@domain.name, NResolv::DNS::Resource::IN::ANY)
 	    rawmsg     = msg.to_wire
 	    sock       = nil
 	    thr        = nil
