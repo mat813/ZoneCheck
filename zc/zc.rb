@@ -308,6 +308,7 @@ class ZoneCheck
 	
 	# 
 	begin
+	    success = true
 	    if ! @param.batch
 		cm = CacheManager::create(@param.resolver.local,
 					  @param.network.query_mode)
@@ -315,7 +316,7 @@ class ZoneCheck
 		@param.domain.autoconf(@param.resolver.local)
 		@param.report.autoconf(@param.domain, 
 				       @param.rflag, @param.publisher.engine)
-		zc(cm)
+		success = zc(cm)
 	    else
 		cm = CacheManager::create(@param.resolver.local, 
 					  @param.network.query_mode)
@@ -333,7 +334,7 @@ class ZoneCheck
 		    @param.domain.autoconf(@param.resolver.local)
 		    @param.report.autoconf(@param.domain, 
 					 @param.rflag, @param.publisher.engine)
-		    zc(cm)
+		    succed = false unless zc(cm)
 		}
 		batchio.close unless @param.batch == "-"
 	    end
@@ -343,6 +344,9 @@ class ZoneCheck
 
 	# End formatter
 	@param.publisher.engine.end
+
+	#
+	return success
     end
 
 
@@ -351,6 +355,7 @@ class ZoneCheck
     #
     def do_testlist
 	puts @test_manager.list.sort
+	true
     end
 
     #
@@ -364,6 +369,7 @@ class ZoneCheck
 	list.each { |test|
 	    puts $mc.get("#{test}_#{suf}")
 	}
+	true
     end
 
     def start 
@@ -394,13 +400,13 @@ class ZoneCheck
 	    @config.overrideconf(@param.test.tests) if @param.test.tests
 
 	    # Do the job
-	    if    @param.test.list	then do_testlist
-	    elsif @param.test.desctype	then do_testdesc
-	    else			     do_check
-	    end
+	    success = if    @param.test.list		then do_testlist
+		      elsif @param.test.desctype	then do_testdesc
+		      else				     do_check
+		      end
 
-	    # Everything is fine
-	    exit EXIT_OK
+	    # Everything fine?
+	    exit success ? EXIT_OK : EXIT_FAILED
 	rescue Param::ParamError => e
 	    @input.error(e.to_s, EXIT_ERROR)
 	ensure

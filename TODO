@@ -9,7 +9,6 @@ version = 2.0.0
 	Implement AXFR tests (only framework exists)
 	Test loopback delegation v6
 	Cache status is wrong
-	Check for meaningfull exit code
 	Translation in french
 	Check name from_s methode
 
@@ -39,6 +38,7 @@ version = 2.1.0
 	New test scheme (ie: tst_*) (++++)    |
 	Rework config parser (++)             /
 	Have a useconf strict (+++)
+	Detection of failure due to dependencies
 	A test can change the severity (ex: test soa.ttl between ns) (+++)
 	Cachemanager destroy method (and use it) (++)
 	Implement XML input and XML publisher
