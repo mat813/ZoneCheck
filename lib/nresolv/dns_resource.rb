@@ -149,7 +149,7 @@ class NResolv
 	    ## IN Resource
 	    ##
 	    module IN
-		# Add all the generic resources
+		#-- Add all the generic resources -----------------
 		Generic.constants.each { |name|
 		    next unless Generic.const_get(name).class == Class
 		    module_eval <<-EOS
@@ -160,6 +160,7 @@ class NResolv
 		    EOS
 		}
 
+		#-- Add the Internet (IN) specific resources ------
 		class A < Resource
 		    RClass, RType = RClass::IN, RType::A
 		    has_fields :address
@@ -177,16 +178,18 @@ class NResolv
 end
 
 
+#
+# Shortcut for addresses
+#  (ie: add method to_dnsressource to convert an address into its
+#       dns resource)
+#
+
 require 'address'
 class Address
     class IPv4
-	def to_dnsressource
-	    NResolv::DNS::Resource::IN::A::new(self)
-	end
+	def to_dnsressource ; NResolv::DNS::Resource::IN::A::new(self)    ; end
     end
     class IPv6
-	def to_dnsressource
-	    NResolv::DNS::Resource::IN::AAAA::new(self)
-	end
+	def to_dnsressource ; NResolv::DNS::Resource::IN::AAAA::new(self) ; end
     end
 end

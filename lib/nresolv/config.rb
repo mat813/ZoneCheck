@@ -108,17 +108,10 @@ class NResolv
 		end
 		
 		# Autoconf for missing information
-		if nameserver.empty?
-		    nameserver = ['0.0.0.0'] 
-		end
-		if search.nil?
-		    search = Socket.gethostname =~ /\./ ? [$'] : [] #' <- emacs
-		end
-		
-		# Create domain list
-		search.map! { |domain| Name::create(domain, true) }
-		search << Name::Root
-
+		nameserver= [ '0.0.0.0' ] if nameserver.empty?
+		search    = Socket.gethostname=~/\./ ? [$'] : [] if search.nil?
+		# Ensure we have root in the search list
+		search << '.'
 		# Create config
 		self::new(nameserver, search)
 	    end
@@ -134,17 +127,10 @@ class NResolv
 		nameserver << $1.to_s.untaint unless $1.nil?
 
 		# Autoconf for missing information
-		if nameserver.empty?
-		    nameserver = ['0.0.0.0'] 
-		end
-		if search.nil?
-		    search = Socket.gethostname =~ /\./ ? [$'] : [] #' <- emacs
-		end
-		
-		# Create domain list
-		search.map! { |domain| Name::create(domain, true) }
-		search << Name::Root
-
+		nameserver= [ '0.0.0.0' ] if nameserver.empty?
+		search    = Socket.gethostname=~/\./ ? [$'] : [] if search.nil?
+		# Ensure we have root in the search list
+		search << '.'
 		# Create config
 		self::new(nameserver, search)
 	    end
@@ -155,6 +141,7 @@ class NResolv
 			      when Array then nameserver
 			      else [ nameserver ]
 			      end
+		@rootserver = nil
 		@search     = search.collect { |domain|
 		                  Name::create(domain, true) }.uniq.freeze
 		@ndots      = ndots < 0 ? 0 : ndots

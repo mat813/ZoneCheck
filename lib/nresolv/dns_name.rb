@@ -25,7 +25,13 @@
 
 class NResolv
     class DNS
+	##
+	## DNS Name
+	##
 	class Name
+	    ##
+	    ## DNS Label
+	    ##
 	    class Label
 		##
 		## Ordinary DNS Label

@@ -27,6 +27,7 @@ class NResolv
 	class Message
 	    attr_reader :msgid, :opcode
 
+	    # Allow generation of message id
 	    @@genid = rand 0xffff
 	    def self.generate_id
 		begin
@@ -112,46 +113,54 @@ class NResolv
 		end
 
 		def rcode=(code)
-		    if code.nil? || code.class != RCode
-			raise ArgumentError, 
-			    'expected type NResolv::DNS::RCode'
+		    # Sanity check
+		    unless code.kind_of?(RCode)
+			raise ArgumentError, "expecting #{RCode}"
 		    end
-		    @rcode = code
+
+		    # Initialize
+		    @rcode	= code
 		end
 
 		def question=(q)
-		    unless q.nil? || q.class == Section::Q
-			raise ArgumentError,
-			    'expected type NResolv::DNS::Section::Q'
+		    # Sanity check
+		    unless q.kind_of?(Section::Q)
+			raise ArgumentError, "expecting #{Section::Q}"
 		    end
-		    @question = q
+
+		    # Initialize
+		    @question	= q
 		end
 
 		def answer=(a)
-		    unless a.nil? || a.class == Section::A
-			raise ArgumentError,
-			    'expected type NResolv::DNS::Section::A'
+		    # Sanity check
+		    unless a.kind_of?(Section::A)
+			raise ArgumentError, "expecting #{Section::A}"
 		    end
-		    @answer = a
+
+		    # Initialize
+		    @answer	= a
 		end
 		
 		def authority=(a)
-		    unless a.nil? || a.class == Section::A
-			raise ArgumentError,
-			    'expected type NResolv::DNS::Section::A'
+		    # Sanity check
+		    unless a.kind_of?(Section::A)
+			raise ArgumentError, "expecting #{Section::A}"
+
 		    end
-		    @authority = a
+		    # Initialize
+		    @authority	= a
 		end
 		
 		def additional=(a)
-		    unless a.nil? || a.class == Section::A
-			raise ArgumentError,
-			    'expected type NResolv::DNS::Section::A'
+		    # Sanity check
+		    unless a.kind_of?(Section::A)
+			raise ArgumentError, "expecting #{Section::A}"
 		    end
-		    @additional = a
-		end
-		
 
+		    # Initialize
+		    @additional	= a
+		end
 	    end
 	end
 
@@ -162,7 +171,7 @@ class NResolv
 	class Section
 	    def initialize
 		if self.class == Section
-		    raise RuntimeError, "#{self.class} is an abstract class"
+		    raise "#{self.class} is an abstract class"
 		end
 
 		@record = []
