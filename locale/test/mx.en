@@ -35,9 +35,9 @@ testname: MX is not an alias
 error   : MX is not allowed to point to a CNAME alias
 explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
 
-[chk_mx_wildcard]
-testname: MX wildcard exists
-error   : A wilcard MX is not present
+[chk_mx_no_wildcard]
+testname: absence of wildcard MX
+error   : A wilcard MX is present
 explain : [none]
 
 [chk_mx_ip]

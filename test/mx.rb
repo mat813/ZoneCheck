@@ -66,11 +66,11 @@ module CheckNetworkAddress
 	    true
 	end
 
-	# DESC: check for wildcard MX
-	def chk_mx_wildcard(ns, ip)
+	# DESC: check for absence of wildcard MX
+	def chk_mx_no_wildcard(ns, ip)
 	    host    = const("inexistant_hostname")
 	    host_fq = @domain.name.add(host)
-	    !mx(ip, host_fq).empty?
+	    mx(ip, host_fq).empty?
 	end
 
 
