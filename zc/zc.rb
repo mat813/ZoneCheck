@@ -149,8 +149,22 @@ $LOAD_PATH.delete_if { |path| path == '.' }
 $LOAD_PATH << ZC_DIR << ZC_LIB
 
 
+#
+# Version / Name / Contact
+#
+$zc_version	= ZC_VERSION
+$zc_name	= ZC_NAME
+$zc_contact	= ZC_CONTACT
+
+
+#
+# Config directory
+# 
+$zc_config_dir	||= ZC_CONFIG_DIR
+
+
 # Resolver configuration
-$nresolv_rootserver_hintfile	= "#{ZC_CONFIG_DIR}/rootservers"
+$nresolv_rootserver_hintfile	= "#{$zc_config_dir}/rootservers"
 $nresolv_dbg			= 0xffff
 
 
@@ -239,30 +253,17 @@ end
 
 
 #
-# Version / Name / Contact
-#
-$zc_version	= ZC_VERSION
-$zc_name	= ZC_NAME
-$zc_contact	= ZC_CONTACT
-
-
-#
-# Config directory
-# 
-$zc_config_dir	= ZC_CONFIG_DIR
-
-
-#
 # Load eventual custom version
 #
 begin 
     require 'zc-custom'
-rescue LoadError
+rescue LoadError => e
+    $dbg.msg(DBG::INIT, "Unable to load 'zc-custom' (#{e})")
 end
 
 
 #
-# Adjustement for zc-custom
+# Adjustement due to zc-custom
 #
 begin
     hintfile = "#{$zc_config_dir}/rootservers"
