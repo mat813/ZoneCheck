@@ -74,23 +74,10 @@ module MyXML
     end
 end
 
-
 case MyXML::Implementation
 when :libxml
 
 #-- BEGIN: libxml specific --------------------------------------------
-# Define XML_CATALOG_FILES to point to our catalog
-$dbg.msg(DBG::INIT) {
-    xml_catalog = File.shrink_path("#{ZC_DIR}/data/catalog.xml")
-    "Ensuring XML_CATALOG_FILES contains #{xml_catalog}" }
-ENV['XML_CATALOG_FILES'] = ((ENV['XML_CATALOG_FILES'] || '').split(/:/, -1) \
-			    << "#{ZC_DIR}/data/catalog.xml").uniq.join(':')
-$dbg.msg(DBG::INIT) {
-    shrinked_path = File.shrink_path(ENV['XML_CATALOG_FILES'], ':')
-    "Using XML_CATALOG_FILES=#{shrinked_path}"
-}
-
-
 require 'xml/libxml'
 
 module MyXML

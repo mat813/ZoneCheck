@@ -4,7 +4,7 @@
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
 #
-# CREATED     : 2002/08/02 13:58:17
+# CREATED     : 2003/12/22 15:40:37
 # REVISION    : $Revision$ 
 # DATE        : $Date$
 #

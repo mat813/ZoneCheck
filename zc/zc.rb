@@ -160,7 +160,6 @@ $zc_version	||= ZC_VERSION
 $zc_name	||= ZC_NAME
 $zc_contact	||= ZC_CONTACT
 
-
 #
 # Config directory
 # 
@@ -183,15 +182,7 @@ $nresolv_dbg			= 0xffff
 
 
 #
-# Debugger object
-#  (earlier initialization, can also be set via input interface)
-#
-require 'dbg'
-$dbg       = DBG::new
-$dbg.level = ENV['ZC_DEBUG'] if ENV['ZC_DEBUG']
-
-#
-# Requirement
+# Requierement
 #
 # Standard Ruby libraries
 require 'socket'
@@ -202,12 +193,34 @@ require 'nresolv'
 # Modification to standard/core ruby classes
 require 'ext/array'
 require 'ext/file'
+require 'ext/myxml'
 
 # ZoneCheck component
+require 'dbg'
 require 'locale'
 require 'msgcat'
 require 'console'
 require 'zonecheck'
+
+
+#
+# Debugger object
+#  (earlier initialization, can also be set via input interface)
+#
+$dbg       = DBG::new
+$dbg.level = ENV['ZC_DEBUG'] if ENV['ZC_DEBUG']
+
+
+#
+# XML parser
+#
+ENV['XML_CATALOG_FILES'] = "#{ZC_DIR}/data/catalog.xml"
+
+$dbg.msg(DBG::INIT) {
+    shrinked_path = File.shrink_path(ENV['XML_CATALOG_FILES'], ':')
+    "Using XML_CATALOG_FILES=#{shrinked_path}"
+}
+$dbg.msg(DBG::INIT) { "Using XML parser: #{MyXML::Implementation}" }
 
 
 
