@@ -98,6 +98,48 @@ module Input
 	    # Direct script invocation is not authorized
 	    return false if @cgi.params.empty?
 
+	    # Parse zone data and options
+	    parse_zonedata(p) && parse_options(p)
+	end
+
+	def redirect(url, errcode, data=nil, io=$stdout)
+	    io.puts @cgi.header({ "status"   => "REDIRECT",
+				  "location" => url,
+				  "type"     => "text/plain",
+				  "charset"  => "UTF-8" })
+	    io.puts data if data
+	    exit errcode unless errcode.nil?
+	end
+
+	def interact(p, c, tm)
+	    # XXX: not good place
+	    p.rflag.autoconf
+	    p.publisher.autoconf(p.rflag)
+	    puts @cgi.header({ "type"    => p.publisher.engine.class::Mime,
+			       "charset" => "UTF-8" })
+	    true
+	end
+
+	def usage(errcode, io=$stdout)
+	    io.puts @cgi.header({ "type"    => "text/plain",
+				  "charset" => "UTF-8" })
+	    io.puts $mc.get("input_cgi_usage")
+	    exit errcode unless errcode.nil?
+	end
+
+	def error(str, errcode=nil, io=$stdout)
+	    l10n_error = $mc.get("w_error").upcase
+	    io.puts @cgi.header({ "type"    => "text/plain",
+				  "charset" => "UTF-8" })
+	    io.puts "#{l10n_error}: #{str}"
+	    exit errcode unless errcode.nil?
+	end
+
+
+	#-- PRIVATE -------------------------------------------------
+	private
+
+	def parse_options(p)
 	    # Lang
 	    # => The message catalogue need to be replaced
 	    if @cgi.has_key?("lang")
@@ -109,11 +151,6 @@ module Input
 		    end
 		rescue ArgumentError
 		end
-	    end
-
-	    # Batch
-	    if @cgi.has_key?("batchdata")
-		p.batch = Param::BatchData::new(@cgi["batchdata"])
 	    end
 
 	    # Quiet, One
@@ -181,6 +218,16 @@ module Input
 		end
 	    end
 
+	    # Ok
+	    true
+	end
+
+	def parse_zonedata(p)
+	    # Batch
+	    if @cgi.has_key?("batchdata")
+		p.batch = Param::BatchData::new(@cgi["batchdata"])
+	    end
+
 	    # NS and IPs
 	    if @cgi.has_key?("ns")
 		p.domain.ns = @cgi.params["ns"].join(";")
@@ -242,39 +289,6 @@ module Input
 
 	    # Ok
 	    true
-	end
-
-	def redirect(url, errcode, data=nil, io=$stdout)
-	    io.puts @cgi.header({ "status"   => "REDIRECT",
-				  "location" => url,
-				  "type"     => "text/plain",
-				  "charset"  => "UTF-8" })
-	    io.puts data if data
-	    exit errcode unless errcode.nil?
-	end
-
-	def interact(p, c, tm)
-	    # XXX: not good place
-	    p.rflag.autoconf
-	    p.publisher.autoconf(p.rflag)
-	    puts @cgi.header({ "type"    => p.publisher.engine.class::Mime,
-			       "charset" => "UTF-8" })
-	    true
-	end
-
-	def usage(errcode, io=$stdout)
-	    io.puts @cgi.header({ "type"    => "text/plain",
-				  "charset" => "UTF-8" })
-	    io.puts $mc.get("input_cgi_usage")
-	    exit errcode unless errcode.nil?
-	end
-
-	def error(str, errcode=nil, io=$stdout)
-	    l10n_error = $mc.get("w_error").upcase
-	    io.puts @cgi.header({ "type"    => "text/plain",
-				  "charset" => "UTF-8" })
-	    io.puts "#{l10n_error}: #{str}"
-	    exit errcode unless errcode.nil?
 	end
     end
 end
