@@ -93,6 +93,9 @@ ZC_COPYRIGHT		= 'AFNIC (c) 2003'
 ZC_CONTACT		= 'ZoneCheck <zonecheck@nic.fr>'
 ZC_MAINTAINER		= 'Stephane D\'Alu <sdalu@nic.fr>'
 
+## Internal
+ZC_XML_IMPLEMENTATION	= ENV['ZC_XML_IMPLEMENTATION'] 
+
 ## --> END OF CUSTOMIZATION <-- ######################################
 
 
@@ -153,22 +156,26 @@ $LOAD_PATH << ZC_DIR << ZC_LIB
 #
 # Version / Name / Contact
 #
-$zc_version	||= ZC_VERSION
-$zc_name	||= ZC_NAME
-$zc_contact	||= ZC_CONTACT
+$zc_version		||= ZC_VERSION
+$zc_name		||= ZC_NAME
+$zc_contact		||= ZC_CONTACT
 
 
 #
 # Config directory
 # 
-$zc_config_dir	||= ZC_CONFIG_DIR
-$zc_config_file	||= ZC_CONFIG_FILE
+$zc_config_dir		||= ZC_CONFIG_DIR
+$zc_config_file		||= ZC_CONFIG_FILE
 
 #
 # Custom
 #
-$zc_custom	||= 'zc-custom'
+$zc_custom		||= 'zc-custom'
 
+#
+# Internal
+#
+$zc_xml_implementation	||= ZC_XML_IMPLEMENTATION
 
 # Resolver configuration
 $nresolv_rootserver_hintfile	= "#{$zc_config_dir}/rootservers"
@@ -254,6 +261,7 @@ begin
     $mc.read(ZC_LANG_FILE)
 
 rescue => e
+    raise if $dbg.enabled?(DBG::DONT_RESCUE)
     $stderr.puts "ERROR: #{e.to_s}"
     exit EXIT_ERROR
 end
