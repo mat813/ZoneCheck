@@ -1,29 +1,26 @@
 # $Id$
 
 require 'diagnostic'
-
+require 'formatter'
 
 ##
 ## Parameters of the ZoneCheck application
 ##
 class Param
-    #
-    # configfile
-    # ipv4
-    # ipv6
-    # domainname
-    # ns
-    # info
-    # warning
-    # fatal
-
     attr_reader :configfile, :ipv4, :ipv6, :domainname, :ns
     attr_writer :configfile, :ipv4, :ipv6
     attr_reader :resolver
 
+    attr_reader :diagnostic
     attr_reader :info, :warning, :fatal
     attr_reader :stop_on_fatal
 
+    attr_reader :intro, :explanation, :testdesc, :counter
+    attr_reader :client
+    attr_reader :formatter
+
+    attr_reader :cache
+    attr_reader :primary
 
     DefaultConfigFile = "zc.conf"
 
@@ -38,35 +35,27 @@ class Param
     def initialize
 	@dns			= NResolv::DNS::DefaultResolver
 	@configfile		= DefaultConfigFile
-	@ipv4			= true
-	@ipv6			= true
+	@ipv4			= nil
+	@ipv6			= nil
+	@client			= nil
+
 	@stop_on_fatal		= true
-	@diag_class		= Diagnostic::Straight
-	@warning_methodname	= "warning"
-	@fatal_methodname	= "fatal"
-	@info_methodname	= "info"
+	@diagnostic_class	= Diagnostic::Straight
+	@formatter_class	= Formatter::Text
+	@warning_methodname	= :warning
+	@fatal_methodname	= :fatal
+	@info_methodname	= :info
 	@intro			= false
 	@explanation		= false
-	@testing		= false
+	@testdesc		= false
 
-	@diag			= nil
+	@diagnostic		= nil
 	@info			= nil
 	@warning		= nil
 	@fatal			= nil
 	@ns			= nil
-    end
 
-
-    def intro?
-	@intro
-    end
-
-    def explanation?
-	@explanation
-    end
-    
-    def testing?
-	@testing
+	@cache			= true
     end
 
     #
@@ -75,11 +64,12 @@ class Param
     def self.cmdline_parse
 	opts = GetoptLong.new(
 		[ "--quiet",	"-q",	GetoptLong::NO_ARGUMENT       ],
-		[ "--error",	"-e",	GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--ipv4",	"-4",	GetoptLong::NO_ARGUMENT       ],
 		[ "--ipv6",	"-6",	GetoptLong::NO_ARGUMENT       ],
         	[ "--ns",       "-n",   GetoptLong::REQUIRED_ARGUMENT ],
         	[ "--resolver", "-r",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--error",	"-e",	GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--transp",	"-t",	GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--verbose",  "-v",   GetoptLong::OPTIONAL_ARGUMENT ],
 		[ "--output",   "-o",   GetoptLong::REQUIRED_ARGUMENT ],
         	[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
@@ -95,12 +85,13 @@ class Param
 		when "--version"
 		    puts "#{MYNAME}: RCS version #{RCS_REVISION}"
 		    exit EXIT_OK
-		when "--error"     then i.error         = arg
-		when "--ipv6"      then i.ipv4          = false
-		when "--ipv4"      then i.ipv6          = false
+		when "--ipv6"      then i.ipv6          = true
+		when "--ipv4"      then i.ipv4          = true
 		when "--config"    then i.configfile    = arg
 		when "--ns"        then i.ns            = arg
 		when "--resolver"  then i.resolver      = arg
+		when "--error"     then i.error         = arg
+		when "--transp"    then i.transp        = arg
 		when "--verbose"   then i.verbose	= arg
 		when "--output"    then i.output        = arg
 		when "--help"      then cmdline_usage(EXIT_USAGE, $stdout)
@@ -122,17 +113,43 @@ class Param
     #
     def self.cmdline_usage(errcode, io=$stderr)
 	io.print <<EOT
-usage: #{MYNAME}: [-hqv] [-46] [-f] [-n ns1,ns2,..] [-c configfile] domainname
-    -q, --quiet        Quiet mode, doesn't print visual candy.
-    -h, --help         Show this message
-    -V, --version      Display RCS version
-    -e, --error        Behaviour in case of error (allfatal,allwarning,nostop)
-    -v, --verbose      Display extra information (intro,explanation)
-    -o, --output       Output (straight, consolidation)
-    -c, --config       Specify location of the configuration file
-    -4, --ipv4         Only check the zone with IPv4 connectivity
-    -6, --ipv6         Only check the zone with IPv6 connectivity
-    -n, --ns           List of nameservers of the domain
+usage: #{MYNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
+    -q, --quiet         Quiet mode, doesn't print visual candy.
+    -h, --help          Show this message
+    -V, --version       Display RCS version and exit
+    -e, --error         Behaviour in case of error (see error)
+    -t, --transp        Transport/routing layer (see transp)
+    -v, --verbose       Display extra information (see verbose)
+    -o, --output        Output (see output)
+    -c, --config        Specify location of the configuration file
+    -4, --ipv4          Only check the zone with IPv4 connectivity
+    -6, --ipv6          Only check the zone with IPv6 connectivity
+    -n, --ns            List of nameservers for the domain
+
+  verbose:              [intro/explanation] [testdesc|counter]
+    intro          [i]  Print summary for domain and associated nameservers
+    explanation    [x]  Print an explanation for failed tests
+    testdesc       [t]  Print the test description before running it
+    counter        [c]  Print a test counter
+
+  output:               [straigh|consolidation] [text|html]
+    straight      *[s]  Print output without processing
+    consolidation  [c]  Try to merge some results before output
+    text          *[t]  Output plain text
+    html           [h]  Output HTML
+
+  error:                [allfatal|allwarning] [stop|nostop]
+    allfatal       [af] All error are considered fatal
+    allwarning     [aw] All error are considered warning
+    stop          *[s]  Stop on the first fatal error
+    nostop         [ns] Never stop (even on fatal error)
+
+  transp:               [ipv4/ipv6] [udp|tcp|std]
+    ipv4          *[4]  Use IPv4 routing protocol (same as -4)
+    ipv6          *[6]  Use IPv6 routing protocol (same as -6)
+    udp            [u]  Use UDP transport layer
+    tcp            [t]  Use TCP transport layer
+    std           *[s]  Use UDP with fallback to TCP from truncated messages
 
 EXAMPLES:
   #{MYNAME} -4 --verbose=x,i afnic.fr.
@@ -185,9 +202,9 @@ EOT
 	string.split(/\s*,\s*/).each { |token|
 	    case token
 	    when "af", "allfatal"
-		@warning_methodname = @fatal_methodname = "fatal"
+		@warning_methodname = @fatal_methodname = :fatal
 	    when "aw", "allwarning"
-		@warning_methodname = @fatal_methodname = "warning"
+		@warning_methodname = @fatal_methodname = :warning
 	    when "s",  "stop"
 		@stop_on_fatal = true
 	    when "ns", "nostop"
@@ -208,8 +225,34 @@ EOT
 		@explanation = true
 	    when "i", "intro"
 		@intro       = true
-	    when "t", "testing"
-		@testing     = true
+	    when "t", "testdesc"
+		@testdesc     = true
+		@counter      = false
+	    when "c", "counter"
+		@counter      = true
+		@testdesc     = false
+	    else
+		raise ParamError, "unknown verbose modifier '#{token}'"
+	    end
+	}
+    end
+
+    #
+    # WRITER: verbose
+    #
+    def transp=(string)
+	string.split(/\s*,\s*/).each { |token|
+	    case token
+	    when "4", "ipv4"
+		@ipv4 = true
+	    when "6", "ipv6"
+		@ipv6 = true
+	    when "u", "udp"
+		@client = NResolv::DNS::Client::UDP
+	    when "t", "tcp"
+		@client = NResolv::DNS::Client::TCP
+	    when "s", "std"
+		@client = NResolv::DNS::Client::Classic
 	    else
 		raise ParamError, "unknown verbose modifier '#{token}'"
 	    end
@@ -223,9 +266,13 @@ EOT
 	string.split(/\s*,\s*/).each { |token|
 	    case token
 	    when "s", "straight"
-		@diag_class = Diagnostic::Straight
+		@diagnostic_class = Diagnostic::Straight
 	    when "c", "consolidation"
-		@diag_class = Diagnostic::Consolidation
+		@diagnostic_class = Diagnostic::Consolidation
+	    when "t", "text"
+		@formatter_class  = Formatter::Text
+	    when "h", "html"
+		@formatter_class  = Formatter::HTML
 	    else
 		raise ParamError, "unknown output modifier '#{token}'"
 	    end
@@ -237,7 +284,7 @@ EOT
     #
     def resolver=(resolv)
 	@resolver = resolv
-	@dns = NResolv::DNS::new(NResolv::DNS::Config(resolv))
+	@dns = NResolv::DNS::Client::Classic::new(NResolv::DNS::Config::new(resolv))
     end
 
 
@@ -266,11 +313,19 @@ EOT
     # Try to fill the blank for the unspecified parameters
     #
     def autoconf
+	# Select routing protocol
+	@ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
+	@ipv4 = false        if @ipv4.nil?
+	@ipv6 = false        if @ipv6.nil?
+
+	# Select transport layer
+	@client = NResolv::DNS::Client::Classic if @client.nil?
+
 	# Guess Nameservers and ensure primary is at first position
-	if ns.nil?
+	if @ns.nil?
 	    begin
 		primary = @dns.primary(@domainname)
-	    rescue NResolv
+	    rescue NResolv::NResolvError
 		raise ParamError, "Unable to find primary nameserver (SOA)"
 	    end
 
@@ -287,31 +342,47 @@ EOT
 		raise ParamError, "Unable to find nameservers (NS)"
 	    end
 	    
-	    if ns[0].nil?
+	    if @ns[0].nil?
 		raise ParamError, 
 		    "Unable to identify primary nameserver (NS vs SOA)"
 	    end
 	end
 	
-	# Guess Nameservers IP addressses
-	@ns.each { |n|
-	    ns, ns_ip = n
-	    if ns_ip.empty? then
+	# Set cache status
+	if @cache
+	    domain_exists = begin
+				@dns.primary(@domainname)
+				true
+			    rescue NResolv::NoDomainError
+				false
+			    end
+	    @ns.each { |ns, ips|
+		@cache &&= ips.empty? || (!domain_exists && 
+					  ns.in_domain?(@domainname))
+	    }
+	end
+
+	# Guess Nameservers IP addresses
+	@ns.each { |ns, ips|
+	    if ips.empty? then
 		begin
-		    ns_ip.concat(@dns.addresses(ns, Address::OrderStrict))
+		    ips.concat(@dns.addresses(ns, Address::OrderStrict))
 		rescue NResolv::NResolvError
 		end
 	    end
-	    if ns_ip.empty? then
+	    if ips.empty? then
 		raise ParamError, 
 		    "Unable to find nameserver IP address(es) for #{n}"
 	    end
 	}
 
+	# Set output formatter
+	@formatter  = @formatter_class::new
+
 	# Set diagnostic object
-	@diag    = @diag_class::new
-	@info    = @diag.method(@info_methodname).call
-	@warning = @diag.method(@warning_methodname).call
-	@fatal   = @diag.method(@fatal_methodname).call
+	@diagnostic = @diagnostic_class::new(@formatter)
+	@info       = @diagnostic.method(@info_methodname).call
+	@warning    = @diagnostic.method(@warning_methodname).call
+	@fatal      = @diagnostic.method(@fatal_methodname).call
     end
 end

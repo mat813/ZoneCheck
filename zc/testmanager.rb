@@ -1,21 +1,24 @@
 # $Id$
 
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revivion$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+require 'thread'
+require 'test/framework'
+require 'diagnostic'
 
 ##
 ##
 ##
 class TestManager
-    # ATTRIBUTES:
-    #  param   : program configuration parameters
-    #  config  : configuration file informations
-    #  tests   : associate each test with its class
-    #  classes : associate each test class with an array where the first
-    #             element is one of class instance
-    #  ic      : root node of the information cache (InfoCache),
-    #             initialized with the default DNS resolver (Test::DefaultDNS)
-
-
-
     ##
     ## Error in the test definition
     ##
@@ -28,11 +31,15 @@ class TestManager
     # Initialize a new object.
     #
     def initialize(param)
-	@param   = param
-	@config  = nil
-	@tests   = {}
-	@classes = {}
-	@ic	 = InfoCache::create(Test::DefaultDNS)
+	@mutex     = Mutex::new
+	@param     = param
+	@config    = nil
+	@tests     = {}
+	@classes   = {}
+	@cm	   = CacheManager::create(Test::DefaultDNS, 
+					NResolv::DNS::Client::Classic)
+	@testpos   = 0
+	@testcount = 0
     end
 
 
@@ -82,11 +89,45 @@ class TestManager
 	# Instanciate only once each classes that has a requested test
 	@config.test_list.each { |testname|
 	    if ! @classes.has_key?(klass = @tests[testname])
-		@classes[klass] = [ klass.method("create").call(@param, @ic) ]
+		@classes[klass] = [ klass.method("create").call(@param, @cm) ]
 	    end
 	}
     end
 
+
+    def test1(diag, method, testname, ns=nil, ip=nil) 
+	# Print test description
+	@param.formatter.synchronize {
+	    if @param.testdesc
+		@param.formatter.testing($mc.get("#{testname}_testname"), ns, ip)
+	    end
+	    if @param.counter
+		@testpos += 1	# using the formatter mutex
+		@param.formatter.counter(@testpos, @testcount)
+	    end
+	}
+
+	errmsg = nil
+	xpl    = nil
+	type   = Test::Error
+	args   = []
+	args   << ns if !ns.nil?
+	args   << ip if !ip.nil?
+	begin
+	    type = method.call(*args) ? Test::Succeed : Test::Failed
+	rescue NResolv::RefusedError
+	    errmsg = "Connection refused"
+	rescue Exception => e
+	    puts "Exception: #{e}"
+	    puts e.backtrace.join("\n")
+	    raise RuntimeError, "Screugneugneu"
+	end
+	begin
+	    diag.add_answer(type.new(testname, errmsg, xpl, ns, ip))
+	rescue Diagnostic::FatalError
+	    raise if @param.stop_on_fatal
+	end
+    end
 
 
     #
@@ -98,8 +139,14 @@ class TestManager
 	if @config.nil?
 	    raise RuntimeError, "the TestManager#init should be called before"
 	end
+	
+	check_generic         = []
+	check_nameserver      = {}
+	check_network_address = {}
 
-	# For each test requested in the configuration file
+	threadlist            = []
+
+	# Build test sequences
 	@config.test_list.each { |testname| 
 	    # Retrieve the method representing the test 'testname'
 	    klass   = @tests[testname]
@@ -107,8 +154,7 @@ class TestManager
 	    method  = object.method(testname)
 
 	    # Retrieve information relative to the test output
-	    diag   = @config.action(testname)
-	    errmsg = $mc.get("#{testname}_err")
+	    diag    = @config.action(testname)
 
 	    # Perform the test according to their "types"
 	    case klass.name
@@ -116,29 +162,56 @@ class TestManager
 		# Test generic: 
 		#  => ARG: *none*
 	    when /^CheckGeneric::/
-		diag.addmsg(errmsg) if ! method.call
+		check_generic << [diag, method, testname]
+		@testcount += 1
 		
 		# Test specific to the nameserver:
 		#  => ARG: nameserver name
 	    when /^CheckNameServer::/
-		@param.ns.each { |n|	    ns_name, = n
-		    diag.addmsg(errmsg, ns_name) if !method.call(ns_name)
+		@param.ns.each { |name, |
+		    @testcount += 1
+		    check_nameserver[name] ||= []
+		    check_nameserver[name] <<
+			[diag, method, testname, name]
 		}
 
 		# Test specific to the nameserver instance
 		#  => ARG: nameserver name; nameserver IP
 	    when /^CheckNetworkAddress::/ then 
-		@param.ns.each { |n|	    ns_name, ns_addr_list = n
+		@param.ns.each { |ns_name, ns_addr_list|
 		    @param.address_wanted?(ns_addr_list).each { |addr|
-			if !method.call(ns_name, addr)
-			    diag.addmsg(errmsg, "#{ns_name}/#{addr}")
-			end
+			@testcount += 1
+			check_network_address[addr] ||= []
+			check_network_address[addr] <<
+			    [ diag, method, testname, ns_name, addr ]
 		    }
 		}
 	    end
 	}
 
-	# All test have been succesful (only warnings)
-	return true
+	# Counter start
+	@param.formatter.counter_start if @param.counter
+
+	# Do CheckGeneric
+	check_generic.each { |args| test1(*args) }
+
+	# Do CheckNameServer
+	check_nameserver.each_value { |args_list|
+	    args_list.each { |args| test1(*args) }
+	}
+
+	# Do CheckNetworkAddress (and parallelize)
+	check_network_address.each_value { |args_list|
+	    threadlist << Thread::new {
+		args_list.each { |args| test1(*args) }
+	    }
+	}
+	threadlist.each { |thr| thr.join }
+
+	# Counter end
+	@param.formatter.counter_end if @param.counter
+
+	# Testdesc spacer
+	@param.formatter.vskip if @param.testdesc
     end
 end
