@@ -274,31 +274,32 @@ class Param
 		end
 	    }
 
-	    # Sanity check on given IP addresses
-	    #  => this is not done for nameservers which are in the 
-	    #     delegated zone, as we need to perform additional
-	    #     checks before, there will be an explicit test for it
-	    #     in the configuration file
-	    @ns_input.each { |ns, ips|
-		if !ns.in_domain?(@name) && !ips.nil?
-		    resolved_ips = nil
-		    begin
-			$dbg.msg(DBG::AUTOCONF) {"Comparing IP for NS: #{ns}"}
-			resolved_ips = dns.getaddresses(ns, 
-							Address::OrderStrict)
-			
-			unless ips.unsorted_eql?(resolved_ips)
-#			    raise ParamError, 
-#				$mc.get('xcp_param_ns_bad_ips') % ns
-			end
-		    rescue NResolv::NResolvError
-		    end
-		    if resolved_ips.empty?
-			raise ParamError, 
-			    $mc.get('xcp_param_nameserver_ips') % [ ns ]
-		    end
-		end
-	    }
+# XXX: doesn't allow to force an IP addresse.
+#	    # Sanity check on given IP addresses
+#	    #  => this is not done for nameservers which are in the 
+#	    #     delegated zone, as we need to perform additional
+#	    #     checks before, there will be an explicit test for it
+#	    #     in the configuration file
+#	    @ns_input.each { |ns, ips|
+#		if !ns.in_domain?(@name) && !ips.nil?
+#		    resolved_ips = nil
+#		    begin
+#			$dbg.msg(DBG::AUTOCONF) {"Comparing IP for NS: #{ns}"}
+#			resolved_ips = dns.getaddresses(ns, 
+#							Address::OrderStrict)
+#			
+#			unless ips.unsorted_eql?(resolved_ips)
+# #			    raise ParamError, 
+# #				$mc.get('xcp_param_ns_bad_ips') % ns
+#			end
+#		    rescue NResolv::NResolvError
+#		    end
+#		    if resolved_ips.nil? || resolved_ips.empty?
+#			raise ParamError, 
+#			    $mc.get('xcp_param_nameserver_ips') % [ ns ]
+#		    end
+#		end
+#	    }
 
 	    # Build addresses set
 	    @addresses = []
