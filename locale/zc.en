@@ -81,7 +81,7 @@ error   : All addresses should be distinct
 
 [chk_same_net]
 testname: nameserver addresses on same subnet
-error   : IP addresses are on the same subnet
+error   : IP addresses on the same subnet
 explain : Ref: AFNIC advise\n  To avoid loosing all connectivity with the autoritative DNS in case\n  of network outage it is advised to host the DNS on different networks.
 
 [chk_private_ip]

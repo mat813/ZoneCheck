@@ -129,7 +129,7 @@ class TestManager
 	begin
 	    result_class = method.call(*args) ? Test::Succeed : Test::Failed
 	rescue NResolv::RefusedError
-	    desc.err = "Connection refused"
+	    desc.err = "Answer refused"
 	rescue Errno::EADDRNOTAVAIL
 	    desc.err = "Network transport unavailable try option -4 or -6"
 	rescue NResolv::NResolvError => e

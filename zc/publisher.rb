@@ -353,7 +353,8 @@ EOT
 	end
 
 	def h2(h)
-	    @o.puts "<H2>---- #{h.capitalize} ----</H2>"
+#	    @o.puts "<H2>---- #{h.capitalize} ----</H2>"
+	    @o.puts "<P class=\"warning\">---- #{h.capitalize} ----</P>"
 	end
 
 	def explanation(xpl)
