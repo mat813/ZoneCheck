@@ -189,8 +189,8 @@ EOT
 
 	def end
 	    @o.puts HTML.jscript { 
-		"zc_contextmenu_setlocale(\"#{$mc.get("w_details")}\", \"#{$mc.get("w_references")}\", \"#{$mc.get("w_elements")}\");" }
-	    @o.puts HTML.jscript { "zc_contextmenu_start();" }
+		"zc_contextmenu_setlocale(\"#{$mc.get("w_details")}\", \"#{$mc.get("w_references")}\", \"#{$mc.get("w_elements")}\");\n" +
+		    "zc_contextmenu_start();" }
 	    @o.print <<"EOT"
   </BODY>
 </HTML>

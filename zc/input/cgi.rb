@@ -99,15 +99,21 @@ module Input
 	    if @cgi.has_key?("output")
 		p.output = @cgi.params["output"].join(",")
 	    else
-		p.output = @cgi["format"]
+		p.output = if @cgi.has_key?("format")
+			   then @cgi.params["format"]
+			   else "html"
+			   end
 	    end
 
 	    # Error
 	    if @cgi.has_key?("error")
 		p.error  = @cgi.params["error"].join(",")
 	    else
-		errorlvl  = @cgi.params["errorlvl"].delete_if { |e| 
-		    e =~ /^\s*$/ }
+		errorlvl  = if @cgi.has_key?("errorlvl")
+			    then @cgi.params["errorlvl"].delete_if { |e| 
+			           e =~ /^\s*$/ }
+			    else []
+			    end
 		errorstop = @cgi.has_key?("errorstop") ? "stop" : "nostop"
 		p.error   = (errorlvl + [ errorstop ]).join(",")
 	    end
@@ -116,8 +122,8 @@ module Input
 	    if @cgi.has_key?("transp")
 		p.transp = @cgi.params["transp"].join(",")
 	    else
-		p.transp = (@cgi.params["transp3"] + 
-			    @cgi.params["transp4"]).join(",")
+		p.transp = ((@cgi.params["transp3"] || []) + 
+			    (@cgi.params["transp4"] || [])).join(",")
 	    end
 
 	    # Category
@@ -140,11 +146,11 @@ module Input
 	    else
 		ns_list = [ ]
 		(0..MaxNS-1).each { |i|
-		    next unless cgi_ns = @cgi.params["ns#{i}"]
+		    next unless cgi_ns = @cgi.params["ns#{i}"] || ""
 		    next unless cgi_ns.length > 0
 		    next if     (ns = cgi_ns[0]).empty?
 		    
-		    cgi_ips = @cgi.params["ips#{i}"]
+		    cgi_ips = @cgi.params["ips#{i}"] || ""
 		    if cgi_ips.nil? || cgi_ips.length == 0 
 			ns_list << [ ns ]
 		    else
@@ -168,7 +174,7 @@ module Input
 
 	    # Zone/Domain
 	    # XXX: todo check!!!
-	    p.domain.name = @cgi.params["zone"]
+	    p.domain.name = @cgi.params["zone"] || ""
 
 	    # Ok
 	    true
