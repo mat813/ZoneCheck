@@ -197,7 +197,7 @@ module Publisher
 
     <!-- Navigation -->
     <link rel="start" href="#{@publish_path}/"              type="text/html">
-    <link rel="up"    href="#{@publish_path}/#{$langpath}/" type="text/html">
+    <link rel="up"    href="#{@publish_path}/#{langpath}/"  type="text/html">
 
     <link rel="bookmark" title="ZoneCheck website"
 	  href="http://www.zonecheck.fr/"                   type="text/html">
