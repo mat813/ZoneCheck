@@ -43,8 +43,8 @@
 
     <BLOCKQUOTE class="zc_warning">
       <P>The time required to completely verify a zone can take
-      from 30 seconds up to <B>5 minutes</B> depending of the network
-      speed to the server being accessed. <BR>
+      from 30 seconds up to <B>5 minutes</B> depending on the network
+      speed of the server being accessed. <BR>
       If it takes more than a minute it's generally means we are
       encountering problems accessing your nameservers 
       (configuration error, firewall, ...) and are waiting for timeout.</P>
@@ -422,7 +422,7 @@ Release: $Name$
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Feb  6 16:50:38 CET 2003
+Last modified: Wed Feb 12 15:59:18 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

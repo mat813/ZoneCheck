@@ -162,7 +162,7 @@ module Publisher
     <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <TITLE>ZoneCheck results</TITLE>
     <LINK rel="stylesheet" href="#{@publish_path}zc.css" type="text/css">
-    <SCRIPT language="JavaScript" src="#{@publish_path}progress.js" type="text/javascript">
+    <SCRIPT src="#{@publish_path}progress.js" type="text/javascript">
     </SCRIPT>
     <STYLE>
         UL.zc_ref LI { 
