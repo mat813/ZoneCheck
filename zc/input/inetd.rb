@@ -118,6 +118,8 @@ module Input
     class INETD
 	with_msgcat "inetd.%s"
 
+	def allow_preset ; false ; end
+
 	def initialize
 	    @prompt = "zonecheck> "
 	end

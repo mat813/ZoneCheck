@@ -93,6 +93,8 @@ module Input
 
 	MaxNS = 20       # Maximum number of NS taken into account
 
+	def allow_preset ; false ; end
+
 	def initialize
 	    @cgi  = ::CGI::new
 	end

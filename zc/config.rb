@@ -32,10 +32,13 @@ class Config
     Skip		= 'S'		# Don't run the test
     Ok			= 'o'		# Reserved
 
-    ProfileAutomatic	= 'automatic'
+    Profile_Automatic	= 'automatic'
+    Preset_Default	= 'default'
 
     E_PROFILE		= 'profile'	# XML Elements
     E_CONFIG		= 'config'	#      .
+    E_PRESET		= 'preset'	#      .
+    E_PARAM		= 'param'	#      .
     E_CASE		= 'case'	#      .
     E_WHEN		= 'when'	#      .
     E_ELSE		= 'else'	#      .
@@ -131,6 +134,32 @@ class Config
 
 
     ##
+    ## Store the different preset
+    ##
+    class Presets
+	def initialize
+	    @data = {}
+	end
+
+	# Store a new profile
+	def <<(preset)
+	    $dbg.msg(DBG::CONFIG, "adding preset: #{preset.name}")
+	    @data[preset.name] = preset
+	end
+
+	# Retrieve a profile by its name
+	def [](name)
+	    @data[name]
+	end
+
+	# Iterate on |preset|
+	def each(&block)
+	    @data.each_value &block
+	end
+    end
+
+
+    ##
     ## Store the different profiles
     ##
     class Profiles
@@ -190,8 +219,14 @@ class Config
 
 
 
-    class Preconf
-	def initialize
+    class Preset
+	attr_reader :name
+	def initialize(name, params)
+	    @name = name
+	    @data = params
+	end
+	def [](name)
+	    @data[name]
 	end
     end
 
@@ -351,6 +386,17 @@ class Config
 	    @mapping[zone] = profile.untaint
 	}
 
+	main.root.elements.each(E_PRESET) { |preset|
+	    presetname = preset.attributes[A_NAME]
+	    params	= {}
+
+	    preset.elements.each(E_PARAM) { |param|
+		name    = param.attributes[A_NAME]
+		value   = param.attributes[A_VALUE]
+		params[name] = value
+	    }
+	    @presets << Preset::new(presetname, params)
+	}
 
 	@mapping.each { |zone, profilename|
 	    next if @profiles[profilename]
@@ -385,7 +431,7 @@ class Config
     # Force use of a particular profile
     #
     def profilename=(name)
-	name = nil if name == ProfileAutomatic
+	name = nil if name == Profile_Automatic
 	if !name.nil? && @profiles[name].nil?
 	    raise ConfigError, "Profile '#{name}' doesn't exist" 
 	end
@@ -409,7 +455,7 @@ class Config
     end
 
 
-    attr_reader :constants, :profiles, :profilename
+    attr_reader :constants, :profiles, :presets, :profilename
 
     #-- [private] ---------------------------------------------------------
     private
@@ -420,6 +466,7 @@ class Config
     def clear
 	@constants		= Constants::new
 	@profiles		= Profiles::new
+	@presets		= Presets::new
 	@mapping		= ZoneMapping::new
 	@profile_override	= nil
 	@profilename		= nil

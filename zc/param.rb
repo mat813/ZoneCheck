@@ -403,15 +403,17 @@ class Param
     ## cfgfile: configuration file to use (zc.conf)
     ## testdir: directory where tests are located
     ## profile: allow override of automatic profile selection
+    ## preset:  allow selection of a preset configuration
     ##
     class Preconf
-	attr_reader :cfgfile, :testdir, :profile
-	attr_writer :cfgfile, :testdir, :profile
+	attr_reader :cfgfile, :testdir, :profile, :preset
+	attr_writer :cfgfile, :testdir, :profile, :preset
 	
 	def initialize
 	    @cfgfile	= $zc_config_file
 	    @testdir	= ZC_TEST_DIR
 	    @profile	= nil
+	    @preset	= nil
 	end
 
 	def autoconf
@@ -419,6 +421,7 @@ class Param
 	    $dbg.msg(DBG::AUTOCONF) { "Configuration file: #{@cfgfile}" }
 	    $dbg.msg(DBG::AUTOCONF) { "Tests directory: #{@testdir}"    }
 	    $dbg.msg(DBG::AUTOCONF) { "Asking for profile: #{profile}"  }
+	    $dbg.msg(DBG::AUTOCONF) { "Asking for preset: #{preset}"    }
 	end
     end
 
@@ -776,15 +779,21 @@ class Param
     def verbose=(string)
 	return if (string = string.strip).empty?
 	string.split(/\s*,\s*/).each { |token|
+	    action = case token[0]
+		     when ?!, ?-	then token = token[1..-1] ; false
+		     when ?+		then token = token[1..-1] ; true
+		     else					    true
+		     end
+
 	    case token
-	    when 'i', 'intro'		then @rflag.intro	= true
-	    when 'n', 'testname'	then @rflag.testname	= true
-	    when 'x', 'explain'		then @rflag.explain	= true
-	    when 'd', 'details'		then @rflag.details	= true
-	    when 'o', 'reportok'	then @rflag.reportok	= true
-	    when 'f', 'fatalonly'	then @rflag.fatalonly	= true
-	    when 't', 'testdesc'	then @rflag.testdesc	= true
-	    when 'c', 'counter'		then @rflag.counter	= true
+	    when 'i', 'intro'		then @rflag.intro	= action
+	    when 'n', 'testname'	then @rflag.testname	= action
+	    when 'x', 'explain'		then @rflag.explain	= action
+	    when 'd', 'details'		then @rflag.details	= action
+	    when 'o', 'reportok'	then @rflag.reportok	= action
+	    when 'f', 'fatalonly'	then @rflag.fatalonly	= action
+	    when 't', 'testdesc'	then @rflag.testdesc	= action
+	    when 'c', 'counter'		then @rflag.counter	= action
 	    else raise ParamError,
 		    $mc.get('xcp_param_unknown_modopt') % [ token, 'verbose' ]
 	    end

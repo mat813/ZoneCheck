@@ -62,10 +62,12 @@
     -t, --transp        Choix de la couche transport/routage (voir transp)
     -4, --ipv4          Utilise uniquement IPv4 pour vérifier le domaine
     -6, --ipv6          Utilise uniquement IPv6 pour vérifier le domaine
+        --preset        Utilise une configuration préinitialisée
         --option        Options supplémentaires (-,-opt,opt,opt=toto)
 
   verbose:              [intro/testname/explain/details]
                         [reportok|fatalonly] [testdesc|counter]
+                        peut être préfixé par '-' ou '!' pour retirer l'effet
     intro          [i]  Affiche un résumé du domaine et de ses serveurs
     testname       [n]  Affiche le nom du test
     explain        [x]  Affiche une explication en cas d'échec du test

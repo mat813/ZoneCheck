@@ -10,6 +10,7 @@
 	* test: delegation_udp512* give the exceding size
 	* publisher: link to the external reference
 	* zc: added profile selection
+	* zc: added preset configuration
 	
 2003-10-27  ZoneCheck-2.0.0b9
 	* dbg: time the execution of test

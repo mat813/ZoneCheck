@@ -1,5 +1,8 @@
 # $Id$
 
+
+add preset to inetd, cgi
+
 version = 2.1.0
 	Tests:	- Implement AXFR tests (only framework exists)
 		- base de donnees reseau (RIR) 

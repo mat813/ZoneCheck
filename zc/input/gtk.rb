@@ -61,6 +61,8 @@ module Input
 	MaxNS			= 8
 	DefaultBatchFile	= "batch.txt"
 
+	def allow_preset ; true ; end
+
 	##
 	## Expert
 	##

@@ -67,10 +67,12 @@ require 'param'
 ##     -t, --transp        Transport/routing layer (see transp)
 ##     -4, --ipv4          Only check the zone with IPv4 connectivity
 ##     -6, --ipv6          Only check the zone with IPv6 connectivity
+##         --preset        Use a preset configuration
 ##         --option        Set extra options (-,-opt,opt,opt=foo)
 ## 
 ##   verbose:              [intro/testname/explain/details]
 ##                         [reportok|fatalonly] [testdesc|counter]
+##                         can be prefix by '-' or '!' to remove the effect
 ##     intro          [i]  Print summary for domain and associated nameservers
 ##     testname       [n]  Print the test name
 ##     explain        [x]  Print an explanation for failed tests
@@ -103,6 +105,8 @@ require 'param'
 module Input
     class CLI
 	with_msgcat "cli.%s"
+
+	def allow_preset ; true ; end
 
 	def initialize
 	    @opts = GetoptLong.new(* opts_definition)
@@ -162,6 +166,7 @@ module Input
 		[ '--output',	'-o',   GetoptLong::REQUIRED_ARGUMENT ],
 		[ '--error',	'-e',	GetoptLong::REQUIRED_ARGUMENT ],
 		[ '--transp',	'-t',	GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--preset',           GetoptLong::REQUIRED_ARGUMENT ],
 		[ '--option',           GetoptLong::REQUIRED_ARGUMENT ],
 		#
 		# Let's have some fun
@@ -199,6 +204,7 @@ module Input
 		when '--transp'    then p.transp		= arg
 		when '--verbose'   then p.verbose		= arg
 		when '--output'    then p.output		= arg
+		when '--preset'    then p.preconf.preset	= arg
 		when '--option'    then p.option	       << arg
 		#
 		# Let's have some fun
@@ -234,6 +240,5 @@ EOT
 	def setdomain(p, arg)
 	    p.domain.name = arg
 	end
-
     end
 end

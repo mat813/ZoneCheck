@@ -30,9 +30,9 @@
 <!--                                                                      -->
 
 
-<!ELEMENT config  ((preconf*, const*, map*)|profile)>
+<!ELEMENT config  ((preset*, const*, map*)|profile)>
 
-<!ELEMENT preconf (param*)>
+<!ELEMENT preset (param*)>
 
 <!ELEMENT param   EMPTY>
 <!ELEMENT const   EMPTY>
@@ -47,7 +47,7 @@
 <!ELEMENT else    (check|case)*>
 
 
-<!ATTLIST preconf   name       CDATA #REQUIRED>
+<!ATTLIST preset   name       CDATA #REQUIRED>
 
 <!ATTLIST param     name       CDATA #REQUIRED
                     value      CDATA #REQUIRED>

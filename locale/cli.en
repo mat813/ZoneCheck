@@ -62,10 +62,12 @@
     -t, --transp        Transport/routing layer (see transp)
     -4, --ipv4          Only check the zone with IPv4 connectivity
     -6, --ipv6          Only check the zone with IPv6 connectivity
+        --preset        Use some preset configuration
         --option        Set extra options (-,-opt,opt,opt=foo)
 
   verbose:              [intro/testname/explain/details]
                         [reportok|fatalonly] [testdesc|counter]
+                        can be prefix by '-' or '!' to remove the effect
     intro          [i]  Print summary for domain and associated nameservers
     testname       [n]  Print the test name
     explain        [x]  Print an explanation for failed tests

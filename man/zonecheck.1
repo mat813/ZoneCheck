@@ -191,7 +191,8 @@ Display only tag. This option should be used for scripting.
 .
 .TP
 \fB--verbose\fR, \fB-v\fR \fIoptions\fR
-Display extra information, available options are:
+Display extra information, they can be prefix by '-' or '!'
+to remove the effect, available options are:
 .
 .RS
 .TP
@@ -308,6 +309,10 @@ Only check the zone with IPv4 connectivity.
 .TP
 \fB--ipv6\fR, \fB-6\fR
 Only check the zone with IPv6 connectivity.
+.
+.TP
+\fB--preset\fR \fIname\fR
+Use of a preset configuration defined in the zc.conf configuration file.
 .
 .TP
 \fB--option\fR \fIoptions\fR

@@ -119,6 +119,22 @@ class ZoneCheck
 	    @config.load(@param.preconf.cfgfile)
 	    @config.validate(@test_manager)
 	    @config.profilename = @param.preconf.profile
+	    
+	    # Preset
+	    if @input.allow_preset
+		begin
+		    presetname = @param.preconf.preset||Config::Preset_Default
+		    if preset = @config.presets[presetname]
+			@param.verbose = preset['verbose'] if preset['verbose']
+			@param.transp  = preset['transp']  if preset['transp']
+			@param.output  = preset['output']  if preset['output']
+			@param.error   = preset['error']   if preset['error']
+		    end
+		rescue Param::ParamError => e
+		    raise Config::ConfigError,
+			"In preset '#{presetname}': #{e.message}"
+		end
+	    end
 
 	    # Interaction
 	    unless @input.interact(@param, @config, @test_manager)
