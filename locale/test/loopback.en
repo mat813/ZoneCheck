@@ -38,7 +38,7 @@
 #
 
 [*]
-xpl_loopback: [ref]: DNS & BIND (2nd edition) (p.61)\nNo one was given responsibility for the loopback network and system\nuse it for a loopback address, so it is the responsibility of everyone.\nIf it wasn't configured the request would eventually reach the root\nname server (increasing network traffic, and adding local delay) and\nthere is no guarantee that the answer would be 'localhost'.\n\n[ref]: IETF RFC1537 (p.6 10. Safety measures and specialties)\n
+xpl_loopback: [ref]: IETF RFC1912 (p.13 4.1. Boot file setup)\nThese are set up to either provide nameservice for "special"\naddresses, or to help eliminate accidental queries for broadcast or\nlocal address to be sent off to the root nameservers.  All of these\nfiles will contain NS and SOA records just like the other zone files\nyou maintain.
 
 
 
