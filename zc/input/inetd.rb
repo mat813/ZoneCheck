@@ -174,15 +174,31 @@ module Input
 	    print @prompt
 	    $stdout.flush
 	    
-	    while line = $stdin.gets do
+	    while true do
+		# Check if ^D otherwise read a full line
+		char = $stdin.getc
+		break if char.nil? || char == 4
+		$stdin.ungetc(char)
+		line = $stdin.gets
+		break if line.nil?
+
 		line.strip!
 		begin
 		    case line
+		    when ''
 		    # Set
 		    when /^preset\s+(\w+)$/
 			case $1
 			when 'classic'
-			    p.verbose = "i,x,d,c"
+			    p.verbose		= 'i,x,d,c'
+			    puts '+ set verbose i,x,d,c'
+			when 'fatal'
+			    p.verbose		= 'x,d,f'
+			    p.rflag.quiet	= true
+			    puts '+ set verbose x,d,f'
+			    puts '+ set quiet'
+			else
+			    error($mc.get('input_inetd_unknown_preset') % $1)
 			end
 		    when /^set\s+(\w+)\s+(.*)$/
 			case $1
@@ -217,11 +233,10 @@ module Input
 			puts $mc.get('input_inetd_help')
 		    # Leave interaction loop
 		    when 'check'		then return true
-		    when 'quit','q','exit',"\004"	then return false
+		    when 'quit', 'q', 'exit'	then return false
 			
 		    # What did he said?!
 		    else
-			puts line[0]
 			error($mc.get('input_inetd_what'))
 		    end
 		rescue Param::ParamError => e
@@ -232,7 +247,8 @@ module Input
 		$stdout.flush
 	    end
 
-	    # NOT REACHED
+	    puts # Skip a line
+	    return false
 	end
 
 	def usage(errcode, io=$stdout)

@@ -121,3 +121,5 @@ Pour plus d'information sur ZoneCheck visitez l'URL suivante:\n\
 \n
 
 input_inetd_what: Je n'ai pas compris, essayez de demander de l'aide!
+
+input_inetd_unknown_preset: Valeur de préselection '%s' inconnue

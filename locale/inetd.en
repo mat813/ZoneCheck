@@ -119,3 +119,5 @@ For more information visit about ZoneCheck visit the following URL:\n\
 \n
 
 input_inetd_what: I didn't understand, try asking for help!
+
+input_inetd_unknown_preset: Unknown preset value '%s'
