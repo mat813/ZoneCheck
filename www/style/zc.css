@@ -40,8 +40,17 @@ H3 {
 //}
 
 
+.error { 
+    text-decoration: none;
+    font-size: 18px;
+    color: red; 
+    text-indent: 40px;
+    font-weight: bold;
+    border: 2px solid #F7AD31
+}
+
 .warning { 
-    TEXT-DECORATION: none;
+    text-decoration: none;
     font-size: 18px;
     color: red; 
     text-indent: 40px;
@@ -62,6 +71,19 @@ H3 {
 
 
 UL.zc_ref { 
+    font-size: 12px;
+    margin-left: 2ex;
+    margin-right: 150px;
+    background-color: #f0ece5; 
+
+    padding: 8px 8px 8px 2em; 
+
+    color: #333333; 
+    font-weight: normal;
+    border: 2px solid #f7ad31
+}
+
+UL.zc_details { 
     font-size: 12px;
     margin-left: 2ex;
     margin-right: 150px;
@@ -172,6 +194,12 @@ TABLE.zc_options TR.zc_title {
 BLOCKQUOTE.zc_warning {
     background-color: #eeeeee;
     border: solid red;
+    color: black;
+}
+
+BLOCKQUOTE.zc_error {
+    background-color: #eeeeee;
+    border: double red;
     color: black;
 }
 

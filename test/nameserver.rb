@@ -22,6 +22,8 @@ module CheckNameServer
     ##   (see modules CheckNetworkAddress for that)
     ##
     class ServerAccess < Test
+	MsgCat = "test/nameserver.%s"
+
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
 	    super(*args)
@@ -35,7 +37,7 @@ module CheckNameServer
 	    }
 	end
 
-	#-- Tests ---------------------------------------------------
+	#-- Checks --------------------------------------------------
 	# DESC: Nameserver IP addresses should be public!
 	def chk_private_ip(ns)
 	    ip(ns).each { |addr| return false if addr.private? }

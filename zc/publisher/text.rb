@@ -11,7 +11,6 @@
 #
 #
 
-require 'xtra/progress'
 require 'textfmt'
 
 module Publisher
@@ -199,6 +198,13 @@ module Publisher
 
 
 	#------------------------------------------------------------
+	
+	def error(text)
+	    paragraph = ::Text::Format::new
+	    paragraph.width = 72
+	    paragraph.tag   = " "
+	    @o.puts paragraph.format(text)
+	end
 
 
 	def intro(domain)

@@ -1,0 +1,28 @@
+# $Id$
+
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+[chk_icmp]
+testname: ICMP answer
+error   : Host doesn't seems to be alive (firewall?)
+explain : [none]
+
+[chk_udp]
+testname: UDP connectivity
+error   : Server doesn't listen/answer for UDP protocol
+explain : [none]
+
+[chk_tcp]
+testname: TCP connectivity
+error   : Server doesn't listen/answer for TCP protocol
+explain : [none]
+

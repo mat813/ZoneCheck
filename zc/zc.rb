@@ -214,7 +214,7 @@ class ZoneCheck
 	    $stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
 	end
-	@input = eval "Param::#{im.upcase}::new"
+	@input = eval "Input::#{im.upcase}::new"
     end
 
     #
@@ -232,7 +232,7 @@ class ZoneCheck
 
     def interact
 	begin
-	    @input.interact(@config)
+	    @input.interact(@param)
 	rescue Param::ParamError => e
 	    @input.error(e.to_s, EXIT_ERROR)
 	end
@@ -253,11 +253,16 @@ class ZoneCheck
 	# Setup publisher domain
 	@param.publisher.engine.setup(@param.domain.name)
 
+	# Retrieve specific configuration
+	if (cfg = @config[@param.domain.name]).nil?
+	    l10n_error = $mc.get("param_unsupported_domain")
+	    @param.publisher.engine.error(l10n_error % @param.domain.name)
+	    return false
+	end
+
 	# Display intro (ie: domain and nameserver summary)
 	@param.publisher.engine.intro(@param.domain) if @param.rflag.intro
 	
-	cfg = @config[@param.domain.name]
-
 	# Initialise and check
 	@test_manager.init(cfg, cm, @param)
 	success = begin

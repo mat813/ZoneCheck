@@ -1,0 +1,26 @@
+# $Id$
+
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/09/11 11:20:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+
+loopback_xpl: [ref]: DNS & BIND (2nd edition) (p.61)\nNo one was given responsibility for the loopback network and system\nuse it for a loopback address, so it is the responsibility of everyone.\nIf it wasn't configured the request would eventually reach the root\nname server (increasing network traffic, and adding local delay) and\nthere is no guarantee that the answer would be 'localhost'
+
+[chk_loopback_delegation]
+testname: loopback delegation
+error   : Loopback domain is not delegated.
+explain = loopback_xpl
+
+[chk_loopback_host]
+testname: loopback is resolvable
+error   : Loopback is not resolvable
+explain = loopback_xpl
+

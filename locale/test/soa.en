@@ -1,0 +1,107 @@
+# $Id$
+
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+[*]
+ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME is bad and may conflict badly\nwith current BIND servers.  In fact, current BIND implementations\nwill ignore such records, possibly leading to a lame delegation.\nThere is a certain amount of security checking done in BIND to\nprevent spoofing DNS NS records.  Also, older BIND servers reportedly\nwill get caught in an infinite query loop trying to figure out the\naddress for the aliased nameserver, causing a continuous stream of\nDNS requests to be sent.
+
+[chk_soa]
+testname: SOA record present
+error   : No SOA record found on server
+explain : [none]
+
+
+[chk_soa_auth]
+testname: SOA authoritative answer
+error   : The SOA answer is not authoritative
+explain : [none]
+
+
+[chk_soa_contact_sntx_at]
+testname: missused '@' characters in SOA contact name
+error   : The contact name contains the character '@'
+explain : [ref]: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are converted by using the following rule:\n   <local-part>@<mail-domain>  ==>  <local-part>.<mail-domain>\nif <local-part> contains a dot in should be backslashed (for 'bind')
+
+[chk_soa_contact_sntx]
+testname: illegal characters in SOA contact name
+error   : The contact name contains illegal characters
+explain : [ref]: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are converted by using the following rule:\n   <local-part>@<mail-domain>  ==>  <local-part>.<mail-domain>\nif <local-part> contains a dot in should be backslashed (for 'bind')
+
+[chk_soa_master_sntx]
+testname: illegal characters in SOA master nameserver
+error   : The SOA master nameserver contains illegal characters
+explain : [none]
+
+[chk_soa_master_fq]
+testname: fully qualified master nameserver in SOA
+error   : The SOA master nameserver is not fully qualified
+explain : [none]
+details : The master nameserver (%{mname}) is certainly missing the final dot in the configuration file.
+
+[chk_soa_serial_fmt_YYYYMMDDnn]
+testname: serial number of the form YYYYMMDDnn
+error   : The format of the serial number is not YYYYMMDDnn
+explain : [ref]: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day,\nnn=revision number).
+details : The serial %{serial} doesn't seem to be in the YYYYMMDDnn format.
+
+[chk_soa_refresh_6h]
+testname: SOA 'refresh' at least 6 hours
+error   : The 'refresh' period should be at least 6 hours
+explain : [none]
+details : The refresh (%{refresh} sec) should bet at least 6 hours (21600 sec), you should correct this value.
+
+[chk_soa_retry_refresh]
+testname: SOA 'retry' lower than 'refresh'
+error   : The 'retry' period must be lower than the 'refresh' period
+explain : [ref]: IETF RFC1912 (p.4)\nThe 'retry' value is typically a fraction of the 'refresh' interval.
+details : The retry (%{retry} sec) should be lower than the refresh (%{refresh} sec), you should correct one of these values.
+
+[chk_soa_retry_1h]
+testname: SOA 'retry' at least 1 hour
+error   : The 'retry' period should be at least 1 hour
+explain : [none]
+details : The retry (%{retry} sec) should be at least 1 hour (3600 sec), you should correct this value.
+
+[chk_soa_expire_7d]
+testname: SOA 'expire' at least 7 days
+error   : The 'expire' period must be at least 7 days
+explain : [ref]: IETF RFC1912 (p.4)\nAfter a zone is expired a secondary will still continue to try to contact\nthe primary, but it will no longer provide nameservice for the zone.\n2 to 4 weeks are suggested values.\n[ref]: AFNIC constraint\nA minimum of 1 week (7 days) is enforced.
+details : The expire (%{expire} sec) should be at least 7 days (604800 sec), you should correct this value.
+
+[chk_soa_expire_7refresh]
+testname: SOA 'expire' at least 7 times 'refresh'
+error   : The 'expire' period must be at least 7 times greater than 'refresh'
+explain : [none]
+details : The expire (%{expire} sec) is not at least 7 times greater than the refresh (%{refresh} sec), you should correct one of them.
+
+[chk_soa_minimum_3h]
+testname: SOA 'minimum' less than 3 hours
+error   : The 'minimum' period should be less than 3 hours
+explain : [none]
+details : The minimum value is %{minimum} sec, and should be less than 3 hours (10800 sec).
+
+[chk_soa_ttl]
+testname: SOA 'TTL' equal 'minimum'
+error   : The 'TTL' should be equal to the 'minimum'
+explain : [none]
+
+[chk_soa_ns_cname]
+testname: SOA master is not an alias
+error   : SOA master is not allowed to point to a CNAME alias
+explain = ns_cname_xpl
+details : The master (%{master}) is a CNAME alias to %{alias}.
+
+[chk_soa_vs_any]
+testname: coherence between SOA and ANY records
+error   : SOA and ANY request disagree
+explain : [none]
+

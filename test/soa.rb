@@ -19,6 +19,8 @@ module CheckNetworkAddress
     ## Check domain SOA record
     ##
     class SOA < Test
+	MsgCat = "test/soa.%s"
+
 	#-- Tests ---------------------------------------------------
 	# DESC: SOA entries should exists
 	def chk_soa(ns, ip)

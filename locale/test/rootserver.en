@@ -1,0 +1,28 @@
+# $Id$
+
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+[chk_root_servers]
+testname: root servers list present
+error   : Root Servers are not available
+explain : [none]
+
+[chk_root_servers_ns_vs_iana]
+testname: root servers list identical to IANA
+error   : Root Servers list is not coherent with IANA
+explain : [none]
+
+[chk_root_servers_ip_vs_iana]
+testname: root servers addresses identical to IANA
+error   : Root Servers IP addresses are not coherent with IANA
+explain : [none]
+

@@ -34,13 +34,15 @@ module CheckNetworkAddress
     ##   the tests won't be affected by the transport flags
     ## 
     class Connectivity < Test
+	MsgCat = "test/connectivity.%s"
+
 	def initialize(*args)
 	    super(*args)
 	    @ping4_cmd = const("ping4")
 	    @ping6_cmd = const("ping6")
 	end
 
-	#-- Tests ---------------------------------------------------
+	#-- Checks --------------------------------------------------
 	# DESC: Test TCP connectivity with DNS server
 	def chk_tcp(ns, ip)
 	    # The idea is to open a TCP connection

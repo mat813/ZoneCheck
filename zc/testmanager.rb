@@ -253,7 +253,8 @@ class TestManager
 	rescue NResolv::NResolvError => e
 	    desc.err = "Resolver error (#{e})"
 	rescue Exception => e
-	    desc.err = "Dependency issue (allwarning flag?)"
+#	    desc.err = "Dependency issue (allwarning flag?)"
+	    desc.err = e.message
 	    raise if $dbg.enabled?(DBG::DONT_RESCUE)
 	end
 

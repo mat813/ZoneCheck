@@ -16,7 +16,9 @@ require 'framework'
 
 module CheckNetworkAddress
     class RootServer < Test
-	#-- Tests ---------------------------------------------------
+	MsgCat = "test/rootserver.%s"
+
+	#-- Checks --------------------------------------------------
 	# DESC: root server list should be available
 	def chk_root_servers(ns, ip)
 	    return true unless rec(ip)

@@ -1,7 +1,14 @@
 # $Id$
 
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
 #
-# MX
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
 #
 
 [chk_mx]

@@ -19,7 +19,9 @@ module CheckGeneric
     ## Check syntax validity of the domain name
     ##
     class DomainNameSyntax < Test
-	#-- Tests ---------------------------------------------------
+	MsgCat = "test/generic.%s"
+
+	#-- Checks --------------------------------------------------
 	# DESC: A domainname should only contains A-Z a-Z 0-9 '-' '.'
 	def chk_dn_sntx
 	    @domain.name.to_s =~ /^[A-Za-z0-9\-\.]+$/
@@ -42,6 +44,8 @@ module CheckGeneric
     ## Check basic absurdity with the nameserver IP addresses
     ##
     class ServerAddress < Test
+	MsgCat = "test/generic.%s"
+
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
 	    super(*args)
@@ -80,7 +84,7 @@ module CheckGeneric
 	    }
 	end
 
-	#-- Tests ---------------------------------------------------
+	#-- Checks --------------------------------------------------
 	# DESC: Addresses should be distincts
 	def chk_distinct_ip
 	    # Ok all addresses are distincts
@@ -143,7 +147,9 @@ module CheckGeneric
     ## Check for nameserver!
     ##
     class NameServers < Test
-	#-- Tests ---------------------------------------------------
+	MsgCat = "test/generic.%s"
+
+	#-- Checks --------------------------------------------------
 	# DESC: A domain should have a nameserver!
 	def chk_one_ns
 	    @domain.ns.length >= 1

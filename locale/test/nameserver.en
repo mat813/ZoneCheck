@@ -1,0 +1,17 @@
+# $Id$
+
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+[chk_private_ip]
+testname: address in a private network
+error   : Address is part of a private subnet
+explain : [none]

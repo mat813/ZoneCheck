@@ -25,11 +25,13 @@ module CheckNetworkAddress
     ## Check for loopback network delegation/resolution
     ## 
     class Loopback < Test
+	MsgCat = "test/loopback.%s"
+
 	#-- Constants -----------------------------------------------
 	IPv4LoopbackName = NResolv::DNS::Name::create(Address::IPv4::Loopback)
 	IPv6LoopbackName = NResolv::DNS::Name::create(Address::IPv6::Loopback)
 
-	#-- Tests ---------------------------------------------------
+	#-- Checks --------------------------------------------------
 	# DESC: loopback network should be delegated
 	def chk_loopback_delegation(ns, ip)
 	    soa(ip, IPv4LoopbackName.domain)

@@ -144,6 +144,10 @@ module Publisher
 	end
 
 
+	def error(text)
+	    @o.puts "<BLOCKQUOTE class=\"zc_error\">#{text}</BLOCKQUOTE>"
+	end
+
 	#------------------------------------------------------------
 
 	def begin
@@ -163,6 +167,10 @@ module Publisher
 
         UL.zc_element LI { 
             list-style: url(/zc/img/element.png) disc
+        }
+
+        UL.zc_details LI { 
+            list-style: url(/zc/img/details.png) disc
         }
     </STYLE>
   </HEAD>
@@ -290,6 +298,14 @@ EOT
 	    @o.puts "<DIV class=\"zc_diag\">"
 	    @o.puts "<DIV class=\"zc_title\"><IMG src=\"/zc/img/#{logo}.png\" alt=\"\"> #{msg}</DIV>"
 
+	    if @rflag.details && desc.dtl
+		@o.puts "<UL class=\"zc_details\">"
+		@o.puts "<LI>"
+		@o.puts desc.dtl
+		@o.puts "</LI>"
+		@o.puts "</UL>"
+	    end
+
 	    if xpl_lst
 		@o.puts "<UL class=\"zc_ref\">"
 		xpl_lst.each { |t, h, b|
@@ -301,7 +317,7 @@ EOT
 		    @o.puts b.join(" ")
 		    @o.puts "</LI>"
 		}
-		puts "</UL>"
+		@o.puts "</UL>"
 	    end
 
 	    if ! lst.empty?

@@ -20,6 +20,8 @@ module CheckExtra
     ## Check domain NS records
     ##
     class Mail < Test
+	MsgCat = "test/mail.%s"
+
 	#-- Initialisation ------------------------------------------
 	def initialize(*args)
 	    super(*args)
@@ -43,6 +45,7 @@ module CheckExtra
 	def mhosttest(mdom, mhost)
 	    # Mailhost and IP 
 	    mip   = addresses(mhost, bestresolverip(mhost))[0]
+	    raise "No mail server for domain #{mdom}" if mip.nil?
 
 #	    puts "DOM=#{mdom}   HOST=#{mhost}   IP=#{mip}"
 #	    puts "DEST=#{@fake_dest}  FROM=#{@fake_from}  USER=#{@fake_user}"
@@ -72,12 +75,12 @@ module CheckExtra
 	    }
 	end
 
-	#-- Tests ---------------------------------------------------
+	#-- Checks --------------------------------------------------
 	# DESC: Check that the best MX for hostmaster is not an openrelay
 	def chk_mail_openrelay_hostmaster
 	    rname = soa(bestresolverip).rname
 	    mdom  = rname.domain
-	    mhost = bestmx(mdom)
+	    mhost = bestmx(mdom) || mdom
 	    return true unless openrelay(mdom, mhost)
 	    { "mailhost"   => mhost,
 	      "hostmaster" => "#{rname[0]}@#{mdom}",
@@ -88,7 +91,7 @@ module CheckExtra
 	# DESC: Check that the best MX for the domain is not an openrelay
 	def chk_mail_openrelay_domain
 	    mdom  = @domain.name
-	    mhost = bestmx(mdom)
+	    mhost = bestmx(mdom) || mdom
 	    return true unless openrelay(mdom, mhost)
 	    { "mailhost"   => mhost,
 	      "from_host"  => @fake_from,
@@ -99,7 +102,7 @@ module CheckExtra
 	def chk_mail_hostmaster
 	    rname = soa(bestresolverip).rname
 	    mdom  = rname.domain
-	    mhost = bestmx(mdom)
+	    mhost = bestmx(mdom) || mdom
 	    user  = "#{rname[0]}@#{mdom}"
 	    return true if testuser(user, mdom, mhost)
 	    { "hostmaster" => user }
@@ -108,7 +111,7 @@ module CheckExtra
 	# DESC: Check that postmaster address is valid
 	def chk_mail_postmaster
 	    mdom  = @domain.name
-	    mhost = bestmx(mdom)
+	    mhost = bestmx(mdom) || mdom
 	    user  = "postmaster@#{mdom}"
 	    return true if testuser(user, mdom, mhost)
 	    { "postmaster" => user }

@@ -121,7 +121,7 @@ class ZCMail
     end
 
     def test_openrelay(count=1)
-	tests = [ @openrelay_testlist[0] ]
+	tests = [ @openrelay_testlist[1] ]
 
 	tests.each { |name, from, to|
 	    if (r = mail_from(from)[0]) == 250

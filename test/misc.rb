@@ -25,6 +25,8 @@ module CheckNetworkAddress
     ##
     ##
     class Misc < Test
+	MsgCat = "test/misc.%s"
+
 	#-- Checks --------------------------------------------------
 	# DESC:
 	def chk_ns_reverse(ns, ip)

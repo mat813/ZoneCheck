@@ -19,7 +19,9 @@ module CheckNetworkAddress
     ## Check domain NS records
     ##
     class NS < Test
-	#-- Tests ---------------------------------------------------
+	MsgCat = "test/ns.%s"
+
+	#-- Checks --------------------------------------------------
 	# DESC: NS entries should exists
 	def chk_ns(ns, ip)
 	    ! ns(ip).empty?

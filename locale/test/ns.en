@@ -1,0 +1,42 @@
+# $Id$
+
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+[chk_ns]
+testname: NS record present
+error   : No NS record found on server
+explain : [none]
+
+[chk_ns_auth]
+testname: NS authoritative answer
+error   : The NS answer is not authoritative
+explain : [none]
+
+[chk_ns_sntx]
+testname: NS name has a valid domain/hostname syntax
+error   : NS name syntax is not correct
+explain : [none]
+
+[chk_ns_cname]
+testname: NS is not an alias
+error   : NS is not allowed to point to a CNAME alias
+explain = ns_cname_xpl
+
+[chk_ns_vs_any]
+testname: coherence between NS and ANY records
+error   : NS and ANY request disagree
+explain : [none]
+
+[chk_ns_ip]
+testname: NS can be resolved
+error   : The IP addresses of the zone nameserver can't be found
+explain : [none]
