@@ -102,3 +102,16 @@ testname: coherence between SOA and ANY records
 error   : SOA and ANY request disagree
 explain : [none]
 
+
+[chk_soa_coherence_serial]
+testname: coherence of serial number with primary nameserver
+error   : The serial number is not coherent with primary nameserver
+explain : [none]
+details : got serial %{serial_this} instead of %{serial_ref} as on %{host_ref}.
+
+[chk_soa_coherence_master]
+testname: coherence of master number with primary nameserver
+error   : The master number is not coherent with primary nameserver
+explain : [none]
+details : got master %{master_this} instead of %{master_ref} as on %{host_ref}.
+

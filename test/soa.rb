@@ -115,5 +115,25 @@ module CheckNetworkAddress
 	def chk_soa_vs_any(ns, ip)
 	    soa(ip) == any(ip, NResolv::DNS::Resource::IN::SOA)[0]
 	end
+
+	# DESC: coherence of serial number with primary
+	def chk_soa_coherence_serial(ns,ip)
+	    serial_ref   = soa(@domain.ns[0][1][0]).serial
+	    serial_other = soa(ip).serial
+	    return true if serial_ref >= serial_other
+	    { "serial_ref"  => serial_ref,
+	      "host_ref"    => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
+	      "serial_this" => serial_other }
+	end
+
+	# DESC: coherence of master with primary
+	def chk_soa_coherence_master(ns,ip)
+	    mname_ref   = soa(@domain.ns[0][1][0]).mname
+	    mname_other = soa(ip).mname
+	    return true if mname_ref == mname_other
+	    { "mname_ref"  => mname_ref,
+	      "host_ref"   => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
+	      "mname_this" => mname_other }
+	end
     end
 end
