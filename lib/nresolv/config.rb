@@ -67,11 +67,9 @@ class NResolv
 		    search = Socket.gethostname =~ /\./ ? [$'] : [] #' <- emacs
 		end
 		
-		# Ensure that domain in the search list are FQDN
-		search.map { |domain| # domain can't be empty
-		    domain.concat(".") unless domain[-1] == ?. }
-		# Ensure root is in the search list
-		search.push("") unless search.include?("")
+		# Create domain list
+		search.map! { |domain| Name::create(domain, true) }
+		search << Name::Root
 
 		# Create config
 		self::new(nameserver, search)
@@ -80,10 +78,10 @@ class NResolv
 	    def self.from_winreg
 	    end
 
-	    def initialize(nameserver, search=[""], absdepth=3)
+	    def initialize(nameserver, search=[Name::Root], absdepth=3)
 		# Sanity check
-		search.map { |domain|
-		    if (! domain.empty?) && (domain[-1] != ?.)
+		search.each { |domain|
+		    unless domain.absolute?
 			raise ArgumentError, 
 			    "domains in the search list should be absolute"
 		    end
@@ -94,16 +92,19 @@ class NResolv
 			      when Array then nameserver
 			      else [ nameserver ]
 			      end
-		@search     = search.uniq
+		@search     = search.uniq.freeze
 		@absdepth   = absdepth < 0 ? 0 : absdepth
 	    end
 	    
 	    def candidates(name)
-		if name[-1] == ?.
+		# Ensure we got a DNS name
+		name = Name::create(name)
+
+		if name.absolute?
 		then [ name ]
-		else if name.count(".") + 1 >= @absdepth
-		     then [ "#{name}." ]
-		     else @search.collect { |domain| "#{name}.#{domain}" }
+		else if name.depth + 1 >= @absdepth
+		     then [ Name::create(name, true) ]
+		     else @search.collect { |domain| domain.prepend(name) }
 		     end
 		end
 	    end

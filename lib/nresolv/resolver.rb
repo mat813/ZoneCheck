@@ -59,11 +59,12 @@ class NResolv
 	    end
 
 	    def getaddresses(name, order=Address::OrderDefault)
+		addrs = []
 		@config.candidates(name).each { |fqname|
-		    res = addresses(fqname)
-		    return res unless res.empty?
+		    each_address(name, order) { |address| addrs << address }
+		    break unless addrs.empty?
 		}
-		[]
+		addrs
 	    end
 
 	    def getname(address)
@@ -148,8 +149,7 @@ class NResolv
 	    def master(domain)
 		domain = Name::create(domain)
 		each_resource(domain, Resource::IN::SOA) { |r,|
-		    return r.mname
-		}
+		    return r.mname }
 	    end
 	    alias primary master
 
@@ -157,8 +157,7 @@ class NResolv
 		domain = Name::create(domain)
 		ns = []
 		each_resource(domain, NResolv::DNS::Resource::IN::NS) { |r,|
-		    ns << r.name
-		}
+		    ns << r.name }
 		ns
 	    end
 
@@ -168,7 +167,7 @@ class NResolv
 		name = Name::create(address)
 
 		# retrieve PTR information
-		each_resource(name, Resource::IN::PTR, true, false) {|r,| 
+		each_resource(name, Resource::IN::PTR, true, false) { |r,| 
 		    yield r.ptrdname }
 	    end
 

@@ -146,7 +146,7 @@ class NResolv
 	    end
 	    alias fqdn? absolute?
 
-	    def add(obj)
+	    def prepend(obj)
 		prefix = Name::create(obj, false)
 		Name::new(prefix.labels, self)
 	    end
