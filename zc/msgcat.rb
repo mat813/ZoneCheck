@@ -62,13 +62,14 @@ class MessageCatalog
 
     #
     # Normalize lang
-    #  and raise exception is the parameter is suspicious
+    #  (and raise exception is the parameter is suspicious)
+    #  The settings are based on: LanguageCode_CountryCode.Encoding
     #
     def self.normlang(lng)
-	unless lng =~ /^\w+(:?\.[\w\-]+)?$/
+	unless lng =~ /^(\w+?)(?:_(\w+))?(:?\.([\w\-]+))?$/
 	    raise ArgumentError, "Suspicious language selection: #{lng}"
 	end
-	lng
+	$1	# Only return the LanguageCode
     end
 
 
