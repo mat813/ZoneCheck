@@ -207,14 +207,17 @@ class Param
 	    @ns.each { |ns, ips| @addresses.concat(ips) }
 	end
 
-	def get_resolver_ips(name)
+	def get_resolver_ips(name, prim=false)
 	    if name.nil? || !((name == @name) || (name.in_domain?(@name)))
 		nil
 	    elsif (name.depth - @name.depth) > 1
 		puts name
 		raise RuntimeError, "XXX: correct behaviour not decided"
 	    else
-		@addresses
+		if prim
+		then ns[0][1]
+		else @addresses
+		end
 	    end
 	end
     end

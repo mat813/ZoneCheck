@@ -177,20 +177,19 @@ class Test
 
 
     # Test if 'name' is a cname
-    #  If 'domain' is specified and 'name' is directly in 'domain' the
-    #   request will be done using the DNS at address 'ip', otherwise
-    #   the default DNS is querried
+    #  If 'name' is inside the current domain, the specified 'ip'
+    #   will be used (if 'ip' is nil the first nameserver address
+    #   is used)
     #  WARN: this is necessary because the query could be in the
     #        domain being delegated
     #  IDEA: a better way would be to use the cachemanager to fake
     #        the nameserver NS, A and AAAA records retrieved by autoconf
     #        unfortunately we have a NOCACHE option in the debug mode
-    def is_cname?(name, ip=nil, domain=@domain.name)
-	auth_domain = name.domain
-	unless auth_domain == domain
-	    ns_list = @cm[nil].ns(auth_domain)
-	    ns_addr = @cm[nil].addresses(ns_list[0].name)
-	    ip = ns_addr[0]
+    def is_cname?(name, ip=nil)
+	if name.in_domain?(@domain.name)
+	    ip = @domain.addresses[0] if ip.nil?
+	else
+	    ip = nil
 	end
 	@cm[ip].cname(name)
     end
