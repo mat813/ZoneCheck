@@ -102,8 +102,8 @@ module NResolv
 		class MX < Resource
 		    attr_reader :preference, :exchange
 		    def initialize(preference, exchange)
-			@preferecence = preference
-			@exchange     = exchange
+			@preference = preference
+			@exchange   = exchange
 		    end
 		end
 		    

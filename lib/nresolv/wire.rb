@@ -39,7 +39,7 @@ module NResolv
 
 		class MX
 		    def self.wire_decode(decoder)
-			self::new(decoder.unpack("n"),
+			self::new(decoder.unpack("n")[0],
 				  Name::wire_decode(decoder))
 		    end
 		end
