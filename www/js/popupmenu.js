@@ -131,11 +131,11 @@ function zc_contextmenu_start() {
 
   var ctx = new ZC_Popup("zc_contextmenu");
   ctx.add("<IMG src='"+ zc_publish_path+"/img/details.png'>"+zc_l10n_details,
-	  function () { hidefunc('zc_details', 'UL'); });
+	  function () { hidefunc('zc-details', 'UL'); });
   ctx.add("<IMG src='"+ zc_publish_path+"/img/ref.png'>"   +zc_l10n_references,
-	  function () { hidefunc('zc_ref', 'UL'); });
+	  function () { hidefunc('zc-ref', 'UL'); });
   ctx.add("<IMG src='"+ zc_publish_path+"/img/element.png'>"+zc_l10n_elements,
-	  function () { hidefunc('zc_element', 'UL'); });
+	  function () { hidefunc('zc-element', 'UL'); });
 
   ctx.create();
 

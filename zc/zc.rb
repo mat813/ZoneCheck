@@ -468,7 +468,7 @@ if ! $zc_slavemode
     $zc_contact	= ZC_CONTACT
 
     begin
-	exit ZoneCheck::new.start ? EXIT_OK : EXIT_FAILED
+	exit ZoneCheck::new::start ? EXIT_OK : EXIT_FAILED
     rescue Config::SyntaxError => e
 	puts e.message
 	puts e.at.x

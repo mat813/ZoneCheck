@@ -19,6 +19,7 @@ version = 2.1.0
 	Check for authoritative answer in NResolv
 
 version = 3.0.0
+	stand alone package for resolver library
 	add checking of message catalog and test set
 	fix behaviour in case of test failed
 
@@ -37,7 +38,7 @@ version = 3.0.0
 	Try zonecheck with the native thread ruby implementation
 	Escape HTML code
 	Remove the need of a tagonly_supported in Report
-	Finish implementing nresolv (Bitstring, DNSSEC, unknown records)
+	Finish implementing nresolv (Bitstring, DNSSEC)
 	NResolv library able to inspect all the Sections (++++)
 	Test:	- comparaison de le resolution resolver parent avec ns
 		- whois for fr
