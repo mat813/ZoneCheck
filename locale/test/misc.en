@@ -26,18 +26,21 @@
 [chk_ns_reverse]
 testname: Nameserver IP reverse
 error   : Can't find reverse for the nameserver IP address
+ok	: Reverse for nameserver IP address found
 explain : [none]
 
 
 [chk_correct_recursive_flag]
 testname: check if server is really recursive
 error   : server claims to be recursive but is not
+ok	: server is recursive has stated
 explain : [none]
 
 
 [chk_given_nsprim_vs_soa]
 testname: given primary nameserver is primary
 error   : The primary nameserver doesn't match the given one
+ok	: The primary nameserver match the given one
 details : The primary nameserver (%{primary}) doesn't match the given one (%{given_primary}).
 explain : [none]
 
@@ -45,5 +48,6 @@ explain : [none]
 [chk_given_ns_vs_ns]
 testname: correctness of given nameserver list
 error   : The nameserver list doesn't match the given one
+ok	: The nameserver list matches the given one
 details : The given nameserver list (%{list_from_param}) is not coherent with the one retrieved from the zone (%{list_from_ns}).
 explain : [none]

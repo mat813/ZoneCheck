@@ -30,16 +30,19 @@ xpl_connectivity_udp_tcp : [ref]: IETF RFC1035 (p.32 4.2. Transport)\nThe DNS as
 [chk_icmp]
 testname: réponses aux requêtes ICMP
 error   : L'hôte ne semble pas être vivant (présence d'un parefeux?)
+ok	: L'hôte repond aux requetes ICMP
 explain : [none]
 
 
 [chk_udp]
 testname: connectivité UDP
 error   : Le serveur n'écoute pas ou ne répond pas en UDP sur le port 53
+ok	: Le serveur repond aux requetes DNS en UDP sur le port 53
 explain = xpl_connectivity_udp_tcp
 
 
 [chk_tcp]
 testname: connectivité TCP
 error   : Le serveur n'écoute pas ou ne répond pas en TCP sur le port 53
+ok	: Le serveur repond aux requetes DNS en TCP sur le port 53
 explain = xpl_connectivity_udp_tcp

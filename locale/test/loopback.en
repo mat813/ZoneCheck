@@ -28,12 +28,14 @@ xpl_loopback: [ref]: DNS & BIND (2nd edition) (p.61)\nNo one was given responsib
 
 [chk_loopback_delegation]
 testname: loopback delegation
-error   : Loopback domain is not delegated.
+error   : Loopback domain is not delegated
+ok	: Loopback domain has been delegated
 explain = xpl_loopback
 
 
 [chk_loopback_host]
 testname: loopback is resolvable
 error   : Loopback is not resolvable
+ok	: Loopback address is resolvable
 explain = xpl_loopback
 

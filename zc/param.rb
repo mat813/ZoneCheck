@@ -41,7 +41,7 @@ class Param
     ## testdesc     : print a short description of the test being performed
     ## counter      : display a progress bar
     ## stop_on_fatal: stop on the first fatal error
-    ## report_ok    : also report test that have passed
+    ## reportok     : also report test that have passed
     ##
     ## Corrections are silently made to respect the following constraints:
     ##  - 'tagonly' doesn't support 'explain', 'details' (as displaying
@@ -54,10 +54,10 @@ class Param
 	attr_reader :tagonly,  :one,   :quiet
 	attr_reader :testname, :intro, :explain, :details
 	attr_reader :testdesc, :counter
-	attr_reader :stop_on_fatal, :report_ok
+	attr_reader :stop_on_fatal, :reportok
 
 	attr_writer :one, :quiet, :intro
-	attr_writer :stop_on_fatal, :report_ok
+	attr_writer :stop_on_fatal, :reportok
 	attr_writer :testname
 
 	def initialize
@@ -65,7 +65,7 @@ class Param
 	    @intro    = @testname = @details = @explain	= false
 	    @testdesc = @counter			= false
 	    @stop_on_fatal				= true
-	    @report_ok					= false
+	    @reportok					= false
 	end
 
 	def tagonly=(val)
@@ -100,7 +100,7 @@ class Param
 	    flags << "testdesc" if @testdesc
 	    flags << "counter"  if @counter
 	    flags << "stop"     if @stop_on_fatal
-	    flags << "reportok" if @report_ok
+	    flags << "reportok" if @reportok
 	    $dbg.msg(DBG::AUTOCONF, "Report flags: " + flags.join("/"))
 	end
     end
@@ -627,6 +627,8 @@ class Param
 		@rflag.details  = true
 	    when "i", "intro"
 		@rflag.intro	= true
+	    when "o", "reportok"
+		@rflag.reportok	= true
 	    when "t", "testdesc"
 		@rflag.testdesc	= true
 	    when "c", "counter"

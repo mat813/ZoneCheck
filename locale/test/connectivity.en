@@ -30,16 +30,19 @@ xpl_connectivity_udp_tcp : [ref]: IETF RFC1035 (p.32 4.2. Transport)\nThe DNS as
 [chk_icmp]
 testname: ICMP answer
 error   : Host doesn't seem to be alive (firewall?)
+ok	: Host replies to ICMP requests
 explain : [none]
 
 
 [chk_udp]
 testname: UDP connectivity
 error   : Server doesn't listen/answer on port 53 for UDP protocol
+ok	: Server replies to UDP DNS request on port 53
 explain = xpl_connectivity_udp_tcp
 
 
 [chk_tcp]
 testname: TCP connectivity
 error   : Server doesn't listen/answer on port 53 for TCP protocol
+ok	: Server replies to TCP DNS request on port 53
 explain = xpl_connectivity_udp_tcp

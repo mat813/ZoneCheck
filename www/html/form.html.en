@@ -304,6 +304,11 @@
 	    the generated report</TD>
 	</TR>
 	<TR>
+	  <TD class="zc-key">test name</TD>
+	  <TD>Includes the name of the test that has been performed
+	    when reporting errors</TD>
+	</TR>
+	<TR>
 	  <TD class="zc-key">explanations</TD>
 	  <TD>Includes an explanation (when the test failed) about 
 	    the purpose of the test and why you should fixed it.</TD>
@@ -355,6 +360,10 @@
 	  <TD class="zc-key">don't stop on fatal</TD>
 	  <TD>Keep going even after encountering a fatal error
 	    (<I>this could lead to some unexpected results</I>).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc-key">report ok</TD>
+	  <TD>Report test that passed.</TD>
 	</TR>
 
 	<TR><TD class="zc-title" colspan="2">Options: Extra tests performed</TD></TR>
@@ -413,7 +422,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr 11 11:47:35 CEST 2003
+Last modified: Thu Apr 17 13:32:58 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

@@ -24,15 +24,18 @@
 [chk_axfr]
 testname: zone transfer possible
 error   : Zone transfer not possible
+ok	: Zone transfer is possible
 explain : [none]
 
 [chk_axfr_empty]
 testname: zone transfer contains data
 error   : Zone transfer is empty
+ok	: Zone transfer returned data
 explain : [none]
 
 [chk_axfr_valid_labels]
 testname: zone transfer contains valid labels
 error   : Zone transfer contains invalid label(s)
+ok	: Zone transfer contains only valid label(s)
 explain = label_xpl
 

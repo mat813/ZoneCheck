@@ -269,49 +269,58 @@ module Publisher
 
 	def diagnostic(severity, testname, desc, lst)
 	    msg, xpl_lst = nil, nil
-	    if @rflag.tagonly
-		if desc.is_error?
-		    l10n_unexpected = $mc.get("w_unexpected").capitalize
-		    msg = "#{severity}[#{l10n_unexpected}]: #{testname}"
-		else
-		    msg = "#{severity}: #{testname}"
-		end
-	    else
-		msg = desc.msg
-	    end
 
-
-	    if @rflag.explain && !@rflag.tagonly
-		xpl_lst = xpl_split(desc.xpl)
-	    end
-
+	    # Testname
 	    if @rflag.testname
 		l10n_name = $mc.get("#{testname}_testname")
 		@o.puts "[> #{l10n_name}"
 	    end
+
+	    # Message
+	    severity_tag	= severity2tag(severity)
+
+	    msg = if severity.nil?
+		      $mc.get("#{testname}_ok")
+		  else
+		      if @rflag.tagonly
+			  if desc.is_error?
+			  then "#{severity}[Unexpected]: #{testname}"
+			  else "#{severity}: #{testname}"
+			  end
+		      else
+			  msg = desc.msg
+		      end
+		  end
 	    
 	    @o.puts msg
 
-	    if @rflag.details && desc.dtl
-		txt = ::Text::Format::new
-		txt.width = 72
-		txt.tag   = "  "
-		txt.format(desc.dtl).split(/\n/).each { |l|
-		    @o.puts " : #{l}"
-		}
-		@o.puts " `..... .. .. . .  ."
-	    end
-	    
-	    if xpl_lst
-		xpl_lst.each { |t, h, b|
-		    tag = $mc.get("tag_#{t}")
-		    @o.puts " | #{tag}: #{h}"
-		    b.each { |l| @o.puts " |  #{l}" }
-		}
-		@o.puts " `----- -- -- - -  -"
-	    end
+	    if !severity.nil?
+		# Details
+		if @rflag.details && desc.dtl
+		    txt = ::Text::Format::new
+		    txt.width = 72
+		    txt.tag   = "  "
+		    txt.format(desc.dtl).split(/\n/).each { |l|
+			@o.puts " : #{l}" }
+		    @o.puts " `..... .. .. . .  ."
+		end
 
-
+		# Explanation
+		if @rflag.explain && !@rflag.tagonly
+		    xpl_lst = xpl_split(desc.xpl)
+		end
+		
+		if xpl_lst
+		    xpl_lst.each { |t, h, b|
+			tag = $mc.get("tag_#{t}")
+			@o.puts " | #{tag}: #{h}"
+			b.each { |l| @o.puts " |  #{l}" }
+		    }
+		    @o.puts " `----- -- -- - -  -"
+		end
+	    end
+		
+	    # Elements
 	    lst.each { |elt|
 		lines  = elt.split(/\n/)
 		

@@ -37,11 +37,12 @@ module Input
     ##  - quiet
     ##  - one
     ##  - verbose  = [ i|intro, n|testname, x|explain, d|details, 
-    ##                 t|testdesc, c|counter ]
+    ##                 o|reportok, t|testdesc, c|counter ]
     ##      - intro
     ##      - testname
     ##      - explain
     ##      - details
+    ##      - reportok
     ##      - progress = [ testdesc | counter ]
     ##  - output   = [ straight, consolidation, text, html ]
     ##      - format   = html|text
@@ -106,6 +107,7 @@ module Input
 		p.verbose = "intro"             if @cgi.has_key?("intro")
 		p.verbose = "explain"           if @cgi.has_key?("explain")
 		p.verbose = "details"		if @cgi.has_key?("details")
+		p.verbose = "reportok"		if @cgi.has_key?("reportok")
 		p.verbose = @cgi["progress"]    if @cgi.has_key?("progress")
 	    end
 

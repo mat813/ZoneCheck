@@ -30,12 +30,14 @@ xpl_rfc2182 : [adv]: AFNIC\nTo avoid loosing all connectivity with the autoritat
 
 [chk_dn_sntx]
 testname: illegal symbols in domain name
+ok	: No illegal symbols found in domain name
 error   : The domain name contains illegal symbols
 explain = label_xpl
 
 
 [chk_dn_orp_hyph]
 testname: dash ('-') at start or beginning of domain name
+ok	: No illegal use of dash ('-') in the domain name found
 error   : The domain name start or end with a dash ('-')
 explain = label_xpl
 
@@ -43,17 +45,20 @@ explain = label_xpl
 [chk_dn_dbl_hyph]
 testname: double dash in domain name
 error   : The domain name contains a double dash
+ok	: No double dash ('--') found
 explain : [ref]: IETF IDN project (internationalized domain names)\nThe double dash ('--') will have a special meaning for the domain name\nencoding, so it is strongly advised not to used it. See \n<URL:http://www.iana.org/cctld/specifications-policies-cctlds-01apr02.htm> (4. Tagged Domain Names.)
 
 
 [chk_one_ns]
 testname: one nameserver for the domain 
+ok	: At least one nameserver found
 error   : At least one nameserver is required
 explain = xpl_rfc2182
 
 
 [chk_several_ns]
 testname: at least two nameservers for the domain
+ok	: At least two nameservers found
 error   : At least two nameservers are necessary
 explain = xpl_rfc2182
 
@@ -61,6 +66,7 @@ explain = xpl_rfc2182
 [chk_ip_distinct]
 testname: identical addresses
 error   : All addresses should be distinct
+ok	: All addresses are distinct
 explain = xpl_rfc2182
 details : The nameservers %{ns} are using the same IP address (%{ip}).
 
@@ -68,6 +74,7 @@ details : The nameservers %{ns} are using the same IP address (%{ip}).
 [chk_ip_same_net]
 testname: nameserver's addresses on same subnet
 error   : IP addresses on the same subnet
+ok	: Some IP addresses are not on the same subnet
 explain = xpl_rfc2182
 details : The following subnets are used by several hosts: %{subnets}. Try moving some of their hosts to another subnet.
 
@@ -75,5 +82,6 @@ details : The following subnets are used by several hosts: %{subnets}. Try movin
 [chk_ip_all_same_net]
 testname: nameserver addresses are all on the same subnet
 error   : IP addresses are all on the same subnet
+ok	: All IP addresses are not on the same subnet
 explain = xpl_rfc2182
 details : All the servers are in the subnet %{subnet}, try moving some of them  to another subnet.

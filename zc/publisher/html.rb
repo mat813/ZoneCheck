@@ -362,26 +362,25 @@ EOT
 	    end
 
 	    # Message
-	    if !severity.nil?
-		logo = case severity
-		       when Config::Info    then "info.png"
-		       when Config::Warning then "warning.png"
-		       when Config::Fatal   then "fatal.png"
-		       else raise "XXX: unknown severity: #{severity}"
-		       end
+	    severity_tag	= severity2tag(severity)
+	    logo		= severity_tag + ".png"
 
-		if @rflag.tagonly
-		    if desc.is_error?
-			msg = "#{severity}[Unexpected]: #{testname}"
-		    else
-			msg = "#{severity}: #{testname}"
-		    end
-		else
-		    msg = desc.msg
-		end
-
-		@o.puts "<DIV class=\"zc-msg\"><IMG src=\"#{@publish_path}/img/#{logo}\" alt=\"\"> #{msg}</DIV>"
+	    msg = if severity.nil?
+		      $mc.get("#{testname}_ok")
+		  else
+		      if @rflag.tagonly
+			  if desc.is_error?
+			  then "#{severity_tag}[Unexpected]: #{testname}"
+			  else "#{severity_tag}: #{testname}"
+			  end
+		      else
+			  desc.msg
+		      end
+		  end
+	    
+	    @o.puts "<DIV class=\"zc-msg\"><IMG src=\"#{@publish_path}/img/#{logo}\" alt=\"\"> #{msg}</DIV>"
 		
+	    if !severity.nil?
 		# Details
 		if @rflag.details && desc.dtl
 		    @o.puts "<UL class=\"zc-details\">"

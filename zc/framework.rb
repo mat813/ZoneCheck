@@ -79,8 +79,7 @@ class Test
 		else
 		    d = d.dup
 		    @data.each_pair { |k, v|
-			d.gsub!(/%\{#{k}\}/, v.to_s)
-		    }
+			d.gsub!(/%\{#{k}\}/, v.to_s) }
 		    d
 		end
 	    end

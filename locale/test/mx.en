@@ -24,42 +24,49 @@
 [chk_mx]
 testname: MX record present
 error   : No MX record found on server
+ok	: MX record found
 explain : [ref]: IETF RFC1912 (p.7)\nPut MX records even on hosts that aren't intended to send or receive\ne-mail.  If there is a security problem involving one of these hosts,\nsome people will mistakenly send mail to postmaster or root at the\nsite without checking first to see if it is a "real" host or just a\nterminal or personal computer that's not set up to accept e-mail.
 
 
 [chk_mx_auth]
 testname: MX authoritative answer
 error   : The MX answer is not authoritative
+ok	: The MX answer is authoritative
 explain : [none]
 
 
 [chk_mx_sntx]
 testname: MX syntax is valid for an hostname
 error   : MX syntax is not correct
+ok	: MX syntax is correct
 explain = label_xpl
 
 
 [chk_mx_cname]
 testname: MX is not an alias
 error   : MX is not allowed to point to a CNAME alias
+ok	: MX is not an alias
 explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
 
 
 [chk_mx_no_wildcard]
 testname: absence of wildcard MX
 error   : A wilcard MX is present
+ok	: No wildcard MX found
 explain : [none]
 
 
 [chk_mx_ip]
 testname: MX can be resolved
 error   : The IP address of the Mail eXchanger can't be resolved
+ok	: The IP address of the Mail eXchanger is resolvable
 explain : [none]
 
 
 [chk_mx_vs_any]
 testname: coherence between MX and ANY records
 error   : MX and ANY request disagree
+ok	: MX and ANY agree
 explain : [none]
 
 

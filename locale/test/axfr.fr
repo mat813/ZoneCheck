@@ -24,15 +24,18 @@
 [chk_axfr]
 testname: transfert de zone possible
 error   : Transfert de zone impossible
+ok	: Transfert de zone reussi
 explain : [none]
 
 [chk_axfr_empty]
 testname: transfert de zone ne contenant aucune donnée
 error   : Le transfert de zone ne contient pas de données
+ok	: Le transfert de zone contient des données
 explain : [none]
 
 [chk_axfr_valid_labels]
 testname: transfert de zone contenant des labels invalides
 error   : Le transfert de zone contient des labels invalides
+ok	: Le transfert de zone ne contient aucun label invalide
 explain = label_xpl
 

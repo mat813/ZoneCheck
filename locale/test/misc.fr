@@ -26,12 +26,14 @@
 [chk_ns_reverse]
 testname: recherche du nom correspondant à l'adresse IP du serveur
 error   : Impossible de trouver le nom correspondant à l'adresse IP du serveur
+ok	: Le nom correspondant a l'addresse IP du serveur a ete trouvee
 explain : [none]
 
 
 [chk_correct_recursive_flag]
 testname: serveur de nom réellement récursif
 error   : Le serveur dit être récursif mais ne l'est pas
+ok	: Le serveur est recursif comme affirme
 explain : [none]
 
 
@@ -39,11 +41,13 @@ explain : [none]
 testname: serveur de nom donné comme primaire est primaire
 error   : Le serveur de nom primaire ne correspond pas à celui donné
 details : Le serveur de nom primaire (%{primary}) ne correspond pas à celui indiqué (%{given_primary}).
+ok	: Le serveur de nom primaire correspond a celui donne
 explain : [none]
 
 
 [chk_given_ns_vs_ns]
 testname: cohérence avec la liste des serveurs de noms donnée
 error   : La liste des serveurs récupérée ne correspond pas à celle donnée
+ok	: La liste des serveurs recupere correspond a celle donnee
 details : La liste des serveurs de noms donnée (%{list_from_param}) n'est pas cohérente avec celle récupérée sur la zone (%{list_from_ns}).
 explain : [none]

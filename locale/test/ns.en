@@ -29,34 +29,40 @@ ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME 
 [chk_ns]
 testname: NS record present
 error   : No NS record found on server
+ok	: NS record found
 explain : [none]
 
 
 [chk_ns_auth]
 testname: NS authoritative answer
 error   : The NS answer is not authoritative
+ok	: The NS answer is authoritative
 explain : [none]
 
 
 [chk_ns_sntx]
 testname: NS name has a valid domain/hostname syntax
 error   : NS name syntax is not correct
+ok	: NS name syntax is correct
 explain = label_xpl
 
 
 [chk_ns_cname]
 testname: NS is not an alias
 error   : NS is not allowed to point to a CNAME alias
+ok	: NS is not an alias
 explain = ns_cname_xpl
 
 
 [chk_ns_vs_any]
 testname: coherence between NS and ANY records
 error   : NS and ANY request disagree
+ok	: NS and ANY agree
 explain : [none]
 
 
 [chk_ns_ip]
 testname: NS can be resolved
 error   : The IP addresses of the zone nameserver can't be found
+ok	: IP addresses of the zone naemserver have been found
 explain : [none]

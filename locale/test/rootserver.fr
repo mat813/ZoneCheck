@@ -30,16 +30,19 @@ xpl_rootserver_vs_icann : [ref]: IETF RFC2870 (p.1)\nThe Internet Corporation fo
 [chk_root_servers]
 testname: existence de la liste des root servers
 error   : Les "Root Servers" ne sont pas disponibles
+ok	: Les "Root Servers" sont disponibles
 explain : [none]
 
 
 [chk_root_servers_ns_vs_icann]
 testname: liste des Root Servers identique à celle de l'ICANN
 error   : La liste des "Root Servers" est incohérente avec celle de l'ICANN
+ok	: La liste des "Root Servers" est cohérente avec celle de l'ICANN
 explain = xpl_rootserver_vs_icann
 
 
 [chk_root_servers_ip_vs_icann]
 testname: adresses IP des "Root Servers" identiques à celles de l'ICANN
-error   : La liste des "Root Servers" est incohérente avec celle de l'ICANN
+error   : Les addresses des "Root Servers" est incohérente avec celle de l'ICANN
+ok	: Les addresses des "Root Servers" est cohérente avec celle de l'ICANN
 explain = xpl_rootserver_vs_icann

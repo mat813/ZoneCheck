@@ -132,6 +132,36 @@ module Report
 	end
 
 
+	    def display(list)
+		return if list.empty?
+		title = "ok"
+
+		if !@rflag.tagonly && !@rflag.quiet
+		    @publish.diag_section(title)
+		end
+		
+		nlist = list.dup
+		while ! nlist.empty?
+		    # Get test result
+		    res		= nlist.shift
+		    
+		    # Initialize 
+		    whos	= [ res.tag ]
+		    desc	= res.desc.clone
+		    testname	= res.testname
+		    
+		    # Look for similare test results
+		    nlist.delete_if { |a|
+			if (a.testname == res.testname) && (a.desc == res.desc)
+			    whos << a.tag
+			end
+		    }
+		    
+		    # Publish diagnostic
+		    @publish.diagnostic(nil, testname, desc, whos)
+		end
+	    end
+
 	def finish
 	    if @rflag.one
 		rtest = nil
@@ -151,7 +181,7 @@ module Report
 	    if !(@info.empty? && @warning.empty? && @fatal.empty?)
 		@publish.diag_start() unless @rflag.quiet
 
-#		display(@list_ok)
+		display(@list_ok) if @rflag.reportok
 		@info.display
 		@warning.display
 		@fatal.display

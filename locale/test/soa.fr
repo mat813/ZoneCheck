@@ -27,36 +27,42 @@ xpl_email_sntx: [ref]: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are co
 [chk_soa]
 testname: présence d'un enregistrement SOA
 error   : Aucun enregistrement SOA présent sur le serveur
+ok	: Enregistrement SOA trouve
 explain : [none]
 
 
 [chk_soa_auth]
 testname: réponse autoritaire pour le SOA
 error   : La réponse pour le SOA n'est pas autoritaire
+ok	: La reponse pour le SOA est autoritaire
 explain : [none]
 
 
 [chk_soa_contact_sntx_at]
-testname: mauvaise utilisation du caractère '@' dans le contact du SOA
+testname: mauvaise utilisation du caractère '@' dans le 'contact' du SOA
 error   : Le contact contient le caractère '@'
+ok	: Aucune mauvaise utilisation du caractere '@' dans le 'contact' du SOA
 explain = xpl_email_sntx
 
 
 [chk_soa_contact_sntx]
 testname: caractères illégaux dans le contact du SOA
 error   : Le contact contient des caractères illégaux
+ok	: Aucun caractere illegal dans le contact du SOA
 explain = xpl_email_sntx
 
 
 [chk_soa_master_sntx]
 testname: caractères illégaux dans le 'master' du SOA
 error   : Le 'master' du SOA contient des caractères illégaux
+ok	: Aucun caractere illegal dans le 'master' du SOA
 explain = label_xpl
 
 
 [chk_soa_master_fq]
 testname: nom de serveur pleinement qualifié dans le 'master' du SOA
 error   : Le nom du serveur dans le 'master' du SOA n'est pas pleinement qualifie
+ok	: Le 'master' est pleinement qualifie
 explain : [none]
 details : Le point ('.') final est certainement manquant dans le fichier de configuration pour le serveur (%{mname}) indiqué en tant que maître dans le SOA.
 
@@ -64,6 +70,7 @@ details : Le point ('.') final est certainement manquant dans le fichier de conf
 [chk_soa_serial_fmt_YYYYMMDDnn]
 testname: numéro de série de la forme YYYYMMDDnn
 error   : Le numéro de série n'est pas de la forme YYYYMMDDnn
+ok	: Le numero de serie suis bien la forme YYYYLLDDnn
 explain : [ref]: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day,\nnn=revision number).
 details : Le numéro de série %{serial} ne semble pas être au format YYYYMMDDnn.
 
@@ -71,6 +78,7 @@ details : Le numéro de série %{serial} ne semble pas être au format YYYYMMDDn
 [chk_soa_refresh_6h]
 testname: champ 'refresh' du SOA est à au moins 6 heures
 error   : Le champ 'refresh' doit être positionné à au moins 6 heures
+ok	: Le champ 'refresh' du SOA est à au moins 6 heures
 explain : [none]
 details : La valeur du champ 'refresh' est de %{refresh} sec, et derait être de moins de 6 heures (21600 sec).
 
@@ -78,6 +86,7 @@ details : La valeur du champ 'refresh' est de %{refresh} sec, et derait être de
 [chk_soa_retry_refresh]
 testname: champ 'retry' du SOA inférieure à celui du 'refresh'
 error   : Le champ 'retry' doit être inférieure à celui du 'refresh'
+ok	: Le champ 'retry' du SOA inférieure à celui du 'refresh'
 explain : [ref]: IETF RFC1912 (p.4)\nThe 'retry' value is typically a fraction of the 'refresh' interval.
 details : La valeur du champ 'retry' est de %{retry} sec, et devrait être inférieur au 'refresh' (%{refresh} sec).
 
@@ -85,6 +94,7 @@ details : La valeur du champ 'retry' est de %{retry} sec, et devrait être infé
 [chk_soa_retry_1h]
 testname: champ 'retry' du SOA est d'au moins 1 heure
 error   : Le champ 'retry' doit être d'au moins 1 heure
+ok	: Le champ 'retry' du SOA est d'au moins 1 heure
 explain : [none]
 details : La valeur du champ 'retry' est de %{retry} sec, et devrait être d'au moins 1 heure (3600 sec).
 
@@ -92,6 +102,7 @@ details : La valeur du champ 'retry' est de %{retry} sec, et devrait être d'au 
 [chk_soa_expire_7d]
 testname: champ 'expire' du SOA est d'au moins 7 jours
 error   : Le champ 'expire' doit être d'au moins 7 jours
+ok	: Le champ 'expire' du SOA est d'au moins 7 jours
 explain : [ref]: IETF RFC1912 (p.4)\nAfter a zone is expired a secondary will still continue to try to contact\nthe primary, but it will no longer provide nameservice for the zone.\n2 to 4 weeks are suggested values.\n[ref]: AFNIC constraint\nA minimum of 1 week (7 days) is enforced.
 details : La valeur du champ 'expire' est de %{expire} sec, et devrait être d'au moins 7 jours (604800 sec).
 
@@ -99,6 +110,7 @@ details : La valeur du champ 'expire' est de %{expire} sec, et devrait être d'a
 [chk_soa_expire_7refresh]
 testname: champ 'expire' est d'au moins 7 fois celui du 'refresh'
 error   : Le champ 'expire' doit être au moins 7 fois celui du 'refresh'
+ok	: Le champ 'expire' est d'au moins 7 fois celui du 'refresh'
 explain : [none]
 details : La valeur du champ 'expire' est de %{expire} sec, et devrait être 7 fois plus grand que celui du 'refresh' (%{refresh} sec).
 
@@ -106,6 +118,7 @@ details : La valeur du champ 'expire' est de %{expire} sec, et devrait être 7 f
 [chk_soa_minimum_3h]
 testname: champ 'minimum' du SOA inférieur à 3 heures
 error   : Le champ 'minimum' doit être inférieur à 3 heures
+ok	: Le champ 'minimum' du SOA inférieur à 3 heures
 explain : [none]
 details : La valeur du champ 'minimum' est de %{minimum} sec, et devrait être moins de 3 heures (10800 sec).
 
@@ -113,6 +126,7 @@ details : La valeur du champ 'minimum' est de %{minimum} sec, et devrait être m
 [chk_soa_ns_cname]
 testname: champ 'master' du SOA n'est pas un alias
 error   : Le champ 'master' du SOA ne doit pas pointer sur un alias CNAME
+ok	: Le champ 'master' du SOA n'est pas un alias
 explain = ns_cname_xpl
 details : Le serveur maître (%{master}) indiqué dans le SOA est un alias CNAME sur %{alias}.
 
@@ -120,12 +134,14 @@ details : Le serveur maître (%{master}) indiqué dans le SOA est un alias CNAME
 [chk_soa_vs_any]
 testname: cohérence entre enregistrements SOA et ANY
 error   : Enregistrements SOA et ANY incohérents
+ok	: Enregistrements SOA et ANY cohérents
 explain : [none]
 
 
 [chk_soa_coherence_serial]
 testname: cohérence du numéro de série avec celui du serveur primaire
 error   : Le numéro de série n'est pas cohérent avec celui du serveur primaire
+ok	: Le numéro de série est cohérent avec celui du serveur primaire
 explain : [none]
 details : Le numéro de série obtenu (%{serial_this}) est différent de celui indiqué sur %{host_ref} (%{serial_ref}).
 
@@ -133,5 +149,6 @@ details : Le numéro de série obtenu (%{serial_this}) est différent de celui i
 [chk_soa_coherence_master]
 testname: cohérence du champ 'master' du SOA avec celui du serveur primaire
 error   : Le champ 'master' du SOA est incohérent avec celui du serveur primaire
+ok	: Le champ 'master' du SOA est cohérent avec celui du serveur primaire
 explain : [none]
 details : Le serveur maître indiqué dans le SOA (%{master_this}) est différent de celui indiqué sur %{host_ref} (%{master_ref}).
