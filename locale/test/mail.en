@@ -37,7 +37,7 @@ details : The mailhost (%{mailhost}) used for the hostmaster address (%{hostmast
 [chk_mail_postmaster]
 testname: 'postmaster' email address for the domain is valid
 error   : The postmaster can't be contacted by email
-explain : chk_mail_postmaster_xpl
+explain = chk_mail_postmaster_xpl
 details : The postmaster address (%{postmaster}) doesn't exist.
 
 [chk_mail_hostmaster]
