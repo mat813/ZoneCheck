@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2002/08/02 13:58:17
@@ -22,18 +28,18 @@ xpl_connectivity_udp_tcp : [ref]: IETF RFC1035 (p.32 4.2. Transport)\nThe DNS as
 
 
 [chk_icmp]
-testname: réponses aux requêtes ICMP
-error   : L'hôte ne semble pas être vivant (présence d'un parefeux?)
+testname: rÃ©ponses aux requÃªtes ICMP
+error   : L'hÃ´te ne semble pas Ãªtre vivant (prÃ©sence d'un parefeux?)
 explain : [none]
 
 
 [chk_udp]
-testname: connectivité UDP
-error   : Le serveur n'écoute pas ou ne répond pas en UDP sur le port 53
+testname: connectivitÃ© UDP
+error   : Le serveur n'Ã©coute pas ou ne rÃ©pond pas en UDP sur le port 53
 explain = xpl_connectivity_udp_tcp
 
 
 [chk_tcp]
-testname: connectivité TCP
-error   : Le serveur n'écoute pas ou ne répond pas en TCP sur le port 53
+testname: connectivitÃ© TCP
+error   : Le serveur n'Ã©coute pas ou ne rÃ©pond pas en TCP sur le port 53
 explain = xpl_connectivity_udp_tcp

@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2002/08/02 13:58:17
@@ -18,26 +24,26 @@
 
 
 [chk_ns_reverse]
-testname: recherche du nom correspondant à l'adresse IP du serveur
-error   : Impossible de trouver le nom correspondant à l'adresse IP du serveur
+testname: recherche du nom correspondant Ã  l'adresse IP du serveur
+error   : Impossible de trouver le nom correspondant Ã  l'adresse IP du serveur
 explain : [none]
 
 
 [chk_correct_recursive_flag]
-testname: serveur de nom réellement récursif
-error   : Le serveur dit être récursif mais ne l'est pas
+testname: serveur de nom rÃ©ellement rÃ©cursif
+error   : Le serveur dit Ãªtre rÃ©cursif mais ne l'est pas
 explain : [none]
 
 
 [chk_given_nsprim_vs_soa]
-testname: serveur de nom donné comme primaire est primaire
-error   : Le serveur de nom primaire ne correspond pas à celui donné
-details : Le serveur de nom primaire (%{primary}) ne correspond pas à celui indiqué (%{given_primary}).
+testname: serveur de nom donnÃ© comme primaire est primaire
+error   : Le serveur de nom primaire ne correspond pas Ã  celui donnÃ©
+details : Le serveur de nom primaire (%{primary}) ne correspond pas Ã  celui indiquÃ© (%{given_primary}).
 explain : [none]
 
 
 [chk_given_ns_vs_ns]
-testname: cohérence avec la liste des serveurs de noms donnée
-error   : La liste des serveurs récupérée ne correspond pas à celle donnée
-details : La liste des serveurs de noms donnée (%{list_from_param}) n'est pas cohérente avec celle récupérée sur la zone (%{list_from_ns}).
+testname: cohÃ©rence avec la liste des serveurs de noms donnÃ©e
+error   : La liste des serveurs rÃ©cupÃ©rÃ©e ne correspond pas Ã  celle donnÃ©e
+details : La liste des serveurs de noms donnÃ©e (%{list_from_param}) n'est pas cohÃ©rente avec celle rÃ©cupÃ©rÃ©e sur la zone (%{list_from_ns}).
 explain : [none]

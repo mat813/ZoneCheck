@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/09/11 11:20:17
@@ -21,13 +27,13 @@ xpl_loopback: [ref]: DNS & BIND (2nd edition) (p.61)\nNo one was given responsib
 
 
 [chk_loopback_delegation]
-testname: délégation du 'loopback'
-error   : Le domaine du 'loopback' n'est pas délégué
+testname: dÃ©lÃ©gation du 'loopback'
+error   : Le domaine du 'loopback' n'est pas dÃ©lÃ©guÃ©
 explain = xpl_loopback
 
 
 [chk_loopback_host]
 testname: 'loopback' resolvable
-error   : Impossible de résoudre le 'loopback'
+error   : Impossible de rÃ©soudre le 'loopback'
 explain = xpl_loopback
 

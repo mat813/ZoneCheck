@@ -18,7 +18,6 @@
 require 'dbg'
 
 
-
 ##
 ## Message catalog for I18N/L10N
 ##
@@ -44,7 +43,22 @@ require 'dbg'
 ##      we replace the inode number by the filename if the inode is 0
 ##
 class MessageCatalog
-    TagRegex = /[\w\/]+/
+    TagRegex	= /[\w\/]+/
+    LANGRegex	= /^(\w+?)(?:_(\w+))?(?:\.([\w\-]+))?$/
+
+    ##
+    ## Exception: the corresponding message catalog is not installed
+    ##
+    class NoCatalogFound < StandardError
+    end
+
+
+    ##
+    ## Exception: requested encoding is not possible (conversion lose)
+    ##
+    class EncodingError < StandardError
+    end
+
 
     ##
     ## Exception: Syntax error, while parsing the file
@@ -66,10 +80,24 @@ class MessageCatalog
     #  The settings are based on: LanguageCode_CountryCode.Encoding
     #
     def self.normlang(lng)
-	unless lng =~ /^(\w+?)(?:_(\w+))?(:?\.([\w\-]+))?$/
+	unless lng =~ LANGRegex
 	    raise ArgumentError, "Suspicious language selection: #{lng}"
 	end
-	$1	# Only return the LanguageCode
+	lang  = $1.downcase
+        lang += "_" + $2.upcase if $2
+        lang += "." + $3.downcase if $3
+        lang
+    end
+
+
+    #
+    # Split lang between Language, Country, Encoding
+    #
+    def self.splitlang(lng)
+	unless lng =~ LANGRegex
+	    raise ArgumentError, "Suspicious language selection: #{lng}"
+	end
+        [ $1, $2, $3 ]
     end
 
 
@@ -83,13 +111,22 @@ class MessageCatalog
 	@loaded		= {}
 	@catfiles	= []
 	@lang		= nil
-    end
+        @language	= nil
+        @country	= nil
+        @encoding	= nil
+        @iconv		= nil
 
+	begin
+	    require 'iconv'
+	rescue LoadError => e
+            @iconv = false
+        end
+    end
     
     #
     # READER
     #
-    attr_reader :lang
+    attr_reader :lang, :language, :country, :encoding
 
 
     #
@@ -97,6 +134,8 @@ class MessageCatalog
     #
     def lang=(lng)
 	@lang = self.class::normlang(lng).clone.untaint
+        @language, @country, @encoding = self.class::splitlang(@lang)
+        @iconv = Iconv::new(@encoding, "utf8") if @encoding && @iconv != false
     end
 
 
@@ -105,7 +144,8 @@ class MessageCatalog
     #
     def available?(where, lng=@lang)
 	lng = lng.clone.untaint if lng.tainted?
-	File::readable?(filepath(where, lng))
+        filepath(where, lng).each { |fp| return true if File::readable?(fp) }
+        false
     end
 
 
@@ -126,10 +166,15 @@ class MessageCatalog
     #  (the occurence of %s is replaced by the language name)
     #
     def read(where)
-	if res = readfile(filepath(where))
-	    @catfiles << where
-	end
-	res
+        filepath(where).each { |fp|
+	    if File::readable?(fp)
+                if res = readfile(fp)
+                    @catfiles << where
+                end
+                return res
+            end
+	}
+        raise NoCatalogFound, "No valid catalog found for #{@lang}"
     end
 	
 
@@ -153,21 +198,36 @@ class MessageCatalog
 	@catalog	= {}
 	@loaded		= {}
 	@catfiles.each { |where| 
-	    readfile(filepath(where)) }
+            ok = false
+            filepath(where).each { |fp|
+		if File::readable?(fp)
+                    readfile(fp) ; ok = true ; break
+                end
+            }
+            unless ok
+                raise NoCatalogFound, "No valid catalog found for #{@lang}"
+            end
+        }
     end
 
     ## PRIVATE ##
     private
 
     #
-    # Establish the filepath from the template file
+    # Establish the possible filepaths from the template file
     #  - %s is replace by lang
     #  - if not fullpath the default directory is prepend
+    # 
+    # WARN: An array is returned has for exemple we could need to
+    #       test for fr_CA and next fr
     #
     def filepath(where, lng=@lang)
 	lng   = self.class::normlang(lng) unless lng == @lang
+        language, country, encoding = self.class::splitlang(lng)
 	where = "#{@directory}/#{where}"  unless where[0] == ?/
-	where % [ lng ]
+	fp = [ where % [ language ] ]
+        fp << where % [ "#{language}_#{country}" ] if country
+        fp
     end
 
 
@@ -229,6 +289,14 @@ class MessageCatalog
 		    end
 
 		    msg.gsub!(/\\n/, "\n")
+                    if @iconv
+                        begin
+                            msg = @iconv.iconv(msg) 
+                        rescue Iconv::Failure, Iconv::InvalidCharacter => e
+                            raise EncodingError, 
+                                "Can't do full conversion to #{@encoding}"
+                        end
+                    end
 		    @catalog[tag] = msg
 		    $dbg.msg(DBG::LOCALE, "adding locale: #{tag}")
 

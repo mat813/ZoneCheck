@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2002/08/02 13:58:17
@@ -16,7 +22,7 @@
 #
 
 [chk_private_ip]
-testname: adresse dans un réseau privé
-error   : L'adresse a été allouée dans un réseau privé
+testname: adresse dans un rÃ©seau privÃ©
+error   : L'adresse a Ã©tÃ© allouÃ©e dans un rÃ©seau privÃ©
 explain : [ref]: IETF RFC1918 (3. Private Address Space)\nThe Internet Assigned Numbers Authority (IANA) has reserved the\nfollowing three blocks of the IP address space for private internets: 10/8, 172.16/12, 192.168/16.
 

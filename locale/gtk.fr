@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2002/08/02 13:58:17
@@ -18,23 +24,23 @@
 [iface]
 label_transport		: Transport
 label_error		: Erreur
-label_extra_tests	: tests supplémentaires
+label_extra_tests	: tests supplÃ©mentaires
 label_output		: Sortie
-label_check		: Vérifie
+label_check		: VÃ©rifie
 label_guess		: Devine
 label_clear		: Efface
 label_debug		: Debug
-label_advanced		: Avancé
-stop_on_first		: arrête sur le premier fatal
-error_default		: sévérité par défaut
+label_advanced		: AvancÃ©
+stop_on_first		: arrÃªte sur le premier fatal
+error_default		: sÃ©vÃ©ritÃ© par dÃ©faut
 error_allwarnings	: tout avertissment
 error_allfatals		: tout fatal
 test_mail		: mail delivery
 test_zone		: zone content
 test_ripe		: RIPE database
 output_explain		: explication
-output_details		: détails
-output_zone		: résumé
+output_details		: dÃ©tails
+output_zone		: rÃ©sumÃ©
 output_progressbar	: barre de progression
 output_nothing		: rien
 output_description	: description
@@ -56,7 +62,7 @@ batch_save		: Ouvrir traitement en lots
 batch_open		: Sauvegarder traitement en lots
 
 file_overwrite		: Ecraser le fichier : %s
-file_gotdirectory	: Ne peut pas lire un répertoire
+file_gotdirectory	: Ne peut pas lire un rÃ©pertoire
 
 xcp_toomany_nameservers : Trop de serveurs de noms
 

@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2002/08/02 13:58:17
@@ -28,12 +34,12 @@ explain : [none]
 
 
 [chk_root_servers_ns_vs_icann]
-testname: liste des Root Servers identique à celle de l'ICANN
-error   : La liste des Root Servers n'est pas cohérente avec celle de l'ICANN
+testname: liste des Root Servers identique Ã  celle de l'ICANN
+error   : La liste des Root Servers n'est pas cohÃ©rente avec celle de l'ICANN
 explain = xpl_rootserver_vs_icann
 
 
 [chk_root_servers_ip_vs_icann]
-testname: adresses IP des Root Servers identiques à celles de l'ICANN
-error   : La liste des Root Servers n'est pas cohérente avec celle de l'ICANN
+testname: adresses IP des Root Servers identiques Ã  celles de l'ICANN
+error   : La liste des Root Servers n'est pas cohÃ©rente avec celle de l'ICANN
 explain = xpl_rootserver_vs_icann

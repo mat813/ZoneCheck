@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2002/08/02 13:58:17
@@ -18,7 +24,7 @@
 #
 # Word
 #
-w_generic	: générique
+w_generic	: gÃ©nÃ©rique
 w_warning	: avertissement
 w_warning_id	: a
 w_fatal		: fatal
@@ -32,9 +38,9 @@ w_error		: erreur
 w_perfect	: parfait
 w_quit		: quitte
 w_abort		: interrompt
-w_details	: détails
-w_references	: références
-w_elements	: éléments
+w_details	: dÃ©tails
+w_references	: rÃ©fÃ©rences
+w_elements	: Ã©lÃ©ments
 w_form          : formulaire
 
 
@@ -48,7 +54,7 @@ t_single	: domaine simple
 #
 # Tag
 #
-tag_ref		: Réf
+tag_ref		: RÃ©f
 tag_adv		: Conseil
 
 
@@ -70,7 +76,7 @@ ns_ips		: IPs
 
 title_zoneinfo  : Information sur la Zone
 title_progress  : Progression
-title_testres   : Résultat des tests
+title_testres   : RÃ©sultat des tests
 title_status    : Statut final
 
 pgr_progress    : Progression
@@ -83,54 +89,54 @@ pgr_speed_unit  : T/s
 #
 #
 #
-problem_file	: problème à l'ouverture/lecture du fichier: %s
+problem_file	: problÃ¨me Ã  l'ouverture/lecture du fichier: %s
 
 
 #
 # Input
 #
 [input]
-unsupported	: méthode d'entrée '%s' non supportée
-suspicious	: méthode d'entrée '%s' douteuse
+unsupported	: mÃ©thode d'entrÃ©e '%s' non supportÃ©e
+suspicious	: mÃ©thode d'entrÃ©e '%s' douteuse
 version		: PROGNAME: version %s
-unsupported_domain: Impossible d'établir une correspondance pour '%s'
+unsupported_domain: Impossible d'Ã©tablir une correspondance pour '%s'
 
 
 #
 # Parser
 #
 [config]
-section_exists	: section '%s' déjà définie
+section_exists	: section '%s' dÃ©jÃ  dÃ©finie
 section_unknown	: section '%s' inconnue ou indisponnible
-constant_exists	: constante '%s' déjà définie
-param_exists	: paramètre '%s' déjà défini
-param_unknown	: paramètre '%s' inconnu
+constant_exists	: constante '%s' dÃ©jÃ  dÃ©finie
+param_exists	: paramÃ¨tre '%s' dÃ©jÃ  dÃ©fini
+param_unknown	: paramÃ¨tre '%s' inconnu
 wrong_arg_number: mauvais nombre d'arguments (%s au lieu de %s) dans '%s'
-dcl_map_exists	: carte pour "%s" déjà définie
-dcl_unknown	: déclaration '%s' inconnue
-method_unknown	: méthode '%s' indisponnible
+dcl_map_exists	: carte pour "%s" dÃ©jÃ  dÃ©finie
+dcl_unknown	: dÃ©claration '%s' inconnue
+method_unknown	: mÃ©thode '%s' indisponnible
 for_domain	: %s pour le domaine %s
 family_unknown	: famille '%s' inconnue
 
 
-expect_string	: chaîne attendue
+expect_string	: chaÃ®ne attendue
 expect_symbol	: symbole attendu
-expect_keyword	: mot clé '%s' attendu
+expect_keyword	: mot clÃ© '%s' attendu
 expect_token	: '%s' attendu
-expect_cfg_main	: déclaration de constante ou 'useconf' attendu
-expect_cfg_specific: déclaration de constante ou 'testseq' attendu
+expect_cfg_main	: dÃ©claration de constante ou 'useconf' attendu
+expect_cfg_specific: dÃ©claration de constante ou 'testseq' attendu
 
-expect_checkname: méthode de vérification (ie: chk_*) attendue
-expect_testname	: méthode de test (ie: tst_*) attendue
-expect_severity_level : niveau de sévérité (w,i,f,S) attendu
-expect_category	: catégorie attendue
-expect_constname: déclaration de constante attendue
-expect_value	: chaîne de caractères pour l'affection de constante attendue
+expect_checkname: mÃ©thode de vÃ©rification (ie: chk_*) attendue
+expect_testname	: mÃ©thode de test (ie: tst_*) attendue
+expect_severity_level : niveau de sÃ©vÃ©ritÃ© (w,i,f,S) attendu
+expect_category	: catÃ©gorie attendue
+expect_constname: dÃ©claration de constante attendue
+expect_value	: chaÃ®ne de caractÃ¨res pour l'affection de constante attendue
 expect_domain	: nom de domaine attendu
 expect_filename	: no de fichier attendu
 expect_testtype	: type de test (generic, extra, nameserver ou address) attendu
 
-expect_lexical	: caractère '%s' inattendu
+expect_lexical	: caractÃ¨re '%s' inattendu
 
 
 #
@@ -148,27 +154,27 @@ nameservers_ns	: Incapable de trouver les serveurs de noms (NS)
 prim_ns_soa	: Incapable d'identifier le serveur de nom primaire (NS vs SOA)
 nameserver_ips	: Incapable de trouver les adresses IP de %s
 output_support	: La sortie ne supporte pas la classe '%s'
-ipv6_no_stack	: IPv6 n'est pas supporté sur cette machine
+ipv6_no_stack	: IPv6 n'est pas supportÃ© sur cette machine
 unknown_modopt	: Modificateur '%s' inconnu pour l'option '%s'
 local_resolver	: Incapable d'utiliser le resolveur local '%s'
 
 [xcp_config]
-malformed_cmd	: commande malformée
-nosection	: aucune section définie
+malformed_cmd	: commande malformÃ©e
+nosection	: aucune section dÃ©finie
 unknownsection	: section '%s' inconnue
-constexists	: constante '%s' déjà déclarée
-testexists	: test '%s' déjà listé
-confexists	: configuration pour '%s' déjà listée
+constexists	: constante '%s' dÃ©jÃ  dÃ©clarÃ©e
+testexists	: test '%s' dÃ©jÃ  listÃ©
+confexists	: configuration pour '%s' dÃ©jÃ  listÃ©e
 unknowntest	: test '%s' inconnu
-badsection	: section '%s' ne peut pas être utilisée dans ce contexte
+badsection	: section '%s' ne peut pas Ãªtre utilisÃ©e dans ce contexte
 unexpected_token: jeton '%s' inatendu
 unexpected_test	: test inatendu ('when' manquant?)
-whenexists	: clef '%s' déjà définie dans la déclaraion 'when'
-elseexists	: 'else' déjà utilisé
+whenexists	: clef '%s' dÃ©jÃ  dÃ©finie dans la dÃ©claraion 'when'
+elseexists	: 'else' dÃ©jÃ  utilisÃ©
 unknown_sectopt	: option '%s' inconnue dans la section '%s'
 missing_sectopt	: option manquante pour la section '%s'
 
 [xcp_testmanager]
-badclass	: classe '%s' ne dérive pas de %s
-test_exists	: test '%s' défini dans les classes '%s' et '%s'
-check_exists	: vérification '%s' definie dans les classes '%s' et '%s'
+badclass	: classe '%s' ne dÃ©rive pas de %s
+test_exists	: test '%s' dÃ©fini dans les classes '%s' et '%s'
+check_exists	: vÃ©rification '%s' definie dans les classes '%s' et '%s'

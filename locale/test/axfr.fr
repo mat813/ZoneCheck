@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2003/01/16 13:58:17
@@ -21,8 +27,8 @@ error   : Transfert de zone impossible
 explain : [none]
 
 [chk_axfr_empty]
-testname: transfert de zone ne contenant aucune donnée
-error   : Le transfert de zone ne contient pas de données
+testname: transfert de zone ne contenant aucune donnÃ©e
+error   : Le transfert de zone ne contient pas de donnÃ©es
 explain : [none]
 
 [chk_axfr_valid_labels]

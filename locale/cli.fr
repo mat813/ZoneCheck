@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2002/08/02 13:58:17
@@ -17,76 +23,76 @@
 
 input_cli_usage: \
 usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
-    -q, --quiet         N'affiche pas de titres suplémentaires\n\
+    -q, --quiet         N'affiche pas de titres suplÃ©mentaires\n\
         --lang          Choisit une autre langue (en, fr, ...)\n\
     -h, --help          Affiche ce message\n\
-    -V, --version       Affiche le numéro de version et quitte\n\
+    -V, --version       Affiche le numÃ©ro de version et quitte\n\
     -B, --batch         Mode en lots (lit depuis un fichier ou stdin '-')\n\
     -c, --config        Emplacement du fichier de configuration\n\
-        --testdir       Emplacement du répertoire contenant les tests\n\
-    -C, --category      Limite les tests à un ensemble de catégories\n\
-    -T, --test          Nom du test à effectuer\n\
+        --testdir       Emplacement du rÃ©pertoire contenant les tests\n\
+    -C, --category      Limite les tests Ã  un ensemble de catÃ©gories\n\
+    -T, --test          Nom du test Ã  effectuer\n\
         --testlist      Liste tous les tests disponibles\n\
         --testdesc      Donne une description du test (name,expl,error)\n\
-    -r, --resolver      Resolveur à utiliser pour déterminer les 'ns'\n\
+    -r, --resolver      Resolveur Ã  utiliser pour dÃ©terminer les 'ns'\n\
     -n, --ns            Liste des serveurs de noms pour le domaine\n\
     -1, --one           Affiche uniquement le message le plus significatif\n\
-    -g, --tagonly       Affiche uniquement les tags (idéal pour les scripts)\n\
+    -g, --tagonly       Affiche uniquement les tags (idÃ©al pour les scripts)\n\
     -e, --error         Comportement en cas d'erreurs (voir error)\n\
     -t, --transp        Choix de la couche transport/routage (voir transp)\n\
-    -v, --verbose       Niveau de détail des informations (voir verbose)\n\
+    -v, --verbose       Niveau de dÃ©tail des informations (voir verbose)\n\
     -o, --output        Format de sortie (see output)\n\
-    -4, --ipv4          Utilise uniquement IPv4 pour vérifier le domaine\n\
-    -6, --ipv6          Utilise uniquement IPv6 pour vérifier le domaine\n\
+    -4, --ipv4          Utilise uniquement IPv4 pour vÃ©rifier le domaine\n\
+    -6, --ipv6          Utilise uniquement IPv6 pour vÃ©rifier le domaine\n\
 \n\
   verbose:              [intro/explain/details] [testdesc|counter]\n\
-    intro          [i]  Affiche un résumé du domaine et de ses serveurs\n\
-    explain        [x]  Affiche une explication en cas d'échec du test\n\
-    details        [d]  Affiche les details liés à l'échec du test\n\
+    intro          [i]  Affiche un rÃ©sumÃ© du domaine et de ses serveurs\n\
+    explain        [x]  Affiche une explication en cas d'Ã©chec du test\n\
+    details        [d]  Affiche les details liÃ©s Ã  l'Ã©chec du test\n\
     testdesc       [t]  Affiche la description du test en cours\n\
     counter        [c]  Affiche une barre de progression\n\
 \n\
   output:               [straigh|consolidation] [text|html]\n\
-    straight      *[s]  Affiche les résultats sans traitements (ou presque)\n\
-    consolidation  [c]  Essaye de regrouper les résultats avant affichage\n\
+    straight      *[s]  Affiche les rÃ©sultats sans traitements (ou presque)\n\
+    consolidation  [c]  Essaye de regrouper les rÃ©sultats avant affichage\n\
     text          *[t]  Formatage en texte pur\n\
     html           [h]  Formatage en HTML\n\
 \n\
   error:                [allfatal|allwarning] [stop|nostop]\n\
-    allfatal       [af] Tout échec est considéré comme fatal\n\
-    allwarning     [aw] Tout échec est considéré comme un avertissement\n\
-    stop          *[s]  Arrête dès le premier échec\n\
-    nostop         [ns] Exécute tous les tests (même après échec fatal)\n\
+    allfatal       [af] Tout Ã©chec est considÃ©rÃ© comme fatal\n\
+    allwarning     [aw] Tout Ã©chec est considÃ©rÃ© comme un avertissement\n\
+    stop          *[s]  ArrÃªte dÃ¨s le premier Ã©chec\n\
+    nostop         [ns] ExÃ©cute tous les tests (mÃªme aprÃ¨s Ã©chec fatal)\n\
 \n\
   transp:               [ipv4/ipv6] [udp|tcp|std]\n\
     ipv4          *[4]  Utilise le protocole de routage IPv4\n\
     ipv6          *[6]  Utilise le protocole de routage IPv6\n\
     udp            [u]  Utilise la couche de transport UDP\n\
     tcp            [t]  Utilise la couche de transport TCP\n\
-    std           *[s]  Utilise UDP et se replie sur TCP si nécessaire\n\
+    std           *[s]  Utilise UDP et se replie sur TCP si nÃ©cessaire\n\
 \n\
   Traitement en lots:\n\
-   Lit les domaines ligne par ligne depuis un fichier ou l'entrée standard,\n\
+   Lit les domaines ligne par ligne depuis un fichier ou l'entrÃ©e standard,\n\
    La syntaxe est:\n\
       DOM=nom_de_domain\n\
    ou DOM=nom_de_domain NS=ns1;ns2=ip1,ip2\n\
 \n\
-  Catégories:\n\
-    permet=[+|]    interdit=[-|!]    sous-composant=:    séparateur=,\n\
+  CatÃ©gories:\n\
+    permet=[+|]    interdit=[-|!]    sous-composant=:    sÃ©parateur=,\n\
     ex: dns:soa,!dns,+\n\
-        n'effectue pas les tests DNS qui ne sont pas liés au SOA\n\
+        n'effectue pas les tests DNS qui ne sont pas liÃ©s au SOA\n\
 \n\
 \n\
 EXEMPLES:\n\
   PROGNAME -6 --verbose=i,x,d afnic.fr.\n\
-    Teste le domaine 'afnic.fr.' en utilisant uniquement une connectivité\n\
-    IPv6, affiche un résumé des informations sur le domaine testé\n\
-    ainsi qu'une explication et les détails sur les tests ayant échoués\n\
+    Teste le domaine 'afnic.fr.' en utilisant uniquement une connectivitÃ©\n\
+    IPv6, affiche un rÃ©sumÃ© des informations sur le domaine testÃ©\n\
+    ainsi qu'une explication et les dÃ©tails sur les tests ayant Ã©chouÃ©s\n\
 \n\
   PROGNAME -v c -1 -B -\n\
-    Travail en mode par lots, où les domaines sont lus depuis l'entrée\n\
+    Travail en mode par lots, oÃ¹ les domaines sont lus depuis l'entrÃ©e\n\
     standard, une barre de progression indique combien de tests restent,\n\
-    et uniquement un court rapport est rédigé\n\
+    et uniquement un court rapport est rÃ©digÃ©\n\
 \n\
   PROGNAME --testdesc error -T chk_soa\n\
-    Demande le message 'error' associé avec le test 'chk_soa'\n
+    Demande le message 'error' associÃ© avec le test 'chk_soa'\n

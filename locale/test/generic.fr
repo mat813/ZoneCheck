@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2002/08/02 13:58:17
@@ -23,13 +29,13 @@ xpl_rfc2182 : [adv]: AFNIC\nTo avoid loosing all connectivity with the autoritat
 
 
 [chk_dn_sntx]
-testname: nom de domaine contenant des caractères illégaux
-error   : Le nom de domaine contient des caractères illégaux
+testname: nom de domaine contenant des caractÃ¨res illÃ©gaux
+error   : Le nom de domaine contient des caractÃ¨res illÃ©gaux
 explain = label_xpl
 
 
 [chk_dn_orp_hyph]
-testname: tiret ('-') au début ou à la fin du nom de domaine
+testname: tiret ('-') au dÃ©but ou Ã  la fin du nom de domaine
 error   : Le nom de domaine commence ou finit par un tiret ('-')
 explain = label_xpl
 
@@ -41,33 +47,33 @@ explain : [ref]: IETF IDN project (internationalized domain names)\nThe double d
 
 
 [chk_one_ns]
-testname: présence de serveurs de nom gérant le domaine
+testname: prÃ©sence de serveurs de nom gÃ©rant le domaine
 error   : Au moins un serveur de nom est requis
 explain = xpl_rfc2182
 
 
 [chk_several_ns]
-testname: présence d'au moins deux serveurs de noms pour le domaine
-error   : Au moins deux serveurs de noms sont nécessaires
+testname: prÃ©sence d'au moins deux serveurs de noms pour le domaine
+error   : Au moins deux serveurs de noms sont nÃ©cessaires
 explain = xpl_rfc2182
 
 
 [chk_distinct_ip]
 testname: adresses IP identiques parmi les serveurs
-error   : Toutes les adresses IP doivent être distinctes
+error   : Toutes les adresses IP doivent Ãªtre distinctes
 explain = xpl_rfc2182
-details : Les serveurs de noms %{ns} utilisent la même adresse IP (%{ip}).
+details : Les serveurs de noms %{ns} utilisent la mÃªme adresse IP (%{ip}).
 
 
 [chk_same_net]
-testname: serveurs de noms sur le même sous réseau
-error   : Des serveurs sont sur le même sous réseau
+testname: serveurs de noms sur le mÃªme sous rÃ©seau
+error   : Des serveurs sont sur le mÃªme sous rÃ©seau
 explain = xpl_rfc2182
-details : Les sous réseaux suivants sont utilisés par plusieurs hôtes: %{subnets}. Essayez de déplacer certains hôtes sur un autre sous réseau.
+details : Les sous rÃ©seaux suivants sont utilisÃ©s par plusieurs hÃ´tes: %{subnets}. Essayez de dÃ©placer certains hÃ´tes sur un autre sous rÃ©seau.
 
 
 [chk_all_same_net]
-testname: serveurs de noms tous sur le même sous réseau
-error   : Les serveurs de noms sont tous sur le même sous réseau
+testname: serveurs de noms tous sur le mÃªme sous rÃ©seau
+error   : Les serveurs de noms sont tous sur le mÃªme sous rÃ©seau
 explain = xpl_rfc2182
-details : Tous les serveurs de noms sont dans le sous réseau %{subnet}. Essayez d'en déplacer quelques uns sur un autre sous réseau.
+details : Tous les serveurs de noms sont dans le sous rÃ©seau %{subnet}. Essayez d'en dÃ©placer quelques uns sur un autre sous rÃ©seau.

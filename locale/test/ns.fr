@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2002/08/02 13:58:17
@@ -21,36 +27,36 @@ ns_cname_xpl : [ref]: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME 
 
 
 [chk_ns]
-testname: présence d'un enregistrement NS
-error   : Aucun enregistrement NS présent sur le serveur
+testname: prÃ©sence d'un enregistrement NS
+error   : Aucun enregistrement NS prÃ©sent sur le serveur
 explain : [none]
 
 
 [chk_ns_auth]
-testname: réponse autoritaire pour le NS
-error   : La réponse pour le NS n'est pas autoritaire
+testname: rÃ©ponse autoritaire pour le NS
+error   : La rÃ©ponse pour le NS n'est pas autoritaire
 explain : [none]
 
 
 [chk_ns_sntx]
-testname: la syntaxe du NS réprésente un nom/domaine valide
+testname: la syntaxe du NS rÃ©prÃ©sente un nom/domaine valide
 error   : la syntaxe du MS n'est pas correcte
 explain = label_xpl
 
 
 [chk_ns_cname]
 testname: l'enregistrement NS n'est pas un alias
-error   : l'enregistrement NS ne peut pas être un alias (CNAME)
+error   : l'enregistrement NS ne peut pas Ãªtre un alias (CNAME)
 explain = ns_cname_xpl
 
 
 [chk_ns_vs_any]
-testname: cohérence entre enregistrements NS et ANY
-error   : Enregistrements NS et ANY incohérents
+testname: cohÃ©rence entre enregistrements NS et ANY
+error   : Enregistrements NS et ANY incohÃ©rents
 explain : [none]
 
 
 [chk_ns_ip]
-testname: enregistrement NS peut être résolu
+testname: enregistrement NS peut Ãªtre rÃ©solu
 error   : L'adresse IP du serveur de noms n'existe pas
 explain : [none]

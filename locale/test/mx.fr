@@ -1,5 +1,11 @@
 # $Id$
 
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
 # 
 # AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
 # CREATED  : 2002/08/02 13:58:17
@@ -16,19 +22,19 @@
 #
 
 [chk_mx]
-testname: enregistrement MX présent
-error   : Aucun enregistrement MX présent sur le serveur
+testname: enregistrement MX prÃ©sent
+error   : Aucun enregistrement MX prÃ©sent sur le serveur
 explain : [ref]: IETF RFC1912 (p.7)\nPut MX records even on hosts that aren't intended to send or receive\ne-mail.  If there is a security problem involving one of these hosts,\nsome people will mistakenly send mail to postmaster or root at the\nsite without checking first to see if it is a "real" host or just a\nterminal or personal computer that's not set up to accept e-mail.
 
 
 [chk_mx_auth]
-testname: réponse autoritaire pour le MX
-error   : La réponse pour le MX n'est pas autoritaire
+testname: rÃ©ponse autoritaire pour le MX
+error   : La rÃ©ponse pour le MX n'est pas autoritaire
 explain : [none]
 
 
 [chk_mx_sntx]
-testname: syntaxe du MX réprésente un nom de machine valide
+testname: syntaxe du MX rÃ©prÃ©sente un nom de machine valide
 error   : la syntaxe du MX n'est pas correcte
 explain = label_xpl
 
@@ -41,19 +47,19 @@ explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by 
 
 [chk_mx_no_wildcard]
 testname: absence de joker pour l'enregistrement MX
-error   : Un joker pour l'enregistrement MX est présent
+error   : Un joker pour l'enregistrement MX est prÃ©sent
 explain : [none]
 
 
 [chk_mx_ip]
-testname: enregistrement MX peut être résolu
-error   : L'adresse IP de l'enregistrement MX ne peut pas être résolue
+testname: enregistrement MX peut Ãªtre rÃ©solu
+error   : L'adresse IP de l'enregistrement MX ne peut pas Ãªtre rÃ©solue
 explain : [none]
 
 
 [chk_mx_vs_any]
-testname: cohérence entre enregistrements MX et ANY
-error   : Enregistrements MX et ANY incohérents
+testname: cohÃ©rence entre enregistrements MX et ANY
+error   : Enregistrements MX et ANY incohÃ©rents
 explain : [none]
 
 
