@@ -1,5 +1,9 @@
+# $Id$
+
 ZoneCheck is copyright AFNIC, 2003. It is written and maintained by
-Stephane d'Alu <sdalu@nic.fr>. You can write AFNIC at <nic@nic.fr>.
+Stephane d'Alu <sdalu@nic.fr>. You can write AFNIC at <nic@nic.fr>,
+or for technical questions/patches about this software prefer
+the following address <zonecheck@nic.fr>.
 
 The Ruby DNS library (in the lib/ directory) is licenced like Ruby
 (either GPL or the Ruby licence, see
@@ -8,13 +12,13 @@ The Ruby DNS library (in the lib/ directory) is licenced like Ruby
 ZoneCheck terms of use and distribution:
 
 You can use, modify and distribute ZoneCheck according to the GPL
-(GNU General Public License)
-<URL:http://www.gnu.org/licenses/gpl.html>. To summary (a lot!), it
-means you can use ZoneCheck freely (but not to link it with software
-which is not GPL-compatible), you can have the source code, you can
-distribute it freely (even after modifications) BUT you cannot deny
-these freedoms to the people who receive it: for instance, you must
-provide them with the source code.
+(GNU General Public License) <URL:http://www.gnu.org/licenses/gpl.html>,
+a copy has been made available in the file 'GPL'.
+To summarize (a lot!), it means you can use ZoneCheck freely (but not
+to link it with software which is not GPL-compatible), you can have 
+the source code, you can distribute it freely (even after modifications)
+BUT you cannot deny these freedoms to the people who receive it: for
+instance, you must provide them with the source code.
 
 Alternatively, if you want to use or distribute a version of ZoneCheck
 in a way which is not compatible with the GPL you *must* get an
@@ -44,17 +48,15 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
------------------------------------------
+-- WARNING ----------------------------------------------------
 
 Patch submitters are therefore informed that, for the patches to be
 included, you must agree on this possible relicensing.
 
-------------
+---------------------------------------------------------------
 
 References that you may find interesting:
 
 http://www.gnu.org/licenses/licenses.html
 http://sourceforge.net/docman/display_doc.php?docid=778&group_id=1
-
-$Id$
 
