@@ -47,9 +47,9 @@
 <!ELEMENT else    (check|case)*>
 
 
-<!ATTLIST preset   name       CDATA #REQUIRED>
+<!ATTLIST preset    name       CDATA #REQUIRED>
 
-<!ATTLIST param     name       CDATA #REQUIRED
+<!ATTLIST param     name       (verbose|transp|output|error|quiet|one) #REQUIRED
                     value      CDATA #REQUIRED>
 
 <!ATTLIST const     name       CDATA #REQUIRED
