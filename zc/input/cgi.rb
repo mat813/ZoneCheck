@@ -116,7 +116,7 @@ module Input
 	def interact(p, c, tm, io=$console.stdout)
 	    # XXX: not good place
 	    p.rflag.autoconf
-	    p.publisher.autoconf(p.rflag)
+	    p.publisher.autoconf(p.rflag, p.info)
 	    puts @cgi.header({ 'type'    => p.publisher.engine.class::Mime,
 			       'charset' => $console.encoding })
 	    true
