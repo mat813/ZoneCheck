@@ -339,7 +339,7 @@
 	<TR>
 	  <TD class="zc_key">don't stop on fatal</TD>
 	  <TD>Keep going even after encountering a fatal error
-	    (this could lead to some unexpected results).</TD>
+	    (<I>this could lead to some unexpected results</I>).</TD>
 	</TR>
 
 	<TR><TD class="zc_title" colspan="2">Options: Extra tests performed</TD></TR>
@@ -378,7 +378,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Mar  4 11:19:58 CET 2003
+Last modified: Tue Mar  4 11:34:21 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

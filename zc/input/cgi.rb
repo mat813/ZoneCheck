@@ -34,25 +34,25 @@ module Input
     ##  - quiet
     ##  - one
     ##  - verbose = [ intro, explain, details, testdesc, counter ]
-    ##      - intro    = true|false
-    ##      - explain  = true|false
-    ##      - details  = true|false
+    ##      - intro    = true|false   -> 'intro'  |
+    ##      - explain  = true|false   -> 'explain'|
+    ##      - details  = true|false   -> 'details'|
     ##      - progress = testdesc|counter
     ##  - output  = [ straight, consolidation, text, html ]
     ##      - format   = html|text
     ##  - error   = [ allfatal, allwarning, stop, nostop, standard ]
     ##      - errorlvl  = allfatal|allwarning
-    ##      - dontstop = true|false
+    ##      - dontstop  = true|false  -> 'nostop'|'stop'
     ##  - transp  = [ ipv4, ipv6, udp, tcp, std ]
     ##      - transp3   = ipv4, ipv6
     ##      - transp4   = udp|tcp|std
     ##  - category
-    ##      - chkmail   = true|false  -> '!mail'
-    ##      - chkripe   = true|false  -> '!ripe'
-    ##      - chkzone   = true|false  -> '!dns:axfr'
+    ##      - chkmail   = true|false  -> '!mail'    |
+    ##      - chkripe   = true|false  -> '!ripe'    |
+    ##      - chkzone   = true|false  -> '!dns:axfr'|
     ##  - ns
-    ##      - ns1  .. nsX
-    ##      - ips1 .. ipsX
+    ##      - ns0  .. nsX
+    ##      - ips0 .. ipsX
     ##  - zone
     ##
     class CGI

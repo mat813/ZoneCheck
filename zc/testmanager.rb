@@ -329,12 +329,7 @@ class TestManager
 	    args = []
 	    args << ns unless ns.nil?
 	    args << ip unless ip.nil?
-	    begin
-		method.call(*args)
-	    rescue Exception => e
-		raise "XXX[test1]: behaviour not established yet"
-		raise if $dbg.enabled?(DBG::DONT_RESCUE)
-	    end
+	    method.call(*args)
 	}
     end
 
