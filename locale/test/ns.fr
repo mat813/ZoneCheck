@@ -46,11 +46,11 @@ explain = ns_cname_xpl
 
 [chk_ns_vs_any]
 testname: cohérence entre enregistrements NS et ANY
-error   : Enregistrement NS et ANY en désaccord
+error   : Enregistrements NS et ANY incohérents
 explain : [none]
 
 
 [chk_ns_ip]
 testname: enregistrement NS peut être résolu
-error   : L'addresse IP du serveur de noms n'existe pas
+error   : L'adresse IP du serveur de noms n'existe pas
 explain : [none]

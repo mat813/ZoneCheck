@@ -30,7 +30,7 @@ explain = label_xpl
 
 [chk_dn_orp_hyph]
 testname: tiret ('-') au début ou à la fin du nom de domaine
-error   : Le nom de domaine commence ou fini par un tiret ('-')
+error   : Le nom de domaine commence ou finit par un tiret ('-')
 explain = label_xpl
 
 
@@ -42,7 +42,7 @@ explain : [ref]: IETF IDN project (internationalized domain names)\nThe double d
 
 [chk_one_ns]
 testname: présence de serveurs de nom gérant le domaine
-error   : Au moins un serveur de noms est requis
+error   : Au moins un serveur de nom est requis
 explain = xpl_rfc2182
 
 
@@ -53,15 +53,15 @@ explain = xpl_rfc2182
 
 
 [chk_distinct_ip]
-testname: addresses IP identiques parmi les serveurs
-error   : Toutes les addresses IP doivent être distinctes
+testname: adresses IP identiques parmi les serveurs
+error   : Toutes les adresses IP doivent être distinctes
 explain = xpl_rfc2182
-details : Les serveurs de noms %{ns} utilisent la même addresse IP (%{ip}).
+details : Les serveurs de noms %{ns} utilisent la même adresse IP (%{ip}).
 
 
 [chk_same_net]
 testname: serveurs de noms sur le même sous réseau
-error   : Des serveurs sont sous le même sous réseau
+error   : Des serveurs sont sur le même sous réseau
 explain = xpl_rfc2182
 details : Les sous réseaux suivants sont utilisés par plusieurs hôtes: %{subnets}. Essayez de déplacer certains hôtes sur un autre sous réseau.
 

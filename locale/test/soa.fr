@@ -63,8 +63,8 @@ details : Le numéro de série %{serial} ne semble pas être au format YYYYMMDDnn.
 
 
 [chk_soa_refresh_6h]
-testname: champ 'refresh' du SOA est à au moins 6 hours
-error   : Le champs 'refresh' doit être positionné à au moins 6 hours
+testname: champ 'refresh' du SOA est à au moins 6 heures
+error   : Le champ 'refresh' doit être positionné à au moins 6 heures
 explain : [none]
 details : Le champ 'refresh' (%{refresh} sec) doit être au moins de 6 heures (21600 sec).
 
@@ -113,7 +113,7 @@ details : The master (%{master}) is a CNAME alias to %{alias}.
 
 [chk_soa_vs_any]
 testname: cohérence entre enregistrements SOA et ANY
-error   : Enregistrement SOA et ANY en désaccord
+error   : Enregistrements SOA et ANY incohérents
 explain : [none]
 
 

@@ -144,7 +144,7 @@ prim_ns_soa	: Unable to identify primary nameserver (NS vs SOA)
 nameserver_ips	: Unable to find nameserver IP address(es) for %s
 output_support	: Selected output class doesn't support '%s'
 ipv6_no_stack	: IPv6 not supported on that host
-unknown_modopt	: unknown modifier '%s' for '%s' option
+unknown_modopt	: Unknown modifier '%s' for '%s' option
 local_resolver	: Unable to use local resolver '%s'
 
 [xcp_config]

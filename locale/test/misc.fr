@@ -18,8 +18,8 @@
 
 
 [chk_ns_reverse]
-testname: recherche du nom correspondant à l'addresse IP du serveur
-error   : Impossible de trouver le nom correspondant à l'addresse IP du serveur
+testname: recherche du nom correspondant à l'adresse IP du serveur
+error   : Impossible de trouver le nom correspondant à l'adresse IP du serveur
 explain : [none]
 
 
@@ -30,14 +30,14 @@ explain : [none]
 
 
 [chk_given_nsprim_vs_soa]
-testname: serveur de nom donnée comme primaire est primaire
+testname: serveur de nom donné comme primaire est primaire
 error   : Le serveur de nom primaire ne correspond pas à celui donné
-details : Le serveur de nom primaire (%{primary}) ne correspont pas à celui indiqué (%{given_primary}).
+details : Le serveur de nom primaire (%{primary}) ne correspond pas à celui indiqué (%{given_primary}).
 explain : [none]
 
 
 [chk_given_ns_vs_ns]
 testname: cohérence avec la liste des serveurs de noms donnée
 error   : La liste des serveurs récupérée ne correspond pas à celle donnée
-details : La liste des serveurs de noms donnée (%{list_from_param}) n'est pas cohérentes avec celle récupéré sur la zone (%{list_from_ns}).
+details : La liste des serveurs de noms donnée (%{list_from_param}) n'est pas cohérente avec celle récupérée sur la zone (%{list_from_ns}).
 explain : [none]

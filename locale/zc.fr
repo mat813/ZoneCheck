@@ -18,7 +18,7 @@
 #
 # Word
 #
-w_generic	: génerique
+w_generic	: générique
 w_warning	: avertissement
 w_warning_id	: a
 w_fatal		: fatal
@@ -26,11 +26,11 @@ w_fatal_id	: f
 w_info		: info
 w_info_id	: i
 w_testing	: teste
-w_unexpected	: innattendu
+w_unexpected	: inattendu
 w_line          : ligne
 w_error		: erreur
 w_perfect	: parfait
-w_quit		: quite
+w_quit		: quitte
 w_abort		: interrompt
 w_details	: détails
 w_references	: références
@@ -59,7 +59,7 @@ res_succeed_but : SUCCES (mais %d avertissement(s))
 res_succeed	: SUCCES
 res_failed	: ECHEC
 res_failed_on	: ECHEC (sur avertissement)
-res_failed_and	: ECHEC (et %d avertissment(s))
+res_failed_and	: ECHEC (et %d avertissement(s))
 
 ns_batch	: lot
 ns_zone         : zone
@@ -71,7 +71,7 @@ ns_ips		: IPs
 title_zoneinfo  : Information sur la Zone
 title_progress  : Progression
 title_testres   : Résultat des tests
-title_status    : Status final
+title_status    : Statut final
 
 pgr_progress    : Progression
 pgr_test        : Tests
@@ -84,7 +84,7 @@ pgr_speed_unit  : T/s
 # Input
 #
 [input]
-unsupported	: méthode d'entrée '%s' non supported
+unsupported	: méthode d'entrée '%s' non supportée
 suspicious	: méthode d'entrée '%s' douteuse
 version		: PROGNAME: version %s
 unsupported_domain: Impossible d'établir une correspondance pour '%s'
@@ -105,25 +105,25 @@ dcl_map_exists	: carte pour "%s" déjà définie
 dcl_unknown	: déclaration '%s' inconnue
 method_unknown	: méthode '%s' indisponnible
 for_domain	: %s pour le domaine %s
-family_unknown	: famile '%s' inconnue
+family_unknown	: famille '%s' inconnue
 
 
-expect_string	: chaine attendue
+expect_string	: chaîne attendue
 expect_symbol	: symbole attendu
-expect_keyword	: mot clef '%s' attendu
+expect_keyword	: mot clé '%s' attendu
 expect_token	: '%s' attendu
-expect_cfg_main	: déclaration de constate ou useconf attendu
-expect_cfg_specific: déclaration de constate ou testseq attendu
+expect_cfg_main	: déclaration de constante ou 'useconf' attendu
+expect_cfg_specific: déclaration de constante ou 'testseq' attendu
 
 expect_checkname: méthode de vérification (ie: chk_*) attendue
 expect_testname	: méthode de test (ie: tst_*) attendue
 expect_severity_level : niveau de sévérité (w,i,f,S) attendu
 expect_category	: catégorie attendue
 expect_constname: déclaration de constante attendue
-expect_value	: chaine de caractères pour l'affection de constante attendue
+expect_value	: chaîne de caractères pour l'affection de constante attendue
 expect_domain	: nom de domaine attendu
 expect_filename	: no de fichier attendu
-expect_testtype	: type de test (generic, extra, nameserver or address) attendu
+expect_testtype	: type de test (generic, extra, nameserver ou address) attendu
 
 expect_lexical	: caractère '%s' inattendu
 
@@ -135,16 +135,16 @@ expect_lexical	: caractère '%s' inattendu
 batch_parse	: Incapable d'analyser la ligne par lot
 
 [xcp_param]
-fqdn_required	: nom de domaine absolument qualifie attendu
+fqdn_required	: Nom de domaine absolument qualifie attendu
 batch_nodomain	: Aucun nom de domaine n'est attendu pour le traitement en lots
 domain_expected	: UN nom de domaine attendu
 primary_soa	: Incapable de trouver le serveur de nom primaire (SOA)
 nameservers_ns	: Incapable de trouver les serveurs de noms (NS)
 prim_ns_soa	: Incapable d'identifier le serveur de nom primaire (NS vs SOA)
-nameserver_ips	: Incapable de trouver les addresses IP de %s
-output_support	: La sortie ne supporte pas la class '%s'
-ipv6_no_stack	: IPv6 n'est pas supporte sur cette machine
-unknown_modopt	: modificateur '%s' inconnu pour l'option '%s'
+nameserver_ips	: Incapable de trouver les adresses IP de %s
+output_support	: La sortie ne supporte pas la classe '%s'
+ipv6_no_stack	: IPv6 n'est pas supporté sur cette machine
+unknown_modopt	: Modificateur '%s' inconnu pour l'option '%s'
 local_resolver	: Incapable d'utiliser le resolveur local '%s'
 
 [xcp_config]
@@ -153,14 +153,14 @@ nosection	: aucune section définie
 unknownsection	: section '%s' inconnue
 constexists	: constante '%s' déjà déclarée
 testexists	: test '%s' déjà listé
-confexists	: configuration pour '%s' déjà listé
+confexists	: configuration pour '%s' déjà listée
 unknowntest	: test '%s' inconnu
-badsection	: section '%s' ne peut pas être utilisé dans ce contexte
-unexpected_token: jeton '%s' innatendu
-unexpected_test	: test innatendu ('when' manquant?)
+badsection	: section '%s' ne peut pas être utilisée dans ce contexte
+unexpected_token: jeton '%s' inatendu
+unexpected_test	: test inatendu ('when' manquant?)
 whenexists	: clef '%s' déjà définie dans la déclaraion 'when'
 elseexists	: 'else' déjà utilisé
-unknown_sectopt	: option '%s' inconnu dans la section '%s'
+unknown_sectopt	: option '%s' inconnue dans la section '%s'
 missing_sectopt	: option manquante pour la section '%s'
 
 [xcp_testmanager]

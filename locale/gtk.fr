@@ -35,7 +35,7 @@ test_ripe		: RIPE database
 output_explain		: explication
 output_details		: détails
 output_zone		: résumé
-output_progressbar	: bar de progression
+output_progressbar	: barre de progression
 output_nothing		: rien
 output_description	: description
 dbg_loading		: chargement
@@ -55,7 +55,7 @@ batch_example		: example:\nDOM=domain\nDOM=domain NS=ns1;ns2=1.2.34,2001:1547::1
 batch_save		: Ouvrir traitement en lots
 batch_open		: Sauvegarder traitement en lots
 
-file_overwrite		: Ecraser le fichier: %s
+file_overwrite		: Ecraser le fichier : %s
 file_gotdirectory	: Ne peut pas lire un répertoire
 
 xcp_toomany_nameservers : Trop de serveurs de noms
@@ -100,7 +100,7 @@ expert/advanced/testonly: Select the unique test you want to make
 [*]
 input_gtk_usage: \
 usage: PROGNAME: [-hV] [-c conf] [-r resolver]\n\
-        --lang          Choisi une autre langue (en, fr, ...)\n\
+        --lang          Choisit une autre langue (en, fr, ...)\n\
     -h, --help          Show this message\n\
     -V, --version       Display version and exit\n\
     -c, --config        Specify location of the configuration file\n\

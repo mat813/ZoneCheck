@@ -29,7 +29,7 @@ explain : [none]
 
 [chk_mx_sntx]
 testname: syntaxe du MX réprésente un nom de machine valide
-error   : la syntaxt du MX n'est pas correcte
+error   : la syntaxe du MX n'est pas correcte
 explain = label_xpl
 
 
@@ -47,13 +47,13 @@ explain : [none]
 
 [chk_mx_ip]
 testname: enregistrement MX peut être résolu
-error   : L'addresse IP de l'enregistrement MX ne peut pas être résolue
+error   : L'adresse IP de l'enregistrement MX ne peut pas être résolue
 explain : [none]
 
 
 [chk_mx_vs_any]
 testname: cohérence entre enregistrements MX et ANY
-error   : Enregistrement MX et ANY en désaccord
+error   : Enregistrements MX et ANY incohérents
 explain : [none]
 
 
