@@ -1,25 +1,72 @@
 # $Id$
 
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/07/19 07:28:13
+#
+# $Revivion$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+require 'framework'
+
+##
+## Hold the information about the zc.conf configuration file
+##
 class Config
+    ##
+    ## Syntax error, while parsing the file
+    ##
     class SyntaxError < StandardError
     end
 
+
+
+    ##
+    ## Configuration error
+    ##  (unknown test, ordering problem)
+    ## 
     class ConfigError < StandardError
     end
 
+
+
     attr_reader :test_list
 
-    def initialize 
+
+    #
+    # Initializer
+    #
+    def initialize(fatal, warning, info)
+	@fatal		= fatal
+	@warning	= warning
+	@info		= info
+
 	@test_list	= []
 	@test_action	= {}
     end
 
+
+    #
+    #
+    #
     def action(testname)
 	@test_action[testname]
     end
 
-    def read(test_manager, configfile="/usr/local/etc/zc.conf")
-	lineno = 0
+
+
+    #
+    #
+    #
+    def read(test_manager, configfile)
+	lineno    = 0
+	order_cur = 0 
+	order     = { CheckGeneric => 0, CheckNameServer => 1,  
+                      CheckNetworkAddress => 2 }
 	File.open(configfile) { |io|
 	    while line = io.gets
 		# Read line
@@ -43,15 +90,24 @@ class Config
 			"line #{lineno}: unknown test '#{testname}'"
 		end
 		
+		# Check for test ordering problems
+		#  (according to their families)
+		order_new = order[test_manager.family(testname)]
+		if order_new < order_cur
+		    raise ConfigError,
+			"line #{lineno}: ordering problem with '#{testname}'"
+		else
+		    order_cur = order_new
+		end
+
 		# Register test
 		@test_list << testname
 		@test_action[testname] = case action
-					 when "i" then $param.info
-					 when "w" then $param.warning
-					 when "f" then $param.fatal
+					 when "w" then @warning
+					 when "i" then @info
+					 when "f" then @fatal
 					 end
 	    end
 	}
     end
 end
-
