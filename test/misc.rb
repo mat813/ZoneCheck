@@ -76,6 +76,21 @@ module CheckNetworkAddress
 		soa(ip, NResolv::DNS::Name::create(revdom))
 	end
 
+	# DESC:
+	def chk_rir_inetnum(ns, ip)
+	    true
+	end
+
+	# DESC:
+	def chk_rir_route(ns, ip)
+	    true
+	end
+
+	# DESC:
+	def chk_bogon(ns, ip)
+	    true
+	end
+
 	#-- Tests ---------------------------------------------------
 	# 
 	def tst_recursive_server(ns, ip)
