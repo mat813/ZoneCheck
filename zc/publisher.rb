@@ -12,14 +12,6 @@
 #
 
 
-#####
-#
-# TODO:
-#  - escape html text
-#  - clean up html
-#  - use const for html path
-#
-
 require 'thread'
 
 
@@ -62,24 +54,28 @@ module Publisher
 	def begin ; end
 	def end   ; end
 
+	protected
 	def xpl_split(xpl)
 	    return nil if xpl.nil?
 	    xpl_lst = [ ]
 	    xpl_elt = nil
 	    xpl.split(/\n/).each { |e|
-		if e =~ /^\[\w+]:\s*/
-		    xpl_elt     = [ e, [] ]
+		if e =~ /^\[(\w+)]:\s*/
+		    xpl_elt     = [ $1, $', [] ]	#'
 		    xpl_lst << xpl_elt
 		else
-		    xpl_elt[1] << e
+		    xpl_elt[2] << e
 		end
 	    }
 	    xpl_lst
 	end
-	    
     end
-
 end
 
+
+
+#
+# Load implementing classes
+#
 load "publisher/text.rb"
 load "publisher/html.rb"
