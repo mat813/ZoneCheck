@@ -66,6 +66,16 @@ module NResolv
 		[]
 	    end
 
+	    def getname(address)
+		each_name(address) {|name| return name}
+		raise NoEntryError, "no PTR information about #{address}"
+	    end
+
+	    def getnames(address)
+		ret = []
+		each_name(address) {|name| ret << name}
+		return ret
+	    end
 
 	    
 	    def getresources(name, resource, rec=true, exception=true)
@@ -151,6 +161,17 @@ module NResolv
 		}
 		ns
 	    end
+
+	    def each_name(address)
+		# ensure we got a DNS::Name
+		#  (addresses are automatically conerted in their .arpa space)
+		name = Name::create(address)
+
+		# retrieve PTR information
+		each_resource(name, Resource::IN::PTR, true, false) {|r,| 
+		    yield r.ptrdname }
+	    end
+
 
 	    #
 	    #  WARN: this can result in duplicated entries if order
