@@ -131,8 +131,6 @@ class ZCMail
 	tests = [ @openrelay_testlist[0] ]
 
 	tests.each { |name, from, to|
-	    puts "name: from=#{from} to=#{to}"
-	    
 	    if (r = mail_from(from)[0]) == 250
 		return true unless rcpt_to(to)[0] == 554
 	    else

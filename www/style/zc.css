@@ -1,0 +1,37 @@
+/*
+ *
+ */
+
+TABLE.zc_domain {
+    border-collapse: collapse;
+}
+
+TR.zc_zone {
+    background-color: #e8e8e8;
+}
+
+TR.zc_ns_prim {
+    background-color: #ce995c;
+}
+
+TR.zc_ns_sec {
+    background-color: #d3ab5b;
+}
+
+TABLE.zc_options {
+    background-color: #e0ffff;
+}
+
+TABLE.zc_options TR.zc_title {
+    background-color: #e2eeff;
+}
+
+BLOCKQUOTE.zc_warning {
+    background-color: #eeeeee;
+    border: solid red;
+    color: black;
+}
+
+TABLE.zc_help TD.zc_key {
+    vertical-align: top;
+}

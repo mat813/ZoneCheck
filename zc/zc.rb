@@ -149,7 +149,7 @@ class ZoneCheck
     # Read the 'zc.conf' configuration file
     #
     def load_testlist
-	@config = Config::new(@test_manager)
+	@config = Config::new(@test_manager, @param.category)
 	if @param.test
 	    @config.add(@param.test, Config::Fatal)
 	else

@@ -76,6 +76,10 @@ class TestManager
 	eval("#{$1}")
     end
 
+    def category(testname)
+	@tests[testname]::ZC_Category
+    end
+
 
     def list
 	@tests.keys
@@ -245,9 +249,7 @@ class TestManager
 	    threadlist.each { |thr| thr.join }
 
 	    # Do CheckExtra
-	    if ! @param.dnsonly
-		check_extra.each { |args| test1(*args) }
-	    end
+	    check_extra.each { |args| test1(*args) }
 
 	    # Counter end
 	    @publisher.counter.done(domainname_s)   if @param.rflag.counter

@@ -1,0 +1,342 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+  <HEAD>
+    <LINK rel="stylesheet" href="/zc/zc.css" type="text/css">
+
+    <TITLE>Zone Check</TITLE>
+  </HEAD>
+
+  <BODY>
+    <H1>ZoneCheck</H1>
+
+    <P> The ZoneCheck program (freely available <A href="toto">here</A>
+      for download) performs several tests on your zone (or
+      domain name) to ensure that it is correctly configured and can be
+      safely delegated, providing a certain quality to your domain (see the
+      <A href="#benefit">benefit</A> section).</P>
+
+    <P>For detailed information on how to fill this form see the 
+      <A href="#help">help</A> section.</P>
+      
+    <BLOCKQUOTE class="zc_warning">
+      <UL>
+	<LI>The time required to completely verify a zone can take
+	  from 30 seconds up to <B>5 minutes</B> depending of the network
+	  speed to the server being accessed. <BR>
+	  If it takes more than a minute it's generally means we are
+	  encountering problems accessing your nameservers 
+	  (configuration error, firewall, ...) and are waiting for timeout.
+	</LI>
+	<LI> You could see some entries in your logs as being an attack
+	  from our network <B>this is not the case</B>, it's the result
+	  of ZoneCheck doing its job.
+	</LI>
+      </UL>
+    </BLOCKQUOTE>
+
+    
+
+    <H2>Zone information</H2>
+    <FORM method="POST" action="/cgi-bin/zc.cgi">
+      <TABLE class="zc_domain">
+	  <TR class="zc_zone">
+	    <TD>Zone</TD>
+	    <TD colspan="4">
+	      <INPUT name="zone" type="text" size="65" value=""></TD>
+	  </TR>
+
+	  <TR><TD colspan="5"> </TD></TR>
+
+	  <TR class="zc_ns_prim">
+	    <TD>Primary</TD>
+	    <TD><INPUT name="ns0"  type="text" size=24 default=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips0" type="text" size=35 default=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD>Secondary</TD>
+	    <TD><INPUT name="ns1"  type="text" size=24 default=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips1" type="text" size=35 default=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD>Secondary</TD>
+	    <TD><INPUT name="ns2"  type="text" size=24 default=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips2" type="text" size=35 default=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD>Secondary</TD>
+	    <TD><INPUT name="ns3"  type="text" size=24 default=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips3" type="text" size=35 default=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD>Secondary</TD>
+	    <TD><INPUT name="ns4"  type="text" size=24 default=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips4" type="text" size=35 default=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD>Secondary</TD>
+	    <TD><INPUT name="ns5"  type="text" size=24 default=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips5" type="text" size=35 default=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD>Secondary</TD>
+	    <TD><INPUT name="ns6"  type="text" size=24 default=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips6" type="text" size=35 default=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD>Secondary</TD>
+	    <TD><INPUT name="ns7"  type="text" size=24 default=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips7" type="text" size=35 default=""></TD>
+	  </TR>
+      </TABLE>
+      <P>
+
+	<INPUT type="submit" value=" Check! ">
+	<INPUT type="reset" value=" Clear ">
+	<INPUT NAME="LANGUAGE" VALUE="FRANCAIS/HTML" TYPE=hidden>
+	
+	
+      <H2>Options</H2>
+      <TABLE class="zc_options">
+	<TR class="zc_title"><TD colspan="4">Output</TD></TR>
+	  <TR>
+	    <TD></TD>
+	    <TD>
+	      <INPUT type="checkbox" name="intro"    value='t' checked>
+	      Zone summary
+	    </TD>
+	    <TD>
+	      <INPUT type="checkbox" name="explain"  value='t' checked>
+	      Includes explanations
+	    </TD>
+	    <TD>
+	      <INPUT type="checkbox" name="progress" value='t' checked>
+	      Show progress
+	    </TD>
+	  </TR>
+	  <TR>
+	    <TD></TD>
+	    <TD>
+	      <SELECT name="format">
+		<OPTION value="html" SELECTED>
+		  HTML
+		<OPTION value="text">
+		  Text
+	      </SELECT> format
+	    </TD>
+	    <TD>
+	      <SELECT name="lang">
+		<OPTION value="english" SELECTED>
+		  English
+		<OPTION value="french">
+		  Fran&ccedil;ais
+	      </SELECT> Language
+	    </TD>
+	  </TR>	    
+
+	  <TR></TR>
+	  <TR class="zc_title"><TD colspan="4">Error report</TD></TR>
+	  <TR>
+	    <TD></TD>
+	    <TD>
+	      <INPUT type="radio" name="errorlvl" value="" CHECKED>
+	      Default error
+	    </TD>
+	    <TD>
+	      <INPUT type="radio" name="errorlvl" value="allfatal">
+	      All fatals
+	    </TD>
+	    <TD>
+	      <INPUT type="radio" name="errorlvl" value="allwarning">
+	      All warnings
+	    </TD>
+	  </TR>
+	  <TR>
+	    <TD></TD>
+	    <TD>
+	      <INPUT type="checkbox" name="errorstop" value="stop" checked>
+	      Stop on first fatal
+	    </TD>
+	  </TR>
+
+	  
+	  <TR></TR>
+	  <TR class="zc_title"><TD colspan="4">Extra test performed</TD></TR>
+	  <TR>
+	    <TD></TD>
+	    <TD>
+	      <INPUT type="checkbox" name="chkmail" value='t' checked>
+	      Check mail delivery
+	    </TD>
+	    <TD>
+	      <INPUT type="checkbox" name="chkzone" value='t' checked>
+	      Check zone content
+	    </TD>
+	  <TR>
+	    <TD></TD>
+	    <TD>
+	      <INPUT type="checkbox" name="chkwhois" value='t' checked>
+	      Check <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A>
+	    </TD>
+	    <TD>
+	      using <INPUT name="whois" value="whois.ripe.net">
+	    </TD>
+	  </TR>
+
+
+	  <TR></TR>
+	  <TR class="zc_title"><TD colspan="4">Transport layer</TD></TR>
+	  <TR>
+	    <TD></TD>
+	    <TD>
+	      <INPUT type="checkbox" name="transp3" value="ipv4" checked>
+	      <ACRONYM title="Internet Protocol version 4">IPv4</ACRONYM>
+	    </TD>
+	    <TD>
+	      <INPUT type="checkbox" name="transp3" value="ipv6" checked>
+	      <A href="http://www.ipv6.org/"><ACRONYM title="Internet Protocol version 6">IPv6</ACRONYM></A>
+	    </TD>
+	  </TR>
+	  <TR>
+	    <TD></TD>
+	    <TD>
+	      <INPUT type="radio" name="transp4" value="std" CHECKED>
+	      <ACRONYM title="UDP with fallback on TCP for truncated answers">STD</ACRONYM>
+	    </TD>
+	    <TD>
+	      <INPUT type="radio" name="transp4" value="udp">
+	      <ACRONYM title="User Datagram Protocol">UDP</ACRONYM>
+	    </TD>
+	    <TD>
+	      <INPUT type="radio" name="transp4" value="tcp">
+	      <ACRONYM title="Transport Control Protocol">TCP</ACRONYM>
+	    </TD>
+	  </TR>
+      </TABLE>
+    </FORM>
+    
+    <H2 id="benefit">Benefit</H2>
+    <P> Among the tests performed you can find checking for: 
+    <UL>
+      <LI>authoritative nameserver for your zone, ensuring you will
+	be able to use your domain from outside your network.
+      </LI>
+      <LI>correct list of secondary nameservers, so that if your
+	primary nameserver is temporarily unreachable, you will still
+	be visible on the internet;
+      <LI>check for mail delivery, so that you don't become the 
+	pray of spammer	and be 
+	<A href="http://www.mail-abuse.org/">blacklisted</A>
+      </LI>
+    </UL></P>
+
+    <H2 id="help">Help</H2>
+    <TABLE rules="rows" class="zc_help">
+	<TR>
+	  <TD class="zc_key">Zone</TD>
+	  <TD>The Zone that should be tested (this is the domain name
+	    that you want to register).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Primary</TD>
+	  <TD>The nameserver that is considered as primary (the one in 
+	    the SOA record).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Secondary</TD>
+	  <TD>The secondary nameservers (all the NS records associated
+	    with the zone, except for the primary).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">IPs</TD>
+	  <TD>List of IP addresses associated with the nameserver.
+	    <UL>
+	      <LI>They only need to be specified if they can't be resolved
+		(ie: they are in the zone that you want to install).</LI>
+	      <LI>If you have several addresses could enter them separated
+		by space or coma.</LI>
+	      <LI>The form accept IPv4 and IPv6 addresses.</LI>
+	    </UL>
+	  </TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Zone summary</TD>
+	  <TD>Includes a summary about the zone and its nameservers in 
+	    the generated report</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Includes explanations</TD>
+	  <TD>Includes an explanation (when the test failed) about 
+	    what was the purpose of the test and why you should fixed it.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Show progress</TD>
+	  <TD>Display information about the test progression (could
+	    be usefull as ZoneCheck can take a long time).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Default error</TD>
+	  <TD>Errors are reported with the default severity associated 
+	    with them.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">All fatals</TD>
+	  <TD>All errors are considered fatals.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">All warnings</TD>
+	  <TD>All errors are considered warnings.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Stop on first fatal</TD>
+	  <TD>The report stop on the first fatal error.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Check mail delivery</TD>
+	  <TD>Perform extra checking on the mail delivery daemon.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Check zone content</TD>
+	  <TD>Perform additional tests on the zone retrieved after
+	    a <I>zone transfert</I>.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Check RIPE database</TD>
+	  <TD>????</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">IPv4, IPv6</TD>
+	  <TD>Select the routing layer (if none are selected it will
+	    default to IPv4 and IPv6).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">STD, UDP, TCP</TD>
+	  <TD>Select the transport layer you want for interrogating
+	    your nameservers.</TD>
+	</TR>
+    </TABLE>
+
+    
+    <HR>
+    <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
+<!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
+<!-- hhmts start -->
+Last modified: Tue Oct  1 14:53:54 CEST 2002
+<!-- hhmts end -->
+  </BODY>
+</HTML>

@@ -15,6 +15,7 @@
 require 'thread'
 require 'xtra'
 
+
 module Publisher
     class PBar < Xtra::ProgressBar
 	def unit            ; "T/s"  ; end
@@ -54,6 +55,9 @@ module Publisher
 	    end
 	    $mc.get(tag) % [ w_count ]
 	end
+
+	def begin ; end
+	def end   ; end
     end
 
     
@@ -75,14 +79,6 @@ module Publisher
 
 	#------------------------------------------------------------
 
-	def begin
-	end
-
-	def end
-	end
-	
-	#------------------------------------------------------------
-
 
 	def testing(desc, ns, ip)
 	    xtra = if    ip then " (IP=#{ip})"
@@ -100,7 +96,6 @@ module Publisher
 		printf "NS %2s : %s [%s]\n",
 		    i == 0 ? "<=" : "  ", n[0], n[1].join(", ")
 	    }
-	    puts "CACHE : #{domain.cache}"
 	    puts
 	end
 
@@ -261,7 +256,7 @@ EOT
 
 	def intro(domain)
 	    tbl_beg   = '<TABLE class="zc_domain">'
-	    tbl_zone  = '<TR class="zc_zone"><TD>Zone</TD><TD colspan="4">%s</TD></TR>'
+	    tbl_zone  = '<TR class="zc_zone"><TD>%s</TD><TD colspan="4">%s</TD></TR>'
 	    tbl_empty = '<TR><TD colspan="5"></TD></TR>'
 	    tbl_ns    = '<TR class="%s"><TD>%s</TD><TD>%s</TD><TD></TD><TD>%s</TD><TD>%s</TD></TR>'
 	    tbl_end   = '</TABLE>'
@@ -269,8 +264,9 @@ EOT
 
 	    h1("Zone information")
 
+
 	    puts tbl_beg
-	    puts tbl_zone % [ domain.name ]
+	    puts tbl_zone % [ "Zone", domain.name ]
 	    puts tbl_empty
 	    domain.ns.each_index { |i| 
 		ns_ip = domain.ns[i]
@@ -353,11 +349,11 @@ EOT
 	#------------------------------------------------------------
 
 	def h1(h)
-	    puts "<H1>#{h.capitalize}</H1>"
+	    @o.puts "<H1>#{h.capitalize}</H1>"
 	end
 
 	def h2(h)
-	    puts "<H2>---- #{h.capitalize} ----</H2>"
+	    @o.puts "<H2>---- #{h.capitalize} ----</H2>"
 	end
 
 	def explanation(xpl)

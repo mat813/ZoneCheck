@@ -47,8 +47,9 @@ class Config
     #
     # Initializer
     #
-    def initialize(test_manager)
+    def initialize(test_manager, category=nil)
 	@test_manager	= test_manager
+	@category	= category
 
 	@test_list	= []
 	@test_action	= {}
@@ -87,6 +88,11 @@ class Config
 	    @order = order_new
 	end
 	
+	# Check if we really want the test
+	if @category && ! @category.include?(@test_manager.category(testname))
+	    return
+	end
+
 	# Register test
 	@test_list << testname
 	@test_action[testname] = action

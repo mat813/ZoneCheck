@@ -60,8 +60,22 @@ class Param
 	    else
 		@p.transp = (cgi["transp3"] + cgi["transp4"]).join(",")
 	    end
+
+	    # Category
+	    if cgi.has_key?("category")
+		@p.category = cgi["category"].join(",")
+	    else
+		cat = [ ]
+		cat << "mail"  if cgi.has_key?("chkmail")
+		cat << "whois" if cgi.has_key?("chkwhois")
+		cat << "zone"  if cgi.has_key?("chkzone")
+		if ! cat.empty?
+		    cat << "dns"
+		    @p.category = cat.join(",")
+		end
+	    end
 	    
-	    # Retrieve NS and associated addresses
+	    # NS and IPs
 	    if cgi.has_key?("ns")
 		@p.domain.ns = cgi["ns"].join(";")
 	    else
@@ -121,7 +135,7 @@ class Param
 		[ "--batch",	"-B",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--config",	"-c",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--testdir",	        GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--dnsonly",  "-D",   GetoptLong::NO_ARGUMENT       ],
+		[ "--category", "-C",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--test",     "-T",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--testlist",         GetoptLong::NO_ARGUMENT       ],
 		[ "--testdesc",         GetoptLong::REQUIRED_ARGUMENT ],
@@ -150,7 +164,7 @@ class Param
 		when "--batch"     then @p.batch	 = arg
 		when "--config"    then @p.configfile    = arg
 		when "--testdir"   then @p.testdir       = arg
-		when "--dnsonly"   then @p.dnsonly	 = true
+		when "--category"  then @p.category	 = arg
 		when "--test"      then @p.test          = arg
 		when "--testlist"  then @p.give_testlist = true
 		when "--testdesc"  then @p.give_testdesc = arg
@@ -210,7 +224,7 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     -B, --batch         Batch mode (read from file or stdin '-')
     -c, --config        Specify location of the configuration file
         --testdir       Location of the directory holding tests
-    -D, --dnsonly       Only perform DNS related tests
+    -C, --category      Only perform test for the specified category
     -T, --test          Name of the test to perform
         --testlist      List all the available tests
         --testdesc      Give a description of the test
@@ -266,7 +280,7 @@ EXAMPLES:
     Work in batch mode, where domain are read from stdin, a progress bar
     indicates how many tests remains, and only short report is written
 
-  #{PROGNAME} -T error chk_soa
+  #{PROGNAME} --testdesc error -T chk_soa
     Ask for the 'error' message associated with the test 'chk_soa'
 EOT
        exit errcode unless errcode.nil? #'
@@ -501,8 +515,7 @@ EOT
     attr_reader :batch
     attr_writer :batch
     
-    attr_reader :dnsonly
-    attr_writer :dnsonly
+    attr_reader :category
 
     attr_reader :test
     attr_writer :test
@@ -572,6 +585,15 @@ EOT
     end
 
 
+    #
+    # WRITER: category
+    #
+    def category=(string)
+	@category = [] if @category.nil?
+	@category.concat(string.split(/\s*,\s*/))
+    end
+
+    
     #
     # WRITER: error
     #
