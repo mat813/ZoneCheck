@@ -55,32 +55,30 @@ module Publisher
 
 	    def apply(xmlnode, var={})
 		case xmlnode
-		when REXML::Element
+		when MyXML::Node::Element
 		    case xmlnode.name
 		    when MsgCat::NAME, MsgCat::FAILURE, MsgCat::SUCCESS
 			do_text(xmlnode, var)
 		    when MsgCat::EXPLANATION	# not displayed in tagonly
-			text=xmlnode.elements.to_a('src').collect { |xmlsrc|
-			    type = xmlsrc.attributes['type']
-			    type = $mc.get("tag_#{type}")
-
-			    title = do_text(xmlsrc.elements['title'])
+			text = xmlnode.to_a('src').collect { |xmlsrc|
+			    type  = $mc.get("tag_#{xmlsrc['type']}")
+			    title = do_text(xmlsrc.child('title'))
 
 			    type + ': ' + title + "\n" +
-			    xmlsrc.elements.to_a('para').collect { |xmlpara|
+			    xmlsrc.to_a('para').collect { |xmlpara|
 				fmt_para(do_text(xmlpara, var)) }.join
 			}.join("\n")
 			::Text::Formater.lbox(text, [ ' |', ' `', '-', ' ' ])
 		    when MsgCat::DETAILS	# not displayed in tagonly
-			text=xmlnode.elements.to_a('para').collect { |xmlpara|
+			text = xmlnode.to_a('para').collect { |xmlpara|
 			    fmt_para(do_text(xmlpara, var)) }.join("\n")
 			::Text::Formater.lbox(text, [ ' :', ' `', '.', ' ' ])
 		    else
 			do_text(xmlnode, var)
 		    end
-		when REXML::Text
+		when MyXML::Node::Text
 		    xmlnode.value
-		when REXML::Comment
+		else
 		    ''
 		end
 	    end
@@ -93,29 +91,29 @@ module Publisher
 
 	    def do_text(xmlnode, var={})
 		case xmlnode
-		when REXML::Element
+		when MyXML::Node::Element
 		    case xmlnode.name
 		    when 'zcvar', 'zcconst'
-			data = case xmlnode.name
-			       when 'zcvar'   then var
-			       when 'zcconst' then @const
-			       end
-			name    = xmlnode.attributes['name']
-			display = xmlnode.attributes['display']
+			display = xmlnode['display']
+			data	= case xmlnode.name
+				  when 'zcvar'   then var
+				  when 'zcconst' then @const
+				  end
+			name    = xmlnode['name']
+			value	= data.fetch(name)
 			case display
 			when 'duration'
-			    value = data.fetch(name)
 			    Publisher.to_bind_duration(value.to_i) 
 			else
-			    data.fetch(name).to_s
+			    value
 			end
 		    else
-			xmlnode.to_a.collect { |xmlchild| 
+			xmlnode.to_a(:child).collect { |xmlchild| 
 			    do_text(xmlchild, var) }.join
 		    end
-		when REXML::Text
+		when MyXML::Node::Text
 		    xmlnode.value
-		when REXML::Comment
+		else
 		    ''
 		end
 	    end

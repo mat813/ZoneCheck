@@ -31,7 +31,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 
-require 'rexml/document'
+require 'ext/myxml'
 require 'dbg'
 
 
@@ -146,7 +146,7 @@ class MsgCat
 		@tag.fetch(tag)
 	    when CHECK
 		res = @check.fetch(tag)[subtype]
-		if res && (sameas = res.attributes['sameas'])
+		if res && (sameas = res['sameas'])
 		    res = case sameas
 			  when /^shortcut:(.*)$/
 			      @shortcut.fetch(subtype).fetch($1)
@@ -237,46 +237,47 @@ class MsgCat
 	lineno   = 0
 
 	File::open(msgfile) { |io|
-	    doc = REXML::Document::new(io)
+	    doc = MyXML::Document::new(io)
+	    root = doc.root
 
 	    # Tag
-	    doc.elements.each("//tag")  { |element| 
+	    root.each('//tag')  { |element| 
 		# create prefix from parent sections
 		prefix = ''
 		xmlsection = element.parent
 		while xmlsection.name == 'section'
-		    prefix += xmlsection.attributes['name'] + ':'
+		    prefix += xmlsection['name'] + ':'
 		    xmlsection = xmlsection.parent
 		end
 
-		name = prefix + element.attributes['name'] 
+		name = prefix + element['name']
 		$dbg.msg(DBG::LOCALE) { "locale tag: #{name}" }
 		@tag[name] = element.text
 	    }
 
 	    # Shortcut
-	    doc.elements.each("msgcat/shortcut")  { |shortcut|
-		shortcut.elements.each { |element|
-		    name	= element.attributes['name']
+	    root.each('shortcut')  { |shortcut|
+		shortcut.each { |element|
+		    name	= element['name']
 		    @shortcut[element.name][name] = element
 		}
 	    }
 
 	    # Check
-	    doc.elements.each("msgcat/check")  { |element|
-		checkname	= element.attributes['name']
-		name		= element.elements[NAME]
-		success		= element.elements[SUCCESS]
-		failure		= element.elements[FAILURE]
-		explanation	= element.elements[EXPLANATION]
-		details		= element.elements[DETAILS]
+	    root.each("check")  { |element|
+		checkname	= element['name']
+		name		= element.child(NAME)
+		success		= element.child(SUCCESS)
+		failure		= element.child(FAILURE)
+		explanation	= element.child(EXPLANATION)
+		details		= element.child(DETAILS)
 
-		if explanation.attributes['sameas'].nil?
-		    explanation = nil if explanation.elements.empty?
+		if explanation['sameas'].nil?
+		    explanation = nil unless explanation.empty?
 		end
 		
-		if details.attributes['sameas'].nil?
-		    details     = nil if details.elements.empty?
+		if details['sameas'].nil?
+		    details     = nil unless details.empty?
 		end
 
 		@check[checkname] = {
@@ -286,9 +287,9 @@ class MsgCat
 	    }
 
 	    # Test
-	    doc.elements.each("msgcat/test")  { |element|
-		testname	= element.attributes['name']
-		name		= element.elements[NAME]
+	    root.each('test')  { |element|
+		testname	= element['name']
+		name		= element.child(NAME)
 
 		@test[testname] = {
 		    NAME	=> name }

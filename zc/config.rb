@@ -1,24 +1,40 @@
 # $Id$
 
 # 
-# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
-# CREATED  : 2002/07/19 07:28:13
+# CONTACT     : zonecheck@nic.fr
+# AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
 #
-# COPYRIGHT: AFNIC (c) 2003
-# CONTACT  : zonecheck@nic.fr
-# LICENSE  : GPL v2 (or MIT/X11-like after agreement)
-#
-# $Revision$ 
-# $Date$
+# CREATED     : 2002/07/19 07:28:13
+# REVISION    : $Revision$ 
+# DATE        : $Date$
 #
 # CONTRIBUTORS: (see also CREDITS file)
 #
+#
+# LICENSE     : GPL v2 (or MIT/X11-like after agreement)
+# COPYRIGHT   : AFNIC (c) 2003
+#
+# This file is part of ZoneCheck.
+#
+# ZoneCheck is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# ZoneCheck is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ZoneCheck; if not, write to the Free Software Foundation,
+# Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 
 require 'framework'
 require 'nresolv'
 
-require 'rexml/document'
+require 'ext/myxml'
 require 'instructions'
 
 ##
@@ -243,21 +259,21 @@ class Config
 	end
 
 	def self.from_xmlprofile(xmlprofile, parent=nil)
-	    profilename	= xmlprofile.attributes[A_NAME]
-	    longdesc	= xmlprofile.attributes[A_LONGDESC]
+	    profilename	= xmlprofile[A_NAME]
+	    longdesc	= xmlprofile[A_LONGDESC]
 	    constants	= Constants::new(parent.constants)
 	    rules	= {}
 
 	    $dbg.msg(DBG::CONFIG, "processing profile: #{profilename}")
 
-	    xmlprofile.elements.each(E_CONST) { |element|
-		name  = element.attributes[A_NAME]
-		value = element.attributes[A_VALUE]
+	    xmlprofile.each(E_CONST) { |element|
+		name  = element[A_NAME]
+		value = element[A_VALUE]
 		constants[name]=value.untaint
 	    }
 
-	    xmlprofile.elements.each(E_RULES) { |element|
-		klass  = element.attributes[A_CLASS]
+	    xmlprofile.each(E_RULES) { |element|
+		klass  = element[A_CLASS]
 		rules[klass] = parse_block(element)
 	    }
 
@@ -269,8 +285,8 @@ class Config
 
 	def self.parse_block(rule)
 	    block = Instruction::Block::new
-	    rule.each_child { |elt|
-		next unless elt.kind_of?(REXML::Element)
+	    rule.each { |elt|
+		next unless elt.kind_of?(MyXML::Node::Element)
 		block << case elt.name
 			 when E_CHECK then parse_check(elt)
 			 when E_CASE  then parse_case(elt)
@@ -280,8 +296,8 @@ class Config
 	end
 	
 	def self.parse_check(xmlelt)
-	    name, severity, category = xmlelt.attributes[A_NAME], 
-		xmlelt.attributes[A_SEVERITY], xmlelt.attributes[A_CATEGORY]
+	    name, severity, category = 
+		xmlelt[A_NAME], xmlelt[A_SEVERITY], xmlelt[A_CATEGORY]
 
 	    $dbg.msg(DBG::CONFIG, "creating instruction check: #{name}")
 	    Instruction::Check::new(name, severity, category)
@@ -289,12 +305,12 @@ class Config
 
 	def self.parse_case(xmlelt)
 	    when_stmt, else_stmt = {}, nil
-	    testname = xmlelt.attributes[A_TEST]
-	    xmlelt.each_child { |elt|
-		next unless elt.kind_of?(REXML::Element)
+	    testname = xmlelt[A_TEST]
+	    xmlelt.each { |elt|
+		next unless elt.kind_of?(MyXML::Node::Element)
 		case elt.name
 		when E_WHEN
-		    when_stmt[elt.attributes[A_VALUE]] = parse_block(elt)
+		    when_stmt[elt[A_VALUE]] = parse_block(elt)
 		when E_ELSE
 		    else_stmt = parse_block(elt)
 		end
@@ -347,7 +363,7 @@ class Config
 	fakeconf = "<#{E_CONFIG}>" + fakeprofile + "</#{E_CONFIG}>"
 
 	# Register it as an override profile
-	xmlprofile = REXML::Document::new(fakeconf).root.elements[E_PROFILE]
+	xmlprofile = MyXML::Document::new(fakeconf).root.elements[E_PROFILE]
 	@profile_override = Profile::from_xmlprofile(xmlprofile, self)
     end
 
@@ -365,7 +381,7 @@ class Config
 	io, main = nil, nil
 	begin
 	    io   = File::open(cfgfile)
-	    main = REXML::Document::new(io)
+	    main = MyXML::Document::new(io)
 	rescue SystemCallError # for the Errno::ENOENT error
 	    raise ConfigError, $mc.get('problem_file') % configfile
 	rescue REXML::ParseException => e
@@ -374,25 +390,25 @@ class Config
 	    io.close unless io.nil?
 	end
 
-	main.root.elements.each(E_CONST) { |element|
-	    name  = element.attributes[A_NAME]
-	    value = element.attributes[A_VALUE]
+	main.root.each(E_CONST) { |element|
+	    name  = element[A_NAME]
+	    value = element[A_VALUE]
 	    @constants[name] =value.untaint
 	}
 
-	main.root.elements.each(E_MAP) { |element|
-	    zone    = element.attributes[A_ZONE]
-	    profile = element.attributes[A_PROFILE]
+	main.root.each(E_MAP) { |element|
+	    zone    = element[A_ZONE]
+	    profile = element[A_PROFILE]
 	    @mapping[zone] = profile.untaint
 	}
 
-	main.root.elements.each(E_PRESET) { |preset|
-	    presetname = preset.attributes[A_NAME]
+	main.root.each(E_PRESET) { |preset|
+	    presetname = preset[A_NAME]
 	    params	= {}
 
-	    preset.elements.each(E_PARAM) { |param|
-		name    = param.attributes[A_NAME]
-		value   = param.attributes[A_VALUE]
+	    preset.each(E_PARAM) { |param|
+		name    = param[A_NAME]
+		value   = param[A_VALUE]
 		params[name] = value
 	    }
 	    @presets << Preset::new(presetname, params)
@@ -407,13 +423,14 @@ class Config
 	    io = nil
 	    begin
 		io = File::open(cfgfile)
-		doc = REXML::Document::new(io)
+		doc = MyXML::Document::new(io)
 	    rescue SystemCallError # for the Errno::ENOENT error
 		raise ConfigError, $mc.get("problem_file") % cfgfile
 	    rescue REXML::ParseException => e
 		raise SyntaxError::new(e.message, cfgfile, e.line)
 	    end
-	    @profiles << Profile::from_xmlprofile(doc.root.elements[1], self)
+	    doc.root.each(E_PROFILE) { |xmlprofile|
+		@profiles << Profile::from_xmlprofile(xmlprofile, self) }
 	}
     end
 

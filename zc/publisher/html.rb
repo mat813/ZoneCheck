@@ -72,51 +72,49 @@ module Publisher
 
 	    def apply(xmlnode, var={})
 		case xmlnode
-		when REXML::Element
+		when MyXML::Node::Element
 		    case xmlnode.name
 		    when MsgCat::NAME, MsgCat::FAILURE, MsgCat::SUCCESS
 			do_text(xmlnode, var)
 		    when MsgCat::EXPLANATION	# not displayed in tagonly
 			"<ul class=\"zc-ref\">" +
-			xmlnode.elements.to_a('src').collect { |xmlsrc|
-			    type  = xmlsrc.attributes['type']
-			    type  = $mc.get("tag_#{type}")
+			xmlnode.to_a('src').collect { |xmlsrc|
+			    type  = $mc.get("tag_#{xmlsrc['type']}")
+			    title = do_text(xmlsrc.child('title'))
 
-			    from = xmlsrc.attributes['from']
-			    fid  = xmlsrc.attributes['fid']
+			    from  = xmlsrc['from']
+			    fid   = xmlsrc['fid']
+			    link  = case from
+				    when 'rfc'
+					case fid
+					when NilClass
+					    'http://www.ietf.org/'
+					when /^(rfc\d+)/
+					    "ftp://ftp.ietf.org/rfc/#{$1}.txt"
+					end
+				    end
 
-			    title = do_text(xmlsrc.elements['title'])
-
-			    link = case from
-				   when 'rfc'
-				       case fid
-				       when NilClass
-					   'http://www.ietf.org/'
-				       when /^(rfc\d+)/
-					   "ftp://ftp.ietf.org/rfc/#{$1}.txt"
-				       end
-				   end
 			    title = "<a href=\"#{link}\">#{title}</a>" if link
 
 			    "<li>" +
 			    "<span class=\"zc-ref\">#{type}: <i>#{title}</i></span>" +
 			    "<br>" +
-			    xmlsrc.elements.to_a('para').collect { |xmlpara|
+			    xmlsrc.to_a('para').collect { |xmlpara|
 				fmt_para(do_text(xmlpara, var)) }.join +
 			    "</li>"
 			}.join("\n") +
 			"</ul>"
 		    when MsgCat::DETAILS	# not displayed in tagonly
 			"<ul class=\"zc-details\"><li>" +
-			xmlnode.elements.to_a('para').collect { |xmlpara|
+			xmlnode.to_a('para').collect { |xmlpara|
 			    fmt_para(do_text(xmlpara, var)) }.join +
 			'</li></ul>'
 		    else
 			do_text(xmlnode, var)
 		    end
-		when REXML::Text
+		when MyXML::Node::Text
 		    CGI::escapeHTML(xmlnode.value)
-		when REXML::Comment
+		else
 		    ''
 		end
 	    end
@@ -129,35 +127,35 @@ module Publisher
 
 	    def do_text(xmlnode, var={})
 		case xmlnode
-		when REXML::Element
+		when MyXML::Node::Element
 		    case xmlnode.name
 		    when 'zcvar', 'zcconst'
-			data = case xmlnode.name
-			       when 'zcvar'   then var
-			       when 'zcconst' then @const
-			       end
-			name    = xmlnode.attributes['name']
-			display = xmlnode.attributes['display']
+			display = xmlnode['display']
+			data    = case xmlnode.name
+				  when 'zcvar'   then var
+				  when 'zcconst' then @const
+				  end
+			name    = xmlnode['name']
+			value	= data.fetch(name)
 			case display
 			when 'duration'
-			    value = data.fetch(name)
 			    unit  = $mc.get('word:second_abbr')
 			    "<abbr title=\"#{value} #{unit}\">" +
 				Publisher.to_bind_duration(value.to_i) +
 				'</abbr>'
 			else
-			    data.fetch(name).to_s
+			    value
 			end
 		    when 'uri'
-			link = xmlnode.attributes['link']
+			link = xmlnode['link']
 			"<a href=\"#{link}\">" + xmlnode.text + "</a>"
 		    else
-			xmlnode.to_a.collect { |xmlchild| 
+			xmlnode.to_a(:child).collect { |xmlchild| 
 			    do_text(xmlchild, var) }.join
 		    end
-		when REXML::Text
+		when MyXML::Node::Text
 		    CGI::escapeHTML(xmlnode.value)
-		when REXML::Comment
+		else
 		    ''
 		end
 	    end
