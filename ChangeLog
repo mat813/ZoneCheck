@@ -6,6 +6,8 @@
 	* zc: fixed locale interpretation
 	* zc: added control on IP stack detection (ZC_IP_STACK)
 	* zc: added environment variable to control config parameter
+	* install: WWWDIR option allows changing static web page directory
+	* nresolv: UDP retry a little less aggressive
 	
 2003-01-20  ZoneCheck-2.0.2
 	* test: fixed bugs in mail_delivery_{postmaster,hostmaster}
