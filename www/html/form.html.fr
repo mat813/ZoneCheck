@@ -93,7 +93,7 @@
 
     <!-- Warning about waiting time -->
     <BLOCKQUOTE class="zc-warning">
-      <P><img src="HTML_PATH/img/light.png" align="left">
+      <P><img src="HTML_PATH/img/notepad.png" align="left">
         Le temps nécessaire à une vérification complète du domaine
 	peut prendre de 30 secondes jusqu'à <B>5 minutes</B> selon
 	la vitesse du réseau pour accéder aux serveurs.
@@ -464,7 +464,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Oct 16 15:47:44 CEST 2003
+Last modified: Thu Oct 16 17:23:29 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
