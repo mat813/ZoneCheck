@@ -81,7 +81,25 @@
 	  directory.</para>
       </answer>
     </qandaentry>
-    
+
+    <qandaentry>
+      <question>
+	<para>Why do I get rubish or wrong results when doing the 
+	  <function>chk_icmp</function></para>
+      </question>
+      <answer>
+	<para>ZoneCheck use the command <application>ping</application> to 
+	  perform this test, so you should set the constants 
+	  <constant>ping4</constant> and <constant>ping6</constant> in 
+	  the configuration file so that the <application>ping</application>
+	  is correctly invoked: stop after 5 echo request, doesn't
+	  output messages, and return an exit code of 0 in case of success.
+	</para>
+	<para>If you are using ZoneCheck on the Window plateform, you better
+	  remove the test.</para>
+      </answer>
+    </qandaentry>
+   
 <!--
       <qandaentry>
 	<question>
