@@ -83,7 +83,8 @@
         <para>MX records shall not point to an alias defined by a CNAME.</para>
       </src>
     </explanation>
-    <details/>
+    <details><para>The MX <zcvar name="mx"/> is an alias to
+      <zcvar name="cname"/>.</para></details>
   </check>
 
 

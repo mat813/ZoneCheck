@@ -6,6 +6,8 @@
 	* zc: automatically use ruby-libxml implementation if available
 	* zc: fixed handling of preset
 	* test: all_same_asn test activated in the default profile
+	* publisher: removed right-click menu for html pages
+	* test: added details for mx_cname test
 	
 2003-12-01  ZoneCheck-2.0.0
 	* publisher: protect quote in javascript string
