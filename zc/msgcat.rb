@@ -297,3 +297,12 @@ class MessageCatalog
 	return true
     end
 end
+
+
+#
+# Include the 'with_msgcat' facility in every objects
+#
+def with_msgcat(*msgcat_list)
+    return unless $mc && $mc.kind_of?(MessageCatalog)
+    msgcat_list.each { |msgcat| $mc.read(msgcat) }
+end

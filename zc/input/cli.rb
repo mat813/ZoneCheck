@@ -23,6 +23,8 @@ require 'param'
 ##
 ## WARN: don't forget to update locale/cli.*
 ##
+## ----------------------------------------------------------------------
+##
 ## usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
 ##     -q, --quiet         Don't display extra titles
 ##         --lang          Select another language (en, fr, ...)

@@ -23,6 +23,7 @@ require 'cgi'
 ##
 ## WARN: don't forget to update locale/cgi.*
 ##
+## ----------------------------------------------------------------------
 ##
 ## For obvious security reasons the following parameters shouldn't
 ## be set through the CGI:
@@ -212,6 +213,9 @@ module Input
 		zone = @cgi["zone"]
 		zone.strip! if zone
 		if zone.nil? || zone.empty?
+		    # If we got a referer send it back to this page,
+		    # otherwise assume it was an attempt of a direct
+		    # script invocation (and send a usage page)
 		    if ENV.has_key?('HTTP_REFERER')
 		    then redirect(ENV['HTTP_REFERER'], EXIT_USAGE)
 		    else return false
@@ -224,12 +228,12 @@ module Input
 	    true
 	end
 
-	def redirect(url, errcode, txt=nil, io=$stdout)
+	def redirect(url, errcode, data=nil, io=$stdout)
 	    io.puts @cgi.header({ "status"   => "REDIRECT",
 				  "location" => url,
 				  "type"     => "text/plain",
 				  "charset"  => "UTF-8" })
-	    io.puts txt if txt
+	    io.puts data if data
 	    exit errcode unless errcode.nil?
 	end
 

@@ -126,9 +126,13 @@ module Input
 		@a_usecategory = Gtk::CheckButton::new("category")
 		@a_usecategory.signal_connect("clicked") { |w|
 		    @a_category.set_sensitive(w.active?)
-		    @a_category.set_text("")
+		    main.options.extra(!w.active?)		    
+		    if !w.active?
+			@a_category.set_text(main.options.categories)
+		    end
 		}
 		@a_category = Gtk::Entry::new
+		@a_category.set_text(main.options.categories)
 		@a_category.set_sensitive(false)
 		
 		@a_test = Gtk::CheckButton::new("test only")
@@ -317,7 +321,7 @@ module Input
 		main.set_tip(@sf, "option/error/stoponfirst")
 		
 		# Tests
-		test_f   = Gtk::Frame::new(l10n_test)
+		@test_f   = Gtk::Frame::new(l10n_test)
 
 		@tst_mail = Gtk::CheckButton::new($mc.get("iface_test_mail"))
 		@tst_axfr = Gtk::CheckButton::new($mc.get("iface_test_zone"))
@@ -328,7 +332,7 @@ module Input
 		tbl.attach(@tst_mail, 0, 1, 0, 1)
 		tbl.attach(@tst_axfr, 1, 2, 0, 1)
 		tbl.attach(@tst_rir,  2, 3, 0, 1)
-		test_f.add(tbl)
+		@test_f.add(tbl)
 
 		# Transport
 		transp_f = Gtk::Frame::new(l10n_transport)
@@ -370,10 +374,14 @@ module Input
 		# Final packaging
 		pack_start(output_f)
 		pack_start(error_f)
-		pack_start(test_f)
+		pack_start(@test_f)
 		pack_start(transp_f)
 	    end
 
+
+	    def extra(bool)
+		@test_f.set_sensitive(bool)
+	    end
 
 	    def one   ; @o_one.active?   ; end
 	    def quiet ; @o_quiet.active? ; end
@@ -797,6 +805,7 @@ module Input
 	    attr_reader :config, :statusbar, :testmanager, :window
 	    attr_reader :aborted
 	    
+	    attr_reader :options
 
 	    def initialize(param, config, testmanager)
 		@p		= param

@@ -39,9 +39,10 @@
 #     for testing the code
 #
 
+## Installation path
 ZC_INSTALL_PATH		= ENV["ZC_INSTALL_PATH"].untaint || (ENV["HOME"].untaint || "/homes/sdalu") + "/ZC.CVS/zc"
 
-
+## Directories
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
@@ -49,11 +50,14 @@ ZC_CONFIG_DIR		= "#{ZC_INSTALL_PATH}/etc"
 ZC_LOCALIZATION_DIR	= "#{ZC_INSTALL_PATH}/locale"
 ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
 
+## Configuration
 ZC_CONFIG_FILE		= "zc.conf"
 
+## Lang
 ZC_LANG_FILE		= "zc.%s"
 ZC_LANG_DEFAULT		= "en"
 
+## Input methods
 ZC_DEFAULT_INPUT	= "cli"
 
 ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
@@ -61,8 +65,10 @@ ZC_CGI_EXT		= "cgi"
 
 ZC_GTK_ENV_KEYS		= [] #[ "DISPLAY" ]
 
+## Publisher
 ZC_HTML_PATH		= "/zc" # no trailing /
 
+## Contact / Details
 ZC_COPYRIGHT		= "AFNIC (c) 2003"
 ZC_CONTACT		= "ZoneCheck <zonecheck@nic.fr>"
 ZC_MAINTAINER		= "Stephane D'Alu <sdalu@nic.fr>"
@@ -177,10 +183,6 @@ $ipv6_stack = begin
 # Initialize the message catalog system
 $mc = MessageCatalog::new(ZC_LOCALIZATION_DIR)
 
-# Include the 'with_msgcat' facility in every objects
-def with_msgcat(*msgcat_list)
-    msgcat_list.each { |msgcat| $mc.read(msgcat) }
-end
 
 # Load the default locale
 begin
