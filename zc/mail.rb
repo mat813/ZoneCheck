@@ -126,14 +126,15 @@ class ZCMail
 	tests.each { |name, from, to|
 	    if (r = mail_from(from)[0]) == 250
 		case rcpt_to(to)[0]
-		when 550, 551, 552, 553, 554 then return true
+		when 550, 551, 552, 553, 554
+		else return true
 		end
 	    else
 		raise ZCMailError, "Unexpected return code #{r}"
 	    end
 	    rset
-	    false
 	}
+	false
     end
 end
 
