@@ -1,4 +1,7 @@
 # $Id$
+2003-??-??  ZoneCheck-2.0.0??
+	* dbg: time the execution of tests
+
 2003-10-02  ZoneCheck-2.0.0b8
 	* test: added chk_soa_coherence
 	* l10n: improved chk_mx_ip description

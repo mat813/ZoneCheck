@@ -33,6 +33,7 @@
 
 require 'thread'
 require 'timeout'
+require 'time'
 require 'framework'
 require 'report'
 require 'cache'
@@ -281,7 +282,16 @@ class TestManager
     # Perform unitary check
     #
     def check1(checkname, severity, ns=nil, ip=nil) 
-	$dbg.msg(DBG::TESTS) { "checking: #{checkname}" }
+	# Build argument list
+	args = []
+	args << ns if !ns.nil?
+	args << ip if !ip.nil?
+
+	# Debugging
+	$dbg.msg(DBG::TESTS) {
+	    where  = args.empty? ? "generic" : args.join('/')
+	    "checking: #{checkname} [#{where}]" }
+
 	# Retrieve the method representing the check
 	klass   = @checks[checkname]
 	object  = @objects[klass]
@@ -304,11 +314,14 @@ class TestManager
 	# Perform the test
 	desc         = Test::Result::Desc::new(checkname)
 	result_class = Test::Error
-	args = []
-	args << ns if !ns.nil?
-	args << ip if !ip.nil?
 	begin
-	    data         = method.call(*args)
+	    starttime    = Time::now
+	    exectime     = nil
+	    begin
+		data     = method.call(*args)
+	    ensure
+		exectime = Time::now - starttime
+	    end
 	    desc.data    = data if data
 	    result_class = case data 
 			   when NilClass, FalseClass, Hash then Test::Failed
@@ -346,6 +359,13 @@ class TestManager
 		desc.err = e.message
 	    end
 	    raise if $dbg.enabled?(DBG::DONT_RESCUE)
+	ensure
+	    $dbg.msg(DBG::TESTS) { 
+		resstr  = result_class.to_s.gsub(/^.*::/, '')
+		where   = args.empty? ? "generic" : args.join('/')
+		timestr = "%.2f" % exectime
+		"result: #{resstr} for #{checkname} [#{where}] (in #{timestr} sec)"
+	    }
 	end
 
 	# Build result
