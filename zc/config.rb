@@ -449,7 +449,8 @@ class Config
 	    # will be used even in overrided profile
 	    pfile = Profile::new(@profile_override.name,
 				 selected_profile.constants,
-				 @profile_override.rules)
+				 @profile_override.rules,
+				 @profile_override.longdesc)
 	end
 	pfile
     end
