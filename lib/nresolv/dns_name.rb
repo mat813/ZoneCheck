@@ -21,40 +21,27 @@ module NResolv
 	    class Label
 		class Ordinary < Label
 		    attr_reader :downcase
+
 		    def initialize(str)
 			@string   = str.to_s.freeze
 			@downcase = @string.downcase.freeze
 		    end
 
+                    def data        ; @string                        ; end
+
 		    def self.from_s(str)
 			self.new(str.to_s.gsub(/\\\./, '.'))
 		    end
-		    
-		    def to_s
-			@string.gsub(/\./, '\.')
-		    end
+		    def to_s        ; @string.gsub(/\./, '\.')       ; end
 		  
-		    def root?
-			@string.empty?
-		    end
+		    def root?       ; @string.empty?                 ; end
+		    def wildcard?   ; @string == "*"                 ; end
+		    def depth       ; 1                              ; end
 		    
-		    def wildcard?
-			@string == "*"
-		    end
-		    
-		    def eql?(other)
-			@downcase.eql?(other.downcase)
-		    end
+		    def hash        ; @downcase.hash                 ; end
+		    def eql?(other) ; @downcase.eql?(other.downcase) ; end
 		    alias == eql?
-			
-		    def hash
-			@downcase.hash
-		    end
-		    
-		    def depth
-			1
-		    end
-		end
+                end
 		Root = Label::Ordinary::new("")
 	    end
 
@@ -67,6 +54,14 @@ module NResolv
                                      (lbl =~ /[^A-Za-z0-9\-]/))
                 }
                 true
+            end
+
+            def self.is_valid_mbox_address?(name)
+                return false unless name.depth > 1
+                mbox  = name[0].data	# to_s would have put a '\' before '.'
+                self.is_valid_hostname?(name.domain)			&&
+		    (mbox !~ /[^A-Za-z0-9\._\-~\#]/)			&&
+		    (mbox !~ /^\.|\.$/)
             end
 
 	    def initialize(labels, origin=nil)

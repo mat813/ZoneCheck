@@ -44,11 +44,7 @@ module CheckNetworkAddress
 
 	# DESC: SOA email address should have a valid syntax
 	def chk_soa_contact_sntx(ns, ip)
-	    rname = soa(ip).rname
-	    mbox  = rname[0].to_s
-	    NResolv::DNS::Name::is_valid_hostname?(rname)	&&
-		(mbox !~ /[^A-Za-z0-9\._\-~\#]/)		&&
-		(mbox !~ /^\.|\.$/)
+	    NResolv::DNS::Name::is_valid_mbox_address?(soa(ip).rname)
 	end
 
 	# DESC: SOA master should have a valid hostname syntax
