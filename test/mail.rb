@@ -40,9 +40,8 @@ module CheckExtra
 	    exch
 	end
 
-	def mhosttest(mdom)
+	def mhosttest(mdom, mhost)
 	    # Mailhost and IP 
-	    mhost = bestmx(mdom)
 	    mip   = addresses(mhost, bestresolverip(mhost))[0]
 
 #	    puts "DOM=#{mdom}   HOST=#{mhost}   IP=#{mip}"
@@ -62,35 +61,57 @@ module CheckExtra
 	end
 	
 	
-	def openrelay(mdom)
-	    mhosttest(mdom) { |mrelay| return mrelay.test_openrelay }
+	def openrelay(mdom, mhost)
+	    mhosttest(mdom, mhost) { |mrelay| return mrelay.test_openrelay }
 	end
 
-	def testuser(user, mdom)
+	def testuser(user, mdom, mhost)
 #	    puts "USER = #{user}"
-	    mhosttest(mdom) { |mrelay| return mrelay.test_userexists(user) }
+	    mhosttest(mdom, mhost) { 
+		|mrelay| return mrelay.test_userexists(user) 
+	    }
 	end
 
 	#-- Tests ---------------------------------------------------
 	# DESC: Check that the best MX for hostmaster is not an openrelay
 	def chk_mail_openrelay_hostmaster
-	    ! openrelay(soa(bestresolverip).rname.domain)
+	    rname = soa(bestresolverip).rname
+	    mdom  = rname.domain
+	    mhost = bestmx(mdom)
+	    return true unless openrelay(mdom, mhost)
+	    { "mailhost"   => mhost,
+	      "hostmaster" => "#{rname[0]}@#{mdom}",
+	      "from_host"  => @fake_from,
+	      "to_host"    => @fake_dest }
 	end
 
 	# DESC: Check that the best MX for the domain is not an openrelay
 	def chk_mail_openrelay_domain
-	    ! openrelay(@domain.name)
+	    mdom  = @domain.name
+	    mhost = bestmx(mdom)
+	    return true unless openrelay(mdom, mhost)
+	    { "mailhost"   => mhost,
+	      "from_host"  => @fake_from,
+	      "to_host"    => @fake_dest }
 	end
 
 	# DESC: Check that hostmaster address is valid
 	def chk_mail_hostmaster
 	    rname = soa(bestresolverip).rname
-	    testuser("#{rname[0]}@#{rname.domain}", rname.domain)
+	    mdom  = rname.domain
+	    mhost = bestmx(mdom)
+	    user  = "#{rname[0]}@#{mdom}"
+	    return true if testuser(user, mdom, mhost)
+	    { "hostmaster" => user }
 	end
 	
 	# DESC: Check that postmaster address is valid
 	def chk_mail_postmaster
-	    testuser("postmaster@#{@domain.name}", @domain.name)
+	    mdom  = @domain.name
+	    mhost = bestmx(mdom)
+	    user  = "postmaster@#{mdom}"
+	    return true if testuser(user, mdom, mhost)
+	    { "postmaster" => user }
 	end
     end
 end
