@@ -19,6 +19,149 @@ require 'publisher'
 ##
 class Param
     ##
+    ##
+    ##
+    class CLI
+	def initialize
+	    @p    = Param::new
+	    @opts = GetoptLong.new(* opts_definition)
+	    @opts.quiet = true
+	end
+
+	def opts_definition
+	    [   [ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ],
+		[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
+		[ "--quiet",	"-q",	GetoptLong::NO_ARGUMENT       ],
+		[ "--debug",	"-d",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--batch",	"-B",   GetoptLong::NO_ARGUMENT       ],
+		[ "--config",	"-c",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--testdir",	"-T",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--resolver",	"-r",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--ns",	"-n",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--ipv4",	"-4",	GetoptLong::NO_ARGUMENT       ],
+		[ "--ipv6",	"-6",	GetoptLong::NO_ARGUMENT       ],
+		[ "--one",	"-1",	GetoptLong::NO_ARGUMENT       ],
+		[ "--tagonly",	"-g",   GetoptLong::NO_ARGUMENT       ],
+		[ "--error",	"-e",	GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--transp",	"-t",	GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--verbose",	"-v",   GetoptLong::OPTIONAL_ARGUMENT ],
+		[ "--output",	"-o",   GetoptLong::REQUIRED_ARGUMENT ] ]
+        end
+
+	def opts_analyse
+	    @opts.each do |opt, arg|
+		case opt
+		when "--help"      then usage(EXIT_USAGE, $stdout)
+		when "--version"
+		    puts "#{PROGNAME}: version #{$zc_version}"
+		    exit EXIT_OK
+		when "--debug"     then $dbg.level	 = arg
+		when "--batch"     then @p.batch	 = true
+		when "--config"    then @p.configfile    = arg
+		when "--testdir"   then @p.testdir       = arg
+		when "--resolver"  then @p.resolver      = arg
+		when "--ns"        then @p.domain.ns     = arg
+		when "--ipv6"      then @p.ipv6          = true
+		when "--ipv4"      then @p.ipv4          = true
+		when "--one"       then @p.rflag.one	 = true
+		when "--tagonly"   then @p.rflag.tagonly = true
+		when "--error"     then @p.error         = arg
+		when "--transp"    then @p.transp        = arg
+		when "--verbose"   then @p.verbose	 = arg
+		when "--output"    then @p.output        = arg
+		end
+	    end
+	end
+	
+	def args_analyse
+	    if @p.batch
+		if !ARGV.empty?
+		    raise ParamError, 
+			"no domainname expected for batch mode"
+		end
+	    else
+		raise ParamError, 
+		    "one domainname expected" unless ARGV.length == 1
+		@p.domain.name = ARGV[0]
+	    end
+	end
+
+	def parse
+	    begin
+		opts_analyse
+		args_analyse
+	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
+		return nil
+	    end
+	    @p
+	end
+
+	def usage(errcode, io=$stderr)
+	    io.print <<EOT
+usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
+    -q, --quiet         Quiet mode, doesn't print visual candy.
+    -h, --help          Show this message
+    -V, --version       Display version and exit
+    -B, --batch         Batch mode (read from stdin)
+    -T, --testdir       Location of the directory holding tests
+    -c, --config        Specify location of the configuration file
+    -r, --resolver      Resolver to use for guessing 'ns' information
+    -n, --ns            List of nameservers for the domain
+    -1, --one           Only primite the most relevant message
+    -g, --tagonly       Display only tag (suitable for scripting)
+    -e, --error         Behaviour in case of error (see error)
+    -t, --transp        Transport/routing layer (see transp)
+    -v, --verbose       Display extra information (see verbose)
+    -o, --output        Output (see output)
+    -4, --ipv4          Only check the zone with IPv4 connectivity
+    -6, --ipv6          Only check the zone with IPv6 connectivity
+
+  verbose:              [intro/explanation] [testdesc|counter]
+    intro          [i]  Print summary for domain and associated nameservers
+    explanation    [x]  Print an explanation for failed tests
+    testdesc       [t]  Print the test description before running it
+    counter        [c]  Print a test counter
+
+  output:               [straigh|consolidation] [text|html]
+    straight      *[s]  Print output without processing (or very few)
+    consolidation  [c]  Try to merge some results before output
+    text          *[t]  Output plain text
+    html           [h]  Output HTML
+
+  error:                [allfatal|allwarning] [stop|nostop]
+    allfatal       [af] All error are considered fatal
+    allwarning     [aw] All error are considered warning
+    stop          *[s]  Stop on the first fatal error
+    nostop         [ns] Never stop (even on fatal error)
+
+  transp:               [ipv4/ipv6] [udp|tcp|std]
+    ipv4          *[4]  Use IPv4 routing protocol
+    ipv6          *[6]  Use IPv6 routing protocol
+    udp            [u]  Use UDP transport layer
+    tcp            [t]  Use TCP transport layer
+    std           *[s]  Use UDP with fallback to TCP for truncated messages
+
+  Batch Mode: 
+    - process domain from stdin, with 1 per line. The syntax is:
+      DOM=domainname
+   or DOM=domainname NS=ns1;ns2=ip1,ip2
+    
+
+EXAMPLES:
+  #{PROGNAME} -4 --verbose=x,i afnic.fr.
+EOT
+       exit errcode unless errcode.nil? #'
+	end
+    end
+
+    def self.cmdline_parse
+	CLI::new.parse
+    end
+
+
+
+
+    ##
     ## Hold the flags used to describe report output behaviour
     ##
     ## tagonly      : only print tag or information suitable for parsing
@@ -76,9 +219,9 @@ class Param
     ##
     ## name : a fully qualified domain name
     ## ns   : list of nameservers attached to the domain (name)
-    ##        output format : [ ns1, [ ip1, ip2 ],
-    ##                          ns2, [ ip3 ],
-    ##                          ns3 ]
+    ##        output format : [ [ ns1, [ ip1, ip2 ] ],
+    ##                          [ ns2, [ ip3 ] ],
+    ##                          [ ns3 ] ]
     ##        input  format : ns1=ip1,ip2;ns2=ip3;ns3
     ##        if element aren't specified they will be 'guessed' when
     ##        calling 'autoconf'
@@ -277,7 +420,9 @@ class Param
 	@testdir		= DefaultTestDir
 	@ipv4			= nil
 	@ipv6			= nil
-	@client			= nil
+
+	@client			= NResolv::DNS::Client::Classic
+
 
 	@publisher_class	= Publisher::Text
 	@report			= ProxyReport::new(Report::Straight)
@@ -288,132 +433,6 @@ class Param
     #
     #
     #
-    def self.cmdline_parse
-	opts = GetoptLong.new(
-		[ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ],
-        	[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
-		[ "--quiet",	"-q",	GetoptLong::NO_ARGUMENT       ],
-        	[ "--debug",    "-d",   GetoptLong::REQUIRED_ARGUMENT ],
-	        [ "--batch",    "-B",   GetoptLong::NO_ARGUMENT       ],
-        	[ "--config",   "-c",   GetoptLong::REQUIRED_ARGUMENT ],
-        	[ "--testdir",  "-T",   GetoptLong::REQUIRED_ARGUMENT ],
-        	[ "--resolver", "-r",   GetoptLong::REQUIRED_ARGUMENT ],
-        	[ "--ns",       "-n",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--ipv4",	"-4",	GetoptLong::NO_ARGUMENT       ],
-		[ "--ipv6",	"-6",	GetoptLong::NO_ARGUMENT       ],
-		[ "--one",      "-1",	GetoptLong::NO_ARGUMENT       ],
-		[ "--tagonly",  "-g",   GetoptLong::NO_ARGUMENT       ],
-		[ "--error",	"-e",	GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--transp",	"-t",	GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--verbose",  "-v",   GetoptLong::OPTIONAL_ARGUMENT ],
-		[ "--output",   "-o",   GetoptLong::REQUIRED_ARGUMENT ] )
-	opts.quiet = true
-
-	i = self.new
-
-	begin
-	    opts.each do |opt, arg|
-		case opt
-		when "--help"      then cmdline_usage(EXIT_USAGE, $stdout)
-		when "--version"
-		    puts "#{PROGNAME}: version #{ZC_VERSION}"
-		    exit EXIT_OK
-		when "--debug"     then $dbg.level	= arg
-		when "--batch"     then i.batch		= true
-		when "--config"    then i.configfile    = arg
-		when "--testdir"   then i.testdir       = arg
-		when "--resolver"  then i.resolver      = arg
-		when "--ns"        then i.domain.ns     = arg
-		when "--ipv6"      then i.ipv6          = true
-		when "--ipv4"      then i.ipv4          = true
-		when "--one"       then i.rflag.one	= true
-		when "--tagonly"   then i.rflag.tagonly	= true
-		when "--error"     then i.error         = arg
-		when "--transp"    then i.transp        = arg
-		when "--verbose"   then i.verbose	= arg
-		when "--output"    then i.output        = arg
-		end
-	    end
-
-	    if i.batch
-		if !ARGV.empty?
-		    raise ParamError, 
-			"no domainname expected on command line (batch mode)"
-		end
-	    else
-		raise ParamError, 
-		    "one domainname expected" unless ARGV.length == 1
-		i.domain.name = ARGV[0]
-	    end
-
-	rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
-	    return nil
-	end
-	i
-    end
-
-
-
-    # 
-    #
-    #
-    def self.cmdline_usage(errcode, io=$stderr)
-	io.print <<EOT
-usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
-    -q, --quiet         Quiet mode, doesn't print visual candy.
-    -h, --help          Show this message
-    -V, --version       Display version and exit
-    -B, --batch         Batch mode (read from stdin)
-    -T, --testdir       Location of the directory holding tests
-    -c, --config        Specify location of the configuration file
-    -r, --resolver      Resolver to use for guessing 'ns' information
-    -n, --ns            List of nameservers for the domain
-    -1, --one           Only primite the most relevant message
-    -g, --tagonly       Display only tag (suitable for scripting)
-    -e, --error         Behaviour in case of error (see error)
-    -t, --transp        Transport/routing layer (see transp)
-    -v, --verbose       Display extra information (see verbose)
-    -o, --output        Output (see output)
-    -4, --ipv4          Only check the zone with IPv4 connectivity
-    -6, --ipv6          Only check the zone with IPv6 connectivity
-
-  verbose:              [intro/explanation] [testdesc|counter]
-    intro          [i]  Print summary for domain and associated nameservers
-    explanation    [x]  Print an explanation for failed tests
-    testdesc       [t]  Print the test description before running it
-    counter        [c]  Print a test counter
-
-  output:               [straigh|consolidation] [text|html]
-    straight      *[s]  Print output without processing (or very few)
-    consolidation  [c]  Try to merge some results before output
-    text          *[t]  Output plain text
-    html           [h]  Output HTML
-
-  error:                [allfatal|allwarning] [stop|nostop]
-    allfatal       [af] All error are considered fatal
-    allwarning     [aw] All error are considered warning
-    stop          *[s]  Stop on the first fatal error
-    nostop         [ns] Never stop (even on fatal error)
-
-  transp:               [ipv4/ipv6] [udp|tcp|std]
-    ipv4          *[4]  Use IPv4 routing protocol
-    ipv6          *[6]  Use IPv6 routing protocol
-    udp            [u]  Use UDP transport layer
-    tcp            [t]  Use TCP transport layer
-    std           *[s]  Use UDP with fallback to TCP for truncated messages
-
-  Batch Mode: 
-    - process domain from stdin, with 1 per line. The syntax is:
-      DOM=domainname
-   or DOM=domainname NS=ns1;ns2=ip1,ip2
-    
-
-EXAMPLES:
-  #{PROGNAME} -4 --verbose=x,i afnic.fr.
-EOT
-       exit errcode unless errcode.nil? #'
-    end
-
 
 
 
@@ -533,6 +552,9 @@ EOT
     #
     # Try to fill the blank for the unspecified parameters
     #
+    # WARN: parameters that are used before the call to 'zc'
+    #       should not be part of autoconf
+    #
     def autoconf
 	# Autoconf of domain information
 	@domain.autoconf(@dns)
@@ -541,9 +563,6 @@ EOT
 	@ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
 	@ipv4 = false        if @ipv4.nil?
 	@ipv6 = false        if @ipv6.nil?
-
-	# Select transport layer
-	@client = NResolv::DNS::Client::Classic if @client.nil?
 
 	# Set output publisher
 	@publisher = @publisher_class::new(@rflag)

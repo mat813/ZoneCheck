@@ -31,6 +31,7 @@ ZC_VERSION	= (Proc::new {
 		   }).call
 PROGNAME	= File.basename($0)
 
+$zc_version = ZC_VERSION
 
 #
 # Requirement
@@ -67,113 +68,150 @@ $dbg = DBG::new
 #
 $mc = MessageCatalog::new("zc.en")
 
+class ZoneCheck
+    def initialize
+	@param		= nil
+	@test_manager	= nil
+	@testlist	= nil
+    end
 
-#
-# Parse command line
-#
-begin
-    Param::cmdline_usage(EXIT_USAGE) if (param = Param::cmdline_parse).nil?
-    param.autoconf
-rescue Param::ParamError => e
-    $stderr.puts "ERROR: #{e}"
-    exit EXIT_ERROR
-end
+    def destroy
+    end
 
-
-#
-# Load ruby files implementing tests
-#
-$dbg.msg(DBG::TEST_LOADING, "directory: #{param.testdir}")
-Dir::open(param.testdir) { |dir|
-    dir.each { |entry|
-	next unless entry =~ /\.rb$/
-	$dbg.msg(DBG::TEST_LOADING, "loading file: #{entry}")
-	load "#{param.testdir}/#{entry}"
-    }
-}
-    
-
-#
-# Load TestManager with test classees
-#
-# Create test manager
-test_manager = TestManager::new
-    
-# Add the test classes (they should have Test as superclass)
-[ CheckGeneric, CheckNameServer, CheckNetworkAddress].each { |mod|
-    mod.constants.each { |t|
-	testclass = eval "#{mod}::#{t}"
-	if testclass.superclass == Test
-	    $dbg.msg(DBG::TEST_LOADING, "instanciate class: #{testclass}")
-	    test_manager << testclass
-	else
-	    $dbg.msg(DBG::TEST_LOADING, "not a test class: #{testclass}")
+    #
+    # Parse command line
+    #
+    def configure
+	begin
+	    Param::cmdline_usage(EXIT_USAGE) if (@param = Param::cmdline_parse).nil?
+	rescue Param::ParamError => e
+	    $stderr.puts "ERROR: #{e}"
+	    exit EXIT_ERROR
 	end
-    }
-}
+    end
 
 
-#
-# Read the 'zc.conf' configuration file
-#
-config = Config::new(test_manager)
-config.read(param.configfile)
-
-
-
-def zc(test_manager, config, cm, param)
-    # Begin formatter
-    param.publisher.begin
-
-    # Display intro (ie: domain and nameserver summary)
-    param.publisher.intro(param.domain) if param.rflag.intro
-
-    # Initialise and test
-    test_manager.init(config, cm, param)
-    success = begin
-		  test_manager.test
-		  true
-	      rescue Report::FatalError
-		  false
-	      end
-
-    # Finish diagnostic (in case of pending output)
-    param.report.finish
+    #
+    # Load ruby files implementing tests
+    #
+    def load_tests_implementation
+	$dbg.msg(DBG::TEST_LOADING, "directory: #{@param.testdir}")
+	Dir::open(@param.testdir) { |dir|
+	    dir.each { |entry|
+		next unless entry =~ /\.rb$/
+		$dbg.msg(DBG::TEST_LOADING, "loading file: #{entry}")
+		load "#{@param.testdir}/#{entry}"
+	    }
+	}
+    end
     
+
+    #
+    # Load TestManager with test classees
+    #
+    def init_testmanager
+	# Create test manager
+	@test_manager = TestManager::new
     
-    # End formatter
-    param.publisher.end
+	# Add the test classes (they should have Test as superclass)
+	[ CheckGeneric, CheckNameServer, CheckNetworkAddress].each { |mod|
+	    mod.constants.each { |t|
+		testclass = eval "#{mod}::#{t}"
+		if testclass.superclass == Test
+		    $dbg.msg(DBG::TEST_LOADING, 
+			     "instanciate class: #{testclass}")
+		    @test_manager << testclass
+		else
+		    $dbg.msg(DBG::TEST_LOADING, 
+			     "not a test class: #{testclass}")
+		end
+	    }
+	}
+    end
 
-    return success
-end
+    #
+    # Read the 'zc.conf' configuration file
+    #
+    def load_testlist
+	@config = Config::new(@test_manager)
+	@config.read(@param.configfile)
+    end
 
 
+    def zc(cm)
+	# Begin formatter
+	@param.publisher.begin
+	
+	# Display intro (ie: domain and nameserver summary)
+	@param.publisher.intro(@param.domain) if @param.rflag.intro
+	
+	# Initialise and test
+	@test_manager.init(@config, cm, @param)
+	success = begin
+		      @test_manager.test
+		      true
+		  rescue Report::FatalError
+		      false
+		  end
+	
+	# Finish diagnostic (in case of pending output)
+	@param.report.finish
+	
+	
+	# End formatter
+	@param.publisher.end
+	
+	return success
+    end
 
 
-if ! param.batch
-    cm = CacheManager::create(Test::DefaultDNS, param.client)
-    success = zc(test_manager, config, cm, param)
-else
-    cm = CacheManager::create(Test::DefaultDNS, param.client)
-    $stdin.each_line { |line|
+    def parse_batch(line)
 	case line
-	when /^\s*$/
-	    next
 	when /^DOM=(\S+)\s+NS=(\S+)\s*$/
-	    param.domain = Param::Domain::new($1, $2)
+	    @param.domain = Param::Domain::new($1, $2)
+	    true
 	when /^DOM=(\S+)\s*$/
-	    param.domain = Param::Domain::new($1)
+	    @param.domain = Param::Domain::new($1)
+	    true
 	else
-	    $stderr.puts "ERROR: Unable to parse batch line"
-	    exit(EXIT_ERROR)
+	    false
 	end
-	param.autoconf
-	zc(test_manager, config, cm, param)
-    }
+    end
+
+    def run
+	if ! @param.batch
+	    @param.autoconf
+	    cm = CacheManager::create(Test::DefaultDNS, @param.client)
+	    success = zc(cm)
+	else
+	    cm = CacheManager::create(Test::DefaultDNS, @param.client)
+	    $stdin.each_line { |line|
+		next if line =~ /^\s*$/
+		next if line =~ /^\#/
+		if ! parse_batch(line)
+		    $stderr.puts "ERROR: Unable to parse batch line"
+		    exit(EXIT_ERROR)
+		end
+		@param.autoconf
+		zc(cm)
+	    }
+	end
+    end
+
+    def start
+	configure
+	load_tests_implementation
+	init_testmanager
+	load_testlist
+	run
+	destroy
+    end
 end
 
+
+ZoneCheck::new.start if ! $zc_slavemode
 
 #
 # EXIT
 #
-exit success ? EXIT_OK : EXIT_FAILED
+#exit success ? EXIT_OK : EXIT_FAILED

@@ -135,6 +135,7 @@ class CacheManager
 	# DNS / client type
 	@dns		= dns
 	@client		= client
+	raise "FUCK" if client.nil?
 
 	# Cached attributs
 	@attrcache_mutex= Sync::new
