@@ -8,12 +8,17 @@ $LOAD_PATH << ZC_LIB
 
 require 'nresolv'
 
-resolver = NResolv::DNS::Client::TCP::new(NResolv::DNS::Config::new("ns1.nic.fr"))
+resolver = NResolv::DNS::Client::UDP::new(NResolv::DNS::Config::new("ns1.nic.fr"))
 
 
 name = NResolv::DNS::Name::create("fr.")
 puts name
-resolver.each_resource(name, NResolv::DNS::Resource::IN::AXFR, false) { |r,t,n,rpl|
 
+#resolver.each_resource(name, NResolv::DNS::Resource::IN::AXFR, false) { |r,t,n,rpl|
+#    puts "#{r.to_dig}"
+#}
+
+resolver.each_resource(name, NResolv::DNS::Resource::IN::NS, false) { |r,t,n,rpl|
     puts "#{r.to_dig}"
 }
+
