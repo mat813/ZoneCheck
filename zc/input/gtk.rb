@@ -451,7 +451,8 @@ module Input
 			main.set_expert
 			main.set_options
 			main.set_domain
-			main.release
+			main.destroy
+			Gtk::main_quit
 		    rescue => e
 			main.statusbar.push(1, e.message)
 			puts e.message
@@ -708,6 +709,7 @@ module Input
 
 	class Main
 	    attr_reader :config, :statusbar, :testmanager, :window
+	    attr_reader :aborted
 	    
 
 	    def initialize(param, config, testmanager)
@@ -715,13 +717,14 @@ module Input
 		@config		= config
 		@testmanager	= testmanager
 		@window		= nil
-		@q		= Queue::new
+		@aborted	= false
 	    end
 	    
 	    def create
 		@window = Gtk::Window::new
 		@window.set_title("ZoneCheck")
-		@window.signal_connect("delete_event") { exit EXIT_ABORTED }
+		@window.signal_connect("delete_event") { 
+		    @aborted = true ; destroy ; Gtk::main_quit }
 		@window.border_width = 0
 
 		@tooltips = Gtk::Tooltips.new
@@ -824,8 +827,7 @@ module Input
 		}
 		
 		quit_mitem.signal_connect("activate") {
-		    exit EXIT_ABORTED
-		}
+		    @aborted = true ; destroy ; Gtk::main_quit }
 
 		tooltips_mitem.signal_connect("toggled") { |w|
 		    if w.active?
@@ -845,14 +847,6 @@ module Input
 		@tooltips.set_tip(widget, $mc.get("iface_tooltip_#{id}"), id)
 	    end
 	    
-	    def release
-		@q.push nil
-	    end
-
-	    def wait
-		@q.pop
-	    end
-
 	    def destroy
 		@window.destroy
 	    end
@@ -925,7 +919,6 @@ module Input
 	def initialize
 	    @opts = GetoptLong.new(* opts_definition)
 	    @opts.quiet = true
-	    Thread::new { Gtk::main() }
 	end
 	
 	attr_reader :config, :statusbar, :testmanager
@@ -945,8 +938,8 @@ EOT
 )
 	    main = Main::new(p, c, tm)
 	    main.create
-	    main.wait
-	    main.destroy
+	    Gtk::main()
+	    exit EXIT_ABORTED if main.aborted
 	end
 
 	def parse(p)
