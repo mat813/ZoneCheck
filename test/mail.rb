@@ -145,7 +145,7 @@ module CheckExtra
 		    begin
 			return true if testuser(user, mdom, m.exchange)
 			break
-		    rescue TimeoutError
+		    rescue TimeoutError, Errno::ECONNREFUSED
 		    end
 		}
 	    end
@@ -175,7 +175,7 @@ module CheckExtra
 		    begin
 			return true if testuser(user, mdom, m.exchange)
 			break
-		    rescue TimeoutError
+		    rescue TimeoutError, Errno::ECONNREFUSED
 		    end
 		}
 	    end
