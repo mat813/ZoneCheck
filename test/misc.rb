@@ -57,8 +57,10 @@ module CheckNetworkAddress
 	    nslist_from_param = @domain.ns.collect { |n, ips| n }
 
 	    return true if nslist_from_ns.unsorted_eql?(nslist_from_param)
-	    { "list_from_ns"    => nslist_from_ns.collect{|e| e.to_s }.sort.join(", "),
-	      "list_from_param" => nslist_from_param.join(", ") }
+	    { "list_from_ns"    => nslist_from_ns   .collect{|e| e.to_s } \
+		                                    .sort.join(", "),
+	      "list_from_param" => nslist_from_param.collect{|e| e.to_s } \
+		                                    .sort.join(", ") }
 	end
 
 
