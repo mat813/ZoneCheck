@@ -172,7 +172,10 @@ module Publisher
 	end
 
 	def error(text)
-	    @o.puts "<blockquote class=\"zc-error\">#{text}</blockquote>"
+	    @o.puts "<blockquote class=\"zc-error\">"
+	    @o.puts "<!-- ERROR: xxx -->"
+	    @o.puts text
+	    @o.puts "</blockquote>"
 	end
 
 	#------------------------------------------------------------
@@ -463,9 +466,9 @@ EOT
 
 	    @o.puts "<div class=\"zc-status\">"
 	    # Easy parseable comment
-	    [   "STATUS : #{f_count > 0 ? "FAILED" : "PASSED"}",
-		"ERROR  : #{f_count}",
-		"WARNING: #{w_count}" ].each { |e|
+	    [   "STATUS  : #{f_count > 0 ? "FAILED" : "PASSED"}",
+		" error  : #{f_count}",
+		" warning: #{w_count}" ].each { |e|
 		@o.puts "<!-- #{e.ljust(20)} -->" }
 	    # Result
 	    @o.puts super(domainname, i_count, w_count, f_count)
