@@ -67,8 +67,8 @@ module CheckExtra
 	end
 
 	def testuser(user, mdom)
+#	    puts "USER = #{user}"
 	    mhosttest(mdom) { |mrelay| return mrelay.test_userexists(user) }
-	    
 	end
 
 	#-- Tests ---------------------------------------------------
@@ -85,12 +85,12 @@ module CheckExtra
 	# DESC: Check that hostmaster address is valid
 	def chk_mail_hostmaster
 	    rname = soa(bestresolverip).rname
-	    testuser(rname[0], rname.domain)
+	    testuser("#{rname[0]}@#{rname.domain}", rname.domain)
 	end
 	
 	# DESC: Check that postmaster address is valid
 	def chk_mail_postmaster
-	    testuser("postmaster", @domain.name)
+	    testuser("postmaster@#{@domain.name}", @domain.name)
 	end
     end
 end
