@@ -47,8 +47,10 @@ module Publisher
 	## Rendering of XML chunks
 	##
 	class XMLTransform
-	    def initialize(const={})
-		@const	= const
+	    attr_writer :const
+
+	    def initialize
+		@const	= {}
 	    end
 
 	    def apply(xmlnode, var={})
@@ -91,11 +93,20 @@ module Publisher
 		case xmlnode
 		when REXML::Element
 		    case xmlnode.name
-		    when 'zcvar'
-			name = xmlnode.attributes['name']
-			var[name].to_s
-		    when 'zcconst'
-			''
+		    when 'zcvar', 'zcconst'
+			data = case xmlnode.name
+			       when 'zcvar'   then var
+			       when 'zcconst' then @const
+			       end
+			name    = xmlnode.attributes['name']
+			display = xmlnode.attributes['display']
+			case display
+			when 'duration'
+			    value = data.fetch(name)
+			    Publisher.to_bind_duration(value.to_i) 
+			else
+			    data.fetch(name).to_s
+			end
 		    else
 			xmlnode.to_a.collect { |xmlchild| 
 			    do_text(xmlchild, var) }.join
@@ -287,8 +298,8 @@ module Publisher
 
 	#------------------------------------------------------------
 
-	def initialize(rflag, info, ostream=$stdout)
-	    super(rflag, info, ostream)
+	def initialize(rflag, ostream=$stdout)
+	    super(rflag, ostream)
 	    @progress	= Progress::new(self)
 	    @xmltrans	= XMLTransform::new
 	end

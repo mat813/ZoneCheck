@@ -122,9 +122,9 @@ class Installer
 
 	puts "==> Installing default configuration file"
 	mkdir_p @ch_confdir,				:verbose => @verbose
-	cp 'etc/zonecheck/zc.conf',      @ch_confdir,	:verbose => @verbose
-	cp 'etc/zonecheck/rootservers',  @ch_confdir,	:verbose => @verbose
-	cp Dir['etc/zonecheck/*.rules'], @ch_confdir,	:verbose => @verbose
+	cp 'etc/zonecheck/zc.conf',        @ch_confdir,	:verbose => @verbose
+	cp 'etc/zonecheck/rootservers',    @ch_confdir,	:verbose => @verbose
+	cp Dir['etc/zonecheck/*.profile'], @ch_confdir,	:verbose => @verbose
 	puts
     end
 

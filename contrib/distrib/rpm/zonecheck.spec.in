@@ -56,7 +56,7 @@ ruby ./installer.rb cli cgi		\
 %doc BUGS ChangeLog COPYING CREDITS GPL HISTORY README TODO INSTALL
 %doc doc/html
 %config %{_sysconfdir}/zonecheck/rootservers
-%config %{_sysconfdir}/zonecheck/*.rules
+%config %{_sysconfdir}/zonecheck/*.profile
 %verify(not size,not md5) %config(noreplace) %{_sysconfdir}/zonecheck/zc.conf
 %{_bindir}/*
 %{_libexecdir}/zonecheck/zc
@@ -71,6 +71,9 @@ ruby ./installer.rb cli cgi		\
 %{_libexecdir}/zonecheck/cgi-bin
 
 %changelog
+* Fri Oct 24 2003 Stephane D'Alu <sdalu@nic.fr> - 2.0.0b10
+- Updated for new zone configuration profile.
+
 * Fri Oct 24 2003 Jean-Philippe Pick <zonecheck@nic.fr> - 2.0.0b9
 - Reworked packaging to meet new installation process.
 

@@ -121,18 +121,79 @@
   </check>
 
 
-  <check name="soa_refresh_6h">
-    <name>SOA 'refresh' at least 6 hours</name>
-    <success>The 'refresh' is at least 6 hours</success>
-    <failure>The 'refresh' period should be at least 6 hours</failure>
+  <check name="soa_expire">
+    <name>SOA 'expire' between <zcconst name="soa:expire:min" display="duration"/> and <zcconst name="soa:expire:max" display="duration"/></name>
+    <success>The 'expire' is between <zcconst name="soa:expire:min" display="duration"/> and <zcconst name="soa:expire:max" display="duration"/></success>
+    <failure>The 'expire' period should be between <zcconst name="soa:expire:min" display="duration"/> and <zcconst name="soa:expire:max" display="duration"/></failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc1912#p4">
+        <title>IETF RFC1912 (p.4)</title>
+        <para>After a zone is expired a secondary will still continue
+          to try to contact the primary, but it will no longer provide
+          nameservice for the zone. 2 to 4 weeks are suggested values.</para>
+      </src>
+      <src type="ref" from="AFNIC">
+        <title>AFNIC constraint</title>
+        <para>A minimum of 1 week (7 days) is enforced.</para>
+      </src>
+    </explanation>
+    <details><para>The expire value is 
+      <zcvar name="expire" display="duration"/> and should be between 
+      <zcconst name="soa:expire:min" display="duration"/> and
+      <zcconst name="soa:expire:max" display="duration"/>.</para></details>
+  </check>
+
+
+  <check name="soa_minimum">
+    <name>SOA 'minimum' between <zcconst name="soa:minimum:min" display="duration"/> and <zcconst name="soa:minimum:max" display="duration"/></name>
+    <success>The 'minimum' is between <zcconst name="soa:minimum:min" display="duration"/> and <zcconst name="soa:minimum:max" display="duration"/></success>
+    <failure>The 'minimum' period should be between <zcconst name="soa:minimum:min" display="duration"/> and <zcconst name="soa:minimum:max" display="duration"/></failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc2308#p9#5">
+        <title>RFC2308 (p.9) 5. Caching Negative Answers</title>
+        <para>Values of one to three hours have been found to work well
+          and would make sensible a default. Values exceeding one day
+          have been found to be problematic.</para>
+      </src>
+   </explanation>
+    <details><para>The minimum value is 
+      <zcvar name="minimum" display="duration"/> and should be between 
+      <zcconst name="soa:minimum:min" display="duration"/> and
+      <zcconst name="soa:minimum:max" display="duration"/>.</para></details>
+  </check>
+
+
+  <check name="soa_refresh">
+    <name>SOA 'refresh' between <zcconst name="soa:refresh:min" display="duration"/> and <zcconst name="soa:refresh:max" display="duration"/></name>
+    <success>The 'refresh' is between <zcconst name="soa:refresh:min" display="duration"/> and <zcconst name="soa:refresh:max" display="duration"/></success>
+    <failure>The 'refresh' period should be between <zcconst name="soa:refresh:min" display="duration"/> and <zcconst name="soa:refresh:max" display="duration"/></failure>
     <explanation>
       <src type="ref">
         <title>RFC1912 (p.3) and RIPE-203</title>
         <para>Yo</para>
       </src>
     </explanation>
-    <details><para>The refresh (<zcvar name="refresh"/> sec) should be at
-      least 6 hours (21600 sec).</para></details>
+    <details><para>The refresh value is 
+      <zcvar name="refresh" display="duration"/> and should be between 
+      <zcconst name="soa:refresh:min" display="duration"/> and
+      <zcconst name="soa:refresh:max" display="duration"/>.</para></details>
+  </check>
+
+
+  <check name="soa_retry">
+    <name>SOA 'retry' between <zcconst name="soa:retry:min" display="duration"/> and <zcconst name="soa:retry:max" display="duration"/></name>
+    <success>The 'retry' is between <zcconst name="soa:retry:min" display="duration"/> and <zcconst name="soa:retry:max" display="duration"/></success>
+    <failure>The 'retry' period should be between <zcconst name="soa:retry:min" display="duration"/> and <zcconst name="soa:retry:max" display="duration"/></failure>
+    <explanation>
+      <src type="ref" from="rfc" fid="rfc1912#p3">
+        <title>RFC1912 (p.3) and RIPE-203</title>
+        <para>....</para>
+      </src>
+    </explanation>
+    <details><para>The retry value is 
+      <zcvar name="retry" display="duration"/> and should be between 
+      <zcconst name="soa:retry:min" display="duration"/> and
+      <zcconst name="soa:retry:max" display="duration"/>.</para></details>
   </check>
 
 
@@ -152,42 +213,6 @@
   </check>
 
 
-  <check name="soa_retry_1h">
-    <name>SOA 'retry' at least 1 hour</name>
-    <success>The 'retry' is at least 1 hour</success>
-    <failure>The 'retry' period should be at least 1 hour</failure>
-    <explanation>
-      <src type="ref" from="rfc" fid="rfc1912#p3">
-        <title>RFC1912 (p.3) and RIPE-203</title>
-        <para>....</para>
-      </src>
-    </explanation>
-    <details><para>The retry (<zcvar name="retry"/> sec) should be at
-      least 1 hour (3600 sec).</para></details>
-  </check>
-
-
-  <check name="soa_expire_7d">
-    <name>SOA 'expire' at least 7 days</name>
-    <success>The 'expire' is at least 7 days</success>
-    <failure>The 'expire' period must be at least 7 days</failure>
-    <explanation>
-      <src type="ref" from="rfc" fid="rfc1912#p4">
-        <title>IETF RFC1912 (p.4)</title>
-        <para>After a zone is expired a secondary will still continue
-          to try to contact the primary, but it will no longer provide
-          nameservice for the zone. 2 to 4 weeks are suggested values.</para>
-      </src>
-      <src type="ref" from="AFNIC">
-        <title>AFNIC constraint</title>
-        <para>A minimum of 1 week (7 days) is enforced.</para>
-      </src>
-    </explanation>
-    <details><para>The expire (<zcvar name="expire"/> sec) should be at
-      least 7 days (604800 sec), you should correct this value.</para></details>
-  </check>
-
-
   <check name="soa_expire_7refresh">
     <name>SOA 'expire' at least 7 times 'refresh'</name>
     <success>The 'expire' is at least 7 times the 'refresh'</success>
@@ -196,24 +221,6 @@
     <details><para>The expire (<zcvar name="expire"/> sec) is not at
       least 7 times greater than the refresh (<zcvar name="refresh"/> sec),
       you should correct one of them.</para></details>
-  </check>
-
-
-  <check name="soa_minimum_1d">
-    <name>SOA 'minimum' less than 1 day</name>
-    <success>The 'minimum' is less than 1 day</success>
-    <failure>The 'minimum' period should be less than 1 day</failure>
-    <explanation>
-      <src type="ref" from="rfc" fid="rfc2308#p9#5">
-        <title>RFC2308 (p.9) 5. Caching Negative Answers</title>
-        <para>Values of one to three hours have been found to work well
-          and would make sensible a default. Values exceeding one day
-          have been found to be problematic.</para>
-      </src>
-   </explanation>
-   <details><para>The minimum value is <zcvar name="minimum"/> sec, 
-     and should be less than 1 day (86400 sec), the recommanded value 
-     is between 1 and 3 hours.</para></details>
   </check>
 
 

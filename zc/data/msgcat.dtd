@@ -68,7 +68,9 @@
                        fid     CDATA #IMPLIED>
 <!ATTLIST uri          link    CDATA #REQUIRED>
 <!ATTLIST zcvar        name    CDATA #REQUIRED>
+<!ATTLIST zcvar        display CDATA #IMPLIED>
 <!ATTLIST zcconst      name    CDATA #REQUIRED>
+<!ATTLIST zcconst      display CDATA #IMPLIED>
 
 <!ATTLIST section      name    CDATA #REQUIRED>
 <!ATTLIST tag          name    CDATA #REQUIRED>

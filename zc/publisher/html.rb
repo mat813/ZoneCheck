@@ -64,8 +64,10 @@ module Publisher
 	## Rendering of XML chunks
 	##
 	class XMLTransform
-	    def initialize(const={})
-		@const	= const
+	    attr_writer :const
+
+	    def initialize
+		@const	= {}
 	    end
 
 	    def apply(xmlnode, var={})
@@ -129,11 +131,23 @@ module Publisher
 		case xmlnode
 		when REXML::Element
 		    case xmlnode.name
-		    when 'zcvar'
-			name = xmlnode.attributes['name']
-			var[name].to_s
-		    when 'zcconst'
-			''
+		    when 'zcvar', 'zcconst'
+			data = case xmlnode.name
+			       when 'zcvar'   then var
+			       when 'zcconst' then @const
+			       end
+			name    = xmlnode.attributes['name']
+			display = xmlnode.attributes['display']
+			case display
+			when 'duration'
+			    value = data.fetch(name)
+			    unit  = $mc.get('word:second_abbr')
+			    "<abbr title=\"#{value} #{unit}\">" +
+				Publisher.to_bind_duration(value.to_i) +
+				'</abbr>'
+			else
+			    data.fetch(name).to_s
+			end
 		    when 'uri'
 			link = xmlnode.attributes['link']
 			"<a href=\"#{link}\">" + xmlnode.text + "</a>"
@@ -223,7 +237,7 @@ module Publisher
 	    end
 	    
 	    # Process an item
-	    def process(desc, ns, ip)
+	    def process(checkname, ns, ip)
 		# Don't bother, if there is no output asked
 		return unless (@publisher.rflag.counter ||
 			       @publisher.rflag.testdesc)
@@ -231,6 +245,12 @@ module Publisher
 		xtra = if    ip then " (IP=#{ip})"
 		       elsif ns then " (NS=#{ns})"
 		       else          ''
+		       end
+		desc = if @publisher.rflag.tagonly
+			   checkname
+		       else
+			   @publisher.xmltrans.apply($mc.get(checkname, 
+						MsgCat::CHECK, MsgCat::NAME))
 		       end
 		msg = CGI::escapeHTML("#{desc}#{xtra}")
 
@@ -253,8 +273,8 @@ module Publisher
 
 	#------------------------------------------------------------
 
-	def initialize(rflag, info, ostream=$stdout)
-	    super(rflag, info, ostream)
+	def initialize(rflag, ostream=$stdout)
+	    super(rflag, ostream)
 	    @progress		= Progress::new(self)
 	    @publish_path	= ZC_HTML_PATH.gsub(/\/+$/, '')
 	    @xmltrans		= XMLTransform::new

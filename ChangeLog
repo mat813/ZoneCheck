@@ -6,6 +6,9 @@
 	* test: added details for email test 
 	* zc: explanation are formated automatically
 	* config/msgcat: use of xml file format
+	* test: soa_{refresh,retry,minimum,expire} are configurable
+	* test: delegation_udp512* give the exceding size
+	* publisher: link to the external reference
 	
 2003-10-27  ZoneCheck-2.0.0b9
 	* dbg: time the execution of test

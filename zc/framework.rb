@@ -196,7 +196,7 @@ class Test
 
     #-- Shortcuts -----------------------------------------------
     def const(name)
-	@config.constants[name]
+	@config.constants.fetch(name)
     end
 
     def rec(ip=nil, dom=@domain.name, force=false)

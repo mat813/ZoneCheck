@@ -58,6 +58,7 @@
   <tag name="elements">éléments</tag>
   <tag name="form">formulaire</tag>
   <tag name="name">nom</tag>
+  <tag name="second_abbr">sec</tag>
 </section>
 
 <!-- Titles -->

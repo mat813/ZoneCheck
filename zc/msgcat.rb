@@ -38,20 +38,6 @@ require 'dbg'
 ##
 ## Message catalog for I18N/L10N
 ##
-## The format of the message catalog is as follow:
-## line       : '#' comment              # a comment
-##            | tag ':' definition       # a tag definition
-##            | tag '=' tag              # a link to another tag
-##            | '[' prefix ']'           # a prefix to append to other tags
-##
-## prefix     : tag                      # the tag to use as prefix
-##            | '*'                      # don't use a prefix
-##
-## definition : string                   # a string
-##            | string '\' definition    # with posibility of continuation '\'
-##
-## tag        : [a-zA-Z0-9_/]+
-##
 ##
 ## WARN: this file is not localized
 ##
@@ -62,8 +48,6 @@ require 'dbg'
 
 # BUG: @lang / @language / @country?
 class MsgCat
-    TagRegex	= /[\w\/]+/
-
     TAG		= 'tag'
     CHECK	= 'check'
     TEST	= 'test'
@@ -152,9 +136,10 @@ class MsgCat
     #
     def get(tag, type=TAG, subtype=nil)
 	$dbg.msg(DBG::LOCALE) { 
-	    category = "#{type}/#{subtype}" if type != TAG
-	    "requesting locale for: #{tag} (#{category})"
+	    category = type != TAG ? " (#{type}/#{subtype})" : ''
+	    "requesting locale for: #{tag}#{category}"
 	}
+	sameas = nil
 	begin
 	    case type
 	    when TAG
@@ -163,8 +148,10 @@ class MsgCat
 		res = @check.fetch(tag)[subtype]
 		if res && (sameas = res.attributes['sameas'])
 		    res = case sameas
-			  when /^shortcut:(.*)$/ then @shortcut[subtype][$1]
-			  else	 		      @check[sameas][subtype]
+			  when /^shortcut:(.*)$/
+			      @shortcut.fetch(subtype).fetch($1)
+			  else
+			      @check.fetch(sameas).fetch(subtype)
 			  end
 		end
 		res
@@ -172,9 +159,13 @@ class MsgCat
 		@test.fetch(tag)[subtype]
 	    end
 	rescue IndexError
-	    category = "#{type}/#{subtype}" if type != TAG
-	    raise EntryNotFound, 
-		"Entity '#{tag}' (#{category}) has not been defined/localized"
+	    category = type != TAG ? " (#{type}/#{subtype})" : ''
+	    xcp = if sameas.nil?
+		"Entity '#{tag}'#{category} has not been defined/localized"
+		  else
+	        "Entity '#{tag}'#{category} doesn't have a link to '#{sameas}'"
+		  end
+	    raise EntryNotFound, xcp
 	end
     end
 

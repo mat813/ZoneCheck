@@ -36,18 +36,41 @@ require 'thread'
 
 
 module Publisher
+
+    def self.to_bind_duration(src)
+	sec  = src % 60 ; src /= 60
+        min  = src % 60 ; src /= 60
+	hour = src % 24 ; src /= 24
+        day  = src % 7  ; src /= 7
+	week = src
+
+	str  = ''
+	str += "#{week}W" if week > 0
+	str += "#{day}D"  if day  > 0
+	str += "#{hour}H" if hour > 0
+	str += "#{min}M"  if min  > 0
+	str += "#{sec}S"  if sec  > 0
+	
+	str
+    end
+
     ##
     ##
     ##
     class Template # --> ABSTRACT <--
 	attr_reader :progress, :xmltrans
-	attr_reader :rflag, :info
+	attr_reader :info, :rflag
+	attr_writer :info
 
-	def initialize(rflag, info, ostream=$stdout)
+	def initialize(rflag, ostream=$stdout)
 	    @rflag	= rflag
-	    @info	= info
 	    @o		= ostream
 	    @mutex	= Mutex::new
+	    @info	= nil
+	end
+
+	def constants=(const)
+	    @xmltrans.const = const
 	end
 
 	def output ; @o ; end

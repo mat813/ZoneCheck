@@ -33,7 +33,8 @@ class Config
     Ok			= 'o'		# Reserved
 
 
-    E_CONFIG		= 'config'	# XML Elements
+    E_PROFILE		= 'profile'	# XML Elements
+    E_CONFIG		= 'config'	#      .
     E_CASE		= 'case'	#      .
     E_WHEN		= 'when'	#      .
     E_ELSE		= 'else'	#      .
@@ -171,6 +172,18 @@ class Config
 	def [](name)
 	    @data[name] || (@parent ? @parent[name] : nil)
 	end
+
+	def fetch(name)
+	    begin
+		@data.fetch(name)
+	    rescue IndexError
+		if @parent 
+		then @parent.fetch(name)
+		else raise IndexError,
+			"Unable to fetch ZoneCheck constant '#{name}'"
+		end
+	    end
+	end
     end
 
 
@@ -247,7 +260,6 @@ class Config
 	    Instruction::Switch::new(testname, when_stmt, else_stmt)
 	end
     end
-
 
 
 
@@ -333,16 +345,16 @@ class Config
 
 	@mapping.each { |zone, profilename|
 	    next if @profiles[profilename]
-	    rulesfile ="#{profilename}.rules"
-	    cfgfile = Config.cfgfile(rulesfile)
-	    $dbg.msg(DBG::CONFIG, "loading profile: #{rulesfile}")
+	    filename ="#{profilename}.profile"
+	    cfgfile = Config.cfgfile(filename)
+	    $dbg.msg(DBG::CONFIG, "loading profile: #{filename}")
 	    $dbg.msg(DBG::CONFIG, "reading file: #{cfgfile}")
 	    io = nil
 	    begin
 		io = File::open(cfgfile)
 		doc = REXML::Document::new(io)
 	    rescue SystemCallError # for the Errno::ENOENT error
-		raise ConfigError, $mc.get("problem_file") % configfile
+		raise ConfigError, $mc.get("problem_file") % cfgfile
 	    rescue REXML::ParseException => e
 		puts "YO: #{e.position} / #{e.line} / #{e.message}"
 	    end

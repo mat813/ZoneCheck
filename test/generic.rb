@@ -204,9 +204,10 @@ module CheckGeneric
 				  NResolv::DNS::Resource::IN::NS::new(ns),
 				  dummyttl) 
 	    }
+	    excess = (msg.to_wire.size + @querysize-1) - 512
 
-	    return true if msg.to_wire.size + @querysize-1 <= 512
-	    { 'bytes' => @querysize }
+	    return true if excess <= 0
+	    { 'excess' => excess }
 	end
 
 	def chk_delegation_udp512_additional
@@ -225,8 +226,10 @@ module CheckGeneric
 		end
 	    }
 
-	    return true if msg.to_wire.size + @querysize-1 <= 512
-	    { 'bytes' => @querysize }
+	    excess = (msg.to_wire.size + @querysize-1) - 512
+
+	    return true if excess <= 0
+	    { 'excess' => excess }
 	end
     end
 end
