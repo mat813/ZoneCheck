@@ -104,12 +104,12 @@ function zc_pgr_start(count) {
 
   s  = "";
   if (! zc_pgr_quiet) {
-    s += "<H2  id=\"zc_pgr_title\">" + zc_pgr_l_title_progress + "</H2>";
+    s += "<H2  id=\"zc-pgr-title\">" + zc_pgr_l_title_progress + "</H2>";
   }
 
-  s += "<DIV id=\"zc_pgr_pbar\">";
-  s += "<TABLE id=\"zc_pgr_pbar_out\"><TR><TD>";
-  s += "<TABLE id=\"zc_pgr_pbar_in\" style='border-collapse: collapse;'>";
+  s += "<DIV id=\"zc-pgr-pbar\">";
+  s += "<TABLE id=\"zc-pgr-pbar-out\"><TR><TD>";
+  s += "<TABLE id=\"zc-pgr-pbar-in\" style='border-collapse: collapse;'>";
   // titles
   s += "<TR>";
   s += "<TD colspan=4>" + zc_pgr_l_progress + "</TD>";
@@ -120,27 +120,27 @@ function zc_pgr_start(count) {
   s += "</TR>";
   // progress bar information
   s += "<TR>";
-  s += "<TD id=\"zc_pgr_pct\"   style='text-align: right; width: 4em'></TD>";
+  s += "<TD id=\"zc-pgr-pct\"   style='text-align: right; width: 4em'></TD>";
   if (zc_pgr_totalsize <= 0) {
     // infinit
-    s += "<TD id=\"zc_pgr_pct0\"  style='border-style: solid none solid solid;'></TD>";
-    s += "<TD id=\"zc_pgr_pct1\"  style='border-style: solid none; width: " + zc_pgr_tickersize + "px'></TD>";
-    s += "<TD id=\"zc_pgr_pct2\"  style='border-style: solid solid solid none;'></TD>";
+    s += "<TD id=\"zc-pgr-pct0\"  style='border-style: solid none solid solid;'></TD>";
+    s += "<TD id=\"zc-pgr-pct1\"  style='border-style: solid none; width: " + zc_pgr_tickersize + "px'></TD>";
+    s += "<TD id=\"zc-pgr-pct2\"  style='border-style: solid solid solid none;'></TD>";
   } else {
     // limited
-    s += "<TD id=\"zc_pgr_pct0\"  style='width: 0px'></TD>";
-    s += "<TD id=\"zc_pgr_pct1\"  style='border-style: solid none solid solid;'></TD>";
-    s += "<TD id=\"zc_pgr_pct2\"  style='border-style: solid solid solid none;'></TD>";
+    s += "<TD id=\"zc-pgr-pct0\"  style='width: 0px'></TD>";
+    s += "<TD id=\"zc-pgr-pct1\"  style='border-style: solid none solid solid;'></TD>";
+    s += "<TD id=\"zc-pgr-pct2\"  style='border-style: solid solid solid none;'></TD>";
   }
   s += "<TD></TD>";
-  s += "<TD id=\"zc_pgr_proc\"  style='text-align: center;'></TD>";
-  s += "<TD id=\"zc_pgr_speed\" style='text-align: center;'></TD>";
-  s += "<TD id=\"zc_pgr_eta\"   style='text-align: center;'></TD>";
+  s += "<TD id=\"zc-pgr-proc\"  style='text-align: center;'></TD>";
+  s += "<TD id=\"zc-pgr-speed\" style='text-align: center;'></TD>";
+  s += "<TD id=\"zc-pgr-eta\"   style='text-align: center;'></TD>";
   s += "</TR>";
   // spacer
   s += "<TR><TD colspan=8>&nbsp;</TD></TR>";
   // check description
-  s += "<TR><TD id=\"zc_pgr_desc\" colspan=8></TD></TR>";
+  s += "<TR><TD id=\"zc-pgr-desc\" colspan=8></TD></TR>";
   s += "</TABLE>";
   s += "</TD><TR></TABLE>";
   s += "</DIV>";
@@ -174,20 +174,20 @@ function zc_pgr_update() {
 
     //
     pctsize = zc_pgr_barsize * pct / 100;
-    document.getElementById("zc_pgr_pct"  ).innerHTML = pct + "%&nbsp;";
-    document.getElementById("zc_pgr_pct1" ).style.width = pctsize;
-    document.getElementById("zc_pgr_pct2" ).style.width = zc_pgr_barsize-pctsize;
-    document.getElementById("zc_pgr_eta"  ).innerHTML = zc_sec_to_timestr(eta);
+    document.getElementById("zc-pgr-pct"  ).innerHTML = pct + "%&nbsp;";
+    document.getElementById("zc-pgr-pct1" ).style.width = pctsize;
+    document.getElementById("zc-pgr-pct2" ).style.width = zc_pgr_barsize-pctsize;
+    document.getElementById("zc-pgr-eta"  ).innerHTML = zc_sec_to_timestr(eta);
   } else {
     pos0 = (2 * zc_pgr_ticks) % (zc_pgr_barsize * 2 - zc_pgr_tickersize);
     pos2 = zc_pgr_barsize-zc_pgr_tickersize - pos0;
-    document.getElementById("zc_pgr_pct0" ).style.width = pos0;
-    document.getElementById("zc_pgr_pct2" ).style.width = pos2;
-    document.getElementById("zc_pgr_eta"  ).innerHTML = zc_pgr_l_na;
+    document.getElementById("zc-pgr-pct0" ).style.width = pos0;
+    document.getElementById("zc-pgr-pct2" ).style.width = pos2;
+    document.getElementById("zc-pgr-eta"  ).innerHTML = zc_pgr_l_na;
   }
 
-  document.getElementById("zc_pgr_proc" ).innerHTML = zc_pgr_processed;
-  document.getElementById("zc_pgr_speed").innerHTML = zc_speed_tostr(speed);
+  document.getElementById("zc-pgr-proc" ).innerHTML = zc_pgr_processed;
+  document.getElementById("zc-pgr-speed").innerHTML = zc_speed_tostr(speed);
 }
 
 
@@ -195,7 +195,7 @@ function zc_pgr_update() {
  *
  */
 function zc_pgr_setdesc(desc) {
-  document.getElementById("zc_pgr_desc" ).innerHTML = desc;
+  document.getElementById("zc-pgr-desc" ).innerHTML = desc;
 }
 
 
@@ -233,19 +233,19 @@ function zc_pgr_finish() {
 
   // remove progress bar
   if (! zc_pgr_quiet) {
-    zc_element_off("zc_pgr_title");
-    zc_element_clear_id("zc_pgr_title"   );
+    zc_element_off("zc-pgr-title");
+    zc_element_clear_id("zc-pgr-title"   );
   }
-  zc_element_off("zc_pgr_pbar" );
-  zc_element_clear_id("zc_pgr_pbar"    );
-  zc_element_clear_id("zc_pgr_pbar_out");
-  zc_element_clear_id("zc_pgr_pbar_in" );
-  zc_element_clear_id("zc_pgr_pct"     );
-  zc_element_clear_id("zc_pgr_pct0"    );
-  zc_element_clear_id("zc_pgr_pct1"    );
-  zc_element_clear_id("zc_pgr_pct2"    );
-  zc_element_clear_id("zc_pgr_proc"    );
-  zc_element_clear_id("zc_pgr_speed"   );
-  zc_element_clear_id("zc_pgr_eta"     );
-  zc_element_clear_id("zc_pgr_desc"    );
+  zc_element_off("zc-pgr-pbar" );
+  zc_element_clear_id("zc-pgr-pbar"    );
+  zc_element_clear_id("zc-pgr-pbar-out");
+  zc_element_clear_id("zc-pgr-pbar-in" );
+  zc_element_clear_id("zc-pgr-pct"     );
+  zc_element_clear_id("zc-pgr-pct0"    );
+  zc_element_clear_id("zc-pgr-pct1"    );
+  zc_element_clear_id("zc-pgr-pct2"    );
+  zc_element_clear_id("zc-pgr-proc"    );
+  zc_element_clear_id("zc-pgr-speed"   );
+  zc_element_clear_id("zc-pgr-eta"     );
+  zc_element_clear_id("zc-pgr-desc"    );
 }

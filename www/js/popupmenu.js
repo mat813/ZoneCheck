@@ -36,14 +36,14 @@ ZC_Popup.prototype.create = function() {
   var tbody = document.createElement('TBODY');
   table.appendChild(tbody);
   table.cellSpacing = 1;
-  table.className   = "zc_popup";
+  table.className   = "zc-popup";
   table.id          = this.id;  // XXX: not working
   table.style.visibility = 'hidden';
   table.style.position   = "absolute";
 
   // title bar
   row              = document.createElement('TR');
-  row.className    = 'zc_title';
+  row.className    = 'zc-title';
   cell             = document.createElement('TD');
   cell.colSpan     = 8;
   cell.align       = 'right';
@@ -62,7 +62,7 @@ ZC_Popup.prototype.create = function() {
   // items
   for (var i = 0 ; i < this.item.length ; i++) {
     row            = document.createElement('TR');
-    row.className  = "zc_item";
+    row.className  = "zc-item";
     cell           = document.createElement('TD');
     cell.colSpan   = 8;
     cell.align     = 'left';
