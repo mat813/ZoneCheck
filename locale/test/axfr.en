@@ -1,0 +1,27 @@
+# $Id$
+
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2003/01/16 13:58:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+[chk_axfr]
+testname: Zone transfert possible
+error   : Zone transfert not possible
+explain : [none]
+
+[chk_axfr_empty]
+testname: Zone transfert contains data
+error   : Zone transfert is empty
+explain : [none]
+
+[chk_axfr_valid_labels]
+testname: Zone transfert contains valid labels
+error   : Zone transfert containts invalid label(s)
+explain : [none]
