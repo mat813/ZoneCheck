@@ -148,10 +148,15 @@ else
     cm = CacheManager::create(Test::DefaultDNS, param.client)
     $stdin.each_line { |line|
 	case line
+	when /^\s*$/
+	    next
 	when /^DOM=(\S+)\s+NS=(\S+)\s*$/
 	    param.domain = Param::Domain::new($1, $2)
 	when /^DOM=(\S+)\s*$/
 	    param.domain = Param::Domain::new($1)
+	else
+	    $stderr.puts "ERROR: Unable to parse batch line"
+	    exit(EXIT_ERROR)
 	end
 	param.autoconf
 	zc(test_manager, config, cm, param)
