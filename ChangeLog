@@ -4,6 +4,8 @@
 	* dbg: fixed debuging output for nresolv
 	* doc: fixed apache configuration example
 	* zc: fixed locale interpretation
+	* zc: added control on IP stack detection (ZC_IP_STACK)
+	* zc: added environment variable to control config parameter
 	
 2003-01-20  ZoneCheck-2.0.2
 	* test: fixed bugs in mail_delivery_{postmaster,hostmaster}

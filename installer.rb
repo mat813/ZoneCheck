@@ -122,7 +122,7 @@ class Installer
 		when Regexp
 		    line.gsub!(pattern, value)
 		when String
-		    line.gsub!(/^(#{pattern}\s*=\s*).*/, value)
+		    line.gsub!(/^(#{pattern}\s*=\s*(?:ENV\[[^\]]+\]\s*\|\|\s*)?).*/, value)
 		end
 	    }
 	}

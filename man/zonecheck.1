@@ -50,7 +50,7 @@
 .\" End of macro definitions
 .
 .
-.TH ZONECHECK 1 "26 August 2003"
+.TH ZONECHECK 1 "26 January 2003"
 .SH NAME
 zonecheck \- DNS zone checking tool
 .SH SYNOPSIS
@@ -130,7 +130,7 @@ The syntax for the batch mode processing is as follow:
 .
 .TP
 \fB--config\fR, \fB-c\fR \fIfilename\fR
-Specify the location of the configuration file (default is \fI/usr/local/etc/zonecheck/zc.conf\fR).
+Specify the location of the configuration file (default is \fIzc.conf\fR).
 .
 .TP
 \fB--testdir\fR \fIdirectory\fR
@@ -325,6 +325,23 @@ Set extra options. The syntax is: -,-opt,opt,opt=foo
 Specify the lang and eventually the encoding to use to display messages.
 For examples: fr, fr_CA, fr.latin1, fr_CA.utf8, ...
 .TP
+.I ZC_CONFIG_DIR
+Directory where the configuration file and the different profiles are located.
+.TP
+.I ZC_CONFIG_FILE
+Name of the configuration file to use (defaul to zc.conf), it is
+override by the \fB--config\fR option.
+.TP
+.I ZC_LOCALIZATION_DIR
+Directory where all the localization files are located.
+.TP
+.I ZC_TEST_DIR
+Directory where all the tests are located, it is override by the
+\fB--testdir\fR option.
+.TP
+.I ZC_HTML_PATH
+Path relative to the web server to use when generating HTML pages.
+.TP
 .I ZC_DEBUG 
 The variable as the same effect as the \fBdebug\fR parameter, but its
 main advantage is that it is taken into account from the beginning of
@@ -341,6 +358,10 @@ This is particularly useful if you have an IPv6 stack on your computer but don't
 .TP
 .I ZC_XML_PARSER
 If ruby-libxml is installed, this parser will be used instead of rexml for speed improvement, but you can force the use of rexml by setting ZC_XML_PARSER to rexml.
+.TP
+.IP \fINOTE:\fB
+The following variables are mainly useful when it is not possible for the user to specify alternative value with the selected input interface: \fIZC_CONFIG_DIR\fR, \fIZC_CONFIG_FILE\fR, \fIZC_LOCALIZATION_DIR\fR, \fIZC_TEST_DIR\fR.
+Such a case happen when using the cgi interface, and you don't want the user to read an arbitrary configuration file, but as the provider of the service you want to use another configuration.
 .
 .SH "EXIT STATUS"
 The following exit status can be reported by \fIZoneCheck\fR:
