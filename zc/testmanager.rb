@@ -293,7 +293,7 @@ class TestManager
 			   when NilClass, FalseClass, Hash then Test::Failed
 			   else Test::Succeed
 			   end
-	rescue NResolv::ReplyError => e
+	rescue NResolv::DNS::ReplyError => e
 	    desc.err = case e.mesg 
 		       when NResolv::DNS::RCode::SERVFAIL
 			   "Serveur failure"

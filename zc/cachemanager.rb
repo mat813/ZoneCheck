@@ -171,7 +171,7 @@ class CacheManager
 	    @cache.use(:address, host) {
 		begin
 		    @dns.getaddresses(host, order)
-		rescue NResolv::NoEntryError
+		rescue NResolv::DNS::NoEntryError
 		    []
 		end
 	    }
