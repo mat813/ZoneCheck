@@ -42,12 +42,12 @@ explain : [ref]: IETF IDN project (internationalized domain names)\nThe double d
 [chk_one_ns]
 testname: one nameserver for the domain 
 error   : At least one nameserver is requiered
-explain : chk_several_ns_xpl
+explain = chk_several_ns_xpl
 
 [chk_several_ns]
 testname: at least two nameserver for the domain
 error   : At least two nameserver are necessary
-explain : chk_several_ns_xpl
+explain = chk_several_ns_xpl
 
 
 [chk_distinct_ip]
