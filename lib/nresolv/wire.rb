@@ -16,6 +16,12 @@ module NResolv
     class DNS
 	class Resource
 	    module Generic
+		class TXT
+		    def self.wire_decode(decoder)
+			self::new(decoder.get_string)
+		    end
+		end
+
 		class CNAME
 		    def self.wire_decode(decoder)
 			self::new(Name::wire_decode(decoder))

@@ -52,6 +52,22 @@ module NResolv
 	    alias == eql?
 
 	    module Generic
+		class TXT < Resource
+		    attr_reader :txtdata
+
+		    def initialize(txtdata)
+			@txtdata = txtdata
+		    end
+
+		    def self::from_s(str)
+			self::new(str)
+		    end
+
+		    def to_s
+			@txtdata
+		    end
+		end
+
 		class CNAME < Resource
 		    attr_reader :cname
 
@@ -165,6 +181,12 @@ module NResolv
 			@address.to_s
 		    end
 
+		    add_resource(self)
+		end
+		
+		class TXT < Generic::TXT
+		    RClass = RClass::IN
+		    RType  = RType::TXT
 		    add_resource(self)
 		end
 
