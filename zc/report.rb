@@ -55,8 +55,12 @@ module Report
 		$1
 	    end
 
-	    def one 
+	    def first
 		@list.nil? ? nil : @list.first
+	    end
+
+	    def one 
+		first
 	    end
 
 	    def has_error?

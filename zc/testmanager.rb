@@ -20,6 +20,7 @@ require 'cache'
 ##
 ## TODO: decide how to replace the Errno::EADDRNOTAVAIL which is not
 ##       available on windows
+## TODO: improved detection of dependencies issues
 ##
 ## attributs: param, classes, cm, config, tests
 class TestManager
@@ -298,9 +299,15 @@ class TestManager
 #	    desc.err = "Network transport unavailable try option -4 or -6"
 	rescue NResolv::NResolvError => e
 	    desc.err = "Resolver error (#{e})"
+	rescue ZCMail::ZCMailError => e
+	    desc.err = "Mail error (#{e})"
 	rescue Exception => e
-#	    desc.err = "Dependency issue (allwarning flag?)"
-	    desc.err = e.message
+	    # XXX: this is a hack
+	    unless @param.rflag.stop_on_fatal
+		desc.err = "Dependency issue? (allwarning/dontstop flag?)"
+	    else
+		desc.err = e.message
+	    end
 	    raise if $dbg.enabled?(DBG::DONT_RESCUE)
 	end
 
