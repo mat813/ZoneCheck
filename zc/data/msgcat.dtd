@@ -37,9 +37,9 @@
 <!ELEMENT check    (name,success,failure,explanation,details)>
 <!ELEMENT test     (name)>
 
-<!ELEMENT name		(#PCDATA)>
-<!ELEMENT failure	(#PCDATA)>
-<!ELEMENT success	(#PCDATA)>
+<!ELEMENT name		(#PCDATA|zcvar|zcconst)*>
+<!ELEMENT failure	(#PCDATA|zcvar|zcconst)*>
+<!ELEMENT success	(#PCDATA|zcvar|zcconst)*>
 <!ELEMENT explanation	(src*)>
 <!ELEMENT details	(para*)>
 

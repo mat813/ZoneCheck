@@ -4,11 +4,7 @@
 <!-- $Id$ -->
 
   <profile name="default">
-    <!-- For openrelay testing -->
-    <const name="fake_mail_user" value="zonecheck"/>
-    <const name="fake_mail_dest" value="nic.fr"/>
-    <const name="fake_mail_from" value="afnic.fr"/>
-    <const name="fake_mail_host" value="relay2.nic.fr"/>
+    <const name="registry" value="default"/>
 
     <rules class="generic">
       <!-- Domain name check -->

@@ -46,35 +46,35 @@
   font-size: 50pt;
 }
 
-BODY { 
+body { 
     background: white;
     color: #333333; 
     font-family: Arial, Helvetica, sans-serif;
 }
 
-P { 
+p { 
     font-size: 12px; 
     text-align: justify;
 }
 
-TD, LI, UL {  
+td, li, ul {  
     font-size: 12px;
 }
 
 
-H1 {  
+h1 {  
     font-size: 18px;
     color: #f7ad31;
     font-weight: bold;
 }
 
-H2 {  
+h2 {  
     font-size: 14px;
     color: #1341af;
     font-weight: bold;
 }
 
-H3 {
+h3 {
     font-size: 12px; 
     color: #1341af; 
     font-weight: bold;
@@ -118,6 +118,7 @@ ul.zc-ref {
     padding: 8px 8px 8px 2em; 
 
     border: 2px solid #f7ad31;
+    -moz-border-radius:     10px;
 }
 
 ul.zc-ref p { 
@@ -147,6 +148,7 @@ ul.zc-details {
     padding: 8px 8px 8px 2em; 
 
     border: 2px solid #f7ad31;
+    -moz-border-radius:     10px;
 }
 
 ul.zc-details p { 
@@ -162,15 +164,16 @@ div.zc-zinfo {
  * Progress bar
  */
 
-DIV#zc-pgr-pbar { 
+div#zc-pgr-pbar { 
     margin-left: 5ex;
 }
 
-TABLE#zc-pgr-pbar-out { 
+table#zc-pgr-pbar-out { 
     border: 1px solid black;
+    -moz-border-radius:     10px;
 }
 
-TABLE#zc-pgr-pbar-in { 
+table#zc-pgr-pbar-in { 
     margin: 5px;
 }
 
@@ -199,35 +202,35 @@ UL.zc-test {
 /* 
  * The diagnostic box
  */
-DIV.zc-diag { 
+div.zc-diag { 
     padding-left: 5ex;
 }
 
-DIV.zc-diag DIV.zc-name { 
+div.zc-diag div.zc-name { 
     font-size: 12px; 
     color: #333333; 
     font-weight: bold;
 }
 
-DIV.zc-diag DIV.zc-msg { 
+div.zc-diag div.zc-msg { 
     font-size: 12px; 
     color: #1341AF; 
     font-weight: bold;
 }
 
 
-DIV.zc-diag1 TABLE TR.zc-title { 
+div.zc-diag1 table tr.zc-title { 
     background-color: #ddeeee;
 }
 
 
-DIV.zc-status { 
+div.zc-status { 
     padding-left: 5ex;
     font-weight: bold;
 }
 
 
-H3.zc-diagsec { 
+h3.zc-diagsec { 
     color: red;
 }
 
@@ -235,44 +238,45 @@ H3.zc-diagsec {
 
 /* Zone information
  */
-TABLE.zc-domain {
+table.zc-domain {
     border-collapse: collapse;
     border: solid #0066B2;
+    -moz-border-radius:     10px;
 }
 
-TABLE.zc-domain TD {
+table.zc-domain TD {
     padding: 5px;
     border-color:  #0066b2;
 }
 
-TR.zc-zone { 
+tr.zc-zone { 
     background-color: #e6ebf0;
     font-weight: bold;
 }
 
-TR.zc-ns-sec { 
+tr.zc-ns-sec { 
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f0ece5;
 }
 
-TR.zc-ns-prim { 
+tr.zc-ns-prim { 
     background-color: #e4dcca;
 }
 
 /* Options
  */
 
-TABLE.zc-options {
+table.zc-options {
     border-collapse: collapse;
     border: solid #f5b13d;
     background-color: #f0ece5;
 }
 
-TABLE.zc-options TD {
+table.zc-options TD {
     padding: 2px 1ex;
 }
 
-TABLE.zc-options TR.zc-title {
+table.zc-options TR.zc-title {
     background-color: #e4dcca;
 }
 
@@ -280,20 +284,20 @@ TABLE.zc-options TR.zc-title {
 /* Help
  */
 
-TABLE.zc-help { 
+table.zc-help { 
     border: solid #333333;
     border-collapse: collapse; 
 }
 
-TABLE.zc-help TD { 
+table.zc-help td { 
     border-color: #333333;
 }
 
-TABLE.zc-help TD.zc-key {
+table.zc-help td.zc-key {
     vertical-align: top;
 }
 
-TABLE.zc-help TD.zc-title {
+table.zc-help td.zc-title {
     background-color: #e4dcca;
     border-top: solid;
     font-style: italic;
@@ -301,36 +305,36 @@ TABLE.zc-help TD.zc-title {
 
 /* Popups
  */
-TABLE.zc-popup { 
+table.zc-popup { 
     background-color: #f0ece5;
     color: #333333; 
     border: 3px groove #1341af;
     border-collapse:  collapse; 
 }
 
-TABLE.zc-popup TR.zc-title { 
+table.zc-popup tr.zc-title { 
     background-color: #1341af;
 }
 
-TABLE.zc-popup TR.zc-title TD { 
+table.zc-popup TR.zc-title TD { 
     color: #f5b13d;
 }
 
-TABLE.zc-popup TR.zc-title TD.zc-title { 
+table.zc-popup TR.zc-title TD.zc-title { 
     font-weight: bold;
 }
 
-TABLE.zc-popup TR.zc-title A { 
+table.zc-popup TR.zc-title A { 
     color: #f5b13d;
     font-weight: bold;
     text-decoration: none; 
 }
 
-TABLE.zc-popup TR.zc-title A:hover { 
+table.zc-popup TR.zc-title A:hover { 
     color: #ff5809;
 }
 
-TABLE.zc-popup TR.zc-item:hover { 
+table.zc-popup TR.zc-item:hover { 
     background-color: #e4dcca;
     cursor: pointer;
 }

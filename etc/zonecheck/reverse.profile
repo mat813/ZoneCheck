@@ -4,6 +4,8 @@
 <!-- $Id$ -->
 
   <profile name="reverse">
+    <const name="registry" value="reverse"/>
+
     <rules class="generic">
       <!-- Domain name check -->
       <check name="dn_sntx"     severity="f" category="dns:sntx"/>

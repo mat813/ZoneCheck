@@ -85,7 +85,7 @@ module Publisher
 			    from = xmlsrc.attributes['from']
 			    fid  = xmlsrc.attributes['fid']
 
-			    title = xmlsrc.elements['title'].text
+			    title = do_text(xmlsrc.elements['title'])
 
 			    link = case from
 				   when 'rfc'
@@ -115,7 +115,7 @@ module Publisher
 			do_text(xmlnode, var)
 		    end
 		when REXML::Text
-		    xmlnode.value
+		    CGI::escapeHTML(xmlnode.value)
 		when REXML::Comment
 		    ''
 		end
@@ -156,7 +156,7 @@ module Publisher
 			    do_text(xmlchild, var) }.join
 		    end
 		when REXML::Text
-		    xmlnode.value
+		    CGI::escapeHTML(xmlnode.value)
 		when REXML::Comment
 		    ''
 		end
@@ -252,7 +252,7 @@ module Publisher
 			   @publisher.xmltrans.apply($mc.get(checkname, 
 						MsgCat::CHECK, MsgCat::NAME))
 		       end
-		msg = CGI::escapeHTML("#{desc}#{xtra}")
+		msg = "#{desc}#{xtra}"
 
 		# Counter
 		if @publisher.rflag.counter

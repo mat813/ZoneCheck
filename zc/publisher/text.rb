@@ -64,7 +64,9 @@ module Publisher
 			    type = xmlsrc.attributes['type']
 			    type = $mc.get("tag_#{type}")
 
-			    type + ': ' +xmlsrc.elements['title'].text + "\n" +
+			    title = do_text(xmlsrc.elements['title'])
+
+			    type + ': ' + title + "\n" +
 			    xmlsrc.elements.to_a('para').collect { |xmlpara|
 				fmt_para(do_text(xmlpara, var)) }.join
 			}.join("\n")

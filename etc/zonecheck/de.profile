@@ -4,6 +4,8 @@
 <!-- $Id$ -->
 
   <profile name="de">
+    <const name="registry" value="DENIC"/>
+
     <!-- For openrelay testing -->
     <const name="fake_mail_user" value="zonecheck"/>
     <const name="fake_mail_dest" value="nic.fr"/>

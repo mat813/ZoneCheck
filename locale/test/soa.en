@@ -43,7 +43,25 @@
         <para>Email addresses are converted by using the following rule:
           local-part@mail-domain  ==&gt;  local-part.mail-domain 
           if local-part contains a dot in should be backslashed 
-          (for 'bind')</para>
+          (for 'bind').</para>
+      </src>
+    </explanation>
+    <explanation name="soa_local_policy">
+      <src type="adv">
+        <title><zcconst name="registry"/> registry policy</title>
+        <para>The registry requieres the SOA fields to be inside
+          a defined range: the 'expire' should be between
+          <zcconst name="soa:expire:min" display="duration"/> and
+          <zcconst name="soa:expire:max" display="duration"/>, 
+          the 'minimum' between
+          <zcconst name="soa:minimum:min" display="duration"/> and
+          <zcconst name="soa:minimum:max" display="duration"/>, 
+          the 'refresh' between
+          <zcconst name="soa:refresh:min" display="duration"/> and 
+          <zcconst name="soa:refresh:max" display="duration"/>, 
+          and at last the 'retry' between
+          <zcconst name="soa:retry:min" display="duration"/> and
+          <zcconst name="soa:retry:max" display="duration"/>.</para>
       </src>
     </explanation>
   </shortcut>
@@ -125,18 +143,7 @@
     <name>SOA 'expire' between <zcconst name="soa:expire:min" display="duration"/> and <zcconst name="soa:expire:max" display="duration"/></name>
     <success>The 'expire' is between <zcconst name="soa:expire:min" display="duration"/> and <zcconst name="soa:expire:max" display="duration"/></success>
     <failure>The 'expire' period should be between <zcconst name="soa:expire:min" display="duration"/> and <zcconst name="soa:expire:max" display="duration"/></failure>
-    <explanation>
-      <src type="ref" from="rfc" fid="rfc1912#p4">
-        <title>IETF RFC1912 (p.4)</title>
-        <para>After a zone is expired a secondary will still continue
-          to try to contact the primary, but it will no longer provide
-          nameservice for the zone. 2 to 4 weeks are suggested values.</para>
-      </src>
-      <src type="ref" from="AFNIC">
-        <title>AFNIC constraint</title>
-        <para>A minimum of 1 week (7 days) is enforced.</para>
-      </src>
-    </explanation>
+    <explanation sameas="shortcut:soa_local_policy"/>
     <details><para>The expire value is 
       <zcvar name="expire" display="duration"/> and should be between 
       <zcconst name="soa:expire:min" display="duration"/> and
@@ -148,14 +155,7 @@
     <name>SOA 'minimum' between <zcconst name="soa:minimum:min" display="duration"/> and <zcconst name="soa:minimum:max" display="duration"/></name>
     <success>The 'minimum' is between <zcconst name="soa:minimum:min" display="duration"/> and <zcconst name="soa:minimum:max" display="duration"/></success>
     <failure>The 'minimum' period should be between <zcconst name="soa:minimum:min" display="duration"/> and <zcconst name="soa:minimum:max" display="duration"/></failure>
-    <explanation>
-      <src type="ref" from="rfc" fid="rfc2308#p9#5">
-        <title>RFC2308 (p.9) 5. Caching Negative Answers</title>
-        <para>Values of one to three hours have been found to work well
-          and would make sensible a default. Values exceeding one day
-          have been found to be problematic.</para>
-      </src>
-   </explanation>
+    <explanation sameas="shortcut:soa_local_policy"/>
     <details><para>The minimum value is 
       <zcvar name="minimum" display="duration"/> and should be between 
       <zcconst name="soa:minimum:min" display="duration"/> and
@@ -167,12 +167,7 @@
     <name>SOA 'refresh' between <zcconst name="soa:refresh:min" display="duration"/> and <zcconst name="soa:refresh:max" display="duration"/></name>
     <success>The 'refresh' is between <zcconst name="soa:refresh:min" display="duration"/> and <zcconst name="soa:refresh:max" display="duration"/></success>
     <failure>The 'refresh' period should be between <zcconst name="soa:refresh:min" display="duration"/> and <zcconst name="soa:refresh:max" display="duration"/></failure>
-    <explanation>
-      <src type="ref">
-        <title>RFC1912 (p.3) and RIPE-203</title>
-        <para>Yo</para>
-      </src>
-    </explanation>
+    <explanation sameas="shortcut:soa_local_policy"/>
     <details><para>The refresh value is 
       <zcvar name="refresh" display="duration"/> and should be between 
       <zcconst name="soa:refresh:min" display="duration"/> and
@@ -184,12 +179,7 @@
     <name>SOA 'retry' between <zcconst name="soa:retry:min" display="duration"/> and <zcconst name="soa:retry:max" display="duration"/></name>
     <success>The 'retry' is between <zcconst name="soa:retry:min" display="duration"/> and <zcconst name="soa:retry:max" display="duration"/></success>
     <failure>The 'retry' period should be between <zcconst name="soa:retry:min" display="duration"/> and <zcconst name="soa:retry:max" display="duration"/></failure>
-    <explanation>
-      <src type="ref" from="rfc" fid="rfc1912#p3">
-        <title>RFC1912 (p.3) and RIPE-203</title>
-        <para>....</para>
-      </src>
-    </explanation>
+    <explanation sameas="shortcut:soa_local_policy"/>
     <details><para>The retry value is 
       <zcvar name="retry" display="duration"/> and should be between 
       <zcconst name="soa:retry:min" display="duration"/> and
