@@ -119,6 +119,7 @@ install-common:
 	$(INSTALL) -b -m 0644 etc/zonecheck/fr.rules $(ETCDIR)/zonecheck
 	$(INSTALL) -b -m 0644 etc/zonecheck/de.rules $(ETCDIR)/zonecheck
 	$(INSTALL) -b -m 0644 etc/zonecheck/default.rules $(ETCDIR)/zonecheck
+	$(INSTALL) -b -m 0644 etc/zonecheck/reverse.rules $(ETCDIR)/zonecheck
 	$(INSTALL) -b -m 0644 etc/zonecheck/rootservers $(ETCDIR)/zonecheck
 	@echo "*************************"
 	@echo "** If you already had a zc.conf file it has been renamed"
