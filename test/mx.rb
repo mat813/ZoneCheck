@@ -53,9 +53,8 @@ module CheckNetworkAddress
 
 	# DESC: MX exchange should be resolvable
 	def chk_mx_ip(ns, ip)
-	    domain = ns.domain
 	    mx(ip).each { |m|
-		return false unless is_resolvable?(ip, m.exchange, domain)
+		return false unless is_resolvable?(m.exchange,ip,@domain_name)
 	    }
 	    true
 	end
