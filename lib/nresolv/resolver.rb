@@ -19,6 +19,8 @@ module NResolv
 
     class DNS
 	class Client
+	    attr_reader :config
+
 	    def initialize(config=DefaultConfig)
 		@config = config
 	    end
@@ -31,6 +33,15 @@ module NResolv
 		return ret
 	    end
 
+	    def getaddresses(name)
+		@config.candidates(name).each { |fqname|
+		    res = addresses(fqname)
+		    return res unless res.empty?
+		}
+		[]
+	    end
+
+	    
 	    #
 	    # yield: resource, ttl, name, msg
 	    # exceptions: NoEntryError, NoDomainError, RefusedError

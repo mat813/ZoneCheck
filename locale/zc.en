@@ -114,6 +114,7 @@ param_output_support : Selected output class doesn't support '%s'
 param_ipv6_no_stack  : IPv6 not supported on that host
 param_unknown_modopt : unknown modifier '%s' for '%s' option
 zc_batch_parse       : Unable to parse batch line
+param_local_resolver : Unable to use local resolver '%s'
 
 [xcp_config]
 malformed_cmd   : malformed command

@@ -26,6 +26,7 @@ module Input
     ##
     class GTK
 	MaxNS = 8
+
 	##
 	## Expert
 	##
@@ -131,6 +132,9 @@ module Input
 		pack_start(output_f)
 		pack_start(advanced_f)
 		pack_start(debug_f)
+
+		# 
+		show_all
 	    end
 
 	    def one      ; @o_one.active?                                 ; end
@@ -216,7 +220,7 @@ module Input
 		tbl.attach(@ed, 0, 1, 0, 1)
 		tbl.attach(@aw, 1, 2, 0, 1)
 		tbl.attach(@af, 2, 3, 0, 1)
-		tbl.attach(@sf, 0, 3, 1, 2)
+		tbl.attach(@sf, 0, 1, 1, 2)
 		error_f.add(tbl)
 		
 
@@ -475,6 +479,7 @@ module Input
 	end
 
 
+
 	class Main
 	    attr_reader :config, :statusbar, :testmanager
 
@@ -507,9 +512,9 @@ module Input
 		@info_note = Gtk::Frame::new
 		
 		
+
 		
-		
-		menuitem = Gtk::MenuItem::new("mode")
+		menuitem = Gtk::MenuItem::new("Mode")
 		menubar.append(menuitem)
 		
 		menu = Gtk::Menu::new
@@ -520,30 +525,41 @@ module Input
 		menu.append(std_mitem)
 		exp_mitem = Gtk::RadioMenuItem::new(grp, "Expert")
 		menu.append(exp_mitem)
+				 
+
+#		sep = Gtk::SeparatorMenuItem::new
+#		menu.append(sep)
 		
-		    
-		menuitem = Gtk::MenuItem::new("help")
+		quit_mitem = Gtk::ImageMenuItem::new(Gtk::Stock::QUIT)
+		menu.append(quit_mitem)
+
+		help_mitem=menuitem = Gtk::MenuItem::new("Help")
 		menuitem.set_right_justified(true)
 		menubar.append(menuitem)
+		help_mitem.signal_connect("activate") {
+		    help = Gtk::MessageDialog::new(@window, Gtk::MessageDialog::MODAL, Gtk::MessageDialog::INFO, Gtk::MessageDialog::BUTTONS_OK, "I'm here to help you")
+		    help.set_title("Help")
+		    help.run
+		    help.destroy
+		}
 		
-		    
-		std_mitem.signal_connect("toggled") { |w|
-		    if w.active?
-			@expert.hide
-		    end
-		}
-		exp_mitem.signal_connect("toggled") { |w|
-		    if w.active?
-			@expert.show
-		    end
-		}
 		    
 		notebook = Gtk::Notebook::new
 		notebook.set_tab_pos(Gtk::POS_TOP)
 		notebook.append_page @input,   Gtk::Label::new("Input")
 		notebook.append_page @options, Gtk::Label::new("Options")
-		notebook.append_page @expert,  Gtk::Label::new("Expert")
+#		notebook.append_page @expert,  Gtk::Label::new("Expert")
 		
+		std_mitem.signal_connect("toggled") { |w|
+		    if w.active?
+			notebook.remove_page(notebook.page_num(@expert))
+		    end
+		}
+		exp_mitem.signal_connect("toggled") { |w|
+		    if w.active?
+			notebook.append_page(@expert, Gtk::Label::new("Expert"))
+		    end
+		}
 		
 		vbox = Gtk::VBox::new
 		vbox.pack_start(menubar)
