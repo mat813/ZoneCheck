@@ -33,3 +33,7 @@ NOT ABLE TODO?
 
 2002-10-18 sdalu@nic.fr
 	Unbroke nearly everything due to the recent change in param
+
+2002-11-05 sdalu@nic.fr
+	Finish GTK publisher
+	Cleanup Text/HTML publishers

@@ -22,12 +22,17 @@ module Publisher
 	Mime		= "text/plain"
 	MaxLineLength	= 79
 
+	##
+	## Class for displaying progression information about
+	## the tests being performed.
+	##
 	class Progress
 	    class PBar < TTY::ProgressBar
 		def unit            ; $mc.get("pgr_speed_unit") ; end
 		def unit_cvt(value) ; value                     ; end
 	    end
 
+	    # Initialization
 	    def initialize(publisher)
 		@publisher  = publisher
 		@o          = publisher.output
@@ -37,26 +42,34 @@ module Publisher
 			      end
 	    end
 	    
+	    # Start progression
 	    def start(count)
 		@counter.start(count)	if @counter
 	    end
 	    
+	    # Finished on success
 	    def done(desc)
 		@counter.done(desc)	if @counter
 	    end
 	    
+	    # Finished on failure
 	    def failed(desc)
 		@counter.failed(desc)	if @counter
 	    end
 	    
+	    # Finish (finalize) output
 	    def finish
 		@counter.finish		if @counter
 	    end
 	    
+	    # Process an item
 	    def process(desc, ns, ip)
+		# Counter
 		if @counter
 		    @counter.processed(1)
 		end
+
+		# Test description
 		if @publisher.rflag.testdesc
 		    xtra = if    ip then " (IP=#{ip})"
 			   elsif ns then " (NS=#{ns})"
@@ -176,11 +189,12 @@ module Publisher
 	    
 
 	def status(domainname, i_count, w_count, f_count)
-	    @o.print "==> ", super(domainname, i_count, w_count, f_count)
+	    @o.printf "==> %s\n", super(domainname, i_count, w_count, f_count)
 	end
 
 
 	#------------------------------------------------------------
+
 	def h1(h)
 	end
 

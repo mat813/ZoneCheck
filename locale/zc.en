@@ -29,15 +29,15 @@ w_abort		: abort
 
 xpltag_ref	: Ref
 
-res_succeed_but : SUCCEED (but %d warning(s))\n
-res_succeed	: SUCCEED\n
-res_failed	: FAILED\n
-res_failed_on	: FAILED (on warning)\n
-res_failed_and	: FAILED (and %d warning(s))\n
+res_succeed_but : SUCCEED (but %d warning(s))
+res_succeed	: SUCCEED
+res_failed	: FAILED
+res_failed_on	: FAILED (on warning)
+res_failed_and	: FAILED (and %d warning(s))
 warning_fmt	: Warning: %s\n
 fatal_fmt	: Fatal  : %s\n
 info_fmt	: Info   : %s\n
-testing_fmt     : Testing : %s\n
+testing_fmt     : Testing: %s\n
 test_progress   : Tests in progress
 
 ns_zone         : zone

@@ -15,6 +15,7 @@ require 'thread'
 require 'gtk'
 require 'publisher/xpm_data'
 
+
 module Publisher
     ##
     ##
@@ -22,6 +23,9 @@ module Publisher
     class GTK < Template
 	Mime		= nil
 
+	##
+	##
+	##
 	class Output < Gtk::CTree
 	    L_H1      = "h1"
 	    L_H2      = "h2"
@@ -62,8 +66,8 @@ module Publisher
 		@xpm_none	= [ nil, nil ]
 	    end
 
-	    def forget_level(lvl)
-		@hh.delete(lvl)
+	    def forget_level(*lvl)
+		lvl.each { |l| @hh.delete(l) }
 	    end
 
 	    def add_node(type, lvl, str, is_leaf, expanded)
@@ -104,7 +108,12 @@ module Publisher
 	    end
 	end
 	
+	##
+	## Class for displaying progression information about
+	## the tests being performed.
+	##
 	class Progress < Gtk::Table
+	    # Initialization
 	    def initialize(publisher)
 		super(2, 5, false)
 
@@ -149,44 +158,52 @@ module Publisher
 
 	    end
 	    
+	    # Start progression
 	    def start(count)
 		@count		= count
 		@processed	= 0
 		@starttime	= Time.now
 
+		# Counter
 		if @publisher.rflag.counter
 		    @updater = Thread::new { 
 			while true ; update_bar ; sleep(1) ; end
 		    }
 		end
 
+		# Test description
 		if @publisher.rflag.testdesc
-		    @ctree  = @publisher.ctree
 		    if ! @publisher.rflag.quiet
-			@ctree.add_node(Output::L_H1, "h1", 
+			@node = @o.add_node(Output::L_H1, "h1", 
 					$mc.get("title_progress"), false, true)
 		    end
 		end
 	    end
 	    
+	    # Finished on success
 	    def done(desc)
 	    end
 	    
+	    # Finished on failure
 	    def failed(desc)
 	    end
 	    
+	    # Finish (finalize) output
 	    def finish
+		# Counter
 		if @publisher.rflag.counter
 		    @updater.kill
 		end
 
-		if @publisher.rflag.testdesc
-		    @o.puts "</UL>"
+		# Test description
+		if @publisher.rflag.testdesc && !@node.nil?
+		    @o.collapse(@node)
 		end
 
 		hide_all
 	    end
 	    
+	    # Process an item
 	    def process(desc, ns, ip)
 		@processed += 1
 
@@ -195,18 +212,20 @@ module Publisher
 		       else          ""
 		       end
 
+		# Counter
 		if @publisher.rflag.counter
 		    pct = 100 * @processed / @count
 
 		    @tname.set_text("#{desc} #{xtra}")
 		    @pct  .set_text("%3d%%" % [ pct ])
 		    @tests.set_text(@processed.to_s)
-		    @pbar.set_value(pct)
+		    @pbar .set_value(pct)
 		end
 
+		# Test description
 		if @publisher.rflag.testdesc
-		    @publisher.ctree.add_node(Output::L_Element, "testdesc",
-				       "#{desc}#{xtra}", true, false)
+		    @o.add_node(Output::L_Element, "testdesc",
+					      "#{desc}#{xtra}", true, false)
 		end
 	    end
 
@@ -249,27 +268,24 @@ module Publisher
 
 	#------------------------------------------------------------
 
-	attr_reader :ctree, :parent
+	attr_reader :parent
 	attr_reader :xpm_element
 
 	def initialize(rflag, ostream=$stdout)
 	    super(rflag, ostream)
-	    @progress	= Progress::new(self)
 
 	    # Create default style
 	    style = Gtk::Style::new
 
 	    # Create initial windows
 	    window = Gtk::Window::new
-	    window.realize	# requiered before pixmap creation
-
-
-
-
 	    window.set_title("ZoneCheck result")
 	    window.signal_connect("delete_event") {|*args| delete_event(*args) }
 	    window.signal_connect("destroy") {|*args| destroy(*args) }
 	    window.border_width = 10
+
+
+
 
 	    @output = Gtk::VBox::new(false)
 	    
@@ -292,7 +308,13 @@ module Publisher
 	    @hbbox  = Gtk::HButtonBox::new
 	    @hbbox.pack_start(@quit)
 
+	    @o = Output::new([ "Tree" ], 0)
+	    @o.set_row_height(18) # XXX: pixmap / font size
+	    @o.column_titles_hide
+	    @o.line_style = Gtk::CTree::LINES_NONE
+	    @o.set_expander_style(Gtk::CTree::EXPANDER_TRIANGLE)
 
+	    @progress	= Progress::new(self)
 
 	    toto = Gtk::VBox::new(false)
 	    toto.pack_start(@progress)
@@ -306,14 +328,10 @@ module Publisher
 
 
 
-	    @ctree = Output::new([ "Tree" ], 0)
-	    @ctree.set_row_height(18) # XXX: pixmap / font size
-	    @ctree.column_titles_hide
-	    @ctree.line_style = Gtk::CTree::LINES_NONE
-	    @ctree.set_expander_style(Gtk::CTree::EXPANDER_TRIANGLE)
 
 
-	    @output.pack_start(@ctree)
+	    @output.pack_start(@o)
+
 
 	    window.show_all
 	    
@@ -326,8 +344,8 @@ module Publisher
 
 	def setup(domain_name)
 	    if ! @rflag.quiet
-		@ctree.add_node(Output::L_Root, "root", 
-				domain_name.to_s, false, true)
+		@o.add_node(Output::L_Root, "root", 
+			    domain_name.to_s, false, true)
 	    end
 	end
 
@@ -336,32 +354,32 @@ module Publisher
 
 	def intro(domain)
 	    # Title
-	    unless rflag.quiet
-		@ctree.add_node(Output::L_H1, "h1", 
-				$mc.get("title_zoneinfo"), false, true)
+	    unless @rflag.quiet
+		@o.add_node(Output::L_H1, "h1", 
+			    $mc.get("title_zoneinfo"), false, true)
 	    end
 
 	    # Zone
-	    @ctree.add_node(Output::L_Zone, "zoneinfo",
-			    "#{domain.name.to_s}", true, false)
+	    @o.add_node(Output::L_Zone, "zoneinfo",
+			"#{domain.name.to_s}", true, false)
 
 	    # DNS (Primary / Secondary)
 	    domain.ns.each_index { |idx| 
 		ns_ip = domain.ns[idx]
-		if idx == 0
-		then logo = Output::L_Prim
-		else logo = Output::L_Sec
-		end
+		logo = if idx == 0
+		       then Output::L_Prim
+		       else Output::L_Sec
+		       end
 
 		str = "#{ns_ip[0].to_s} (#{ns_ip[1].join(", ")})"
-		@ctree.add_node(logo, "zoneinfo", str, true, false)
+		@o.add_node(logo, "zoneinfo", str, true, false)
 	    }
 	end
 
 	def diag_section(title)
 	    if !@rflag.quiet
-		@ctree.add_node(Output::L_H2, "h2", title.capitalize, false, true)
-		@ctree.forget_level("diagnostic")
+		@o.add_node(Output::L_H2, "h2", title.capitalize, false, true)
+		@o.forget_level("diagnostic")
 	    end
 	end
 
@@ -389,13 +407,13 @@ module Publisher
 		msg = res.desc.msg
 	    end
 
-	    @o.puts "<DIV class=\"zc_diag1\">"
-	    @o.puts "<TABLE width=\"100%\">"
-	    @o.puts "<TR class=\"zc_title\"><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
-	    @o.puts "<TR><TD colspan=\"2\">#{severity}: #{res.tag}</TD></TR>"
-	    @o.puts "<TR><TD colspan=\"2\">#{msg}</TD></TR>"
-	    @o.puts "</TABLE>"
-	    @o.puts "</DIV>"
+#	    @o.puts "<DIV class=\"zc_diag1\">"
+#	    @o.puts "<TABLE width=\"100%\">"
+#	    @o.puts "<TR class=\"zc_title\"><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
+#	    @o.puts "<TR><TD colspan=\"2\">#{severity}: #{res.tag}</TD></TR>"
+#	    @o.puts "<TR><TD colspan=\"2\">#{msg}</TD></TR>"
+#	    @o.puts "</TABLE>"
+#	    @o.puts "</DIV>"
 	end
 
 
@@ -424,34 +442,42 @@ module Publisher
 		   end
 
 
-	    @ctree.add_node(logo, "diagnostic", msg, false, true)
+	    @o.add_node(logo, "diagnostic", msg, false, !@rflag.quiet)
+	    @o.forget_level("diag_details", "diag_ref", "diag_elt")
 
-	    @ctree.forget_level("diag_details")
-
+	    # Explanation
 	    if xpl_lst
-		@ctree.add_node(Output::L_H1, "diag_details", 
-				"Explanation", false, true)
-		
-		@ctree.forget_level("ref")
+		if @rflag.quiet
+		    lvl = "diag_elt"
+		else
+		    @o.add_node(Output::L_H1, "diag_details", 
+				    "Explanation", false, false)
+		    lvl = "diag_ref"
+		end
 
 		xpl_lst.each { |t, h, b|
 		    l10n_tag = $mc.get("xpltag_#{t}")
 		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '\1') }
-		    @ctree.add_node(Output::L_Ref, "ref",
+		    @o.add_node(Output::L_Ref, lvl,
 				    "#{l10n_tag}: #{h}", false, false)
 		    b.each { |l|
-			@ctree.add_node(Output::L_None, nil, l, true, false)
+			@o.add_node(Output::L_None, nil, l, true, false)
 		    }
 		}
-
 	    end
 
+	    # Elements
 	    if ! lst.empty?
-		@ctree.add_node(Output::L_H1, "diag_details",
+		if @rflag.quiet
+		    lvl = "diag_elt"
+		else
+		    @o.add_node(Output::L_H1, "diag_details",
 				"Affected host(s)", false, true)
-		sibling = nil
+		    lvl = nil
+		end
+
 		lst.each { |elt| 
-		    @ctree.add_node(Output::L_Element, nil, elt, true, false)
+		    @o.add_node(Output::L_Element, lvl, elt, true, false)
 		}
 	    end
 
@@ -461,15 +487,15 @@ module Publisher
 	def status(domainname, i_count, w_count, f_count)
 	    unless @rflag.quiet
 		l10n_title = $mc.get("title_status")
-		@o.puts "<H2>#{l10n_title}</H2>"
+		@o.add_node(Output::L_H1, "h1", l10n_title, false, true)
 	    end
-	    @o.print "<DIV class=\"zc_status\">", 
-		super(domainname, i_count, w_count, f_count), "</DIV>"
-	    @o.puts "<BR>"
-	    if @rflag.quiet
-		@o.puts "<HR width=\"60%\">"
-		@o.puts "<BR>"
-	    end
+	    @o.add_node(Output::L_H2, nil,  
+		super(domainname, i_count, w_count, f_count), true, false)
+
+#	    if @rflag.quiet
+#		@o.puts "<HR width=\"60%\">"
+#		@o.puts "<BR>"
+#	    end
 	end
 
 
@@ -488,12 +514,12 @@ module Publisher
 	#------------------------------------------------------------
 
 	def h1(h)
-	    @ctree.add_node(Output::L_H1, "h1", h.capitalize, false, true)
+	    @o.add_node(Output::L_H1, "h1", h.capitalize, false, true)
 	end
 
 	def h2(h)
-	    @ctree.add_node(Output::L_H2, "h2", h.capitalize, false, true)
-	    @ctree.forget_level("diagnostic")
+	    @o.add_node(Output::L_H2, "h2", h.capitalize, false, true)
+	    @o.forget_level("diagnostic")
 	end
     end
 end

@@ -65,6 +65,11 @@ function zc_pgr_locale(tprogress, progress, test, speed, time) {
   zc_pgr_l_time           = time;
 }
 
+// quiet mode (no titles)
+function zc_pgr_quiet(quiet) {
+  zc_pgr_quiet = quiet;
+}
+
 // start progress bar
 function zc_pgr_start(count) {
   zc_pgr_starttime = (new Date()).getTime();
@@ -76,7 +81,7 @@ function zc_pgr_start(count) {
   zc_pgr_totalsize = count;
 
   s  = "";
-  if (zc_pgr_l_title_progress != null) {
+  if (! zc_pgr_quiet) {
     s += "<H2  id=\"zc_pgr_title\">" + zc_pgr_l_title_progress + "</H2>";
   }
 

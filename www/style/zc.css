@@ -74,15 +74,6 @@ UL.zc_ref {
     border: 2px solid #f7ad31
 }
 
-UL.zc_ref LI { 
-    list-style: url(/zc/img/ref.png) disc
-}
-
-UL.zc_element LI { 
-    list-style: url(/zc/img/element.png) disc
-}
-
-
 DIV.zc_zinfo {
     padding-left: 5ex;
 }

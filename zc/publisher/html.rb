@@ -26,71 +26,93 @@ module Publisher
     class HTML < Template
 	Mime		= "text/html"
 
+	# Shortcut for enclosing javascript
 	def self.jscript
 	    '<SCRIPT type="text/javascript">' + yield + '</SCRIPT>'
 	end
 
+	# Shortcut for enclosing noscript
 	def self.nscript
 	    '<NOSCRIPT>' + yield + '</NOSCRIPT>'
 	end
 
+
+	##
+	## Class for displaying progression information about
+	## the tests being performed.
+	##
 	class Progress
+	    # Initialization
 	    def initialize(publisher)
 		@publisher = publisher
 		@o         = publisher.output
 	    end
 	    
+	    # Start progression
 	    def start(count)
 		title = if @publisher.rflag.quiet
 			then ""
 			else "<H2>" + $mc.get("title_progress") + "</H2>"
 			end
+
+		# Counter
 		if @publisher.rflag.counter
 		    @o.puts HTML.jscript {
-			title_progress = $mc.get("title_progress")
-			pgr_progress   = $mc.get("pgr_progress")
-			pgr_test       = $mc.get("pgr_test")
-			pgr_speed      = $mc.get("pgr_speed")
-			pgr_time       = $mc.get("pgr_time")
+			pgr_quiet_param  = @publisher.rflag.quiet ? "true" \
+			                                          : "false"
+			pgr_locale_param = [ 
+			    $mc.get("title_progress"),
+			    $mc.get("pgr_progress"),
+			    $mc.get("pgr_test"),
+			    $mc.get("pgr_speed"),
+			    $mc.get("pgr_time") ]
+			pgr_start_param  = count
 
-			str = if @publisher.rflag.quiet
-			      then "zc_pgr_locale(null, \"#{pgr_progress}\", \"#{pgr_test}\", \"#{pgr_speed}\", \"#{pgr_time}\");"
-			      else "zc_pgr_locale(\"#{title_progress}\", \"#{pgr_progress}\", \"#{pgr_test}\", \"#{pgr_speed}\", \"#{pgr_time}\");"
-			      end
-			str += "zc_pgr_start(#{count});"
+			str  = 'zc_pgr_quiet(%s);' % pgr_quiet_param
+			str += 'zc_pgr_locale("%s", "%s", "%s", "%s", "%s");' % pgr_locale_param
+			str += 'zc_pgr_start(%d);' % pgr_start_param
 			str
 		    }
-		    @o.puts HTML.nscript { title + "<UL>" }
+		    @o.puts HTML.nscript { title }
 		end
+
+		# Test description
 		if @publisher.rflag.testdesc
 		    @o.puts title
 		    @o.puts "<UL class=\"zc_test\">"
 		end
 	    end
 	    
+	    # Finished on success
 	    def done(desc)
 	    end
 	    
+	    # Finished on failure
 	    def failed(desc)
 	    end
 	    
+	    # Finish (finalize) output
 	    def finish
+		# Counter
 		if @publisher.rflag.counter
 		    @o.puts HTML.jscript { "zc_pgr_finish();" }
 		    @o.puts HTML.nscript { "</UL>" }
 		end
 
+		# Test description
 		if @publisher.rflag.testdesc
 		    @o.puts "</UL>"
 		end
 	    end
 	    
+	    # Process an item
 	    def process(desc, ns, ip)
 		xtra = if    ip then " (IP=#{ip})"
 		       elsif ns then " (NS=#{ns})"
 		       else          ""
 		       end
 
+		# Counter
 		if @publisher.rflag.counter
 		    @o.puts HTML.jscript { 
 			"zc_pgr_process(\"#{desc} #{xtra}\")" }
@@ -101,11 +123,14 @@ module Publisher
 		    }
 		end
 
+		# Test description
 		if @publisher.rflag.testdesc
 		    @o.puts "<LI>"
 		    @o.printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
 		    @o.puts "</LI>"
 		end
+
+		# Flush
 		@o.flush
 	    end
 	end
@@ -131,6 +156,15 @@ module Publisher
     <LINK rel="stylesheet" href="/zc/zc.css" type="text/css">
     <SCRIPT language="JavaScript" src="/zc/progress.js" type="text/javascript">
     </SCRIPT>
+    <STYLE>
+        UL.zc_ref LI { 
+            list-style: url(/zc/img/ref.png) disc
+        }
+
+        UL.zc_element LI { 
+            list-style: url(/zc/img/element.png) disc
+        }
+    </STYLE>
   </HEAD>
   <BODY>
 EOT
@@ -166,10 +200,11 @@ EOT
 		@o.puts "<H2>#{title}</H2>"
 	    end
 
+	    l10n_zone = $mc.get("ns_zone").capitalize
 
 	    @o.puts "<DIV class=\"zc_zinfo\">"
 	    @o.puts tbl_beg
-	    @o.puts tbl_zone % [ "<IMG src=\"/zc/img/zone.png\" alt=\"#{$mc.get("ns_zone").capitalize}\">", domain.name ]
+	    @o.puts tbl_zone % [ "<IMG src=\"/zc/img/zone.png\" alt=\"#{l10n_zone}\">", domain.name ]
 	    domain.ns.each_index { |i| 
 		ns_ip = domain.ns[i]
 		if i == 0
