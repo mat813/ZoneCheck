@@ -189,7 +189,9 @@ class Installer
     def inst_cgi
 	puts "==> Installing HTML pages"
 	mkdir_p @ch_wwwdir,				:verbose => @verbose
-	cp_r "www", @ch_wwwdir,				:verbose => @verbose
+	Dir["www/*"].each { |entry|
+	    cp_r entry, @ch_wwwdir,			:verbose => @verbose
+	}
 	puts
 
 	puts "==> Installing CGI"
