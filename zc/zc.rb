@@ -22,7 +22,7 @@ ZC_INSTALL_PATH		= "/homes/sdalu/ZC.CVS/zc"
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
-ZC_LOCALIZATION_FILE	= "#{ZC_DIR}/zc.%s"
+ZC_LOCALIZATION_FILE	= "#{ZC_DIR}/locale/zc.%s"
 ZC_CONFIG_FILE		= "#{ZC_DIR}/zc.conf"
 ZC_TEST_DIR		= "#{ZC_DIR}/test"
 
