@@ -91,6 +91,7 @@ module NResolv
 	    end
 
 	    def self.from_s(str, make_absolute=false)
+		return Root if str == "."
 		labels = []
 		lbl = nil
 		str.scan(/(?:(?:\\.|[^\.])+|\.)/) {|m| 
@@ -181,4 +182,3 @@ module NResolv
 	end
     end
 end
-
