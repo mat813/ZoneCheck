@@ -4,6 +4,16 @@ require 'resolv'
 
 module AFNIC
     class DNS
+	class Resource < Resolv::DNS::Resource
+	end
+
+	module RCode
+	    include Resolv::DNS::RCode
+	end
+
+	class Message < Resolv::DNS::Message
+	end
+
 	class Requester
 	    def initialize
 		@senders = {}
@@ -18,6 +28,9 @@ module AFNIC
 		else
 		    raise ArgumentError.new("neither Sender or Queue: #{arg}")
 		end
+	    end
+
+	    class Request
 	    end
 
 	    class Sender
@@ -39,17 +52,14 @@ module AFNIC
 		    @host = host
 		    @port = port
 		    @sock = UDPSocket.new
-		    puts "Connecting: #{host} #{port}"
 		    @sock.connect(host, port)
 		    @sock.fcntl(Fcntl::F_SETFD, 1)
 		    @id = -1
 		    @thread = Thread.new {
 			loop {
-			    puts "Waiting reply"
-			    reply = @sock.recv(UDPSize)
-			    puts "Got message"
+			    reply = @sock.recv(Resolv::DNS::UDPSize)
 			    msg = begin
-				      Resolv::DNS::Message.decode(reply)
+				      Message.decode(reply)
 				  rescue DecodeError
 				      STDERR.print("DNS message decoding error: #{reply.inspect}")
 				      next
@@ -98,8 +108,7 @@ module AFNIC
 	def each_resource(name, typeclass, &proc)
 	    q = Queue.new
 	    begin
-		puts @requester
-		msg = Resolv::DNS::Message.new
+		msg    = Message.new
 		msg.rd = 1
 		msg.add_question(name, typeclass)
 		sender = @requester.sender(msg, name, q, @nameserver)
@@ -111,9 +120,9 @@ module AFNIC
 		    extract_resources(reply, reply_name, typeclass, &proc)
 		    return
 		when RCode::NXDomain
-			raise Config::NXDomain.new(reply_name)
+			raise Resolv::DNS::Config::NXDomain.new(reply_name)
 		else
-		    raise Config::OtherResolvError.new(reply_name)
+		    raise Resolv::DNS::Config::OtherResolvError.new(reply_name)
 		end
 	    ensure
 		@requester.delete(q)
@@ -122,13 +131,13 @@ module AFNIC
 
 	def extract_resources(msg, name, typeclass)
 	    if typeclass < Resource::ANY
-		n0 = Name.create(name)
+		n0 = Resolv::DNS::Name.create(name)
 		msg.each_answer {|n, ttl, data|
 		    yield data if n0 == n
 		}
 	    end
 	    yielded = false
-	    n0 = Name.create(name)
+	    n0 = Resolv::DNS::Name.create(name)
 	    msg.each_answer {|n, ttl, data|
 		if n0 == n
 		    case data
@@ -186,4 +195,4 @@ module AFNIC
     end
 end
 
-puts AFNIC::DNS.new("192.134.4.10").getresources("kame220.kame.net", Resolv::DNS::Resource::IN::ANY).collect { |r| r.address }
+puts AFNIC::DNS.new("192.134.4.10").getresources("kame220.kame.net", AFNIC::DNS::Resource::IN::ANY).collect { |r| r.address }
