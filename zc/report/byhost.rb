@@ -59,7 +59,8 @@ module Report
 	    end
  
 	    list.each { |res, severity|
-		@publish.diagnostic(severity, res.testname, res.desc, []) }
+		@publish.diagnostic(severity, 
+				    res.testname, res.desc, [ res.tag ]) }
 	end
     end
 end

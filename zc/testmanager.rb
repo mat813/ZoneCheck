@@ -342,7 +342,13 @@ class TestManager
 	    args = []
 	    args << ns unless ns.nil?
 	    args << ip unless ip.nil?
-	    method.call(*args)
+	    begin
+		method.call(*args)
+	    rescue NResolv::NResolvError => e
+		desc = Test::Result::Desc::new(testname)
+		desc.err = "Resolver error (#{e})"
+		@param.report.fatal << Test::Error::new(testname, desc, ns, ip)
+	    end
 	}
     end
 

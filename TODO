@@ -7,6 +7,7 @@ version = 2.0.0
 
 	integration avec la chaine de production
 	problem with @input.error when in html due to header (for batch)
+	handle in test1 the case when a 'test' (ie: switch) fails
 
 version = 2.1.0
 	IDN
