@@ -244,7 +244,6 @@ class Test
 	@cm[ip].soa(dom, force)
     end
 
-
     def ns(ip=nil, dom=@domain.name, force=false)
 	@cm[ip].ns(dom, force)
     end
@@ -261,6 +260,14 @@ class Test
 	@cm[ip].addresses(name)
     end
     
+    def a(ip, name, force=false)
+	@cm[ip].a(name, force)
+    end
+
+    def aaaa(ip, name, force=false)
+	@cm[ip].aaaa(name, force)
+    end
+
     def ptr(ip, name)
 	@cm[ip].ptr(name)
     end

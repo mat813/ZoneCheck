@@ -126,7 +126,7 @@ class CacheManager
 
 	# Cached items
 	@cache = Cache::new
-	@cache.create(:address, :soa, :any, :ns, :mx, :cname, :ptr, :rec)
+	@cache.create(:address, :soa, :any, :ns, :mx, :cname, :a, :aaaa, :ptr, :rec)
     end
     
     def get_resources(name, resource, rec=true, exception=false)
@@ -228,6 +228,20 @@ class CacheManager
     def mx(domainname, force=nil)
 	@cache.use(:mx, domainname, force) {
 	    get_resources(domainname, NResolv::DNS::Resource::IN::MX)
+	}
+    end
+    
+    # A record
+    def a(name, force=nil)
+	@cache.use(:a, name, force) {
+	    get_resources(name,        NResolv::DNS::Resource::IN::A)
+	}
+    end
+    
+    # AAAA record
+    def aaaa(name, force=nil)
+	@cache.use(:aaaa, name, force) {
+	    get_resources(name,        NResolv::DNS::Resource::IN::AAAA)
 	}
     end
     

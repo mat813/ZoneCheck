@@ -7,6 +7,9 @@
 	* main: fixed bug in is_resolvable?
 	* test: reduced timeout on tcp for mail connection
 	* test: more in depth check of tcp connection (chk_tcp)
+	* mail: fixed open relay detection
+	* test: catch connection refused in chk_udp
+	* test: aaaa query behaviour
 	* nresolv: added code for handling lost of tcp connection
 	
 2003-09-01  ZoneCheck-2.0.0b7
