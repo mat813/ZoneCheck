@@ -119,6 +119,10 @@ module Report
 	## Informational results
 	##
 	class Info    < Processor
+	    # Info has the opposite semantique than Warning/Fatal
+	    def add_result(result)
+		@list << result if result.ok?
+	    end
 	end
 
 
