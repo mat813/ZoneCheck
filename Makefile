@@ -115,10 +115,11 @@ install-common:
 
 	@echo "==> Installing default configuration file"
 	$(INSTALL) -d $(ETCDIR)/zonecheck
-	$(INSTALL) -b -m 0644 etc/zc.conf $(ETCDIR)/zonecheck
-	$(INSTALL) -b -m 0644 etc/zc.conf.fr $(ETCDIR)/zonecheck
-	$(INSTALL) -b -m 0644 etc/zc.conf.arpa $(ETCDIR)/zonecheck
-	$(INSTALL) -b -m 0644 etc/rootservers $(ETCDIR)/zonecheck
+	$(INSTALL) -b -m 0644 etc/zonecheck/zc.conf $(ETCDIR)/zonecheck
+	$(INSTALL) -b -m 0644 etc/zonecheck/fr.rules $(ETCDIR)/zonecheck
+	$(INSTALL) -b -m 0644 etc/zonecheck/de.rules $(ETCDIR)/zonecheck
+	$(INSTALL) -b -m 0644 etc/zonecheck/default.rules $(ETCDIR)/zonecheck
+	$(INSTALL) -b -m 0644 etc/zonecheck/rootservers $(ETCDIR)/zonecheck
 	@echo "*************************"
 	@echo "** If you already had a zc.conf file it has been renamed"
 	@echo "**   to zc.conf.old"
