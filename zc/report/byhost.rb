@@ -47,6 +47,7 @@ module Report
 		# Sorting by 'host'
 		byhost = {}
 		full_list.each { |elt| res, severity = elt
+		    next if @rflag.fatalonly && severity != Config::Fatal
 		    next if severity.nil? && !@rflag.reportok
 		    tag = res.tag
 		    byhost[tag] = [] unless byhost.has_key?(tag)

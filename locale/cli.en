@@ -63,12 +63,14 @@ usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname\n\
     -6, --ipv6          Only check the zone with IPv6 connectivity\n\
         --option        Set extra options (-,-opt,opt,opt=foo)\n\
 \n\
-  verbose:              [intro/explain/details] [testdesc|counter]\n\
+  verbose:              [intro/testname/explain/details]\n\
+                        [reportok|fatalonly] [testdesc|counter]\n\
     intro          [i]  Print summary for domain and associated nameservers\n\
     testname       [n]  Print the test name\n\
     explain        [x]  Print an explanation for failed tests\n\
     details        [d]  Print a detailed description of the failure\n\
     reportok       [o]  Still report passed test\n\
+    fatalonly      [f]  Print fatal errors only\n\
     testdesc       [t]  Print the test description before running it\n\
     counter        [c]  Print a test counter\n\
 \n\

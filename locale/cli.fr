@@ -63,12 +63,14 @@ usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] nomdedomaine\n\
     -6, --ipv6          Utilise uniquement IPv6 pour vérifier le domaine\n\
         --option        Options supplémentaires (-,-opt,opt,opt=toto)\n\
 \n\
-  verbose:              [intro/explain/details] [testdesc|counter]\n\
+  verbose:              [intro/testname/explain/details]\n\
+                        [reportok|fatalonly] [testdesc|counter]\n\
     intro          [i]  Affiche un résumé du domaine et de ses serveurs\n\
     testname       [n]  Affiche le nom du test\n\
     explain        [x]  Affiche une explication en cas d'échec du test\n\
     details        [d]  Affiche les détails liés à l'échec du test\n\
     reportok       [o]  Affiche quand même les tests qui ont réussi\n\
+    fatalonly      [f]  Affiche uniquement les erreurs fatales\n\
     testdesc       [t]  Affiche la description du test en cours\n\
     counter        [c]  Affiche une barre de progression\n\
 \n\

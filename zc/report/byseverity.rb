@@ -45,8 +45,12 @@ module Report
 		@publish.diag_start() unless @rflag.quiet
 		    
 		catlist = []
-		catlist << @ok   if @rflag.reportok
-		catlist << @info << @warning << @fatal
+		if !@rflag.fatalonly
+		    catlist << @ok   if @rflag.reportok
+		    catlist << @info << @warning
+		end
+		catlist << @fatal
+
 		catlist.each { |cat|
 		    display(cat.list, cat.severity) }
 	    end

@@ -161,9 +161,10 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="dontstop" value="nostop">
 	      don't stop on fatal</TD>
-	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="reportok" value="t">
-	      report ok</TD>	    
+	    <TD><INPUT type="checkbox" name="fatalonly" value="t">
+	      fatal only</TD>
+	    <TD><INPUT type="checkbox" name="reportok"  value="t">
+	      report ok</TD>
 	  </TR>
 
 	  
@@ -389,7 +390,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Jun 16 22:12:25 CEST 2003
+Last modified: Thu Aug  7 14:50:22 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

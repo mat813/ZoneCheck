@@ -57,6 +57,7 @@ parameters:\n\
      - details\n\
      - progress = [ t|testdesc | c|counter ]\n\
      - reportok\n\
+     - fatalonly\n\
  - output   = [ bs|byseverity, bh|byhost, t|text, h|html ]\n\
      - report   = bs|byseverity | bh|byhost\n\
      - format   = h|html | text\n\

@@ -58,6 +58,7 @@ class Param
     ## counter      : display a progress bar
     ## stop_on_fatal: stop on the first fatal error
     ## reportok     : also report test that have passed
+    ## fatalonly    : only print fatal errors
     ##
     ## Corrections are silently made to respect the following constraints:
     ##  - 'tagonly' doesn't support 'explain', 'details' (as displaying
@@ -71,10 +72,10 @@ class Param
 	attr_reader :tagonly,  :one,   :quiet
 	attr_reader :testname, :intro, :explain, :details
 	attr_reader :testdesc, :counter
-	attr_reader :stop_on_fatal, :reportok
+	attr_reader :stop_on_fatal, :reportok, :fatalonly
 
 	attr_writer :one, :quiet, :intro
-	attr_writer :stop_on_fatal, :reportok
+	attr_writer :stop_on_fatal, :reportok, :fatalonly
 	attr_writer :testname
 
 	def initialize
@@ -82,7 +83,7 @@ class Param
 	    @intro    = @testname = @details = @explain	= false
 	    @testdesc = @counter			= false
 	    @stop_on_fatal				= true
-	    @reportok					= false
+	    @reportok = @fatalonly			= false
 	end
 
 	def tagonly=(val)
@@ -108,18 +109,19 @@ class Param
 	def autoconf
 	    $dbg.msg(DBG::AUTOCONF) {
 		flags = []
-		flags << 'tagonly'  if @tagonly
-		flags << 'one'      if @one
-		flags << 'quiet'    if @quiet
-		flags << 'intro'    if @intro
-		flags << 'testname' if @testname
-		flags << 'explain'  if @explain
-		flags << 'details'  if @details
-		flags << 'testdesc' if @testdesc
-		flags << 'counter'  if @counter
-		flags << 'stop'     if @stop_on_fatal
-		flags << 'reportok' if @reportok
-		flags << 'NONE'     if flags.empty?
+		flags << 'tagonly'	if @tagonly
+		flags << 'one'		if @one
+		flags << 'quiet'	if @quiet
+		flags << 'intro'	if @intro
+		flags << 'testname'	if @testname
+		flags << 'explain'	if @explain
+		flags << 'details'	if @details
+		flags << 'testdesc'	if @testdesc
+		flags << 'counter'	if @counter
+		flags << 'stop'		if @stop_on_fatal
+		flags << 'reportok'	if @reportok
+		flags << 'fatalonly'	if @fatalonly
+		flags << 'NONE'		if flags.empty?
 		"Report flags: #{flags.join('/')}"
 	    }
 	end
@@ -756,6 +758,7 @@ class Param
 	    when 'x', 'explain'		then @rflag.explain	= true
 	    when 'd', 'details'		then @rflag.details	= true
 	    when 'o', 'reportok'	then @rflag.reportok	= true
+	    when 'f', 'fatalonly'	then @rflag.fatalonly	= true
 	    when 't', 'testdesc'	then @rflag.testdesc	= true
 	    when 'c', 'counter'		then @rflag.counter	= true
 	    else raise ParamError,

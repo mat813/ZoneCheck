@@ -66,12 +66,14 @@ require 'param'
 ##     -6, --ipv6          Only check the zone with IPv6 connectivity
 ##         --option        Set extra options (-,-opt,opt,opt=foo)
 ## 
-##   verbose:              [intro/explain/details] [testdesc|counter]
+##   verbose:              [intro/testname/explain/details]
+##                         [reportok|fatalonly] [testdesc|counter]
 ##     intro          [i]  Print summary for domain and associated nameservers
 ##     testname       [n]  Print the test name
 ##     explain        [x]  Print an explanation for failed tests
 ##     details        [d]  Print a detailed description of the failure
 ##     reportok       [o]  Still report passed test
+##     fatalonly      [f]  Print fatal errors only
 ##     testdesc       [t]  Print the test description before running it
 ##     counter        [c]  Print a test counter
 ## 

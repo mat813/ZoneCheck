@@ -244,9 +244,10 @@
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="dontstop" value="nostop">
 	      continue après fatal</TD>
-	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="reportok" value="t">
-	      affiche ok</TD>	    
+	    <TD><INPUT type="checkbox" name="fatalonly" value="t">
+	      erreurs fatales uniquement</TD>
+	    <TD><INPUT type="checkbox" name="reportok"  value="t">
+	      affiche ok</TD>
 	  </TR>
 
 	  <TR><TD></TD></TR>
@@ -465,7 +466,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Jun 25 16:23:22 CEST 2003
+Last modified: Thu Aug  7 14:50:00 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

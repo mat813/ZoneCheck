@@ -61,6 +61,7 @@ require 'cgi'
 ##      - details
 ##      - progress = [ t|testdesc | c|counter ]
 ##      - reportok
+##      - fatalonly
 ##  - output   = [ bs|byseverity, bh|byhost, text, html ]
 ##      - report   = bs|byseverity | bh|byhost
 ##      - format   = h|html | t|text
@@ -167,6 +168,7 @@ module Input
 		p.verbose = 'explain'           if @cgi.has_key?('explain')
 		p.verbose = 'details'		if @cgi.has_key?('details')
 		p.verbose = 'reportok'		if @cgi.has_key?('reportok')
+		p.verbose = 'fatalonly'         if @cgi.has_key?('fatalonly')
 		p.verbose = @cgi['progress']    if @cgi.has_key?('progress')
 	    end
 

@@ -241,9 +241,10 @@
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="dontstop" value="nostop">
 	      don't stop on fatal</TD>
-	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="reportok" value="t">
-	      report ok</TD>	    
+	    <TD><INPUT type="checkbox" name="fatalonly" value="t">
+	      fatal only</TD>
+	    <TD><INPUT type="checkbox" name="reportok"  value="t">
+	      report ok</TD> 
 	  </TR>
 
 	  <TR><TD></TD></TR>
@@ -457,7 +458,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Jun 25 16:23:35 CEST 2003
+Last modified: Thu Aug  7 14:48:52 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
