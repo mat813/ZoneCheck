@@ -49,9 +49,6 @@ module CheckExtra
 	def mhosttest(mdom, mhost)
 	    # Mailhost and IP 
 	    mip   = addresses(mhost, bestresolverip(mhost))[0]
-#	    puts "DOM=#{mdom}   HOST=#{mhost}   IP=#{mip}"
-#	    puts "DEST=#{@fake_dest}  FROM=#{@fake_from}  USER=#{@fake_user}"
-
 	    raise "No host servicing mail for domain #{mdom}" if mip.nil?
 
 	    # Execute test on mailhost
@@ -76,7 +73,6 @@ module CheckExtra
 	end
 
 	def testuser(user, mdom, mhost)
-#	    puts "USER = #{user}"
 	    mhosttest(mdom, mhost) { 
 		|mrelay| return mrelay.test_userexists(user, true)
 	    }
