@@ -61,9 +61,9 @@ parametres:\n\
  - output   = [ bs|byseverity, bh|byhost, t|text, h|html ]\n\
      - report   = bs|byseverity | bh|byhost\n\
      - format   = h|html | t|text\n\
- - error    = [ af|allfatal, aw|allwarning, std|standard,\n\
+ - error    = [ af|allfatal, aw|allwarning, ds|dfltseverity,\n\
                 s|stop, ns|nostop ]\n\
-     - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]\n\
+     - errorlvl  = [ af|allfatal | aw|allwarning | ds|dfltseverity ]\n\
      - dontstop \n\
  - transp   = [ ipv4, ipv6, udp, tcp, std ]\n\
      - transp3   = [ ipv4, ipv6 ]\n\

@@ -84,6 +84,7 @@ usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname\n\
   error:                [allfatal|allwarning] [stop|nostop]\n\
     allfatal       [af] All error are considered fatal\n\
     allwarning     [aw] All error are considered warning\n\
+    dfltseverity  *[ds] Use the severity associated with the test\n\
     stop          *[s]  Stop on the first fatal error\n\
     nostop         [ns] Never stop (even on fatal error)\n\
 \n\

@@ -738,10 +738,9 @@ class Param
 	    case token
 	    when 'af',  'allfatal'	then @report.allfatal
 	    when 'aw',  'allwarning'	then @report.allwarning
+	    when 'ds',  'dfltseverity'	then @report.standard
 	    when 's',   'stop'		then @rflag.stop_on_fatal = true
 	    when 'ns',  'nostop'	then @rflag.stop_on_fatal = false
-	    when 'std', 'standard'	then @report.standard
-		                             @rflag.stop_on_fatal = false
 	    else raise ParamError,
 		    $mc.get('xcp_param_unknown_modopt') % [ token, 'error' ]
 	    end
