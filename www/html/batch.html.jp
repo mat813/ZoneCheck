@@ -18,6 +18,8 @@
 
 <HTML>
   <HEAD>
+    <META http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP">
+
     <LINK rel="stylesheet" href="HTML_PATH/style/zc.css"   type="text/css">
     <LINK rel="icon"       href="HTML_PATH/img/zc-fav.png" type="image/png">
 
@@ -45,8 +47,8 @@
   </HEAD>
 
   <BODY>
-    <P id="lang">Lang: EN / <A href="HTML_PATH/fr/batch.html">FR</A> / <A href="HTML_PATH/jp/batch.html">JP</A></P>
-    <P id="beta">BETA<BR>unstandardized template</P>
+    <P id="lang">Lang: <A href="HTML_PATH/en/batch.html">EN</A> / <A href="HTML_PATH/fr/batch.html">FR</A> / JP</P>
+    <P id="beta">BETA<BR>Help needed for translation</P>
 
     <!-- Logo -->
     <H1><IMG alt="ZoneCheck (batch mode)" src="HTML_PATH/img/logo.png"></H1>
@@ -185,7 +187,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
       </LI>
       <LI>correct list of secondary nameservers, so that if your
 	primary nameserver is temporarily unreachable, you will still
-	be visible on the internet;
+	be visible on the インターネット;
       <LI>check for mail delivery, so that you don't become the 
 	pray of spammer	and be 
 	<A href="http://www.mail-abuse.org/">blacklisted</A>
@@ -330,7 +332,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Apr  2 21:17:41 CEST 2003
+Last modified: Wed Apr  2 21:28:09 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

@@ -2,8 +2,8 @@
 <!-- $Id$ -->
  
 <!--                                                                  -->
-<!-- AUTHOR : Stephane D'Alu <sdalu@nic.fr>                           -->
-<!-- CREATED: 2002/10/01 13:58:17                                     -->
+<!-- AUTHOR   : Stephane D'Alu <sdalu@nic.fr>                         -->
+<!-- CREATED  : 2002/10/01 13:58:17                                   -->
 <!--                                                                  -->
 <!-- COPYRIGHT: AFNIC (c) 2003                                        -->
 <!-- CONTACT  : zonecheck@nic.fr                                      -->
@@ -16,8 +16,11 @@
 <!--                                                                  -->
 <!--                                                                  -->
 
+
 <HTML>
   <HEAD>
+    <META http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP">
+
     <LINK rel="stylesheet" href="HTML_PATH/style/zc.css"   type="text/css">
     <LINK rel="icon"       href="HTML_PATH/img/zc-fav.png" type="image/png">
 
@@ -35,66 +38,138 @@
 	  type="text/html"
 	  href="#help">
 
+    <LINK lang="en" title="Zonecheck"
+	  type="text/html"
+	  rel="alternate"
+	  hreflang="en"
+	  href="HTML_PATH/en/">
     <LINK lang="fr" title="Zonecheck"
 	  type="text/html"
 	  rel="alternate"
 	  hreflang="fr"
 	  href="HTML_PATH/fr/">
 
-    <TITLE>ZoneCheck in batch mode</TITLE>
+
+    <SCRIPT src="HTML_PATH/js/formvalidation.js" type="text/javascript"></SCRIPT>
+    <TITLE>Zone Check</TITLE>
   </HEAD>
 
   <BODY>
-    <P id="lang">Lang: EN / <A href="HTML_PATH/fr/batch.html">FR</A> / <A href="HTML_PATH/jp/batch.html">JP</A></P>
-    <P id="beta">BETA<BR>unstandardized template</P>
+    <P id="lang">Lang: <A href="HTML_PATH/en/">EN</A> / <A href="HTML_PATH/fr/">FR</A> / JP</P>
+    <P id="beta">BETA<BR>Help needed for translation</P>
 
     <!-- Logo -->
-    <H1><IMG alt="ZoneCheck (batch mode)" src="HTML_PATH/img/logo.png"></H1>
+    <H1 style="text-align: center;">
+      <IMG alt="ZoneCheck" src="HTML_PATH/img/logo.png"></H1>
 
-    <P>It is assumed that you are already familiar with <I>ZoneCheck</I>,
-      if not you are advised to try the <A href="form.html">single domain
-	version</A> of the form before using this batch mode.</P>
+    <!-- Propaganda -->
+    <P>The  「ZoneCheck」 program (freely available 
+      <A href="http://zonecheck.nic.fr/download/v2/">here</A>
+      for ダウンロード) performs several tests on your zone (ie:
+      domain) to ensure that it is correctly configured and can be
+      safely delegated, providing a certain quality to your domain (see the
+      <A href="#benefit">benefit</A> section).</P>
 
     <P>For detailed information on how to fill this form see the 
       <A href="#help">help</A> section.</P>
       
-    
+    <P>If you need to perform the <I>ZoneCheck</I> operation for several
+      domains, you can find the <A href="batch.html">batch</A> form more
+      convenient.</P>
 
-    <H2>Zone information</H2>
-Examples:
-    <PRE>DOM=afnic.fr
-DOM=nic.fr NS=ns1.nic.fr;ns2.nic.fr
-DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
-</PRE>
+    <!-- Warning about waiting time -->
+    <BLOCKQUOTE class="zc_warning">
+      <P>The time required to completely verify a zone can take
+      from 30 seconds から <B>5分間</B> まで depending on the network
+      speed of the server being accessed. 
+      If it takes more than a minute it generally means we are
+      encountering problems accessing your ネームセーバ
+      (configuration error, firewall, ...) and are waiting for timeout.</P>
+    </BLOCKQUOTE>
+    
     <!-- Form -->
-    <FORM method="POST" action="HTML_PATH/cgi-bin/zc.cgi">
-      <TEXTAREA name="batchdata" rows="10" cols="60"></TEXTAREA>
-      <P>
-	<INPUT type="submit" value=" Check! ">
-	<INPUT type="reset"  value=" Clear ">
-	
-	
+    <FORM name="zcform" method="POST" action="HTML_PATH/cgi-bin/zc.cgi">
+      <!-- Basic information -->
+      <H2>Zone information</H2>
+      <TABLE class="zc_domain">
+	  <TR class="zc_zone">
+	    <TD><IMG src="HTML_PATH/img/zone.png" alt="">ドメイン名</TD>
+	    <TD colspan="4">
+	      <INPUT name="zone" type="text" size="65" value=""></TD>
+	  </TR>
+
+	  <TR class="zc_ns_prim">
+	    <TD><IMG src="HTML_PATH/img/primary.png" alt="">プライマリー</TD>
+	    <TD><INPUT name="ns0"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IP</TD>
+	    <TD><INPUT name="ips0" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">セカンダリー</TD>
+	    <TD><INPUT name="ns1"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IP</TD>
+	    <TD><INPUT name="ips1" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">セカンダリー</TD>
+	    <TD><INPUT name="ns2"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IP</TD>
+	    <TD><INPUT name="ips2" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">セカンダリー</TD>
+	    <TD><INPUT name="ns3"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IP</TD>
+	    <TD><INPUT name="ips3" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">セカンダリー</TD>
+	    <TD><INPUT name="ns4"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IP</TD>
+	    <TD><INPUT name="ips4" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">セカンダリー</TD>
+	    <TD><INPUT name="ns5"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IP</TD>
+	    <TD><INPUT name="ips5" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">セカンダリー</TD>
+	    <TD><INPUT name="ns6"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IP</TD>
+	    <TD><INPUT name="ips6" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">セカンダリー</TD>
+	    <TD><INPUT name="ns7"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IP</TD>
+	    <TD><INPUT name="ips7" type="text" size=35 value=""></TD>
+	  </TR>
+      </TABLE>
+      <INPUT type="submit" value=" Check! " onClick="zc_formcheck(this.form)">
+      <INPUT type="button" value=" Clear "  onClick="zc_formclear(this.form)">
+
       <!-- Options -->
       <H2>Options</H2>
       <TABLE class="zc_options">
 	<TR class="zc_title"><TD colspan="4">Output</TD></TR>
 	  <TR>
 	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="intro"    value='t'>
+	    <TD><INPUT type="checkbox" name="intro"    value='t' checked>
 	      zone summary</TD>
-	    <TD><INPUT type="checkbox" name="explain"  value='t'>
+	    <TD><INPUT type="checkbox" name="explain"  value='t' checked>
 	      explanations</TD>
-	    <TD><INPUT type="checkbox" name="details"  value='t'>
+	    <TD><INPUT type="checkbox" name="details"  value='t' checked>
 	      details</TD>
-	  </TR>
-	  <TR>
-	    <TD></TD>
-	    <TD><INPUT type="checkbox" name="one"  value='t' checked>
-	      one liner</TD>
-	    <TD><INPUT type="checkbox" name="quiet"  value='t' checked>
-	      no titles</TD>
-	    <TD>
-	    </TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
@@ -107,19 +182,17 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
-	      <SELECT name="format">
+	    <TD><SELECT name="format">
 		<OPTION value="html" SELECTED> HTML
 		<OPTION value="text"         > Text
-	      </SELECT> format
-	    </TD>
-	    <TD>
-	      <SELECT name="lang">
+	      </SELECT>
+	      format</TD>
+	    <TD><SELECT name="lang">
 		<OPTION value=""           > Default
-		<OPTION value="en" SELECTED> English
-		<OPTION value="fr"         > Fran&ccedil;ais
-	      </SELECT> Language
-	    </TD>
+		<OPTION value="en" SELECTED> 英
+		<OPTION value="fr"         > フランス
+	      </SELECT>
+	      語</TD>
 	  </TR>	    
 
 	  <TR></TR>
@@ -137,22 +210,19 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="dontstop" value="nostop">
 	      don't stop on fatal</TD>
-	    </TD>
 	  </TR>
 
-	  
 	  <TR></TR>
-	  <TR class="zc_title"><TD colspan="4">Extra test performed</TD></TR>
+	  <TR class="zc_title"><TD colspan="4">Extra tests performed</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="chkmail" value='t' checked>
 	      mail delivery</TD>
 	    <TD><INPUT type="checkbox" name="chkzone" value='t' checked>
-	      zone content</TD>
+	      zone transfer</TD>
 	    <TD><INPUT type="checkbox" name="chkrir" value='t' checked>
-	      <ACRONYM title="Regional Internet Registry">RIR</ACRONYM> databases</TD>
+	      <ACRONYM title="Regional Internet Registry">RIR</ACRONYM>のデータベース</TD>
 	  </TR>
-
 
 	  <TR></TR>
 	  <TR class="zc_title"><TD colspan="4">Transport layer</TD></TR>
@@ -174,22 +244,20 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TR>
       </TABLE>
     </FORM>
-
     
+
     <!-- Propaganda -->
     <H2 id="benefit">Benefit</H2>
     <P> Among the tests performed you can find checking for: 
     <UL>
       <LI>authoritative nameserver for your zone, ensuring you will
-	be able to use your domain from outside your network.
-      </LI>
+	be able to use your domain from outside your network.</LI>
       <LI>correct list of secondary nameservers, so that if your
 	primary nameserver is temporarily unreachable, you will still
-	be visible on the internet;
+	be visible on the インターネット;</LI>
       <LI>check for mail delivery, so that you don't become the 
 	pray of spammer	and be 
-	<A href="http://www.mail-abuse.org/">blacklisted</A>
-      </LI>
+	<A href="http://www.mail-abuse.org/">blacklisted</A></LI>
     </UL></P>
 
 
@@ -203,18 +271,18 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    that you want to register).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Primary</TD>
+	  <TD class="zc_key">プライマリー</TD>
 	  <TD>The nameserver that is considered as primary (the one in 
 	    the SOA record if it is public).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Secondary</TD>
-	  <TD>The secondary nameservers (all the NS records associated
+	  <TD class="zc_key">セカンダリー</TD>
+	  <TD>セカンダリーネームセーバ (all the NS records associated
 	    with the zone, except for the one listed above).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">IPs</TD>
-	  <TD>List of IP addresses associated with the nameserver.
+	  <TD>List of IPアドレス addresses associated with the ネームセーバ.
 	    <UL>
 	      <LI>they are only required if they can't be resolved
 		(ie: they are in the zone that you want to register).</LI>
@@ -232,22 +300,14 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    the generated report</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">details</TD>
-	  <TD>Includes details (when the test failed) about 
-	    the culprit elements.</TD>
-	</TR>
-	<TR>
 	  <TD class="zc_key">explanations</TD>
 	  <TD>Includes an explanation (when the test failed) about 
 	    the purpose of the test and why you should fixed it.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">one liner</TD>
-	  <TD>Report information as a one liner (in fact 3 lines).</TD>
-	</TR>
-	<TR>
-	  <TD class="zc_key">no titles</TD>
-	  <TD>Don't use title for the different sections.</TD>
+	  <TD class="zc_key">details</TD>
+	  <TD>Includes details (when the test failed) about 
+	    the culprit elements.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">progress bar</TD>
@@ -265,11 +325,11 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	</TR>
 	<TR>
 	  <TD class="zc_key">format</TD>
-	  <TD>Select the format in which you want the report
+	  <TD>Select the format in which you want the report 
 	    (HTML or plain text).</TD>
 	</TR> 
 	<TR>
-	  <TD class="zc_key">language</TD>
+	  <TD class="zc_key">語</TD>
 	  <TD>Select the language that you want the report generated in.</TD>
 	</TR> 
 
@@ -306,9 +366,9 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    a <I>zone transfer</I>.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">RIR databases</TD>
-	  <TD>Check that IP addresses used are registered in the RIR
-	    databases</TD>
+	  <TD class="zc_key">RIRのデータベース</TD>
+	  <TD>Check that IPアドレス used are registered in the 
+	    RIRのデータベース</TD>
 	</TR>
 
 	<TR><TD class="zc_title" colspan="2">Options: Transport layer</TD></TR>
@@ -327,10 +387,10 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
     <!-- What / Who / When -->
     <HR>
-Release: $Name$ <BR>
+リリーズ: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Apr  2 21:17:41 CEST 2003
+Last modified: Wed Apr  2 21:37:05 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
