@@ -175,6 +175,7 @@ module Publisher
     </STYLE>
   </HEAD>
   <BODY>
+    <IMG class="zc_logo" src="/zc/img/logo.png">
 EOT
 @o.flush
 	end

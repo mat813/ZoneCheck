@@ -35,9 +35,9 @@ module Input
 	def parse(p)
 	    # Lang
 	    # => The message catalogue need to be replaced
-	    if @cgi["lang"].length == 1
+	    if @cgi.has_key?("lang")
 		begin
-		    lang = @cgi["lang"][0]
+		    lang = @cgi["lang"]
 		    if $mc.available?(ZC_LANG_FILE, lang)
 			$mc.clear
 			$mc.lang = lang
@@ -49,7 +49,7 @@ module Input
 
 	    # Batch
 	    if @cgi.has_key?("batchdata")
-		p.batch = Param::BatchData::new(@cgi["batchdata"][0])
+		p.batch = Param::BatchData::new(@cgi["batchdata"])
 	    end
 
 	    # Quiet, One
@@ -59,40 +59,42 @@ module Input
 
 	    # Verbose
 	    if @cgi.has_key?("verbose")
-		p.verbose = @cgi["verbose"].join(",")
+		p.verbose = @cgi.params["verbose"].join(",")
 	    else
 		p.verbose = "intro"             if @cgi.has_key?("intro")
 		p.verbose = "explain"           if @cgi.has_key?("explain")
 		p.verbose = "details"		if @cgi.has_key?("details")
-		p.verbose = @cgi["progress"][0] if @cgi.has_key?("progress")
+		p.verbose = @cgi["progress"]    if @cgi.has_key?("progress")
 	    end
 
 	    # Output
 	    if @cgi.has_key?("output")
-		p.output = @cgi["output"].join(",")
+		p.output = @cgi.params["output"].join(",")
 	    else
-		p.output = @cgi["format"].join(",")
+		p.output = @cgi["format"]
 	    end
 
 	    # Error
 	    if @cgi.has_key?("error")
-		p.error  = @cgi["error"].join(",")
+		p.error  = @cgi.params["error"].join(",")
 	    else
-		errorlvl  = @cgi["errorlvl"].delete_if { |e| e =~ /^\s*$/ }
+		errorlvl  = @cgi.params["errorlvl"].delete_if { |e| 
+		    e =~ /^\s*$/ }
 		errorstop = @cgi.has_key?("errorstop") ? "stop" : "nostop"
-		p.error  = (errorlvl + [ errorstop ]).join(",")
+		p.error   = (errorlvl + [ errorstop ]).join(",")
 	    end
 
 	    # Transp
 	    if @cgi.has_key?("transp")
-		p.transp = @cgi["transp"].join(",")
+		p.transp = @cgi.params["transp"].join(",")
 	    else
-		p.transp = (@cgi["transp3"] + @cgi["transp4"]).join(",")
+		p.transp = (@cgi.params["transp3"] + 
+			    @cgi.params["transp4"]).join(",")
 	    end
 
 	    # Category
 	    if @cgi.has_key?("category")
-		p.category = @cgi["category"].join(",")
+		p.category = @cgi.params["category"].join(",")
 	    else
 		cat = [ ]
 		cat << "mail"  if @cgi.has_key?("chkmail")
@@ -106,15 +108,15 @@ module Input
 	    
 	    # NS and IPs
 	    if @cgi.has_key?("ns")
-		p.domain.ns = @cgi["ns"].join(";")
+		p.domain.ns = @cgi.params["ns"].join(";")
 	    else
 		ns_list = [ ]
 		(0..MaxNS-1).each { |i|
-		    next unless cgi_ns = @cgi["ns#{i}"]
+		    next unless cgi_ns = @cgi.params["ns#{i}"]
 		    next unless cgi_ns.length > 0
 		    next if     (ns = cgi_ns[0]).empty?
 		    
-		    cgi_ips = @cgi["ips#{i}"]
+		    cgi_ips = @cgi.params["ips#{i}"]
 		    if cgi_ips.nil? || cgi_ips.length == 0 
 			ns_list << [ ns ]
 		    else
@@ -138,7 +140,7 @@ module Input
 
 	    # Zone/Domain
 	    # XXX: todo check!!!
-	    p.domain.name = @cgi["zone"]
+	    p.domain.name = @cgi.params["zone"]
 
 	    # Ok
 	    p

@@ -341,17 +341,18 @@ module Publisher
 
 	    # Create pixmap album
 	    @pixmap = PixmapAlbum::new
-	    @pixmap.put(:book_closed,	XPM::Book_closed)
-	    @pixmap.put(:book_open,	XPM::Book_open)
-	    @pixmap.put(:minipage,	XPM::Minipage)
-	    @pixmap.put(:element,	XPM::Element)
-	    @pixmap.put(:reference,	XPM::Reference)
-	    @pixmap.put(:info,		XPM::Info)
-	    @pixmap.put(:warning,	XPM::Warning)
-	    @pixmap.put(:fatal,		XPM::Fatal)
-	    @pixmap.put(:zone,		XPM::Zone)
-	    @pixmap.put(:primary,	XPM::Primary)
-	    @pixmap.put(:secondary,	XPM::Secondary)
+	    @pixmap.put(:book_closed,	ZCData::XPM::Book_closed)
+	    @pixmap.put(:book_open,	ZCData::XPM::Book_open)
+	    @pixmap.put(:minipage,	ZCData::XPM::Minipage)
+	    @pixmap.put(:element,	ZCData::XPM::Element)
+	    @pixmap.put(:reference,	ZCData::XPM::Reference)
+	    @pixmap.put(:detail,	ZCData::XPM::Detail)
+	    @pixmap.put(:info,		ZCData::XPM::Info)
+	    @pixmap.put(:warning,	ZCData::XPM::Warning)
+	    @pixmap.put(:fatal,		ZCData::XPM::Fatal)
+	    @pixmap.put(:zone,		ZCData::XPM::Zone)
+	    @pixmap.put(:primary,	ZCData::XPM::Primary)
+	    @pixmap.put(:secondary,	ZCData::XPM::Secondary)
 
 
 	    # Create initial windows
@@ -541,7 +542,7 @@ module Publisher
 		tbl = Gtk::Table::new(0, 2, false)
 		tbl.set_col_spacings(5)
 		tbl.set_row_spacings(2)
-		img = Gtk::Image::new(*self.pixmap[:reference])
+		img = Gtk::Image::new(*self.pixmap[:detail])
 		lbl = Gtk::Label::new(str)
 		lbl.set_alignment(0, 0.5)
 		tbl.attach(img, 0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK)

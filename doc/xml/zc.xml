@@ -3,7 +3,6 @@
  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" 
 [
 <!ENTITY version "0.01">
-<!ENTITY supercopy "SUPERCOPYRIGHT &copy;&reg;">
 <!ENTITY faq     SYSTEM "common/faq.xml">
 <!ENTITY config  SYSTEM "common/config.xml">
 <!ENTITY install SYSTEM "common/install.xml">
@@ -22,7 +21,7 @@
       <holder role="mailto:nic@nic.fr">AFNIC</holder>
     </copyright>
     <legalnotice>
-      <para>This legal mumbo jumbo will stop evil. It even has &supercopy;.</para>
+      <para>This legal mumbo jumbo will stop evil.</para>
     </legalnotice>
 
     <releaseinfo>ZORG</releaseinfo>

@@ -17,6 +17,7 @@ require 'thread'
 require 'gtk2'
 require 'ext/gtk'
 require 'data/xpm'
+require 'data/logo'
 
 Gtk.init
 
@@ -317,9 +318,9 @@ module Input
 		make_pixmap = Proc::new { |pixmap_data|
 		    Gdk::Pixmap::create_from_xpm_d(winroot, nil, pixmap_data) 
 		}
-		pix_zone = make_pixmap.call(Publisher::XPM::Zone)
-		pix_prim = make_pixmap.call(Publisher::XPM::Primary)
-		pix_sec  = make_pixmap.call(Publisher::XPM::Secondary)
+		pix_zone = make_pixmap.call(ZCData::XPM::Zone)
+		pix_prim = make_pixmap.call(ZCData::XPM::Primary)
+		pix_sec  = make_pixmap.call(ZCData::XPM::Secondary)
 
 		# Localisation
 		l10n_check		= $mc.get("iface_label_check")
@@ -626,14 +627,26 @@ module Input
 
 		# Signal
 		about_mitem.signal_connect("activate") {
+		    logo = Gdk::Pixmap::create_from_xpm_d(Gdk::Window::default_root_window, nil, ZCData::XPM::Logo)
+		    
 		    txt  = "Version: #{$zc_version}\n"
 		    txt += "Maintainer: #{ZC_MAINTAINER}"
 
-		    about = Gtk::MessageDialog::new(@window, 
-					 Gtk::MessageDialog::MODAL,
-					 Gtk::MessageDialog::INFO,
-					 Gtk::MessageDialog::BUTTONS_OK, txt)
-		    about.set_title("About")
+#		    about = Gtk::MessageDialog::new(@window, 
+#					 Gtk::MessageDialog::MODAL,
+#					 Gtk::MessageDialog::INFO,
+#					 Gtk::MessageDialog::BUTTONS_OK, txt)
+
+		    about = Gtk::Dialog::new("About", @window,
+                         Gtk::Dialog::MODAL | Gtk::Dialog::DESTROY_WITH_PARENT,
+                         [Gtk::Stock::OK, Gtk::Dialog::RESPONSE_ACCEPT])
+
+
+		    about.vbox.pack_start(Gtk::Image::new(*logo), false, true)
+		    about.vbox.pack_start(Gtk::Label::new(txt), false, true)
+		    about.vbox.show_all
+#		    about.child = hb
+#		    about.set_title("About")
 		    about.run
 		    about.destroy
 		}

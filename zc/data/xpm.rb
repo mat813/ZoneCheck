@@ -14,7 +14,7 @@
 #
     
 
-module Publisher
+module ZCData
     module XPM
 	Book_open = [
 	    "16 16 4 1",

@@ -22,7 +22,8 @@
   </HEAD>
 
   <BODY>
-    <H1>ZoneCheck</H1>
+    
+    <H1><IMG alt="ZoneCheck" src="/zc/img/logo.png"></H1>
 
     <P>The ZoneCheck program (freely available <A href="toto">here</A>
       for download) performs several tests on your zone (or
@@ -135,10 +136,24 @@
       </TABLE>
       <P>
 
+
+
 	<SCRIPT>
+	  function validform(form) {
+	  if (form["zone"].value.length == 0) {
+	  alert("Zone Empty")
+	  return 0
+	  } else {
+	  return 1
+	  }
+	  }
+
 	  function toto(form) {
 	  form.action=""
+	  form.method="get"
+	  if (validform(form)) {
 	  form.submit()
+	  }
 	  }
 	</SCRIPT>
 
@@ -392,7 +407,7 @@
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Dec 27 13:37:03 CET 2002
+Last modified: Tue Jan 14 18:17:36 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>
