@@ -54,8 +54,16 @@ class Test
 
 	    def xpl
 		if @xpl 
-		then @xpl
-		else is_error? ? nil : $mc.get("#{@testname}_explain")
+		    @xpl
+		elsif is_error?
+		    nil
+		else
+		    x = $mc.get("#{@testname}_explain")
+		    if x == "[none]"
+			nil
+		    else
+			x
+		    end
 		end
 	    end
 

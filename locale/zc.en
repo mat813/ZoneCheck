@@ -96,14 +96,17 @@ explain : [ref]: IETF IDN project (internationalized domain names)\nThe double d
 [chk_one_ns]
 testname: one nameserver for the domain 
 error   : At least one nameserver is requiered
+explain : [none]
 
 [chk_several_ns]
 testname: at least two nameserver for the domain
 error   : At least two nameserver are necessary
+explain : [none]
 
 [chk_distinct_ip]
 testname: identical addresses
 error   : All addresses should be distinct
+explain : [none]
 
 [chk_same_net]
 testname: nameserver addresses on same subnet
@@ -113,6 +116,7 @@ explain : [ref]: AFNIC advise\n  To avoid loosing all connectivity with the auto
 [chk_private_ip]
 testname: address in a private network
 error   : Address is part of a private subnet
+explain : [none]
 
 
 
@@ -123,14 +127,17 @@ error   : Address is part of a private subnet
 [chk_icmp]
 testname: ICMP answer
 error   : Host doesn't seems to be alive (firewall?)
+explain : [none]
 
 [chk_udp]
 testname: UDP connectivity
 error   : Server doesn't listen/answer for UDP protocol
+explain : [none]
 
 [chk_tcp]
 testname: TCP connectivity
 error   : Server doesn't listen/answer for TCP protocol
+explain : [none]
 
 
 
@@ -141,14 +148,17 @@ error   : Server doesn't listen/answer for TCP protocol
 [chk_root_servers]
 testname: root servers list present
 error   : Root Servers are not available
+explain : [none]
 
 [chk_root_servers_ns_vs_iana]
 testname: root servers list identical to IANA
 error   : Root Servers list is not coherent with IANA
+explain : [none]
 
 [chk_root_servers_ip_vs_iana]
 testname: root servers addresses identical to IANA
 error   : Root Servers IP addresses are not coherent with IANA
+explain : [none]
 
 
 
@@ -175,11 +185,13 @@ explain = loopback_xpl
 [chk_soa]
 testname: SOA record present
 error   : No SOA record found on server
+explain : [none]
 
 
 [chk_soa_auth]
 testname: SOA authoritative answer
 error   : The SOA answer is not authoritative
+explain : [none]
 
 
 [chk_soa_sntx_contact_at]
@@ -190,6 +202,7 @@ explain : [ref]: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are converte
 [chk_soa_sntx_master]
 testname: illegal characters in SOA master nameserver
 error   : The SOA master nameserver contains illegal characters
+explain : [none]
 
 [chk_soa_serial_fmt]
 testname: serial number of the form YYYYMMDDnn
@@ -199,6 +212,7 @@ explain : [ref]: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year,
 [chk_soa_refresh_6h]
 testname: SOA 'refresh' at least 6 hours
 error   : The 'refresh' period should be at least 6 hours
+explain : [none]
 
 [chk_soa_retry_refresh]
 testname: SOA 'retry' lower than 'refresh'
@@ -208,6 +222,7 @@ explain : [ref]: IETF RFC1912 (p.4)\nThe 'retry' value is typically a fraction o
 [chk_soa_retry_1h]
 testname: SOA 'retry' at least 1 hour
 error   : The 'retry' period should be at least 1 hour
+explain : [none]
 
 [chk_soa_expire_7d]
 testname: SOA 'expire' at least 7 days
@@ -217,6 +232,7 @@ explain : [ref]: IETF RFC1912 (p.4)\nAfter a zone is expired a secondary will st
 [chk_soa_expire_refresh]
 testname: SOA 'expire' at least 7 times 'refresh'
 error   : The 'expire' period must be at least 7 times greater than 'refresh'
+explain : [none]
 
 [chk_soa_minimum_24h]
 testname: SOA 'minimum' at least 24 hours
@@ -226,6 +242,7 @@ explain : [ref]: IETF RFC1912 (p.4)\n  The default TTL for resource records: how
 [chk_soa_ttl]
 testname: SOA 'TTL' equal 'minimum'
 error   : The 'TTL' should be equal to the 'minimum'
+explain : [none]
 
 [chk_soa_ns_cname]
 testname: SOA nameserver is not an alias
@@ -235,6 +252,7 @@ explain = ns_cname_xpl
 [chk_soa_vs_any]
 testname: coherence between SOA and ANY records
 error   : SOA and ANY request disagree
+explain : [none]
 
 
 
@@ -245,13 +263,17 @@ error   : SOA and ANY request disagree
 [chk_ns]
 testname: NS record present
 error   : No NS record found on server
+explain : [none]
 
 [chk_ns_auth]
 testname: NS authoritative answer
 error   : The NS answer is not authoritative
+explain : [none]
 
 [chk_ns_sntx]
 testname: NS name has a valid domain/hostname syntax
+error   : NS name syntax is not correct
+explain : [none]
 
 [chk_ns_cname]
 testname: NS is not an alias
@@ -261,14 +283,17 @@ explain = ns_cname_xpl
 [chk_ns_vs_any]
 testname: coherence between NS and ANY records
 error   : NS and ANY request disagree
+explain : [none]
 
 [chk_ns_ip]
 testname: NS can be resolved
 error   : The IP addresses of the zone nameserver can't be found
+explain : [none]
 
 [chk_ns_reverse]
 testname: Nameserver IP reverse
 error   : Can't find reverse for the nameserver IP address
+explain : [none]
 
 
 
@@ -284,9 +309,12 @@ explain : [ref]: IETF RFC1912 (p.7)\nPut MX records even on hosts that aren't in
 [chk_mx_auth]
 testname: MX authoritative answer
 error   : The MX answer is not authoritative
+explain : [none]
 
 [chk_mx_sntx]
 testname: MX syntax is valid for an hostname
+error   : MX syntax is not correct
+explain : [none]
 
 [chk_mx_cname]
 testname: MX is not an alias
@@ -296,9 +324,12 @@ explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by 
 [chk_mx_ip]
 testname: MX can be resolved
 error   : The IP address of the Mail eXchanger can't be resolved
+explain : [none]
 
 [chk_mx_vs_any]
 testname: coherence between MX and ANY records
+error   : MX and ANY request disagree
+explain : [none]
 
 
 
@@ -309,10 +340,12 @@ testname: coherence between MX and ANY records
 [chk_given_nsprim_vs_soa]
 testname: given primary nameserver is primary
 error   : The primary nameserver doesn't match the given one
+explain : [none]
 
 [chk_given_ns_vs_ns]
 testname: correctness of given nameserver list
 error   : The nameserver list doesn't match the given one
+explain : [none]
 
 
 
@@ -333,7 +366,9 @@ explain = openrelay_xpl
 [chk_mail_postmaster]
 testname: 'postmaster' email address for the domain is valid
 error   : The postmaster can't be contacted by email
+explain : [none]
 
 [chk_mail_hostmaster]
 testname: hostmaster email address is valid
 error   : The hostmaster can't be contacted by email
+explain : [none]
