@@ -231,6 +231,12 @@ Output plain text.
 .TP
 \fBhtml\fR, \fBh\fR
 Output HTML.
+.TP
+\fBxml\fR, \fBx\fR
+Output XML. (experimental)
+.TP
+\fBgtk\fR, \fBg\fR
+Use a GTK window to display the result. (Requires GTK binding)
 .
 .IP \fINOTE:\fB
 The following set are mutually exclusive: [\fBbyseverity\fR|\fBbyhost\fR] and [\fBtext\fR|\fBhtml\fR].
@@ -309,7 +315,7 @@ the program.
 .I ZC_INPUT
 The variable as the same effect as the undocumented \fBINPUT\fR parameter,
 it allows to chose the input interface used by \fIZoneCheck\fR, the currently
-supported values are: \fBcli\fR, \fBcgi\fR, \fBgtk\fR (requires GTK/ruby binding)
+supported values are: \fBcli\fR, \fBcgi\fR, \fBgtk\fR (requires GTK/ruby binding).
 .
 .SH "EXIT STATUS"
 The following exit status can be reported by \fIZoneCheck\fR:
@@ -340,25 +346,34 @@ Contains a website sample for the web interface.
 .LP
 Test the 'afnic.fr.' domain with IPv6 only connectivity, print
 a summary information about the tested domain as well as explanations
-and details of failed tests
+and details of failed tests.
 .RS
 .nf
-\fBzc.rb -6 --verbose=i,x,d afnic.fr.\fP
+\fBzonecheck -6 --verbose=i,x,d afnic.fr.\fP
 .fi
 .RE
 .LP
 Work in batch mode, where domains are read from stdin, a progress bar
-indicates how many tests remain, and only short report is written
+indicates how many tests remain, and only short report is written.
 .RS
 .nf
-\fBzc.rb -v c -1 -B -\fP
+\fBzonecheck -v c -1 -B -\fP
 .fi
 .RE
 .LP
-Ask for the 'error' message associated with the test 'chk_soa'
+Ask for the 'error' message associated with the test 'chk_soa'.
 .RS
 .nf
-\fBzc.rb --testdesc error -T chk_soa\fP
+\fBzonecheck --testdesc error -T chk_soa\fP
+.fi
+.RE
+.LP
+If you want to test your domain, you will certainly like to use these
+parameters (the use of IPv4 as been forced because now people have
+computer with IPv6 stack but very few have the IPv6 connectivity).
+.RS
+.nf
+\fBzonecheck -4 -vi,x,d,c my_domain_name\fP
 .fi
 .RE
 .
