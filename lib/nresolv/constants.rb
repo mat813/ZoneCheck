@@ -60,7 +60,7 @@ class NResolv
 	    begin
 		@@hash_by_name[self].fetch(name)
 	    rescue IndexError
-		raise IndexError, "key #{name} not found in #{self}"
+		raise IndexError, "key name '#{name}' not found in #{self}"
 	    end
 	end
 	
@@ -68,7 +68,7 @@ class NResolv
 	    begin
 		@@hash_by_value[self].fetch(value)
 	    rescue IndexError
-		raise IndexError, "key #{name} not found in #{self}"
+		raise IndexError, "key value '#{value}' not found in #{self}"
 	    end
 	end
 	
