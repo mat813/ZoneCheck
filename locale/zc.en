@@ -266,6 +266,7 @@ explain : Ref: IETF RFC974\nMX records shall not point to an alias defined by a 
 
 [chk_mx_ip]
 testname: MX can be resolved
+error   : The IP address of the Mail eXchanger can't be resolved
 
 [chk_mx_vs_any]
 testname: coherence between MX and ANY records

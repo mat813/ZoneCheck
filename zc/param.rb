@@ -36,6 +36,7 @@ class Param
 		[ "--batch",	"-B",   GetoptLong::NO_ARGUMENT       ],
 		[ "--config",	"-c",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--testdir",	"-T",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--dnsonly",  "-D",   GetoptLong::NO_ARGUMENT       ],
 		[ "--resolver",	"-r",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--ns",	"-n",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--ipv4",	"-4",	GetoptLong::NO_ARGUMENT       ],
@@ -45,7 +46,9 @@ class Param
 		[ "--error",	"-e",	GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--transp",	"-t",	GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--verbose",	"-v",   GetoptLong::OPTIONAL_ARGUMENT ],
-		[ "--output",	"-o",   GetoptLong::REQUIRED_ARGUMENT ] ]
+		[ "--output",	"-o",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--makecoffee",       GetoptLong::NO_ARGUMENT       ],
+		[ "--coffee",           GetoptLong::NO_ARGUMENT       ] ]
         end
 
 	def opts_analyse
@@ -59,6 +62,7 @@ class Param
 		when "--batch"     then @p.batch	 = true
 		when "--config"    then @p.configfile    = arg
 		when "--testdir"   then @p.testdir       = arg
+		when "--dnsonly"   then @p.dnsonly	 = true
 		when "--resolver"  then @p.resolver      = arg
 		when "--ns"        then @p.domain.ns     = arg
 		when "--ipv6"      then @p.ipv6          = true
@@ -69,6 +73,16 @@ class Param
 		when "--transp"    then @p.transp        = arg
 		when "--verbose"   then @p.verbose	 = arg
 		when "--output"    then @p.output        = arg
+		when "--makecoffee"
+		    print <<EOT
+#{PROGNAME}: I'm not currently designed for that task.
+\tBut if you really want this option added in future version, 
+\tyou should see with the maintainer: \"#{ZC_MAINTAINER}\".
+EOT
+		    exit EXIT_OK
+		when "--coffee"
+		    puts "#{PROGNAME}: I'll take one too. thank you."
+		    exit EXIT_OK
 		end
 	    end
 	end
@@ -103,8 +117,9 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     -h, --help          Show this message
     -V, --version       Display version and exit
     -B, --batch         Batch mode (read from stdin)
-    -T, --testdir       Location of the directory holding tests
     -c, --config        Specify location of the configuration file
+    -T, --testdir       Location of the directory holding tests
+    -D, --dnsonly       Only perform DNS related tests
     -r, --resolver      Resolver to use for guessing 'ns' information
     -n, --ns            List of nameservers for the domain
     -1, --one           Only primite the most relevant message
@@ -391,7 +406,9 @@ EOT
 
     attr_reader :batch
     attr_writer :batch
-
+    
+    attr_reader :dnsonly
+    attr_writer :dnsonly
 
     attr_reader :domain
     attr_writer :domain

@@ -169,10 +169,15 @@ class Test
 	! @cm[ip].cname(name).nil?
     end
 
-    def is_resolvable?(ip, name, domain)
-	! (( name.in_domain?(domain)   && @cm[ip].addresses(name).empty?)   ||
-	   ( @cm[ip].rec(@domain_name) && @cm[ip].addresses(name).empty?)   ||
-	   (!@cm[ip].rec(@domain_name) && @cm[nil].addresses(name).empty?))
+    def is_resolvable?(name, ip=nil, domain=@domain_name)
+#	puts "IP=#{ip} DOM=#{domain} NAME=#{name}"
+#	puts  name.in_domain?(domain)
+#	puts  @cm[ip].rec(@domain_name) && !@cm[ip].addresses(name).empty?
+#	puts !@cm[ip].rec(@domain_name) && !@cm[nil].addresses(name).empty?
+	
+	(( name.in_domain?(domain))                                        ||
+	 ( @cm[ip].rec(@domain_name) && !@cm[ip].addresses(name).empty?)   ||
+	 (!@cm[ip].rec(@domain_name) && !@cm[nil].addresses(name).empty?))
     end
 
 

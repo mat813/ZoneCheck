@@ -11,6 +11,9 @@
 # CONTRIBUTORS:
 #
 #
+# HISTORIC:
+#  - First version of ZoneCheck was developped by Erwan Mas
+#
 
 $LOAD_PATH << "../lib/"
 
@@ -29,6 +32,8 @@ ZC_VERSION	= (Proc::new {
 		       
 		       n || "<unreleased>"
 		   }).call
+ZC_AUTHOR	= "Stephane D'Alu <sdalu@nic.fr>"
+ZC_MAINTAINER   = "Stephane D'Alu <sdalu@nic.fr>"
 PROGNAME	= File.basename($0)
 
 $zc_version = ZC_VERSION
@@ -179,10 +184,12 @@ class ZoneCheck
     end
 
     def run
+	ok = true
+
 	if ! @param.batch
 	    @param.autoconf
 	    cm = CacheManager::create(Test::DefaultDNS, @param.client)
-	    success = zc(cm)
+	    ok = zc(cm)
 	else
 	    cm = CacheManager::create(Test::DefaultDNS, @param.client)
 	    $stdin.each_line { |line|
@@ -193,25 +200,28 @@ class ZoneCheck
 		    exit(EXIT_ERROR)
 		end
 		@param.autoconf
-		zc(cm)
+		ok = false unless zc(cm)
 	    }
 	end
     end
 
-    def start
-	configure
-	load_tests_implementation
-	init_testmanager
-	load_testlist
-	run
-	destroy
+    def start 
+	begin
+	    configure
+	    load_tests_implementation
+	    init_testmanager
+	    load_testlist
+	    run
+	ensure
+	    destroy
+	end
     end
 end
 
 
-ZoneCheck::new.start if ! $zc_slavemode
-
 #
-# EXIT
 #
-#exit success ? EXIT_OK : EXIT_FAILED
+#
+if ! $zc_slavemode
+    exit ZoneCheck::new.start ? EXIT_OK : EXIT_FAILED
+end
