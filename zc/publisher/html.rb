@@ -165,7 +165,7 @@ module Publisher
     <SCRIPT type="text/javascript">
       zc_publish_path = "#{@publish_path}"
     </SCRIPT>
-    <SCRIPT src="#{@publish_path}/progress.js" type="text/javascript">
+    <SCRIPT src="#{@publish_path}/progress.js"  type="text/javascript">
     </SCRIPT>
     <SCRIPT src="#{@publish_path}/popupmenu.js" type="text/javascript">
     </SCRIPT>

@@ -49,10 +49,11 @@ module CheckExtra
 	def mhosttest(mdom, mhost)
 	    # Mailhost and IP 
 	    mip   = addresses(mhost, bestresolverip(mhost))[0]
-	    raise "No mail server for domain #{mdom}" if mip.nil?
-
 #	    puts "DOM=#{mdom}   HOST=#{mhost}   IP=#{mip}"
 #	    puts "DEST=#{@fake_dest}  FROM=#{@fake_from}  USER=#{@fake_user}"
+
+	    raise "No host servicing mail for domain #{mdom}" if mip.nil?
+
 	    # Execute test on mailhost
 	    mrelay = nil
 	    begin

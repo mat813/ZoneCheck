@@ -210,9 +210,8 @@ class Param
 	def get_resolver_ips(name, prim=false)
 	    if name.nil? || !((name == @name) || (name.in_domain?(@name)))
 		nil
-	    elsif (name.depth - @name.depth) > 1
-		puts name
-		raise RuntimeError, "XXX: correct behaviour not decided"
+#	    elsif (name.depth - @name.depth) > 1
+#		raise RuntimeError, "XXX: correct behaviour not decided (#{name})"
 	    else
 		if prim
 		then ns[0][1]

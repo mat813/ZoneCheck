@@ -27,7 +27,8 @@
 
   <BODY>
     <!-- Logo -->
-    <H1><IMG style="float:left;" alt="ZoneCheck" src="/zc/img/logo.png"></H1>
+    <H1 style="text-align: center;">
+      <IMG alt="ZoneCheck" src="/zc/img/logo.png"></H1>
 
     <!-- Propaganda -->
     <P>The ZoneCheck program (freely available 
@@ -313,6 +314,7 @@
 	    </UL>
 	  </TD>
 	</TR>
+
 	<TR><TD class="zc_title" colspan="2">Options: Output</TD></TR>
 	<TR>
 	  <TD class="zc_key">zone summary</TD>
@@ -323,14 +325,6 @@
 	  <TD class="zc_key">details</TD>
 	  <TD>Includes details (when the test failed) about 
 	    the culprit elements.</TD>
-	</TR>
-	<TR>
-	  <TD class="zc_key">one liner</TD>
-	  <TD>Report information as a one liner (in fact 3 lines).</TD>
-	</TR>
-	<TR>
-	  <TD class="zc_key">no titles</TD>
-	  <TD>Don't use title for the different sections.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">explanations</TD>
@@ -351,6 +345,16 @@
 	  <TD class="zc_key">nothing</TD>
 	  <TD>Don't display information about the test progression.</TD>
 	</TR>
+	<TR>
+	  <TD class="zc_key">format</TD>
+	  <TD>Select the format in which you want the report 
+	    (HTML or plain text).</TD>
+	</TR> 
+	<TR>
+	  <TD class="zc_key">language</TD>
+	  <TD>Select the language that you want the report generated in.</TD>
+	</TR> 
+
 	<TR><TD class="zc_title" colspan="2">Options: Error report</TD></TR>
 	<TR>
 	  <TD class="zc_key">default error</TD>
@@ -369,6 +373,7 @@
 	  <TD class="zc_key">stop on first fatal</TD>
 	  <TD>The report stop on the first fatal error.</TD>
 	</TR>
+
 	<TR><TD class="zc_title" colspan="2">Options: Extra tests performed</TD></TR>
 	<TR>
 	  <TD class="zc_key">mail delivery</TD>
@@ -385,6 +390,7 @@
 	  <TD>Check that IP addresses used are registered in the RIPE
 	    database (if they belong to RIPE)</TD>
 	</TR>
+
 	<TR><TD class="zc_title" colspan="2">Options: Transport layer</TD></TR>
 	<TR>
 	  <TD class="zc_key">IPv4, IPv6</TD>
@@ -404,7 +410,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Feb 18 20:53:01 CET 2003
+Last modified: Thu Feb 20 17:43:51 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

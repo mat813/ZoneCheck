@@ -17,31 +17,31 @@
  
 BODY { 
     background: white;
+    color: #333333; 
     font-family: Arial, Helvetica, sans-serif;
 }
 
 P { 
-    font-style: normal;  
     font-size: 12px; 
-    color: #333333; 
     text-align: justify;
 }
 
-TD {  
-     font-size: 12px; color: #333333
+TD, LI, UL {  
+    font-size: 12px;
 }
 
-li {  
- font-size: 12px; color: #333333}
-
-ul {  
- font-size: 12px; color: #333333}
 
 H1 {  
-font-size: 18px; color: #f7ad31; font-weight: bold}
+    font-size: 18px;
+    color: #f7ad31;
+    font-weight: bold;
+}
 
 H2 {  
-font-size: 14px; color: #1341AF; font-weight: bold}
+    font-size: 14px;
+    color: #1341AF;
+    font-weight: bold;
+}
 
 H3 {
     font-size: 12px; 
@@ -81,8 +81,6 @@ UL.zc_ref {
 
     padding: 8px 8px 8px 2em; 
 
-    color: #333333; 
-    font-weight: normal;
     border: 2px solid #f7ad31;
 }
 
@@ -98,8 +96,6 @@ UL.zc_details {
 
     padding: 8px 8px 8px 2em; 
 
-    color: #333333; 
-    font-weight: normal;
     border: 2px solid #f7ad31;
 }
 
@@ -190,7 +186,7 @@ TABLE.zc_domain TD {
 }
 
 TR.zc_zone { 
-    background-color: #ddeeee;
+    background-color: #e6ebf0;
     font-weight: bold;
 }
 
@@ -223,12 +219,12 @@ TABLE.zc_options TR.zc_title {
 */
 
 TABLE.zc_help { 
-    border: solid black;
+    border: solid #333333;
     border-collapse: collapse; 
 }
 
 TABLE.zc_help TD { 
-    border-color: black;
+    border-color: #333333;
 }
 
 TABLE.zc_help TD.zc_key {
@@ -249,7 +245,7 @@ TABLE.zc_popup {
 }
 
 TABLE.zc_popup TR.zc_title { 
-    background-color: #1341af !important;
+    background-color: #1341af;
 }
 
 TABLE.zc_popup TR.zc_title TD { 

@@ -29,6 +29,7 @@ version = 2.0.0
 
 	check for differences between IE/Mozilla/...
 	reorganize javascript (espetially for localisation)
+	finish full configuration of the html_publish_path
 
 version = 2.1.0
         Test whois for fr (++++)
