@@ -431,6 +431,7 @@ explain : [none]
 
 version: PROGNAME: version %s
 
+[param_cli]
 usage: \
 usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     -q, --quiet         Don't display extra titles\n\

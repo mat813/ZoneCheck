@@ -36,3 +36,6 @@ NOT ABLE TODO?
 
 2002-10-18 sdalu@nic.fr
 	Implement XML param and XML publisher
+
+2002-10-18 sdalu@nic.fr
+	Unbroke nearly everything due to the recent change in param

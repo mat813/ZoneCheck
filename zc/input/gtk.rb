@@ -21,7 +21,7 @@ class Param
 	##
 	##
 	class Option < Gtk::VBox
-	    def initialize
+	    def initialize(main)
 		super()
 		l10n_transport = "Transport"
 		l10n_error = "Error"
@@ -56,7 +56,7 @@ class Param
 		@tst_zcnt = Gtk::CheckButton::new($mc.get("iface_test_zone"))
 		@tst_ripe = Gtk::CheckButton::new($mc.get("iface_test_ripe"))
 		@db_ripe  = Gtk::Entry::new
-		@db_ripe.set_text("whois.ripe.net")
+		@db_ripe.set_text(main.config.const("ripe_database"))
 		@tst_mail.active = @tst_zcnt.active = @tst_ripe.active = true
 
 		tbl = Gtk::Table::new(2, 3, true)
@@ -114,8 +114,85 @@ class Param
 	##
 	##
 	##
+	class Tests < Gtk::VBox
+	    def initialize(main)
+		super()
+		tbl = Gtk::Table::new(1, 3)
+		i = 0
+		
+		@test = []
+		
+		main.config.test_list.each { |testname|
+		    l10n_testname = $mc.get("#{testname}_testname")
+		    lbl = Gtk::Label::new(l10n_testname).set_alignment(0, 0.5)
+		    tbl.attach(lbl, 1, 2, i, i+1, Gtk::EXPAND | Gtk::FILL)
+
+		    lbl = Gtk::Label::new(main.config.category(testname)).set_alignment(0, 0.5)
+		    tbl.attach(lbl, 2, 3, i, i+1, Gtk::SHRINK | Gtk::FILL)
+
+		    @test[i] = Gtk::CheckButton::new(testname)
+		    @test[i].active = true
+		    tbl.attach(@test[i], 0, 1, i, i+1, Gtk::SHRINK | Gtk::FILL)
+		    i += 1
+		}
+
+		scrolled_window = Gtk::ScrolledWindow.new
+#		scrolled_window.border_width(10)
+		scrolled_window.set_policy(Gtk::POLICY_NEVER,
+					   Gtk::POLICY_AUTOMATIC)
+
+#		box2 = Gtk::VBox.new(false, 0)
+#		box2.border_width(10)
+		scrolled_window.add_with_viewport(tbl);
+		tbl.set_focus_vadjustment(scrolled_window.get_vadjustment)
+#		box2.pack_start(tbl)
+		
+		pack_start(scrolled_window, true, true, 0)
+
+	    end
+	end
+
+	##
+	##
+	##
+	class Constants < Gtk::VBox
+	    def initialize(main)
+		super()
+		
+		@const = []
+		
+		# Build constant table
+		tbl = Gtk::Table::new(1, 2)
+		i = 0
+		main.config.const_list.each { |name|
+		    lbl       = Gtk::Label::new(name).set_alignment(0, 0.5)
+		    @const[i] = Gtk::Entry::new
+		    @const[i].set_text(main.config.const(name))
+
+		    tbl.attach(lbl,       0, 1, i, i+1, Gtk::SHRINK|Gtk::FILL)
+		    tbl.attach(@const[i], 1, 2, i, i+1, Gtk::EXPAND|Gtk::FILL)
+		    i += 1
+		}
+
+		# Scrolling
+		scrolled_window = Gtk::ScrolledWindow.new
+		scrolled_window.set_policy(Gtk::POLICY_NEVER,
+					   Gtk::POLICY_AUTOMATIC)
+		scrolled_window.add_with_viewport(tbl);
+		tbl.set_focus_vadjustment(scrolled_window.get_vadjustment)
+		
+		#
+		pack_start(scrolled_window)
+
+	    end
+	end
+
+
+	##
+	##
+	##
 	class Input < Gtk::VBox
-	    def initialize(param, sb)
+	    def initialize(param, config, sb)
 		super()
 		
 		# 
@@ -188,7 +265,7 @@ class Param
 			@p.domain.clear
 			@p.domain.name = domain
 			@p.domain.ns   = self.ns
-			@p.domain.autoconf(@p.dns)
+			@p.domain.autoconf(@p.resolver.local)
 			self.ns = @p.domain.ns
 			sb.push(1, "Name servers and/or addresses guessed")
 		    rescue => e
@@ -253,20 +330,44 @@ class Param
 	    end
 	end
 
+	def opts_definition
+	    [   [ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ],
+		[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
+		[ "--debug",	"-d",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--config",	"-c",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--testdir",	        GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--resolver",	"-r",   GetoptLong::REQUIRED_ARGUMENT ] ]
+        end
 
+	def opts_analyse
+	    @opts.each do |opt, arg|
+		case opt
+		when "--help"      then usage(EXIT_USAGE, $stdout)
+		when "--version"
+		    puts $mc.get("param_version").gsub("PROGNAME", PROGNAME) % 
+			[ $zc_version ]
+		    exit EXIT_OK
+		when "--debug"     then $dbg.level	    = arg
+		when "--config"    then @p.fs.cfgfile       = arg
+		when "--testdir"   then @p.fs.testdir       = arg
+		when "--resolver"  then @p.resolver.local   = arg
+		end
+	    end
+	end
 
 	
 	def initialize
 	    @p    = Param::new
+	    @opts = GetoptLong.new(* opts_definition)
+	    @opts.quiet = true
 	    Thread::new { Gtk::main() }
 	    @q = Queue::new
 	end
 	
-	def interact(param)
-	    true
-	end
+	attr_reader :config
 
-	def parse
+	def interact(config)
+	    @config = config
 	    window = Gtk::Window::new
 	    window.signal_connect("delete_event") {|*args| delete_event(*args) }
 	    window.signal_connect("destroy") {|*args| destroy(*args) }
@@ -279,11 +380,11 @@ class Param
 	    statusbar.push(1, "Toto")
 
 
-	    input_dom = Input::new(@p, statusbar)
-	    options_note = Option::new
+	    input_dom = Input::new(@p, config, statusbar)
+	    options_note = Option::new(self)
 	    info_note = Gtk::Frame::new
-	    
-
+	    tests_note = Tests::new(self)
+	    const_note = Constants::new(self)
 
 
 
@@ -293,6 +394,8 @@ class Param
 	    notebook.set_tab_pos(Gtk::POS_TOP)
 	    notebook.append_page input_dom, Gtk::Label::new("Input")
 	    notebook.append_page options_note, Gtk::Label::new("Options")
+	    notebook.append_page tests_note, Gtk::Label::new("Tests")
+	    notebook.append_page const_note, Gtk::Label::new("Constants")
 
 
 	    vbox = Gtk::VBox::new
@@ -314,6 +417,21 @@ class Param
 
 	    window.show_all
 	    @q.pop
+	end
+
+	def parse
+	    begin
+		opts_analyse
+	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
+		return nil
+	    end
+	    @p.fs.autoconf
+	    @p.resolver.autoconf
+	    @p
+	end
+	def usage(errcode, io=$stderr)
+	    io.print $mc.get("param_cli_usage").gsub("PROGNAME", PROGNAME)
+	    exit errcode unless errcode.nil?
 	end
     end
 end

@@ -66,7 +66,7 @@ class Param
 		when "--test"      then @p.test.tests       = arg
 		when "--testlist"  then @p.test.list        = true
 		when "--testdesc"  then @p.test.desctype    = arg
-		when "--resolver"  then @p.network.resolver = arg
+		when "--resolver"  then @p.resolver.local   = arg
 		when "--ns"        then @p.domain.ns        = arg
 		when "--ipv6"      then @p.network.ipv6     = true
 		when "--ipv4"      then @p.network.ipv4     = true
@@ -119,7 +119,7 @@ EOT
 	end
 
 	def usage(errcode, io=$stderr)
-	    io.print $mc.get("param_usage").gsub("PROGNAME", PROGNAME)
+	    io.print $mc.get("param_cli_usage").gsub("PROGNAME", PROGNAME)
 	    exit errcode unless errcode.nil?
 	end
 

@@ -144,7 +144,7 @@ class ZoneCheck
     #
     # Parse command line
     #
-    def configure
+    def select_input_method
 	# Default Input Method
 	im = nil
 
@@ -173,15 +173,18 @@ class ZoneCheck
 	end
 
 	@input = case im
-		 when "gtk"  then Param::GTK::new
 		 when "cli"  then Param::CLI::new
 		 when "cgi"  then Param::CGI::new
+		 when "gtk"  then Param::GTK::new
 		 else raise RuntimeError, "XXX: Fix ZC_INPUT_METHODS"
 		 end
+    end
 
-	# Configure
+    #
+    # fs should be configured
+    def parse_arguments
 	begin
-	    if (@param = @input.parse).nil? || !@input.interact(@param)
+	    if (@param = @input.parse).nil?
 		@input.usage(EXIT_USAGE)
 	    end
 	rescue Param::ParamError => e
@@ -189,6 +192,13 @@ class ZoneCheck
 	end
     end
 
+    def interact
+	begin
+	    @input.interact(@config)
+	rescue Param::ParamError => e
+	    @input.error(e.to_s, EXIT_ERROR)
+	end
+    end
 
     #
     # Load ruby files implementing tests
@@ -246,18 +256,19 @@ class ZoneCheck
     #
     # Read the 'zc.conf' configuration file
     #
-    def load_config
+    def load_configuration
 	@config = Config::new(@test_manager)
+	@config.read(@param.fs.cfgfile)
+    end
+
+    def select_tests
 	if @param.test.categories
 	    @config.limittest(Config::L_Category, @param.test.categories)
 	end
 	if @param.test.tests
 	    @config.limittest(Config::L_Test, @param.test.tests)
 	end
-
-	@config.read(@param.fs.cfgfile)
     end
-
 
     def zc(cm)
 	# Setup publisher domain
@@ -295,7 +306,7 @@ class ZoneCheck
 	end
     end
 
-    def run
+    def do_check
 	ok = true
 
 	@param.output_autoconf
@@ -331,31 +342,46 @@ class ZoneCheck
 
 	# End formatter
 	@param.publisher.end
+
+	exit EXIT_OK
+    end
+
+    def do_testlist
+	puts @config.test_list.sort
+	exit EXIT_OK
+    end
+
+    def do_testdesc
+	suf = @param.test.desctype
+	@config.test_list.each { |test|
+	    puts $mc.get("#{test}_#{suf}")
+	}
+	exit EXIT_OK
     end
 
     def start 
 	begin
-	    configure
+	    select_input_method
+	    parse_arguments
 	    load_tests_implementation
 	    init_testmanager
-	    load_config
-	    
-	    if @param.test.list
-		puts @config.test_list.sort
-		exit EXIT_OK
-	    end
-	    if @param.test.desctype
-		suf = @param.test.desctype
-		@config.test_list.each { |test|
-		    puts $mc.get("#{test}_#{suf}")
-		}
-		exit EXIT_OK
-	    end
+	    load_configuration
+	    interact
+	    select_tests
 
-	    run
+	    if    @param.test.list
+		do_testlist
+	    elsif @param.test.desctype
+		do_testdesc
+	    else
+		do_check
+	    end
 	ensure
+	    # exit() raise an exception ensuring that the following code
+	    #   is executed
 	    destroy
 	end
+	# NOT REACHED
     end
 end
 

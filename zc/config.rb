@@ -44,7 +44,7 @@ class Config
 
 
 
-    attr_reader :test_list
+    attr_reader :test_list, :const_list
 
 
     #
@@ -59,6 +59,7 @@ class Config
 	@test_action	= {}
 	@test_category	= {}
 
+	@const_list	= []
 	@constants	= {}
 
 	@order		= 0
@@ -153,6 +154,7 @@ class Config
 	if @constants.has_key?(name)
 	    raise ArgumentError, $mc.get("xcp_config_constexists") % [ name ]
 	end
+	@const_list << name
 	@constants[name] = value
 
 	# Debug
@@ -165,6 +167,10 @@ class Config
     #
     def action(testname)
 	@test_action[testname]
+    end
+
+    def category(testname)
+	@test_category[testname]
     end
 
 

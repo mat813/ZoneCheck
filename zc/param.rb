@@ -46,7 +46,6 @@ class Param
 
 	attr_writer :one, :quiet, :intro, :stop_on_fatal
 
-
 	def initialize
 	    @tagonly = @one                           	= false
 	    @intro   = @explain = @testdesc = @counter	= false
@@ -269,6 +268,11 @@ class Param
 	    @cfgfile	= ZC_CONFIG_FILE
 	    @testdir	= ZC_TEST_DIR
 	end
+
+	def autoconf
+	    $dbg.msg(DBG::AUTOCONF, "configuration file: #{@cfgfile}")
+	    $dbg.msg(DBG::AUTOCONF, "tests directory: #{@testdir}")
+	end
     end
 
 
@@ -279,22 +283,15 @@ class Param
     ## ipv4    : use IPv4 routing protocol
     ## ipv6    : use IPv6 routing protocol
     ## mode    : use the following mode for new resolvers: Classic / UDP / TCP 
-    ## resolver: local resolver to use
-    ##
-    ## WARN: the 'resolver' doesn't follow the ipv? or mode constraints
-    ##       as it is local and should be able to correctly operate in its
-    ##       own environment
     ##
     class Network
-	attr_reader :ipv4, :ipv6, :query_mode, :resolver
+	attr_reader :ipv4, :ipv6, :query_mode
 	attr_writer :ipv4, :query_mode
 
 	def initialize
 	    @ipv6		= nil
 	    @ipv4		= nil
 	    @query_mode		= nil
-	    @resolver		= nil
-	    @resolver_name	= nil
 	end
 
 	def ipv6=(bool)
@@ -302,15 +299,6 @@ class Param
 		raise ParamError, $mc.get("xcp_param_ipv6_no_stack")
 	    end
 	    @ipv6 = bool
-	end
-
-	def resolver=(resolv)
-	    case resolv
-	    when String
-		@resolver_name = resolv
-	    else
-		raise ArgumentError, "Wrong type for resolver object"
-	    end
 	end
 
 	def address_wanted?(address)
@@ -339,22 +327,54 @@ class Param
 		     [ @ipv4 ? "IPv4" : nil, 
 		       @ipv6 ? "IPv6" : nil].compact.join("/"))
 
-	    # Select local resolver
-	    if @resolver.nil?
-		@resolver = if @resolver_name.nil?
-				NResolv::DNS::DefaultResolver
-			    else 
-				cfg = NResolv::DNS::Config::new(@resolver_name)
-				NResolv::DNS::Client::Classic::new(cfg)
-			    end
-	    end
-
 	    # Select mode
 	    @query_mode = NResolv::DNS::Client::Classic if @query_mode.nil?
 	    @query_mode.to_s =~ /([^:]+)$/
 	    $dbg.msg(DBG::AUTOCONF, "Query mode set to: #{$1}")
 	end
     end
+
+
+
+    ##
+    ## Hold information about local resolver
+    ##
+    ## resolver: local resolver to use
+    ##
+    ## WARN: the 'resolver' doesn't follow the Network constraints
+    ##       as it is local and should be able to correctly operate in its
+    ##       own environment
+    ##
+    class Resolver
+	attr_reader :local
+
+	def initialize
+	    @local	= nil
+	    @local_name	= nil
+	end
+
+	def local=(resolv)
+	    case resolv
+	    when String
+		@local_name = resolv
+	    else
+		raise ArgumentError, "Wrong type for resolver object"
+	    end
+	end
+
+	def autoconf
+	    # Select local resolver
+	    if @local.nil?
+		@local = if @local_name.nil?
+				NResolv::DNS::DefaultResolver
+			    else 
+				cfg = NResolv::DNS::Config::new(@local_name)
+				NResolv::DNS::Client::Classic::new(cfg)
+			    end
+	    end
+	end
+    end
+
 
     ##
     ## Hold information about the test
@@ -407,7 +427,7 @@ class Param
 
 
 
-    attr_reader :rflag, :report, :test, :network, :fs
+    attr_reader :rflag, :report, :test, :network, :fs, :resolver
     attr_reader :publisher, :publisher_class
 
 
@@ -435,6 +455,7 @@ class Param
 
 	@fs			= FSData::new
 	@network		= Network::new
+	@resolver		= Resolver::new
 	@test			= Test::new
 	@report			= ProxyReport::new(Report::Straight)
 	@domain			= Domain::new
@@ -554,7 +575,8 @@ class Param
     #
     def autoconf
 	@network.autoconf
-	@domain.autoconf(@network.resolver)
+	@resolver.autoconf
+	@domain.autoconf(@resolver.local)
 	@report.autoconf(@domain, @rflag, @publisher)
     end
 end

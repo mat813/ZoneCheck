@@ -1,4 +1,8 @@
 # $Id$
 
+#
+# See TODO before writting a new bug
+#
+
 - cigref.fr, is stuck on the openrelay test
 - elements of the HTML progress bar get blank sometimes
