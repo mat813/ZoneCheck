@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
+        "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <delegateSystem 
+   systemIdStartString="http://docbook.sourceforge.net/release/xsl/" 
+   catalog="file:///usr/local/share/xsl/docbook/catalog" />
+  <delegateURI 
+   uriStartString="http://docbook.sourceforge.net/release/xsl/" 
+   catalog="file:///usr/local/share/xsl/docbook/catalog" />
+  <public 
+   publicId="-//ZoneCheck//DTD Config V1.0//EN"
+   uri="config.dtd" />
+</catalog>
