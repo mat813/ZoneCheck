@@ -183,6 +183,14 @@ $nresolv_dbg			= 0xffff
 
 
 #
+# Debugger object
+#  (earlier initialization, can also be set via input interface)
+#
+require 'dbg'
+$dbg       = DBG::new
+$dbg.level = ENV['ZC_DEBUG'] if ENV['ZC_DEBUG']
+
+#
 # Requirement
 #
 # Standard Ruby libraries
@@ -195,20 +203,11 @@ require 'nresolv'
 require 'ext/array'
 
 # ZoneCheck component
-require 'dbg'
 require 'locale'
 require 'msgcat'
 require 'console'
 require 'zonecheck'
 
-
-
-#
-# Debugger object
-#  (earlier initialization, can also be set via input interface)
-#
-$dbg       = DBG::new
-$dbg.level = ENV['ZC_DEBUG'] if ENV['ZC_DEBUG']
 
 
 #
