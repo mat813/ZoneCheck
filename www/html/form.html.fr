@@ -65,7 +65,7 @@
     <P>Le programme ZoneCheck (librement disponible 
       <A href="http://zonecheck.nic.fr/download/v2/">ici</A>
       en téléchargement) effectue plusieurs tests sur la zone 
-      (domaine) afin de s'assurer que celle ci est correctement configurée
+      (domaine) afin de s'assurer que celle-ci est correctement configurée
       et peut être déléguée sans risque, fournissant un certain degré de
       qualité à votre domaine (voir la section sur les 
       <A href="#benefit">bénéfices</A>).</P>
@@ -85,7 +85,7 @@
 	Si la vérification prend plus d'une minute, cela signifie
 	qu'il y a eu des problèmes pour accéder aux serveurs
 	(erreur de configuration, firewall, ...) et que le programme
-	et en attente de timeouts.</P>
+	est en attente de timeouts.</P>
     </BLOCKQUOTE>
     
     <!-- Form -->
@@ -279,7 +279,7 @@
 	le domaine reste encore visible depuis l'internet ;</LI>
       <LI>vérification de la distribution du courrier, afin de ne pas
 	devenir la proie des spammers et finir en 
-	<A href="http://www.mail-abuse.org/">liste noire</A></LI>
+	<A href="http://www.mail-abuse.org/">liste noire</A>.</LI>
     </UL>
 
 
@@ -290,18 +290,18 @@
 	<TR><TD class="zc-title" colspan="2">Information sur la zone</TD></TR>
 	<TR>
 	  <TD class="zc-key">Zone</TD>
-	  <TD>Le domaine (zone) qui doit être testé (le nom de
+	  <TD>Le domaine qui doit être testé (le nom de
 	    domaine qui doit être enregistré).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc-key">Primaire</TD>
 	  <TD>Le serveur de noms qui est considéré comme primaire (celui qui
-	    figure dans l'enregistrements du SOA, si celui-ci est public).</TD>
+	    figure dans l'enregistrement du SOA, si celui-ci est public).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc-key">Secondary</TD>
 	  <TD>Le serveur de noms secondaire (tous les enregistrement NS
-	    associés avec le domaine, à l'exception de celui listé ci-dessus.
+	    associés avec le domaine), à l'exception de celui listé ci-dessus.
 	  </TD>
 	</TR>
 	<TR>
@@ -341,7 +341,7 @@
 	</TR>
 	<TR>
 	  <TD class="zc-key">barre de progression</TD>
-	  <TD>Affiche des informations a propos de le déroulement des 
+	  <TD>Affiche des informations à propos du déroulement des 
 	    tests en utilisant une barre de progression (<I>nécessite
 	      javascript et Mozilla ou IE5+ pour un rendu correct</I>).</TD>
 	</TR>
@@ -389,7 +389,7 @@
 	</TR>
 	<TR>
 	  <TD class="zc-key">affiche ok</TD>
-	  <TD>Affiche les tests qui sont passés sans erreurs.</TD>
+	  <TD>Affiche les tests qui sont passés sans erreur.</TD>
 	</TR>
 
 	<TR><TD class="zc-title" colspan="2">Option: tests supplémentaires effectués</TD></TR>
@@ -450,7 +450,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Apr 29 19:12:32 CEST 2003
+Last modified: Fri May 23 18:11:27 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
