@@ -731,7 +731,9 @@ EOT
 
 
 
-
+    #
+    # Try to fill the blank for the ouput parameters
+    #
     def output_autoconf
 	# Set output publisher
 	@publisher = @publisher_class::new(@rflag)

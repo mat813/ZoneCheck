@@ -45,6 +45,8 @@ class MessageCatalog
     # Initializer
     #
     def initialize(msgfile)
+	$dbg.msg(DBG::LOCALE, "reading file: #{msgfile}")
+
 	@catalog = {}
 	prefix   = nil
 	lineno   = 0
@@ -61,6 +63,10 @@ class MessageCatalog
 		# Prefix section
 		when /^\[(\w+|\*)]\s*$/
 		    prefix = $1 == "*" ? nil : $1 
+		    if prefix.nil?
+		    then $dbg.msg(DBG::LOCALE, "removing prefix")
+		    else $dbg.msg(DBG::LOCALE, "using prefix: #{prefix}")
+		    end
 
 		# Definition
 		when /^(\w+)\s*:\s*(.*?)\s*$/
@@ -78,12 +84,14 @@ class MessageCatalog
 
 		    msg.gsub!(/\\n/, "\n")
 		    @catalog[tag] = msg
+		    $dbg.msg(DBG::LOCALE, "adding locale: #{tag}")
 
 		# Link
 		when /^(\w+)\s*=\s*(\w+)\s*$/
 		    tag, link = $1, $2
 		    tag = "#{prefix}_#{tag}" if prefix
 		    @catalog[tag] = @catalog[link]
+		    $dbg.msg(DBG::LOCALE, "linking #{tag} -> #{link}")
 
 		else
 		    raise SyntaxError, "#{lineno}: Unexpected token"

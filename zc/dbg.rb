@@ -21,7 +21,9 @@ class DBG
     #
     TEST_LOADING = 0x0001	# Test loading status
     LOCALE       = 0x0002	# Localization / Internationalisation
+    CONFIG       = 0x0004	# Configuration
     AUTOCONF     = 0x0100       # Autoconf
+    DBG          = 0x0800	# The debugger itself
     CACHE_INFO   = 0x1000	# Information about cached object
 
     NOCACHE      = 0x2000	# Disable caching
@@ -34,8 +36,10 @@ class DBG
     Tag = { 
 	TEST_LOADING	=> "test",
 	LOCALE		=> "locale",
+	CONFIG		=> "config",
 	AUTOCONF	=> "autoconf",
 	CACHE_INFO	=> "cache",
+	DBG		=> "dbg",
     }
 
     #
@@ -53,6 +57,7 @@ class DBG
     def initialize(lvl=0, output=$stderr)
 	@output = output
 	@lvl    = lvl
+	msg(DBG, "Debugger initialized at level %0x" % [ @lvl ])
     end
 
 
@@ -70,6 +75,7 @@ class DBG
     def level=(lvl)
 	oldcrazy = enabled?(CRAZYDEBUG)
 
+	# parsing
 	case lvl
 	when String
 	    @lvl = lvl =~ /^0x/ ? lvl.hex : lvl.to_i
@@ -79,6 +85,9 @@ class DBG
 	    raise ArgumentError, "unable to interprete: #{lvl}"
 	end
 	
+	# message
+	msg(DBG, "Setting level to 0x%0x" % [ lvl ])
+
 	# enable/disable CrazyDebug
 	if    enabled?(CRAZYDEBUG) then set_trace_func(CrazyDebug_Proc)
 	elsif oldcrazy             then set_trace_func(nil)

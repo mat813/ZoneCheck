@@ -15,7 +15,6 @@
 - finish internationalisation
 - try zonecheck with the native thread ruby implementation
 - implement the consolidation mode for output
-- use "taint"
 - check name from_s methode
 - escape HTML code
 - meaningfull exit code

@@ -21,6 +21,7 @@ w_warning	: warning
 w_fatal		: fatal
 w_info		: info
 w_unexpected	: unexpected
+w_line          : line
 
 xpltag_ref	: Ref
 
@@ -65,6 +66,13 @@ xcp_param_nameserver_ips : Unable to find nameserver IP address(es) for %s
 xcp_param_output_support : Selected output class doesn't support '%s'
 xcp_param_ipv6_no_stack  : IPv6 not supported on that host
 xcp_param_unknown_modopt : unknown modifier '%s' for %s option
+xcp_config_malformed     : malformed command
+xcp_config_nosection     : no section defined
+xcp_config_unknownsection: unknown section %s
+xcp_config_constexists   : constant '%s' already declared
+xcp_config_testexists    : test '%s' already listed
+xcp_config_unknowntest   : unknown test '%s'
+xcp_config_ordering      : ordering problem with '%s'
 
 ##############################################################################
 ##############################################################################

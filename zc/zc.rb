@@ -87,6 +87,7 @@ EXIT_ERROR      =  3
 # Debugger object
 #
 $dbg = DBG::new
+$dbg.level=ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 
 
 #
@@ -97,6 +98,7 @@ $dbg = DBG::new
 [ ENV["LANG"], ZC_LANG_DEFAULT ].compact.each { |lang|
     localefile = ZC_LOCALIZATION_FILE % [ lang ]
     if File.readable?(localefile)
+	$dbg.msg(DBG::LOCALE, "Using locale: #{lang}")
 	$mc = MessageCatalog::new(localefile)
 	break
     end
@@ -206,7 +208,7 @@ class ZoneCheck
     def load_testlist
 	@config = Config::new(@test_manager, @param.category)
 	if @param.test
-	    @config.read(@param.configfile, [ "constants" ])
+	    @config.read(@param.configfile, [ Config::S_Constants ])
 	    @config.newtest(@param.test, Config::Fatal, "none")
 	else
 	    @config.read(@param.configfile)

@@ -124,6 +124,19 @@ class CacheManager
 
     attr_reader :all_caches, :all_caches_m, :root
 
+    def clear
+	@attrcache_mutex.synchronize {
+	    @address	= {}
+	    @soa	= {}
+	    @any	= {}
+	    @ns		= {}
+	    @mx		= {}
+	    @cname	= {}
+	    @ptr	= {}
+	    @rec	= {}
+	}
+    end
+
 
     private
     def initialize(root, dns, client)
@@ -139,14 +152,7 @@ class CacheManager
 
 	# Cached attributs
 	@attrcache_mutex= Sync::new
-	@address	= {}
-	@soa		= {}
-	@any		= {}
-	@ns		= {}
-	@mx		= {}
-	@cname		= {}
-	@ptr		= {}
-	@rec		= {}
+	clear
     end
     
     def get_resources(name, resource, rec=true, exception=false)
@@ -189,8 +195,6 @@ class CacheManager
 	    ic
 	}
     end
-
-    
 
     # Create the root information cache
     def self.create(dns, client=NResolv::DNS::Client::Classic)

@@ -22,8 +22,8 @@ class Config
     Info		= "i"		# Informational
     Skip		= "-"		# Don't run the test
 
-    Sec_Constants	= "constants"
-    Sec_Test		= "tests"
+    S_Constants		= "constants"
+    S_Tests		= "tests"
 
     ##
     ## Syntax error, while parsing the file
@@ -71,19 +71,19 @@ class Config
 
 	# Check if test was already listed
 	if @test_action.has_key?(testname)
-	    raise ArgumentError, "test '#{testname}' already listed"
+	    raise ArgumentError, $mc.get("xcp_config_testexists") % [ name ]
 	end
 
 	# Check if test is currently registered
 	if ! @test_manager.has_test?(testname)
-	    raise ArgumentError, "unknown test '#{testname}'"
+	    raise ArgumentError, $mc.get("xcp_config_unknowntest") % [testname]
 	end
 	
 	# Check for test ordering problems
 	#  (according to their families)
 	order_new = @order_switch[@test_manager.family(testname)]
 	if order_new < @order
-	    raise ArgumentError, "ordering problem with '#{testname}'"
+	    raise ArgumentError, $mc.get("xcp_config_ordering") % [ testname ]
 	else
 	    @order = order_new
 	end
@@ -97,6 +97,9 @@ class Config
 	@test_list << testname
 	@test_action  [testname] = action
 	@test_category[testname] = category
+	
+	# Debug
+	$dbg.msg(DBG::CONFIG, "adding test: #{testname}")
     end
 
 
@@ -105,9 +108,12 @@ class Config
     #
     def newconst(name, value)
 	if @constants.has_key?(name)
-	    raise ArgumentError, "constant '#{name}' already declared"
+	    raise ArgumentError, $mc.get("xcp_config_constexists") % [ name ]
 	end
 	@constants[name] = value
+
+	# Debug
+	$dbg.msg(DBG::CONFIG, "adding constant: #{name}")
     end
 
 
@@ -126,6 +132,7 @@ class Config
 	begin
 	    @constants.fetch(name)
 	rescue IndexError
+	    # WARN: not localized (programming error)
 	    raise RuntimeError, "Trying to fetch undefined constant '#{name}'"
 	end
     end
@@ -134,7 +141,10 @@ class Config
     #
     # Read the configuration file
     #
-    def read(configfile, sections=nil)
+    def read(configfile, sections=[ S_Constants, S_Tests ])
+	$dbg.msg(DBG::CONFIG, "reading file: #{configfile}")
+	$dbg.msg(DBG::CONFIG, "requested sections: " + sections.join(", "))
+
 	lineno    = 0
 	File.open(configfile) { |io|
 	    while line = io.gets
@@ -147,17 +157,20 @@ class Config
 		if line =~ /^\s*\[\s*(.*?)\s*]\s*$/
 		    section = $1
 		    case section
-		    when "tests"     then reader = method(:read_tests)
-		    when "constants" then reader = method(:read_constants)
-		    else raise SyntaxError, 
-			    "line #{lineno}: unknown section #{section}"
+		    when S_Tests     then reader = method(:read_tests)
+		    when S_Constants then reader = method(:read_constants)
+		    else raise SyntaxError, fmt_line(lineno, 
+			$mc.get("xcp_config_unknownsection") % [ section ])
+							 
 		    end
+		    $dbg.msg(DBG::CONFIG, "parsing section: #{section}")
+
 		else
 		    if reader.nil?
-			raise SyntaxError, 
-			    "line #{lineno}: no section defined"
+			raise SyntaxError, fmt_line(lineno,
+			$mc.get("xcp_config_nosection"))
 		    end
-		    if sections.nil? || sections.include?(section)
+		    if sections.include?(section)
 			reader.call(line, lineno)
 		    end
 		end
@@ -170,12 +183,19 @@ class Config
 
     private
     #
+    # Shortcut for formating text with line number prefixed
+    #
+    def fmt_line(lineno, txt)
+	"%s %d: %s" % [ $mc.get("w_line"), lineno, txt ]
+    end
+
+    #
     # Test parser
     #
     def read_tests(line, lineno)
 	# Syntax checker
 	if line !~ /^([#{Warning}#{Info}#{Fatal}#{Skip}])\s+(\w+)\s+(\w+)\s*$/
-	    raise SyntaxError, "line #{lineno}: malformed command"
+	    raise SyntaxError, fmt_line(lineno,$mc.get("xcp_config_malformed"))
 	end
 	action, testname, category = $1, $2, $3
 	
@@ -183,7 +203,7 @@ class Config
 	begin
 	    newtest(testname, action, category)
 	rescue ArgumentError => e
-	    raise ConfigError, "line #{lineno}: #{e}"
+	    raise ConfigError, fmt_line(lineno, e.to_s)
 	end
     end
 
@@ -193,7 +213,7 @@ class Config
     def read_constants(line, lineno)
 	# Syntax checker
 	if line !~ /^(\w+)\s*=\s*\"((?:[^\"]|\\\")*)\"$/
-	    raise SyntaxError, "line #{lineno}: malformed command"
+	    raise SyntaxError, fmt_line(lineno,$mc.get("xcp_config_malformed"))
 	end
 	name, value = $1, $2
 
@@ -204,7 +224,7 @@ class Config
 	begin
 	    newconst(name, value)
 	rescue ArgumentError => e
-	    raise ConfigError, "line #{lineno}: #{e}"
+	    raise ConfigError, fmt_line(lineno, e.to_s)
 	end
     end
 end
