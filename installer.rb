@@ -144,7 +144,7 @@ class Installer
 
     def patch_cgi
 	puts "==> Patching HTML pages"
-	Dir["#{@ch_installdir}/www/*.html.*"].each { |page|
+	Dir["#{@ch_installdir}/www/html/*.html.*"].each { |page|
 	    page_content = File.readlines(page)
 	    page_content.each { |line| 
 		line.gsub!(/HTML_PATH/, ENV['HTML_PATH']) }
