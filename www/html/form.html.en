@@ -1,4 +1,17 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- $Id$ -->
+ 
+<!--                                                                  -->
+<!-- AUTHOR : Stephane D'Alu <sdalu@nic.fr>                           -->
+<!-- CREATED: 2002/10/01 13:58:17                                     -->
+<!--                                                                  -->
+<!-- $Revision$                                                -->
+<!-- $Date$                                     -->
+<!--                                                                  -->
+<!-- CONTRIBUTORS:                                                    -->
+<!--                                                                  -->
+<!--                                                                  -->
+
 <HTML>
   <HEAD>
     <LINK rel="stylesheet" href="/zc/zc.css" type="text/css">
@@ -124,8 +137,21 @@
 	      Includes explanations
 	    </TD>
 	    <TD>
-	      <INPUT type="checkbox" name="progress" value='t' checked>
-	      Show progress
+	    </TD>
+	  </TR>
+	  <TR>
+	    <TD></TD>
+	    <TD>
+	      <INPUT type="radio" name="progress" value=''>
+	      no progress bar
+	    </TD>
+	    <TD>
+	      <INPUT type="radio" name="progress" value='counter' checked>
+	      progress bar
+	    </TD>
+	    <TD>
+	      <INPUT type="radio" name="progress" value='testdesc'>
+	      tests description
 	    </TD>
 	  </TR>
 	  <TR>
@@ -286,9 +312,18 @@
 	    what was the purpose of the test and why you should fixed it.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Show progress</TD>
-	  <TD>Display information about the test progression (could
-	    be usefull as ZoneCheck can take a long time).</TD>
+	  <TD class="zc_key">no progress bar</TD>
+	  <TD>Don't display information about the test progression.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">progress bar</TD>
+	  <TD>Display information about the test progression 
+	    using a kind of progress bar <I>(you won't see it if 
+	    you don't have javascript</I>).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">test description</TD>
+	  <TD>Give a short description of the test when it is performed.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">Default error</TD>
@@ -337,7 +372,7 @@
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Oct  2 17:19:28 CEST 2002
+Last modified: Thu Oct  3 22:24:58 CEST 2002
 <!-- hhmts end -->
   </BODY>
 </HTML>

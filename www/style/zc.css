@@ -1,30 +1,33 @@
 BODY { 
-	background: white;
+    background: white;
     font-family: Arial, Helvetica, sans-serif;
 }
-P { 
 
-font-style: normal;  font-size: 12px; color: #333333; text-align: justify }
+P { 
+    font-style: normal;  
+    font-size: 12px; 
+    color: #333333; 
+    text-align: justify 
+}
 
 TD {  
-font-style: normal;  font-size: 12px; color: #333333}
+     font-size: 12px; color: #333333
+}
 
 li {  
-font-style: normal;  font-size: 12px; color: #333333}
+ font-size: 12px; color: #333333}
 
 ul {  
-font-style: normal;  font-size: 12px; color: #333333}
+ font-size: 12px; color: #333333}
 
 H1 {  
-font-size: 18px; font-style: normal; color: #f7ad31; font-weight: bold}
+font-size: 18px; color: #f7ad31; font-weight: bold}
 
 H2 {  
-font-size: 14px; font-style: normal; color: #1341AF; font-weight: bold}
+font-size: 14px; color: #1341AF; font-weight: bold}
 
 H3 {
-    text-indent: 40px;
     font-size: 12px; 
-    font-style: normal; 
     color: #1341AF; 
     font-weight: bold;
 }
@@ -60,7 +63,7 @@ TABLE[rules=rows]    { //border-collapse: collapse;
 
 UL.zc_ref { 
     font-size: 12px;
-    margin-left: 50px;
+    margin-left: 2ex;
     margin-right: 150px;
     background-color: #f0ece5; 
 
@@ -70,6 +73,23 @@ UL.zc_ref {
     font-weight: normal;
     border: 2px solid #f7ad31
 }
+
+
+/* 
+ * The diagnostic box
+ */
+DIV.zc_diag { 
+    padding-left: 5ex;
+}
+
+DIV.zc_diag DIV.zc_title { 
+    font-size: 12px; 
+    color: #1341AF; 
+    font-weight: bold;
+}
+
+
+
 
 SPAN.zc_ref { 
   font-weight: bold;
@@ -94,7 +114,7 @@ TR.zc_ns_sec {
 }
 
 TR.zc_ns_prim { 
-    background-color: #E4DCCA;
+    background-color: #e4dcca;
 }
 
 TABLE.zc_options {

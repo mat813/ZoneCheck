@@ -58,9 +58,9 @@ class Param
 	    if cgi.has_key?("verbose")
 		@p.verbose = cgi["verbose"].join(",")
 	    else
-		@p.verbose = "intro"    if cgi.has_key?("intro")
-		@p.verbose = "explain"  if cgi.has_key?("explain")
-		@p.verbose = "testdesc" if cgi.has_key?("progress")
+		@p.verbose = "intro"            if cgi.has_key?("intro")
+		@p.verbose = "explain"          if cgi.has_key?("explain")
+		@p.verbose = cgi["progress"][0] if cgi.has_key?("progress")
 	    end
 
 	    # Output
@@ -604,6 +604,7 @@ EOT
     # WRITER: category
     #
     def category=(string)
+	return if string =~ /^\s*$/
 	@category = [] if @category.nil?
 	@category.concat(string.split(/\s*,\s*/))
     end
@@ -613,6 +614,7 @@ EOT
     # WRITER: error
     #
     def error=(string)
+	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
 	    when "af", "allfatal"
@@ -633,6 +635,7 @@ EOT
     # WRITER: verbose
     #
     def verbose=(string)
+	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
 	    when "x", "explain"
@@ -653,6 +656,7 @@ EOT
     # WRITER: verbose
     #
     def transp=(string)
+	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
 	    when "4", "ipv4"
@@ -675,6 +679,7 @@ EOT
     # WRITER: output
     #
     def output=(string)
+	return if string =~ /^\s*$/
 	string.split(/\s*,\s*/).each { |token|
 	    case token
 	    when "s", "straight"

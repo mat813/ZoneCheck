@@ -30,6 +30,8 @@ module Publisher
 	    @mutex	= Mutex::new
 	end
 
+	def output ; @o ; end
+
 	def synchronize(&block)
 	    @mutex.synchronize(&block)
 	end
@@ -242,116 +244,29 @@ module Publisher
     class HTML < Template
 	Mime		= "text/html"
 
+	def self.jscript
+	    '<SCRIPT type="text/javascript">' + yield + '</SCRIPT>'
+	end
+
+	def self.nscript
+	    '<NOSCRIPT>' + yield + '</NOSCRIPT>'
+	end
+
 	class Progress
 	    def initialize(publisher)
 		@publisher = publisher
+		@o         = publisher.output
 	    end
 	    
 	    def start(count)
-		puts "<H2 id=pgr_0>Progress</H2>"
-		print <<"EOT"
-<SCRIPT type="text/javascript">
-zc_pgr_starttime = (new Date()).getTime()
-zc_pgr_lasttime  = zc_pgr_starttime
-zc_pgr_processed = 0
-zc_pgr_totaltime = 0
-zc_pgr_precision = 1000
-zc_pgr_totalsize = #{count}
-
-function zc_sec_to_timestr(sec) {
-  if (sec < 0)
-     return "--:--"
-
-   hrs = Math.floor(sec / 3600); sec %= 3600;
-   min = Math.floor(sec / 60);   sec %= 60;
-            
-   if (sec < 10)
-     sec = "0" + sec
-   
-   if (hrs > 0) {
-     if (min < 10)
-       min = "0" + min
-     return hrs + ":" + min + ":" + sec
-   } else {
-     return min + ":" + sec
-   }
-}
-
-function zc_speed_tostr(speed) {
-  if (speed < 0)
-    return "--.--"
-
-  speed = speed * 100
-  cnt = Math.floor(speed) % 100
-  if (cnt < 10)
-    cnt = "0" + cnt
-  unt = Math.floor(speed / 100)
-
-  return unt + "." + cnt
-}
-
-// switch progress bar element "on"
-function zc_pgr_on(id) {
-  document.getElementById("pgr_" + id).style.display = "inherit"
-}
-
-// switch progress bar element "off"
-function zc_pgr_off(id) {
-  document.getElementById("pgr_" + id).style.display = "none"
-}
-
-// generate new progress bar and switch it
-function zc_progress(desc) {
-  // one more
-  zc_pgr_processed += 1
-
-  // percent done
-  pct = Math.ceil(100 * zc_pgr_processed / zc_pgr_totalsize)
-
-  // compute spent time
-  //  use precision to avoid quick variation in speed and eta
-  nowtime   = (new Date()).getTime()
-  deltatime = nowtime - zc_pgr_lasttime
-  if (deltatime > zc_pgr_precision) {
-    zc_pgr_totaltime = nowtime - zc_pgr_starttime
-    zc_pgr_lasttime  = nowtime
-  }
-
-  // speed
-  speed = zc_pgr_totaltime ? (1000 * zc_pgr_processed / zc_pgr_totaltime) : -1.0
-
-  // estimated time
-  eta   = speed < 0 ? -1.0 : Math.ceil((zc_pgr_totalsize - zc_pgr_processed) / speed)
-
-  // write progress bar
-  document.write("<TABLE style='display: none' id=pgr_" + zc_pgr_processed + ">")
-  document.write("<TR>")
-  document.write("<TD colspan=3>Progression</TD>")
-  document.write("<TD>Tests</TD>")
-  document.write("<TD>Speed</TD>")
-  document.write("<TD>Estimated Time</TD>")
-  document.write("</TR>")
-  document.write("<TR>")
-  document.write("<TD style='text-align: right; width: 4em'>" + pct + "%&nbsp;</TD>")
-  document.write("<TD style='background-color: #123456; width:" + 3 * pct + "px'></TD>")
-  document.write("<TD style='width:" + 3 * (100 - pct) + "px'></TD>")
-  document.write("<TD style='text-align: right; witdh: 4ex;'>" + zc_pgr_processed + "</TD>")
-  document.write("<TD style='text-align: right; width: 6ex;'>" + zc_speed_tostr(speed) + "</TD>")
-  document.write("<TD style='text-align: right; width: 8ex;'>" + zc_sec_to_timestr(eta) + "</TD>")
-  document.write("</TR>")
-  document.write("<TR>")
-  document.write("<TD colspan=5>" + desc + "</TD>")
-  document.write("</TR>")
-  document.write("</TABLE>")
-
-  // switch progress bar content
-  if (zc_pgr_processed != 1) 
-    zc_pgr_off(zc_pgr_processed - 1)
-  zc_pgr_on(zc_pgr_processed)
-
-}
-</SCRIPT>
-EOT
+		title = "<H2>Progress</H2>"
+		if @publisher.rflag.counter
+		    @o.puts HTML.jscript { "zc_pgr_start(#{count})" }
+		    @o.puts HTML.nscript { title + "<UL>" }
+		end
+		if @publisher.rflag.testdesc
+		    @o.puts title
+		end
 	    end
 	    
 	    def done(desc)
@@ -361,28 +276,34 @@ EOT
 	    end
 	    
 	    def finish
-		print <<"EOT"
-<SCRIPT type="text/javascript">
-zc_pgr_off(zc_pgr_processed)
-zc_pgr_off(0)
-</SCRIPT>
-EOT
+		if @publisher.rflag.counter
+		    @o.puts HTML.jscript { "zc_pgr_finish();" }
+		    @o.puts HTML.nscript { "</UL>" }
+		end
 	    end
 	    
 	    def process(desc, ns, ip)
-		if @publisher.rflag.testdesc
-		    xtra = if    ip then " (IP=#{ip})"
-			   elsif ns then " (NS=#{ns})"
-			   else          ""
-			   end
-		    
-		    
-		    puts "<NOSCRIPT>"
-		    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
-		    puts "</NOSCRIPT>"
-		    puts "<SCRIPT>zc_progress(\"#{desc} #{xtra}\")</SCRIPT>"
-		    $stdout.flush
+		xtra = if    ip then " (IP=#{ip})"
+		       elsif ns then " (NS=#{ns})"
+		       else          ""
+		       end
+
+		if @publisher.rflag.counter
+		    @o.puts HTML.jscript { 
+			"zc_pgr_process(\"#{desc} #{xtra}\")" }
+		    @o.puts HTML.nscript {
+			"<LI>" +
+			    $mc.get("testing_fmt") % [ "#{desc}#{xtra}" ] +
+			    "</LI>"
+		    }
 		end
+
+		if @publisher.rflag.testdesc
+		    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
+		    puts "<BR>"
+		end
+
+		@o.flush
 	    end
 	end
 
@@ -398,16 +319,20 @@ EOT
 	#------------------------------------------------------------
 
 	def begin
+	    # XXX: javascript only if counter
 	    print <<"EOT"
 <HTML>
   <HEAD>
     <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <TITLE>ZoneCheck results</TITLE>
     <LINK rel="stylesheet" href="/zc/zc.css" type="text/css">
+    <SCRIPT language="JavaScript" src="/zc/progress.js" type="text/javascript">
+    </SCRIPT>
   </HEAD>
   <BODY>
 <H1>ZoneCheck</H1>
 EOT
+@o.flush
 	end
 
 	def end
@@ -445,6 +370,7 @@ EOT
 		puts tbl_ns % [ css, desc, ns_ip[0], ns_ip[1].join(", ") ]
 	    }
 	    puts tbl_end
+	    @o.flush
 	end
 
 	def diagnostic1(domainname, 
@@ -495,10 +421,14 @@ EOT
 		xpl = desc.xpl
 	    end
 	    
-	    msg1(msg)
+	    @o.puts "<DIV class=\"zc_diag\">"
+	    @o.puts "<DIV class=\"zc_title\">#{msg}</DIV>"
 	    explanation(xpl)
-	    list(lst)
-	    vskip
+	    @o.puts "<UL>"
+	    lst.each { |elt| @o.puts "  <LI>#{elt}</LI>" }
+	    @o.puts "</UL>"
+	    @o.puts "<BR>"
+	    @o.puts "</DIV>"
 	end
 	    
 
