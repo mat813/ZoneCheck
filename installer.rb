@@ -262,7 +262,7 @@ else
     }
 
     ARGV.each { |rule|
-	info ||= inst.send "rule_#{rule}"
+	info |= inst.send "rule_#{rule}"
     }
     
     inst.info if info
