@@ -54,13 +54,6 @@ class MessageCatalog
 
 
     ##
-    ## Exception: requested encoding is not possible (conversion lose)
-    ##
-    class EncodingError < StandardError
-    end
-
-
-    ##
     ## Exception: Syntax error, while parsing the file
     ##
     class SyntaxError < StandardError
