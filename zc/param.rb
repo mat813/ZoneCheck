@@ -523,7 +523,7 @@ class Param
 	end
 
 	def local=(resolv)
-	    resolv = resolv.clone.untaint if resolv.tainted?
+	    resolv = resolv.dup.untaint if resolv.tainted?
 	    @local_name = if resolv.nil? || resolv =~ /^\s*$/
 			  then nil
 			  else resolv
