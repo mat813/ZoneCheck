@@ -138,28 +138,35 @@
 
 
 
-	<SCRIPT>
+	<SCRIPT language="JavaScript" type="text/javascript"> 
 	  function validform(form) {
-	  if (form["zone"].value.length == 0) {
-	  alert("Zone Empty")
-	  return 0
-	  } else {
-	  return 1
-	  }
+	    if (form["zone"].value.length == 0) {
+	      alert("Zone Empty");
+	      return 0;
+	    } else {
+	      return 1;
+	    }
 	  }
 
-	  function toto(form) {
-	  form.action=""
-	  form.method="get"
-	  if (validform(form)) {
-	  form.submit()
+	  function do_guess(form) {
+	    form.action="";
+  	    form.method="get";
+	    if (validform(form))
+	      form.submit();
 	  }
+
+	  function do_clear(form) {
+	    form["zone"].value = "";
+	    for (i = 0 ; i < 8 ; i++) {
+	      form["ns" +i].value = "";
+	      form["ips"+i].value = "";
+	    }
 	  }
 	</SCRIPT>
 
 	<INPUT type="submit" value=" Check! ">
-	<INPUT type="button" value=" Guess " onClick="toto(this.form)">
-	<INPUT type="reset"  value=" Clear ">
+	<INPUT type="button" value=" Guess " onClick="do_guess(this.form)">
+	<INPUT type="button" value=" Clear " onClick="do_clear(this.form)">
 	
       <H2>Options</H2>
       <TABLE class="zc_options">
@@ -407,7 +414,7 @@
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Jan 14 18:17:36 CET 2003
+Last modified: Thu Jan 16 12:55:16 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

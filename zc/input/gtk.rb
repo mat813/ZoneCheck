@@ -107,6 +107,12 @@ module Input
 
 		output_f.add(tbl)
 
+		main.set_tip(@o_one,     "expert/output/oneline")
+		main.set_tip(@o_quiet,   "expert/output/quiet")
+		main.set_tip(@o_tag,     "expert/output/tagonly")
+		main.set_tip(@o_type,    "expert/output/format")
+		main.set_tip(@o_process, "expert/output/report")
+		
 		# Advanced
 		advanced_f = Gtk::Frame::new(l10n_advanced)
 
@@ -134,6 +140,11 @@ module Input
 		tbl.attach(@a_testname,    1, 3, 1, 2)
 		
 		advanced_f.add(tbl)
+
+		main.set_tip(@a_useresolver, "expert/advanced/resolver")
+		main.set_tip(@a_resolver,    "expert/advanced/resolver")
+		main.set_tip(@a_test,        "expert/advanced/testonly")
+		main.set_tip(@a_testname,    "expert/advanced/testonly")
 
 		#
 		pack_start(output_f)
@@ -213,6 +224,13 @@ module Input
 		tbl.attach(@o_nothing, 2, 3, 1, 2)
 		output_f.add(tbl)
 
+		main.set_tip(@o_zone,    "option/output/summary")
+		main.set_tip(@o_explain, "option/output/explain")
+		main.set_tip(@o_details, "option/output/details")
+		main.set_tip(@o_prog,    "option/output/progress")
+		main.set_tip(@o_desc,    "option/output/description")
+		main.set_tip(@o_nothing, "option/output/nothing")
+
 		# Error
 		error_f = Gtk::Frame::new(l10n_error)
 
@@ -228,6 +246,11 @@ module Input
 		tbl.attach(@af, 2, 3, 0, 1)
 		tbl.attach(@sf, 0, 1, 1, 2)
 		error_f.add(tbl)
+
+		main.set_tip(@ed, "option/error/default")
+		main.set_tip(@aw, "option/error/allwarnings")
+		main.set_tip(@af, "option/error/allfatals")
+		main.set_tip(@sf, "option/error/stoponfirst")
 		
 		# Tests
 		test_f   = Gtk::Frame::new(l10n_test)
@@ -273,6 +296,12 @@ module Input
 		tbl.attach(@udp,  1, 2, 1, 2)
 		tbl.attach(@tcp,  2, 3, 1, 2)
 		transp_f.add(tbl)
+		
+		main.set_tip(@ipv4, "option/transp/ipv4")
+		main.set_tip(@ipv6, "option/transp/ipv6")
+		main.set_tip(@std,  "option/transp/std")
+		main.set_tip(@udp,  "option/transp/udp")
+		main.set_tip(@tcp,  "option/transp/tcp")
 
 		# Final packaging
 		pack_start(output_f)
@@ -353,8 +382,7 @@ module Input
 		zone_f = Gtk::Frame::new(l10n_zone)
 		zone_f.add(hbox)
 
-		main.tooltips.set_tip(@zone, "Enter zone to check",
-				      "input/simple/zone")
+		main.set_tip(@zone, "input/simple/zone")
 
 		# NS
 		tbl  = Gtk::Table::new(MaxNS, 5, false)
@@ -374,10 +402,8 @@ module Input
 		    tbl.attach(lbl_ips, 3, 4, i, i+1, Gtk::SHRINK | Gtk::FILL)
 		    tbl.attach(@ips[i], 4, 5, i, i+1)
 
-		    main.tooltips.set_tip(@ns[i], "Enter nameserver name",
-					  "input/simple/nameserver/name")
-		    main.tooltips.set_tip(@ips[i], "Enter nameserver IP addresses (coma separated)",
-					  "input/simple/nameserver/name")
+		    main.set_tip(@ns[i],  "input/simple/nameserver/name")
+		    main.set_tip(@ips[i], "input/simple/nameserver/addresses")
 		    
 		}
 		
@@ -388,6 +414,10 @@ module Input
 		@check = Gtk::Button::new(Gtk::Stock::EXECUTE, l10n_check)
 		@guess = Gtk::Button::new(Gtk::Stock::REFRESH, l10n_guess)
 		@clear = Gtk::Button::new(Gtk::Stock::CLEAR,   l10n_clear)
+		main.set_tip(@check, "input/check")
+		main.set_tip(@guess, "input/simple/guess")
+		main.set_tip(@clear, "input/clear")
+		
 
 		@hbbox  = Gtk::HButtonBox::new
 		@hbbox.pack_start(@check)
@@ -533,13 +563,15 @@ module Input
 		batch_f = Gtk::Frame::new(l10n_batch)
 		batch_f.add(vbox)
 
-		main.tooltips.set_tip(@batch, "Enter the list of Zone that you want to test", "input/batch/data")
-		main.tooltips.set_tip(open, "Set batch data from existing file", "input/batch/open")
-		main.tooltips.set_tip(save, "Save current batch data", "input/batch/save")
+		main.set_tip(@batch, "input/batch/data")
+		main.set_tip(open,   "input/batch/open")
+		main.set_tip(save,   "input/batch/save")
 
 		# Buttons
 		@check = Gtk::Button::new(Gtk::Stock::EXECUTE, l10n_check)
 		@clear = Gtk::Button::new(Gtk::Stock::CLEAR,   l10n_clear)
+		main.set_tip(@check, "input/check")
+		main.set_tip(@clear, "input/clear")
 
 		hbbox = Gtk::HButtonBox::new
 		hbbox.pack_start(@check)
@@ -660,7 +692,7 @@ module Input
 	end
 
 	class Main
-	    attr_reader :config, :statusbar, :testmanager, :window, :tooltips
+	    attr_reader :config, :statusbar, :testmanager, :window
 	    
 
 	    def initialize(param, config, testmanager)
@@ -792,6 +824,10 @@ module Input
 		@window.add(vbox)
 		@window.show_all
 		@batch.hide
+	    end
+
+	    def set_tip(widget, id)
+		@tooltips.set_tip(widget, $mc.get("iface_tooltip_#{id}"), id)
 	    end
 	    
 	    def release

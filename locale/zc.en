@@ -184,6 +184,41 @@ file_gotdirectory	: Can't read directory
 
 xcp_toomany_nameservers : Too many nameservers
 
+[iface_tooltip]
+input/simple/zone : Enter zone to check
+input/simple/nameserver/name: Enter nameserver name
+input/simple/nameserver/addresses: Enter nameserver IP addresses (coma separated)
+input/batch/data: Enter the list of Zone that you want to test
+input/batch/save: Save current batch data
+input/batch/open: Set batch data from existing file
+input/simple/guess: Try to fill the nameserver information for an existing zone
+input/clear: Clear all the input information
+input/check: Start the ZoneCheck verification
+
+option/output/summary: Give summary information about the zone tested
+option/output/explain: Give explanation and references
+option/output/details: Give detailed information
+option/output/progress: Show a progress bar
+option/output/description: Show current test name
+option/output/nothing: Don't display progress information
+option/error/default: Use the severity assigned in the configuration file
+option/error/allwarnings: All errors are considered as warnings
+option/error/allfatals: All errors are considered as fatals
+option/error/stoponfirst: Stop on first fatal error
+option/transp/ipv4: Use IPv4 protocol
+option/transp/ipv6: Use IPv6 protocol (new internet protocol)
+option/transp/std: Use UDP and fallback to TCP in case of truncated anser
+option/transp/udp: Use UDP protocol for all queries
+option/transp/tcp: Use TCP protocol for all queries
+
+expert/output/oneline: Print a short answer
+expert/output/tagonly: Only print tag (ideal for scripting)
+expert/output/quiet: Try to minimize ouput messages
+expert/output/format: Select output format
+expert/output/report: Select report analyse/processing
+expert/advanced/resolver: Select an alternative local resolver
+expert/advanced/testonly: Select the unique test you want to make
+
 
 ##############################################################################
 ##############################################################################

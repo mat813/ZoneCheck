@@ -41,10 +41,12 @@ NOT ABLE TODO?
 	GTK param/publisher
 	Cleanup Text/HTML publishers
 
-2002-12-03 tigeot@nic.fr
-	Verifier sur kame.net
-
 2002-12-23 sdalu@nic.fr
-	allow choosing the local resolver in GTK input
 	GTK publisher
 
+2003-01-16 sdalu@nic.fr
+	implement AXFR tests (only framework exists)
+
+DONE:
+2003-01-16 sdalu@nic.fr
+	allow choosing the local resolver in GTK input
