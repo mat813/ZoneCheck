@@ -228,6 +228,9 @@ module Publisher
 	    @o.puts
 	end
 
+	def diag_start()
+	end
+
 	def diag_section(title)
 	    h2(title)
 	end
@@ -323,9 +326,6 @@ module Publisher
 
 
 	#------------------------------------------------------------
-
-	def h1(h)
-	end
 
 	def h2(h)
 	    txtlen = [h.length, MaxLineLength-20].min

@@ -59,7 +59,8 @@ module Publisher
 	    def start(count)
 		title = if @publisher.rflag.quiet
 			then ""
-			else "<H2>" + $mc.get("title_progress") + "</H2>"
+			else "<H2 id=\"t_progress\">" + 
+				$mc.get("title_progress") + "</H2>"
 			end
 
 		# Counter
@@ -172,6 +173,18 @@ module Publisher
     <LINK rel="bookmark" title="#{l10n_single_form}"
 	  href="#{@publish_path}/#{$mc.lang}/"             type="text/html">
 
+    <LINK rel="alternate" title="Original AFNIC version"
+	  href="http://hyperion.nic.fr/zc/"                type="text/html">
+
+    <LINK rel="section" title="#{$mc.get("title_zoneinfo")}"
+          href="#t_zoneinfo"                               type="text/html">
+    <LINK rel="section" title="#{$mc.get("title_progress")}"
+          href="#t_progress"                               type="text/html">
+    <LINK rel="section" title="#{$mc.get("title_testres")}"
+          href="#t_testres"                                type="text/html">
+    <LINK rel="section" title="#{$mc.get("title_status")}"
+          href="#t_status"                                 type="text/html">
+
     <!-- Style -->
     <LINK rel="stylesheet" href="#{@publish_path}/zc.css" type="text/css">
     <STYLE>
@@ -229,7 +242,7 @@ EOT
 
 	    unless rflag.quiet
 		title = $mc.get("title_zoneinfo")
-		@o.puts "<H2>#{title}</H2>"
+		@o.puts "<H2 id=\"t_zoneinfo\">#{title}</H2>"
 	    end
 
 	    l10n_zone = $mc.get("ns_zone").capitalize
@@ -256,6 +269,10 @@ EOT
 	    @o.puts tbl_end
 	    @o.puts "</DIV>"
 	    @o.flush
+	end
+
+	def diag_start()
+	    @o.puts "<H2 id=\"t_testres\">#{$mc.get("title_testres")}</H2>"
 	end
 
 	def diag_section(title)
@@ -364,7 +381,7 @@ EOT
 	def status(domainname, i_count, w_count, f_count)
 	    unless @rflag.quiet
 		l10n_title = $mc.get("title_status")
-		@o.puts "<H2>#{l10n_title}</H2>"
+		@o.puts "<H2 id=\"t_status\">#{l10n_title}</H2>"
 	    end
 	    @o.print "<DIV class=\"zc_status\">", 
 		super(domainname, i_count, w_count, f_count), "</DIV>"
@@ -378,10 +395,6 @@ EOT
 
 
 	#------------------------------------------------------------
-
-	def h1(h)
-	    @o.puts "<H2>#{h.capitalize}</H2>"
-	end
 
 	def h2(h)
 	    @o.puts "<H3 class=\"zc_severity\">---- #{h.capitalize} ----</H3>"

@@ -434,6 +434,10 @@ module Publisher
 #	    end
 	end
 
+	def diag_start()
+	    @o.add_node(Output::L_H1, "h1", $mc.get("title_testres"), false, true)
+	end
+
 	def diag_section(title)
 	    if !@rflag.quiet
 		@o.add_node(Output::L_H2, "h2", title.capitalize, false, true)
@@ -630,10 +634,6 @@ module Publisher
 	end
 
 	#------------------------------------------------------------
-
-	def h1(h)
-	    @o.add_node(Output::L_H1, "h1", h.capitalize, false, true)
-	end
 
 	def h2(h)
 	    @o.add_node(Output::L_H2, "h2", h.capitalize, false, true)

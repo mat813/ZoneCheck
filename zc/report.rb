@@ -152,8 +152,7 @@ module Report
 
 	    if !@rflag.quiet && !(@info.empty?    && 
 				  @warning.empty? && @fatal.empty?)
-		@publish.h1($mc.get("title_testres"))
-	    
+		@publish.diag_start()
 		@info   .display($mc.get("w_info"))    unless @info.empty?
 		@warning.display($mc.get("w_warning")) unless @warning.empty?
 		@fatal  .display($mc.get("w_fatal"))   unless @fatal.empty?
