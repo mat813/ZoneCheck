@@ -130,14 +130,14 @@ module NResolv
 		    if q = @queries[msg.msgid]
 			q.recv msg
 		    else
-			STDERR.puts("non-handled DNS message id=#{msg.msgid}")
+			$stderr.puts("non-handled DNS message id=#{msg.msgid}")
 		    end
 		rescue Message::DecodeError => e
-		    STDERR.puts("DNS message decoding error: #{e}")
+		    $stderr.puts "DNS message decoding error: #{e}"
 		rescue Exception => e
-		    STDERR.puts "Host: #{host}"
-		    STDERR.puts "Unexpected exception while decoding: #{e}"
-		    STDERR.puts e.backtrace.join("\n")
+		    $stderr.puts "Host: #{@host}"
+		    $stderr.puts "Unexpected exception while decoding: #{e}"
+		    $stderr.puts e.backtrace.join("\n")
 		end
 	    end
 
