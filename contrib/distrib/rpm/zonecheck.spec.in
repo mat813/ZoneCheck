@@ -48,10 +48,21 @@ ruby ./installer.rb common cli cgi	\
 	-DETCDIST=""			\
 	-DCHROOT="%{buildroot}"
 
+case `uname` in
+	OSF1)
 ruby -p -i \
-	-e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping4\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/bin/ping  -n -q -w 5 -c 5 %s > /dev/null\2')" \
+	-e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping4\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/sbin/ping -n -q -t 5 -c 5 %s > /dev/null\2')" \
+	-e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping6\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/sbin/ping -n -q -t 5 -c 5 %s > /dev/null\2')" \
+	%{buildroot}%{_sysconfdir}/zonecheck/zc.conf
+	;;
+
+	*)
+ruby -p -i \
+	-e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping4\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/bin/ping -n -q -w 5 -c 5 %s > /dev/null\2')" \
 	-e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping6\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/usr/sbin/ping6 -n -q -w 5 -c 5 %s > /dev/null\2')" \
 	%{buildroot}%{_sysconfdir}/zonecheck/zc.conf
+	;;
+esac
 
 %clean
 %{__rm} -rf %{buildroot}
