@@ -1,5 +1,11 @@
 # $Id$
 
+2003-12-??  ZoneCheck-2.0.1
+	* test: preeval doesn't report fatal error anymore
+	* locale: removed wrong explanation for ping (french)
+	* zc: automatically use ruby-libxml implementation if available
+	* zc: fixed handling of preset
+	
 2003-12-01  ZoneCheck-2.0.0
 	* publisher: protect quote in javascript string
 	* test: re. use the same profile as fr.

@@ -119,7 +119,7 @@
            checks for well formed XML and doesn't perform validation
            against the DTD, so when you edit the configuration file or
            the message catalog you should ensure that the files are valid,
-           for that you can you <application>xmllint</application>
+           for that purpose you can use <application>xmllint</application>
            for example.</para>
 	</answer>
       </qandaentry>
