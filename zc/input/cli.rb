@@ -124,6 +124,7 @@ module Input
 		[ "--transp",	"-t",	GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--verbose",	"-v",   GetoptLong::OPTIONAL_ARGUMENT ],
 		[ "--output",	"-o",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--option",           GetoptLong::REQUIRED_ARGUMENT ],
 		#
 		# Let's have some fun
 		[ "--makecoffee",       GetoptLong::NO_ARGUMENT       ],
@@ -163,6 +164,7 @@ module Input
 		when "--transp"    then p.transp		= arg
 		when "--verbose"   then p.verbose		= arg
 		when "--output"    then p.output		= arg
+		when "--option"    then p.option	       << arg
 		#
 		# Let's have some fun
 		when "--makecoffee"

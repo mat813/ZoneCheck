@@ -349,6 +349,7 @@ class ZoneCheck
 	@param.network.autoconf
 	@param.resolver.autoconf
 	@param.test.autoconf
+	@param.option.autoconf
 
 	# Begin formatter
 	@param.publisher.engine.begin

@@ -616,6 +616,42 @@ class Param
 
 
     ##
+    ## Hold optionnal information
+    ##
+    class Option
+	def initialize
+	    @opt	= { }
+	end
+	
+	def <<(args)
+	    args.strip.split(/\s*,\s*/).each { |arg|
+		case arg
+		when /^-$/		then @opt = { }
+		when /^-(\w+)$/		then @opt.delete($1)
+		when /^+?(\w+)$/	then @opt[$1] = true
+		when /^+?(\w+)=(\w+)$/	then @opt[$1] = $2
+		else raise "Bad option specification"
+		end
+	    }
+	    self
+	end
+
+	def [](key)
+	    @opt[key]
+	end
+
+	def autoconf
+	    @opt.each { |key, value| 
+		if value == true
+		then $dbg.msg(DBG::AUTOCONF, "Option set: #{key}")
+		else $dbg.msg(DBG::AUTOCONF, "Option set: #{key} = #{value}")
+		end
+	    }
+	end
+    end
+
+
+    ##
     ## Exception: Parameter errors (ie: usage)
     ##
     class ParamError < StandardError
@@ -640,6 +676,7 @@ class Param
     # ATTRIBUTS
     #
     attr_reader :publisher, :fs, :network, :resolver, :rflag, :test, :report
+    attr_reader :option
     attr_reader :batch, :domain
     attr_writer :batch, :domain
 
@@ -657,6 +694,7 @@ class Param
 	@report		= ProxyReport::new
 	@domain		= Domain::new
 	@rflag		= ReportFlag::new
+	@option		= Option::new
     end
 
 
