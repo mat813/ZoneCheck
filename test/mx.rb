@@ -14,6 +14,9 @@
 require 'framework'
 
 module CheckNetworkAddress
+    ##
+    ## Check domain MX record
+    ##
     class MX < Test
 	#-- Tests ---------------------------------------------------
 	# DESC: MX entries should exists

@@ -14,6 +14,9 @@
 require 'framework'
 
 module CheckNetworkAddress
+    ##
+    ## Check domain NS records
+    ##
     class NS < Test
 	#-- Tests ---------------------------------------------------
 	# DESC: NS entries should exists

@@ -14,6 +14,9 @@
 require 'framework'
 
 module CheckNetworkAddress
+    ##
+    ## Check domain SOA record
+    ##
     class SOA < Test
 	#-- Tests ---------------------------------------------------
 	# DESC: SOA entries should exists

@@ -11,15 +11,38 @@
 #
 #
 
+#####
+#
+# TODO:
+#   - move these functions into another file
+#
+
 require 'framework'
 
 module CheckNetworkAddress
+    ##
+    ##
+    ##
     class Misc < Test
 	#-- Tests ---------------------------------------------------
-
+	# DESC:
 	def chk_ns_reverse(ns, ip)
-	    ! (( @cm[ip].rec(@domain_name) && ptr(ip.to_name, ip).empty?) ||
-	       (!@cm[ip].rec(@domain_name) && ptr(ip.to_name,nil).empty?))
+	    ip_name = NResolv::DNS::Name::create(ip)
+	    ! (( rec(ip) && ptr(ip, ip_name).empty?) ||
+	       (!rec(ip) && ptr(nil,ip_name).empty?))
+	end
+
+	# DESC: Ensure coherence between given (param) primary and SOA
+	def chk_given_nsprim_vs_soa(ns, ip)
+	    soa(ip).mname == @domain_ns[0][0]
+	end
+	   
+	# DESC: Ensure coherence between given (param) nameservers and NS
+	def chk_given_ns_vs_ns(ns, ip)
+	    nslist_from_ns    = ns(ip).collect{ |n| n.name}
+	    nslist_from_param = @domain_ns.collect { |n, ips| n }
+
+	    nslist_from_ns.unsorted_eql?(nslist_from_param)
 	end
     end
 end
