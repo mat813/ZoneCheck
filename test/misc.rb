@@ -25,13 +25,14 @@ module CheckNetworkAddress
     ##
     ##
     class Misc < Test
-	#-- Tests ---------------------------------------------------
+	#-- Checks --------------------------------------------------
 	# DESC:
 	def chk_ns_reverse(ns, ip)
-	    ip_name = NResolv::DNS::Name::create(ip)
-	    ! (( rec(ip) && ptr(ip, ip_name).empty?) ||
-	       (!rec(ip) && ptr(nil,ip_name).empty?))
+	    ip_name	= NResolv::DNS::Name::create(ip)
+	    srv		= rec(ip) ? ip : nil
+	    ! ptr(srv, ip_name).empty?
 	end
+
 
 	# DESC: Ensure coherence between given (param) primary and SOA
 	def chk_given_nsprim_vs_soa(ns, ip)
@@ -47,8 +48,24 @@ module CheckNetworkAddress
 	end
 
 
-	def tst_recursive_servers(ns, ip)
-	    "true"
+	# DESC: Ensure that a server claiming to be recursive is it really
+	def chk_correct_recursive_flag(ns, ip)
+	    return true unless rec(ip)
+
+	    revdom = case ip
+		     when Address::IPv4 then "in-addr.arpa."
+		     when Address::IPv6 then "ip6.arpa."
+		     else raise "Not an IP address"
+		     end
+
+	    soa(ip, @domain.name.domain)			&&
+		soa(ip, NResolv::DNS::Name::create(revdom))
+	end
+
+	#-- Tests ---------------------------------------------------
+	# 
+	def tst_recursive_server(ns, ip)
+	    rec(ip) ? "true" : "false"
 	end
     end
 end

@@ -19,7 +19,9 @@ module CheckNetworkAddress
     ## Check domain MX record
     ##
     class MX < Test
-	#-- Tests ---------------------------------------------------
+	MsgCat = "test/mx.%s"
+
+	#-- Checks --------------------------------------------------
 	# DESC: MX entries should exists
 	def chk_mx(ns, ip)
 	    ! mx(ip).empty?
@@ -60,11 +62,17 @@ module CheckNetworkAddress
 	    true
 	end
 
+	# DESC: check for wildcard MX
+	def chk_mx_wildcard(ns, ip)
+	    host    = const("inexistant_hostname")
+	    host_fq = @domain.name.add(host)
+	    !mx(ip, host_fq).empty?
+	end
 
 
-
+	#-- Tests ---------------------------------------------------
 	def tst_mail_by_mx_or_a(ns, ip)
-	    "MX"
+	    mx(ip).empty? ? "A" : "MX"
 	end
     end
 end

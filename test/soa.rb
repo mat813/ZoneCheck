@@ -31,13 +31,22 @@ module CheckNetworkAddress
 	    soa(ip, @domain.name, true).aa	# so we need to force the cache
 	end
 
-	# DESC: SOA email adddress shouldn't have an '@'
-	def chk_soa_sntx_contact_at(ns, ip)
-	    soa(ip).rname.to_s !~ /@/
+	# DESC: SOA email address shouldn't have an '@'
+	def chk_soa_contact_sntx_at(ns, ip)
+	    soa(ip).rname[0].to_s !~ /@/
+	end
+
+	# DESC: SOA email address should have a valid syntax
+	def chk_soa_contact_sntx(ns, ip)
+	    rname = soa(ip).rname
+	    mbox  = rname[0].to_s
+	    NResolv::DNS::Name::is_valid_hostname?(rname)	&&
+		(mbox !~ /[^A-Za-z0-9\._\-~\#]/)		&&
+		(mbox !~ /^\.|\.$/)
 	end
 
 	# DESC: SOA master should have a valid hostname syntax
-	def chk_soa_sntx_master(ns, ip)
+	def chk_soa_master_sntx(ns, ip)
 	    NResolv::DNS::Name::is_valid_hostname?(soa(ip).mname)
 	end
 	

@@ -5,6 +5,7 @@
 <!ENTITY version "0.01">
 <!ENTITY supercopy "SUPERCOPYRIGHT &copy;&reg;">
 <!ENTITY faq SYSTEM "common/faq.xml">
+<!ENTITY config SYSTEM "common/config.xml">
 ]>
 
 
@@ -84,7 +85,7 @@
 
   <chapter>
     <title>Configuration</title>
-      <para>toto</para>
+      &config;
   </chapter>
 
   <chapter>

@@ -77,16 +77,15 @@ module NResolv
 		case obj
 		when Name
 		    if make_absolute && !obj.absolute?
-			self::new(obj.labels, Root)
-		    else
-			obj
+		    then self::new(obj.labels, Root)
+		    else obj
 		    end
 		when String
-		    self::from_s(obj, make_absolute)
+		    self::from_s(obj,         make_absolute)
 		when Address
-		    self::from_s(obj.to_name)
+		    self::from_s(obj.to_name, make_absolute)
 		else
-		    self::from_s(obj.to_s, make_absolute)
+		    self::from_s(obj.to_s,    make_absolute)
 		end
 	    end
 
@@ -113,6 +112,11 @@ module NResolv
 		@labels[-1].root?
 	    end
 	    alias fqdn? absolute?
+
+	    def add(obj)
+		prefix = Name::create(obj, false)
+		Name::new(prefix.labels, self)
+	    end
 
 	    # XXX: not BitString ready
 	    def domain(skip=1)
@@ -150,9 +154,8 @@ module NResolv
 	    # XXX: not BitString ready
 	    def to_s
 		if self == Root
-		    "."
-		else
-		    @labels.join('.')
+		then "."
+		else @labels.join('.')
 		end
 	    end
 
@@ -176,6 +179,19 @@ module NResolv
 		(self.class == other.class) && (self.labels == other.labels)
 	    end
 	    alias == eql?
+
+	    def tld
+		if @labels.length < 1
+		then nil
+		else if @labels[-1] == Label::Root
+		     then if @labels.length > 1
+			  then Name::new(@labels[-2, 2])
+			  else nil
+			  end
+		     else Name::new(@labels[-1, 1])
+		     end
+		end
+	    end
 
 	    # XXX: not BitString ready
 	    def [](idx)

@@ -17,6 +17,8 @@
 - escape HTML code
 - meaningfull exit code
 
+- check for domain name not in useconf
+
 
 NOT ABLE TODO?
 - test if ping6 is really there and, otherwise, do not perform some IPv6 tests 
