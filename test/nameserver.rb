@@ -44,6 +44,8 @@ module CheckNameServer
     class ServerAccess < Test
 	with_msgcat 'test/nameserver.%s'
 
+	BOGON_IP = Address::IPv4::create('127.0.0.2')
+
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
 	    super(*args)
@@ -70,9 +72,21 @@ module CheckNameServer
 	    ip(ns).each { |addr|
 		bname = NResolv::DNS::Name::create(addr.to_dnsform +
 						   '.bogons.cymru.com.')
-		case addr
-		when Address::IPv4
-		    bogon << addr unless @cm[nil].addresses(bname).empty?
+		begin
+		    case addr
+		    when Address::IPv4
+			@cm[nil].addresses(bname).each { |baddr|
+			    if baddr == BOGON_IP
+				bogon << addr 
+				break
+			    end
+			}
+		    end
+		rescue NResolv::DNS::ReplyError => e
+		    case e.code
+		    when NResolv::DNS::RCode::NXDOMAIN
+		    else raise
+		    end
 		end
 	    }
 	    return true if bogon.empty?
