@@ -75,11 +75,21 @@ module CheckNetworkAddress
 	    # The idea is to open a TCP connection
 	    #  if no one is listening          => Errno::ECONNREFUSED
 	    #  if there is a firewal (timeout) => Errno::EINVAL
-	    sock = nil
+	    #                                     Errno::ECONNRESET
+	    msg		= NResolv::DNS::Message::Query::new
+	    msg.question.add(@domain.name, NResolv::DNS::Resource::IN::ANY)
+	    rawmsg	= msg.to_wire
+	    sock	= nil
 	    begin
-		sock = TCPSocket::new(ip.to_s, NResolv::DNS::Port)
+		sock	= TCPSocket::new(ip.to_s, NResolv::DNS::Port)
+		sock.write([rawmsg.length].pack('n'))
+		sock.write(rawmsg)
+		lenhdr	= sock.read(2)
+		return false if lenhdr.nil? || lenhdr.size != 2
+		len	= lenhdr.unpack('n')[0]
+		reply	= sock.read(len)
 		true
-	    rescue Errno::ECONNREFUSED, Errno::EINVAL
+	    rescue Errno::ECONNREFUSED, Errno::ECONNRESET, Errno::EINVAL
 		false
 	    ensure
 		sock.close unless sock.nil?
@@ -91,11 +101,11 @@ module CheckNetworkAddress
 	    # The idea is to send 25 'query' concerning the domain in 5 seconds
 	    #  if we received one answer within 8 seconds (dont care about 
 	    #  its content, we consider it sucessful)
-	    msg        = NResolv::DNS::Message::Query::new
+	    msg		= NResolv::DNS::Message::Query::new
 	    msg.question.add(@domain.name, NResolv::DNS::Resource::IN::ANY)
-	    rawmsg     = msg.to_wire
-	    sock       = nil
-	    thr        = nil
+	    rawmsg	= msg.to_wire
+	    sock	= nil
+	    thr		= nil
 	    begin
 		sock = UDPSocket::new(ip.protocol)
 		sock.connect(ip.to_s, NResolv::DNS::Port)
