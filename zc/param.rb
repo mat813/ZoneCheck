@@ -689,7 +689,7 @@ class Param
 	end
 
 	def clear
-	    @testingtime	= nil
+	    @testingtime	= 0.0
 	    @testcount		= 0
 	    @nscount		= 0
 	end
