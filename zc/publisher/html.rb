@@ -83,6 +83,7 @@ module Publisher
 			str
 		    }
 		    @o.puts HTML.nscript { title }
+		    @o.puts HTML.nscript { "<UL>" }
 		end
 
 		# Test description
