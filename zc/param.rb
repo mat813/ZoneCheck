@@ -167,7 +167,7 @@ class Param
 	    return false if @ns_input.empty?
 	    # glue misused
 	    @ns_input.each { |ns, ips|
-		return false unless ns.in_domain?(@name) ^ !ips.empty? }
+		return false unless ns.in_domain?(@name) ^ ips.empty? }
 	    # ok
 	    true
 	end
