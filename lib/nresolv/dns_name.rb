@@ -161,6 +161,12 @@ module NResolv
 		@labels.length
 	    end
 
+	    def hash
+		h = 0
+		@labels.each { |lbl| h ^= lbl.hash }
+		h
+	    end
+
 	    def eql?(other)
 		(self.type == other.type) && (self.labels == other.labels)
 	    end
