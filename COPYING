@@ -11,7 +11,7 @@ The Ruby DNS library (in the lib/ directory) is licenced like Ruby
 
 ZoneCheck terms of use and distribution:
 
-You can use, modify and distribute ZoneCheck according to the GPL
+You can use, modify and distribute ZoneCheck according to the GPL v2
 (GNU General Public License) <URL:http://www.gnu.org/licenses/gpl.html>,
 a copy has been made available in the file 'GPL'.
 To summarize (a lot!), it means you can use ZoneCheck freely (but not

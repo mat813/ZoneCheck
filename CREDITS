@@ -1,7 +1,8 @@
 # $Id$
 
-The resolver library has been inspired by the ruby resolver library,
- and some part of code have been borrowed from it
+The resolver library has been inspired by the ruby resolver library
+ (from Tanaka Akira <akr@m17n.org>), and some part of code have been
+ borrowed from it.
 
 Icons/Pictures/Logo
  David Barou <David.Barou@nic.fr>
