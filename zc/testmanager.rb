@@ -315,13 +315,18 @@ class TestManager
 			   end
 	rescue NResolv::DNS::ReplyError => e
 	    info = "(#{e.resource.rdesc}: #{e.name})"
-	    desc.err = case e.code
-		       when NResolv::DNS::RCode::SERVFAIL
-			   "Server failure #{info}"
-		       when NResolv::DNS::RCode::REFUSED
-			   "Answer refused from server #{info}"
-		       else "#{e.code} #{info}"
-		       end
+	    name = case e.code
+		   when NResolv::DNS::RCode::SERVFAIL
+		       $mc.get("nresolv_rcode_servfail")
+		   when NResolv::DNS::RCode::REFUSED
+		       $mc.get("nresolv_rcode_refused")
+		   when NResolv::DNS::RCode::NXDOMAIN
+		       $mc.get("nresolv_rcode_nxdomain")
+		   when NResolv::DNS::RCode::NOTIMP
+		       $mc.get("nresolv_rcode_notimp")
+		   else e.code.to_s
+		   end
+	    desc.err = "#{name} #{info}"
 #	rescue Errno::EADDRNOTAVAIL
 #	    desc.err = "Network transport unavailable try option -4 or -6"
 	rescue NResolv::NResolvError => e

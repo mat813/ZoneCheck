@@ -197,3 +197,10 @@ missing_sectopt	: option manquante pour la section '%s'
 badclass	: classe '%s' ne dérive pas de %s
 test_exists	: test '%s' défini dans les classes '%s' et '%s'
 check_exists	: vérification '%s' définie dans les classes '%s' et '%s'
+
+
+[nresolv]
+rcode_servfail	: serveur en erreur
+rcode_refused	: réponse refusée par le serveur
+rcode_nxdomain	: le domain n'existe pas
+rcode_notimp	: requête non mise en oeuvre sur le serveur

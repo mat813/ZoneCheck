@@ -198,3 +198,10 @@ missing_sectopt	: missing option for section '%s'
 badclass	: class '%s' doesn't derive from %s
 test_exists	: test '%s' defined in classes '%s' and '%s'
 check_exists	: check '%s' defined int class '%s' and '%s'
+
+
+[nresolv]
+rcode_servfail	: server failure
+rcode_refused	: answer refused from server
+rcode_nxdomain	: domain doesn't exist
+rcode_notimp	: query not implemented on server
