@@ -92,7 +92,7 @@ class NResolv
 		    name     = entry[0]
 		    dispname = prevname == name ? nil : name
 		    prevname = name
-		    output << entry_to_dig_s([entry[0], *entry[1..-1]], align)
+		    output << entry_to_dig_s(entry, align)
 		}
 	    end
 
@@ -111,7 +111,7 @@ class NResolv
 	
 	    class Q
 		private
-		def entry_to_dig_s(entry, maxlen)
+		def entry_to_dig_s(entry, align)
 		    name, rr = entry
 		    ";%-*s  %-*s  %-*s\n" % [
 			align, name,
