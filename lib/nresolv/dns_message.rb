@@ -41,7 +41,7 @@ module NResolv
 
 
 	    def opcode=(code)
-		if code.nil? || code.type != OpCode
+		if code.nil? || code.class != OpCode
 		    raise ArgumentError, 
 			"expected type NResolv::DNS::OpCode"
 		end
@@ -107,7 +107,7 @@ module NResolv
 		end
 
 		def rcode=(code)
-		    if code.nil? || code.type != RCode
+		    if code.nil? || code.class != RCode
 			raise ArgumentError, 
 			    "expected type NResolv::DNS::RCode"
 		    end
@@ -115,7 +115,7 @@ module NResolv
 		end
 
 		def question=(q)
-		    unless q.nil? || q.type == Section::Q
+		    unless q.nil? || q.class == Section::Q
 			raise ArgumentError,
 			"expected type NResolv::DNS::Section::Q"
 		    end
@@ -123,7 +123,7 @@ module NResolv
 		end
 
 		def answer=(a)
-		    unless a.nil? || a.type == Section::A
+		    unless a.nil? || a.class == Section::A
 			raise ArgumentError,
 			    "expected type NResolv::DNS::Section::A"
 		    end
@@ -131,7 +131,7 @@ module NResolv
 		end
 		
 		def authority=(a)
-		    unless a.nil? || a.type == Section::A
+		    unless a.nil? || a.class == Section::A
 			raise ArgumentError,
 			    "expected type NResolv::DNS::Section::A"
 		    end
@@ -139,7 +139,7 @@ module NResolv
 		end
 		
 		def additional=(a)
-		    unless a.nil? || a.type == Section::A
+		    unless a.nil? || a.class == Section::A
 			raise ArgumentError,
 			"expected type NResolv::DNS::Section::A"
 		    end
@@ -156,7 +156,7 @@ module NResolv
 	##
 	class Section
 	    def initialize
-		if self.type == Section
+		if self.class == Section
 		    raise RuntimeError, "Abstract Class"
 		end
 

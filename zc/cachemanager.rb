@@ -82,11 +82,10 @@ class CacheManager
 	    @ra       = msg.ra
 	end
 
-	alias _type type
-	def type
-	    @resource.type
+	alias _class class
+	def class
+	    @resource.class
 	end
-	alias class type
 
 	def kind_of?(k)
 	    @resource.kind_of?(k)
@@ -95,8 +94,8 @@ class CacheManager
 	alias is_a?        kind_of?
 
 	def eql?(other)
-	    return false unless self.type == other.type
-	    other = other.instance_eval("@resource") if respond_to?(:_type)
+	    return false unless self.class == other.class
+	    other = other.instance_eval("@resource") if respond_to?(:_class)
 	    @resource == other
 	end
 	alias == eql?

@@ -113,7 +113,7 @@ module NResolv
 
 	    # Create a query from the DNS message _msg_
 	    def query(msg)
-		unless msg.type == Message::Query
+		unless msg.class == Message::Query
 		    raise RuntimeError, "DNS message should be a query"
 		end
 		query = create_query(msg)
@@ -164,7 +164,7 @@ module NResolv
 
 		# two queries are identical if they have the same message id.
 		def eql?(other)
-		    (self.type == other.type) && (self.msgid == other.msgid)
+		    (self.class == other.class) && (self.msgid == other.msgid)
 		end
 		alias == eql?
 		    

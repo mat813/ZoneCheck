@@ -173,7 +173,7 @@ module NResolv
 	    end
 
 	    def eql?(other)
-		(self.type == other.type) && (self.labels == other.labels)
+		(self.class == other.class) && (self.labels == other.labels)
 	    end
 	    alias == eql?
 

@@ -20,7 +20,7 @@ PREFIX
 |   `--zc
 |      |-- cgi-bin
 |      |   `-- zc.cgi		# CGI
-|      |-- html			# HTML directory (javascript + css)
+|      |-- html			# HTML directory (javascript, css, pics, ...)
 |      |   |-- en		#   English version
 |      |   |-- ...              #   ...
 |      |   `-- fr		#   French version

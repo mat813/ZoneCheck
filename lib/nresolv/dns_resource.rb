@@ -42,7 +42,7 @@ module NResolv
 	    end
 
 	    def eql?(other)
-		return false unless self.type == other.type
+		return false unless self.class == other.class
 		siv = self.instance_variables
 		oiv = other.instance_variables
 		return false unless siv == oiv

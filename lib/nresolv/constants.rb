@@ -39,12 +39,12 @@ module NResolv
 	end
 
 	def eql?(other)
-	    (self.type == other.type) && (self.value == other.value)
+	    (self.class == other.class) && (self.value == other.value)
 	end
 	alias == eql?
 
 	def hash
-	    type.hash
+	    self.value.hash
 	end
 
 	def self.fetch_by_name(name)
