@@ -1,3 +1,18 @@
+# $Id$
+
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
+require 'cgi'
+
 class Param
     ##
     ## Processing parameters from CGI (Common Gateway Interface)

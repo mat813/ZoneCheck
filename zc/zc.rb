@@ -143,12 +143,16 @@ class ZoneCheck
     # Parse command line
     #
     def configure
-	@input = if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
-		    (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
-		 then Param::CGI::new
-#		 elsif ENV.has_key?("DISPLAY")
-#		 then Param::GTK::new
-		 else Param::CLI::new
+	@input = case ENV["ZC_INPUT"]
+		 when "gtk"  then Param::GTK::new
+		 when "cli"  then Param::CLI::new
+		 when "cgi"  then Param::CGI::new
+		 else
+		     if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
+			(PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
+		     then Param::CGI::new
+		     else Param::CLI::new
+		     end
 		 end
 	begin
 	    @input.usage(EXIT_USAGE) if (@param = @input.parse).nil?
@@ -215,13 +219,14 @@ class ZoneCheck
     # Read the 'zc.conf' configuration file
     #
     def load_testlist
-	@config = Config::new(@test_manager, @param.category)
-	if @param.test
-	    @config.read(@param.configfile, [ Config::S_Constants ])
-	    @config.newtest(@param.test, Config::Fatal, "none")
-	else
-	    @config.read(@param.configfile)
+	@config = Config::new(@test_manager)
+	@config.limittest(Config::L_Category, @param.category)
+
+	if @param.test && !@param.test.empty?
+	    @config.limittest(Config::L_Test, @param.test)
 	end
+
+	@config.read(@param.configfile)
     end
 
 

@@ -25,6 +25,9 @@ class Config
     S_Constants		= "constants"
     S_Tests		= "tests"
 
+    L_Category		= "category"
+    L_Test		= "test"
+
     ##
     ## Syntax error, while parsing the file
     ##
@@ -47,9 +50,10 @@ class Config
     #
     # Initializer
     #
-    def initialize(test_manager, category=nil)
+    def initialize(test_manager)
 	@test_manager	= test_manager
-	@category	= category
+	@l_category	= nil
+	@l_test		= nil
 
 	@test_list	= []
 	@test_action	= {}
@@ -61,6 +65,43 @@ class Config
 	@order_switch	= { CheckGeneric        => 0, CheckNameServer => 1,  
 	                    CheckNetworkAddress => 2, CheckExtra      => 3 }
     end
+
+
+
+    #
+    # Limit tests to perform to some categories
+    #
+    def limittest(type, limit=nil)
+	tester = nil
+	case type
+	when L_Category
+	    @l_category = limit
+	    tester = Proc::new { |testname|
+		!@l_category.include?(@test_category[testname]) }
+	when L_Test
+	    @l_test = limit
+	    tester = Proc::new { |testname|
+		!@l_test.include?(testname) }
+	else
+	    raise ArgumentError, "Wrong limitation type: #{type}"
+	end 
+
+	if limit.nil?
+	    $dbg.msg(DBG::CONFIG, "no #{type} limitation")
+	    return
+	else
+	    $dbg.msg(DBG::CONFIG, "limiting to #{type}: " + limit.join("/"))
+	end
+	@test_list.delete_if { |testname|
+	    if (remove = tester.call(testname))
+		$dbg.msg(DBG::CONFIG, "removing (due to limit): #{testname}")
+		@test_category.delete(testname)
+		@test_action.delete(testname)
+	    end
+	    remove
+	}
+    end
+	
 
 
     #
@@ -89,7 +130,9 @@ class Config
 	end
 	
 	# Check if we really want the test
-	if @category && ! @category.include?(category)
+	if (@l_category && ! @l_category.include?(category)) ||
+	   (@l_test     && ! @l_test.include?(testname))
+	    $dbg.msg(DBG::CONFIG, "test skipped (due to limit): #{testname}")
 	    return
 	end
 

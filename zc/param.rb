@@ -11,8 +11,6 @@
 #
 #
 
-require 'cgi'
-
 require 'report'
 require 'publisher'
 
@@ -270,7 +268,6 @@ class Param
     attr_reader :category
 
     attr_reader :test
-    attr_writer :test
 
     attr_reader :domain
     attr_writer :domain
@@ -333,6 +330,12 @@ class Param
 	@give_testdesc = suf
     end
 
+    #
+    # WRITER: test
+    #
+    def test=(string)
+	@test = string.split(/\s*,\s*/)
+    end
 
     #
     # WRITER: ipv6
