@@ -51,12 +51,12 @@ module Publisher
 
 	# Shortcut for enclosing javascript
 	def self.jscript
-	    '<SCRIPT type="text/javascript">' + yield + '</SCRIPT>'
+	    '<script type="text/javascript">' + yield + '</script>'
 	end
 
 	# Shortcut for enclosing noscript
 	def self.nscript
-	    '<NOSCRIPT>' + yield + '</NOSCRIPT>'
+	    '<noscript>' + yield + '</noscript>'
 	end
 
 
@@ -76,8 +76,8 @@ module Publisher
 	    def start(count)
 		title = if @publisher.rflag.quiet
 			then ""
-			else "<H2 id=\"t_progress\">" + 
-				$mc.get("title_progress") + "</H2>"
+			else "<h2 id=\"t_progress\">" + 
+				$mc.get("title_progress") + "</h2>"
 			end
 
 		# Counter
@@ -100,13 +100,13 @@ module Publisher
 			str
 		    }
 		    @o.puts HTML.nscript { title }
-		    @o.puts HTML.nscript { "<UL>" }
+		    @o.puts HTML.nscript { "<ul>" }
 		end
 
 		# Test description
 		if @publisher.rflag.testdesc
 		    @o.puts title
-		    @o.puts "<UL class=\"zc-test\">"
+		    @o.puts "<ul class=\"zc-test\">"
 		end
 	    end
 	    
@@ -123,12 +123,12 @@ module Publisher
 		# Counter
 		if @publisher.rflag.counter
 		    @o.puts HTML.jscript { "zc_pgr_finish();" }
-		    @o.puts HTML.nscript { "</UL>" }
+		    @o.puts HTML.nscript { "</ul>" }
 		end
 
 		# Test description
 		if @publisher.rflag.testdesc
-		    @o.puts "</UL>"
+		    @o.puts "</ul>"
 		end
 	    end
 	    
@@ -149,12 +149,12 @@ module Publisher
 		    @o.puts HTML.jscript {
 			"zc_pgr_process(\"#{msg}\")" }
 		    @o.puts HTML.nscript {
-			"<LI>#{@l10n_testing}: #{msg}</LI>" }
+			"<li>#{@l10n_testing}: #{msg}</li>" }
 		end
 
 		# Test description
 		if @publisher.rflag.testdesc
-		    @o.puts "<LI>#{@l10n_testing}: #{msg}</LI>"
+		    @o.puts "<li>#{@l10n_testing}: #{msg}</li>"
 		end
 
 		# Flush
@@ -172,7 +172,7 @@ module Publisher
 	end
 
 	def error(text)
-	    @o.puts "<BLOCKQUOTE class=\"zc-error\">#{text}</BLOCKQUOTE>"
+	    @o.puts "<blockquote class=\"zc-error\">#{text}</blockquote>"
 	end
 
 	#------------------------------------------------------------
@@ -185,40 +185,40 @@ module Publisher
 	    # XXX: javascript only if counter
 	    @o.print <<"EOT"
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-  <HEAD>
-    <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <TITLE>ZoneCheck results</TITLE>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>ZoneCheck results</title>
 
     <!-- Navigation -->
-    <LINK rel="start" href="#{@publish_path}/"             type="text/html">
-    <LINK rel="up"    href="#{@publish_path}/#{$mc.lang}/" type="text/html">
+    <link rel="start" href="#{@publish_path}/"             type="text/html">
+    <link rel="up"    href="#{@publish_path}/#{$mc.lang}/" type="text/html">
 
-    <LINK rel="bookmark" title="ZoneCheck website"
+    <link rel="bookmark" title="ZoneCheck website"
 	  href="http://www.zonecheck.fr/"                  type="text/html">
-    <LINK rel="bookmark" title="#{l10n_batch_form}"
+    <link rel="bookmark" title="#{l10n_batch_form}"
 	  href="#{@publish_path}/#{$mc.lang}/batch.html"   type="text/html">
-    <LINK rel="bookmark" title="#{l10n_single_form}"
+    <link rel="bookmark" title="#{l10n_single_form}"
 	  href="#{@publish_path}/#{$mc.lang}/"             type="text/html">
 
-    <LINK rel="section" title="#{$mc.get("title_zoneinfo")}"
+    <link rel="section" title="#{$mc.get("title_zoneinfo")}"
           href="#t_zoneinfo"                               type="text/html">
-    <LINK rel="section" title="#{$mc.get("title_progress")}"
+    <link rel="section" title="#{$mc.get("title_progress")}"
           href="#t_progress"                               type="text/html">
-    <LINK rel="section" title="#{$mc.get("title_testres")}"
+    <link rel="section" title="#{$mc.get("title_testres")}"
           href="#t_testres"                                type="text/html">
-    <LINK rel="section" title="#{$mc.get("title_status")}"
+    <link rel="section" title="#{$mc.get("title_status")}"
           href="#t_status"                                 type="text/html">
 
 
     <!-- Favicon -->
-    <LINK rel="icon"       href="#{@publish_path}/img/zc-fav.png" type="image/png">
+    <link rel="icon"       href="#{@publish_path}/img/zc-fav.png" type="image/png">
 
 
     <!-- Style -->
-    <LINK rel="stylesheet" href="#{@publish_path}/style/zc.css"   type="text/css">
+    <link rel="stylesheet" href="#{@publish_path}/style/zc.css"   type="text/css">
 
-    <STYLE type="text/css">
+    <style type="text/css">
         UL.zc-ref LI { 
             list-style: url(#{@publish_path}/img/ref.png)     disc }
 
@@ -227,19 +227,19 @@ module Publisher
 
         UL.zc-details LI { 
             list-style: url(#{@publish_path}/img/details.png) disc }
-    </STYLE>
+    </style>
 
     <!-- Javascript -->
-    <SCRIPT type="text/javascript">
+    <script type="text/javascript">
       zc_publish_path = "#{@publish_path}"
-    </SCRIPT>
-    <SCRIPT src="#{@publish_path}/js/progress.js"  type="text/javascript">
-    </SCRIPT>
-    <SCRIPT src="#{@publish_path}/js/popupmenu.js" type="text/javascript">
-    </SCRIPT>
-  </HEAD>
-  <BODY>
-    <IMG class="zc-logo" alt="ZoneCheck" src="#{@publish_path}/img/logo.png">
+    </script>
+    <script src="#{@publish_path}/js/progress.js"  type="text/javascript">
+    </script>
+    <script src="#{@publish_path}/js/popupmenu.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <img class="zc-logo" alt="ZoneCheck" src="#{@publish_path}/img/logo.png">
 EOT
 @o.flush
 	end
@@ -250,8 +250,8 @@ EOT
 		    "zc_contextmenu_start();" }
 	    @o.print <<"EOT"
 
-    <HR>
-    <SPAN style="float: right;">
+    <hr>
+    <span style="float: right;">
       <a href="http://jigsaw.w3.org/css-validator/check/referer">
 	<img style="border:0;width:88px;height:31px"
 	     src="http://jigsaw.w3.org/css-validator/images/vcss" 
@@ -260,19 +260,19 @@ EOT
 	<img style="border:0;width:88px;height:31px"
 	     src="http://www.w3.org/Icons/valid-html401"
 	     alt="Valid HTML 4.01!"></a>
-    </SPAN>
-Release: #{$zc_name}-#{CGI::escapeHTML($zc_version)} <BR>
+    </span>
+Release: #{$zc_name}-#{CGI::escapeHTML($zc_version)} <br>
 Last generated: #{Time::now}
-<!-- <BR> Contact: #{$zc_contact} -->
-  </BODY>
-</HTML>
+<!-- <br> Contact: #{$zc_contact} -->
+  </body>
+</html>
 EOT
 	end
 	
 
 	def setup(domain_name)
 	    if ! @rflag.quiet
-		@o.puts "<H1>ZoneCheck: #{domain_name}</H1>"
+		@o.puts "<h1>ZoneCheck: #{domain_name}</h1>"
 	    end
 	end
 
@@ -282,20 +282,20 @@ EOT
 	def intro(domain)
 	    return unless @rflag.intro
 
-	    tbl_beg   = '<TABLE rules="rows" class="zc-domain">'
-	    tbl_zone  = '<TR class="zc-zone"><TD>%s</TD><TD colspan="4">%s</TD></TR>'
-	    tbl_ns    = '<TR class="%s"><TD>%s</TD><TD>%s</TD><TD>%s</TD></TR>'
-	    tbl_end   = '</TABLE>'
+	    tbl_beg   = '<table rules="rows" class="zc-domain">'
+	    tbl_zone  = '<tr class="zc-zone"><td>%s</td><td colspan="4">%s</td></tr>'
+	    tbl_ns    = '<tr class="%s"><td>%s</td><td>%s</td><td>%s</td></tr>'
+	    tbl_end   = '</table>'
 
 
 	    unless @rflag.quiet
 		title = $mc.get("title_zoneinfo")
-		@o.puts "<H2 id=\"t_zoneinfo\">#{title}</H2>"
+		@o.puts "<h2 id=\"t_zoneinfo\">#{title}</h2>"
 	    end
 
 	    l10n_zone = $mc.get("ns_zone").capitalize
 
-	    @o.puts "<DIV class=\"zc-zinfo\">"
+	    @o.puts "<div class=\"zc-zinfo\">"
 	    # Easy parseable comment
 	    ([ "ZONE: #{domain.name}" ] +
 		domain.ns.collect { |ns, ips|
@@ -303,7 +303,7 @@ EOT
 		@o.puts "<!-- #{e.ljust(70)} -->" }
 	    # Result
 	    @o.puts tbl_beg
-	    @o.puts tbl_zone % [ "<IMG src=\"#{@publish_path}/img/zone.png\" alt=\"#{l10n_zone}\">", domain.name ]
+	    @o.puts tbl_zone % [ "<img src=\"#{@publish_path}/img/zone.png\" alt=\"#{l10n_zone}\">", domain.name ]
 	    domain.ns.each_index { |i| 
 		ns_ip = domain.ns[i]
 		if i == 0
@@ -316,22 +316,22 @@ EOT
 		    logo = "secondary"
 		end
 
-		desc = "<IMG src=\"#{@publish_path}/img/#{logo}.png\" alt= \"#{desc}\">"
+		desc = "<img src=\"#{@publish_path}/img/#{logo}.png\" alt= \"#{desc}\">"
 
 		@o.puts tbl_ns % [ css, desc, 
 		    ns_ip[0].to_s, ns_ip[1].join(", ") ]
 	    }
 	    @o.puts tbl_end
-	    @o.puts "</DIV>"
+	    @o.puts "</div>"
 	    @o.flush
 	end
 
 	def diag_start()
-	    @o.puts "<H2 id=\"t_testres\">#{$mc.get("title_testres")}</H2>"
+	    @o.puts "<h2 id=\"t_testres\">#{$mc.get("title_testres")}</h2>"
 	end
 
 	def diag_section(title)
-	    @o.puts "<H3 class=\"zc-diagsec\">---- #{title} ----</H3>"
+	    @o.puts "<h3 class=\"zc-diagsec\">---- #{title} ----</h3>"
 	end
 
 	def diagnostic1(domainname, 
@@ -352,25 +352,25 @@ EOT
 		f_tag, f_count ]
 
 
-	    @o.puts "<DIV class=\"zc-diag1\">"
-	    @o.puts "<TABLE width=\"100%\">"
-	    @o.puts "<TR class=\"zc-title\"><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
+	    @o.puts "<div class=\"zc-diag1\">"
+	    @o.puts "<table width=\"100%\">"
+	    @o.puts "<tr class=\"zc-title\"><td width=\"100%\">#{domainname}</td><td>#{summary}</td></tr>"
 	    if res.nil?
 		l10n_perfect = $mc.get("w_perfect").capitalize
-		@o.puts "<TR><TD colspan=\"2\"><B>#{l10n_perfect}</B></TD></TR>"
-		@o.puts "<TR><TD colspan=\"2\">&nbsp;</TD></TR>"
+		@o.puts "<tr><td colspan=\"2\"><b>#{l10n_perfect}</b></td></tr>"
+		@o.puts "<tr><td colspan=\"2\">&nbsp;</td></tr>"
 
 	    else
 		msg = if @rflag.tagonly
 		      then res.testname
 		      else res.desc.msg
 		      end
-		@o.puts "<TR><TD colspan=\"2\">#{severity}: #{res.tag}</TD></TR>"
-		@o.puts "<TR><TD colspan=\"2\">#{msg}</TD></TR>"
+		@o.puts "<tr><td colspan=\"2\">#{severity}: #{res.tag}</td></tr>"
+		@o.puts "<tr><td colspan=\"2\">#{msg}</td></tr>"
 	    end
 
-	    @o.puts "</TABLE>"
-	    @o.puts "</DIV>"
+	    @o.puts "</table>"
+	    @o.puts "</div>"
 	end
 
 
@@ -378,12 +378,12 @@ EOT
 	    msg, xpl_lst = nil, nil
 
 	    @o.puts "<!-- TEST: #{testname.ljust(40)} -->"
-	    @o.puts "<DIV class=\"zc-diag\">"
+	    @o.puts "<div class=\"zc-diag\">"
 
 	    # Testname
 	    if @rflag.testname
 		l10n_name = $mc.get("#{testname}_testname")
-		@o.puts "<DIV class=\"zc-name\"><IMG src=\"#{@publish_path}/img/gear.png\" alt=\"\"> #{l10n_name}</DIV>"
+		@o.puts "<div class=\"zc-name\"><img src=\"#{@publish_path}/img/gear.png\" alt=\"\"> #{l10n_name}</div>"
 	    end
 
 	    # Severity
@@ -408,16 +408,16 @@ EOT
 		      end
 		  end
 	    
-	    @o.puts "<DIV class=\"zc-msg\"><IMG src=\"#{@publish_path}/img/#{logo}\" alt=\"#{l10n_severity_shorttag}:\"> #{msg}</DIV>"
+	    @o.puts "<div class=\"zc-msg\"><img src=\"#{@publish_path}/img/#{logo}\" alt=\"#{l10n_severity_shorttag}:\"> #{msg}</div>"
 		
 	    if !severity.nil?
 		# Details
 		if @rflag.details && desc.dtl
-		    @o.puts "<UL class=\"zc-details\">"
-		    @o.puts "<LI>"
+		    @o.puts "<ul class=\"zc-details\">"
+		    @o.puts "<li>"
 		    @o.puts desc.dtl
-		    @o.puts "</LI>"
-		    @o.puts "</UL>"
+		    @o.puts "</li>"
+		    @o.puts "</ul>"
 		end
 
 		# Explanation
@@ -426,40 +426,40 @@ EOT
 		end
 
 		if xpl_lst
-		    @o.puts "<UL class=\"zc-ref\">"
+		    @o.puts "<ul class=\"zc-ref\">"
 		    xpl_lst.each { |t, h, b|
 			l10n_tag = $mc.get("tag_#{t}")
-			h.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>')
-			b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>') }
-			@o.puts "<LI>"
-			@o.puts "<SPAN class=\"zc-ref\">#{l10n_tag}: #{h}</SPAN>"
-			@o.puts "<BR>"
+			h.gsub!(/<URL:([^>]+)>/, '<a href="\1">\1</a>')
+			b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<a href="\1">\1</a>') }
+			@o.puts "<li>"
+			@o.puts "<span class=\"zc-ref\">#{l10n_tag}: #{h}</span>"
+			@o.puts "<br>"
 			@o.puts b.join(" ")
-			@o.puts "</LI>"
+			@o.puts "</li>"
 		    }
-		    @o.puts "</UL>"
+		    @o.puts "</ul>"
 		end
 	    end
 
 	    # Elements
 	    if ! lst.empty?
-		@o.puts "<UL class=\"zc-element\">"
-		lst.each { |elt| @o.puts "  <LI>#{elt}</LI>" }
-		@o.puts "</UL>"
+		@o.puts "<ul class=\"zc-element\">"
+		lst.each { |elt| @o.puts "  <li>#{elt}</li>" }
+		@o.puts "</ul>"
 	    end
 
-	    @o.puts "<BR>"
-	    @o.puts "</DIV>"
+	    @o.puts "<br>"
+	    @o.puts "</div>"
 	end
 	    
 
 	def status(domainname, i_count, w_count, f_count)
 	    unless @rflag.quiet
 		l10n_title = $mc.get("title_status")
-		@o.puts "<H2 id=\"t_status\">#{l10n_title}</H2>"
+		@o.puts "<h2 id=\"t_status\">#{l10n_title}</h2>"
 	    end
 
-	    @o.puts "<DIV class=\"zc-status\">"
+	    @o.puts "<div class=\"zc-status\">"
 	    # Easy parseable comment
 	    [   "STATUS : #{f_count > 0 ? "FAILED" : "PASSED"}",
 		"ERROR  : #{f_count}",
@@ -467,12 +467,12 @@ EOT
 		@o.puts "<!-- #{e.ljust(20)} -->" }
 	    # Result
 	    @o.puts super(domainname, i_count, w_count, f_count)
-	    @o.puts "</DIV>"
+	    @o.puts "</div>"
 
-	    @o.puts "<BR>"
+	    @o.puts "<br>"
 	    if @rflag.quiet
-		@o.puts "<HR width=\"60%\">"
-		@o.puts "<BR>"
+		@o.puts "<hr width=\"60%\">"
+		@o.puts "<br>"
 	    end
 	end
     end
