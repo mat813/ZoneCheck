@@ -33,35 +33,63 @@
 #
 
 require 'framework'
+require 'yaml'
 
 module CheckNetworkAddress
     class RootServer < Test
 	with_msgcat 'test/rootserver.%s'
 
+	#-- Initialization ------------------------------------------
+	def initialize(*args)
+	    super(*args)
+	    @cache.create(:rootserver)
+	end
+
+	#-- Shortcuts -----------------------------------------------
+	def rootserver
+	    @cache.use(:rootserver) {
+		rootserver = {}
+
+		fname = begin
+			    const('rootservers')
+			rescue IndexError
+			    nil
+			end
+
+		if fname
+		    fname = const('rootservers').strip
+		    fname = "#{ZC_CONFIG_DIR}/#{fname}" unless fname[0] == ?/
+		    File::open(fname) { |io|
+			data = YAML::load(io) 
+			data.each { |k, v|
+			    rootserver[NResolv::DNS::Name::create(k)] =
+				v.collect { |addr| Address::create(addr) }
+			}
+		    }
+		else
+		    ns(nil, NResolv::DNS::Name::Root).each { |rsr| 
+			rootserver[rsr.name] = addresses(rsr.name) }
+		end
+		rootserver
+	    }
+	end
+
 	#-- Checks --------------------------------------------------
 	# DESC: root server list should be available
 	def chk_root_servers(ns, ip)
-	    return true unless rec(ip)
 	    ! ns(ip, NResolv::DNS::Name::Root).nil?
 	end
 
 	# DESC: root server list should be coherent with ICANN
 	def chk_root_servers_ns_vs_icann(ns, ip)
-	    return true unless rec(ip)
-	    root = NResolv::DNS::Name::Root
-	    ns(ip, root).unsorted_eql?(ns(nil, root))
+	    (ns(ip, NResolv::DNS::Name::Root).collect { 
+		|n| n.name}).unsorted_eql?(rootserver.keys)
 	end
 
 	# DESC: root server addresses should be coherent with ICANN
 	def chk_root_servers_ip_vs_icann(ns, ip)
-	    return true unless rec(ip)
-	    [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 
-		'h', 'i', 'j', 'k', 'l', 'm' ].each { |r|
-		rootserver = "#{r}.root-servers.net."
-		unless addresses(rootserver) == addresses(rootserver, ip)
-		    return false
-		end
-	    }
+	    rootserver.each { |rs, ips|
+		return false unless addresses(rs, ip).unsorted_eql?(ips) }
 	    true
 	end
     end

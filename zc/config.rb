@@ -227,7 +227,7 @@ class Config
 	    @constants.fetch(name)
 	rescue IndexError
 	    # WARN: not localized (programming error)
-	    raise RuntimeError, 
+	    raise IndexError, 
 		"Trying to fetch undefined constant '#{name}'"
 	end
     end

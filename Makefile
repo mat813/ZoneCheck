@@ -94,7 +94,7 @@ install-common:
 	$(RUBY) -p -i \
 		-e "\$$_.gsub!(/^#!.*ruby/, '#!$(RUBY)')" \
 		-e "\$$_.gsub!(/^(ZC_INSTALL_PATH\s*=\s*).*/, '\1\"$(LIBEXEC)/zc\"')" \
-		-e "\$$_.gsub!(/^(ZC_CONFIG_DIR\s*=\s*).*/,   '\1\"$(ETCDIR)\"')" \
+		-e "\$$_.gsub!(/^(ZC_CONFIG_DIR\s*=\s*).*/,   '\1\"$(ETCDIR)/zonecheck\"')" \
 		-e "\$$_.gsub!(/^(ZC_LOCALIZATION_DIR\s*=\s*).*/, '\1\"$(LIBEXEC)/zc/locale\"')" \
 		-e "\$$_.gsub!(/^(ZC_TEST_DIR\s*=\s*).*/,  '\1\"$(LIBEXEC)/zc/test\"')" \
 		-e "\$$_.gsub!(/^(ZC_HTML_PATH\s*=\s*).*/, '\1\"$(HTML_PATH)\"')" \
@@ -114,10 +114,11 @@ install-common:
 	@echo
 
 	@echo "==> Installing default configuration file"
-	$(INSTALL) -d $(ETCDIR)
-	$(INSTALL) -b -m 0644 etc/zc.conf $(ETCDIR)
-	$(INSTALL) -b -m 0644 etc/zc.conf.fr $(ETCDIR)
-	$(INSTALL) -b -m 0644 etc/zc.conf.arpa $(ETCDIR)
+	$(INSTALL) -d $(ETCDIR)/zonecheck
+	$(INSTALL) -b -m 0644 etc/zc.conf $(ETCDIR)/zonecheck
+	$(INSTALL) -b -m 0644 etc/zc.conf.fr $(ETCDIR)/zonecheck
+	$(INSTALL) -b -m 0644 etc/zc.conf.arpa $(ETCDIR)/zonecheck
+	$(INSTALL) -b -m 0644 etc/rootservers $(ETCDIR)/zonecheck
 	@echo "*************************"
 	@echo "** If you already had a zc.conf file it has been renamed"
 	@echo "**   to zc.conf.old"

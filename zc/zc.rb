@@ -62,7 +62,7 @@ ZC_INSTALL_PATH		= (ENV['ZC_INSTALL_PATH'] || (ENV['HOME'] || '/homes/sdalu') + 
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
-ZC_CONFIG_DIR		= "#{ZC_INSTALL_PATH}/etc"
+ZC_CONFIG_DIR		= "#{ZC_INSTALL_PATH}/etc/zonecheck"
 ZC_LOCALIZATION_DIR	= "#{ZC_INSTALL_PATH}/locale"
 ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
 
