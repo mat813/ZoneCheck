@@ -11,7 +11,14 @@
 #
 #
 
+##
+## Message catalog for L10N
+##
 class MessageCatalog
+    class EntryNotFound < StandardError
+    end
+
+    #
     def initialize(msgfile)
 	@catalog = {}
 	prefix   = nil
@@ -45,7 +52,11 @@ class MessageCatalog
 	}
     end
 
+    #
     def get(tag)
-	@catalog[tag]
+	if (str = @catalog[tag]).nil?
+#	    raise EntryNotFound, "Tag '#{tag}' has not been localized"
+	end
+	str
     end
 end

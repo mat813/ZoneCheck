@@ -1,8 +1,14 @@
+# $Id
+
+require 'socket'
+
 class Address
     ##
     ##
     ##
     class IPv4 < Address
+	Proto = Socket::AF_INET
+
 	Regex = /\A(\d+)\.(\d+)\.(\d+)\.(\d+)\z/
 	
 	def self.is_valid(str)
@@ -58,7 +64,7 @@ class Address
 		address = @address.slice(0, bytes) + 
 		    ("\0" * (@address.size - bytes))
 		address[bytes] = (@address[bytes] >> bits) << bits
-		Resolv::IPv4::new(address)
+		IPv4::new(address)
 	    end
 	end
 
@@ -71,8 +77,14 @@ class Address
 	end
 	
 	def to_name
-	    return DNS::Name::create('%d.%d.%d.%d.in-addr.arpa.' % 
-				     @address.unpack('CCCC').reverse)
+	    return '%d.%d.%d.%d.in-addr.arpa.' % 
+		@address.unpack('CCCC').reverse
 	end
+
+	def protocol
+	    Socket::AF_INET
+	end
+
+	Loopback = IPv4::create("127.0.0.1")
     end
 end

@@ -73,7 +73,6 @@ module NResolv
 		    [ name ]
 		else
 		    if name.count(".") + 1 >= @absdepth
-			puts "YO: #{name.count(".")} vs #{@absdepth}"
 			[ name + "." ]
 		    else
 			@search.collect { |domain| name + "." + domain }

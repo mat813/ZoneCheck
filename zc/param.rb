@@ -1,5 +1,16 @@
 # $Id$
 
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
 require 'diagnostic'
 require 'formatter'
 
@@ -19,13 +30,23 @@ class Param
     attr_reader :client
     attr_reader :formatter
 
+    attr_reader :tagonly
+    attr_writer :tagonly
+
     attr_reader :cache
     attr_reader :primary
 
+    attr_writer :debug
+
+    attr_reader :testdir
+    attr_writer :testdir
+
     DefaultConfigFile = "zc.conf"
+    DefaultTestDir    = "./test"
 
     class ParamError < StandardError
     end
+
 
 
 
@@ -35,6 +56,7 @@ class Param
     def initialize
 	@dns			= NResolv::DNS::DefaultResolver
 	@configfile		= DefaultConfigFile
+	@testdir		= DefaultTestDir
 	@ipv4			= nil
 	@ipv6			= nil
 	@client			= nil
@@ -48,6 +70,8 @@ class Param
 	@intro			= false
 	@explanation		= false
 	@testdesc		= false
+	@tagonly		= false
+
 
 	@diagnostic		= nil
 	@info			= nil
@@ -64,6 +88,9 @@ class Param
     def self.cmdline_parse
 	opts = GetoptLong.new(
 		[ "--quiet",	"-q",	GetoptLong::NO_ARGUMENT       ],
+	        [ "--batch",    "-b",   GetoptLong::NO_ARGUMENT       ],
+        	[ "--debug",    "-d",   GetoptLong::REQUIRED_ARGUMENT ],
+		[ "--tagonly",  "-g",   GetoptLong::NO_ARGUMENT       ],
 		[ "--ipv4",	"-4",	GetoptLong::NO_ARGUMENT       ],
 		[ "--ipv6",	"-6",	GetoptLong::NO_ARGUMENT       ],
         	[ "--ns",       "-n",   GetoptLong::REQUIRED_ARGUMENT ],
@@ -73,6 +100,7 @@ class Param
 		[ "--verbose",  "-v",   GetoptLong::OPTIONAL_ARGUMENT ],
 		[ "--output",   "-o",   GetoptLong::REQUIRED_ARGUMENT ],
         	[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
+        	[ "--testdir",  "-T",   GetoptLong::REQUIRED_ARGUMENT ],
         	[ "--config",   "-c",   GetoptLong::REQUIRED_ARGUMENT ],
 		[ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ] )
 	opts.quiet = true
@@ -83,11 +111,14 @@ class Param
 	    opts.each do |opt, arg|
 		case opt
 		when "--version"
-		    puts "#{MYNAME}: RCS version #{RCS_REVISION}"
+		    puts "#{PROGNAME}: RCS version #{RCS_REVISION}"
 		    exit EXIT_OK
+		when "--debug"     then $dbg.level	= arg
 		when "--ipv6"      then i.ipv6          = true
 		when "--ipv4"      then i.ipv4          = true
+		when "--tagonly"   then i.tagonly       = true
 		when "--config"    then i.configfile    = arg
+		when "--testdir"   then i.testdir       = arg
 		when "--ns"        then i.ns            = arg
 		when "--resolver"  then i.resolver      = arg
 		when "--error"     then i.error         = arg
@@ -100,7 +131,7 @@ class Param
 	    raise "domainname expected" unless ARGV.length == 1
 	    i.domainname = NResolv::DNS::Name::create(ARGV[0], true)
 
-	rescue GetoptLong::InvalidOption
+	rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
 	    return nil
 	end
 	i
@@ -113,7 +144,7 @@ class Param
     #
     def self.cmdline_usage(errcode, io=$stderr)
 	io.print <<EOT
-usage: #{MYNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
+usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     -q, --quiet         Quiet mode, doesn't print visual candy.
     -h, --help          Show this message
     -V, --version       Display RCS version and exit
@@ -121,6 +152,7 @@ usage: #{MYNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     -t, --transp        Transport/routing layer (see transp)
     -v, --verbose       Display extra information (see verbose)
     -o, --output        Output (see output)
+    -T, --testdir       Location of the directory holding tests
     -c, --config        Specify location of the configuration file
     -4, --ipv4          Only check the zone with IPv4 connectivity
     -6, --ipv6          Only check the zone with IPv6 connectivity
@@ -133,7 +165,7 @@ usage: #{MYNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     counter        [c]  Print a test counter
 
   output:               [straigh|consolidation] [text|html]
-    straight      *[s]  Print output without processing
+    straight      *[s]  Print output without processing (or very few)
     consolidation  [c]  Try to merge some results before output
     text          *[t]  Output plain text
     html           [h]  Output HTML
@@ -145,14 +177,14 @@ usage: #{MYNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     nostop         [ns] Never stop (even on fatal error)
 
   transp:               [ipv4/ipv6] [udp|tcp|std]
-    ipv4          *[4]  Use IPv4 routing protocol (same as -4)
-    ipv6          *[6]  Use IPv6 routing protocol (same as -6)
+    ipv4          *[4]  Use IPv4 routing protocol
+    ipv6          *[6]  Use IPv6 routing protocol
     udp            [u]  Use UDP transport layer
     tcp            [t]  Use TCP transport layer
-    std           *[s]  Use UDP with fallback to TCP from truncated messages
+    std           *[s]  Use UDP with fallback to TCP for truncated messages
 
 EXAMPLES:
-  #{MYNAME} -4 --verbose=x,i afnic.fr.
+  #{PROGNAME} -4 --verbose=x,i afnic.fr.
 EOT
        exit errcode unless errcode.nil? #'
     end
@@ -380,7 +412,7 @@ EOT
 	@formatter  = @formatter_class::new
 
 	# Set diagnostic object
-	@diagnostic = @diagnostic_class::new(@formatter)
+	@diagnostic = @diagnostic_class::new(self)
 	@info       = @diagnostic.method(@info_methodname).call
 	@warning    = @diagnostic.method(@warning_methodname).call
 	@fatal      = @diagnostic.method(@fatal_methodname).call

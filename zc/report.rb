@@ -1,63 +1,18 @@
 # $Id$
 
+# 
+# AUTHOR : Stephane D'Alu <sdalu@nic.fr>
+# CREATED: 2002/08/02 13:58:17
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS:
+#
+#
+
 module Diagnostic
     class FatalError < StandardError
-    end
-
-    ##
-    ## Consolidation of reported messages
-    ##
-    class Consolidation
-	class Processor # ABSTRACT
-	    attr_reader :count
-
-	    def initialize(consolidator)
-		@consolidator = consolidator
-		@count        = 0
-	    end
-
-	    def add_answer(answer)
-		@consolidator.add(answer, self)
-	    end
-	end
-	
-	class Fatal < Processor
-	    def add_answer(answer)
-		super(answer)
-		raise FatalError unless answer.ok?
-	    end
-	end
-	
-	class Warning < Processor
-	end
-	
-	class Info < Processor
-	end
-
-
-	def initialize
-	    @root    = {}
-	    @answers = []
-
-	    @fatal   = Fatal::new(@data)
-	    @warning = Warning::new(@data)
-	    @info    = Info::new(@data)
-	end
-
-	def add(answer, type)
-	    @answers << answer 
-	    @root[answer.testname] = {} unless @data.key?(answer.testname)
-	    test = (@data[answer.testname] ||= {})
-	    kind = (test[answer.class]     ||= {})
-	    ns   = (kind[answer.ns]        ||= {})
-	    ns[answer.ip] = true
-	end
-
-	def finish
-		
-	end
-
-	attr_reader :fatal, :warning, :info
     end
 
 
@@ -66,8 +21,10 @@ module Diagnostic
     ##
     class Straight
 	class Processor # ABSTRACT
-	    def initialize(formatter)
-		@formatter = formatter
+	    def initialize(diag)
+		@param     = diag.param
+		@formatter = diag.param.formatter
+		@explain   = diag.param.explanation
 		@list      = []
 	    end
 
@@ -80,9 +37,7 @@ module Diagnostic
 	    end
 
 	    def add_answer(answer)
-		if !answer.ok?
-		    @list << answer
-		end
+		@list << answer unless answer.ok?
 	    end
 	    
 	    def display
@@ -93,7 +48,9 @@ module Diagnostic
 		    
 		    ans = nlist.shift
 		    @formatter.msg1(ans.msg) 
-		    @formatter.explanation(ans.explanation)
+		    if @param.explanation && !@param.tagonly
+			@formatter.explanation(ans.explanation) 
+		    end
 		    tags << ans.tag
 
 		    nlist.delete_if { |a|
@@ -109,7 +66,7 @@ module Diagnostic
 	    end
 	end
 	
-	class Fatal < Processor
+	class Fatal   < Processor
 	    def add_answer(answer)
 		super(answer)
 		raise FatalError unless answer.ok?
@@ -119,28 +76,30 @@ module Diagnostic
 	class Warning < Processor
 	end
 	
-	class Info < Processor
+	class Info    < Processor
 	end
 
 
-	def initialize(formatter)
-	    @formatter = formatter
-	    @fatal     = Fatal::new(formatter)
-	    @warning   = Warning::new(formatter)
-	    @info      = Info::new(formatter)
+	def initialize(param)
+	    @param     = param
+	    @formatter = param.formatter
+	    @fatal     = Fatal::new(self)
+	    @warning   = Warning::new(self)
+	    @info      = Info::new(self)
 	end
 
 	def finish
+	    @formatter.h1("Test results")
 	    if ! @info.empty?
-		@formatter.heading($mc.get("info"))
+		@formatter.h2($mc.get("info"))
 		@info.display
 	    end
 	    if ! @warning.empty?
-		@formatter.heading($mc.get("warning"))
+		@formatter.h2($mc.get("warning"))
 		@warning.display
 	    end
 	    if ! @fatal.empty?
-		@formatter.heading($mc.get("empty"))
+		@formatter.h2($mc.get("fatal"))
 		@fatal.display
 	    end
 
@@ -151,7 +110,7 @@ module Diagnostic
 	    if fatals == 0
 		tag = (warnings > 0) ? "res_succeed_but" : "res_succeed"
 	    else
-		if @param.stop_on_fatal
+		if ! @param.stop_on_fatal # XXX: bad $
 		    tag = "res_failed_on"
 		else
 		    tag = (warnings > 0) ? "res_failed_and" : "res_failed"
@@ -161,5 +120,6 @@ module Diagnostic
 	end
 
 	attr_reader :fatal, :warning, :info
+	attr_reader :param
     end
 end

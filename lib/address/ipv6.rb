@@ -1,5 +1,7 @@
 # $Id$
 
+require 'socket'
+
 class Address
     ##
     ##
@@ -159,7 +161,7 @@ class Address
 		address = @address.slice(0, bytes) + 
 		    ("\0" * (@address.size - bytes))
 		address[bytes] = (@address[bytes] >> bits) << bits
-		Resolv::IPv6::new(address)
+		IPv6::new(address)
 	    end
 	end
 
@@ -178,9 +180,14 @@ class Address
 	
 	def to_name
 	    # ip6.arpa should be searched too. [RFC3152]
-	    return DNS::Name.new(@address.unpack("H32")[0].split(//).reverse +
-				 ['ip6', 'int'])
+	    return (@address.unpack("H32")[0].split(//).reverse +
+		    ['ip6', 'int', '']).join(".")
 	end
+
+	def protocol
+	    Socket::AF_INET6
+	end
+
 
 	class Compatibility < IPv6
 	    def self.create(arg, opt=IPv6LooseRegex)
@@ -188,5 +195,6 @@ class Address
 	    end
 	end
 
+	Loopback = IPv6::create("::1")
     end
 end

@@ -21,6 +21,10 @@ fatal_fmt	: Fatal  : %s\n
 info_fmt	: Info   : %s\n
 testing_fmt     : Testing : %s\n
 generic         : generic
+warning         : warning
+fatal           : fatal
+info            : info
+test_progress   : Tests in progress
 
 label_xpl : Ref: IETF RFC1034 (p.11)\nLabels are only composed by letters ([A-Za-z]), digits ([0-9]) or dashes\n('-') (not starting or ending with), and should be less than 63 characters;\ndomain name (labels separated by '.') should be less than 255 characters.
 
@@ -30,6 +34,7 @@ cname_xpl : Ref: IETF RFC1912 (p.6)\nA CNAME record is not allowed to coexist wi
 ns_cname_xpl : Ref: IETF RFC1912 (p.7)\nHaving NS records pointing to a CNAME is bad and may conflict badly\nwith current BIND servers.  In fact, current BIND implementations\nwill ignore such records, possibly leading to a lame delegation.\nThere is a certain amount of security checking done in BIND to\nprevent spoofing DNS NS records.  Also, older BIND servers reportedly\nwill get caught in an infinite query loop trying to figure out the\naddress for the aliased nameserver, causing a continuous stream of\nDNS requests to be sent.
 
 
+loopback_xpl: Ref: DNS & BIND (2nd edition) (p.61)\nNo one was given responsibility for the loopback network and system\nuse it for a loopback address, so it is the responsibility of everyone.\nIf it wasn't configured the request would eventually reach the root\nname server (increasing network traffic, and adding local delay) and\nthere is no guarantee that the answer would be 'localhost'
 
 
 #
@@ -84,23 +89,50 @@ error   : Address is part of a private subnet
 # Connectivity
 #
 
+[chk_icmp]
+testname: ICMP answer
+error   : Host doesn't seems to be alive (firewall?)
+
+[chk_udp]
+testname: UDP connectivity
+error   : Server doesn't listen/answer for UDP protocol
+
+[chk_tcp]
+testname: TCP connectivity
+error   : Server doesn't listen/answer for TCP protocol
 
 
 #
 # Root servers
 #
 
-[chk_ns_root_servers]
+[chk_root_servers]
 testname: root servers list present
 error   : Root Servers are not available
 
-[chk_ns_root_servers_ns_vs_iana]
+[chk_root_servers_ns_vs_iana]
 testname: root servers list identical to IANA
 error   : Root Servers list is not coherent with IANA
 
-[chk_ns_root_servers_ip_vs_iana]
+[chk_root_servers_ip_vs_iana]
 testname: root servers addresses identical to IANA
 error   : Root Servers IP addresses are not coherent with IANA
+
+
+
+#
+# Loopback
+#
+
+[chk_loopback_delegation]
+testname: loopback delegation
+error   : Loopback domain is not delegated.
+explain = loopback_xpl
+
+[chk_loopback_host]
+testname: loopback is resolvable
+error   : Loopback is not resolvable
+explain = loopback_xpl
 
 
 
@@ -130,7 +162,7 @@ error   : The SOA master nameserver contains illegal characters
 [chk_soa_serial_fmt]
 testname: serial number of the form YYYYMMDDnn
 error   : The format of the serial number is not YYYYMMDDnn
-explain : Ref: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day,\nnn=revision number.
+explain : Ref: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day,\nnn=revision number).
 
 [chk_soa_refresh_6h]
 testname: SOA 'refresh' at least 6 hours
@@ -200,7 +232,11 @@ error   : NS and ANY request disagree
 
 [chk_ns_ip]
 testname: NS can be resolved
+error   : The IP addresses of the zone nameserver can't be found
 
+[chk_ns_reverse]
+testname: Nameserver IP reverse
+error   : Can't find reverse for the nameserver IP address
 
 #
 # MX
@@ -226,6 +262,17 @@ explain : Ref: IETF RFC974\nMX records shall not point to an alias defined by a 
 [chk_mx_ip]
 testname: MX can be resolved
 
-
 [chk_mx_vs_any]
 testname: coherence between MX and ANY records
+
+#
+# Coherence with given parameters
+#
+
+[chk_given_nsprim_vs_soa]
+testname: given primary nameserver is primary
+error   : The primary nameserver doesn't match the given one
+
+[chk_given_ns_vs_ns]
+testname: correctness of given nameserver list
+error   : The nameserver list doesn't match the given one

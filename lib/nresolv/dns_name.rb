@@ -56,6 +56,15 @@ module NResolv
 
 	    attr_reader :labels
 
+            def self.is_valid_hostname?(name)
+		name.labels.each { |lbl|
+		    return false unless lbl.instance_of?(Label::Ordinary)
+                    return false if ((lbl =~ /^-|-$/)  || 
+                                     (lbl =~ /[^A-Za-z0-9\-]/))
+                }
+                true
+            end
+
 	    def initialize(labels, origin=nil)
 		@labels = labels.dup
 		if origin && (@labels.empty? || ! @labels[-1].root?)
@@ -74,6 +83,8 @@ module NResolv
 		    end
 		when String
 		    self::from_s(obj, make_absolute)
+		when Address
+		    self::from_s(obj.to_name)
 		else
 		    self::from_s(obj.to_s, make_absolute)
 		end
@@ -102,6 +113,18 @@ module NResolv
 	    end
 	    alias fqdn? absolute?
 
+	    # XXX: not BitString ready
+	    def domain(skip=1)
+		_depth = depth
+		return Root if (skip >= _depth)
+		case @labels[0]
+		when Label::Ordinary
+		    Name::new(@labels[1..-1])
+		else
+		    raise "XXX: NOT IMPLEMENTED YET"
+		end
+	    end
+
 	    def in_domain?(domain)
 		if self.absolute? ^ domain.absolute?
 		    raise ArgumentError, 
@@ -118,10 +141,12 @@ module NResolv
                 return true
 	    end
 
+	    # XXX: not BitString ready
 	    def wildcard?
 		@labels[0].wildcard?
 	    end
 
+	    # XXX: not BitString ready
 	    def to_s
 		@labels.join('.')
 	    end
@@ -141,6 +166,7 @@ module NResolv
 	    end
 	    alias == eql?
 
+	    # XXX: not BitString ready
 	    def [](idx)
 		@labels[idx]
 	    end

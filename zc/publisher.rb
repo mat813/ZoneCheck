@@ -13,25 +13,25 @@
 
 
 require 'thread'
+require 'xtra'
 
 module Formatter
-    class ProgressBar
-
+    class PBar < Xtra::ProgressBar
+	def unit            ; "T/s"  ; end
+	def unit_cvt(value) ;  value ; end
     end
 
-
     class Text
-        EraseEndLine            = "\033[K" 
-        HideCursor              = "\033[?25l"
-        ShowCursor              = "\033[?25h"
 	MaxLineLength           = 78
 
 	#------------------------------------------------------------
 
+	attr_reader :counter
 	def initialize(ostream=$stdout)
 	    @ostream   = ostream
 	    @mutex     = Mutex::new
 	    @count_txt = $mc.get("test_progress")
+	    @counter   = PBar::new($stdout, 1, PBar::DisplayNoFinalStatus)
 	end
 
 
@@ -51,30 +51,14 @@ module Formatter
 	
 	#------------------------------------------------------------
 
-	def counter_start
-	    print HideCursor
-	end
 
-	def counter(pos, total)
-	    printf "\r%s: %03d/%03d", @count_txt, pos, total
-	    print EraseEndLine
-	    $stdout.flush
-	end
-
-	def counter_end
-	    print "\r", EraseEndLine
-	    print ShowCursor
-	end
 
 	#------------------------------------------------------------
 
 	def testing(desc, ns, ip)
-	    xtra = if ip
-		       " (IP=#{ip})"
-		   elsif ns
-		       " (NS=#{ns})"
-		   else
-		       ""
+	    xtra = if    ip then " (IP=#{ip})"
+		   elsif ns then " (NS=#{ns})"
+		   else          ""
 		   end
 	    
 	    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
@@ -263,4 +247,7 @@ EOT
 	end
     end
 
+
+    class BatchText 
+    end
 end

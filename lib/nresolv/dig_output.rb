@@ -55,10 +55,9 @@ module NResolv
 		  [ @answer,     "ANSWER SECTION:"     ],
 		  [ @authority,  "AUTHORITY SECTION:"  ],
 		  [ @additional, "ADDITIONAL SECTION:" ] ].each { |sec, title|
-		    if sec && !sec.empty?
-			sec.dump(recv, title)
-			recv << "\n"
-		    end
+		    next unless sec && !sec.empty?
+		    sec.dump(recv, title)
+		    recv << "\n"
 		}
 	    end
 	end
@@ -71,10 +70,9 @@ module NResolv
 		maxlen = DEFAULT_ALIGNEMENT
 		prevname = nil
 		each { |entry|
-		    name = entry[0]
+		    name     = entry[0]
 		    dispname = prevname == name ? nil : name
 		    prevname = name
-
 		    recv << entry_to_s([entry[0], *entry[1..-1]])
 		}
 	    end

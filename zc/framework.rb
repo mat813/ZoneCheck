@@ -4,12 +4,14 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
-# $Revivion$ 
+# $Revision$ 
 # $Date$
 #
 # CONTRIBUTORS:
 #
 #
+
+require 'cachemanager'
 
 ##
 ## Class that should be inherited by every test set
@@ -120,6 +122,7 @@ class Test
 	@domain_ns		= domain_ns
 	@cm			= cm
     end
+
 
 
     def is_cname?(ip, name)

@@ -70,7 +70,7 @@ module NResolv
 
 		class SOA < Resource
 		    attr_reader :mname, :rname
-		    attr_reader :serial, :refresh, :retry, :export, :minimum
+		    attr_reader :serial, :refresh, :retry, :expire, :minimum
 		    def initialize(mname, rname, 
 				   serial, refresh, retry_, expire, minimum)
 			@mname   = mname
@@ -96,6 +96,28 @@ module NResolv
 
 		    def to_s
 			@name.to_s
+		    end
+		end
+
+		class MX < Resource
+		    attr_reader :preference, :exchange
+		    def initialize(preference, exchange)
+			@preferecence = preference
+			@exchange     = exchange
+		    end
+		end
+		    
+		class PTR < Resource
+		    attr_reader :ptrdname
+		    def initialize(ptrdname)
+			@ptrdname = ptrdname
+		    end
+		end
+
+		class ANY < Resource
+		    def initialize
+			raise RuntimeError, 
+			    "#{self.class} can't be instanciated"
 		    end
 		end
 	    end
@@ -152,6 +174,13 @@ module NResolv
 		    add_resource(self)
 		end    
 
+
+		class MX < Generic::MX
+		    RClass = RClass::IN
+		    RType  = RType::MX
+		    add_resource(self)
+		end    
+
 		class SOA < Generic::SOA
 		    RClass = RClass::IN
 		    RType  = RType::SOA
@@ -164,7 +193,17 @@ module NResolv
 		    add_resource(self)
 		end
 
-		
+		class PTR < Generic::PTR
+		    RClass = RClass::IN
+		    RType  = RType::PTR
+		    add_resource(self)
+		end
+
+		class ANY < Generic::ANY
+		    RClass = RClass::IN
+		    RType  = RType::ANY
+		    add_resource(self)
+		end
 	    end
 	end
     end

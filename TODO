@@ -1,0 +1,4 @@
+# $Id$
+
+- test loopback v6
+- verifier que certains test ne sont fait que si recursif

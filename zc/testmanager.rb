@@ -12,7 +12,7 @@
 #
 
 require 'thread'
-require 'test/framework'
+require 'framework'
 require 'diagnostic'
 
 ##
@@ -31,21 +31,18 @@ class TestManager
     # Initialize a new object.
     #
     def initialize(param)
-	@mutex     = Mutex::new
 	@param     = param
+	@formatter = param.formatter	# shortcut
 	@config    = nil
 	@tests     = {}
 	@classes   = {}
-	@cm	   = CacheManager::create(Test::DefaultDNS, 
-					NResolv::DNS::Client::Classic)
-	@testpos   = 0
-	@testcount = 0
+	@cm	   = CacheManager::create(Test::DefaultDNS, param.client)
     end
 
 
 
     #
-    # Register all the test than are provided by the class 'klass'.
+    # Register all the tests that are provided by the class 'klass'.
     #
     def <<(klass)
 	# Sanity check (all test class should derive from Test)
@@ -73,10 +70,15 @@ class TestManager
     #
     # Check if 'test' has already been registered.
     #
-    def has_test?(test)
-	@tests.has_key?(test)
+    def has_test?(testname)
+	@tests.has_key?(testname)
     end
 
+    def family(testname) 
+	klass = @tests[testname]
+	klass.name =~ /^([^:]+)/
+	eval("#{$1}")
+    end
 
 
     #
@@ -89,7 +91,9 @@ class TestManager
 	# Instanciate only once each classes that has a requested test
 	@config.test_list.each { |testname|
 	    if ! @classes.has_key?(klass = @tests[testname])
-		@classes[klass] = [ klass.method("create").call(@param, @cm) ]
+		@classes[klass] = [klass.method("new").call(@cm, 
+							    @param.domainname, 
+							    @param.ns)]
 	    end
 	}
     end
@@ -97,14 +101,15 @@ class TestManager
 
     def test1(diag, method, testname, ns=nil, ip=nil) 
 	# Print test description
-	@param.formatter.synchronize {
+	@formatter.synchronize {
 	    if @param.testdesc
-		@param.formatter.testing($mc.get("#{testname}_testname"), ns, ip)
+		desc = if @param.tagonly
+		       then testname
+		       else $mc.get("#{testname}_testname")
+		       end
+		@formatter.testing(desc, ns, ip)
 	    end
-	    if @param.counter
-		@testpos += 1	# using the formatter mutex
-		@param.formatter.counter(@testpos, @testcount)
-	    end
+	    @formatter.counter.processed(1) if @param.counter
 	}
 
 	errmsg = nil
@@ -118,9 +123,8 @@ class TestManager
 	rescue NResolv::RefusedError
 	    errmsg = "Connection refused"
 	rescue Exception => e
-	    puts "Exception: #{e}"
-	    puts e.backtrace.join("\n")
-	    raise RuntimeError, "Screugneugneu"
+	    errmsg = e.to_s
+	    raise if $dbg.enable?(DBG::DONT_RESCUE)
 	end
 	begin
 	    diag.add_answer(type.new(testname, errmsg, xpl, ns, ip))
@@ -145,6 +149,7 @@ class TestManager
 	check_network_address = {}
 
 	threadlist            = []
+	testcount             = 0
 
 	# Build test sequences
 	@config.test_list.each { |testname| 
@@ -163,13 +168,13 @@ class TestManager
 		#  => ARG: *none*
 	    when /^CheckGeneric::/
 		check_generic << [diag, method, testname]
-		@testcount += 1
+		testcount += 1
 		
 		# Test specific to the nameserver:
 		#  => ARG: nameserver name
 	    when /^CheckNameServer::/
 		@param.ns.each { |name, |
-		    @testcount += 1
+		    testcount += 1
 		    check_nameserver[name] ||= []
 		    check_nameserver[name] <<
 			[diag, method, testname, name]
@@ -180,7 +185,7 @@ class TestManager
 	    when /^CheckNetworkAddress::/ then 
 		@param.ns.each { |ns_name, ns_addr_list|
 		    @param.address_wanted?(ns_addr_list).each { |addr|
-			@testcount += 1
+			testcount += 1
 			check_network_address[addr] ||= []
 			check_network_address[addr] <<
 			    [ diag, method, testname, ns_name, addr ]
@@ -189,29 +194,35 @@ class TestManager
 	    end
 	}
 
-	# Counter start
-	@param.formatter.counter_start if @param.counter
-
-	# Do CheckGeneric
-	check_generic.each { |args| test1(*args) }
-
-	# Do CheckNameServer
-	check_nameserver.each_value { |args_list|
-	    args_list.each { |args| test1(*args) }
-	}
-
-	# Do CheckNetworkAddress (and parallelize)
-	check_network_address.each_value { |args_list|
-	    threadlist << Thread::new {
+	# Perform tests
+	begin
+	    # Counter start
+	    @formatter.counter.start(testcount) if @param.counter
+	    
+	    # Do CheckGeneric
+	    check_generic.each { |args| test1(*args) }
+	    
+	    # Do CheckNameServer
+	    check_nameserver.each_value { |args_list|
 		args_list.each { |args| test1(*args) }
 	    }
-	}
-	threadlist.each { |thr| thr.join }
-
-	# Counter end
-	@param.formatter.counter_end if @param.counter
+	    
+	    # Do CheckNetworkAddress (and parallelize)
+	    check_network_address.each_value { |args_list|
+		threadlist << Thread::new {
+		    args_list.each { |args| test1(*args) }
+		}
+	    }
+	    threadlist.each { |thr| thr.join }
+	    
+	    # Counter end
+	    @formatter.counter.done(@param.domainname.to_s) if @param.counter
+	ensure
+	    # Counter cleanup
+	    @formatter.counter.finish if @param.counter
+	end
 
 	# Testdesc spacer
-	@param.formatter.vskip if @param.testdesc
+	@formatter.vskip if @param.testdesc
     end
 end

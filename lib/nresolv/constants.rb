@@ -47,11 +47,11 @@ module NResolv
 	    type.hash
 	end
 
-	def fetch_by_name(name)
+	def self.fetch_by_name(name)
 	    @@hash_by_name[self].fetch(name)
 	end
 	
-	def fetch_by_value(value)
+	def self.fetch_by_value(value)
 	    @@hash_by_value[self].fetch(value)
 	end
 	
