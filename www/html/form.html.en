@@ -52,6 +52,7 @@
     </BLOCKQUOTE>
     
     <H2>Zone information</H2>
+    <%=$msg%>
     <FORM name="zcform" method="POST" action="/cgi-bin/zc.cgi">
       <TABLE class="zc_domain">
 	  <TR class="zc_zone">
@@ -423,7 +424,7 @@ Release: $Name$
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Feb 12 17:24:14 CET 2003
+Last modified: Fri Feb 14 10:48:35 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>
