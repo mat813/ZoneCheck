@@ -1,0 +1,28 @@
+ZoneCheck is copyright AFNIC, 2003. It is written and maintained by
+Stephane d'Alu <sdalu@nic.fr>. You can write AFNIC at <nic@nic.fr>.
+
+You can use, modifiy and distribute ZoneCheck according to the GPL
+(GNU General Public License)
+<URL:http://www.gnu.org/licenses/gpl.html>. To summary (a lot!), it
+means you can use ZoneCheck freely, you can have the source code, you
+can distribute it freely (even after modifications) BUT you cannot
+deny these freedoms to the people who receive it: for instance, you
+must provide them with the source code.
+
+Alternatively, if you want to distribute a version of ZoneCheck in a
+way which is not compatible with the GPL you must get an agreement
+from AFNIC which will allow you the right to use other terms.
+
+Patch submitters are therefore informed that, for the patches to be
+included, you must agree on this possible relicensing.
+
+
+------------
+
+References that you may find interesting:
+
+http://www.gnu.org/licenses/licenses.html
+http://sourceforge.net/docman/display_doc.php?docid=778&group_id=1
+
+$Id$
+
