@@ -184,7 +184,8 @@ module Input
 	    # XXX: not good place
 	    p.rflag.autoconf
 	    p.publisher.autoconf(p.rflag)
-	    puts @cgi.header(p.publisher.engine.class::Mime)
+	    puts @cgi.header({ "type"    => p.publisher.engine.class::Mime,
+			       "charset" => "UTF-8" })
 	    true
 	end
 
