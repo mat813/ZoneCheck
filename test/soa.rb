@@ -40,6 +40,12 @@ module CheckNetworkAddress
 	def chk_soa_sntx_master(ns, ip)
 	    NResolv::DNS::Name::is_valid_hostname?(soa(ip).mname)
 	end
+	
+	# DESC: SOA master should be fully qualified
+	def chk_soa_master_fq(ns, ip)
+	    return true if soa(ip).mname.absolute?
+	    { "mname" => soa(ip).mname }
+	end
 
 	# DESC: SOA master should not point to CNAME alias
 	def chk_soa_ns_cname(ns, ip)

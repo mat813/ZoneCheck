@@ -263,6 +263,12 @@ testname: illegal characters in SOA master nameserver
 error   : The SOA master nameserver contains illegal characters
 explain : [none]
 
+[chk_soa_master_fq]
+testname: fully qualified master nameserver in SOA
+error   : The SOA master nameserver is not fully qualified
+explain : [none]
+details : The master nameserver (%{mname}) is certainly missing the final dot in the configuration file.
+
 [chk_soa_serial_fmt]
 testname: serial number of the form YYYYMMDDnn
 error   : The format of the serial number is not YYYYMMDDnn
