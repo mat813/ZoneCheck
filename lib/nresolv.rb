@@ -12,33 +12,6 @@
 #
 
 
-=begin
-= nresolv library
-
-== NResolv::DNS::Section ABSTRACTclass
-=== methods
---- NResolv::DNS::Section#length
---- NResolv::DNS::Section#each
---- NResolv::DNS::Section#reject!
---- NResolv::DNS::Section#sort!
---- NResolv::DNS::Section#[idx]
-
-== NResolv::DNS::Message ABSTRACT class
-=== class methods
---- NResolv::DNS::Message.generate_id
---- NResolv::DNS::Message.from_wire
-
-=== methods
---- NResolv::DNS::Message#dump(recv)
-((|recv|)) is the stream receiver
---- NResolv::DNS::Message#is_valid?
---- NResolv::DNS::Message#to_wire(bufsize=512, compress=Compress::None)
-
-
-
-=end
-
-
 require 'nresolv_internal'
 require 'socket'
 require 'thread'
@@ -55,7 +28,7 @@ module NResolv
 	end
 
 	class Message
-	    attr_reader :msgid
+	    attr_reader :msgid, :opcode
 
 	    @@genid = rand 0xffff
 	    def self.generate_id
@@ -68,6 +41,16 @@ module NResolv
 		end
 		@msgid = id
 	    end
+
+
+	    def opcode=(code)
+		if code.nil? || code.type != OpCode
+		    raise ArgumentError, 
+			"expected type NResolv::DNS::OpCode"
+		end
+		@opcode = code
+	    end
+
 
 	    def initialize(id=nil)
 		self.msgid = id.nil? ? Message::generate_id : id
@@ -86,6 +69,8 @@ module NResolv
 		! @msgid.nil?
 	    end
 
+	    # dump the message content (with a format like +dig+) into 
+	    # the stream _recv_, by default +STDOUT+ is used
 	    def dump(recv=STDOUT)
 		hdr1 = "opcode: %-*s  status: %-*s  id: %#06x" % [
 		    OpCode::maxstrlen, @opcode,
@@ -127,18 +112,27 @@ module NResolv
 	    end
 
 
-	    ##
+	    ## DNS Query message
 	    ## 
 	    ##
 	    class Query < Message
-		attr_reader :opcode, :rd, :cd, :question
-		attr_writer :opcode, :rd, :cd, :question
+		attr_reader :question
+		attr_reader :rd, :cd
+		attr_writer :rd, :cd
 
 		def initialize(msgid=nil)
 		    super(msgid)
 		    @qr       = false
 		    @opcode   = OpCode::QUERY
 		    @question = QSection::new
+		end
+
+		def question=(q)
+		    unless q.nil? || q.type == Section::QSection
+			raise ArgumentError,
+			    "expected type NResolv::DNS::Section::QSection"
+		    end
+		    @question = q
 		end
 
 		def is_valid?
@@ -150,15 +144,59 @@ module NResolv
 	    ##
 	    ##
 	    class Answer < Message
-		attr_reader :qr, :opcode, :aa, :rd, :ra
+		attr_reader :qr, :aa, :rd, :ra
 		attr_reader :rcode, :question, :answer, :authority, :additional
-		attr_writer :qr, :opcode, :aa, :rd, :ra
-		attr_writer :rcode, :question, :answer, :authority, :additional
+		attr_writer :qr, :aa, :rd, :ra
 
 		def initialize
 		    super
-		    @qr = true
+		    @qr         = true
+		    @question   = QSection::new
+		    @answer     = ASection::new
+		    @authority  = ASection::new
+		    @additional = ASection::new
 		end
+
+		def rcode=(code)
+		    if code.nil? || code.type != RCode
+			raise ArgumentError, 
+			    "expected type NResolv::DNS::RCode"
+		    end
+		    @rcode = code
+		end
+
+		def question=(q)
+		    unless q.nil? || q.type == Section::QSection
+			raise ArgumentError,
+			"expected type NResolv::DNS::Section::QSection"
+		    end
+		    @question = q
+		end
+
+		def answer=(a)
+		    unless a.nil? || a.type == Section::ASection
+			raise ArgumentError,
+			    "expected type NResolv::DNS::Section::ASection"
+		    end
+		    @answer = a
+		end
+		
+		def authority=(a)
+		    unless a.nil? || a.type == Section::ASection
+			raise ArgumentError,
+			    "expected type NResolv::DNS::Section::ASection"
+		    end
+		    @authority = a
+		end
+		
+		def additional=(a)
+		    unless a.nil? || a.type == Section::ASection
+			raise ArgumentError,
+			"expected type NResolv::DNS::Section::ASection"
+		    end
+		@additional = a
+		end
+		
 
 	    end
 	end
@@ -258,4 +296,108 @@ module NResolv
 	end
     end
 end
+
+module NResolv
+    class DNS
+        UDPRetrySequence = [ 5, 10, 20, 40 ]
+
+	class Requester
+            def initialize
+                @queries = {}
+            end
+            
+            def delete(query)
+                @queries.delete(query)
+            end
+
+            def close
+                thread, sock, @thread, @sock = @thread, @sock
+                begin
+                    if thread
+                        thread.kill
+                        thread.join
+                    end
+                ensure
+                    sock.close if sock
+                end
+            end
+            
+
+            class Query
+            end
+
+
+
+            ##
+            ##
+            ##
+            class ConnectedUDP < Requester
+                def initialize(host, port=Port)
+                    super()
+                    @host   = host
+                    @port   = port
+                    @sock   = UDPSocket::new
+                    @sock.connect(host, port)
+                    @sock.fcntl(Fcntl::F_SETFD, 1)
+                    @id     = -1
+                    @thread = Thread::new {
+                        DNSThreadGroup.add Thread.current
+                        loop {
+                            reply = @sock.recv(UDPSize)
+                            msg = begin
+                                      Message.decode(reply)
+                                  rescue DecodeError
+                                      STDERR.print("DNS message decoding error: 
+#{reply.inspect}")
+                                      next
+                                  end
+                            if q = @queries[msg.id]
+                                q.recv msg
+                            else
+                                STDERR.print("non-handled DNS message: #{msg.ins
+pect}")
+                            end
+                        }
+                    }
+                end
+                
+                def query(msg, data)
+                    return @queries[msg.msgid] = Query::new(msg, @sock)
+                end
+
+                class Query < Requester::Query
+                    def initialize(msg, sock)
+			@queue = Queue::new
+                        @msg   = msg
+                        @sock  = sock
+                    end
+
+                    def wait
+                        tout = 2
+                        UDPRetrySequence.each { |timeout| tout += timeout }
+                        timeout(tout) { return @queue.pop }
+                    end
+
+                    def send
+                        @thread = Thread::new {
+                            @sock.send(@msg, 0)
+                            UDPRetrySequence.each { |timeout|
+                                sleep timeout
+                                @sock.send(@msg, 0)
+                            }
+                        }
+                        self
+                    end
+
+                    def recv(msg)
+                        @thread.kill
+                        @queue.push(msg)
+                    end
+                end
+            end
+
+	end
+    end
+end
+
 
