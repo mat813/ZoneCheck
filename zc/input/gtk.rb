@@ -11,6 +11,10 @@
 #
 #
 
+#
+# WARN: this file is LOADED by param
+#
+
 require 'thread'
 require 'gtk'
 
@@ -117,25 +121,47 @@ class Param
 	class Tests < Gtk::VBox
 	    def initialize(main)
 		super()
-		tbl = Gtk::Table::new(1, 3)
+		tbl = Gtk::Table::new(1, 2)
 		i = 0
 		
-		@test = []
-		
+		@test = {}
+		@tcat = {}
+
 		main.config.test_list.each { |testname|
-		    l10n_testname = $mc.get("#{testname}_testname")
-		    lbl = Gtk::Label::new(l10n_testname).set_alignment(0, 0.5)
-		    tbl.attach(lbl, 1, 2, i, i+1, Gtk::EXPAND | Gtk::FILL)
-
-		    lbl = Gtk::Label::new(main.config.category(testname)).set_alignment(0, 0.5)
-		    tbl.attach(lbl, 2, 3, i, i+1, Gtk::SHRINK | Gtk::FILL)
-
-		    @test[i] = Gtk::CheckButton::new(testname)
-		    @test[i].active = true
-		    tbl.attach(@test[i], 0, 1, i, i+1, Gtk::SHRINK | Gtk::FILL)
-		    i += 1
+		    cat = main.config.category(testname)
+		    @tcat[cat] = [] unless @tcat.has_key?(cat)
+		    @tcat[cat] << testname
 		}
+		
+		@tcat.each_pair { |cat, tests|
+		    # Category
+		    catbtn = Gtk::CheckButton::new(cat)
+		    catbtn.child.set_name("category.package_label")
+		    catbtn.active = true
+		    catbtn.signal_connect("toggled") { |w|
+			@tcat[cat].each { |testname|
+			    tst    = @test[testname]
+			    active = w.active?
+			    tst.set_sensitive(active)
+			    tst.active = active
+			}
+		    }
+		    tbl.attach(catbtn, 0, 2, i, i+1)
+		    i += 1
 
+
+		    # Tests
+		    tests.each { |testname|
+			l10n_testname = $mc.get("#{testname}_testname")
+			lbl = Gtk::Label::new(l10n_testname).set_alignment(0, 0.5)
+			tbl.attach(lbl, 1, 2, i, i+1, Gtk::EXPAND | Gtk::FILL)
+			
+			tst = @test[testname] = Gtk::CheckButton::new(testname)
+			tst.active = true
+			tbl.attach(tst, 0, 1, i, i+1, Gtk::SHRINK | Gtk::FILL)
+			i += 1
+		    }
+		}
 		scrolled_window = Gtk::ScrolledWindow.new
 #		scrolled_window.border_width(10)
 		scrolled_window.set_policy(Gtk::POLICY_NEVER,
@@ -251,7 +277,6 @@ class Param
 
 
 		#
-
 		@check.signal_connect("clicked") { |w| 
 		    @p.domain.name = input_dom.domain
 		    @p.ipv4 = true
@@ -364,9 +389,18 @@ class Param
 	    @q = Queue::new
 	end
 	
-	attr_reader :config
+	attr_reader :config, :statusbar
 
 	def interact(config)
+	    Gtk::RC.parse_string(<<EOT
+style "package_label"
+{
+#  font = '-adobe-helvetica-medium-o-*-*-*-120-*-*-*-*-*-*'
+font = '-adobe-helvetica-bold-r-normal-*-*-120-*-*-*-*-*-*'
+}
+widget "*package_label" style "package_label"
+EOT
+)
 	    @config = config
 	    window = Gtk::Window::new
 	    window.signal_connect("delete_event") {|*args| delete_event(*args) }
@@ -376,44 +410,73 @@ class Param
 	    window.set_title("ZoneCheck")
 	    
 	    menubar   = Gtk::MenuBar::new
-	    statusbar = Gtk::Statusbar::new
-	    statusbar.push(1, "Toto")
+	    @statusbar = Gtk::Statusbar::new
+	    @statusbar.push(1, "Toto")
 
 
-	    input_dom = Input::new(@p, config, statusbar)
-	    options_note = Option::new(self)
+	    @input   = Input::new(@p, config, @statusbar)
+	    @options = Option::new(self)
+	    @tests   = Tests::new(self)
+	    @const   = Constants::new(self)
 	    info_note = Gtk::Frame::new
-	    tests_note = Tests::new(self)
-	    const_note = Constants::new(self)
+
+
+	    menuitem = Gtk::MenuItem::new("help")
+	    menuitem.right_justify
+	    menubar.append(menuitem)
 
 
 
+	    menuitem = Gtk::MenuItem::new("mode")
+	    menubar.append(menuitem)
+	    
 
 
-	    notebook = Gtk::Notebook::new()
+
+	    menu = Gtk::Menu::new
+	    menuitem.set_submenu(menu)
+
+	    std_mitem = Gtk::RadioMenuItem::new(nil, "Standard")
+	    grp = std_mitem.group
+	    menu.append(std_mitem)
+	    exp_mitem = Gtk::RadioMenuItem::new(grp, "Expert")
+	    menu.append(exp_mitem)
+	    
+	    std_mitem.signal_connect("toggled") { |w|
+		if w.active?
+		    @options.show
+		    @tests.hide
+		    @const.hide
+		end
+	    }
+	    exp_mitem.signal_connect("toggled") { |w|
+		if w.active?
+		    @options.hide
+		    @tests.show
+		    @const.show
+		end
+	    }
+
+
+
+	    notebook = Gtk::Notebook::new
 	    notebook.set_tab_pos(Gtk::POS_TOP)
-	    notebook.append_page input_dom, Gtk::Label::new("Input")
-	    notebook.append_page options_note, Gtk::Label::new("Options")
-	    notebook.append_page tests_note, Gtk::Label::new("Tests")
-	    notebook.append_page const_note, Gtk::Label::new("Constants")
+	    notebook.append_page @input,   Gtk::Label::new("Input")
+	    notebook.append_page @options, Gtk::Label::new("Options")
+	    notebook.append_page @tests,   Gtk::Label::new("Tests")
+	    notebook.append_page @const,   Gtk::Label::new("Constants")
 
 
 	    vbox = Gtk::VBox::new
 	    vbox.pack_start(menubar)
 	    vbox.pack_start(notebook)
-	    vbox.pack_start(statusbar)
+	    vbox.pack_start(@statusbar)
 
 	    button = Gtk::Button::new("Hello World")
 	    button.signal_connect("clicked") {|*args| hello(*args) }
 	    button.signal_connect("clicked") {|*args| window.destroy }
 	
 	    window.add(vbox)
-
-	    input_dom.show()
-	    notebook.show()
-	    statusbar.show()
-	    menubar.show()
-	    vbox.show()
 
 	    window.show_all
 	    @q.pop

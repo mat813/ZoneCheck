@@ -11,6 +11,10 @@
 #
 #
 
+#
+# WARN: this file is LOADED by param
+#
+
 require 'getoptlong'
 
 class Param
