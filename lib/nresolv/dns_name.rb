@@ -149,7 +149,11 @@ module NResolv
 
 	    # XXX: not BitString ready
 	    def to_s
-		@labels.join('.')
+		if self == Root
+		    "."
+		else
+		    @labels.join('.')
+		end
 	    end
 
 	    def depth
