@@ -34,6 +34,7 @@ version = 2.0.0
 	add checking of message catalog and test set
 
 version = 2.1.0
+	edns0
         Test whois for fr (++++)
 	New configuration file (++++)         \
 	New scheduling engine (++++)          |
