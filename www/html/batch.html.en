@@ -170,9 +170,13 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    <td></td>
 	    <td><select name="profile">
 		<option value="automatic" selected> automatic
-<!--		<option value="afnic"             > AFNIC -->
-		<option value="reverse"           > Reverse
-		<option value="default"           > Default
+                <optgroup label="automatic profiles">
+		  <option value="default"           > Default
+		  <option value="reverse"           > Reverse
+		</optgroup>
+                <optgroup label="available profiles">
+		  <option value="afnic"             > AFNIC
+		</optgroup>
 	      </select> profile</td>
 	    <td></td>
 	    <td></td>
@@ -401,7 +405,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Jan 23 18:37:26 CET 2004
+Last modified: Thu Feb 19 14:45:06 CET 2004
 <!-- hhmts end -->
   </BODY>
 
