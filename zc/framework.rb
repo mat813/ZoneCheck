@@ -188,7 +188,7 @@ class Test
 	    ns_addr = @cm[nil].addresses(ns_list[0].name)
 	    ip = ns_addr[0]
 	end
-	! @cm[ip].cname(name).nil?
+	@cm[ip].cname(name)
     end
 
     def is_resolvable?(name, ip=nil, domain=@domain.name)

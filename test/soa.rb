@@ -49,13 +49,15 @@ module CheckNetworkAddress
 
 	# DESC: SOA master should not point to CNAME alias
 	def chk_soa_ns_cname(ns, ip)
-	    ! is_cname?(soa(ip).mname, ip)
+	    return true unless name = is_cname?(soa(ip).mname, ip)
+	    { "master" => soa(ip).mname, "alias" => name }
 	end
 	
 	# DESC: recommanded format for serial is YYYYMMDDnn
-	def chk_soa_serial_fmt(ns, ip)
+	def chk_soa_serial_fmt_YYYYMMDDnn(ns, ip)
 	    serial = soa(ip).serial
-	    (serial > 1999000000) && (serial < 2010000000)
+	    return true if (serial > 1999000000) && (serial < 2010000000)
+	    { "serial" => serial }
 	end
 
 	# DESC: recommanded refresh is > 6h

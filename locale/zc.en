@@ -269,10 +269,11 @@ error   : The SOA master nameserver is not fully qualified
 explain : [none]
 details : The master nameserver (%{mname}) is certainly missing the final dot in the configuration file.
 
-[chk_soa_serial_fmt]
+[chk_soa_serial_fmt_YYYYMMDDnn]
 testname: serial number of the form YYYYMMDDnn
 error   : The format of the serial number is not YYYYMMDDnn
 explain : [ref]: RFC1912 (p.3)\nThe recommended syntax is YYYYMMDDnn (YYYY=year, MM=month, DD=day,\nnn=revision number).
+details : The serial %{serial} doesn't seem to be in the YYYYMMDDnn format.
 
 [chk_soa_refresh_6h]
 testname: SOA 'refresh' at least 6 hours
@@ -316,9 +317,10 @@ error   : The 'TTL' should be equal to the 'minimum'
 explain : [none]
 
 [chk_soa_ns_cname]
-testname: SOA nameserver is not an alias
-error   : SOA nameserver is not allowed to point to a CNAME alias
+testname: SOA master is not an alias
+error   : SOA master is not allowed to point to a CNAME alias
 explain = ns_cname_xpl
+details : The master (%{master}) is a CNAME alias to %{alias}.
 
 [chk_soa_vs_any]
 testname: coherence between SOA and ANY records
