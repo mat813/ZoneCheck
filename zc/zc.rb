@@ -12,12 +12,20 @@
 #
 #
 # HISTORIC:
-#  - First version was developped by Erwan Mas
+#  - First version was developped by
 #  - C++ prototype was developped by 
 #
 
-$LOAD_PATH << "../lib/"
 
+$LOAD_PATH << "../lib/"
+$LOAD_PATH << "/homes/sdalu/ZC.CVS/zc/lib/"
+$LOAD_PATH << "/homes/sdalu/ZC.CVS/zc/zc/"
+
+ZC_DIR="/homes/sdalu/ZC.CVS/zc/zc"
+
+ZC_LOCALIZATION_FILE = "#{ZC_DIR}/zc.en"
+ZC_CONFIG_FILE       = "#{ZC_DIR}/zc.conf"
+ZC_TEST_DIR          = "#{ZC_DIR}/test"
 
 #
 # Identification
@@ -71,7 +79,7 @@ $dbg = DBG::new
 #
 # Internationalisation
 #
-$mc = MessageCatalog::new("zc.en")
+$mc = MessageCatalog::new(ZC_LOCALIZATION_FILE)
 
 class ZoneCheck
     def initialize
@@ -88,7 +96,7 @@ class ZoneCheck
     #
     def configure
 	begin
-	    param = Param::CLI::new
+	    param = PROGNAME =~ /\.cgi$/ ? Param::CGI::new : Param::CLI::new
 	    param.usage(EXIT_USAGE) if (@param = param.parse).nil?
 	rescue Param::ParamError => e
 	    $stderr.puts "ERROR: #{e}"

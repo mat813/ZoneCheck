@@ -21,25 +21,57 @@ module Publisher
 	def unit_cvt(value) ;  value ; end
     end
 
-    class Text
-	MaxLineLength           = 79
+    class BlackHole
+	def method_missing(method, *args)
+	end
+    end
 
-	#------------------------------------------------------------
+    ##
+    ##
+    ##
+    class Template # --> ABSTRACT <--
+	attr_reader :counter
 
 	def initialize(rflag, ostream=$stdout)
 	    @rflag	= rflag
-	    @ostream	= ostream
+	    @o		= ostream
 	    @mutex	= Mutex::new
-	    @count_txt	= $mc.get("test_progress")
-	    @counter	= PBar::new($stdout, 1, PBar::DisplayNoFinalStatus)
 	end
-
-
-	#------------------------------------------------------------
 
 	def synchronize(&block)
 	    @mutex.synchronize(&block)
 	end
+
+	def status(domainname, i_count, w_count, f_count)
+	    if f_count == 0
+		tag = (w_count > 0) ? "res_succeed_but" : "res_succeed"
+	    else
+		if ! @rflag.stop_on_fatal # XXX: bad $
+		    tag = "res_failed_on"
+		else
+		    tag = (w_count > 0) ? "res_failed_and" : "res_failed"
+		end
+	    end
+	    $mc.get(tag) % [ w_count ]
+	end
+    end
+
+    
+    ##
+    ##
+    ##
+    class Text < Template
+	Mime		= "text/plain"
+	MaxLineLength	= 79
+
+	#------------------------------------------------------------
+
+	def initialize(rflag, ostream=$stdout)
+	    super(rflag, ostream)
+	    @count_txt	= $mc.get("test_progress")
+	    @counter	= PBar::new($stdout, 1, PBar::DisplayNoFinalStatus)
+	end
+
 
 	#------------------------------------------------------------
 
@@ -51,9 +83,6 @@ module Publisher
 	
 	#------------------------------------------------------------
 
-	def counter
-	    @counter
-	end
 
 	def testing(desc, ns, ip)
 	    xtra = if    ip then " (IP=#{ip})"
@@ -65,7 +94,7 @@ module Publisher
 	end
 
 	def intro(domain)
-	    puts "DOMAIN: #{domain.name}"
+	    puts "ZONE  : #{domain.name}"
 	    domain.ns.each_index { |i| 
 		n = domain.ns[i]
 		printf "NS %2s : %s [%s]\n",
@@ -106,20 +135,6 @@ module Publisher
 	end
 
 
-	def status(domainname, i_count, w_count, f_count)
-	    if f_count == 0
-		tag = (w_count > 0) ? "res_succeed_but" : "res_succeed"
-	    else
-		if ! @rflag.stop_on_fatal # XXX: bad $
-		    tag = "res_failed_on"
-		else
-		    tag = (w_count > 0) ? "res_failed_and" : "res_failed"
-		end
-	    end
-	    printf $mc.get(tag), w_count
-	end
-
-
 	def diagnostic(severity, testname, desc, lst)
 	    msg, xpl = nil, nil
 	    if @rflag.tagonly
@@ -143,6 +158,11 @@ module Publisher
 	    vskip
 	end
 	    
+
+	def status(domainname, i_count, w_count, f_count)
+	    print super(domainname, i_count, w_count, f_count)
+	end
+
 
 	#------------------------------------------------------------
 	def h1(h)
@@ -192,20 +212,19 @@ module Publisher
 
 
 
-    class HTML
-	#------------------------------------------------------------
-
-	def initialize
-	    @mutex     = Mutex::new
-	    @count_txt = $mc.get("test_progress")
-	end
-
+    ##
+    ##
+    ##
+    class HTML < Template
+	Mime		= "text/html"
 
 	#------------------------------------------------------------
 
-	def synchronize(&block)
-	    @mutex.synchronize(&block)
+	def initialize(rflag, ostream=$stdout)
+	    super(rflag, ostream)
+	    @counter = BlackHole::new
 	end
+
 
 	#------------------------------------------------------------
 
@@ -215,21 +234,7 @@ module Publisher
   <HEAD>
     <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <TITLE>ZoneCheck results</TITLE>
-    <link rel="StyleSheet" href="tpl.css" type="text/css" media="screen">
-<STYLE>
-BODY {
-    background: #EEEEEF;
-    color: black;
-}
-
-TABLE.intro TR.primary {
-background: #F4F4F4;
-}
-
-TABLE.intro TR.secondary
-
-
-</STYLE>
+    <LINK rel="stylesheet" href="/zc/zc.css" type="text/css">
   </HEAD>
   <BODY>
 EOT
@@ -244,45 +249,109 @@ EOT
 	
 	#------------------------------------------------------------
 
-	def counter_start
-	end
-
-	def counter(pos, total)
-	end
-
-	def counter_end
-	end
-
-	#------------------------------------------------------------
-
 	def testing(desc, ns, ip)
-	    xtra = if ip
-		       " (IP=#{ip})"
-		   elsif ns
-		       " (NS=#{ns})"
-		   else
-		       ""
+	    xtra = if    ip then " (IP=#{ip})"
+		   elsif ns then " (NS=#{ns})"
+		   else          ""
 		   end
 	    
 	    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
 	end
 
-	#------------------------------------------------------------
 
-	def intro(domainname, ns, cache)
-	    h1("Summary")
-	    puts '<TABLE>'
-	    puts "<TR><TD>Domain</TD><TD colspan='2'>#{domainname}</TD></TR>"
-	    ns.each_index { |i| 
-		n = ns[i]
-		printf "<TR class=\"%s\"><TD>NS</TD><TD>%s</TD><TD>%s</TD></TR>\n",
-		    i == 0 ? "exerg" : "secondary", n[0], n[1].join(", ")
+	def intro(domain)
+	    tbl_beg   = '<TABLE class="zc_domain">'
+	    tbl_zone  = '<TR class="zc_zone"><TD>Zone</TD><TD colspan="4">%s</TD></TR>'
+	    tbl_empty = '<TR><TD colspan="5"></TD></TR>'
+	    tbl_ns    = '<TR class="%s"><TD>%s</TD><TD>%s</TD><TD></TD><TD>%s</TD><TD>%s</TD></TR>'
+	    tbl_end   = '</TABLE>'
+
+
+	    h1("Zone information")
+
+	    puts tbl_beg
+	    puts tbl_zone % [ domain.name ]
+	    puts tbl_empty
+	    domain.ns.each_index { |i| 
+		ns_ip = domain.ns[i]
+		if i == 0
+		    css  = "zc_ns_prim"
+		    desc = "Primary"
+		else
+		    css  = "zc_ns_sec"
+		    desc = "Secondary"
+		end
+
+		puts tbl_ns % [ css, 
+		    desc, ns_ip[0], "IPs", ns_ip[1].join(", ") ]
 	    }
-	    puts "<TR><TD>CACHE</TD><TD colspan='2'>#{cache}</TD></TR>"
-	    puts "</TABLE>"
+	    puts tbl_end
 	end
 
+	def diagnostic1(domainname, 
+		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
+		res, severity)
+
+	    i_tag = @rflag.tagonly ? "i" : $mc.get("i_tag")
+	    w_tag = @rflag.tagonly ? "w" : $mc.get("w_tag")
+	    f_tag = @rflag.tagonly ? "f" : $mc.get("f_tag")
+	    
+	    i_tag = i_tag.upcase if i_unexp
+	    w_tag = w_tag.upcase if w_unexp
+	    f_tag = f_tag.upcase if f_unexp
+
+	    summary = "%1s%03d %1s%03d %1s%03d" % [ 
+		i_tag, i_count, 
+		w_tag, w_count, 
+		f_tag, f_count ]
+
+	    printf "%-*s    %s\n", 
+		MaxLineLength - 4 - summary.length, domainname, summary
+
+	    if @rflag.tagonly
+		msg1("  #{severity}: #{res.tag}")
+		msg1("  #{res.testname}")
+	    else
+		msg1("  #{severity}: #{res.tag}")
+		msg1("  #{res.desc.msg}")
+	    end
+
+	end
+
+
+	def diagnostic(severity, testname, desc, lst)
+	    msg, xpl = nil, nil
+	    if @rflag.tagonly
+		if desc.is_error?
+		    msg = "#{severity}[Unexpected]: #{testname}"
+		else
+		    msg = "#{severity}: #{testname}"
+		end
+	    else
+		msg = desc.msg
+	    end
+
+
+	    if @rflag.explain && !@rflag.tagonly
+		xpl = desc.xpl
+	    end
+	    
+	    msg1(msg)
+	    explanation(xpl)
+	    list(lst)
+	    vskip
+	end
+	    
+
+	def status(domainname, i_count, w_count, f_count)
+	    h1("Final status")
+	    print super(domainname, i_count, w_count, f_count)
+	end
+
+
+
 	#------------------------------------------------------------
+
 	def h1(h)
 	    puts "<H1>#{h.capitalize}</H1>"
 	end
@@ -293,10 +362,12 @@ EOT
 
 	def explanation(xpl)
 	    return unless xpl
+	    puts "<pre>"
 	    xpl.split(/\n/).each { |e|
 		puts " | #{e}"
 	    }
 	    puts " `----- -- -- - -  -"
+	    puts "</pre>"
 	end
 	
 	def msg1(str)
@@ -304,18 +375,14 @@ EOT
 	end
 
 	def list(l, tag="=>")
-	    puts "<UL>"
-	    l.each { |elt| puts "<LI>#{elt}</LI>" }
-	    puts "</UL>"
+	    @o.puts "<UL>"
+	    l.each { |elt| @o.puts "  <LI>#{elt}</LI>" }
+	    @o.puts "</UL>"
 	end
 
 	def vskip(skip=1)
 	    skip.times { puts "<BR>" }
 	end
-    end
-
-
-    class BatchText 
     end
 end
 

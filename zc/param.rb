@@ -11,6 +11,8 @@
 #
 #
 
+require 'cgi'
+
 require 'report'
 require 'publisher'
 
@@ -18,6 +20,89 @@ require 'publisher'
 ## Parameters of the ZoneCheck application
 ##
 class Param
+    class CGI
+	def initialize
+	    @p    = Param::new
+	end
+
+	def parse
+	    # CGI interpreter
+	    cgi = ::CGI::new
+	    
+	    # Verbose
+	    if cgi.has_key?("verbose")
+		@p.verbose = cgi["verbose"].join(",")
+	    else
+		@p.verbose = "intro"    if cgi.has_key?("intro")
+		@p.verbose = "explain"  if cgi.has_key?("explain")
+		@p.verbose = "testdesc" if cgi.has_key?("progress")
+	    end
+
+	    # Output
+	    if cgi.has_key?("output")
+		@p.output = cgi["output"].join(",")
+	    else
+		@p.output = cgi["format"].join(",")
+	    end
+
+	    # Error
+	    if cgi.has_key?("error")
+		@p.error = cgi["error"].join(",")
+	    else
+		errorlvl  = cgi["errorlvl"].delete_if { |e| e =~ /^\s*$/ }
+		errorstop = cgi.has_key?("errorstop") ? "stop" : "nostop"
+		@p.error = (errorlvl + [ errorstop ]).join(",")
+	    end
+
+	    # Transp
+	    if cgi.has_key?("transp")
+		@p.transp = cgi["transp"].join(",")
+	    else
+		@p.transp = (cgi["transp3"] + cgi["transp4"]).join(",")
+	    end
+	    
+	    # Retrieve NS and associated addresses
+	    if cgi.has_key?("ns")
+		@p.domain.ns = cgi["ns"].join(";")
+	    else
+		ns_list = [ ]
+		(0..7).each { |i|
+		    next unless cgi_ns = cgi["ns#{i}"]
+		    next unless cgi_ns.length > 0
+		    next if     (ns = cgi_ns[0]).empty?
+		    
+		    cgi_ad = cgi["ips#{i}"]
+		    if cgi_ad.nil? || cgi_ad.length == 0 
+			ns_list << [ ns ]
+		    else
+			# XXX: cgi_ad[x].empty?
+			ips = cgi_ad.collect { |a| 
+			    a.split(/\s*,\s*|\s+/) }.flatten.compact
+			ns_list << [ ns, ips ]
+		    end
+		}
+		if ! ns_list.empty?
+		    @p.domain.ns   = ns_list.collect { |ns, ips|
+			ips ? "#{ns}=#{ips.join(",")}" : ns
+		    }.join(";")
+		end
+	    end
+
+	    # Zone/Domain
+	    # XXX: todo check!!!
+	    @p.domain.name = cgi["zone"]
+
+	    # XXX: not good place
+	    puts cgi.header(@p.publisher_class::Mime)
+
+	    # Ok
+	    @p
+	end
+
+	def usage
+	end
+    end
+
     ##
     ##
     ##
@@ -140,9 +225,9 @@ usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     -4, --ipv4          Only check the zone with IPv4 connectivity
     -6, --ipv6          Only check the zone with IPv6 connectivity
 
-  verbose:              [intro/explanation] [testdesc|counter]
+  verbose:              [intro/explain] [testdesc|counter]
     intro          [i]  Print summary for domain and associated nameservers
-    explanation    [x]  Print an explanation for failed tests
+    explain        [x]  Print an explanation for failed tests
     testdesc       [t]  Print the test description before running it
     counter        [c]  Print a test counter
 
@@ -410,7 +495,7 @@ EOT
 
     attr_reader :client
 
-    attr_reader :rflag, :report, :publisher
+    attr_reader :rflag, :report, :publisher, :publisher_class
 
 
     attr_reader :batch
@@ -432,14 +517,9 @@ EOT
 
     attr_reader :give_testdesc
     
-
-
     attr_reader :testdir
     attr_writer :testdir
 
-
-    DefaultConfigFile = "zc.conf"
-    DefaultTestDir    = "./test"
 
     class ParamError < StandardError
     end
@@ -452,8 +532,8 @@ EOT
     #
     def initialize
 	@dns			= NResolv::DNS::DefaultResolver
-	@configfile		= DefaultConfigFile
-	@testdir		= DefaultTestDir
+	@configfile		= ZC_CONFIG_FILE
+	@testdir		= ZC_TEST_DIR
 	@ipv4			= nil
 	@ipv6			= nil
 
@@ -518,7 +598,7 @@ EOT
     def verbose=(string)
 	string.split(/\s*,\s*/).each { |token|
 	    case token
-	    when "x", "explanation"
+	    when "x", "explain"
 		@rflag.explain	= true
 	    when "i", "intro"
 		@rflag.intro	= true
