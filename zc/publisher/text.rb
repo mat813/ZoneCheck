@@ -202,7 +202,7 @@ module Publisher
 	def error(text)
 	    paragraph = ::Text::Format::new
 	    paragraph.width = 72
-	    paragraph.tag   = " "
+	    paragraph.tag   = "ERROR: "
 	    @o.puts paragraph.format(text)
 	end
 

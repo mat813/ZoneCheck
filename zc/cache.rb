@@ -38,8 +38,17 @@ class Cache
     # Clear the items (all if none specified)
     def clear(*items)
 	@mutex.synchronize {
+	    # Clear item content
 	    list = items.empty? ? @list.keys : items
-	    list.each { |item| @list[item] = {} }
+	    list.each { |item| 
+		# Sanity check
+		if ! @list.has_key?(item)
+		    raise ArgumentError, "Cache item '#{item}' not defined"
+		end
+		
+		# Clear 
+		@list[item] = {} 
+	    }
 	}
     end
 

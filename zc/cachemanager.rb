@@ -42,15 +42,7 @@ class CacheManager
 	end
 
 	alias _class class
-	def class
-	    @resource.class
-	end
 
-	def kind_of?(k)
-	    @resource.kind_of?(k)
-	end
-	alias instance_of? kind_of?
-	alias is_a?        kind_of?
 
 	def eql?(other)
 	    return false unless self.class == other.class
@@ -59,13 +51,12 @@ class CacheManager
 	end
 	alias == eql?
 
-	def hash
-	    @resource.hash
-	end
-
-	def to_s
-	    @resource.to_s
-	end
+	def hash        ; @resource.hash        ; end
+	def to_s        ; @resource.to_s        ; end
+	def class       ; @resource.class       ; end
+	def kind_of?(k) ; @resource.kind_of?(k) ; end
+	alias instance_of? kind_of?
+	alias is_a?        kind_of?
 
 	def method_missing(method, *args)
 	    @resource.method(method).call(*args)
@@ -92,7 +83,6 @@ class CacheManager
 	# DNS / client type
 	@dns		= dns
 	@client		= client
-	raise "FUCK" if client.nil?
 
 	# Cached items
 	@cache = Cache::new
@@ -124,7 +114,7 @@ class CacheManager
 	    # Sanity check
 	    case ip
 	    when Address::IPv4, Address::IPv6
-	    else raise RuntimeError, "Argument should be an Address"
+	    else raise "Argument should be an Address"
 	    end
  
 	    # Retrieve/Create the cachemanager for the address
@@ -162,7 +152,7 @@ class CacheManager
 		end
 	    }
 	else
-	    raise RuntimeError
+	    raise ArgumentError, "Expecting Address or DNS Name"
 	end
     end
 

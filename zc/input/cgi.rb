@@ -28,25 +28,6 @@ module Input
     class CGI
 	MaxNS = 8
 
-	##
-	## Wrapper for batch data, so that they have the same kind
-	## of IO interfaces as File or STDIN
-	##
-	class BatchData
-	    def initialize(data)
-		@data = data.split(/\n/)
-	    end
-
-	    def each_line(&block)
-		@data.each &block
-	    end
-
-	    def close
-		@data = nil
-	    end
-	end
-
-
 	def initialize
 	    @cgi  = ::CGI::new
 	end
@@ -68,7 +49,7 @@ module Input
 
 	    # Batch
 	    if @cgi.has_key?("batchdata")
-		p.batch = BatchData::new(@cgi["batchdata"][0])
+		p.batch = Param::BatchData::new(@cgi["batchdata"][0])
 	    end
 
 	    # Quiet, One

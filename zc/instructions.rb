@@ -11,6 +11,8 @@
 #
 #
 
+require 'dbg'
+
 
 ##
 ##
@@ -20,6 +22,9 @@ module Instruction
     end
 
     class Node
+	##
+	## Block
+	##
 	class Block < Node
 	    def initialize(instr=[])
 		@instr		= instr
@@ -45,6 +50,10 @@ module Instruction
 	    end
 	end
 
+
+	##
+	## Check
+	##
 	class Check < Node
 	    def initialize(name, severity, category)
 		@name		= name
@@ -69,6 +78,10 @@ module Instruction
 	    end
 	end
 
+
+	##
+	## Switch
+	##
 	class Switch < Node
 	    def initialize(testname, when_stmt, else_stmt)
 		@testname	= testname

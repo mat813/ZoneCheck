@@ -83,6 +83,7 @@ module Input
 		menu.append(Gtk::MenuItem::new("GTK"))
 		@o_type = Gtk::OptionMenu::new
 		@o_type.set_menu(menu)
+		@o_type.set_history(2)
 
 		menu = Gtk::Menu::new
 		menu.append(Gtk::MenuItem::new("straight"))
@@ -107,7 +108,6 @@ module Input
 		    @a_resolver.set_sensitive(w.active?)
 		    @a_resolver.set_text("")
 		}
-#		@a_useresolver.set_sensitive(false)
 		@a_resolver = Gtk::Entry::new
 		@a_resolver.set_sensitive(false)
 		
@@ -206,7 +206,6 @@ module Input
 		tbl.attach(@o_nothing, 2, 3, 1, 2)
 		output_f.add(tbl)
 
-
 		# Error
 		error_f = Gtk::Frame::new(l10n_error)
 
@@ -223,7 +222,6 @@ module Input
 		tbl.attach(@sf, 0, 1, 1, 2)
 		error_f.add(tbl)
 		
-
 		# Tests
 		test_f   = Gtk::Frame::new(l10n_test)
 
@@ -237,7 +235,6 @@ module Input
 		tbl.attach(@tst_zcnt, 1, 2, 0, 1)
 		tbl.attach(@tst_ripe, 2, 3, 0, 1)
 		test_f.add(tbl)
-
 
 		# Transport
 		transp_f = Gtk::Frame::new(l10n_transport)
@@ -270,8 +267,7 @@ module Input
 		tbl.attach(@tcp,  2, 3, 1, 2)
 		transp_f.add(tbl)
 
-
-		#
+		# Final packaging
 		pack_start(output_f)
 		pack_start(error_f)
 		pack_start(test_f)
@@ -316,7 +312,6 @@ module Input
 		# Parent constructor
 		super()
 
-
 		# Pixmaps
 		winroot     = Gdk::Window::default_root_window
 		make_pixmap = Proc::new { |pixmap_data|
@@ -326,8 +321,7 @@ module Input
 		pix_prim = make_pixmap.call(Publisher::XPM::Primary)
 		pix_sec  = make_pixmap.call(Publisher::XPM::Secondary)
 
-
-		# Locallisation
+		# Localisation
 		l10n_check		= $mc.get("iface_label_check")
 		l10n_guess		= $mc.get("iface_label_guess")
 		l10n_clear		= $mc.get("iface_label_clear")
@@ -335,14 +329,13 @@ module Input
 		l10n_secondary		= $mc.get("ns_secondary")
 		l10n_ips		= $mc.get("ns_ips")
 		l10n_ns			= $mc.get("ns_ns")
+		l10n_zone		= $mc.get("ns_zone").capitalize
 
 		# 
 		@ns	= []
 		@ips	= []
 
-
 		# Zone
-		l10n_zone = $mc.get("ns_zone").capitalize
 		@zone = Gtk::Entry::new
 
 		hbox = Gtk::HBox::new(false, 5)
@@ -384,15 +377,13 @@ module Input
 		@hbbox.pack_start(@check)
 		@hbbox.pack_start(@guess)
 		@hbbox.pack_start(@clear)
-
 		
-		#
+		# Final packaging
 		pack_start(zone_f)
 		pack_start(ns_f)
 		pack_start(@hbbox)
 
-
-		#
+		# Signal handler
 		@check.signal_connect("clicked") { |w| 
 		    @hbbox.set_sensitive(false)
 		    begin
@@ -462,16 +453,20 @@ module Input
 	    end
 	    
 	    def ns=(ns_list) 
+		# Sanity check
 		if ns_list.length > MaxNS
-		    raise ArgumentError, "Too many nameservers to display them"
+		    raise ArgumentError, 
+			$mc.get("iface_xcp_toomany_nameservers")
 		end
 		
+		# Set nameservers entries
 		i = 0
 		ns_list.each_index { |i|
 		    @ns [i].set_text(ns_list[i][0].to_s)
 		    @ips[i].set_text(ns_list[i][1].join(", "))
 		}
-		
+
+		# Clear remaining entries
 		(i+1..MaxNS-1).each { |i|
 		    @ns [i].set_text("") ; @ips[i].set_text("")
 		}
@@ -479,6 +474,78 @@ module Input
 	end
 
 
+
+	##
+	## Batch
+	##
+	class Batch < Gtk::VBox
+	    def initialize(main)
+		# Parent constructor
+		super()
+
+		# Localisation
+		l10n_check		= $mc.get("iface_label_check")
+		l10n_clear		= $mc.get("iface_label_clear")
+		l10n_batch		= $mc.get("ns_batch").capitalize
+
+		# Batch
+		@batch = Gtk::TextView::new
+
+		info = Gtk::Label::new($mc.get("iface_batch_example"))
+		info.set_alignment(0,0.5)
+
+		scroller = Gtk::ScrolledWindow::new
+		scroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
+		scroller.add_with_viewport(@batch)
+
+		vbox = Gtk::VBox::new(false, 5)
+		vbox.pack_start(scroller, true,  true)
+		vbox.pack_start(info,     false, true)
+	    
+		batch_f = Gtk::Frame::new(l10n_batch)
+		batch_f.add(vbox)
+
+		# Buttons
+		@check = Gtk::Button::new(Gtk::Stock::EXECUTE, l10n_check)
+		@clear = Gtk::Button::new(Gtk::Stock::CLEAR,   l10n_clear)
+
+		@hbbox  = Gtk::HButtonBox::new
+		@hbbox.pack_start(@check)
+		@hbbox.pack_start(@clear)
+		
+		# Final packaging
+		pack_start(batch_f, true,  true)
+		pack_start(@hbbox,  false, true)
+
+		# Signal handler
+		@check.signal_connect("clicked") { |w| 
+		    @hbbox.set_sensitive(false)
+		    begin
+			main.set_expert
+			main.set_options
+			main.set_batch
+			main.release
+		    rescue => e
+			main.statusbar.push(1, e.message)
+			puts e.message
+			puts e.backtrace.join("\n")
+			puts "FUCK"
+		    end
+		    @hbbox.set_sensitive(true)
+		}
+
+		@clear.signal_connect("clicked") {
+		    @hbbox.set_sensitive(false)
+		    @batch.buffer.set_text("")
+		    @hbbox.set_sensitive(true)
+		}
+	    end
+
+	    def data
+		buffer = @batch.buffer
+		buffer.get_text(buffer.start_iter, buffer.end_iter, false)
+	    end
+	end
 
 	class Main
 	    attr_reader :config, :statusbar, :testmanager
@@ -507,6 +574,7 @@ module Input
 		
 		
 		@input   = Input::new(self)
+		@batch   = Batch::new(self)
 		@options = Option::new(self)
 		@expert  = Expert::new(self)
 		@info_note = Gtk::Frame::new
@@ -519,13 +587,17 @@ module Input
 		
 		menu = Gtk::Menu::new
 		menuitem.set_submenu(menu)
-		
-		std_mitem = Gtk::RadioMenuItem::new(nil, "Standard")
-		grp = std_mitem.group
-		menu.append(std_mitem)
-		exp_mitem = Gtk::RadioMenuItem::new(grp, "Expert")
+
+		exp_mitem = Gtk::CheckMenuItem::new("Expert")
 		menu.append(exp_mitem)
-				 
+		
+		single_mitem = Gtk::RadioMenuItem::new(nil, "Single")
+		grp = single_mitem.group
+		menu.append(single_mitem)
+		batch_mitem = Gtk::RadioMenuItem::new(grp, "Batch")
+		menu.append(batch_mitem)
+
+		
 
 #		sep = Gtk::SeparatorMenuItem::new
 #		menu.append(sep)
@@ -547,24 +619,33 @@ module Input
 		notebook = Gtk::Notebook::new
 		notebook.set_tab_pos(Gtk::POS_TOP)
 		notebook.append_page @input,   Gtk::Label::new("Input")
+		notebook.append_page @batch,   Gtk::Label::new("Input")
 		notebook.append_page @options, Gtk::Label::new("Options")
 #		notebook.append_page @expert,  Gtk::Label::new("Expert")
 		
-		std_mitem.signal_connect("toggled") { |w|
-		    if w.active?
-			notebook.remove_page(notebook.page_num(@expert))
-		    end
-		}
 		exp_mitem.signal_connect("toggled") { |w|
 		    if w.active?
 			notebook.append_page(@expert, Gtk::Label::new("Expert"))
+#			notebook.set_current_page(notebook.page_num(@expert))
+		    else
+			notebook.remove_page(notebook.page_num(@expert))
 		    end
 		}
 		
-		vbox = Gtk::VBox::new
-		vbox.pack_start(menubar)
-		vbox.pack_start(notebook)
-		vbox.pack_start(@statusbar)
+
+		batch_mitem.signal_connect("toggled") { |w|
+		    if w.active? then @batch.show else @batch.hide end
+		}
+
+		single_mitem.signal_connect("toggled") { |w|
+		    if w.active? then @input.show else @input.hide end
+		}
+
+
+		vbox = Gtk::VBox::new(false)
+		vbox.pack_start(menubar,    false, true)
+		vbox.pack_start(notebook,   true,  true)
+		vbox.pack_start(@statusbar, false, true)
 		
 		button = Gtk::Button::new("Hello World")
 		button.signal_connect("clicked") {|*args| hello(*args) }
@@ -572,6 +653,7 @@ module Input
 		
 		@window.add(vbox)
 		@window.show_all
+		@batch.hide
 	    end
 	    
 	    def release
@@ -600,6 +682,10 @@ module Input
 		@p.transp	= @options.transp
 		@p.verbose	= @options.verbose
 		@p.error	= @options.error
+	    end
+
+	    def set_batch
+		@p.batch = Param::BatchData::new(@batch.data)
 	    end
 
 	    def set_domain
@@ -684,4 +770,3 @@ EOT
 	end
     end
 end
-

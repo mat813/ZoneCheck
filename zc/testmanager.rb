@@ -22,6 +22,12 @@ require 'cache'
 ##
 ## attributs: param, classes, cm, config, tests
 class TestManager
+    TestSuperclass = Test	# Superclass
+    TestPrefix     = "tst_"	# Prefix for test methods
+    CheckPrefix    = "chk_"	# Prefix for check methods
+
+
+    @@test_files = {}
 
     ##
     ## Exception: error in the test definition
@@ -30,14 +36,10 @@ class TestManager
     end
 
 
-    TestSuperclass = Test
-    TestPrefix     = "tst_"
-    CheckPrefix    = "chk_"
-
-
     #
     # Load ruby files implementing tests
     #  WARN: we are required to untaint for loading
+    #  WARN: file are only loaded once to avoid constant redefinition
     #
     # To minimize risk of choosing a random directory, only files
     #  that have the ruby extension (.rb) and have the "ZCTEST 1.0"
@@ -63,9 +65,15 @@ class TestManager
 		    rescue # XXX: Careful with rescue all
 			false
 		    end)
-		    $dbg.msg(DBG::LOADING, "test file: #{filename}")
-		    ::Kernel.load filename
-		    count += 1
+		    if  ! @@test_files.has_key?(filename)
+			$dbg.msg(DBG::LOADING, "test file: #{filename}")
+			::Kernel.load filename
+			@@test_files[filename] = true
+			count += 1
+		    else
+			$dbg.msg(DBG::LOADING,
+				 "test file: #{filename} (already loaded)")
+		    end
 		end
 	    end
 	}
@@ -81,7 +89,7 @@ class TestManager
 	@checks		= {}	# Hash of check method name (chk_*)
 	@classes	= []	# List of classes used by the methods above
 	@cache = Cache::new
-	@cache.create(:cached_tst)
+	@cache.create(:test)
    end
 
 
@@ -190,7 +198,7 @@ class TestManager
 	@cm		= cm
 	@do_preeval	= do_preeval
 
-	@cache.clear(:cached_tst)
+	@cache.clear(:test)
 
 	@iterer = { 
 	    CheckExtra          => proc { |bl| bl.call },
@@ -274,16 +282,16 @@ class TestManager
     #
     def test1(testname, ns=nil, ip=nil)
 	$dbg.msg(DBG::TESTS, "test: #{testname}")
-	@cache.use(:cached_tst, [ testname, ns, ip ]) {
-	    # Retrieve the method representing the check
+	@cache.use(:test, [ testname, ns, ip ]) {
+	    # Retrieve the method representing the test
 	    klass   = @tests[testname]
 	    object  = @objects[klass]
 	    method  = object.method(testname)
 	    
 	    # Call the method
 	    args = []
-	    args << ns if !ns.nil?
-	    args << ip if !ip.nil?
+	    args << ns unless ns.nil?
+	    args << ip unless ip.nil?
 	    method.call(*args)
 	}
     end
@@ -300,11 +308,13 @@ class TestManager
 	begin
 	    # Do a pre-evaluation of the code
 	    if @do_preeval
+		# Sanity check for debugging
 		if $dbg.enabled?(DBG::NOCACHE)
-		    raise RuntimeError, 
-			"Debugging with preeval and NOCACHE is not adviced"
+		    raise "Debugging with preeval and NOCACHE is not adviced"
 		end
 
+		# Do the pre-evaluation
+		#  => compute the number of checking to perform
 		begin
 		    Config::TestSeqOrder.each { |family|
 			testseq		= @config[family]

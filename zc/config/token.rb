@@ -17,17 +17,20 @@ require 'config/pos'
 ##
 ##
 class Config
+    ##
+    ## Token
+    ##
     class Token
-	SYMBOL		= 1
-	STRING		= 2
-	KEYWORD		= 3
-	CHAR		= 4
-	EOF		= 9
+	SYMBOL		= 1		# Symbol  : \w+
+	STRING		= 2		# String  : "([^\\\"]|\\[\\\"])*"
+	KEYWORD		= 3		# Keyword
+	CHAR		= 4		# Character
+	EOF		= 9		# End Of File
 
-	KW_case		= "case"
-	KW_when		= "when"
-	KW_else		= "else"
-	KW_end		= "end"
+	KW_case		= "case"	# 
+	KW_when		= "when"	# 
+	KW_else		= "else"	# 
+	KW_end		= "end"		# 
 
 
 	def initialize(type, data, x, y)
@@ -45,7 +48,7 @@ class Config
 	end
 	alias == eql
 
-	def to_s ; 
+	def to_s 
 	    @data
 	end
 	

@@ -499,6 +499,16 @@ class Param
 
 
 
+    ##
+    ## Wrapper for batch data, so that they have the same kind
+    ## of IO interfaces as File or STDIN
+    ##
+    class BatchData
+	def initialize(data)  ; @data = data.split(/\n/) ; end
+	def each_line(&block) ; @data.each &block        ; end
+	def close             ; @data = nil              ; end
+    end
+
     attr_reader :rflag, :report, :test, :network, :fs, :resolver, :publisher
 
     attr_reader :batch
@@ -512,7 +522,7 @@ class Param
 
 
     #
-    #
+    # Create parameters
     #
     def initialize
 	@publisher		= Publisher::new
@@ -524,9 +534,6 @@ class Param
 	@domain			= Domain::new
 	@rflag			= ReportFlag::new
     end
-
-
-
 
 
     

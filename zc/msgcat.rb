@@ -30,7 +30,7 @@ require 'dbg'
 ## definition : string                   # a string
 ##            | string '\' definition    # with posibility of continuation '\'
 ##
-## tag        : [a-zA-Z0-9_]
+## tag        : [a-zA-Z0-9_]+
 ##
 ##
 ## WARN: this file is not localized

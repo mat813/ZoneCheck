@@ -35,7 +35,7 @@
 #     for testing the code
 #
 
-ZC_INSTALL_PATH		= ENV["ZC_INSTALL_PATH"].untaint || "/homes/sdalu/ZC.CVS/zc"
+ZC_INSTALL_PATH		= ENV["ZC_INSTALL_PATH"].untaint || (ENV["HOME"].untaint || "/homes/sdalu") + "/ZC.CVS/zc"
 
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
@@ -53,6 +53,8 @@ ZC_DEFAULT_INPUT	= "cli"
 
 ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
 ZC_CGI_EXT		= "cgi"
+
+ZC_GTK_ENV_KEYS		= [ "DISPLAY" ]
 
 ## --> END OF CUSTOMIZATION <-- ######################################
 
@@ -163,21 +165,10 @@ end
 ##
 ##
 class ZoneCheck
-    def initialize
-	@input		= nil
-	@param		= nil
-	@test_manager	= nil
-	@testlist	= nil
-    end
-
-    def destroy
-    end
-
-
     #
-    # Parse command line
+    # Input method
     #
-    def select_input_method
+    def self.input_method
 	im = nil	# Input Method
 
 	# Check meta argument 
@@ -193,6 +184,8 @@ class ZoneCheck
 	im ||= if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
 		  (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
 	       then "cgi"
+	       elsif (ZC_GTK_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0
+	       then "gtk"
 	       else ZC_DEFAULT_INPUT
 	       end
 
@@ -214,40 +207,21 @@ class ZoneCheck
 	    $stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
 	end
-	@input = eval "Input::#{im.upcase}::new"
-    end
-
-    #
-    # fs should be configured
-    def parse_arguments
-	begin
-	    @param = Param::new
-	    if ! @input.parse(@param)
-		@input.usage(EXIT_USAGE)
-	    end
-	rescue Param::ParamError => e
-	    @input.error(e.to_s, EXIT_ERROR)
-	end
-    end
-
-    def interact
-	begin
-	    @input.interact(@param, @config, @test_manager)
-	rescue Param::ParamError => e
-	    @input.error(e.to_s, EXIT_ERROR)
-	end
+	eval "Input::#{im.upcase}::new"
     end
 
 
-
-    def select_tests
-	if @param.test.categories
-	    @config.limittest(Config::L_Category, @param.test.categories)
-	end
-	if @param.test.tests
-	    @config.overrideconf(@param.test.tests)
-	end
+    def initialize
+	@input		= nil
+	@param		= nil
+	@test_manager	= nil
+	@testlist	= nil
     end
+
+    def destroy
+#	puts "DESTROYED"
+    end
+
 
     def zc(cm)
 	# Setup publisher domain
@@ -293,8 +267,6 @@ class ZoneCheck
     end
 
     def do_check
-	ok = true
-
 	@param.fs.autoconf
 	@param.rflag.autoconf
 	@param.publisher.autoconf(@param.rflag)
@@ -313,14 +285,14 @@ class ZoneCheck
 	    @param.domain.autoconf(@param.resolver.local)
 	    @param.report.autoconf(@param.domain, 
 				   @param.rflag, @param.publisher.engine)
-	    ok = zc(cm)
+	    zc(cm)
 	else
 	    cm = CacheManager::create(Test::DefaultDNS, 
 				      @param.network.query_mode)
 	    batchio = case @param.batch
-		      when "-"                   then $stdin
-		      when String                then File::open(@param.batch) 
-		      when Input::CGI::BatchData then @param.batch
+		      when "-"              then $stdin
+		      when String           then File::open(@param.batch) 
+		      when Param::BatchData then @param.batch
 		      end
 	    batchio.each_line { |line|
 		next if line =~ /^\s*$/
@@ -331,15 +303,13 @@ class ZoneCheck
 		@param.domain.autoconf(@param.resolver.local)
 		@param.report.autoconf(@param.domain, 
 				       @param.rflag, @param.publisher.engine)
-		ok = false unless zc(cm)
+		zc(cm)
 	    }
 	    batchio.close unless @param.batch == "-"
 	end
 
 	# End formatter
 	@param.publisher.engine.end
-
-	exit EXIT_OK
     end
 
 
@@ -348,7 +318,6 @@ class ZoneCheck
     #
     def do_testlist
 	puts @test_manager.list.sort
-	exit EXIT_OK
     end
 
     #
@@ -362,14 +331,18 @@ class ZoneCheck
 	list.each { |test|
 	    puts $mc.get("#{test}_#{suf}")
 	}
-	exit EXIT_OK
     end
 
     def start 
 	begin
-	    select_input_method
-	    parse_arguments
+	    # Input method selection
+	    @input = ZoneCheck.input_method
+	    
+	    # Initialize parameters (from command line parsing)
+	    @param = Param::new
+	    @input.usage(EXIT_USAGE) unless @input.parse(@param)
 
+	    # Load the test implementation
 	    TestManager.load(@param.fs.testdir)
 
 	    # Create test manager
@@ -381,16 +354,27 @@ class ZoneCheck
 	    @config.read(@param.fs.cfgfile)
 	    @config.validate(@test_manager)
 
-	    interact
-	    select_tests
+	    # Interaction
+	    @input.interact(@param, @config, @test_manager)
 
-	    if    @param.test.list
-		do_testlist
-	    elsif @param.test.desctype
-		do_testdesc
-	    else
-		do_check
+	    # Test selection/limitation
+	    if @param.test.categories
+		@config.limittest(Config::L_Category, @param.test.categories)
 	    end
+	    if @param.test.tests
+		@config.overrideconf(@param.test.tests)
+	    end
+
+	    # Do the job
+	    if    @param.test.list	then do_testlist
+	    elsif @param.test.desctype	then do_testdesc
+	    else			     do_check
+	    end
+
+	    # Everything is fine
+	    exit EXIT_OK
+	rescue Param::ParamError => e
+	    @input.error(e.to_s, EXIT_ERROR)
 	ensure
 	    # exit() raise an exception ensuring that the following code
 	    #   is executed
@@ -413,7 +397,8 @@ if ! $zc_slavemode
 	puts e.message
 	puts e.at.x
 	puts e.at.y
-    rescue => e
+    rescue Param::ParamError => e
+	puts e.class
 	puts e.message
 	puts e.backtrace.join("\n")
     end
