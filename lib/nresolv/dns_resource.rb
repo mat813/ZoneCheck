@@ -84,6 +84,10 @@ class NResolv
 	    end
 	    alias == eql?
 
+
+	    ##
+	    ## Generic Resource
+	    ##
 	    module Generic
 		class TXT < Resource
 		    has_fields :txtdata
@@ -141,7 +145,9 @@ class NResolv
 	    
 	    
 
-
+	    ##
+	    ## IN Resource
+	    ##
 	    module IN
 		# Add all the generic resources
 		Generic.constants.each { |name|

@@ -31,16 +31,25 @@ class NResolv
 	    end
 	end
 
+	##
+	## Extend Resource so they can generate output to the dig format
+	##  (ie: adding method to_dig)
+	##
 	class Resource
 	    def to_dig
-		"#{rclass}\t#{rtype}\t" + _fields.collect { |name, value|
-		    value.to_s }.join(" ")
+		"%-*s  %-*s  %s" % [
+		    rclass.class.maxlen, rclass,
+		    rtype.class.maxlen,  rtype,
+		    _fields.collect { |name, value| value.to_s }.join(" ") ]
 	    end
 
 	    module Generic
 		class SOA
 		    def to_dig
-			"#{rclass}\t#{rtype}\t#{@mname} #{@rname} (#{@serial} #{@refresh} #{@retry} #{@expire} #{@minimum})"
+			"%-*s  %-*s  %s" % [
+			    rclass.class.maxlen, rclass,
+			    rtype.class.maxlen,  rtype,
+			    "#{@mname} #{@rname} (#{@serial} #{@refresh} #{@retry} #{@expire} #{@minimum})" ]
 		    end
 		end
 	    end
@@ -100,12 +109,7 @@ class NResolv
 		private
 		def entry_to_dig_s(entry, align)
 		    name, rr, ttl = entry
-		    "%-*s  %6d  %-*s  %-*s  %s\n" % [
-			align-7, name,
-			ttl,
-			rr.rclass.class.maxlen, rr.rclass,
-			rr.rtype.class.maxlen,  rr.rtype,
-			rr.respond_to?(:to_dig) ? rr.to_dig : rr.to_s ]
+		    "%-*s  %6d  %s\n" % [ align-7, name, ttl, rr.to_dig ]
 		end
 	    end
 	

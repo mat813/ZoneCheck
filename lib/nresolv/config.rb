@@ -84,7 +84,7 @@ class NResolv
 	##
 	class Config
 	    attr_reader :nameserver
-
+	    attr_reader :rootserver
 
 	    def self.from_resolv(filename='/etc/resolv.conf')
 		nameserver = []

@@ -168,25 +168,13 @@ class NResolv
 		@record = []
 	    end
 
-	    def length  ; @record.length ; end
-	    def empty?  ; @record.empty? ; end
-	    def [](idx) ; @record[idx]   ; end
-
-	    def each(&block)
-		@record.each &block
-		self
-	    end
-
-	    def reject!(&block)
-		@record.reject! &block
-		self
-	    end
-
-	    def sort!
-		@record.sort! { |x, y|
-		    x[0].to_s <=> y[0].to_s }
-		self
-	    end
+	    def length		; @record.length		; end
+	    def empty?		; @record.empty?		; end
+	    def [](idx)		; @record[idx]			; end
+	    def each(&block)	; @record.each &block		; end
+	    def reject!(&block)	; @record.reject! &block	; end
+	    def sort!		; @record.sort! { |x, y| 
+		                    x[0].to_s <=> y[0].to_s }	; end
 
 
 
