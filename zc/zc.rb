@@ -65,7 +65,6 @@ ZC_HTML_PATH		= "/zc" # no trailing /
 ## --> END OF CUSTOMIZATION <-- ######################################
 
 
-
 #
 # Identification
 #
@@ -82,6 +81,26 @@ ZC_MAINTAINER   = "Stephane D'Alu <sdalu@nic.fr>"
 PROGNAME	= File.basename($0)
 
 $zc_version	= ZC_VERSION
+
+
+#
+# Constants
+#
+EXIT_OK		=  0	# Everything went fine
+EXIT_USAGE	= -1	# The user didn't bother reading the man page
+EXIT_ABORTED	=  2	# The user aborted the program before completion
+EXIT_FAILED	=  1	# The program completed but the result is negative
+EXIT_ERROR      =  3	# An error unrelated to the result occured
+
+
+#
+# Sanity check
+#
+m = /^(\d+)\.(\d+)\./.match(RUBY_VERSION)
+if (m[1].to_i <= 1) && (m[2].to_i < 8)
+    $stderr.puts "#{PROGNAME}: ruby version 1.8.0 is at least required."
+    exit EXIT_ERROR
+end
 
 
 #
@@ -117,16 +136,6 @@ require 'config'
 require 'param'
 require 'cachemanager'
 require 'testmanager'
-
-
-#
-# Constants
-#
-EXIT_OK		=  0	# Everything went fine
-EXIT_USAGE	= -1	# The user didn't bother reading the man page
-EXIT_ABORTED	=  2	# The user aborted the program before completion
-EXIT_FAILED	=  1	# The program completed but the result is negative
-EXIT_ERROR      =  3	# An error unrelated to the result occured
 
 
 #
