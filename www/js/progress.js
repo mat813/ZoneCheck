@@ -79,6 +79,7 @@ function zc_pgr_setlocale(tprogress, progress, test, speed, time) {
   zc_pgr_l_test           = test;
   zc_pgr_l_speed          = speed;
   zc_pgr_l_time           = time;
+  zc_pgr_l_na             = "N/A";
 }
 
 /**
@@ -182,7 +183,7 @@ function zc_pgr_update() {
     pos2 = zc_pgr_barsize-zc_pgr_tickersize - pos0;
     document.getElementById("zc_pgr_pct0" ).style.width = pos0;
     document.getElementById("zc_pgr_pct2" ).style.width = pos2;
-    document.getElementById("zc_pgr_eta"  ).innerHTML = "N/A";
+    document.getElementById("zc_pgr_eta"  ).innerHTML = zc_pgr_l_na;
   }
 
   document.getElementById("zc_pgr_proc" ).innerHTML = zc_pgr_processed;
