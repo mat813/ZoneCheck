@@ -316,7 +316,7 @@ class Param
 		case opt
 		when "--help"      then cmdline_usage(EXIT_USAGE, $stdout)
 		when "--version"
-		    puts "#{PROGNAME}: RCS version #{RCS_REVISION}"
+		    puts "#{PROGNAME}: version #{VERSION}"
 		    exit EXIT_OK
 		when "--debug"     then $dbg.level	= arg
 		when "--batch"     then i.batch		= true
@@ -362,7 +362,7 @@ class Param
 usage: #{PROGNAME}: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname
     -q, --quiet         Quiet mode, doesn't print visual candy.
     -h, --help          Show this message
-    -V, --version       Display RCS version and exit
+    -V, --version       Display version and exit
     -B, --batch         Batch mode (read from stdin)
     -T, --testdir       Location of the directory holding tests
     -c, --config        Specify location of the configuration file

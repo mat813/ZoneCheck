@@ -18,8 +18,10 @@ $LOAD_PATH << "../lib/"
 #
 # Identification
 #
+CVS_NAME	= %q$Name$
 RCS_ID		= %q$Id$
 RCS_REVISION	= RCS_ID.split[2]
+VERSION		= CVS_NAME.gsub(/_/, ".")
 PROGNAME	= File.basename($0)
 
 
