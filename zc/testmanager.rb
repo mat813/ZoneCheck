@@ -382,7 +382,7 @@ class TestManager
     #
     # Perform unitary test
     #
-    def test1(testname, ns=nil, ip=nil)
+    def test1(testname, report=true, ns=nil, ip=nil)
 	$dbg.msg(DBG::TESTS) { "test: #{testname}" }
 	@cache.use(:test, [ testname, ns, ip ]) {
 	    # Retrieve the method representing the test
@@ -397,6 +397,7 @@ class TestManager
 	    begin
 		method.call(*args)
 	    rescue NResolv::NResolvError => e
+		return e unless report
 		desc = Test::Result::Desc::new(false)
 		desc.error = "Resolver error (#{e})"
 		@param.report.fatal << Test::Error::new(testname, desc, ns, ip)
@@ -434,7 +435,7 @@ class TestManager
 				testcount += rules.preeval(self, args)
 			   })
 		}
-	    rescue Instruction::InstructionError, Report::FatalError => e
+	    rescue Instruction::InstructionError => e
 		$dbg.msg(DBG::TESTS) { "disabling preeval: #{e}" }
 		@do_preeval = false
 		testcount   = 0

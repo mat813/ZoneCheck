@@ -41,6 +41,9 @@ module Instruction
     class InstructionError < StandardError
     end
 
+    class PreevalError < InstructionError
+    end
+
 
     ##
     ## Abstract Node class
@@ -129,14 +132,16 @@ module Instruction
 	end
 	
 	def preeval(testmanager, args)
-	    choice = testmanager.test1(@testname, *args)
+	    choice = testmanager.test1(@testname, false, *args)
+	    raise PreevalError if choice.kind_of?(Exception)
+
 	    $dbg.msg(DBG::TESTS) { "preeval: #{@testname} = #{choice}" }
 	    block = @when[choice] || @else
 	    block.nil? ? 0 : block.preeval(testmanager, args) 
 	end
 	
 	def eval(testmanager, args)
-	    choice = testmanager.test1(@testname, *args)
+	    choice = testmanager.test1(@testname, true, *args)
 	    $dbg.msg(DBG::TESTS) {"switching to: #{@testname} = #{choice}"}
 	    block = @when[choice] || @else
 	    if block
