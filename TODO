@@ -25,8 +25,7 @@ NOT ABLE TODO?
 
 
 2002-10-17 francois.tigeot@nic.fr
-	
+2002-10-17 sdalu@nic.fr	(modif)
 	Document the class hierarchy with graphics if possible
-	Include sample code to easily add debuging printfs (not
-	straightforward with the current threaded code)
+	Include sample code to show how to use the DBG class
 	

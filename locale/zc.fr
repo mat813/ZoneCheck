@@ -41,6 +41,7 @@ ns_zone         : zone
 ns_ns		: ns
 ns_primary      : primaire
 ns_secondary    : secondaire
+ns_ips		: IPs
 
 title_zoneinfo  : Information sur la zone
 title_progress  : Progression
