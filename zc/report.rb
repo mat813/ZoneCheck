@@ -102,5 +102,29 @@ module Report
 	    @warning	= Warning::new(self)
 	    @info	= Info::new(self)
 	end
+
+	def finish
+	    if @rflag.one
+	    then display_one
+	    else display_std
+	    end
+	end
+
+	protected
+	def display_one
+	    rtest, severity = nil,          nil
+	    rtest, severity = @fatal.one,   @fatal.severity   unless rtest
+	    rtest, severity = @warning.one, @warning.severity unless rtest
+
+	    @publish.diagnostic1(@domain.name, 
+				 @info.count,    @info.has_error?,
+				 @warning.count, @warning.has_error?,
+				 @fatal.count,   @fatal.has_error?,
+				 rtest, severity)
+	end
+
+	def display_std
+	    raise "abstract method"
+	end
     end
 end

@@ -23,31 +23,19 @@ module Report
     ## Straight interpretation of messages.
     ##
     class BySeverity < Template
-	def finish
-	    if @rflag.one
-		rtest, severity = nil,          nil
-		rtest, severity = @fatal.one,   @fatal.severity   unless rtest
-		rtest, severity = @warning.one, @warning.severity unless rtest
-
-		@publish.diagnostic1(@domain.name, 
-				     @info.count,    @info.has_error?,
-				     @warning.count, @warning.has_error?,
-				     @fatal.count,   @fatal.has_error?,
-				     rtest, severity)
-	    else
-		if !(@info.empty? && @warning.empty? && @fatal.empty?)
-		    @publish.diag_start() unless @rflag.quiet
+	def display_std
+	    if !(@info.empty? && @warning.empty? && @fatal.empty?)
+		@publish.diag_start() unless @rflag.quiet
 		    
-		    catlist = []
-		    catlist << @ok   if @rflag.reportok
-		    catlist << @info << @warning << @fatal
-		    catlist.each { |cat|
-			display(cat.list, cat.severity) }
-		end
-
-		@publish.status(@domain.name, 
-				@info.count, @warning.count, @fatal.count)
+		catlist = []
+		catlist << @ok   if @rflag.reportok
+		catlist << @info << @warning << @fatal
+		catlist.each { |cat|
+		    display(cat.list, cat.severity) }
 	    end
+
+	    @publish.status(@domain.name, 
+			    @info.count, @warning.count, @fatal.count)
 	end
 
 	private

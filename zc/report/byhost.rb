@@ -23,47 +23,32 @@ module Report
     ## Straight interpretation of messages.
     ##
     class ByHost < Template
-	def finish
-	    if @rflag.one
-		rtest, severity = nil,          nil
-		rtest, severity = @fatal.one,   @fatal.severity   unless rtest
-		rtest, severity = @warning.one, @warning.severity unless rtest
+	def display_std
+	    if !(@info.empty? && @warning.empty? && @fatal.empty?)
+		@publish.diag_start() unless @rflag.quiet
 
-		@publish.diagnostic1(@domain.name, 
-				     @info.count,    @info.has_error?,
-				     @warning.count, @warning.has_error?,
-				     @fatal.count,   @fatal.has_error?,
-				     rtest, severity)
-	    else
-		if !(@info.empty? && @warning.empty? && @fatal.empty?)
-		    @publish.diag_start() unless @rflag.quiet
+		# Sorting by 'host'
+		byhost = {}
+		full_list.each { |elt| res, severity = elt
+		    next if severity.nil? && !@rflag.reportok
+		    tag = res.tag
+		    byhost[tag] = [] unless byhost.has_key?(tag)
+		    byhost[tag] << elt
+		}
 
-		    # Sorting by 'host'
-		    byhost = {}
-		    full_list.each { |elt| res, severity = elt
-			next if severity.nil? && !@rflag.reportok
-			tag = res.tag
-			byhost[tag] = [] unless byhost.has_key?(tag)
-			byhost[tag] << elt
-		    }
-
-		    # Print 'generic' first
-		    gentag = $mc.get("w_generic")
-		    display(byhost[gentag], gentag)
-		    byhost.delete(gentag)
-
-		    # Print remaining 'host'
-		    byhost.keys.sort.each { |tag|
-			display(byhost[tag], tag) }
-		end
-
-		@publish.status(@domain.name, 
-				@info.count, @warning.count, @fatal.count)
+		# Print 'generic' first
+		gentag = $mc.get("w_generic")
+		display(byhost[gentag], gentag)
+		byhost.delete(gentag)
+		
+		# Print remaining 'host'
+		byhost.keys.sort.each { |tag|
+		    display(byhost[tag], tag) }
 	    end
+	    
+	    @publish.status(@domain.name, 
+			    @info.count, @warning.count, @fatal.count)
 	end
-
-	attr_reader :full_list
-	attr_reader :ok, :fatal, :warning, :info
 
 	private
 	def display(list, title)
