@@ -1,11 +1,8 @@
-# $Id$
+<?xml version='1.0' encoding='UTF-8'?>
+<msgcat lang="en">
+<!-- $Id$ -->
 
-##############################################################################
-#                                                                            #
-#             ===>   Localization files are UTF8 encoded   <===              #
-#                                                                            #
-##############################################################################
-
+<!--
 # 
 # CONTACT     : zonecheck@nic.fr
 # AUTHOR      : Stephane D'Alu <sdalu@nic.fr>
@@ -36,99 +33,108 @@
 # along with ZoneCheck; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
+-->
 
-[iface]
-label_transport		: Transport
-label_error		: Erreur
-label_extra_tests	: tests supplémentaires
-label_output		: Sortie
-label_check		: Vérifie
-label_guess		: Devine
-label_clear		: Efface
-label_debug		: Debug
-label_advanced		: Avancé
-stop_on_first		: arrête sur le premier fatal
-error_default		: sévérité par défaut
-error_allwarnings	: tout avertissment
-error_allfatals		: tout fatal
-error_reportok		: erport ok
-test_mail		: mail delivery
-test_zone		: zone content
-test_rir		: RIR databases
-output_explain		: explication
-output_testname		: nom du test
-output_details		: détails
-output_zone		: résumé
-output_progressbar	: barre de progression
-output_nothing		: rien
-output_description	: description
-dbg_loading		: chargement
-dbg_locale		: locale
-dbg_config		: config
-dbg_parser		: parser
-dbg_tests		: tests
-dbg_autoconf		: autoconf
-dbg_testdbg		: debogage des tests
-dbg_dbg			: debugger
-dbg_cache_info		: cache information
-dbg_nocache		: pas de cache
-dbg_dont_rescue		: aucun parachute
-dbg_crazydebug		: crazy debug
+  <section name="iface">
+    <tag name="label_transport">Transport</tag>
+    <tag name="label_error">Erreur</tag>
+    <tag name="label_extra_tests">tests supplémentaires</tag>
+    <tag name="label_output">Sortie</tag>
+    <tag name="label_check">Vérifie</tag>
+    <tag name="label_guess">Devine</tag>
+    <tag name="label_clear">Efface</tag>
+    <tag name="label_debug">Debug</tag>
+    <tag name="label_advanced">Avancé</tag>
+    <tag name="stop_on_first">arrête sur le premier fatal</tag>
+    <tag name="error_default">sévérité par défaut</tag>
+    <tag name="error_allwarnings">tout avertissment</tag>
+    <tag name="error_allfatals">tout fatal</tag>
+    <tag name="error_reportok">erport ok</tag>
+    <tag name="test_mail">mail delivery</tag>
+    <tag name="test_zone">zone content</tag>
+    <tag name="test_rir">RIR databases</tag>
+    <tag name="output_explain">explication</tag>
+    <tag name="output_testname">nom du test</tag>
+    <tag name="output_details">détails</tag>
+    <tag name="output_zone">résumé</tag>
+    <tag name="output_progressbar">barre de progression</tag>
+    <tag name="output_nothing">rien</tag>
+    <tag name="output_description">description</tag>
+    <tag name="dbg_loading">chargement</tag>
+    <tag name="dbg_locale">locale</tag>
+    <tag name="dbg_config">config</tag>
+    <tag name="dbg_init">initialisation</tag>
+    <tag name="dbg_tests">tests</tag>
+    <tag name="dbg_autoconf">autoconf</tag>
+    <tag name="dbg_testdbg">debogage des tests</tag>
+    <tag name="dbg_dbg">debugger</tag>
+    <tag name="dbg_cache_info">cache information</tag>
+    <tag name="dbg_nocache">pas de cache</tag>
+    <tag name="dbg_dont_rescue">aucun parachute</tag>
+    <tag name="dbg_crazydebug">crazy debug</tag>
 
-batch_example		: example:\nDOM=domain\nDOM=domain NS=ns1;ns2=1.2.34,2001:1547::1
+    <tag name="batch_example">example:\nDOM=domain\nDOM=domain NS=ns1;ns2=1.2.34,2001:1547::1</tag>
 
-batch_save		: Ouvrir traitement en lots
-batch_open		: Sauvegarder traitement en lots
+    <tag name="batch_save">Ouvrir traitement en lots</tag>
+    <tag name="batch_open">Sauvegarder traitement en lots</tag>
 
-file_overwrite		: Ecraser le fichier : %s
-file_gotdirectory	: Ne peut pas lire un répertoire
+    <tag name="file_overwrite">Ecraser le fichier : %s</tag>
+    <tag name="file_gotdirectory">Ne peut pas lire un répertoire</tag>
 
-xcp_toomany_nameservers : Trop de serveurs de noms
+    <tag name="xcp_toomany_nameservers">Trop de serveurs de noms</tag>
+  </section>
 
-[iface_tooltip]
-input/simple/zone : Enter zone to check
-input/simple/nameserver/name: Enter nameserver name
-input/simple/nameserver/addresses: Enter nameserver IP addresses (coma separated)
-input/batch/data: Enter the list of Zone that you want to test
-input/batch/save: Save current batch data
-input/batch/open: Set batch data from existing file
-input/simple/guess: Try to fill the nameserver information for an existing zone
-input/clear: Clear all the input information
-input/check: Start the ZoneCheck verification
+  <section name="iface:tooltip">
+    <tag name="input/simple/zone">Enter zone to check</tag>
+    <tag name="input/simple/nameserver/name">Enter nameserver name</tag>
+    <tag name="input/simple/nameserver/addresses">Enter nameserver IP addresses (coma separated)</tag>
+    <tag name="input/batch/data">Enter the list of Zone that you want to test</tag>
+    <tag name="input/batch/save">Save current batch data</tag>
+    <tag name="input/batch/open">Set batch data from existing file</tag>
+    <tag name="input/simple/guess">Try to fill the nameserver information for an existing zone</tag>
+    <tag name="input/clear">Clear all the input information</tag>
+    <tag name="input/check">Start the ZoneCheck verification</tag>
 
-option/output/summary: Give summary information about the zone tested
-option/output/testname: Give the name of the test
-option/output/explain: Give explanation and references
-option/output/details: Give detailed information
-option/output/progress: Show a progress bar
-option/output/description: Show current test name
-option/output/nothing: Don't display progress information
-option/error/default: Use the severity assigned in the configuration file
-option/error/allwarnings: All errors are considered as warnings
-option/error/allfatals: All errors are considered as fatals
-option/error/stoponfirst: Stop on first fatal error
-option/transp/ipv4: Use IPv4 protocol
-option/transp/ipv6: Use IPv6 protocol (new internet protocol)
-option/transp/std: Use UDP and fallback to TCP in case of truncated anser
-option/transp/udp: Use UDP protocol for all queries
-option/transp/tcp: Use TCP protocol for all queries
+    <tag name="option/output/summary">Give summary information about the zone tested</tag>
+    <tag name="option/output/testname">Give the name of the test</tag>
+    <tag name="option/output/explain">Give explanation and references</tag>
+    <tag name="option/output/details">Give detailed information</tag>
+    <tag name="option/output/progress">Show a progress bar</tag>
+    <tag name="option/output/description">Show current test name</tag>
+    <tag name="option/output/nothing">Don't display progress information</tag>
+    <tag name="option/error/default">Use the severity assigned in the configuration file</tag>
+    <tag name="option/error/allwarnings">All errors are considered as warnings</tag>
+    <tag name="option/error/allfatals">All errors are considered as fatals</tag>
+    <tag name="option/error/stoponfirst">Stop on first fatal error</tag>
+    <tag name="option/transp/ipv4">Use IPv4 protocol</tag>
+    <tag name="option/transp/ipv6">Use IPv6 protocol (new internet protocol)</tag>
+    <tag name="option/transp/std">Use UDP and fallback to TCP in case of truncated anser</tag>
+    <tag name="option/transp/udp">Use UDP protocol for all queries</tag>
+    <tag name="option/transp/tcp">Use TCP protocol for all queries</tag>
 
-expert/output/oneline: Print a short answer
-expert/output/tagonly: Only print tag (ideal for scripting)
-expert/output/quiet: Try to minimize ouput messages
-expert/output/format: Select output format
-expert/output/report: Select report analyse/processing
-expert/advanced/resolver: Select an alternative local resolver
-expert/advanced/testonly: Select the unique test you want to make
+    <tag name="expert/output/oneline">Print a short answer</tag>
+    <tag name="expert/output/tagonly">Only print tag (ideal for scripting)</tag>
+    <tag name="expert/output/quiet">Try to minimize ouput messages</tag>
+    <tag name="expert/output/format">Select output format</tag>
+    <tag name="expert/output/report">Select report analyse/processing</tag>
+    <tag name="expert/advanced/resolver">Select an alternative local resolver</tag>
+    <tag name="expert/advanced/testonly">Select the unique test you want to make</tag>
+  </section>
 
 
+  <section name="input:gtk">
+    <tag name="usage">
+usage: PROGNAME: [-hV] [-c conf] [-r resolver]
+        --lang          Choisit une autre langue (en, fr, ...)
+    -h, --help          Show this message
+    -V, --version       Display version and exit
+    -c, --config        Specify location of the configuration file
+        --testdir       Location of the directory holding tests
+    -r, --resolver      Resolver to use for guessing 'ns' information
+</tag>
+  </section>
 
-[*]
-input_gtk_usage: \
-usage: PROGNAME: [-hV] [-c conf] [-r resolver]\n\
-        --lang          Choisit une autre langue (en, fr, ...)\n\
-    -h, --help          Show this message\n\
-    -V, --version       Display version and exit\n\
-    -c, --config        Specify location of the configuration file\n\
-        --testdir       Location of the directory holding tests\n\
-    -r, --resolver      Resolver to use for guessing 'ns' information\n
+  <!-- Local Variables: -->
+  <!-- mode: xml        -->
+  <!-- End:             -->
+</msgcat>

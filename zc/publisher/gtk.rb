@@ -46,12 +46,79 @@ module Publisher
     class GTK < Template
 	Mime		= nil
 
+	##
+	## Rendering of XML chunks
+	##
+	class XMLTransform
+	    def initialize(const={})
+		@const	= const
+	    end
+
+	    def apply(xmlnode, var={})
+		case xmlnode
+		when REXML::Element
+		    case xmlnode.name
+		    when MsgCat::NAME, MsgCat::FAILURE, MsgCat::SUCCESS
+			do_text(xmlnode, var)
+		    when MsgCat::EXPLANATION	# not displayed in tagonly
+			text=xmlnode.elements.to_a('src').collect { |xmlsrc|
+			    type = xmlsrc.attributes['type']
+			    type = $mc.get("tag_#{type}")
+
+			    type + ': ' +xmlsrc.elements['title'].text + "\n" +
+			    xmlsrc.elements.to_a('para').collect { |xmlpara|
+				fmt_para(do_text(xmlpara, var)) }.join
+			}.join("\n")
+			::Text::Formater.lbox(text, [ ' |', ' `', '-', ' ' ])
+		    when MsgCat::DETAILS	# not displayed in tagonly
+			text=xmlnode.elements.to_a('para').collect { |xmlpara|
+			    fmt_para(do_text(xmlpara, var)) }.join("\n")
+			::Text::Formater.lbox(text, [ ' :', ' `', '.', ' ' ])
+		    else
+			do_text(xmlnode, var)
+		    end
+		when REXML::Text
+		    xmlnode.value
+		when REXML::Comment
+		    ''
+		end
+	    end
+
+	    #-- [private] -----------------------------------------------
+	    private
+	    def fmt_para(text, width=MaxLineLength-7, tag='  ')
+		::Text::Formater.paragraph(text, width, tag)
+	    end
+
+	    def do_text(xmlnode, var={})
+		case xmlnode
+		when REXML::Element
+		    case xmlnode.name
+		    when 'zcvar'
+			name = xmlnode.attributes['name']
+			var[name].to_s
+		    when 'zcconst'
+			''
+		    else
+			xmlnode.to_a.collect { |xmlchild| 
+			    do_text(xmlchild, var) }.join
+		    end
+		when REXML::Text
+		    xmlnode.value
+		when REXML::Comment
+		    ''
+		end
+	    end
+	end
+
+
+
 	class LeaveButton < Gtk::Button
 	    QUIT  = 1
 	    ABORT = 2
 	    def initialize
                 hbox  = Gtk::HBox::new(false)
-                hbox.pack_start(Gtk::Image::new(Gtk::Stock::QUIT), 
+                hbox.pack_start(Gtk::Image::new(Gtk::Stock::QUIT, Gtk::IconSize::BUTTON), 
 				false, false, 2)
                 hbox.pack_start(Gtk::Label::new($mc.get("word:quit").capitalize),
 				false, false, 0)
@@ -59,7 +126,7 @@ module Publisher
 		@quit.child = hbox
 
                 hbox = Gtk::HBox::new(false)
-                hbox.pack_start(Gtk::Image::new(Gtk::Stock::CANCEL), 
+                hbox.pack_start(Gtk::Image::new(Gtk::Stock::CANCEL, Gtk::IconSize::BUTTON), 
 				false, false, 2)
                 hbox.pack_start(Gtk::Label::new($mc.get("word:abort").capitalize),
 				false, false, 0)
@@ -355,6 +422,8 @@ module Publisher
 
 	def initialize(rflag, info, ostream=$stdout)
 	    super(rflag, info, ostream)
+	    @progress	= Progress::new(self)
+	    @xmltrans	= XMLTransform::new
 
 	    #
 	    Thread::new { Gtk::main() }
@@ -406,7 +475,6 @@ module Publisher
 	    @hbbox.pack_start(@quit)
 
 
-	    @progress	= Progress::new(self)
 
 	    toto = Gtk::VBox::new(false)
 	    toto.pack_start(@progress)
@@ -468,13 +536,8 @@ module Publisher
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? "i" : $mc.get('word:info_id')
-	    w_tag = @rflag.tagonly ? "w" : $mc.get('word:warning_id')
-	    f_tag = @rflag.tagonly ? "f" : $mc.get('word:fatal_id')
-	    
-	    i_tag = i_tag.upcase if i_unexp
-	    w_tag = w_tag.upcase if w_unexp
-	    f_tag = f_tag.upcase if f_unexp
+	    i_tag, w_tag, f_tag = 
+		severity_description(i_unexp, w_unexp, f_unexp)
 
 	    # Initialize widget
 	    tbl = Gtk::Table::new(3, 7, false)

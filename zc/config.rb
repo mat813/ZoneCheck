@@ -25,23 +25,42 @@ require 'instructions'
 ## Hold the information about the zc.conf configuration file
 ##
 class Config
-    Warning		= "w"		# Warning severity
-    Fatal		= "f"		# Fatal severity
-    Info		= "i"		# Informational
+    Warning		= 'w'		# Warning severity
+    Fatal		= 'f'		# Fatal severity
+    Info		= 'i'		# Informational
 
-    Skip		= "S"		# Don't run the test
-    Ok			= "o"		# Reserved
+    Skip		= 'S'		# Don't run the test
+    Ok			= 'o'		# Reserved
 
+
+    E_CONFIG		= 'config'	# XML Elements
+    E_CASE		= 'case'	#      .
+    E_WHEN		= 'when'	#      .
+    E_ELSE		= 'else'	#      .
+    E_CONST		= 'const'	#      .
+    E_MAP		= 'map'		#      .
+    E_RULES		= 'rules'	#      .
+    E_CHECK		= 'check'	#      .
+    E_TEST		= 'test'	#      .
+
+    A_NAME		= 'name'	# XML attributes
+    A_VALUE		= 'value'	#      .
+    A_ZONE		= 'zone'	#      .
+    A_PROFILE		= 'profile'	#      .
+    A_TEST		= 'test'	#      .
+    A_CLASS		= 'class'	#      .
+    A_SEVERITY		= 'severity'	#      .
+    A_CATEGORY		= 'category'	#      .
 
     TestSeqOrder	= [ CheckGeneric.family, CheckNameServer.family, 
 	                    CheckNetworkAddress.family, CheckExtra.family ]
 
     def self.severity2tag(severity)
 	case severity
-	when NilClass        then "ok"
-	when Config::Info    then "info"
-	when Config::Warning then "warning"
-	when Config::Fatal   then "fatal"
+	when NilClass        then 'ok'
+	when Config::Info    then 'info'
+	when Config::Warning then 'warning'
+	when Config::Fatal   then 'fatal'
 	else raise ArgumentError, "unknown severity: #{severity}"
 	end
     end
@@ -52,7 +71,7 @@ class Config
     def self.cfgfile(configfile)
 	if configfile =~ /^\// 
 	then configfile
-	else $zc_config_dir + "/" + configfile
+	else $zc_config_dir + '/' + configfile
 	end
     end
 
@@ -170,20 +189,20 @@ class Config
 
 	
 	def initialize(xmlprofile, parent=nil)
-	    @name	= xmlprofile.attributes['name']
+	    @name	= xmlprofile.attributes[A_NAME]
 	    @constants	= Constants::new(parent.constants)
 	    @rules	= {}
 
 	    $dbg.msg(DBG::CONFIG, "processing profile: #{@name}")
 
-	    xmlprofile.elements.each("const") { |element|
-		name  = element.attributes["name"]
-		value = element.attributes["value"]
+	    xmlprofile.elements.each(E_CONST) { |element|
+		name  = element.attributes[A_NAME]
+		value = element.attributes[A_VALUE]
 		@constants[name]=value.untaint
 	    }
 
-	    xmlprofile.elements.each("rules") { |element|
-		klass  = element.attributes["class"]
+	    xmlprofile.elements.each(E_RULES) { |element|
+		klass  = element.attributes[A_CLASS]
 		@rules[klass] = parse_block(element)
 	    }
 	end
@@ -196,16 +215,16 @@ class Config
 	    rule.each_child { |elt|
 		next unless elt.kind_of?(REXML::Element)
 		block << case elt.name
-			 when 'check' then parse_check(elt)
-			 when 'case'  then parse_case(elt)
+			 when E_CHECK then parse_check(elt)
+			 when E_CASE  then parse_case(elt)
 			 end
 	    }
 	    block
 	end
 	
 	def parse_check(xmlelt)
-	    name, severity, category = xmlelt.attributes['name'], 
-		xmlelt.attributes['severity'], xmlelt.attributes['category']
+	    name, severity, category = xmlelt.attributes[A_NAME], 
+		xmlelt.attributes[A_SEVERITY], xmlelt.attributes[A_CATEGORY]
 
 	    $dbg.msg(DBG::CONFIG, "creating instruction check: #{name}")
 	    Instruction::Check::new(name, severity, category)
@@ -213,13 +232,13 @@ class Config
 
 	def parse_case(xmlelt)
 	    when_stmt, else_stmt = {}, nil
-	    testname = xmlelt.attributes['test']
+	    testname = xmlelt.attributes[A_TEST]
 	    xmlelt.each_child { |elt|
 		next unless elt.kind_of?(REXML::Element)
 		case elt.name
-		when 'when' 
-		    when_stmt[elt.attributes['value']] = parse_block(elt)
-		when 'else'
+		when E_WHEN
+		    when_stmt[elt.attributes[A_VALUE]] = parse_block(elt)
+		when E_ELSE
 		    else_stmt = parse_block(elt)
 		end
 	    }
@@ -252,7 +271,7 @@ class Config
 	    # Ensure that the check is currently available
 	    if ! @test_manager.has_check?(checkname)
 		raise ArgumentError, 
-		    $mc.get("config:check_unknown") % [ checkname ]
+		    $mc.get('config:check_unknown') % [ checkname ]
 	    end
 
 	    # Ordering
@@ -260,19 +279,19 @@ class Config
 	}
 
 	# Create a fake configuration
-	fakeprofile = "<profile name=\"override\">\n"
+	fakeprofile = "<#{E_PROFILE} #{A_NAME}=\"override\">\n"
 	TestSeqOrder.each { |family|
 	    next unless rules[family]
-	    fakeprofile += "<rules class=\"#{family}\">\n"
+	    fakeprofile += "<#{E_RULES} #{A_CLASS}=\"#{family}\">\n"
 	    rules[family].each { |checkname|
-		fakeprofile += "<check name=\"#{checkname}\" severity=\"f\" category=\"\"/>\n" }
-	    fakeprofile += "</rules>\n"
+		fakeprofile += "<#{E_CHECK} #{A_NAME}=\"#{checkname}\" #{A_SEVERITY}=\"#{Fatal}\" #{A_CATEGORY}=\"\"/>\n" }
+	    fakeprofile += "</#{E_RULES}>\n"
 	}
-	fakeprofile += "</profile>\n"
-	fakeconf = '<config>' + fakeprofile + '</config>'
+	fakeprofile += "</#{E_PROFILE}>\n"
+	fakeconf = "<#{E_CONFIG}>" + fakeprofile + "</#{E_CONFIG}>"
 
 	# Register it as an override profile
-	xmlprofile = REXML::Document::new(fakeconf).root.elements['profile']
+	xmlprofile = REXML::Document::new(fakeconf).root.elements[E_PROFILE]
 	@profile_override = Profile::new(xmlprofile, self)
     end
 
@@ -292,22 +311,22 @@ class Config
 	    io   = File::open(cfgfile)
 	    main = REXML::Document::new(io)
 	rescue SystemCallError # for the Errno::ENOENT error
-	    raise ConfigError, $mc.get("problem_file") % configfile
+	    raise ConfigError, $mc.get('problem_file') % configfile
 	rescue REXML::ParseException => e
 	    puts "YO: #{e.position} / #{e.line} / #{e.message}"
 	ensure
 	    io.close unless io.nil?
 	end
 
-	main.root.elements.each("const") { |element|
-	    name  = element.attributes["name"]
-	    value = element.attributes["value"]
+	main.root.elements.each(E_CONST) { |element|
+	    name  = element.attributes[A_NAME]
+	    value = element.attributes[A_VALUE]
 	    @constants[name] =value.untaint
 	}
 
-	main.root.elements.each("map") { |element|
-	    zone    = element.attributes["zone"]
-	    profile = element.attributes["profile"]
+	main.root.elements.each(E_MAP) { |element|
+	    zone    = element.attributes[A_ZONE]
+	    profile = element.attributes[A_PROFILE]
 	    @mapping[zone] = profile.untaint
 	}
 

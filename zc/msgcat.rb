@@ -151,6 +151,10 @@ class MsgCat
     # Get message associated with the 'tag'
     #
     def get(tag, type=TAG, subtype=nil)
+	$dbg.msg(DBG::LOCALE) { 
+	    category = "#{type}/#{subtype}" if type != TAG
+	    "requesting locale for: #{tag} (#{category})"
+	}
 	begin
 	    case type
 	    when TAG

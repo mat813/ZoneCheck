@@ -35,9 +35,8 @@
 #
 -->
 
-<section name="input:inetd">
-  <tag name="usage">
-usage: PROGNAME: [-hV] [-46] [-c conf]
+  <section name="input:inetd">
+    <tag name="usage">usage: PROGNAME: [-hV] [-46] [-c conf]
         --lang          Select another language (en, fr, ...)
     -h, --help          Show this message
     -V, --version       Display version and exit
@@ -45,10 +44,10 @@ usage: PROGNAME: [-hV] [-46] [-c conf]
         --testdir       Location of the directory holding tests
     -r, --resolver      Resolver to use for guessing 'ns' information
     -4, --ipv4          Only allow to check the zone with IPv4 connectivity
-    -6, --ipv6          Only allow to check the zone with IPv6 connectivity\n
+    -6, --ipv6          Only allow to check the zone with IPv6 connectivity
+</tag>
 
-input_inetd_help: \
-Command           Args
+    <tag name="help">Command           Args
   ?|help           0     This message
   q|quit|exit      0     Leave ZoneCheck
   check            0     Launch the zone checking process
@@ -108,8 +107,7 @@ Example
   check
 </tag>
 
-  <tag name="welcome">
-Welcome to Zonecheck VERSION
+    <tag name="welcome">Welcome to Zonecheck VERSION
 
 To change the language: set lang fr
 To ask for help       : help
@@ -118,8 +116,8 @@ For more information visit about ZoneCheck visit the following URL:
   http://www.zonecheck.fr/
 </tag>
 
-  <tag name="what">I didn't understand, try asking for help!</tag>
-  <tag name="unknwon_preset">Unknown preset value '%s'</tag>
+    <tag name="what">I didn't understand, try asking for help!</tag>
+    <tag name="unknwon_preset">Unknown preset value '%s'</tag>
   </section>
 
   <!-- Local Variables: -->

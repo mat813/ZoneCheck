@@ -139,7 +139,7 @@ module Input
 		    case opt
 		    when '--help'      then usage(EXIT_USAGE, $console.stdout)
 		    when '--version'
-			l10n_version = $mc.get('input_version') % $zc_version
+			l10n_version = $mc.get('input:version') % $zc_version
 			l10n_version.gsub!(/PROGNAME/, PROGNAME)
 			$console.stdout.puts l10n_version
 			exit EXIT_OK
@@ -165,7 +165,7 @@ module Input
 	end
 
 	def interact(p, c, tm, io=$console.stdout)
-	    io.puts $mc.get('input_inetd_welcome').gsub('VERSION', ZC_VERSION)
+	    io.puts $mc.get('input:inetd:welcome').gsub('VERSION', ZC_VERSION)
 
 	    io.print @prompt
 	    io.flush
@@ -194,7 +194,7 @@ module Input
 			    io.puts '+ set verbose x,d,f'
 			    io.puts '+ set quiet'
 			else
-			    error($mc.get('input_inetd_unknown_preset') % $1)
+			    error($mc.get('input:inetd:unknown_preset') % $1)
 			end
 		    when /^set\s+(\w+)\s+(.*)$/
 			case $1
@@ -219,14 +219,14 @@ module Input
 			end
 		    #
 		    when '?', 'help'
-			io.puts $mc.get('input_inetd_help')
+			io.puts $mc.get('input:inetd:help')
 		    # Leave interaction loop
 		    when 'check'		then return true
 		    when 'quit', 'q', 'exit'	then return false
 			
 		    # What did he said?!
 		    else
-			error($mc.get('input_inetd_what'))
+			error($mc.get('input:inetd:what'))
 		    end
 		rescue Param::ParamError => e
 		    error(e.to_s)
@@ -241,7 +241,7 @@ module Input
 	end
 
 	def usage(errcode, io=$console.stdout)
-	    io.puts $mc.get('input_inetd_usage').gsub('PROGNAME', PROGNAME)
+	    io.puts $mc.get('input:inetd:usage').gsub('PROGNAME', PROGNAME)
 	    io.flush
 	    exit errcode unless errcode.nil?
 	end

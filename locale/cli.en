@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <msgcat lang="en">
 <!-- $Id$ -->
 
@@ -34,8 +35,7 @@
 #
 -->
 
-<tag name="input:cli:usage">
-usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname
+  <tag name="input:cli:usage">usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] domainname
         --lang          Select another language (en, fr, ...)
     -d, --debug         Select debugging messages to print
     -h, --help          Show this message

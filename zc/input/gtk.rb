@@ -42,6 +42,9 @@ require 'data/logo'
 
 Gtk.init
 
+# !! Bug in ruby or gtk2 => EBADF for nresolv
+# Perhaps move Gtk.init elsewhere
+
 #
 # When busy: @window.window.cursor = Gdk::Cursor::new(Gdk::Cursor::WATCH)
 # Notbook:   set_page_pixmaps(notebook, page_num, @book_open, @book_open_mask)
@@ -67,12 +70,12 @@ module Input
 		super()
 		
 		# Localisation
-		l10n_debug	= $mc.get("iface_label_debug")
-		l10n_output	= $mc.get("iface_label_output")
-		l10n_advanced	= $mc.get("iface_label_advanced")
-		l10n_output_progbar	= $mc.get("iface_output_progressbar")
-		l10n_output_desc	= $mc.get("iface_output_description")
-		l10n_output_nothing	= $mc.get("iface_output_nothing")
+		l10n_debug	= $mc.get("iface:label_debug")
+		l10n_output	= $mc.get("iface:label_output")
+		l10n_advanced	= $mc.get("iface:label_advanced")
+		l10n_output_progbar	= $mc.get("iface:output_progressbar")
+		l10n_output_desc	= $mc.get("iface:output_description")
+		l10n_output_nothing	= $mc.get("iface:output_nothing")
 
 
 		# Output
@@ -181,18 +184,18 @@ module Input
 
 		i, j = 0, 0
 		tbl = Gtk::Table::new(1, 3, true)
-		[   [ :d_loading,    "iface_dbg_loading",    DBG::LOADING    ],
-		    [ :d_locale,     "iface_dbg_locale",     DBG::LOCALE     ],
-		    [ :d_config,     "iface_dbg_config",     DBG::CONFIG     ],
-		    [ :d_parser,     "iface_dbg_parser",     DBG::PARSER     ],
-		    [ :d_tests,      "iface_dbg_tests",      DBG::TESTS      ],
-		    [ :d_autoconf,   "iface_dbg_autoconf",   DBG::AUTOCONF   ],
-		    [ :d_testdbg,    "iface_dbg_testdbg",    DBG::TESTDBG    ],
-		    [ :d_dbg,        "iface_dbg_dbg",        DBG::DBG        ],
-		    [ :d_cache_info, "iface_dbg_cache_info", DBG::CACHE_INFO ],
-		    [ :d_nocache,    "iface_dbg_nocache",    DBG::NOCACHE    ],
-		    [ :d_dont_rescue,"iface_dbg_dont_rescue",DBG::DONT_RESCUE],
-		    [ :d_crazydebug, "iface_dbg_crazydebug", DBG::CRAZYDEBUG ]
+		[   [ :d_loading,    "iface:dbg_loading",    DBG::LOADING    ],
+		    [ :d_locale,     "iface:dbg_locale",     DBG::LOCALE     ],
+		    [ :d_config,     "iface:dbg_config",     DBG::CONFIG     ],
+		    [ :d_init,       "iface:dbg_init",       DBG::INIT       ],
+		    [ :d_tests,      "iface:dbg_tests",      DBG::TESTS      ],
+		    [ :d_autoconf,   "iface:dbg_autoconf",   DBG::AUTOCONF   ],
+		    [ :d_testdbg,    "iface:dbg_testdbg",    DBG::TESTDBG    ],
+		    [ :d_dbg,        "iface:dbg_dbg",        DBG::DBG        ],
+		    [ :d_cache_info, "iface:dbg_cache_info", DBG::CACHE_INFO ],
+		    [ :d_nocache,    "iface:dbg_nocache",    DBG::NOCACHE    ],
+		    [ :d_dont_rescue,"iface:dbg_dont_rescue",DBG::DONT_RESCUE],
+		    [ :d_crazydebug, "iface:dbg_crazydebug", DBG::CRAZYDEBUG ]
 		].each { |var, tag, lvl|
 		    l10n  = $mc.get(tag)
 		    button=instance_eval("@#{var}=Gtk::CheckButton::new(l10n)")
@@ -248,19 +251,19 @@ module Input
 		super()
 
 		# Localisation
-		l10n_transport		= $mc.get("iface_label_transport")
-		l10n_error		= $mc.get("iface_label_error")
-		l10n_test		= $mc.get("iface_label_extra_tests")
-		l10n_output		= $mc.get("iface_label_output")
-		l10n_output_zone	= $mc.get("iface_output_zone")
-		l10n_output_testname	= $mc.get("iface_output_testname")
-		l10n_output_explain	= $mc.get("iface_output_explain")
-		l10n_output_details	= $mc.get("iface_output_details")
-		l10n_error_default	= $mc.get("iface_error_default")
-		l10n_error_allwarning	= $mc.get("iface_error_allwarnings")
-		l10n_error_allfatal	= $mc.get("iface_error_allfatals")
-		l10n_error_on_first	= $mc.get("iface_stop_on_first")
-		l10n_error_reportok	= $mc.get("iface_error_reportok")
+		l10n_transport		= $mc.get("iface:label_transport")
+		l10n_error		= $mc.get("iface:label_error")
+		l10n_test		= $mc.get("iface:label_extra_tests")
+		l10n_output		= $mc.get("iface:label_output")
+		l10n_output_zone	= $mc.get("iface:output_zone")
+		l10n_output_testname	= $mc.get("iface:output_testname")
+		l10n_output_explain	= $mc.get("iface:output_explain")
+		l10n_output_details	= $mc.get("iface:output_details")
+		l10n_error_default	= $mc.get("iface:error_default")
+		l10n_error_allwarning	= $mc.get("iface:error_allwarnings")
+		l10n_error_allfatal	= $mc.get("iface:error_allfatals")
+		l10n_error_on_first	= $mc.get("iface:stop_on_first")
+		l10n_error_reportok	= $mc.get("iface:error_reportok")
 
 		# Output
 		output_f = Gtk::Frame::new(l10n_output)
@@ -343,9 +346,9 @@ module Input
 		# Tests
 		@test_f   = Gtk::Frame::new(l10n_test)
 
-		@tst_mail = Gtk::CheckButton::new($mc.get("iface_test_mail"))
-		@tst_axfr = Gtk::CheckButton::new($mc.get("iface_test_zone"))
-		@tst_rir  = Gtk::CheckButton::new($mc.get("iface_test_rir"))
+		@tst_mail = Gtk::CheckButton::new($mc.get("iface:test_mail"))
+		@tst_axfr = Gtk::CheckButton::new($mc.get("iface:test_zone"))
+		@tst_rir  = Gtk::CheckButton::new($mc.get("iface:test_rir"))
 		@tst_mail.active = @tst_axfr.active = @tst_rir.active = true
 
 		tbl = Gtk::Table::new(1, 3, true)
@@ -473,9 +476,9 @@ module Input
 		pix_sec  = make_pixmap.call(ZCData::XPM::Secondary)
 
 		# Localisation
-		l10n_check		= $mc.get("iface_label_check")
-		l10n_guess		= $mc.get("iface_label_guess")
-		l10n_clear		= $mc.get("iface_label_clear")
+		l10n_check		= $mc.get("iface:label_check")
+		l10n_guess		= $mc.get("iface:label_guess")
+		l10n_clear		= $mc.get("iface:label_clear")
 		l10n_primary		= $mc.get("ns_primary")
 		l10n_secondary		= $mc.get("ns_secondary")
 		l10n_ips		= $mc.get("ns_ips")
@@ -619,7 +622,7 @@ module Input
 		# Sanity check
 		if ns_list.length > MaxNS
 		    raise ArgumentError, 
-			$mc.get("iface_xcp_toomany_nameservers")
+			$mc.get("iface:xcp_toomany_nameservers")
 		end
 		
 		# Set nameservers entries
@@ -647,13 +650,13 @@ module Input
 		super()
 
 		# Localisation
-		l10n_check		= $mc.get("iface_label_check")
-		l10n_clear		= $mc.get("iface_label_clear")
+		l10n_check		= $mc.get("iface:label_check")
+		l10n_clear		= $mc.get("iface:label_clear")
 		l10n_batch		= $mc.get("ns_batch").capitalize
-		l10n_batch_open		= $mc.get("iface_batch_open")
-		l10n_batch_save		= $mc.get("iface_batch_save")
-		l10n_file_gotdirectory	= $mc.get("iface_file_gotdirectory")
-		l10n_file_overwrite	= $mc.get("iface_file_overwrite")
+		l10n_batch_open		= $mc.get("iface:batch_open")
+		l10n_batch_save		= $mc.get("iface:batch_save")
+		l10n_file_gotdirectory	= $mc.get("iface:file_gotdirectory")
+		l10n_file_overwrite	= $mc.get("iface:file_overwrite")
 
 		# Open/Save 
 		open = Gtk::Button::new(Gtk::Stock::OPEN)
@@ -666,7 +669,7 @@ module Input
 		# Batch
 		@batch = Gtk::TextView::new
 
-		info = Gtk::Label::new($mc.get("iface_batch_example"))
+		info = Gtk::Label::new($mc.get("iface:batch_example"))
 		info.set_alignment(0,0.5)
 
 		scroller = Gtk::ScrolledWindow::new
@@ -989,7 +992,7 @@ module Input
 	    end
 
 	    def set_tip(widget, id)
-		@tooltips.set_tip(widget, $mc.get("iface_tooltip_#{id}"), id)
+		@tooltips.set_tip(widget, $mc.get("iface:tooltip:#{id}"), id)
 	    end
 	    
 	    def destroy
@@ -1023,7 +1026,7 @@ module Input
 		@p.domain.clear
 		@p.domain.name = @single.domain
 		@p.domain.ns   = @single.ns
-		if @config[@p.domain.name].nil?
+		if @config.profile(@p.domain.name).nil?
 		    raise "#{@single.domain} is not in our TLD map"
 		end
 		@p.domain.autoconf(@p.resolver.local)
@@ -1046,7 +1049,7 @@ module Input
 		case opt
 		when "--help"      then usage(EXIT_USAGE, $stdout)
 		when "--version"
-		    puts $mc.get("input_version").gsub("PROGNAME", PROGNAME) % 
+		    puts $mc.get("input:version").gsub("PROGNAME", PROGNAME) % 
 			[ $zc_version ]
 		    exit EXIT_OK
 		when "--lang"     then $locale.lang         = arg
@@ -1070,6 +1073,13 @@ module Input
 	    @config = c
 	    @testmanager = tm
 
+	    p.resolver.autoconf
+	    p.domain.clear
+	    p.domain.name = "nic.fr"
+	    p.domain.autoconf(p.resolver.local)
+	    puts p.domain.name
+	    puts p.domain.ns
+
 	    Gtk::RC.parse_string(<<EOT
 style "package_label"
 {
@@ -1079,6 +1089,8 @@ font = '-adobe-helvetica-bold-r-normal-*-*-120-*-*-*-*-*-*'
 widget "*package_label" style "package_label"
 EOT
 )
+
+
 	    main = Main::new(p, c, tm)
 	    main.create
 	    Gtk::main()
@@ -1098,7 +1110,7 @@ EOT
 	end
 
 	def usage(errcode, io=$console.stderr)
-	    io.print $mc.get("input_gtk_usage").gsub("PROGNAME", PROGNAME)
+	    io.print $mc.get("input:gtk:usage").gsub("PROGNAME", PROGNAME)
 	    exit errcode unless errcode.nil?
 	end
 

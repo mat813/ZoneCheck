@@ -70,7 +70,7 @@ class ZoneCheck
 	# Sanity check on Input Method
 	if ! (im =~ /^\w+$/)
 	    l10n_error = $mc.get('word:error').upcase
-	    l10n_input = $mc.get('input_suspicious') % [ im ]
+	    l10n_input = $mc.get('input:suspicious_method') % [ im ]
 	    $console.stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
 	end
@@ -81,7 +81,7 @@ class ZoneCheck
 	    require "input/#{im}"
 	rescue LoadError => e
 	    l10n_error = $mc.get('word:error').upcase
-	    l10n_input = $mc.get('input_unsupported') % [ im ]
+	    l10n_input = $mc.get('input:unsupported_method') % [ im ]
 	    $console.stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
 	end
@@ -239,7 +239,7 @@ class ZoneCheck
 
 	# Retrieve specific configuration
 	if (cfg = @config.profile(@param.domain.name)).nil?
-	    l10n_error = $mc.get('input_unsupported_domain')
+	    l10n_error = $mc.get('input:unsupported_domain')
 	    @param.publisher.engine.error(l10n_error % @param.domain.name)
 	    return false
 	end

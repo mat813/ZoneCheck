@@ -171,7 +171,7 @@ module Input
 		case opt
 		when '--help'      then usage(EXIT_USAGE, $console.stdout)
 		when '--version'
-		    l10n_version = $mc.get('input_version') % $zc_version
+		    l10n_version = $mc.get('input:version') % $zc_version
 		    l10n_version.gsub!(/PROGNAME/, PROGNAME)
 		    $console.stdout.puts l10n_version
 		    exit EXIT_OK

@@ -35,10 +35,8 @@
 #
 -->
 
-<section name="input:inetd">
-  <tag name="usage">
-input_inetd_usage: \
-usage: PROGNAME: [-hV] [-46] [-c conf]
+  <section name="input:inetd">
+    <tag name="usage">usage: PROGNAME: [-hV] [-46] [-c conf]
         --lang          Choisit une autre langue (en, fr, ...)
     -h, --help          Affiche ce message
     -V, --version       Affiche le numéro de version et quitte
@@ -47,11 +45,9 @@ usage: PROGNAME: [-hV] [-46] [-c conf]
     -r, --resolver      Résolveur à utiliser pour déterminer les 'ns'
     -4, --ipv4          Autorise uniquement IPv4 pour vérifier le domaine
     -6, --ipv6          Autorise uniquement IPv6 pour vérifier le domaine
+</tag>
 
-
-
-input_inetd_help: \
-Command           Args
+    <tag name="help">Command           Args
   ?|help           0     Ce message
   q|quit|exit      0     Quite ZoneCheck
   check            0     Lance le processus de vérification de la zone
@@ -111,8 +107,7 @@ Exemple
   check
 </tag>
 
-  <tag name="welcome">
-Bienvenu sur Zonecheck VERSION
+    <tag name="welcome">Bienvenu sur Zonecheck VERSION
 
 Pour changer la langue: set lang en
 Pour demander l'aide  : help
@@ -121,9 +116,9 @@ Pour plus d'information sur ZoneCheck visitez l'URL suivante:
   http://www.zonecheck.fr/
 </tag>
 
-  <tag name="what">Je n'ai pas compris, essayez de demander de l'aide!</tag>
-  <tag name="unknown_preset">Valeur de préselection '%s' inconnue</tag>
-</section>
+    <tag name="what">Je n'ai pas compris, essayez de demander de l'aide!</tag>
+    <tag name="unknown_preset">Valeur de préselection '%s' inconnue</tag>
+  </section>
 
   <!-- Local Variables: -->
   <!-- mode: xml        -->

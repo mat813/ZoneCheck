@@ -35,8 +35,7 @@
 #
 -->
 
-  <tag name="input:cgi:usage">
-=> Ce script CGI ne peut pas être directement invoqué!
+  <tag name="input:cgi:usage">=> Ce script CGI ne peut pas être directement invoqué!
    Utilisez un des formulaires présent sur le site à la place.
 
 Ci-dessus se trouve un résumé des paramètres possibles, pour plus
@@ -77,9 +76,9 @@ parametres:
  - zone     = zone à tester
 
 exemples:
- - zone=afnic.fr&intro&progress=testdesc&transp=ipv4,ipv6,std
- - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr
- - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr=192.93.0.1&ns=ns2.nic.fr&ns=bns3.nic.fr
+ - zone=afnic.fr&amp;intro&amp;progress=testdesc&amp;transp=ipv4,ipv6,std
+ - zone=afnic.fr&amp;verbose=i,t&amp;ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr
+ - zone=afnic.fr&amp;verbose=i,t&amp;ns=ns1.nic.fr=192.93.0.1&amp;ns=ns2.nic.fr&amp;ns=bns3.nic.fr
 </tag>
 
 

@@ -45,11 +45,10 @@ class DBG
     LOADING	 = 0x0001	# Loading tests
     LOCALE       = 0x0002	# Localization / Internationalisation
     CONFIG       = 0x0004	# Configuration
-    PARSER       = 0x0008	# Parser
+    INIT         = 0x0008	# Initialisation
     TESTS        = 0x0010	# Tests performed
     AUTOCONF     = 0x0100       # Autoconf
     TESTDBG      = 0x0200	# Debugging messages from tests
-    INIT         = 0x0400	# Initialisation
     DBG          = 0x0800	# Debugger itself
     CACHE_INFO   = 0x1000	# Information about cached object
 
@@ -64,11 +63,10 @@ class DBG
 	LOADING		=> 'loading',
 	LOCALE		=> 'locale',
 	CONFIG		=> 'config',
-	PARSER		=> 'parser',
+	INIT		=> 'init',
 	TESTS		=> 'tests',
 	AUTOCONF	=> 'autoconf',
 	TESTDBG		=> 'testdbg',
-	INIT		=> 'init',
 	DBG		=> 'dbg',
 	CACHE_INFO	=> 'cache'
     }

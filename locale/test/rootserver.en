@@ -37,7 +37,7 @@
 
   <!-- Shortcuts -->
   <shortcut>
-    <explanation>
+    <explanation name="rootserver_vs_icann">
       <src type="ref" from="rfc" fid="rfc2870#p1">
        <title>IETF RFC2870 (p.1)</title>
        <para>The Internet Corporation for Assigned Names and Numbers
@@ -65,7 +65,7 @@
     <name>root-servers list identical to ICANN</name>
     <success>Root-servers list is coherent with ICANN</success>
     <failure>Root-servers list is not coherent with ICANN</failure>
-    <explanation sameas="rootserver_vs_icann"/>
+    <explanation sameas="shortcut:rootserver_vs_icann"/>
     <details><para>The root-server list (<zcvar name="rs_list"/>) is not
       identicall to ICANN list (<zcvar name="ref_list"/>).</para></details>
   </check>
@@ -75,7 +75,7 @@
     <name>root-servers addresses identical to ICANN</name>
     <success>Root-servers IP addresses are coherent with ICANN</success>
     <failure>Root-servers IP addresses are not coherent with ICANN</failure>
-    <explanation sameas="rootserver_vs_icann"/>
+    <explanation sameas="shortcut:rootserver_vs_icann"/>
     <details><para>The root-server <zcvar name="rs"/> addresses 
       (<zcvar name="rs_addr"/>) are not the same as the ICANN 
       addresses (<zcvar name="ref_addr"/>).</para></details>

@@ -40,7 +40,7 @@ class NResolv
 
 	    def [](idx)	; @rootserver[idx]			; end
 	    def size	; @rootserver.size			; end
-	    def each	; @rootserver.each { |a| yield a }	; end 
+	    def each	; @rootserver.each { |k,v| yield(k,v) }	; end 
 	    def keys	; @rootserver.keys			; end
 
 	    def self.from_hintfile(filename)

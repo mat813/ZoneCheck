@@ -98,12 +98,13 @@
 <!-- -->
 <tag name="problem_file">problème à l'ouverture/lecture du fichier: %s</tag>
 
-<!-- Input -->
-<tag name="input_unsupported">méthode d'entrée '%s' non supportée</tag>
-<tag name="input_suspicious">méthode d'entrée '%s' douteuse</tag>
-<tag name="input_version">PROGNAME: version %s</tag>
-<tag name="input_unsupported_domain">Impossible d'établir une correspondance pour '%s'</tag>
-
+  <!-- Input -->
+  <section name="input">
+    <tag name="unsupported_method">méthode d'entrée '%s' non supportée</tag>
+    <tag name="suspicious_method">méthode d'entrée '%s' douteuse</tag>
+    <tag name="version">PROGNAME: version %s</tag>
+    <tag name="unsupported_domain">Impossible d'établir une correspondance pour '%s'</tag>
+  </section>
 
 <!-- Config -->
   <section name="config">
@@ -134,12 +135,13 @@
 <tag name="xcp_testmanager_check_exists">vérification '%s' définie dans les classes '%s' et '%s'</tag>
 
 
-<section name="nresolv:rcode">
-  <tag name="servfail">échec du serveur</tag>
-  <tag name="refused">réponse refusée par le serveur</tag>
-  <tag name="nxdomain">le domaine n'existe pas</tag>
-  <tag name="notimp">requête non mise en oeuvre sur le serveur</tag>
-</section>
+  <!-- NResolv rcode -->
+  <section name="nresolv:rcode">
+    <tag name="servfail">échec du serveur</tag>
+    <tag name="refused">réponse refusée par le serveur</tag>
+    <tag name="nxdomain">le domaine n'existe pas</tag>
+    <tag name="notimp">requête non mise en oeuvre sur le serveur</tag>
+  </section>
 
   <!-- Local Variables: -->
   <!-- mode: xml        -->

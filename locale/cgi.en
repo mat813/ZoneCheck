@@ -35,8 +35,7 @@
 #
 -->
 
-  <tag name="input:cgi:usage">
-=> You can't invoke directly the CGI script!
+  <tag name="input:cgi:usage">=> You can't invoke directly the CGI script!
    Use one of the available form present on the site instead.
 
 Follow a quick summary of the possible parameters for more information
@@ -77,10 +76,9 @@ parameters:
  - zone     = zone to test
 
 exemples:
- - zone=afnic.fr&intro&progress=testdesc&transp=ipv4,ipv6,std
- - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr
- - zone=afnic.fr&verbose=i,t&ns=ns1.nic.fr=192.93.0.1&ns=ns2.nic.fr&ns=bns3.nic.fr
-
+ - zone=afnic.fr&amp;intro&amp;progress=testdesc&amp;transp=ipv4,ipv6,std
+ - zone=afnic.fr&amp;verbose=i,t&amp;ns=ns1.nic.fr%3bns2.nic.fr%3bns3.nic.fr
+ - zone=afnic.fr&amp;verbose=i,t&amp;ns=ns1.nic.fr=192.93.0.1&amp;ns=ns2.nic.fr&amp;ns=bns3.nic.fr
 </tag>
 
   <!-- Local Variables: -->

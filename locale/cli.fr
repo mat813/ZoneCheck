@@ -35,8 +35,7 @@
 #
 -->
 
-<tag name="input:cli:usage">
-usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] nomdedomaine
+  <tag name="input:cli:usage">usage: PROGNAME: [-hqV] [-voet opt] [-46] [-n ns...] [-c conf] nomdedomaine
         --lang          Choisit une autre langue (en, fr, ...)
     -d, --debug         Choisit les messages de deboguage à afficher
     -h, --help          Affiche ce message

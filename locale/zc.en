@@ -102,12 +102,13 @@
 <!-- -->
 <tag name="problem_file">problem while opening/reading file: %s</tag>
 
-<!-- Input -->
-<tag name="input_unsupported">Input method '%s' unsupported</tag>
-<tag name="input_suspicious">Input method '%s' suspicious</tag>
-<tag name="input_version">PROGNAME: version %s</tag>
-<tag name="input_unsupported_domain">No mapping able to process '%s'</tag>
-
+  <!-- Input -->
+  <section name="input">
+    <tag name="unsupported_method">Input method '%s' unsupported</tag>
+    <tag name="suspicious_method">Input method '%s' suspicious</tag>
+    <tag name="version">PROGNAME: version %s</tag>
+    <tag name="unsupported_domain">No mapping able to process '%s'</tag>
+  </section>
 
 <!-- Config -->
   <section name="config">
@@ -139,12 +140,13 @@
 <tag name="xcp_testmanager_test_exists">test '%s' defined in classes '%s' and '%s'</tag>
 <tag name="xcp_testmanager_check_exists">check '%s' defined int class '%s' and '%s'</tag>
 
-<section name="nresolv:rcode">
-  <tag name="servfail">server failure</tag>
-  <tag name="refused">answer refused from server</tag>
-  <tag name="nxdomain">domain doesn't exist</tag>
-  <tag name="notimp">query not implemented on server</tag>
-</section>
+  <!-- NResolv rcode -->
+  <section name="nresolv:rcode">
+    <tag name="servfail">server failure</tag>
+    <tag name="refused">answer refused from server</tag>
+    <tag name="nxdomain">domain doesn't exist</tag>
+    <tag name="notimp">query not implemented on server</tag>
+  </section>
 
   <!-- Local Variables: -->
   <!-- mode: xml        -->

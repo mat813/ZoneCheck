@@ -1,6 +1,8 @@
 # $Id$
 
 For the impatient: ruby ./install.rb all
+should generally works, but it is still a good idea to check
+before that sensible value will be used by calling: ruby ./install.rb
 
 You will need Ruby to install ZoneCheck, after the installation the
 executable will be available under the named of 'zonecheck'

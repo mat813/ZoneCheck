@@ -15,7 +15,7 @@ include FileUtils
 
 class Installer
     def initialize
-	interpreter = ENV['_']
+	interpreter = ENV['SUDO_COMMAND'] || ENV['_']
 	if RUBY_PLATFORM =~ /mswin32/ 
 	    require 'Win32API'
 	    getcli = Win32API::new('kernel32', "GetCommandLine", [], 'P')
@@ -61,7 +61,7 @@ class Installer
 
     def configinfo
 	puts "Default values are:"
-	[ 'RUBY', 'PREFIX', 'PROGNAME', 'HTML_PATH' ]. each { |k|
+	[ 'RUBY', 'PREFIX', 'PROGNAME', 'HTML_PATH' ].each { |k|
 	    puts "  #{k}=#{ENV[k]}" }
     end
 
