@@ -205,6 +205,13 @@ module NResolv
 		    @data[index + 1, len]
 		end
 
+		def skip(size)
+		    if @limit < @index + size
+			raise DecodeError, "limit exceeded" 
+		    end
+		    @index += size
+		end
+
 		def inside(size, offset=nil)
 		    begin
 			saved_offset = @index
@@ -299,13 +306,24 @@ module NResolv
 			name = Name::wire_decode(decoder)
 			t, c = decoder.unpack("nn")
 			ttl  = decoder.unpack("N")[0]
-			res  = Resource.fetch_class(RClass.fetch_by_value(c),
-						    RType .fetch_by_value(t))
-			rr = decoder.inside(decoder.unpack("n")[0]) {
-			    res::wire_decode(decoder)
-			}
-			
-			asection.add(name, rr, ttl)
+			res  = begin
+				   rc	= RClass.fetch_by_value(c)
+				   rt	= RType .fetch_by_value(t)
+				   res	= Resource.fetch_class(rc, rt)
+			       rescue IndexError => e
+				   nil
+			       end
+					
+			rrsize = decoder.unpack("n")[0]
+			if res.nil?
+			    $stderr.puts "NResolver: Skipping record (#{e})"
+			    decoder.skip(rrsize)
+			else
+			    rr = decoder.inside(rrsize) {
+				res::wire_decode(decoder)
+			    }
+			    asection.add(name, rr, ttl)
+			end
 		    }
 		    asection
 		end

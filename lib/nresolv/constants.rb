@@ -55,11 +55,19 @@ module NResolv
 	end
 
 	def self.fetch_by_name(name)
-	    @@hash_by_name[self].fetch(name)
+	    begin
+		@@hash_by_name[self].fetch(name)
+	    rescue IndexError => e
+		raise IndexError, "#{e} for #{self}/#{name}"
+	    end
 	end
 	
 	def self.fetch_by_value(value)
-	    @@hash_by_value[self].fetch(value)
+	    begin
+		@@hash_by_value[self].fetch(value)
+	    rescue IndexError => e
+		raise IndexError, "#{e} for #{self}/#{value}"
+	    end
 	end
 	
 	def self.maxlen
