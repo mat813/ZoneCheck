@@ -71,9 +71,9 @@ ZC_CONFIG_FILE		= 'zc.conf'
 
 ## Lang
 ZC_LANG_FILE		= 'zc.%s'
-ZC_LANG_DEFAULT		= 'en'
-
-ZC_MSGCAT_DEFAULT	= 'en'		# don't specifie an encoding here
+ZC_LANG_DEFAULT		= 'en'		# can have an enconding: en.ascii
+## Message catalog fallback
+ZC_MSGCAT_FALLBACK	= 'en'		# don't specifie an encoding here
 
 ## Input methods
 ZC_DEFAULT_INPUT	= 'cli'
@@ -205,20 +205,29 @@ $ipv6_stack = begin
 #        present in the code (except for debugging purpose)
 #
 begin
+    # Initialize locale
     $locale = Locale::new
     $locale.lang = ZC_LANG_DEFAULT if $locale.lang.nil?
     
     # Initialize the console
     $console = Console::new
-    $console.encoding = $locale.encoding
     
     # Initialize the message catalog
-    $mc = MessageCatalog::new(ZC_LOCALIZATION_DIR, ZC_MSGCAT_DEFAULT)
-    $mc.locale = $locale
+    $mc = MessageCatalog::new(ZC_LOCALIZATION_DIR, ZC_MSGCAT_FALLBACK)
+
+    # Add watcher for notification of locale changes
+    #  ... and force update
+    $locale.watch('lang', proc { 
+		      $mc.language = $locale.language
+		      $mc.country  = $locale.country
+		      $mc.reload } )
+    $locale.watch('encoding', proc { 
+		      $console.encoding = $locale.encoding } )
+    $locale.notify('lang', 'encoding')
+
+    # Read msgcat
     $mc.read(ZC_LANG_FILE)
 
-    $locale.watch('lang', proc { $mc.reload } )
-    $locale.watch('encoding', proc { $console.encoding = $locale.encoding } )
 rescue => e
     raise if $zc_slavemode
     $stderr.puts "ERROR: #{e.to_s}"

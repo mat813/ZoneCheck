@@ -183,6 +183,8 @@ module Publisher
 	    l10n_single_form = l10n_form+': '+$mc.get('t_single').capitalize
 
 	    # XXX: javascript only if counter
+	    langpath = $locale.language
+	    langpath << "_" + $locale.country if $locale.country
 	    @o.print <<"EOT"
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -191,24 +193,24 @@ module Publisher
     <title>ZoneCheck results</title>
 
     <!-- Navigation -->
-    <link rel="start" href="#{@publish_path}/"             type="text/html">
-    <link rel="up"    href="#{@publish_path}/#{$mc.lang}/" type="text/html">
+    <link rel="start" href="#{@publish_path}/"              type="text/html">
+    <link rel="up"    href="#{@publish_path}/#{$langpath}/" type="text/html">
 
     <link rel="bookmark" title="ZoneCheck website"
-	  href="http://www.zonecheck.fr/"                  type="text/html">
+	  href="http://www.zonecheck.fr/"                   type="text/html">
     <link rel="bookmark" title="#{l10n_batch_form}"
-	  href="#{@publish_path}/#{$mc.lang}/batch.html"   type="text/html">
+	  href="#{@publish_path}/#{$langpath}/batch.html"   type="text/html">
     <link rel="bookmark" title="#{l10n_single_form}"
-	  href="#{@publish_path}/#{$mc.lang}/"             type="text/html">
+	  href="#{@publish_path}/#{$langpath}/"             type="text/html">
 
     <link rel="section" title="#{$mc.get('title_zoneinfo')}"
-          href="#t_zoneinfo"                               type="text/html">
+          href="#t_zoneinfo"                                type="text/html">
     <link rel="section" title="#{$mc.get('title_progress')}"
-          href="#t_progress"                               type="text/html">
+          href="#t_progress"                                type="text/html">
     <link rel="section" title="#{$mc.get('title_testres')}"
-          href="#t_testres"                                type="text/html">
+          href="#t_testres"                                 type="text/html">
     <link rel="section" title="#{$mc.get('title_status')}"
-          href="#t_status"                                 type="text/html">
+          href="#t_status"                                  type="text/html">
 
 
     <!-- Favicon -->

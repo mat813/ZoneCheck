@@ -1066,7 +1066,7 @@ module Input
 	
 	attr_reader :config, :statusbar, :testmanager
 
-	def interact(p, c, tm)
+	def interact(p, c, tm, io = $console.stdout)
 	    @config = c
 	    @testmanager = tm
 

@@ -98,9 +98,7 @@ class MessageCatalog
 	@country	= nil
     end
     
-
-    attr_reader :locale
-    attr_writer :locale
+    attr_writer :language, :country
 
 
     #
@@ -186,9 +184,9 @@ class MessageCatalog
 	where = "#{@directory}/#{where}"  unless where[0] == ?/
 
 	fp = []
-	if locale && locale.language
-	    fp << "#{locale.language}_#{locale.country}" if locale.country
-	    fp << locale.language
+	if @language
+	    fp << "#{@language}_#{@country}" if @country
+	    fp << @language
 	end
 	fp << @dfltlang
 	fp.collect { |x| where % x }

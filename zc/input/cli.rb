@@ -117,7 +117,7 @@ module Input
 	    true
 	end
 
-	def interact(p, c, tm)
+	def interact(p, c, tm, io=$console.stdout)
 	    true
 	end
 

@@ -113,12 +113,12 @@ module Input
 	    exit errcode unless errcode.nil?
 	end
 
-	def interact(p, c, tm)
+	def interact(p, c, tm, io=$console.stdout)
 	    # XXX: not good place
 	    p.rflag.autoconf
 	    p.publisher.autoconf(p.rflag)
 	    puts @cgi.header({ 'type'    => p.publisher.engine.class::Mime,
-			       'charset' => 'UTF-8' })
+			       'charset' => $console.encoding })
 	    true
 	end
 

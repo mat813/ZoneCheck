@@ -164,9 +164,7 @@ module Input
 	    true
 	end
 
-	def interact(p, c, tm)
-	    io = $console.stdout	# XXX: bad
-
+	def interact(p, c, tm, io=$console.stdout)
 	    io.puts $mc.get('input_inetd_welcome').gsub('VERSION', ZC_VERSION)
 
 	    io.print @prompt
@@ -189,12 +187,12 @@ module Input
 			case $1
 			when 'classic'
 			    p.verbose		= 'i,x,d,c'
-			    puts '+ set verbose i,x,d,c'
+			    io.puts '+ set verbose i,x,d,c'
 			when 'fatal'
 			    p.verbose		= 'x,d,f'
 			    p.rflag.quiet	= true
-			    puts '+ set verbose x,d,f'
-			    puts '+ set quiet'
+			    io.puts '+ set verbose x,d,f'
+			    io.puts '+ set quiet'
 			else
 			    error($mc.get('input_inetd_unknown_preset') % $1)
 			end
