@@ -78,11 +78,23 @@ xcp_zc_batch_parse       : Unable to parse batch line
 
 ##############################################################################
 ##############################################################################
+[iface]
+stop_on_first		: stop on first fatal
+error_default		: default severity
+error_allwarnings	: all warnings
+error_allfatals		: all fatals
+test_mail		: mail delivery
+test_zone		: zone content
+test_ripe		: RIPE database
+
+##############################################################################
+##############################################################################
 
 #
 # Tests
 #
 
+[*]
 label_xpl : [ref]: IETF RFC1034 (p.11)\nLabels are only composed by letters ([A-Za-z]), digits ([0-9]) or dashes\n('-') (not starting or ending with), and should be less than 63 characters;\ndomain name (labels separated by '.') should be less than 255 characters.
 
 cname_xpl : [ref]: IETF RFC1912 (p.6)\nA CNAME record is not allowed to coexist with any other data.
