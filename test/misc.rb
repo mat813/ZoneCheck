@@ -93,6 +93,12 @@ module CheckNetworkAddress
 	def chk_correct_recursive_flag(ns, ip)
 	    return true unless rec(ip)
 
+	    dbgmsg(ns, ip) { 
+		'asking SOA for: ' + 
+		[ @domain.name.tld || NResolv::DNS::Name::Root,
+		    NResolv::DNS::Name::create(ip.namespace) ].join(', ')
+	    }
+
 	    soa(ip, @domain.name.tld || NResolv::DNS::Name::Root) &&
 		soa(ip, NResolv::DNS::Name::create(ip.namespace))
 	end

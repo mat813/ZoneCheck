@@ -176,6 +176,27 @@ class Test
 	@cache		= Cache::new
     end
 
+    def dbgmsg(ns=nil, ip=nil)
+	$dbg.msg(DBG::TESTDBG) { 
+	    func = 'caller_unknown'
+	    caller.each { |l|
+		if l =~ /`((?:chk|tst)_.*)'/
+		    func = $1
+		    break
+		end
+	    }
+	    
+	    header = if ns.nil? && ip.nil?
+		     then func
+		     else func + ' [' + [ ns, ip ].compact.join('/') + ']'
+		     end
+	    
+	    case arg = yield
+	    when Array then [ header ] + arg
+	    else            [ header, arg ]
+	    end
+	}
+    end
 
     # Test if 'name' is a cname
     #  If 'name' is inside the current domain, the specified 'ip'
