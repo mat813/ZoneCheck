@@ -38,7 +38,7 @@
 #
 
 input_cli_usage: \
-usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
+usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns...] [-c conf] domainname\n\
     -q, --quiet         Don't display extra titles\n\
         --lang          Select another language (en, fr, ...)\n\
     -h, --help          Show this message\n\
@@ -52,6 +52,7 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
         --testdesc      Give a description (name,expl,error) of the test\n\
     -r, --resolver      Resolver to use for guessing 'ns' information\n\
     -n, --ns            List of nameservers for the domain\n\
+                           (ex: ns1;ns2=ip1,ip2;ns3=ip3)\n\
     -1, --one           Only display the most relevant message\n\
     -g, --tagonly       Display only tag (suitable for scripting)\n\
     -e, --error         Behaviour in case of error (see error)\n\

@@ -38,7 +38,7 @@
 #
 
 input_cli_usage: \
-usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] nomdedomaine\n\
+usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns...] [-c conf] nomdedomaine\n\
     -q, --quiet         N'affiche pas de titres suplémentaires\n\
         --lang          Choisit une autre langue (en, fr, ...)\n\
     -h, --help          Affiche ce message\n\
@@ -52,6 +52,7 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] nomdedomaine\n\
         --testdesc      Donne une description du test (name,expl,error)\n\
     -r, --resolver      Résolveur à utiliser pour déterminer les 'ns'\n\
     -n, --ns            Liste des serveurs de noms pour le domaine\n\
+                           (ex: ns1;ns2=ip1,ip2;ns3=ip3)\n\
     -1, --one           Affiche uniquement le message le plus significatif\n\
     -g, --tagonly       Affiche uniquement les tags (idéal pour les scripts)\n\
     -e, --error         Comportement en cas d'erreur (voir error)\n\
