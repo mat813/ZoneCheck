@@ -12,10 +12,13 @@
 - finish implementing nresolv (Bitstring, DNSSEC, unknown records)
 - try removing give_testlist give_testdesc from the zc.rb start method
 - do translation in french ;)
-- finish internationalisation
+- finish localisation
 - try zonecheck with the native thread ruby implementation
-- implement the consolidation mode for output
 - check name from_s methode
 - escape HTML code
 - meaningfull exit code
+
+
+NOT ABLE TODO?
 - test if ping6 is really there and, otherwise, do not perform some IPv6 tests 
+=>ping for IPv6 is not always called ping6, will only test for IPv6 stack

@@ -30,7 +30,7 @@ res_succeed_but : SUCCES (mais %d avertissement(s))\n
 res_succeed	: SUCCES\n
 res_failed	: ECHEC\n
 res_failed_on	: ECHEC (sur avertissement)\n
-res_failed_and	: ECHEC (et %d avertissment(s))\n
+res_failed_and	: ECHEC (et %d avertissement(s))\n
 warning_fmt	: Warning: %s\n
 fatal_fmt	: Fatal  : %s\n
 info_fmt	: Info   : %s\n
