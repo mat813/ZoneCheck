@@ -400,26 +400,28 @@ EOT
     ##
     ## Hold information about the domain to check 
     ##
-    ## name : a fully qualified domain name
-    ## ns   : list of nameservers attached to the domain (name)
-    ##        output format : [ [ ns1, [ ip1, ip2 ] ],
-    ##                          [ ns2, [ ip3 ] ],
-    ##                          [ ns3 ] ]
-    ##        input  format : ns1=ip1,ip2;ns2=ip3;ns3
-    ##        if element aren't specified they will be 'guessed' when
-    ##        calling 'autoconf'
+    ## name      : a fully qualified domain name
+    ## ns        : list of nameservers attached to the domain (name)
+    ##              output format : [ [ ns1, [ ip1, ip2 ] ],
+    ##                                [ ns2, [ ip3 ] ],
+    ##                                [ ns3 ] ]
+    ##              input  format : ns1=ip1,ip2;ns2=ip3;ns3
+    ##              if element aren't specified they will be 'guessed'
+    ##              when calling 'autoconf'
+    ## addresses : list of ns addresses
     ##
     class Domain
 	def initialize(name=nil, ns=nil)
 	    @name	= nil
 	    @ns		= nil
+	    @addresses	= nil
 	    @cache	= true
 
 	    self.name = name unless name.nil?
 	    self.ns   = ns   unless ns.nil?
 	end
 
-	attr_reader :name, :ns, :cache
+	attr_reader :name, :ns, :addresses, :cache
 
 	def can_cache? ; true ; end
 
@@ -499,6 +501,21 @@ EOT
 			"Unable to find nameserver IP address(es) for #{ns}"
 		end
 	    }
+
+	    # Build addresses set
+	    @addresses = []
+	    @ns.each { |ns, ips| @addresses.concat(ips) }
+	end
+
+	def get_resolver_ips(name)
+	    if name.nil? || !((name == @name) || (name.in_domain?(@name)))
+		nil
+	    elsif (name.depth - @name.depth) > 1
+		puts name
+		raise RuntimeError, "XXX: correct behaviour not decided"
+	    else
+		@addresses
+	    end
 	end
     end
 
@@ -714,7 +731,7 @@ EOT
 	    when "s", "std"
 		@client = NResolv::DNS::Client::Classic
 	    else
-		raise ParamError, "unknown verbose modifier '#{token}'"
+		raise ParamError, "unknown transport modifier '#{token}'"
 	    end
 	}
     end
