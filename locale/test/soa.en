@@ -239,9 +239,9 @@
     <failure>Excessive drift of serial number with primary nameserver</failure>
     <explanation/>
     <details><para>The expected value for the serial (taking drift into 
-      account) should have been more than <var name="serial_min"/>, 
-      but is <var name="serial_this"/> instead of 
-      <var name="serial_ref"/> as on <var name="host_ref"/>).</para></details>
+      account) should have been more than <zcvar name="serial_min"/>, 
+      but is <zcvar name="serial_this"/> instead of 
+      <zcvar name="serial_ref"/> as on <zcvar name="host_ref"/>).</para></details>
   </check>
 
   <check name="soa_coherence_serial">

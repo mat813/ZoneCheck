@@ -57,6 +57,25 @@ module CheckNetworkAddress
 	    @soa_drift_ticks   = const('soa:serial:drift_ticks').to_i
 	end
 
+	#------------------------------------------------------------
+	def is_serial_rfc1912?(serial) 
+	    # Parse the serial into YYYYMMDDnn format
+	    year  = serial / 1000000; serial %= 1000000
+	    month = serial / 10000  ; serial %= 10000
+	    day   = serial / 100
+	    idx   = serial % 100
+
+	    # If year seems too far away in the past or in the future
+	    return false if (year < 1950) || (year > 2100)
+
+	    # Check that the given date is valide
+	    begin
+		return [ Date::new(year, month, day), idx ]
+	    rescue ArgumentError
+		return false
+	    end
+	end
+
 	#-- Tests ---------------------------------------------------
 	# DESC: SOA entries should exists
 	def chk_soa(ns, ip)
@@ -99,7 +118,7 @@ module CheckNetworkAddress
 	# DESC: recommanded format for serial is YYYYMMDDnn
 	def chk_soa_serial_fmt_YYYYMMDDnn(ns, ip)
 	    serial = soa(ip).serial
-	    return true if (serial > 1999000000) && (serial < 2010000000)
+	    return true if is_serial_rfc1912?(serial)
 	    { 'serial' => serial }
 	end
 
