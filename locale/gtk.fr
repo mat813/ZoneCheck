@@ -61,19 +61,21 @@
     <tag name="output_progressbar">barre de progression</tag>
     <tag name="output_nothing">rien</tag>
     <tag name="output_description">description</tag>
-    <tag name="dbg_loading">chargement</tag>
-    <tag name="dbg_locale">locale</tag>
-    <tag name="dbg_config">config</tag>
-    <tag name="dbg_init">initialisation</tag>
-    <tag name="dbg_tests">tests</tag>
-    <tag name="dbg_autoconf">autoconf</tag>
-    <tag name="dbg_testdbg">debogage des tests</tag>
-    <tag name="dbg_dbg">debugger</tag>
-    <tag name="dbg_cache_info">cache information</tag>
-    <tag name="dbg_nocache">pas de cache</tag>
-    <tag name="dbg_dont_rescue">aucun parachute</tag>
-    <tag name="dbg_crazydebug">crazy debug</tag>
-
+    <section name="dbg">
+      <tag name="loading">chargement</tag>
+      <tag name="locale">locale</tag>
+      <tag name="config">config</tag>
+      <tag name="init">initialisation</tag>
+      <tag name="tests">tests</tag>
+      <tag name="autoconf">autoconf</tag>
+      <tag name="testdbg">debogage des tests</tag>
+      <tag name="dbg">debugger</tag>
+      <tag name="cache_info">cache information</tag>
+      <tag name="nocache">pas de cache</tag>
+      <tag name="dont_rescue">aucun parachute</tag>
+      <tag name="crazydebug">crazy debug</tag>
+      <tag name="nresolv">resolver</tag>
+    </section>
     <tag name="batch_example">example:\nDOM=domain\nDOM=domain NS=ns1;ns2=1.2.34,2001:1547::1</tag>
 
     <tag name="batch_save">Ouvrir traitement en lots</tag>

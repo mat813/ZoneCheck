@@ -56,12 +56,14 @@ Gtk.init
 ##
 module Input
     class GTK
-	with_msgcat "gtk.%s"
+	with_msgcat 'gtk.%s'
 
 	MaxNS			= 8
-	DefaultBatchFile	= "batch.txt"
+	DefaultBatchFile	= 'batch.txt'
 
 	def allow_preset ; true ; end
+
+
 
 	##
 	## Expert
@@ -75,21 +77,17 @@ module Input
 		l10n_debug	= $mc.get("iface:label_debug")
 		l10n_output	= $mc.get("iface:label_output")
 		l10n_advanced	= $mc.get("iface:label_advanced")
-		l10n_output_progbar	= $mc.get("iface:output_progressbar")
-		l10n_output_desc	= $mc.get("iface:output_description")
-		l10n_output_nothing	= $mc.get("iface:output_nothing")
 
 
 		# Output
-		output_f = Gtk::Frame::new(l10n_output)
-		@o_one   = Gtk::CheckButton::new("one line")
-		@o_quiet = Gtk::CheckButton::new("quiet")
-		@o_tag   = Gtk::CheckButton::new("tag only")
+		output_f = Gtk::Frame::new($mc.get('iface:panel:output'))
+		@o_tag   = main.mk_ckbtn('iface:param:reportflag:tagonly')
+
 
 		menu = Gtk::Menu::new
-		menu.append(Gtk::MenuItem::new("plain text"))
-		menu.append(Gtk::MenuItem::new("HTML"))
-		menu.append(Gtk::MenuItem::new("GTK"))
+		menu.append(Gtk::MenuItem::new('plain text'))
+		menu.append(Gtk::MenuItem::new('HTML'))
+		menu.append(Gtk::MenuItem::new('GTK'))
 		@o_publisher = Gtk::OptionMenu::new
 		@o_publisher.set_menu(menu)
 		@o_publisher.set_history(2)
@@ -107,19 +105,13 @@ module Input
 
 		output_f.add(tbl)
 
-		main.set_tip(@o_one,       "expert/output/oneline")
-		main.set_tip(@o_quiet,     "expert/output/quiet")
-		main.set_tip(@o_tag,       "expert/output/tagonly")
-		main.set_tip(@o_publisher, "expert/output/format")
-		main.set_tip(@o_report,    "expert/output/report")
-
-
 		# Progression
-		progress_f = Gtk::Frame::new("Progression")
-
-		@o_counter = Gtk::RadioButton::new(        l10n_output_progbar)
-		@o_testdesc= Gtk::RadioButton::new(@o_counter,l10n_output_desc)
-		@o_nothing = Gtk::RadioButton::new(@o_counter,l10n_output_nothing)
+		progress_f = Gtk::Frame::new($mc.get('iface:panel:progression'))
+		
+		@o_counter, @o_testdesc, @o_nothing = 
+		    main.mk_rdbtns('iface:param:reportflag:counter',
+				   'iface:param:reportflag:testdesc',
+				   'iface:param:reportflag:noprogress')
 		@o_counter.active = true
 
 		tbl = Gtk::Table::new(1, 3, true)
@@ -129,24 +121,20 @@ module Input
 
 		progress_f.add(tbl)
 
-		main.set_tip(@o_counter,  "option/output/progress")
-		main.set_tip(@o_testdesc, "option/output/description")
-		main.set_tip(@o_nothing,  "option/output/nothing")
-		
 		
 		# Advanced
 		advanced_f = Gtk::Frame::new(l10n_advanced)
 
-		@a_useresolver = Gtk::CheckButton::new("local resolver")
-		@a_useresolver.signal_connect("clicked") { |w|
+		@a_useresolver = main.mk_ckbtn('iface:param:resolver:local')
+		@a_useresolver.signal_connect('clicked') { |w|
 		    @a_resolver.set_sensitive(w.active?)
 		    @a_resolver.set_text("")
 		}
 		@a_resolver = Gtk::Entry::new
 		@a_resolver.set_sensitive(false)
 
-		@a_usecategory = Gtk::CheckButton::new("category")
-		@a_usecategory.signal_connect("clicked") { |w|
+		@a_usecategory = main.mk_ckbtn('iface:param:test:categories')
+		@a_usecategory.signal_connect('clicked') { |w|
 		    @a_category.set_sensitive(w.active?)
 		    main.options.extra(!w.active?)		    
 		    if !w.active?
@@ -157,8 +145,8 @@ module Input
 		@a_category.set_text(main.options.categories)
 		@a_category.set_sensitive(false)
 		
-		@a_test = Gtk::CheckButton::new("test only")
-		@a_test.signal_connect("clicked") { |w|
+		@a_test = main.mk_ckbtn('iface:param:test:tests')
+		@a_test.signal_connect('clicked') { |w|
 		    @a_testname.set_sensitive(w.active?)
 		}
 		@a_testname = Gtk::Combo::new
@@ -176,33 +164,30 @@ module Input
 		
 		advanced_f.add(tbl)
 
-		main.set_tip(@a_useresolver, "expert/advanced/resolver")
-		main.set_tip(@a_resolver,    "expert/advanced/resolver")
-		main.set_tip(@a_test,        "expert/advanced/testonly")
-		main.set_tip(@a_testname,    "expert/advanced/testonly")
-
 		# Debug
 		debug_f = Gtk::Frame::new(l10n_debug)
 
 		i, j = 0, 0
 		tbl = Gtk::Table::new(1, 3, true)
-		[   [ :d_loading,    "iface:dbg_loading",    DBG::LOADING    ],
-		    [ :d_locale,     "iface:dbg_locale",     DBG::LOCALE     ],
-		    [ :d_config,     "iface:dbg_config",     DBG::CONFIG     ],
-		    [ :d_init,       "iface:dbg_init",       DBG::INIT       ],
-		    [ :d_tests,      "iface:dbg_tests",      DBG::TESTS      ],
-		    [ :d_autoconf,   "iface:dbg_autoconf",   DBG::AUTOCONF   ],
-		    [ :d_testdbg,    "iface:dbg_testdbg",    DBG::TESTDBG    ],
-		    [ :d_dbg,        "iface:dbg_dbg",        DBG::DBG        ],
-		    [ :d_cache_info, "iface:dbg_cache_info", DBG::CACHE_INFO ],
-		    [ :d_nocache,    "iface:dbg_nocache",    DBG::NOCACHE    ],
-		    [ :d_dont_rescue,"iface:dbg_dont_rescue",DBG::DONT_RESCUE],
-		    [ :d_crazydebug, "iface:dbg_crazydebug", DBG::CRAZYDEBUG ]
-		].each { |var, tag, lvl|
-		    l10n  = $mc.get(tag)
-		    button=instance_eval("@#{var}=Gtk::CheckButton::new(l10n)")
+		[   [ 'init',		DBG::INIT	],
+		    [ 'locale',		DBG::LOCALE	],
+		    [ 'config',		DBG::CONFIG	],
+		    [ 'autoconf',	DBG::AUTOCONF	],
+		    [ 'loading',	DBG::LOADING	],
+		    [ 'tests',		DBG::TESTS	],
+		    [ 'testdbg',	DBG::TESTDBG	],
+		    [ 'cache_info',	DBG::CACHE_INFO	],
+		    [ 'dbg',		DBG::DBG	],
+		    [ 'crazydebug',	DBG::CRAZYDEBUG	],
+		    [ 'nresolv',	DBG::NRESOLV	],
+		    [ 'nocache',	DBG::NOCACHE	],
+		    [ 'dont_rescue',	DBG::DONT_RESCUE],
+		].each { |id, lvl|
+		    var		= "d_#{id}"
+		    tag		= "iface:dbg:#{id}"
+		    button	= instance_eval("@#{var}=main.mk_ckbtn(tag)")
 		    button.active = $dbg.enabled?(lvl)
-		    button.signal_connect("clicked") {|w| $dbg[lvl]=w.active?}
+		    button.signal_connect('clicked') {|w| $dbg[lvl]=w.active?}
 		    i, j = 0, j+1 if i > 2
 		    tbl.attach(button, i, i += 1, j, j + 1)
 		}
@@ -226,19 +211,19 @@ module Input
 
 	    def verbose
 		verbose = []
-		verbose << "counter"	if @o_counter.active?
-		verbose << "testdesc"	if @o_testdesc.active?
-		verbose.join(",")
+		verbose << 'counter'	if @o_counter.active?
+		verbose << 'testdesc'	if @o_testdesc.active?
+		verbose.join(',')
 	    end
 
 	    def output 
 		output = []
 		output << case @o_publisher.history
-			  when 0 then "text"
-			  when 1 then "html"
-			  when 2 then "gtk"
+			  when 0 then 'text'
+			  when 1 then 'html'
+			  when 2 then 'gtk'
 			  end
-		output.join(",")
+		output.join(',')
 	    end
 	end
 
@@ -251,57 +236,48 @@ module Input
 	    def initialize(main)
 		# Parent constructor
 		super()
+		ip_rflag  = 'iface:param:reportflag'
+		ip_rpt = 'iface:param:report'
+		ip_net = 'iface:param:network'
+
 
 		# Localisation
-		l10n_transport		= $mc.get("iface:label_transport")
-		l10n_error		= $mc.get("iface:label_error")
-		l10n_test		= $mc.get("iface:label_extra_tests")
-		l10n_output		= $mc.get("iface:label_output")
-		l10n_output_zone	= $mc.get("iface:output_zone")
-		l10n_output_testname	= $mc.get("iface:output_testname")
-		l10n_output_explain	= $mc.get("iface:output_explain")
-		l10n_output_details	= $mc.get("iface:output_details")
-		l10n_error_default	= $mc.get("iface:error_default")
-		l10n_error_allwarning	= $mc.get("iface:error_allwarnings")
-		l10n_error_allfatal	= $mc.get("iface:error_allfatals")
-		l10n_error_on_first	= $mc.get("iface:stop_on_first")
-		l10n_error_reportok	= $mc.get("iface:error_reportok")
+		l10n_transport		= $mc.get('iface:panel:transport')
+		l10n_error		= $mc.get('iface:panel:error')
+		l10n_test		= $mc.get('iface:panel:extra_tests')
+		l10n_output		= $mc.get('iface:label_output')
+		l10n_output_zone	= $mc.get('iface:output_zone')
+		l10n_output_testname	= $mc.get('iface:output_testname')
+		l10n_output_explain	= $mc.get('iface:output_explain')
+		l10n_output_details	= $mc.get('iface:output_details')
+
 
 		# Output
 		output_f = Gtk::Frame::new(l10n_output)
 
-		@o_summary = Gtk::CheckButton::new(l10n_output_zone)
+		@o_summary = main.mk_ckbtn('iface:param:reportflag:intro')
 		@o_summary.active = true
 
-		@o_testname= Gtk::CheckButton::new(l10n_output_testname)
-		@o_explain = Gtk::CheckButton::new(l10n_output_explain)
-		@o_details = Gtk::CheckButton::new(l10n_output_details)
+		@o_testname= main.mk_ckbtn('iface:param:reportflag:testname')
+		@o_explain = main.mk_ckbtn('iface:param:reportflag:explain')
+		@o_details = main.mk_ckbtn('iface:param:reportflag:details')
 		@o_explain.active = @o_details.active = true
 
-		@o_one     = Gtk::CheckButton::new("one line")
-		@o_quiet   = Gtk::CheckButton::new("quiet")
-		@o_tag     = Gtk::CheckButton::new("tag only")
+		@o_one     = main.mk_ckbtn('iface:param:reportflag:one')
+		@o_quiet   = main.mk_ckbtn('iface:param:reportflag:quiet')
 		
-		@o_reportok= Gtk::CheckButton::new("report ok")
-		@o_fatalonly=Gtk::CheckButton::new("fatal only")
+		@o_reportok= main.mk_ckbtn('iface:param:reportflag:reportok')
+		@o_fatalonly=main.mk_ckbtn('iface:param:reportflag:fatalonly')
 
 		menu = Gtk::Menu::new
-		menu.append(Gtk::MenuItem::new("plain text"))
-		menu.append(Gtk::MenuItem::new("HTML"))
-		menu.append(Gtk::MenuItem::new("GTK"))
-		@o_publisher = Gtk::OptionMenu::new
-		@o_publisher.set_menu(menu)
-		@o_publisher.set_history(2)
-
-		menu = Gtk::Menu::new
-		menu.append(Gtk::MenuItem::new("sorted by severity"))
-		menu.append(Gtk::MenuItem::new("sorted by host"))
+		menu.append(Gtk::MenuItem::new('sorted by severity'))
+		menu.append(Gtk::MenuItem::new('sorted by host'))
 		@o_report = Gtk::OptionMenu::new
 		@o_report.set_menu(menu)
 
 		menu = Gtk::Menu::new
-		menu.append(Gtk::MenuItem::new("Francais"))
-		menu.append(Gtk::MenuItem::new("English"))
+		menu.append(Gtk::MenuItem::new('Francais'))
+		menu.append(Gtk::MenuItem::new('English'))
 		@o_lang = Gtk::OptionMenu::new
 		@o_lang.set_menu(menu)
 		@o_lang.set_history(1)
@@ -319,38 +295,39 @@ module Input
 		tbl.attach(@o_one,       0, 1, 3, 4)
 		output_f.add(tbl)
 
-		main.set_tip(@o_summary,  "option/output/summary")
-		main.set_tip(@o_testname, "option/output/testname")
-		main.set_tip(@o_explain,  "option/output/explain")
-		main.set_tip(@o_details,  "option/output/details")
 
 		# Error
 		error_f = Gtk::Frame::new(l10n_error)
 
-		@ed = Gtk::RadioButton::new(     l10n_error_default)
-		@aw = Gtk::RadioButton::new(@ed, l10n_error_allwarning)
-		@af = Gtk::RadioButton::new(@ed, l10n_error_allfatal)
-		@sf = Gtk::CheckButton::new(l10n_error_on_first)
+		@ed, @aw, @af =
+		    main.mk_rdbtns('iface:param:report:dfltseverity',
+				   'iface:param:report:allwarning',
+				   'iface:param:report:allfatal')
+		@sf = main.mk_ckbtn('iface:param:reportflag:stop_on_fatal')
 		@sf.active = true
 
+		menu = Gtk::Menu::new
+		menu.append(Gtk::MenuItem::new('* automatic *'))
+		main.config.profiles.each { |profile|
+		    menu.append(Gtk::MenuItem::new(profile.name))
+		}
+		@o_profile = Gtk::OptionMenu::new
+		@o_profile.set_menu(menu)
+
 		tbl = Gtk::Table::new(2, 3, true)
-		tbl.attach(@ed, 0, 1, 0, 1)
-		tbl.attach(@aw, 1, 2, 0, 1)
-		tbl.attach(@af, 2, 3, 0, 1)
-		tbl.attach(@sf, 0, 1, 1, 2)
+		tbl.attach(@ed,		0, 1, 0, 1)
+		tbl.attach(@aw,		1, 2, 0, 1)
+		tbl.attach(@af,		2, 3, 0, 1)
+		tbl.attach(@sf,		0, 1, 1, 2)
+		tbl.attach(@o_profile,	2, 3, 1, 2)
 		error_f.add(tbl)
 
-		main.set_tip(@ed, "option/error/default")
-		main.set_tip(@aw, "option/error/allwarnings")
-		main.set_tip(@af, "option/error/allfatals")
-		main.set_tip(@sf, "option/error/stoponfirst")
-		
 		# Tests
 		@test_f   = Gtk::Frame::new(l10n_test)
 
-		@tst_mail = Gtk::CheckButton::new($mc.get("iface:test_mail"))
-		@tst_axfr = Gtk::CheckButton::new($mc.get("iface:test_zone"))
-		@tst_rir  = Gtk::CheckButton::new($mc.get("iface:test_rir"))
+		@tst_mail = main.mk_ckbtn('iface:param:metatest:mail')
+		@tst_axfr = main.mk_ckbtn('iface:param:metatest:zone')
+		@tst_rir  = main.mk_ckbtn('iface:param:metatest:rir')
 		@tst_mail.active = @tst_axfr.active = @tst_rir.active = true
 
 		tbl = Gtk::Table::new(1, 3, true)
@@ -359,11 +336,11 @@ module Input
 		tbl.attach(@tst_rir,  2, 3, 0, 1)
 		@test_f.add(tbl)
 
-		# Transport
+		# Transport		    
 		transp_f = Gtk::Frame::new(l10n_transport)
 
-		@ipv4 = Gtk::CheckButton::new("IPv4")
-		@ipv6 = Gtk::CheckButton::new("IPv6")
+		@ipv4 = main.mk_ckbtn('iface:param:network:ipv4')
+		@ipv6 = main.mk_ckbtn('iface:param:network:ipv6')
 		@ipv6.active = @ipv4.active = true
 		unless $ipv6_stack
 		    @ipv6.active = false
@@ -371,16 +348,16 @@ module Input
 		    @ipv6.set_sensitive(false)
 		end
 
-		@ipv4.signal_connect("toggled") {
+		@ipv4.signal_connect('toggled') {
 		    @ipv6.active = true if !@ipv4.active? && !@ipv6.active?
 		}
-		@ipv6.signal_connect("toggled") {
+		@ipv6.signal_connect('toggled') {
 		    @ipv4.active = true if !@ipv4.active? && !@ipv6.active?
 		}
 
-		@std = Gtk::RadioButton::new(      "STD")
-		@udp = Gtk::RadioButton::new(@std, "UDP")
-		@tcp = Gtk::RadioButton::new(@std, "TCP")
+		@std, @udp, @tcp = main.mk_rdbtns('iface:param:network:std',
+						  'iface:param:network:udp',
+						  'iface:param:network:tcp')
 
 		tbl = Gtk::Table::new(2, 3, true)
 		tbl.attach(@ipv4, 0, 1, 0, 1)
@@ -390,11 +367,6 @@ module Input
 		tbl.attach(@tcp,  2, 3, 1, 2)
 		transp_f.add(tbl)
 		
-		main.set_tip(@ipv4, "option/transp/ipv4")
-		main.set_tip(@ipv6, "option/transp/ipv6")
-		main.set_tip(@std,  "option/transp/std")
-		main.set_tip(@udp,  "option/transp/udp")
-		main.set_tip(@tcp,  "option/transp/tcp")
 
 		# Final packaging
 		pack_start(output_f)
@@ -413,49 +385,49 @@ module Input
 
 	    def verbose
 		verbose = []
-		verbose << "intro"		if @o_summary.active?
-		verbose << "testname"		if @o_testname.active?
-		verbose << "explain"		if @o_explain.active?
-		verbose << "details"		if @o_details.active?
-		verbose << "reportok"		if @o_reportok.active?
-		verbose << "fatalonly"		if @o_fatalonly.active?
-		verbose.join(",")
+		verbose << 'intro'		if @o_summary.active?
+		verbose << 'testname'		if @o_testname.active?
+		verbose << 'explain'		if @o_explain.active?
+		verbose << 'details'		if @o_details.active?
+		verbose << 'reportok'		if @o_reportok.active?
+		verbose << 'fatalonly'		if @o_fatalonly.active?
+		verbose.join(',')
 	    end
 
 	    def output
 		output = []
 		output << case @o_report.history
-			  when 0 then "byseverity"
-			  when 1 then "byhost"
+			  when 0 then 'byseverity'
+			  when 1 then 'byhost'
 			  end
-		output.join(",")
+		output.join(',')
 	    end
 
 	    def error
 		error = []
-		error << "allfatal"		if @af.active?
-		error << "allwarning"		if @aw.active?
-		error << "stop"			if @sf.active?
-		error.join(",")
+		error << 'allfatal'		if @af.active?
+		error << 'allwarning'		if @aw.active?
+		error << 'stop'			if @sf.active?
+		error.join(',')
 	    end
 
 	    def categories
 		categories = []
-		categories << "!rir"		unless @tst_rir.active?
-		categories << "!mail"		unless @tst_mail.active?
-		categories << "!dns:axfr"	unless @tst_axfr.active?
-		categories << "+"		# accept by default
-		categories.join(",")
+		categories << '!rir'		unless @tst_rir.active?
+		categories << '!mail'		unless @tst_mail.active?
+		categories << '!dns:axfr'	unless @tst_axfr.active?
+		categories << '+'		# accept by default
+		categories.join(',')
 	    end
 
 	    def transp
 		transp = []
-		transp << "ipv4"		if @ipv4.active?
-		transp << "ipv6"		if @ipv6.active?
-		transp << "std"			if @std.active?
-		transp << "udp"			if @udp.active?
-		transp << "tcp"			if @tcp.active?
-		transp.join(",")
+		transp << 'ipv4'		if @ipv4.active?
+		transp << 'ipv6'		if @ipv6.active?
+		transp << 'std'			if @std.active?
+		transp << 'udp'			if @udp.active?
+		transp << 'tcp'			if @tcp.active?
+		transp.join(',')
 	    end
 	end
 
@@ -478,14 +450,14 @@ module Input
 		pix_sec  = make_pixmap.call(ZCData::XPM::Secondary)
 
 		# Localisation
-		l10n_check		= $mc.get("iface:label_check")
-		l10n_guess		= $mc.get("iface:label_guess")
-		l10n_clear		= $mc.get("iface:label_clear")
-		l10n_primary		= $mc.get("ns_primary")
-		l10n_secondary		= $mc.get("ns_secondary")
-		l10n_ips		= $mc.get("ns_ips")
-		l10n_ns			= $mc.get("ns_ns")
-		l10n_zone		= $mc.get("ns_zone").capitalize
+		l10n_check		= $mc.get('iface:btn:check')
+		l10n_guess		= $mc.get('iface:btn:guess')
+		l10n_clear		= $mc.get('iface:btn:clear')
+		l10n_primary		= $mc.get('ns_primary')
+		l10n_secondary		= $mc.get('ns_secondary')
+		l10n_ips		= $mc.get('ns_ips')
+		l10n_ns			= $mc.get('iface:panel:ns')
+		l10n_zone		= $mc.get('iface:panel:zone').capitalize
 
 		# 
 		@ns	= []
@@ -501,8 +473,6 @@ module Input
 	    
 		zone_f = Gtk::Frame::new(l10n_zone)
 		zone_f.add(hbox)
-
-		main.set_tip(@zone, "input/simple/zone")
 
 		# NS
 		tbl  = Gtk::Table::new(MaxNS, 5, false)
@@ -521,22 +491,15 @@ module Input
 		    tbl.attach(@ns[i],  2, 3, i, i+1)
 		    tbl.attach(lbl_ips, 3, 4, i, i+1, Gtk::SHRINK | Gtk::FILL)
 		    tbl.attach(@ips[i], 4, 5, i, i+1)
-
-		    main.set_tip(@ns[i],  "input/simple/nameserver/name")
-		    main.set_tip(@ips[i], "input/simple/nameserver/addresses")
-		    
 		}
 		
-		ns_f = Gtk::Frame::new(l10n_ns.upcase)
+		ns_f = Gtk::Frame::new(l10n_ns.capitalize)
 		ns_f.add(tbl)
 		
 		# Buttons
 		@check = Gtk::Button::new(Gtk::Stock::EXECUTE, l10n_check)
 		@guess = Gtk::Button::new(Gtk::Stock::REFRESH, l10n_guess)
 		@clear = Gtk::Button::new(Gtk::Stock::CLEAR,   l10n_clear)
-		main.set_tip(@check, "input/check")
-		main.set_tip(@guess, "input/simple/guess")
-		main.set_tip(@clear, "input/clear")
 		
 
 		@hbbox  = Gtk::HButtonBox::new
@@ -550,7 +513,7 @@ module Input
 		pack_start(@hbbox, false, true)
 
 		# Signal handler
-		@check.signal_connect("clicked") { |w| 
+		@check.signal_connect('clicked') { |w| 
 		    @hbbox.set_sensitive(false)
 		    begin
 			main.set_expert
@@ -562,33 +525,33 @@ module Input
 			main.statusbar.push(1, e.message)
 			puts e.message
 			puts e.backtrace.join("\n")
-			puts "FUCK check"
+			puts 'FUCK check'
 		    end
 		    @hbbox.set_sensitive(true)
 		}
 
-		@guess.signal_connect("clicked") { |w|
+		@guess.signal_connect('clicked') { |w|
 		    @hbbox.set_sensitive(false)
 		    begin
 			main.set_expert
 			main.set_options
 			main.set_domain
-			main.statusbar.push(1, "Name servers and/or addresses guessed")
+			main.statusbar.push(1, 'Name servers and/or addresses guessed')
 		    rescue => e
 			main.statusbar.push(1, e.message)
 			puts e.message
 			puts e.backtrace.join("\n")
-			puts "FUCK guess"
+			puts 'FUCK guess'
 		    end
 		    
 		    @hbbox.set_sensitive(true)
 		}
 
-		@clear.signal_connect("clicked") {
+		@clear.signal_connect('clicked') {
 		    @hbbox.set_sensitive(false)
-		    (@ns + @ips + [ @zone ]).each  { |w| w.set_text("") } 
+		    (@ns + @ips + [ @zone ]).each  { |w| w.set_text('') } 
 		    @hbbox.set_sensitive(true)
-		    main.statusbar.push(1, "Input cleared")
+		    main.statusbar.push(1, 'Input cleared')
 		}
 	    end
 
@@ -611,10 +574,10 @@ module Input
 		if ! ns_list.empty?
 		    ns_list.collect { |ns, ips|
 			if ips
-			then ips_str = ips.join(", ") ; "#{ns}=#{ips_str}" 
+			then ips_str = ips.join(', ') ; "#{ns}=#{ips_str}" 
 			else ns
 			end
-		    }.join(";")
+		    }.join(';')
 		else
 		    nil
 		end
@@ -624,19 +587,19 @@ module Input
 		# Sanity check
 		if ns_list.length > MaxNS
 		    raise ArgumentError, 
-			$mc.get("iface:xcp_toomany_nameservers")
+			$mc.get('iface:xcp_toomany_nameservers')
 		end
 		
 		# Set nameservers entries
 		i = 0
 		ns_list.each_index { |i|
 		    @ns [i].set_text(ns_list[i][0].to_s)
-		    @ips[i].set_text(ns_list[i][1].join(", "))
+		    @ips[i].set_text(ns_list[i][1].join(', '))
 		}
 
 		# Clear remaining entries
 		(i+1..MaxNS-1).each { |i|
-		    @ns [i].set_text("") ; @ips[i].set_text("")
+		    @ns [i].set_text('') ; @ips[i].set_text('')
 		}
 	    end
 	end
@@ -652,13 +615,13 @@ module Input
 		super()
 
 		# Localisation
-		l10n_check		= $mc.get("iface:label_check")
-		l10n_clear		= $mc.get("iface:label_clear")
-		l10n_batch		= $mc.get("ns_batch").capitalize
-		l10n_batch_open		= $mc.get("iface:batch_open")
-		l10n_batch_save		= $mc.get("iface:batch_save")
-		l10n_file_gotdirectory	= $mc.get("iface:file_gotdirectory")
-		l10n_file_overwrite	= $mc.get("iface:file_overwrite")
+		l10n_check		= $mc.get('iface:btn:check')
+		l10n_clear		= $mc.get('iface:btn:clear')
+		l10n_batch		= $mc.get('ns_batch').capitalize
+		l10n_batch_open		= $mc.get('iface:batch_open')
+		l10n_batch_save		= $mc.get('iface:batch_save')
+		l10n_file_gotdirectory	= $mc.get('iface:file_gotdirectory')
+		l10n_file_overwrite	= $mc.get('iface:file_overwrite')
 
 		# Open/Save 
 		open = Gtk::Button::new(Gtk::Stock::OPEN)
@@ -671,7 +634,7 @@ module Input
 		# Batch
 		@batch = Gtk::TextView::new
 
-		info = Gtk::Label::new($mc.get("iface:batch_example"))
+		info = Gtk::Label::new($mc.get('iface:batch_example'))
 		info.set_alignment(0,0.5)
 
 		scroller = Gtk::ScrolledWindow::new
@@ -686,15 +649,10 @@ module Input
 		batch_f = Gtk::Frame::new(l10n_batch)
 		batch_f.add(vbox)
 
-		main.set_tip(@batch, "input/batch/data")
-		main.set_tip(open,   "input/batch/open")
-		main.set_tip(save,   "input/batch/save")
-
 		# Buttons
 		@check = Gtk::Button::new(Gtk::Stock::EXECUTE, l10n_check)
 		@clear = Gtk::Button::new(Gtk::Stock::CLEAR,   l10n_clear)
-		main.set_tip(@check, "input/check")
-		main.set_tip(@clear, "input/clear")
+
 
 		hbbox = Gtk::HButtonBox::new
 		hbbox.pack_start(@check)
@@ -705,7 +663,7 @@ module Input
 		pack_start(hbbox,   false, true)
 
 		# Signal handler
-		@check.signal_connect("clicked") { |w| 
+		@check.signal_connect('clicked') { |w| 
 		    hbbox.set_sensitive(false)
 		    begin
 			main.set_expert
@@ -716,19 +674,19 @@ module Input
 			main.statusbar.push(1, e.message)
 			puts e.message
 			puts e.backtrace.join("\n")
-			puts "FUCK"
+			puts 'FUCK'
 		    end
 		    hbbox.set_sensitive(true)
 		}
 
-		@clear.signal_connect("clicked") {
+		@clear.signal_connect('clicked') {
 		    hbbox.set_sensitive(false)
-		    self.data = ""
+		    self.data = ''
 		    hbbox.set_sensitive(true)
-		    main.statusbar.push(1, "Input cleared")
+		    main.statusbar.push(1, 'Input cleared')
 		}
 
-		save.signal_connect("clicked") {
+		save.signal_connect('clicked') {
 		    # Create file selection
 		    fs = Gtk::FileSelection::new(l10n_batch_save)
 		    fs.set_modal(true)
@@ -737,12 +695,12 @@ module Input
 		    fs.set_filename(DefaultBatchFile)
 		    
 		    # Cancel Button
-		    fs.cancel_button.signal_connect("clicked") {
+		    fs.cancel_button.signal_connect('clicked') {
 			fs.destroy 
 		    }
 
 		    # Ok Button
-		    fs.ok_button.signal_connect("clicked") {
+		    fs.ok_button.signal_connect('clicked') {
 			doit = true
 			doit &= fs.filename[-1] != File::SEPARATOR[0]
 			if doit && File.file?(fs.filename)
@@ -779,7 +737,7 @@ module Input
 		    fs.show
 		}
 
-		open.signal_connect("clicked") {
+		open.signal_connect('clicked') {
 		    # Create file selection
 		    fs = Gtk::FileSelection::new(l10n_batch_open)
 		    fs.set_modal(true)
@@ -787,18 +745,18 @@ module Input
 		    fs.hide_fileop_buttons
 		    
 		    # Cancel Button
-		    fs.cancel_button.signal_connect("clicked") {
+		    fs.cancel_button.signal_connect('clicked') {
 			fs.destroy
 		    }
 
 		    # Ok Button
-		    fs.ok_button.signal_connect("clicked") {
+		    fs.ok_button.signal_connect('clicked') {
 			if fs.filename[-1] != File::SEPARATOR[0]
 			    if File.directory?(fs.filename)
 				main.statusbar.push(1, l10n_file_gotdirectory)
 			    else
 				begin
-				    txt = ""
+				    txt = ''
 				    File::open(fs.filename) { |io|
 					while not io.eof?
 					    txt << io.read(4096) ; end
@@ -841,10 +799,39 @@ module Input
 		@aborted	= false
 	    end
 	    
+	    def mk_btn(tag, type, sibling=nil)
+		widget = if sibling.nil? 
+			 then type.new($mc.get(tag))
+			 else type.new(sibling, $mc.get(tag))
+			 end
+		begin
+		    @tooltips.set_tip(widget, $mc.get(tag + '/tip'), tag)
+		rescue MsgCat::EntryNotFound
+		end
+		widget
+	    end
+
+	    def mk_ckbtn(tag, sibling=nil)
+		mk_btn(tag, Gtk::CheckButton, sibling)
+	    end
+	    def mk_rdbtn(tag, sibling=nil)
+		mk_btn(tag, Gtk::RadioButton, sibling)
+	    end
+	    def mk_rdbtns(*tags)
+		rdbtns = [ ]
+		tags.each { |tag| rdbtns << mk_rdbtn(tag, rdbtns[0]) }
+		rdbtns
+	    end
+
+
+	    def self.mk_mitem(tag)
+		Gtk::MenuItem::new($mc.get(tag))
+	    end
+
 	    def create
 		@window = Gtk::Window::new
-		@window.set_title("ZoneCheck")
-		@window.signal_connect("delete_event") { 
+		@window.set_title('ZoneCheck')
+		@window.signal_connect('delete_event') { 
 		    @aborted = true ; destroy ; Gtk::main_quit }
 		@window.border_width = 0
 
@@ -874,7 +861,7 @@ module Input
 		#             +---------+
 		
 		# [File]
-		mitem = Gtk::MenuItem::new("File")
+		mitem = Gtk::MenuItem::new('File')
 		menu  = Gtk::Menu::new
 		mitem.set_submenu(menu)
 		menubar.append(mitem)
@@ -883,49 +870,49 @@ module Input
 		menu.append(quit_mitem)
 
 		# [Mode]
-		mitem = Gtk::MenuItem::new("Mode")
+		mitem = Gtk::MenuItem::new('Mode')
 		menu  = Gtk::Menu::new
 		mitem.set_submenu(menu)
 		menubar.append(mitem)
 
-		single_mitem = Gtk::RadioMenuItem::new(nil, "Single")
+		single_mitem = Gtk::RadioMenuItem::new(nil, 'Single')
 		grp = single_mitem.group
 		menu.append(single_mitem)
-		batch_mitem  = Gtk::RadioMenuItem::new(grp, "Batch")
+		batch_mitem  = Gtk::RadioMenuItem::new(grp, 'Batch')
 		menu.append(batch_mitem)
 #		menu.append(Gtk::SeparatorMenuItem::new)
-#		exp_mitem    = Gtk::CheckMenuItem::new("Expert")
+#		exp_mitem    = Gtk::CheckMenuItem::new('Expert')
 #		menu.append(exp_mitem)
 
 		# [Preference]
-		mitem = Gtk::MenuItem::new("Preference")
+		mitem = Gtk::MenuItem::new('Preference')
 		menu  = Gtk::Menu::new
 		mitem.set_submenu(menu)
 		menubar.append(mitem)
 
-		tooltips_mitem = Gtk::CheckMenuItem::new("Tooltips")
+		tooltips_mitem = Gtk::CheckMenuItem::new('Tooltips')
 		menu.append(tooltips_mitem)
 
 		# [Help]
-		mitem = Gtk::MenuItem::new("Help")
+		mitem = Gtk::MenuItem::new('Help')
 		menu  = Gtk::Menu::new
 		mitem.set_submenu(menu)
 		mitem.set_right_justified(true)
 		menubar.append(mitem)
 
-		about_mitem = Gtk::MenuItem::new("About")
+		about_mitem = Gtk::MenuItem::new('About')
 		menu.append(about_mitem)
 
 
 		# Notebook
 		notebook = Gtk::Notebook::new
 		notebook.set_tab_pos(Gtk::POS_TOP)
-		notebook.append_page @single,  Gtk::Label::new("Input")
-		notebook.append_page @batch,   Gtk::Label::new("Input")
-		notebook.append_page @options, Gtk::Label::new("Options")
+		notebook.append_page @single,  Gtk::Label::new('Input')
+		notebook.append_page @batch,   Gtk::Label::new('Input')
+		notebook.append_page @options, Gtk::Label::new('Options')
 #		notebook.set_tab_label_packing(@options, 
 #					       false, false, Gtk::PACK_END)
-		notebook.append_page @expert,  Gtk::Label::new("Expert")
+		notebook.append_page @expert,  Gtk::Label::new('Expert')
 #		notebook.set_tab_label_packing(@expert, 
 #					       false, false, Gtk::PACK_END)
 		
@@ -936,7 +923,7 @@ module Input
 		
 
 		# Signal
-		about_mitem.signal_connect("activate") {
+		about_mitem.signal_connect('activate') {
 		    logo = Gdk::Pixmap::create_from_xpm_d(Gdk::Window::default_root_window, nil, ZCData::XPM::Logo)
 		    
 		    txt  = "Version\t: #{$zc_version}\n"
@@ -944,7 +931,7 @@ module Input
 		    txt += "Maintainer\t: #{ZC_MAINTAINER}\n"
 		    txt += "Copyright\t: #{ZC_COPYRIGHT}\n"
 
-		    about = Gtk::Dialog::new("About", @window,
+		    about = Gtk::Dialog::new('About', @window,
                          Gtk::Dialog::MODAL | Gtk::Dialog::DESTROY_WITH_PARENT,
                          [Gtk::Stock::OK, Gtk::Dialog::RESPONSE_ACCEPT])
 
@@ -956,17 +943,17 @@ module Input
 		    about.destroy
 		}
 		
-		batch_mitem.signal_connect("toggled") { |w|
+		batch_mitem.signal_connect('toggled') { |w|
 		    if w.active? then @batch.show else @batch.hide end
 		}
 
-		single_mitem.signal_connect("toggled") { |w|
+		single_mitem.signal_connect('toggled') { |w|
 		    if w.active? then @single.show else @single.hide end
 		}
 
-#		exp_mitem.signal_connect("toggled") { |w|
+#		exp_mitem.signal_connect('toggled') { |w|
 #		    if w.active?
-#			notebook.append_page(@expert, Gtk::Label::new("Expert"))
+#			notebook.append_page(@expert, Gtk::Label::new('Expert'))
 ##			@expert.set_sensitive(false)
 ##			notebook.set_current_page(notebook.page_num(@expert))
 #		    else
@@ -974,10 +961,10 @@ module Input
 #		    end
 #		}
 		
-		quit_mitem.signal_connect("activate") {
+		quit_mitem.signal_connect('activate') {
 		    @aborted = true ; destroy ; Gtk::main_quit }
 
-		tooltips_mitem.signal_connect("toggled") { |w|
+		tooltips_mitem.signal_connect('toggled') { |w|
 		    if w.active?
 		    then @tooltips.enable
 		    else @tooltips.disable
@@ -993,10 +980,6 @@ module Input
 
 	    end
 
-	    def set_tip(widget, id)
-		@tooltips.set_tip(widget, $mc.get("iface:tooltip:#{id}"), id)
-	    end
-	    
 	    def destroy
 		@window.destroy
 	    end
@@ -1037,28 +1020,28 @@ module Input
 	end
 
 	def opts_definition
-	    [   [ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ],
-		[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
-		[ "--lang",		GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--debug",	"-d",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--config",	"-c",   GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--testdir",	        GetoptLong::REQUIRED_ARGUMENT ],
-		[ "--resolver",	"-r",   GetoptLong::REQUIRED_ARGUMENT ] ]
+	    [   [ '--help',	'-h',	GetoptLong::NO_ARGUMENT       ],
+		[ '--version',	'-V',	GetoptLong::NO_ARGUMENT       ],
+		[ '--lang',		GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--debug',	'-d',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--config',	'-c',   GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--testdir',	        GetoptLong::REQUIRED_ARGUMENT ],
+		[ '--resolver',	'-r',   GetoptLong::REQUIRED_ARGUMENT ] ]
         end
 
 	def opts_analyse(p)
 	    @opts.each do |opt, arg|
 		case opt
-		when "--help"      then usage(EXIT_USAGE, $stdout)
-		when "--version"
-		    puts $mc.get("input:version").gsub("PROGNAME", PROGNAME) % 
+		when '--help'      then usage(EXIT_USAGE, $stdout)
+		when '--version'
+		    puts $mc.get('input:version').gsub('PROGNAME', PROGNAME) % 
 			[ $zc_version ]
 		    exit EXIT_OK
-		when "--lang"     then $locale.lang         = arg
-		when "--debug"     then $dbg.level	    = arg
-		when "--config"    then p.preconf.cfgfile   = arg
-		when "--testdir"   then p.preconf.testdir   = arg
-		when "--resolver"  then p.resolver.local    = arg
+		when '--lang'     then $locale.lang         = arg
+		when '--debug'     then $dbg.level	    = arg
+		when '--config'    then p.preconf.cfgfile   = arg
+		when '--testdir'   then p.preconf.testdir   = arg
+		when '--resolver'  then p.resolver.local    = arg
 		end
 	    end
 	end
@@ -1082,16 +1065,16 @@ module Input
 
 	    p.resolver.autoconf
 	    p.domain.clear
-	    p.domain.name = "nic.fr"
+	    p.domain.name = 'nic.fr'
 	    p.domain.autoconf(p.resolver.local)
 
 	    Gtk::RC.parse_string(<<EOT
-style "package_label"
+style 'package_label'
 {
 #  font = '-adobe-helvetica-medium-o-*-*-*-120-*-*-*-*-*-*'
 font = '-adobe-helvetica-bold-r-normal-*-*-120-*-*-*-*-*-*'
 }
-widget "*package_label" style "package_label"
+widget '*package_label' style 'package_label'
 EOT
 )
 
@@ -1115,12 +1098,12 @@ EOT
 	end
 
 	def usage(errcode, io=$console.stderr)
-	    io.print $mc.get("input:gtk:usage").gsub("PROGNAME", PROGNAME)
+	    io.print $mc.get('input:gtk:usage').gsub('PROGNAME', PROGNAME)
 	    exit errcode unless errcode.nil?
 	end
 
 	def error(str, errcode=nil, io=$console.stderr)
-	    l10n_error = $mc.get("word:error").upcase
+	    l10n_error = $mc.get('word:error').upcase
 	    io.puts "#{l10n_error}: #{str}"
 	    exit errcode unless errcode.nil?
 	end

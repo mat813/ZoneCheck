@@ -246,7 +246,7 @@ class MsgCat
 		prefix = ''
 		xmlsection = element.parent
 		while xmlsection.name == 'section'
-		    prefix += xmlsection['name'] + ':'
+		    prefix = xmlsection['name'] + ':' + prefix
 		    xmlsection = xmlsection.parent
 		end
 

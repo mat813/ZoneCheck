@@ -68,7 +68,7 @@
     <qandaentry>
       <question>
 	<para>Why do I get rubish or wrong results when doing the 
-	  <function>icmp</function></para>
+	  <function>icmp</function> test</para>
       </question>
       <answer>
 	<para>ZoneCheck use the command <application>ping</application> to 

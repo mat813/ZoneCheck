@@ -3,6 +3,9 @@
 2003-01-??  ZoneCheck-2.0.2
 	* test: fixed bugs in mail_delivery_{postmaster,hostmaster}
 	* zc: fixed bugs in XML parsing
+	* zc: fixed --INPUT not working in some cases
+	* test: only the default profile is enabled in the configuration file
+	* input: gtk interface is still partially broken
 	
 2003-01-05  ZoneCheck-2.0.1
 	* test: preeval doesn't report fatal error anymore

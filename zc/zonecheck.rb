@@ -100,10 +100,10 @@ class ZoneCheck
     def start 
 	begin
 	    # Input method selection
-	    argv_backup = ARGV.clone
 	    @input = ZoneCheck.input_method
 	    
 	    # Initialize parameters (from command line parsing)
+	    argv_backup = ARGV.clone
 	    @param = Param::new
 	    @input.usage(EXIT_USAGE) unless @input.parse(@param)
 	    @param.preconf.autoconf
