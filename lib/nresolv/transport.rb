@@ -82,7 +82,7 @@ class NResolv
 	Port		 = 53
 	TCPTimeout	 = 10
 #       UDPRetrySequence = [ 5, 10, 20, 40 ]
-	UDPRetrySequence = [ 1, 2, 3, 4 ]
+	UDPRetrySequence = [ 2, 2, 3, 4 ]
 	UDPSize		 = 512
 
 	DNSThreadGroup   = ThreadGroup::new
