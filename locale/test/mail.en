@@ -38,7 +38,7 @@
 #
 
 [*]
-xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay when it processes a\nmessage from a non-local sender to a non-local recipient. These days,\njunk emailers abuse this capability at an alarming rate. They use the\nstolen capacity to greatly increase the amount of spam they can deliver.\n[adv]: AFNIC\nYou can perform more complete testing by using the following command:\n"telnet relay-test.mail-abuse.org", for more information take a look at\n<URL:http://www.mail-abuse.org/>
+xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay when it processes a message from a non-local sender to a non-local recipient. These days, junk emailers abuse this capability at an alarming rate. They use the stolen capacity to greatly increase the amount of spam they can deliver.\n[adv]: ZoneCheck\nYou can perform more complete testing by using the following command: "telnet relay-test.mail-abuse.org", for more information take a look at <URL:http://www.mail-abuse.org/>
 
 
 
@@ -62,8 +62,8 @@ details : The mailhost (%{mailhost}) used for the hostmaster address (%{hostmast
 testname: can deliver email to 'postmaster'
 error   : The postmaster can't be contacted by email
 ok	: The postmaster can be contacted by email
-explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved\nmailbox "Postmaster".
-details : Unable to send email to the postmaster address (%{postmaster}).
+explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved mailbox "Postmaster".
+details : Unable to send email to the postmaster address (%{postmaster}) using relays: %{mxlist}.
 
 
 [chk_mail_delivery_hostmaster]
@@ -71,7 +71,7 @@ testname: can deliver email to hostmaster
 error   : The hostmaster can't be contacted by email
 ok	: The hostmaster can be contacted by email
 explain : [none]
-details : Unable to send email to the hostmaster address (%{hostmaster}).
+details : Unable to send email to the hostmaster address (%{hostmaster}) using relays: %{mxlist}.
 
 
 [chk_mail_hostmaster_mx_cname]

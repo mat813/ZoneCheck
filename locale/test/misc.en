@@ -57,7 +57,7 @@ explain : [none]
 testname: nameserver doesn't allow recursion
 error	: The nameserver allow recursive queries
 ok	: The nameserver is not recursive
-explain	: [ref]: info\nIf you configure your nameserver to answer recursive queries,\nit means that you allow your nameserver to be used by anyone\nto resolve any kind of queries.
+explain	: [ref]: info\nIf you configure your nameserver to answer recursive queries, it means that you allow your nameserver to be used by anyone to resolve any kind of queries.
 
 
 [chk_correct_recursive_flag]

@@ -38,7 +38,7 @@
 #
 
 [*]
-xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay when it processes a\nmessage from a non-local sender to a non-local recipient. These days,\njunk emailers abuse this capability at an alarming rate. They use the\nstolen capacity to greatly increase the amount of spam they can deliver.\n[adv]: AFNIC\nIl est possible d'effectuer un test plus exhaustif en utilisant la\ncommande suivante: "telnet relay-test.mail-abuse.org", pour plus\nd'informations regardez <URL:http://www.mail-abuse.org/>\n
+xpl_openrelay: [ref]: MAPS\nAn Internet mail server performs third-party relay when it processes a message from a non-local sender to a non-local recipient. These days, junk emailers abuse this capability at an alarming rate. They use the stolen capacity to greatly increase the amount of spam they can deliver.\n[adv]: ZoneCheck\nIl est possible d'effectuer un test plus exhaustif en utilisant la commande suivante: "telnet relay-test.mail-abuse.org", pour plus d'informations regardez <URL:http://www.mail-abuse.org/>\n
 
 
 
@@ -62,8 +62,8 @@ details : La machine indiquée pour la réception du courrier (%{mailhost}) pour
 testname: envoie de mél au "postmaster"
 error   : Le "postmaster" ne peut pas être contacté par mél
 ok	: Le "postmaster" peut être contacté par mél
-explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved\nmailbox "Postmaster".
-details : Impossible d'envoyer un email au "postmaster" (%{postmaster}).
+explain : [ref]: IETF RFC1123 (p.51  5.2.7  RCPT Command: RFC-821 Section 4.1.1)\nA host that supports a receiver-SMTP MUST support the reserved mailbox "Postmaster".
+details : Impossible d'envoyer un email au "postmaster" (%{postmaster}) à travers les relais: %{mxlist}.
 
 
 [chk_mail_delivery_hostmaster]
@@ -71,7 +71,7 @@ testname: envoie de mél au "hostmaster"
 error   : Le "hostmaster" ne peut pas être contacté par mél
 ok	: Le "hostmaster" peut être contacté par mel
 explain : [none]
-details : Impossible d'envoyer un email au "hostmaster" (%{hostmaster}).
+details : Impossible d'envoyer un email au "hostmaster" (%{hostmaster}) à travers les relais: %{mxlist}.
 
 
 [chk_mail_hostmaster_mx_cname]

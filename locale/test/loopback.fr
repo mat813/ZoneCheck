@@ -38,7 +38,7 @@
 #
 
 [*]
-xpl_loopback: [ref]: IETF RFC1912 (p.13 4.1. Boot file setup)\nThese are set up to either provide nameservice for "special"\naddresses, or to help eliminate accidental queries for broadcast or\nlocal address to be sent off to the root nameservers.  All of these\nfiles will contain NS and SOA records just like the other zone files\nyou maintain.
+xpl_loopback: [ref]: IETF RFC1912 (p.13 4.1. Boot file setup)\nThese are set up to either provide nameservice for "special" addresses, or to help eliminate accidental queries for broadcast or local address to be sent off to the root nameservers.  All of these files will contain NS and SOA records just like the other zone files you maintain.
 
 
 

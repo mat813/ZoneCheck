@@ -581,6 +581,9 @@ module Publisher
 
 	    # Explanation
 	    if xpl_lst
+		txt = ::Text::Format::new
+		txt.width = 72
+		txt.tag   = ""
 		tbl = Gtk::Table::new(0, 2, false)
 		tbl.column_spacings = 5
 		tbl.row_spacings    = 2
@@ -594,7 +597,8 @@ module Publisher
 		    tbl.attach(img, 0, 1, idx, idx+1, Gtk::SHRINK, Gtk::SHRINK)
 		    tbl.attach(lbl, 1, 2, idx, idx+1, Gtk::FILL,   Gtk::SHRINK)
 		    idx += 1
-		    lbl = Gtk::Label::new(b.join("\n"))
+		    lbl = Gtk::Label::new(b.collect {|t| txt.format(t) 
+					  }.join("\n"))
 		    lbl.set_alignment(0, 0.5)
 		    tbl.attach(lbl, 1, 2, idx, idx+1, Gtk::FILL,   Gtk::SHRINK)
 		    idx += 1

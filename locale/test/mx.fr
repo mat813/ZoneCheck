@@ -41,7 +41,7 @@
 testname: enregistrement MX présent
 error   : Aucun enregistrement MX présent sur le serveur
 ok	: L'enregistrement MX est présent sur le serveur
-explain : [ref]: IETF RFC1912 (p.7)\nPut MX records even on hosts that aren't intended to send or receive\ne-mail.  If there is a security problem involving one of these hosts,\nsome people will mistakenly send mail to postmaster or root at the\nsite without checking first to see if it is a "real" host or just a\nterminal or personal computer that's not set up to accept e-mail.
+explain : [ref]: IETF RFC1912 (p.7)\nPut MX records even on hosts that aren't intended to send or receive e-mail.  If there is a security problem involving one of these hosts, some people will mistakenly send mail to postmaster or root at the site without checking first to see if it is a "real" host or just a terminal or personal computer that's not set up to accept e-mail.
 
 
 [chk_mx_auth]

@@ -39,7 +39,7 @@
 
 
 [*]
-xpl_connectivity_udp_tcp : [ref]: IETF RFC1035 (p.32 4.2. Transport)\nThe DNS assumes that messages will be transmitted as datagrams or in a\nbyte stream carried by a virtual circuit. While virtual circuits can be\nused for any DNS activity, datagrams are preferred for queries due to\ntheir lower overhead and better performance.
+xpl_connectivity_udp_tcp : [ref]: IETF RFC1035 (p.32 4.2. Transport)\nThe DNS assumes that messages will be transmitted as datagrams or in a byte stream carried by a virtual circuit. While virtual circuits can be used for any DNS activity, datagrams are preferred for queries due to their lower overhead and better performance.
 
 
 

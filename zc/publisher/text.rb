@@ -323,12 +323,13 @@ module Publisher
 	    @o.puts "#{l10n_severity_shorttag}> #{msg}"
 
 	    if !severity.nil?
+		txtfmt		= ::Text::Format::new
+		txtfmt.width	= 72
+		txtfmt.tag	= "  "
+
 		# Details
 		if @rflag.details && desc.dtl
-		    txt = ::Text::Format::new
-		    txt.width = 72
-		    txt.tag   = "  "
-		    txt.format(desc.dtl).split(/\n/).each { |l|
+		    txtfmt.format(desc.dtl).split(/\n/).each { |l|
 			@o.puts " : #{l}" }
 		    @o.puts ' `..... .. .. . .  .'
 		end
@@ -342,7 +343,10 @@ module Publisher
 		    xpl_lst.each { |t, h, b|
 			tag = $mc.get("tag_#{t}")
 			@o.puts " | #{tag}: #{h}"
-			b.each { |l| @o.puts " |  #{l}" }
+			b.each { |t|
+			    txtfmt.format(t).split(/\n/).each { |l|
+				@o.puts " |  #{l}" }
+			}
 		    }
 		    @o.puts ' `----- -- -- - -  -'
 		end
