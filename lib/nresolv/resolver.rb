@@ -205,9 +205,9 @@ module NResolv
 		def query(msg)
 		    @requester.each { |udp, tcp|
 			begin
-			    msg = udp.query(msg).send.wait
-			    msg = tcp.query(msg).send.wait if msg.tc
-			    return msg
+			    nmsg = udp.query(msg).send.wait
+			    nmsg = tcp.query(msg).send.wait if nmsg.tc
+			    return nmsg
 			rescue NResolv::TimeoutError, NResolv::NetworkError
 			end
 		    }
