@@ -54,16 +54,16 @@
     <H1><IMG alt="ZoneCheck (traitement en lots)" src="HTML_PATH/img/logo.png"></H1>
 
     <P>Il est supposé que vous êtes déjà familiarisé avec <I>ZoneCheck</I>,
-      si tel n'est pas le cas essayez d'abord le formulaire pour 
+      si tel n'est pas le cas, essayez d'abord le formulaire pour 
       <A href="form.html">domaine unique</A>.</P>
 
-    <P>Pour une information détaillée sur la manière de remplire le 
-      formulaire voyez la section sur l'<A href="#help">aide</A>.</P>
+    <P>Pour une information détaillée sur la manière de remplir le 
+      formulaire, voyez la section sur l'<A href="#help">aide</A>.</P>
       
     
 
     <H2>Information sur la zone</H2>
-Exemples:
+Exemples :
     <PRE>DOM=afnic.fr
 DOM=nic.fr NS=ns1.nic.fr;ns2.nic.fr
 DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
@@ -72,8 +72,8 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
     <FORM method="POST" action="HTML_PATH/cgi-bin/zc.cgi">
       <TEXTAREA name="batchdata" rows="10" cols="60"></TEXTAREA>
       <P>
-	<INPUT type="submit" value=" Vérifie! ">
-	<INPUT type="reset"  value=" Efface ">
+	<INPUT type="submit" value=" Vérifiez! ">
+	<INPUT type="reset"  value=" Effacez ">
 	
 	
       <!-- Options -->
@@ -101,7 +101,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    <TD><INPUT type="checkbox" name="one"  value='t' checked>
 	      1 ligne</TD>
 	    <TD><INPUT type="checkbox" name="quiet"  value='t' checked>
-	      sans titres</TD>
+	      sans titre</TD>
 	    <TD>
 	    </TD>
 	  </TR>
@@ -118,13 +118,13 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    <TD></TD>
 	    <TD>rapport
 	      <SELECT name="report">
-		<OPTION value="byseverity" SELECTED> par severité
+		<OPTION value="byseverity" SELECTED> par sévérité
 		<OPTION value="byhost"             > par machine
 	      </SELECT></TD>
 	    <TD>format
 	      <SELECT name="format">
 		<OPTION value="html" SELECTED> HTML
-		<OPTION value="text"         > Text
+		<OPTION value="text"         > Texte
 	      </SELECT></TD>
 	    <TD>langue
 	      <SELECT name="lang">
@@ -192,12 +192,12 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
     <!-- Propaganda -->
     <H2 id="benefit">Bénéfices</H2>
-    <P> Parmi les tests effectués on peut trouver: </P>
+    <P> Parmi les tests effectués on peut trouver : </P>
     <UL>
       <LI>serveur autoritaire pour la zone, assurant qu'il est possible
 	d'utiliser le domaine à l'extérieur de votre réseau ;</LI>
-      <LI>liste des serveurs secondaires correctes, de telle manière
-	que si le serveur primaire est temporairement injoingnable, 
+      <LI>liste des serveurs secondaires corrects, de telle manière
+	que si le serveur primaire est temporairement injoignable, 
 	le domaine reste encore visible depuis l'Internet ;</LI>
       <LI>vérification de la distribution du courrier, afin de ne pas
 	devenir la proie des spammers et finir en 
@@ -212,13 +212,13 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	<TR><TD class="zc-title" colspan="2">Information sur la zone</TD></TR>
 	<TR>
 	  <TD class="zc-key">Zone</TD>
-	  <TD>Le domaine (ie: zone) qui doit être testée (ie: le nom de
+	  <TD>Le domaine (ie: zone) qui doit être testé (ie: le nom de
 	    domaine qui doit être enregistré).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc-key">Primaire</TD>
 	  <TD>Le serveur de noms qui est considéré comme primaire (celui qui
-	    figure dans l'enregistrement du SOA, si celui-ci est public).</TD>
+	    figure dans l'enregistrements du SOA, si celui-ci est public).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc-key">Secondary</TD>
@@ -227,24 +227,24 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TD>
 	</TR>
 	<TR>
-	  <TD class="zc-key">IPs</TD>
-	  <TD>Liste des addresses IPs associées avec le serveur de noms.
+	  <TD class="zc-key">IP</TD>
+	  <TD>Liste des adresses IP associées avec le serveur de noms.
 	    <UL>
 	      <LI>elles sont uniquement requises si elles ne peuvent être
 		déduites (ie: elles sont dans la zone qui est actuellement
-		en cours d'enregistrement).</LI>
-	      <LI>si il y a plusieurs addresses, elle doivent être séparées
-		par un espace ou une virgule.</LI>
-	      <LI>le formulaire accepte aussi bien les addresses IPv4
+		en cours d'enregistrement),</LI>
+	      <LI>s'il y a plusieurs adresses, elle doivent être séparées
+		par un espace ou une virgule,</LI>
+	      <LI>le formulaire accepte aussi bien les adresses IPv4
 		qu'IPv6 (à l'exception des compatibles et mappées).</LI>
 	    </UL>
 	  </TD>
 	</TR>
 
-	<TR><TD class="zc-title" colspan="2">Options: Sortie</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Option: Sortie</TD></TR>
 	<TR>
 	  <TD class="zc-key">résumé sur la zone</TD>
-	  <TD>Inclus un résumé sur la zone et ces serveur de noms dans le 
+	  <TD>Inclus un résumé sur la zone et ces serveurs de noms dans le 
 	    rapport généré</TD>
 	</TR>
 	<TR>
@@ -266,12 +266,12 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  <TD>Rapporte l'information en une ligne (en fait 3 lignes).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc-key">sans titres</TD>
-	  <TD>N'utilise pas de titres pour les différentes sections.</TD>
+	  <TD class="zc-key">sans titre</TD>
+	  <TD>N'utilise pas de titre pour les différentes sections.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc-key">barre de progression</TD>
-	  <TD>Affiche des informations a propos de le déroulement des 
+	  <TD>Affiche des informations à propos du déroulement des 
 	    tests en utilisant une barre de progression (<I>nécessite
 	      javascript et Mozilla ou IE5+ pour un rendu correct</I>).</TD>
 	</TR>
@@ -298,10 +298,10 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	    généré.</TD>
 	</TR> 
 
-	<TR><TD class="zc-title" colspan="2">Options: rapport d'erreurs</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Option: rapport d'erreurs</TD></TR>
 	<TR>
 	  <TD class="zc-key">sévérité par défaut</TD>
-	  <TD>Les erreurs sont rapportés avec le degré de sévérité associé
+	  <TD>Les erreurs sont rapportées avec le degré de sévérité associé
 	    au test.</TD>
 	</TR>
 	<TR>
@@ -319,16 +319,16 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	</TR>
 	<TR>
 	  <TD class="zc-key">affiche ok</TD>
-	  <TD>Affiche les tests qui ont passés sans erreurs.</TD>
+	  <TD>Affiche les tests qui sont passés sans erreurs.</TD>
 	</TR>
 
-	<TR><TD class="zc-title" colspan="2">Options: tests supplémentaires effectués</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Option: tests supplémentaires effectués</TD></TR>
 	<TR>
 	  <TD class="zc-key">distribution du courrier</TD>
 	  <TD>Effectue des vérifications supplémentaires
 	    sur la distribution du courrier pour des comptes utilisateurs
-	    typiques (hostmaster, postmaster, ...) associé avec les
-	    domaines.</TD>
+	    typiques (hostmaster, postmaster, ...) associés avec les
+	    noms de domaine.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc-key">transfert de zone</TD>
@@ -337,14 +337,14 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	</TR>
 	<TR>
 	  <TD class="zc-key">bases de données RIR</TD>
-	  <TD>Vérifie que les addresses IPs sont bien enregistrée
-	    dans la base des RIRs</TD>
+	  <TD>Vérifie que les adresses IP sont bien enregistrées
+	    dans la base des RIR</TD>
 	</TR>
 
-	<TR><TD class="zc-title" colspan="2">Options: Couche de transport</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Option: Couche de transport</TD></TR>
 	<TR>
 	  <TD class="zc-key">IPv4, IPv6</TD>
-	  <TD>Sélectionne la couche de routage (si aucune n'est sélectionné
+	  <TD>Sélectionne la couche de routage (si aucune n'est sélectionnée
 	    le défaut est de prendre IPv4 et IPv6).</TD>
 	</TR>
 	<TR>
@@ -359,8 +359,8 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
       <LI>le mot <I>générique</I> signifie que l'erreur est soit
 	indépendante soit présente sur tous les serveurs de noms,</LI>
       <LI>lorsqu'une erreur est entre [crochets], cela signifie
-	que le test a échoué du à une raison externe, cette raison
-	est affiche à coté.</LI>
+	que le test a échoué pour une raison externe (cette raison
+	est affichée à coté).</LI>
     </UL>
 
     <!-- What / Who / When -->
@@ -379,7 +379,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Apr 18 13:43:25 CEST 2003
+Last modified: Fri Apr 18 17:33:38 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
