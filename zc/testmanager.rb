@@ -4,6 +4,10 @@
 # AUTHOR : Stephane D'Alu <sdalu@nic.fr>
 # CREATED: 2002/08/02 13:58:17
 #
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2 (or MIT/X11-like after agreement)
+#
 # $Revision$ 
 # $Date$
 #

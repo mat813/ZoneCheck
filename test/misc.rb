@@ -7,7 +7,7 @@
 #
 # COPYRIGHT: AFNIC (c) 2003
 # CONTACT  : zonecheck@nic.fr
-# LICENSE  : GPL v2.0 (or MIT/X11-like after agreement)
+# LICENSE  : GPL v2 (or MIT/X11-like after agreement)
 #
 # $Revision$ 
 # $Date$
