@@ -42,7 +42,7 @@ module CheckNameServer
     ##   (see modules CheckNetworkAddress for that)
     ##
     class ServerAccess < Test
-	with_msgcat "test/nameserver.%s"
+	with_msgcat 'test/nameserver.%s'
 
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
@@ -69,14 +69,14 @@ module CheckNameServer
 	    bogon = []
 	    ip(ns).each { |addr|
 		bname = NResolv::DNS::Name::create(addr.to_dnsform +
-						   ".bogons.cymru.com.")
+						   '.bogons.cymru.com.')
 		case addr
 		when Address::IPv4
 		    bogon << addr unless @cm[nil].addresses(bname).empty?
 		end
 	    }
 	    return true if bogon.empty?
-	    { "addresses" => bogon.join(", ") }
+	    { 'addresses' => bogon.join(', ') }
 	end
     end
 end

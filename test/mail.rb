@@ -45,15 +45,15 @@ module CheckExtra
     ## Check domain NS records
     ##
     class Mail < Test
-	with_msgcat "test/mail.%s"
+	with_msgcat 'test/mail.%s'
 
 	#-- Initialisation ------------------------------------------
 	def initialize(*args)
 	    super(*args)
-	    @fake_dest = const("fake_mail_dest")
-	    @fake_from = const("fake_mail_from")
-	    @fake_user = const("fake_mail_user")
-	    @fake_host = const("fake_mail_host")
+	    @fake_dest = const('fake_mail_dest')
+	    @fake_from = const('fake_mail_from')
+	    @fake_user = const('fake_mail_user')
+	    @fake_host = const('fake_mail_host')
 	end
 
 	#-- Shortcuts -----------------------------------------------
@@ -110,10 +110,10 @@ module CheckExtra
 	    mdom  = rname.domain
 	    mhost = bestmx(mdom) || mdom
 	    return true unless openrelay(mdom, mhost)
-	    { "mailhost"   => mhost,
-	      "hostmaster" => "#{rname[0].data}@#{mdom}",
-	      "from_host"  => @fake_from,
-	      "to_host"    => @fake_dest }
+	    { 'mailhost'   => mhost,
+	      'hostmaster' => "#{rname[0].data}@#{mdom}",
+	      'from_host'  => @fake_from,
+	      'to_host'    => @fake_dest }
 	end
 
 	# DESC: Check that the best MX for the domain is not an openrelay
@@ -121,9 +121,9 @@ module CheckExtra
 	    mdom  = @domain.name
 	    mhost = bestmx(mdom) || mdom
 	    return true unless openrelay(mdom, mhost)
-	    { "mailhost"   => mhost,
-	      "from_host"  => @fake_from,
-	      "to_host"    => @fake_dest }
+	    { 'mailhost'   => mhost,
+	      'from_host'  => @fake_from,
+	      'to_host'    => @fake_dest }
 	end
 
 	# DESC: Check that hostmaster address is valid
@@ -148,7 +148,7 @@ module CheckExtra
 		    end
 		}
 	    end
-	    { "hostmaster" => user }
+	    { 'hostmaster' => user }
 	end
 	
 	# DESC: check for MX or A
@@ -178,7 +178,7 @@ module CheckExtra
 		    end
 		}
 	    end
-	    { "postmaster" => user }
+	    { 'postmaster' => user }
 	end
 
 	# DESC:
@@ -194,9 +194,9 @@ module CheckExtra
 	# 
 	def tst_mail_delivery
 	    ip = bestresolverip
-	    if    !mx(ip).empty?			then "MX"
-	    elsif !addresses(@domain.name, ip).empty?	then "A"
-	    else					     "nodelivery"
+	    if    !mx(ip).empty?			then 'MX'
+	    elsif !addresses(@domain.name, ip).empty?	then 'A'
+	    else					     'nodelivery'
 	    end
 	end
     end

@@ -39,7 +39,7 @@ module CheckGeneric
     ## Check syntax validity of the domain name
     ##
     class DomainNameSyntax < Test
-	with_msgcat "test/generic.%s"
+	with_msgcat 'test/generic.%s'
 
 	#-- Checks --------------------------------------------------
 	# DESC: A domainname should only contains A-Z a-Z 0-9 '-' '.'
@@ -64,7 +64,7 @@ module CheckGeneric
     ## Check basic absurdity with the nameserver IP addresses
     ##
     class ServerAddress < Test
-	with_msgcat "test/generic.%s"
+	with_msgcat 'test/generic.%s'
 
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
@@ -119,7 +119,7 @@ module CheckGeneric
 	    }
 	    hosts.delete_if { |k, v| v.size < 2 }
 	    hosts.each { |k, v|	# Got at least 1 entry as ip != ip.uniq
-		return { "ip" => k, "ns" => v.join(", ") }
+		return { 'ip' => k, 'ns' => v.join(', ') }
 	    }
 	end
 
@@ -134,14 +134,14 @@ module CheckGeneric
 	    # Create output data for failure
 	    subnetlist = []
 	    same_net.each { |k, v|
-		hlist   = (v.collect { |i| ns = ns_from_ip(i) }).join(", ")
+		hlist   = (v.collect { |i| ns = ns_from_ip(i) }).join(', ')
 		prefix = case k
 			 when Address::IPv4 then 28
 			 when Address::IPv6 then 64
 			 end
 		subnetlist << "#{k}/#{prefix} (#{hlist})"
 	    }
-	    return { "subnets" => subnetlist.join(", ") }
+	    return { 'subnets' => subnetlist.join(', ') }
 	end
 
 	# DESC: Addresses should avoid belonging ALL to the same network
@@ -157,7 +157,7 @@ module CheckGeneric
 		     when Address::IPv4 then 28
 		     when Address::IPv6 then 64
 		     end
-	    return { "subnet" => "#{subnet}/#{prefix}" }
+	    return { 'subnet' => "#{subnet}/#{prefix}" }
 	end
     end
 
@@ -166,7 +166,7 @@ module CheckGeneric
     ## Check for nameserver!
     ##
     class NameServers < Test
-	with_msgcat "test/generic.%s"
+	with_msgcat 'test/generic.%s'
 
 	#-- Checks --------------------------------------------------
 	# DESC: A domain should have a nameserver!

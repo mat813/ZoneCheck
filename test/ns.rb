@@ -39,7 +39,7 @@ module CheckNetworkAddress
     ## Check domain NS records
     ##
     class NS < Test
-	with_msgcat "test/ns.%s"
+	with_msgcat 'test/ns.%s'
 
 	#-- Checks --------------------------------------------------
 	# DESC: NS entries should exists

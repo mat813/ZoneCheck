@@ -56,7 +56,7 @@
 #
 
 ## Installation path
-ZC_INSTALL_PATH		= (ENV["ZC_INSTALL_PATH"] || (ENV["HOME"] || "/homes/sdalu") + "/Repository/zonecheck").dup.untaint
+ZC_INSTALL_PATH		= (ENV['ZC_INSTALL_PATH'] || (ENV['HOME'] || '/homes/sdalu') + '/Repository/zonecheck').dup.untaint
 
 ## Directories
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
@@ -67,27 +67,27 @@ ZC_LOCALIZATION_DIR	= "#{ZC_INSTALL_PATH}/locale"
 ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
 
 ## Configuration
-ZC_CONFIG_FILE		= "zc.conf"
+ZC_CONFIG_FILE		= 'zc.conf'
 
 ## Lang
-ZC_LANG_FILE		= "zc.%s"
-ZC_LANG_DEFAULT		= "en"
+ZC_LANG_FILE		= 'zc.%s'
+ZC_LANG_DEFAULT		= 'en'
 
 ## Input methods
-ZC_DEFAULT_INPUT	= "cli"
+ZC_DEFAULT_INPUT	= 'cli'
 
-ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
-ZC_CGI_EXT		= "cgi"
+ZC_CGI_ENV_KEYS		= [ 'GATEWAY_INTERFACE', 'SERVER_ADDR' ]
+ZC_CGI_EXT		= 'cgi'
 
-ZC_GTK_ENV_KEYS		= [] #[ "DISPLAY" ]
+ZC_GTK_ENV_KEYS		= [] #[ 'DISPLAY' ]
 
 ## Publisher
-ZC_HTML_PATH		= "/zc"
+ZC_HTML_PATH		= '/zc'
 
 ## Contact / Details
-ZC_COPYRIGHT		= "AFNIC (c) 2003"
-ZC_CONTACT		= "ZoneCheck <zonecheck@nic.fr>"
-ZC_MAINTAINER		= "Stephane D'Alu <sdalu@nic.fr>"
+ZC_COPYRIGHT		= 'AFNIC (c) 2003'
+ZC_CONTACT		= 'ZoneCheck <zonecheck@nic.fr>'
+ZC_MAINTAINER		= 'Stephane D\'Alu <sdalu@nic.fr>'
 
 ## --> END OF CUSTOMIZATION <-- ######################################
 
@@ -96,14 +96,14 @@ ZC_MAINTAINER		= "Stephane D'Alu <sdalu@nic.fr>"
 # Identification
 #
 ZC_CVS_NAME	= %q$Name$
-ZC_NAME		= "ZoneCheck"
+ZC_NAME		= 'ZoneCheck'
 ZC_VERSION	= (Proc::new { 
 		       n = ZC_CVS_NAME.split[1]
 		       n = /^ZC-(.*)/.match(n) unless n.nil?
 		       n = n[1]                unless n.nil?
-		       n = n.gsub(/_/, ".")    unless n.nil?
+		       n = n.gsub(/_/, '.')    unless n.nil?
 		       
-		       n || "<unreleased>"
+		       n || '<unreleased>'
 		   }).call
 PROGNAME	= File.basename($0)
 
@@ -140,7 +140,7 @@ $SAFE = 1
 # Ensure '.' is not one of the possible path (too much trouble)
 # Add zonecheck directories to ruby path
 #
-$LOAD_PATH.delete_if { |path| path == "." }
+$LOAD_PATH.delete_if { |path| path == '.' }
 $LOAD_PATH << ZC_DIR << ZC_LIB
 
 
@@ -171,7 +171,7 @@ require 'testmanager'
 #  (earlier initialization, can also be set via input interface)
 #
 $dbg       = DBG::new
-$dbg.level = ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
+$dbg.level = ENV['ZC_DEBUG'] if ENV['ZC_DEBUG']
 
 
 #
@@ -208,14 +208,14 @@ $mc = MessageCatalog::new(ZC_LOCALIZATION_DIR)
 begin
     # Assume that if the ZC_LANG_FILE is available for a locale
     #  all the other necessary files are also available for that locale
-    [ ENV["LANG"], ZC_LANG_DEFAULT ].compact.each { |lang|
+    [ ENV['LANG'], ZC_LANG_DEFAULT ].compact.each { |lang|
 	if $mc.available?(ZC_LANG_FILE, lang)
-	    $dbg.msg(DBG::LOCALE, "Using locale: #{lang}")
+	    $dbg.msg(DBG::LOCALE) { "Using locale: #{lang}" }
 	    $mc.lang = lang
 	    $mc.read(ZC_LANG_FILE)
 	    break
 	end
-	$dbg.msg(DBG::LOCALE, "Unable to find locale for '#{lang}'")
+	$dbg.msg(DBG::LOCALE) { "Unable to find locale for '#{lang}'" }
     }
     raise "Default locale (#{ZC_LANG_DEFAULT}) not found" if $mc.lang.nil?
 rescue => e
@@ -250,21 +250,21 @@ class ZoneCheck
 	}
 
 	# Check environment variable ZC_INPUT
-	im ||= ENV["ZC_INPUT"]
+	im ||= ENV['ZC_INPUT']
 
 	# Try autoconfiguration
 	im ||= if ((ZC_CGI_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0) ||
 		  (PROGNAME =~ /\.#{ZC_CGI_EXT}$/)
-	       then "cgi"
+	       then 'cgi'
 	       elsif (ZC_GTK_ENV_KEYS.collect {|k| ENV[k]}).nitems > 0
-	       then "gtk"
+	       then 'gtk'
 	       else ZC_DEFAULT_INPUT
 	       end
 
 	# Sanity check on Input Method
 	if ! (im =~ /^\w+$/)
-	    l10n_error = $mc.get("w_error").upcase
-	    l10n_input = $mc.get("input_suspicious") % [ im ]
+	    l10n_error = $mc.get('w_error').upcase
+	    l10n_input = $mc.get('input_suspicious') % [ im ]
 	    $console.stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
 	end
@@ -274,8 +274,8 @@ class ZoneCheck
 	begin
 	    require "input/#{im}"
 	rescue LoadError => e
-	    l10n_error = $mc.get("w_error").upcase
-	    l10n_input = $mc.get("input_unsupported") % [ im ]
+	    l10n_error = $mc.get('w_error').upcase
+	    l10n_input = $mc.get('input_unsupported') % [ im ]
 	    $console.stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
 	end
@@ -330,7 +330,7 @@ class ZoneCheck
 	    @input.error(e.to_s, EXIT_ERROR)
 	rescue Config::SyntaxError => e
 	    @input.error("%s %d: %s\n\t(%s)" % [ 
-			     $mc.get("w_line").capitalize, e.pos.y, e.to_s,
+			     $mc.get('w_line').capitalize, e.pos.y, e.to_s,
 			     e.path ], EXIT_ERROR)
 	rescue Config::ConfigError => e
 	    @input.error(e.to_s, EXIT_ERROR)
@@ -367,7 +367,7 @@ class ZoneCheck
 		success = zc(cm)
 	    else
 		batchio = case @param.batch
-			  when "-"              then $stdin
+			  when '-'              then $stdin
 			  when String           then File::open(@param.batch) 
 			  when Param::BatchData then @param.batch
 			  end
@@ -375,12 +375,12 @@ class ZoneCheck
 		    next if line =~ /^\s*$/
 		    next if line =~ /^\#/
 		    if ! parse_batch(line)
-			@input.error($mc.get("xcp_zc_batch_parse"), EXIT_ERROR)
+			@input.error($mc.get('xcp_zc_batch_parse'), EXIT_ERROR)
 		    end
 		    param_autoconf_data
 		    success = false unless zc(cm)
 		}
-		batchio.close unless @param.batch == "-"
+		batchio.close unless @param.batch == '-'
 	    end
 	rescue Param::ParamError => e
 	    @param.publisher.engine.error(e.message)
@@ -427,7 +427,7 @@ class ZoneCheck
 
 	# Retrieve specific configuration
 	if (cfg = @config[@param.domain.name]).nil?
-	    l10n_error = $mc.get("input_unsupported_domain")
+	    l10n_error = $mc.get('input_unsupported_domain')
 	    @param.publisher.engine.error(l10n_error % @param.domain.name)
 	    return false
 	end

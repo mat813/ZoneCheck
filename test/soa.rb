@@ -39,7 +39,7 @@ module CheckNetworkAddress
     ## Check domain SOA record
     ##
     class SOA < Test
-	with_msgcat "test/soa.%s"
+	with_msgcat 'test/soa.%s'
 
 	#-- Tests ---------------------------------------------------
 	# DESC: SOA entries should exists
@@ -71,56 +71,56 @@ module CheckNetworkAddress
 	# DESC: SOA master should be fully qualified
 	def chk_soa_master_fq(ns, ip)
 	    return true if soa(ip).mname.absolute?
-	    { "mname" => soa(ip).mname }
+	    { 'mname' => soa(ip).mname }
 	end
 
 	# DESC: SOA master should not point to CNAME alias
 	def chk_soa_ns_cname(ns, ip)
 	    return true unless name = is_cname?(soa(ip).mname, ip)
-	    { "master" => soa(ip).mname, "alias" => name }
+	    { 'master' => soa(ip).mname, 'alias' => name }
 	end
 	
 	# DESC: recommanded format for serial is YYYYMMDDnn
 	def chk_soa_serial_fmt_YYYYMMDDnn(ns, ip)
 	    serial = soa(ip).serial
 	    return true if (serial > 1999000000) && (serial < 2010000000)
-	    { "serial" => serial }
+	    { 'serial' => serial }
 	end
 
 	# DESC: recommanded refresh is > 6h
 	def chk_soa_refresh_6h(ns, ip)
 	    return true if soa(ip).refresh >= 6*3600
-	    { "refresh" => soa(ip).refresh }
+	    { 'refresh' => soa(ip).refresh }
 	end
 
 	# DESC: coherence between 'retry' and 'refresh'
 	def chk_soa_retry_refresh(ns, ip)
 	    return true if soa(ip).retry <= soa(ip).refresh
-	    { "retry" => soa(ip).retry, "refresh" => soa(ip).refresh }
+	    { 'retry' => soa(ip).retry, 'refresh' => soa(ip).refresh }
 	end
 	
 	# DESC: recommanded retry is > 1h
 	def chk_soa_retry_1h(ns, ip)
 	    return true if soa(ip).retry >= 3600
-	    { "retry" => soa(ip).retry }
+	    { 'retry' => soa(ip).retry }
 	end
 
 	# DESC: recommanded expire is > 7d
 	def chk_soa_expire_7d(ns, ip)
 	    return true if soa(ip).expire >= 7 * 86400
-	    { "expire" => soa(ip).expire }
+	    { 'expire' => soa(ip).expire }
 	end
 
 	# DESC: coherence between 'expire' and 'refresh'
 	def chk_soa_expire_7refresh(ns, ip)
 	    return true if soa(ip).expire >= 7 * soa(ip).refresh
-	    { "expire"  => soa(ip).expire, "refresh" => soa(ip).refresh }
+	    { 'expire'  => soa(ip).expire, 'refresh' => soa(ip).refresh }
 	end
 
 	# DESC: recommanded minimum is <= 3h, not working > 1d
 	def chk_soa_minimum_1d(ns, ip)
 	    return true if soa(ip).minimum <= 86400
-	    { "minimum" => soa(ip).minimum }
+	    { 'minimum' => soa(ip).minimum }
 	end
 
 	# DESC: Ensure coherence between SOA and ANY
@@ -133,9 +133,9 @@ module CheckNetworkAddress
 	    serial_ref   = soa(@domain.ns[0][1][0]).serial
 	    serial_other = soa(ip).serial
 	    return true if serial_ref >= serial_other
-	    { "serial_ref"  => serial_ref,
-	      "host_ref"    => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
-	      "serial_this" => serial_other }
+	    { 'serial_ref'  => serial_ref,
+	      'host_ref'    => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
+	      'serial_this' => serial_other }
 	end
 
 
@@ -144,9 +144,9 @@ module CheckNetworkAddress
 	    rname_ref   = soa(@domain.ns[0][1][0]).rname
 	    rname_other = soa(ip).rname
 	    return true if rname_ref == rname_other
-	    { "rname_ref"   => rname_ref,
-	      "host_ref"    => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
-	      "rname_this"  => rname_other }
+	    { 'rname_ref'   => rname_ref,
+	      'host_ref'    => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
+	      'rname_this'  => rname_other }
 	end
 
 	# DESC: coherence of master with primary
@@ -154,9 +154,9 @@ module CheckNetworkAddress
 	    mname_ref   = soa(@domain.ns[0][1][0]).mname
 	    mname_other = soa(ip).mname
 	    return true if mname_ref == mname_other
-	    { "mname_ref"  => mname_ref,
-	      "host_ref"   => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
-	      "mname_this" => mname_other }
+	    { 'mname_ref'  => mname_ref,
+	      'host_ref'   => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
+	      'mname_this' => mname_other }
 	end
     end
 end

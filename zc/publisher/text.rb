@@ -55,7 +55,7 @@ module Publisher
 		    @precision	= precision
 		    @mutex	= Mutex::new
 		    @updater	= nil
-		    @l10n_unit	= $mc.get("pgr_speed_unit")
+		    @l10n_unit	= $mc.get('pgr_speed_unit')
 		end
 		
 		def start(length)
@@ -65,7 +65,7 @@ module Publisher
 		    @processed	= 0
 		    @tick       = 0
 
-		    @output.write $console.ctl["vi"]
+		    @output.write $console.ctl['vi']
 		    @output.print barstr
 
 		    @updater	= Thread::new { 
@@ -88,7 +88,7 @@ module Publisher
 
 				@output.write "\r"
 				@output.print barstr
-				@output.write $console.ctl["ce"]
+				@output.write $console.ctl['ce']
 				@output.flush
 			    }
 			end
@@ -101,12 +101,12 @@ module Publisher
 
 		def done
 		    @mutex.synchronize { @updater.kill }
-		    @output.write "\r" + $console.ctl["ce"]
+		    @output.write "\r" + $console.ctl['ce']
 		    @output.flush
 		end
 		
 		def finish
-		    @output.write $console.ctl["ve"]
+		    @output.write $console.ctl['ve']
 		end
                 
 		protected
@@ -128,7 +128,7 @@ module Publisher
 				  end
 			pct_s	= "%2d%%" % pct
 			eta_s	= "ETA " + sec_to_timestr(eta)
-			bar_s	= "=" * (BarSize * pct / 100) + ">"
+			bar_s	= '=' * (BarSize * pct / 100) + '>'
 			
 			"%-4s[%-#{BarSize}.#{BarSize}s] %-11s %10s %12s" % [
 			    pct_s, bar_s, @processed, speed_s, eta_s ]
@@ -168,7 +168,7 @@ module Publisher
 				  then PBar::new(@o, 1)
 				  else nil
 				  end
-		@l10n_testing	= $mc.get("w_testing").capitalize
+		@l10n_testing	= $mc.get('w_testing').capitalize
 	    end
 	    
 	    # Start progression
@@ -202,7 +202,7 @@ module Publisher
 		if @publisher.rflag.testdesc
 		    xtra = if    ip then " (IP=#{ip})"
 			   elsif ns then " (NS=#{ns})"
-			   else          ""
+			   else          ''
 			   end
 	    
 		    @o.puts "#{@l10n_testing}: #{desc}#{xtra}"
@@ -214,7 +214,7 @@ module Publisher
 
 	def initialize(rflag, ostream=$stdout)
 	    super(rflag, ostream)
-	    @count_txt	= $mc.get("title_progress")
+	    @count_txt	= $mc.get('title_progress')
 	    @progress	= Progress::new(self)
 	end
 
@@ -224,7 +224,7 @@ module Publisher
 	def error(text)
 	    paragraph = ::Text::Format::new
 	    paragraph.width = 72
-	    paragraph.tag   = $mc.get("w_error").upcase + ": "
+	    paragraph.tag   = $mc.get('w_error').upcase + ': '
 	    @o.puts paragraph.format(text)
 	end
 
@@ -232,8 +232,8 @@ module Publisher
 	def intro(domain)
 	    return unless @rflag.intro
 
-	    l10n_zone	= $mc.get("ns_zone").upcase
-	    l10n_ns	= $mc.get("ns_ns"  ).upcase
+	    l10n_zone	= $mc.get('ns_zone').upcase
+	    l10n_ns	= $mc.get('ns_ns'  ).upcase
 	    sz		= [ l10n_zone.length, l10n_ns.length+3 ].max
 
 	    @o.printf "%-*s : %s\n", sz, l10n_zone, domain.name
@@ -241,7 +241,7 @@ module Publisher
 		n = domain.ns[i]
 		@o.printf "%-*s : %s [%s]\n", 
 		    sz, i == 0 ? "#{l10n_ns} <=" : "#{l10n_ns}  ",
-		    n[0].to_s, n[1].join(", ")
+		    n[0].to_s, n[1].join(', ')
 	    }
 	    @o.puts
 	end
@@ -264,9 +264,9 @@ module Publisher
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get("w_info_id")
-	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get("w_warning_id")
-	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get("w_fatal_id")
+	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get('w_info_id')
+	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get('w_warning_id')
+	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get('w_fatal_id')
 	    
 	    i_tag = i_tag.upcase if i_unexp
 	    w_tag = w_tag.upcase if w_unexp
@@ -330,7 +330,7 @@ module Publisher
 		    txt.tag   = "  "
 		    txt.format(desc.dtl).split(/\n/).each { |l|
 			@o.puts " : #{l}" }
-		    @o.puts " `..... .. .. . .  ."
+		    @o.puts ' `..... .. .. . .  .'
 		end
 
 		# Explanation
@@ -344,7 +344,7 @@ module Publisher
 			@o.puts " | #{tag}: #{h}"
 			b.each { |l| @o.puts " |  #{l}" }
 		    }
-		    @o.puts " `----- -- -- - -  -"
+		    @o.puts ' `----- -- -- - -  -'
 		end
 	    end
 		

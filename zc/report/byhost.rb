@@ -54,7 +54,7 @@ module Report
 		}
 
 		# Print 'generic' first
-		gentag = $mc.get("w_generic")	# XXX: not nice
+		gentag = $mc.get('w_generic')	# XXX: not nice
 		display(byhost[gentag], gentag)
 		byhost.delete(gentag)
 		

@@ -59,12 +59,12 @@ module CheckNetworkAddress
     ##   the tests won't be affected by the transport flags
     ## 
     class Connectivity < Test
-	with_msgcat "test/connectivity.%s"
+	with_msgcat 'test/connectivity.%s'
 
 	def initialize(*args)
 	    super(*args)
-	    @ping4_cmd = const("ping4")
-	    @ping6_cmd = const("ping6")
+	    @ping4_cmd = const('ping4')
+	    @ping6_cmd = const('ping6')
 	end
 
 	#-- Checks --------------------------------------------------
@@ -118,7 +118,7 @@ module CheckNetworkAddress
 	    ping_tmpl = case ip
 			when Address::IPv4 then @ping4_cmd
 			when Address::IPv6 then @ping6_cmd
-			else raise "INTERNAL: Unknown address format"
+			else raise 'INTERNAL: Unknown address format'
 			end
 	    ping_cmd = ping_tmpl % [ ip.to_s ]
 

@@ -143,7 +143,7 @@ module Report
 	end
 
 	def display_std
-	    raise "abstract method"
+	    raise 'abstract method'
 	end
     end
 end

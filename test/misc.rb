@@ -45,7 +45,7 @@ module CheckNetworkAddress
     ##
     ##
     class Misc < Test
-	with_msgcat "test/misc.%s"
+	with_msgcat 'test/misc.%s'
 
 	#-- Checks --------------------------------------------------
 	# DESC:
@@ -71,8 +71,8 @@ module CheckNetworkAddress
 	    mname = soa(ip).mname
 	    if @domain.ns[0][0] != mname
 		@domain.ns[1..-1].each { |nsname|
-		    return { "given_primary" => @domain.ns[0][0],
-			     "primary"       => mname } if nsname == mname }
+		    return { 'given_primary' => @domain.ns[0][0],
+			     'primary'       => mname } if nsname == mname }
 	    end
 	    true
 	end
@@ -83,10 +83,10 @@ module CheckNetworkAddress
 	    nslist_from_param = @domain.ns.collect { |n, ips| n }
 
 	    return true if nslist_from_ns.unsorted_eql?(nslist_from_param)
-	    { "list_from_ns"    => nslist_from_ns   .collect{|e| e.to_s } \
-		                                    .sort.join(", "),
-	      "list_from_param" => nslist_from_param.collect{|e| e.to_s } \
-		                                    .sort.join(", ") }
+	    { 'list_from_ns'    => nslist_from_ns   .collect{|e| e.to_s } \
+		                                    .sort.join(', '),
+	      'list_from_param' => nslist_from_param.collect{|e| e.to_s } \
+		                                    .sort.join(', ') }
 	end
 
 	# DESC: Ensure that a server claiming to be recursive really is it
@@ -109,7 +109,7 @@ module CheckNetworkAddress
 	#-- Tests ---------------------------------------------------
 	# 
 	def tst_recursive_server(ns, ip)
-	    rec(ip) ? "true" : "false"
+	    rec(ip) ? 'true' : 'false'
 	end
     end
 end

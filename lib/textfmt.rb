@@ -29,7 +29,7 @@ module Text
         attr_accessor :tag
 	attr_accessor :style
 
-        def build_line(line, width, tag="", last=false)
+        def build_line(line, width, tag='', last=false)
 	    case @style
 	    when JUSTIFY
 		return line if     last || line.empty?
@@ -41,8 +41,8 @@ module Text
 		words.reverse.each { |rw|
 		    next if rw =~ /^\S/
 		    if spaces > 0
-		    then rw.replace((" " * (ws+1)) + rw) ; spaces -= 1
-		    else rw.replace((" " * (ws)  ) + rw)
+		    then rw.replace((' ' * (ws+1)) + rw) ; spaces -= 1
+		    else rw.replace((' ' * (ws)  ) + rw)
 		    end
 		}
 		tag + words.join('') + "\n"
@@ -64,27 +64,27 @@ module Text
             line  = words.shift
             while w = words.shift
                 break unless (w.size + line.size) < (first_width - 1)
-		line << " " << w
+		line << ' ' << w
             end
             out << build_line(line, @width, @tag, w.nil?) unless line.nil?
 
             line  = w
             while w = words.shift
                 if (w.size + line.size < (@width - 1))
-		    line << " " << w
+		    line << ' ' << w
                 else
-                    out << build_line(line, @width,"", w.nil?) unless line.nil?
+                    out << build_line(line, @width,'', w.nil?) unless line.nil?
                     line = w
                 end
             end
-	    out << build_line(line, @width, "", true) unless line.nil?
+	    out << build_line(line, @width, '', true) unless line.nil?
 
             out.join('')
         end
 
         def initialize
             @width	= 78
-            @tag	= "    "
+            @tag	= '    '
             @style	= LEFT_ALIGN
         end
     end

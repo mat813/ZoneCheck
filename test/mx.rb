@@ -39,7 +39,7 @@ module CheckNetworkAddress
     ## Check domain MX record
     ##
     class MX < Test
-	with_msgcat "test/mx.%s"
+	with_msgcat 'test/mx.%s'
 
 	#-- Checks --------------------------------------------------
 	# DESC: MX entries should exists
@@ -85,7 +85,7 @@ module CheckNetworkAddress
 
 	# DESC: check for absence of wildcard MX
 	def chk_mx_no_wildcard(ns, ip)
-	    host    = const("inexistant_hostname")
+	    host    = const('inexistant_hostname')
 	    host_fq = @domain.name.prepend(host)
 	    mx(ip, host_fq).empty?
 	end
@@ -93,9 +93,9 @@ module CheckNetworkAddress
 
 	#-- Tests ---------------------------------------------------
 	def tst_mail_by_mx_or_a(ns, ip)
-	    if    !mx(ip).empty?			then "MX"
-	    elsif !addresses(@domain.name, ip).empty?	then "A"
-	    else					     "nodelivery"
+	    if    !mx(ip).empty?			then 'MX'
+	    elsif !addresses(@domain.name, ip).empty?	then 'A'
+	    else					     'nodelivery'
 	    end
 	end
     end

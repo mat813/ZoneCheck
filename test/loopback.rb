@@ -40,7 +40,7 @@ module CheckNetworkAddress
     ## Check for loopback network delegation/resolution
     ## 
     class Loopback < Test
-	with_msgcat "test/loopback.%s"
+	with_msgcat 'test/loopback.%s'
 
 	#-- Constants -----------------------------------------------
 	IPv4LoopbackName = NResolv::DNS::Name::create(Address::IPv4::Loopback)
@@ -61,21 +61,17 @@ module CheckNetworkAddress
 	# DESC: loopback network should be delegated
 	def chk_loopback_delegation(ns, ip)
 	    case ip
-	    when Address::IPv4
-		ipv4_delegated?(ip)
-	    when Address::IPv6
-		ipv4_delegated?(ip) && ipv6_delegated?(ip)
+	    when Address::IPv4	then ipv4_delegated?(ip)
+	    when Address::IPv6	then ipv4_delegated?(ip) && ipv6_delegated?(ip)
 	    end
 	end
 
 	# DESC: loopback host reverse should exists
 	def chk_loopback_host(ns, ip)
 	    case ip
-	    when Address::IPv4
-		!ptr(ip, IPv4LoopbackName).empty?
-	    when Address::IPv6
-		!ptr(ip, IPv4LoopbackName).empty? &&
-		!ptr(ip, IPv6LoopbackName).empty?
+	    when Address::IPv4	then !ptr(ip, IPv4LoopbackName).empty?
+	    when Address::IPv6	then !ptr(ip, IPv4LoopbackName).empty? &&
+		                     !ptr(ip, IPv6LoopbackName).empty?
 	    end
 	end
     end

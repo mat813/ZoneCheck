@@ -69,7 +69,7 @@ module Publisher
 	    def initialize(publisher)
 		@publisher	= publisher
 		@o		= publisher.output
-		@l10n_testing	= $mc.get("w_testing").capitalize
+		@l10n_testing	= $mc.get('w_testing').capitalize
 	    end
 	    
 	    # Start progression
@@ -77,7 +77,7 @@ module Publisher
 		title = if @publisher.rflag.quiet
 			then ""
 			else "<h2 id=\"t_progress\">" + 
-				$mc.get("title_progress") + "</h2>"
+				$mc.get('title_progress') + "</h2>"
 			end
 
 		# Counter
@@ -86,12 +86,12 @@ module Publisher
 			pgr_quiet_param  = @publisher.rflag.quiet ? "true" \
 			                                          : "false"
 			pgr_locale_param = [ 
-			    $mc.get("title_progress"),
-			    $mc.get("pgr_progress"),
-			    $mc.get("pgr_test"),
-			    $mc.get("pgr_speed"),
-			    $mc.get("pgr_time"),
-			    $mc.get("pgr_na") ]
+			    $mc.get('title_progress'),
+			    $mc.get('pgr_progress'),
+			    $mc.get('pgr_test'),
+			    $mc.get('pgr_speed'),
+			    $mc.get('pgr_time'),
+			    $mc.get('pgr_na') ]
 			pgr_start_param  = count
 
 			str  = 'zc_pgr_setlocale("%s", "%s", "%s", "%s", "%s", "%s");' % pgr_locale_param
@@ -140,7 +140,7 @@ module Publisher
 
 		xtra = if    ip then " (IP=#{ip})"
 		       elsif ns then " (NS=#{ns})"
-		       else          ""
+		       else          ''
 		       end
 		msg = CGI::escapeHTML("#{desc}#{xtra}")
 
@@ -168,7 +168,7 @@ module Publisher
 	def initialize(rflag, ostream=$stdout)
 	    super(rflag, ostream)
 	    @progress		= Progress::new(self)
-	    @publish_path	= ZC_HTML_PATH.gsub(/\/+$/, "")
+	    @publish_path	= ZC_HTML_PATH.gsub(/\/+$/, '')
 	end
 
 	def error(text)
@@ -178,9 +178,9 @@ module Publisher
 	#------------------------------------------------------------
 
 	def begin
-	    l10n_form        = $mc.get("w_form").capitalize
-	    l10n_batch_form  = l10n_form+": "+$mc.get("t_batch" ).capitalize
-	    l10n_single_form = l10n_form+": "+$mc.get("t_single").capitalize
+	    l10n_form        = $mc.get('w_form').capitalize
+	    l10n_batch_form  = l10n_form+': '+$mc.get('t_batch' ).capitalize
+	    l10n_single_form = l10n_form+': '+$mc.get('t_single').capitalize
 
 	    # XXX: javascript only if counter
 	    @o.print <<"EOT"
@@ -201,13 +201,13 @@ module Publisher
     <link rel="bookmark" title="#{l10n_single_form}"
 	  href="#{@publish_path}/#{$mc.lang}/"             type="text/html">
 
-    <link rel="section" title="#{$mc.get("title_zoneinfo")}"
+    <link rel="section" title="#{$mc.get('title_zoneinfo')}"
           href="#t_zoneinfo"                               type="text/html">
-    <link rel="section" title="#{$mc.get("title_progress")}"
+    <link rel="section" title="#{$mc.get('title_progress')}"
           href="#t_progress"                               type="text/html">
-    <link rel="section" title="#{$mc.get("title_testres")}"
+    <link rel="section" title="#{$mc.get('title_testres')}"
           href="#t_testres"                                type="text/html">
-    <link rel="section" title="#{$mc.get("title_status")}"
+    <link rel="section" title="#{$mc.get('title_status')}"
           href="#t_status"                                 type="text/html">
 
 
@@ -246,7 +246,7 @@ EOT
 
 	def end
 	    @o.puts HTML.jscript { 
-		"zc_contextmenu_setlocale(\"#{$mc.get("w_name")}\", \"#{$mc.get("w_details")}\", \"#{$mc.get("w_references")}\", \"#{$mc.get("w_elements")}\");\n" +
+		"zc_contextmenu_setlocale(\"#{$mc.get('w_name')}\", \"#{$mc.get('w_details')}\", \"#{$mc.get('w_references')}\", \"#{$mc.get('w_elements')}\");\n" +
 		    "zc_contextmenu_start();" }
 	    @o.print <<"EOT"
 
@@ -289,11 +289,11 @@ EOT
 
 
 	    unless @rflag.quiet
-		title = $mc.get("title_zoneinfo")
+		title = $mc.get('title_zoneinfo')
 		@o.puts "<h2 id=\"t_zoneinfo\">#{title}</h2>"
 	    end
 
-	    l10n_zone = $mc.get("ns_zone").capitalize
+	    l10n_zone = $mc.get('ns_zone').capitalize
 
 	    @o.puts "<div class=\"zc-zinfo\">"
 	    # Easy parseable comment
@@ -307,13 +307,13 @@ EOT
 	    domain.ns.each_index { |i| 
 		ns_ip = domain.ns[i]
 		if i == 0
-		    css  = "zc-ns-prim"
-		    desc = $mc.get("ns_primary").capitalize
-		    logo = "primary"
+		    css  = 'zc-ns-prim'
+		    desc = $mc.get('ns_primary').capitalize
+		    logo = 'primary'
 		else
-		    css  = "zc-ns-sec"
-		    desc = $mc.get("ns_secondary").capitalize
-		    logo = "secondary"
+		    css  = 'zc-ns-sec'
+		    desc = $mc.get('ns_secondary').capitalize
+		    logo = 'secondary'
 		end
 
 		desc = "<img src=\"#{@publish_path}/img/#{logo}.png\" alt= \"#{desc}\">"
@@ -327,7 +327,7 @@ EOT
 	end
 
 	def diag_start()
-	    @o.puts "<h2 id=\"t_testres\">#{$mc.get("title_testres")}</h2>"
+	    @o.puts "<h2 id=\"t_testres\">#{$mc.get('title_testres')}</h2>"
 	end
 
 	def diag_section(title)
@@ -338,9 +338,9 @@ EOT
 		i_count, i_unexp, w_count, w_unexp, f_count, f_unexp,
 		res, severity)
 
-	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get("w_info_id")
-	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get("w_warning_id")
-	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get("w_fatal_id")
+	    i_tag = @rflag.tagonly ? Config::Info    : $mc.get('w_info_id')
+	    w_tag = @rflag.tagonly ? Config::Warning : $mc.get('w_warning_id')
+	    f_tag = @rflag.tagonly ? Config::Fatal   : $mc.get('w_fatal_id')
 	    
 	    i_tag = i_tag.upcase if i_unexp
 	    w_tag = w_tag.upcase if w_unexp
@@ -356,7 +356,7 @@ EOT
 	    @o.puts "<table width=\"100%\">"
 	    @o.puts "<tr class=\"zc-title\"><td width=\"100%\">#{domainname}</td><td>#{summary}</td></tr>"
 	    if res.nil?
-		l10n_perfect = $mc.get("w_perfect").capitalize
+		l10n_perfect = $mc.get('w_perfect').capitalize
 		@o.puts "<tr><td colspan=\"2\"><b>#{l10n_perfect}</b></td></tr>"
 		@o.puts "<tr><td colspan=\"2\">&nbsp;</td></tr>"
 
@@ -455,7 +455,7 @@ EOT
 
 	def status(domainname, i_count, w_count, f_count)
 	    unless @rflag.quiet
-		l10n_title = $mc.get("title_status")
+		l10n_title = $mc.get('title_status')
 		@o.puts "<h2 id=\"t_status\">#{l10n_title}</h2>"
 	    end
 

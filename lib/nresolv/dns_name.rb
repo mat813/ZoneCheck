@@ -186,10 +186,7 @@ class NResolv
 
 	    # XXX: not BitString ready
 	    def to_s
-		if self == Root
-		then '.'
-		else @labels.join('.')
-		end
+		self == Root ? '.' : @labels.join('.')
 	    end
 
 	    def depth

@@ -409,8 +409,8 @@ class Param
 
 	def autoconf
 	    # Debug
-	    $dbg.msg(DBG::AUTOCONF) { "configuration file: #{@cfgfile}" }
-	    $dbg.msg(DBG::AUTOCONF) { "tests directory: #{@testdir}"    }
+	    $dbg.msg(DBG::AUTOCONF) { "Configuration file: #{@cfgfile}" }
+	    $dbg.msg(DBG::AUTOCONF) { "Tests directory: #{@testdir}"    }
 	end
     end
 
@@ -728,22 +728,16 @@ class Param
     # WRITER: error
     #
     def error=(string)
-	return if string =~ /^\s*$/
+	return if (string = string.strip).empty?
 	string.split(/\s*,\s*/).each { |token|
 	    case token
-	    when 'af',  'allfatal'
-		@report.allfatal
-	    when 'aw',  'allwarning'
-		@report.allwarning
-	    when 's',   'stop'
-		@rflag.stop_on_fatal = true
-	    when 'ns',  'nostop'
-		@rflag.stop_on_fatal = false
-	    when 'std', 'standard'
-		@report.standard
-		@rflag.stop_on_fatal = false
-	    else
-		raise ParamError,
+	    when 'af',  'allfatal'	then @report.allfatal
+	    when 'aw',  'allwarning'	then @report.allwarning
+	    when 's',   'stop'		then @rflag.stop_on_fatal = true
+	    when 'ns',  'nostop'	then @rflag.stop_on_fatal = false
+	    when 'std', 'standard'	then @report.standard
+		                             @rflag.stop_on_fatal = false
+	    else raise ParamError,
 		    $mc.get('xcp_param_unknown_modopt') % [ token, 'error' ]
 	    end
 	}
@@ -753,25 +747,17 @@ class Param
     # WRITER: verbose
     #
     def verbose=(string)
-	return if string =~ /^\s*$/
+	return if (string = string.strip).empty?
 	string.split(/\s*,\s*/).each { |token|
 	    case token
-	    when 'i', 'intro'
-		@rflag.intro	= true
-	    when 'n', 'testname'
-		@rflag.testname	= true
-	    when 'x', 'explain'
-		@rflag.explain	= true
-	    when 'd', 'details'
-		@rflag.details  = true
-	    when 'o', 'reportok'
-		@rflag.reportok	= true
-	    when 't', 'testdesc'
-		@rflag.testdesc	= true
-	    when 'c', 'counter'
-		@rflag.counter	= true
-	    else
-		raise ParamError,
+	    when 'i', 'intro'		then @rflag.intro	= true
+	    when 'n', 'testname'	then @rflag.testname	= true
+	    when 'x', 'explain'		then @rflag.explain	= true
+	    when 'd', 'details'		then @rflag.details	= true
+	    when 'o', 'reportok'	then @rflag.reportok	= true
+	    when 't', 'testdesc'	then @rflag.testdesc	= true
+	    when 'c', 'counter'		then @rflag.counter	= true
+	    else raise ParamError,
 		    $mc.get('xcp_param_unknown_modopt') % [ token, 'verbose' ]
 	    end
 	}
@@ -781,7 +767,7 @@ class Param
     # WRITER: output
     #
     def output=(string)
-	return if string =~ /^\s*$/
+	return if (string = string.strip).empty?
 	string.split(/\s*,\s*/).each { |token|
 	    case token
 	    when 'bs', 'byseverity'
@@ -813,21 +799,15 @@ class Param
     # WRITER: transp
     #
     def transp=(string)
-	return if string =~ /^\s*$/
+	return if (string = string.strip).empty?
 	string.split(/\s*,\s*/).each { |token|
 	    case token
-	    when '4', 'ipv4'
-		@network.ipv4 = true
-	    when '6', 'ipv6'
-		@network.ipv6 = true
-	    when 'u', 'udp'
-		@network.query_mode = NResolv::DNS::Client::UDP
-	    when 't', 'tcp'
-		@network.query_mode = NResolv::DNS::Client::TCP
-	    when 's', 'std'
-		@network.query_mode = NResolv::DNS::Client::STD
-	    else
-		raise ParamError,
+	    when '4', 'ipv4'	then @network.ipv4 = true
+	    when '6', 'ipv6'	then @network.ipv6 = true
+	    when 'u', 'udp'	then @network.query_mode = NResolv::DNS::Client::UDP
+	    when 't', 'tcp'	then @network.query_mode = NResolv::DNS::Client::TCP
+	    when 's', 'std'	then @network.query_mode = NResolv::DNS::Client::STD
+	    else raise ParamError,
 		    $mc.get('xcp_param_unknown_modopt') % [token, 'transp']
 	    end
 	}

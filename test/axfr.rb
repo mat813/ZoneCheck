@@ -39,7 +39,7 @@ module CheckNetworkAddress
     ## Check domain NS records
     ##
     class AXFR < Test
-	with_msgcat "test/axfr.%s"
+	with_msgcat 'test/axfr.%s'
 
 	#-- Checks --------------------------------------------------
 	# DESC: Zone transfer is possible
