@@ -268,7 +268,7 @@ EOT
     </span>
 Statistics: #{"%d tests in %.2f sec accros %d nameservers" % [info.testcount, info.testingtime, info.nscount]} <br>
 Release: #{$zc_name}-#{CGI::escapeHTML($zc_version)} <br>
-Last generated: #{Time::now}
+Last generated: #{Time::now.strftime("%Y/%m/%d %H:%M %Z")}
 <!-- <br> Contact: #{$zc_contact} -->
   </body>
 </html>
