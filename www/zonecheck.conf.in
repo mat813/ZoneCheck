@@ -1,0 +1,23 @@
+# $Id$
+
+    ScriptAlias @HTML_PATH@/cgi-bin/    @CGIDIR@/
+    <Directory @CGIDIR@/>
+        Options ExecCGI
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+
+    AliasMatch  ^@HTML_PATH@/?$         @LIBEXEC@/@PROGNAME@/www/html/form.html
+    AliasMatch  ^@HTML_PATH@/(en|fr)/?$ @LIBEXEC@/@PROGNAME@/www/html/form.html.$1
+    AliasMatch  ^@HTML_PATH@/(en|fr)/(.*)$ @LIBEXEC@/@PROGNAME@/www/html/$2.$1
+    Alias       @HTML_PATH@/js/         @LIBEXEC@/@PROGNAME@/www/js/
+    Alias       @HTML_PATH@/style/      @LIBEXEC@/@PROGNAME@/www/style/
+    Alias       @HTML_PATH@/img/        @LIBEXEC@/@PROGNAME@/www/img/
+    Alias       @HTML_PATH@/            @LIBEXEC@/@PROGNAME@/www/html/
+
+    <Directory @LIBEXEC@/@PROGNAME@/www/>
+        Options Includes MultiViews
+        Order allow,deny
+        Allow from all
+    </Directory>

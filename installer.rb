@@ -57,6 +57,22 @@ class Installer
     end
 
 
+    def configure
+	puts "==> Configure"
+	[ 'www/zonecheck.conf.in' ].each { |in_filename|
+	    out_filename = in_filename.gsub(/\.in$/, "")
+	    puts "Generating: #{out_filename}"
+	    content = File.readlines(in_filename)
+	    ENV.each { |k, v|
+		content.each { |line|
+		    line.gsub!(/@#{k}@/, v)
+		}
+	    }
+	    File::open(out_filename, "w") { |io| io.puts content } 
+	}
+	puts
+    end
+
 
 
     def configinfo
@@ -192,21 +208,30 @@ EOT
 	inst_cli
 	inst_cgi    ; patch_cgi
 	inst_doc
+	true
     end
     def rule_cli
 	inst_common ; patch_common
 	inst_cli
+	true
     end
     def rule_cgi
 	inst_common ; patch_common
 	inst_cgi    ; patch_cgi
+	true
     end
     def rule_doc
 	inst_doc
+	true
     end
-
-    alias rule_configinfo configinfo
-
+    def rule_configinfo
+	configinfo
+	false
+    end
+    def rule_configure
+	configure
+	false
+    end
 end 
 
 
@@ -224,6 +249,7 @@ end
 
 
 inst = Installer::new
+info = false
 
 if ARGV.empty?
     inst.configinfo 
@@ -236,8 +262,8 @@ else
     }
 
     ARGV.each { |rule|
-	inst.send "rule_#{rule}"
+	info ||= inst.send "rule_#{rule}"
     }
     
-    inst.info
+    inst.info if info
 end
