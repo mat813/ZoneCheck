@@ -101,6 +101,35 @@ module Input
 	    @opts.quiet = true
 	end
 
+	def parse(p)
+	    begin
+		opts_analyse(p)
+		args_analyse(p) unless p.test.list || p.test.desctype
+	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
+		return false
+	    end
+	    true
+	end
+
+	def interact(p, c, tm)
+	    true
+	end
+
+	def usage(errcode, io=$console.stderr)
+	    io.print $mc.get("input_cli_usage").gsub("PROGNAME", PROGNAME)
+	    exit errcode unless errcode.nil?
+	end
+
+	def error(str, errcode=nil, io=$console.stderr)
+	    l10n_error = $mc.get("w_error").upcase
+	    io.puts "#{l10n_error}: #{str}"
+	    exit errcode unless errcode.nil?
+	end
+
+
+	#-- PRIVATE -------------------------------------------------
+	private
+
 	def opts_definition
 	    [   [ "--help",	"-h",	GetoptLong::NO_ARGUMENT       ],
 		[ "--version",	'-V',	GetoptLong::NO_ARGUMENT       ],
@@ -192,33 +221,13 @@ EOT
 		    raise Param::ParamError, 
 			$mc.get("xcp_param_domain_expected") 
 		end
-		p.domain.name = ARGV[0]
 	    end
+	    setdomain(p, ARGV[0])
 	end
 
-	def parse(p)
-	    begin
-		opts_analyse(p)
-		args_analyse(p) unless p.test.list || p.test.desctype
-	    rescue GetoptLong::InvalidOption, GetoptLong::MissingArgument
-		return false
-	    end
-	    true
+	def setdomain(p, arg)
+	    p.domain.name = arg
 	end
 
-	def interact(p, c, tm)
-	    true
-	end
-
-	def usage(errcode, io=$console.stderr)
-	    io.print $mc.get("input_cli_usage").gsub("PROGNAME", PROGNAME)
-	    exit errcode unless errcode.nil?
-	end
-
-	def error(str, errcode=nil, io=$console.stderr)
-	    l10n_error = $mc.get("w_error").upcase
-	    io.puts "#{l10n_error}: #{str}"
-	    exit errcode unless errcode.nil?
-	end
     end
 end

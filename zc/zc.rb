@@ -288,143 +288,6 @@ class ZoneCheck
 	@testlist	= nil
     end
 
-    def destroy
-    end
-
-
-    def lastaction(success)
-    end
-
-    def parse_batch(line)
-	case line
-	when /^DOM=(\S+)\s+NS=(\S+)\s*$/
-	    @param.domain = Param::Domain::new($1, $2)
-	    true
-	when /^DOM=(\S+)\s*$/
-	    @param.domain = Param::Domain::new($1)
-	    true
-	else
-	    false
-	end
-    end
-
-
-    def zc(cm)
-	# Setup publisher (for the domain)
-	@param.publisher.engine.setup(@param.domain.name)
-
-	# Retrieve specific configuration
-	if (cfg = @config[@param.domain.name]).nil?
-	    l10n_error = $mc.get("input_unsupported_domain")
-	    @param.publisher.engine.error(l10n_error % @param.domain.name)
-	    return false
-	end
-
-	# Display intro (ie: domain and nameserver summary)
-	@param.publisher.engine.intro(@param.domain)
-	
-	# Initialise and check
-	@test_manager.init(cfg, cm, @param)
-	success = begin
-		      @test_manager.check
-		      true
-		  rescue Report::FatalError
-		      false
-		  end
-	
-	# Finish diagnostic (in case of pending output)
-	@param.report.finish
-
-	# Lastaction hook
-	lastaction(success)
-
-	# Return status
-	return success
-    end
-
-    def do_check
-	@param.fs.autoconf
-	@param.rflag.autoconf
-	@param.publisher.autoconf(@param.rflag)
-	@param.network.autoconf
-	@param.resolver.autoconf
-	@param.test.autoconf
-	@param.option.autoconf
-
-	# Begin formatter
-	@param.publisher.engine.begin
-	
-	# 
-	success = true
-	begin
-	    if ! @param.batch
-		cm = CacheManager::create(@param.resolver.local,
-					  @param.network.query_mode)
-		
-		@param.domain.autoconf(@param.resolver.local)
-		@param.report.autoconf(@param.domain, 
-				       @param.rflag, @param.publisher.engine)
-		success = zc(cm)
-	    else
-		cm = CacheManager::create(@param.resolver.local, 
-					  @param.network.query_mode)
-		batchio = case @param.batch
-			  when "-"              then $stdin
-			  when String           then File::open(@param.batch) 
-			  when Param::BatchData then @param.batch
-			  end
-		batchio.each_line { |line|
-		    next if line =~ /^\s*$/
-		    next if line =~ /^\#/
-		    if ! parse_batch(line)
-			@input.error($mc.get("xcp_zc_batch_parse"), EXIT_ERROR)
-		    end
-		    @param.domain.autoconf(@param.resolver.local)
-		    @param.report.autoconf(@param.domain, 
-					 @param.rflag, @param.publisher.engine)
-		    success = false unless zc(cm)
-		}
-		batchio.close unless @param.batch == "-"
-	    end
-	rescue Param::ParamError => e
-	    @param.publisher.engine.error(e.message)
-	    success = false
-	end
-
-	# End formatter
-	@param.publisher.engine.end
-
-	#
-	return success
-    end
-
-
-    #
-    # Print the list of available tests
-    # XXX: should use publisher
-    #
-    def do_testlist
-	@param.test.autoconf
-	@test_manager.list.sort.each { |testname|
-	    $console.stdout.puts testname }
-	true
-    end
-
-    #
-    # Print the description of the tests
-    #  If no selection is done (option -T), the description is
-    #  printed for all the available tests
-    # XXX: should use publisher
-    #
-    def do_testdesc
-	@param.test.autoconf
-	suf = @param.test.desctype
-	list = @param.test.tests || @test_manager.list.sort
-	list.each { |test|
-	    $console.stdout.puts $mc.get("#{test}_#{suf}")
-	}
-	true
-    end
 
     def start 
 	begin
@@ -478,6 +341,152 @@ class ZoneCheck
 	    destroy
 	end
 	# NOT REACHED
+    end
+
+    def destroy
+    end
+
+
+    #-- zonecheck ---------------------------------------------------------
+
+    def do_check
+	param_autoconf_preamble
+
+	# Begin formatter
+	@param.publisher.engine.begin
+	
+	# 
+	success = true
+	begin
+	    cm = CacheManager::create(@param.resolver.local,
+				      @param.network.query_mode)
+	    if ! @param.batch
+		param_autoconf_data
+		success = zc(cm)
+	    else
+		batchio = case @param.batch
+			  when "-"              then $stdin
+			  when String           then File::open(@param.batch) 
+			  when Param::BatchData then @param.batch
+			  end
+		batchio.each_line { |line|
+		    next if line =~ /^\s*$/
+		    next if line =~ /^\#/
+		    if ! parse_batch(line)
+			@input.error($mc.get("xcp_zc_batch_parse"), EXIT_ERROR)
+		    end
+		    param_autoconf_data
+		    success = false unless zc(cm)
+		}
+		batchio.close unless @param.batch == "-"
+	    end
+	rescue Param::ParamError => e
+	    @param.publisher.engine.error(e.message)
+	    success = false
+	end
+
+	# End formatter
+	@param.publisher.engine.end
+
+	#
+	return success
+    end
+
+    def param_autoconf_preamble
+	@param.fs.autoconf
+	@param.option.autoconf
+	@param.rflag.autoconf
+	@param.publisher.autoconf(@param.rflag)
+	@param.network.autoconf
+	@param.resolver.autoconf
+	@param.test.autoconf
+    end
+
+    def param_autoconf_data
+	@param.domain.autoconf(@param.resolver.local)
+	@param.report.autoconf(@param.domain, 
+			       @param.rflag, @param.publisher.engine)
+    end
+
+    def parse_batch(line)
+	case line
+	when /^DOM=(\S+)\s+NS=(\S+)\s*$/
+	    @param.domain = Param::Domain::new($1, $2)
+	when /^DOM=(\S+)\s*$/
+	    @param.domain = Param::Domain::new($1)
+	else return false
+	end
+	true
+    end
+
+    def zc(cm)
+	# Setup publisher (for the domain)
+	@param.publisher.engine.setup(@param.domain.name)
+
+	# Retrieve specific configuration
+	if (cfg = @config[@param.domain.name]).nil?
+	    l10n_error = $mc.get("input_unsupported_domain")
+	    @param.publisher.engine.error(l10n_error % @param.domain.name)
+	    return false
+	end
+
+	# Display intro (ie: domain and nameserver summary)
+	@param.publisher.engine.intro(@param.domain)
+	
+	# Initialise and check
+	@test_manager.init(cfg, cm, @param)
+	success = begin
+		      @test_manager.check
+		      true
+		  rescue Report::FatalError
+		      false
+		  end
+	
+	# Finish diagnostic (in case of pending output)
+	@param.report.finish
+
+	# Lastaction hook
+	lastaction(success)
+
+	# Return status
+	return success
+    end
+
+
+    def lastaction(success)
+    end
+
+
+    #-- testlist ----------------------------------------------------------
+
+    #
+    # Print the list of available tests
+    # XXX: should use publisher
+    #
+    def do_testlist
+	@param.test.autoconf
+	@test_manager.list.sort.each { |testname|
+	    $console.stdout.puts testname }
+	true
+    end
+
+
+    #-- testdesc ----------------------------------------------------------
+
+    #
+    # Print the description of the tests
+    #  If no selection is done (option -T), the description is
+    #  printed for all the available tests
+    # XXX: should use publisher
+    #
+    def do_testdesc
+	@param.test.autoconf
+	suf = @param.test.desctype
+	list = @param.test.tests || @test_manager.list.sort
+	list.each { |test|
+	    $console.stdout.puts $mc.get("#{test}_#{suf}")
+	}
+	true
     end
 end
 
