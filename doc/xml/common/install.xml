@@ -93,9 +93,6 @@
       and for html pages generated in the
       <filename class="directory">/zc/</filename> namespace (HTML_PATH=/zc).
 <screen>
-ExtFilterDefine eruby mode=output cmd="/usr/local/bin/erb -n -"
-AddOutputFilter eruby .erb
-
 ScriptAlias  /zc/cgi-bin/    /usr/local/libexec/zc/cgi-bin/
 Alias        /zc/js/         /usr/local/libexec/zc/www/js/
 Alias        /zc/style/      /usr/local/libexec/zc/www/style/
