@@ -21,7 +21,7 @@
 <HTML>
   <HEAD>
     <LINK rel="stylesheet" href="/zc/zc.css" type="text/css">
-
+    <SCRIPT src="/zc/formvalidation.js"  type="text/javascript"></SCRIPT>
     <TITLE>Zone Check</TITLE>
   </HEAD>
 
@@ -143,43 +143,10 @@
 		       value="<%=$ips[7]%>"></TD>
 	  </TR>
       </TABLE>
-      <INPUT type="submit" value=" Check! " onClick="do_check(this.form)">
-      <INPUT type="button" value=" Guess "  onClick="do_guess(this.form)">
-      <INPUT type="button" value=" Clear "  onClick="do_clear(this.form)">
+      <INPUT type="submit" value=" Check! " onClick="zc_formcheck(this.form)">
+      <INPUT type="button" value=" Guess "  onClick="zc_formguess(this.form)">
+      <INPUT type="button" value=" Clear "  onClick="zc_formclear(this.form)">
 
-      <!-- Form validation -->
-      <SCRIPT language="JavaScript" type="text/javascript"> 
-	function validform(form) {
-	    if (form["zone"].value.length == 0) {
-	      alert("Zone Empty");
-	      return 0;
-	    } else {
-	      return 1;
-	    }
-	  }
-
-	  function do_check(form) {
-	    if (validform(form))
-	      form.submit();
-	  }	  
-
-	  function do_guess(form) {
-	    form.action="";
-  	    form.method="get";
-	    if (validform(form))
-	      form.submit();
-	  }
-
-	  function do_clear(form) {
-	    form["zone"].value = "";
-	    for (i = 0 ; i < 8 ; i++) {
-	      form["ns" +i].value = "";
-	      form["ips"+i].value = "";
-	    }
-	  }
-      </SCRIPT>
-      
-	
       <!-- Options -->
       <H2>Options</H2>
       <TABLE class="zc_options">
@@ -410,7 +377,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Feb 20 17:43:51 CET 2003
+Last modified: Wed Feb 26 18:39:46 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>
