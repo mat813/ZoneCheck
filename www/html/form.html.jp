@@ -106,7 +106,8 @@
     </BLOCKQUOTE>
     
     <!-- Form -->
-    <FORM name="zcform" method="GET" action="HTML_PATH/cgi-bin/zc.cgi">
+    <FORM name="zcform" method="GET" action="HTML_PATH/cgi-bin/zc.cgi"
+          onsubmit="return zc_form_validate(this)">
       <!-- Basic information -->
       <H2>Zone information</H2>
       <TABLE class="zc-domain">
@@ -175,13 +176,10 @@
       </TABLE>
 
       <!-- Buttons -->
+      <INPUT type="submit" value=" Check! ">
       <SCRIPT>
-	document.writeln('<INPUT type="button" value=" Check! " onClick="zc_form_check(this.form)">')
 	document.writeln('<INPUT type="button" value=" Clear "  onClick="zc_form_clear(this.form)">')
       </SCRIPT>
-      <NOSCRIPT>
-	<INPUT type="submit" value=" Check! ">
-      </NOSCRIPT>
 
       <!-- Options -->
       <H2>Options</H2>
@@ -463,7 +461,7 @@
 リリーズ: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Oct  2 19:09:15 CEST 2003
+Last modified: Fri Oct  3 15:17:53 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
