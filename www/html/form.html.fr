@@ -445,7 +445,7 @@
 	indépendante soit présente sur tous les serveurs de noms,</LI>
       <LI>lorsqu'une erreur est entre [crochets], cela signifie
 	que le test a échoué pour une raison externe (cette raison
-	est affichée à coté).</LI>
+	est affichée à côté).</LI>
     </UL>
 
 
@@ -465,7 +465,7 @@
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Jun  9 21:28:51 CEST 2003
+Last modified: Mon Jun 16 10:34:29 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
