@@ -312,7 +312,7 @@ module Publisher
 		  else
 		      if @rflag.tagonly
 			  if desc.is_error?
-			  then "#{severity}[Unexpected]: #{testname}"
+			  then "#{severity}: [Unexpected] #{testname}"
 			  else "#{severity}: #{testname}"
 			  end
 		      else
