@@ -21,6 +21,27 @@
 <HTML>
   <HEAD>
     <LINK rel="stylesheet" href="/zc/zc.css" type="text/css">
+    <LINK rel="start" title="The first page of the manual"
+	  type="text/html"
+	  href="/zc/">
+    <LINK rel="bookmark" title="batch form"
+	  type="text/html"
+	  href="/zc/batch.html">
+    <LINK rel="bookmark" title="single zone form"
+	  type="text/html"
+	  href="/zc/">
+
+    <LINK rel="help"	
+	  type="text/html"
+	  href="#help">
+
+    <LINK lang="fr" title="Zonecheck"
+	  type="text/html"
+	  rel="alternate"
+	  hreflang="fr"
+	  href="http://someplace.com/manual/dutch.html">
+
+
     <SCRIPT src="/zc/formvalidation.js"  type="text/javascript"></SCRIPT>
     <TITLE>Zone Check</TITLE>
   </HEAD>
@@ -378,7 +399,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Mar  4 11:34:21 CET 2003
+Last modified: Tue Mar  4 16:34:25 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

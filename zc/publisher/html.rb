@@ -153,13 +153,39 @@ module Publisher
 	#------------------------------------------------------------
 
 	def begin
+	    l10n_form        = $mc.get("w_form").capitalize
+	    l10n_batch_form  = l10n_form+": "+$mc.get("t_batch").capitalize
+	    l10n_single_form = l10n_form+": "+$mc.get("t_single").capitalize
+
 	    # XXX: javascript only if counter
 	    @o.print <<"EOT"
 <HTML>
   <HEAD>
     <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <TITLE>ZoneCheck results</TITLE>
+
+    <!-- Navigation -->
+    <LINK rel="start" href="#{@publish_path}/"             type="text/html">
+    <LINK rel="up"    href="#{@publish_path}/#{$mc.lang}/" type="text/html">
+    <LINK rel="bookmark" title="#{l10n_batch_form}"
+	  href="#{@publish_path}/#{$mc.lang}/batch.html"   type="text/html">
+    <LINK rel="bookmark" title="#{l10n_single_form}"
+	  href="#{@publish_path}/#{$mc.lang}/"             type="text/html">
+
+    <!-- Style -->
     <LINK rel="stylesheet" href="#{@publish_path}/zc.css" type="text/css">
+    <STYLE>
+        UL.zc_ref LI { 
+            list-style: url(#{@publish_path}/img/ref.png)     disc }
+
+        UL.zc_element LI { 
+            list-style: url(#{@publish_path}/img/element.png) disc }
+
+        UL.zc_details LI { 
+            list-style: url(#{@publish_path}/img/details.png) disc }
+    </STYLE>
+
+    <!-- Javascript -->
     <SCRIPT type="text/javascript">
       zc_publish_path = "#{@publish_path}"
     </SCRIPT>
@@ -167,19 +193,6 @@ module Publisher
     </SCRIPT>
     <SCRIPT src="#{@publish_path}/popupmenu.js" type="text/javascript">
     </SCRIPT>
-    <STYLE>
-        UL.zc_ref LI { 
-            list-style: url(#{@publish_path}/img/ref.png) disc
-        }
-
-        UL.zc_element LI { 
-            list-style: url(#{@publish_path}/img/element.png) disc
-        }
-
-        UL.zc_details LI { 
-            list-style: url(#{@publish_path}/img/details.png) disc
-        }
-    </STYLE>
   </HEAD>
   <BODY>
     <IMG class="zc_logo" src="#{@publish_path}/img/logo.png">

@@ -35,6 +35,15 @@ w_abort		: abort
 w_details	: details
 w_references	: references
 w_elements	: elements
+w_form          : form
+
+
+#
+# Titles
+#
+t_batch		: batch
+t_single	: single
+
 
 #
 # Tag
