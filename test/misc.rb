@@ -58,12 +58,24 @@ module CheckNetworkAddress
 	def chk_ns_matching_reverse(ns, ip)
 	    ip_name	= NResolv::DNS::Name::create(ip)
 	    srv		= rec(ip) ? ip : nil
-	    res		= false
 	    ptrlist     = ptr(srv, ip_name)
 	    return true if ptrlist.empty?
 	    ptrlist.each { |rev|
-		res ||= (rev.ptrdname == ns) }
-	    res
+		seen = { rev => true }
+
+		name = rev.ptrdname
+		return true if name == ns
+
+		while name = is_cname?(name, ip)
+		    if seen[name]
+		    then raise "Loop in CNAME chain when looking for #{rev.ptrdname}"
+		    else seen[name] = true
+		    end
+		    return true if name == ns
+		end
+	    }
+
+	    false
 	end
 
 	# DESC: Ensure coherence between given (param) primary and SOA
