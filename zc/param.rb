@@ -203,10 +203,15 @@ class Param
 		    raise ParamError, $mc.get("xcp_param_primary_soa")
 		end
 
+		# Retrieve NS and put ensure the primary at first place
+		#  (based on SOA)
 		begin
-		    @ns = [ [ primary, [] ] ]
+		    @ns = [ ]
 		    dns.nameservers(@name).each { |n|
-			@ns <<  [ n, [] ] unless n == primary
+			if n == primary
+			then @ns.unshift([ n, [] ])
+			else @ns <<  [ n, [] ]
+			end
 		    }
 		rescue NResolv::NResolvError
 		    raise ParamError, $mc.get("xcp_param_nameservers_ns")

@@ -151,4 +151,4 @@ testname: coherence of master with primary nameserver
 error   : The master is not coherent with primary nameserver
 ok	: The master is coherent with primary nameserver
 explain : [none]
-details : got master %{master_this} instead of %{master_ref} as on %{host_ref}.
+details : got master %{mname_this} instead of %{mname_ref} as on %{host_ref}.
