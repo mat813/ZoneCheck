@@ -56,7 +56,7 @@
 #
 
 ## Installation path
-ZC_INSTALL_PATH		= ENV["ZC_INSTALL_PATH"].untaint || (ENV["HOME"].untaint || "/homes/sdalu") + "/Repository/zonecheck"
+ZC_INSTALL_PATH		= (ENV["ZC_INSTALL_PATH"] || (ENV["HOME"] || "/homes/sdalu") + "/Repository/zonecheck").dup.untaint
 
 ## Directories
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
@@ -266,7 +266,7 @@ class ZoneCheck
 	    $console.stderr.puts "#{l10n_error}: #{l10n_input}"
 	    exit EXIT_ERROR
 	end
-	im.untaint
+	im = im.dup.untaint	# object can be frozen, so we need to dup it
 
 	# Instanciate input method
 	begin

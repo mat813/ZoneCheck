@@ -96,7 +96,7 @@ class MessageCatalog
 	lang  = $1.downcase
         lang += "_" + $2.upcase if $2
         lang += "." + $3.downcase if $3
-        lang
+        lang.untaint
     end
 
 
@@ -136,7 +136,7 @@ class MessageCatalog
     # WRITER: Set lang
     #
     def lang=(lng)
-	@lang = self.class::normlang(lng).clone.untaint
+	@lang = self.class::normlang(lng)
         @language, @country, @encoding = self.class::splitlang(@lang)
     end
 
@@ -145,7 +145,7 @@ class MessageCatalog
     # Test if a file catalog is available
     #
     def available?(where, lng=@lang)
-	lng = lng.clone.untaint if lng.tainted?
+	lng   = self.class::normlang(lng) unless lng == @lang
         filepath(where, lng).each { |fp| return true if File::readable?(fp) }
         false
     end
