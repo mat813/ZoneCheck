@@ -132,7 +132,7 @@ class Address
 		end
 
 		# Return new address
-		return IPv6::new(address)
+		return IPv6::new(address.untaint)
 	    else
 		raise InvalidAddress,
 		    "can't interprete as IPv6 address: #{arg.inspect}"

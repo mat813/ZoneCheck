@@ -283,7 +283,7 @@ module NResolv
 		    protocol = @host =~ /:/ ? Socket::AF_INET6 \
 		                            : Socket::AF_INET
 
-                    @sock   = UDPSocket::new(protocol)
+                    @sock = UDPSocket::new(protocol)
                     @sock.connect(@host, @port)
                     @sock.fcntl(Fcntl::F_SETFD, 1)
                     @thread = Thread::new {

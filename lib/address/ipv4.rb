@@ -24,7 +24,7 @@ class Address
 		   (0..255) === (b = $2.to_i) &&
 		   (0..255) === (c = $3.to_i) &&
 		   (0..255) === (d = $4.to_i)
-		    return self.new([a, b, c, d].pack("CCCC"))
+		    return self.new([a, b, c, d].pack("CCCC").untaint)
 		else
 		    raise InvalidAddress, 
 			"IPv4 address with invalid value: #{arg}"
