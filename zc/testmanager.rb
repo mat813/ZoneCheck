@@ -156,7 +156,7 @@ class TestManager
 	end
 	
 	# Inspect instance methods for finding methods (ie: chk_*, tst_*)
-	klass.public_instance_methods.each { |method| 	    
+	klass.public_instance_methods(true).each { |method| 	    
 	    case method
 	    # methods that represent a test
 	    when /^#{TestPrefix}/
