@@ -180,7 +180,7 @@ class Test
 	$dbg.msg(DBG::TESTDBG) { 
 	    func = 'caller_unknown'
 	    caller.each { |l|
-		if l =~ /`((?:chk|tst)_.*)'/
+		if l =~ /`((?:chk|tst)_.*)'/ #` <-- emacs
 		    func = $1
 		    break
 		end
@@ -218,7 +218,7 @@ class Test
     end
 
     def is_resolvable?(name, ip=nil, domain=@domain.name)
-	(( name.in_domain?(domain))                                        ||
+	(( name.in_domain?(domain)   && !@cm[ip].addresses(name).empty?)   ||
 	 ( @cm[ip].rec(@domain.name) && !@cm[ip].addresses(name).empty?)   ||
 	 (!@cm[ip].rec(@domain.name) && !@cm[nil].addresses(name).empty?))
     end
