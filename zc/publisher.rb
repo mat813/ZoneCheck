@@ -17,7 +17,7 @@ require 'xtra'
 
 
 module Publisher
-    class PBar < Xtra::ProgressBar
+    class PBar < TTY::ProgressBar
 	def unit            ; "T/s"  ; end
 	def unit_cvt(value) ;  value ; end
     end
