@@ -236,6 +236,18 @@
     <details/>
   </check>
 
+  <check name="soa_drift_serial">
+    <name>dérive excessive du numéro de série avec celui du serveur primaire</name>
+    <success>Dérive inexistant ou acceptable du numéro de série avec celui du
+ serveur primaire</success>
+    <failure>Dérive excessive du numéro de série avec celui du serveur primaire</failure>
+    <explanation/>
+    <details><para>La valeure attendue pour le numéro de série (en prenant 
+       en consideration une éventuelle dérive) aurait due être supérieure
+       à <var name="serial_min"/>, mais elle est de <var name="serial_this"/>
+       contrairement à celui indiqué sur <var name="host_ref"/> qui 
+       est de <var name="serial_ref"/>).</para></details>
+  </check>
 
   <check name="soa_coherence_serial">
     <name>cohérence du numéro de série avec celui du serveur primaire</name>
@@ -246,7 +258,6 @@
       est différent de celui indiqué sur <zcvar name="host_ref"/>
       (<zcvar name="serial_ref"/>).</para></details>
   </check>
-
 
   <check name="soa_coherence_contact">
     <name>cohérence du contact administratif avec celui du serveur primaire</name>

@@ -53,6 +53,8 @@ module CheckNetworkAddress
 	    @soa_refresh_max = const('soa:refresh:max').to_i
 	    @soa_retry_min   = const('soa:retry:min').to_i
 	    @soa_retry_max   = const('soa:retry:max').to_i
+	    @soa_drift_days    = const('soa:serial:drift_days').to_i
+	    @soa_drift_ticks   = const('soa:serial:drift_ticks').to_i
 	end
 
 	#-- Tests ---------------------------------------------------
@@ -167,6 +169,24 @@ module CheckNetworkAddress
 	      'serial_this' => serial_other }
 	end
 
+	# DESC: check unreasonnable drift of serial number with primary
+	def chk_soa_drift_serial(ns,ip)
+	    serial_ref   = soa(@domain.ns[0][1][0]).serial
+	    serial_other = soa(ip).serial
+	    return true if serial_ref <= serial_other	# we don't test that
+	    if d = is_serial_rfc1912?(serial_ref)
+		newdate = d[0] - @soa_drift_days
+		serial_min = newdate.year * 1000000 +
+		    newdate.month * 10000 + newdate.day * 100
+	    else
+		serial_min = serial_ref -  @soa_drift_ticks
+	    end
+	    return true if serial_other >= serial_min # XXX: possible wrapping
+	    { 'serial_min'   => serial_min,
+	      'serial_ref'   => serial_ref,
+	      'host_ref'     => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
+	      'serial_this'  => serial_other }
+	end
 
 	# DESC: coherence of contact with primary
 	def chk_soa_coherence_contact(ns,ip)

@@ -233,6 +233,16 @@
     <details/>
   </check>
 
+  <check name="soa_drift_serial">
+    <name>excessive drift of serial number with primary nameserver</name>
+    <success>Acceptable or no drift of serial number with primary nameserver</success>
+    <failure>Excessive drift of serial number with primary nameserver</failure>
+    <explanation/>
+    <details><para>The expected value for the serial (taking drift into 
+      account) should have been more than <var name="serial_min"/>, 
+      but is <var name="serial_this"/> instead of 
+      <var name="serial_ref"/> as on <var name="host_ref"/>).</para></details>
+  </check>
 
   <check name="soa_coherence_serial">
     <name>coherence of serial number with primary nameserver</name>

@@ -57,7 +57,8 @@
       <check name="soa_retry_refresh"   severity="f" category="dns:soa"/>
       <check name="soa_expire_7refresh" severity="f" category="dns:soa"/>
       <check name="soa_ns_cname"        severity="w" category="dns:soa"/>
-      <check name="soa_vs_any"          severity="f" category="dns:soa"/>
+      <check name="soa_vs_any"          severity="f"      category="dns:soa"/>
+      <check name="soa_drift_serial"    severity="w" category="dns:soa"/>
       <check name="soa_coherence_serial" severity="f" category="dns:soa"/>
       <check name="soa_coherence_contact" severity="f" category="dns:soa"/>
       <check name="soa_coherence_master" severity="f" category="dns:soa"/>
