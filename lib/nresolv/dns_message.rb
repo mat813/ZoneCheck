@@ -18,6 +18,10 @@
 #
 #
 
+#
+# TODO: add a hash facility to Section
+#
+
 class NResolv
     class DNS
 	class Message

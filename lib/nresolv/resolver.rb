@@ -23,6 +23,13 @@ require 'nresolv/transport'
 require 'nresolv/config'
 require 'nresolv/dbg'
 
+
+#
+# TODO: check implementation when following cname for non recursive
+# TODO: better handling of exception (see CNAME exception)
+# TODO: cname loop
+#
+
 class NResolv
     class DNS
 	class DNSNResolvError < NResolvError
@@ -96,12 +103,8 @@ class NResolv
 		msg = NResolv::DNS::Message::Query::new
 		msg.rd = rec
 		msg.question.add(name, resource)
-		begin
-		    rpl = query(msg)
-		rescue NoEntryError
-		    raise if exception
-		    return
-		end
+		rpl = query(msg)
+
 		case rpl.rcode
 		when RCode::NOERROR
 		when RCode::NXDOMAIN
@@ -139,15 +142,35 @@ class NResolv
 			yield [n, r, t] if (n == name) && (r.class == resource)
 		    }
 		else
-		    msg.answer.each { |n, r, t| 
-			if (n == name) && (r.rtype==RType::CNAME)
-			    name = r.cname
-			    break
+		    # Do CNAME resolution
+		    cnameloop = {}
+		    catch (:redo) {
+			msg.answer.each { |n, r, t| 
+			    if (n == name) && (r.rtype == RType::CNAME)
+				Dbg.msg(DBG::RESOLVER, 
+					"following CNAME #{n} => #{r.cname}")
+				if cnameloop.has_key?(name)
+				    raise "CNAME loop detected"
+				end
+				cnameloop[name] = true
+				name = r.cname
+				throw :redo
+			    end
+			}
+		    }
+
+		    found = false
+		    msg.answer.each { |n, r, t|
+			if (n == name) && (r.class == resource)
+			    found = true
+			    yield [n, r, t] 
 			end
 		    }
-		    msg.answer.each { |n, r, t|
-			yield [n, r, t] if (n == name) && (r.class == resource)
-		    }
+
+		    if !found && !cnameloop.empty?
+			Dbg.msg(DBG::RESOLVER, 
+				"iterate on CNAME not implemented (response will be empty)")
+		    end
 		end
 	    end
 
@@ -190,25 +213,78 @@ class NResolv
 		    raise ArgumentError, "DNS name should be abolute"
 		end
 
-		# Retrieve addresses in the requested order
+		ipv4=ipv6=false
 		order.each { |o|
-		    if o == Address::IPv6::Compatibility
-			[ Resource::IN::A, Resource::IN::AAAA ].each { |rt|
-			    each_resource(name, rt, true, false) { |r,|
-				yield Address::IPv6::create(r.address) }
-			}
-		    elsif o == Address::IPv6
-			each_resource(name, Resource::IN::AAAA, 
-				      true, false) { |r,|
-			    yield r.address }
-		    elsif o == Address::IPv4
-			each_resource(name, Resource::IN::A, 
-				      true, false) { |r,|
-			    yield r.address }
+		    if    o == Address::IPv6::Compatibility then ipv4=ipv6=true
+		    elsif o == Address::IPv6                then      ipv6=true
+		    elsif o == Address::IPv4                then ipv4     =true
+		    else raise ArgumentError, "unknown address type #{o}"
 		    end
 		}
+
+		list = nil
+		if ipv4 && ipv6 then
+		    list = getaddr(name, NResolv::DNS::Resource::IN::ANY,
+				   [ RType::A, RType::AAAA ],
+				   [ RCode::NOTIMP ], true)
+		end
+
+		if list.nil?
+		    list = []
+		    if ipv6
+			begin
+			    ignore = [ RCode::NOTIMP ]
+			    ignore << RCode::SERVFAIL << RCode::FORMERR if ipv4
+			    list << getaddr(name, 
+					    NResolv::DNS::Resource::IN::AAAA,
+					    [ RType::AAAA ], ignore, false)
+			rescue NResolv::TimeoutError
+			    raise unless ipv4
+			end
+		    end
+
+		    if ipv4
+			list << getaddr(name, NResolv::DNS::Resource::IN::A,
+				    [ RType::A ], [ RCode::NOTIMP ], false)
+		    end
+		end
+
+		list.flatten!
+		list.compact
+
+		addrlist = []
+		order.each { |klass|
+		    list.delete_if { |addr|
+			begin
+			    addrlist << klass::create(addr)
+			    true
+			rescue Address::InvalidAddress
+			    false
+			end
+		    }
+		}
+		addrlist.each { |addr| yield addr }
 	    end
 
+
+	    private
+	    def getaddr(name, resource, rtypes, ignore, auth)
+		addrlist = []
+		msg = NResolv::DNS::Message::Query::new
+		msg.rd = !auth
+		msg.question.add(name, resource)
+		rpl = query(msg)
+		
+		if rpl.rcode == RCode::NOERROR
+		    return nil unless !auth || rpl.aa
+		    extract_resource(rpl, name, resource) { |n, r, t|
+			addrlist << r.address if rtypes.include?(r.rtype) }
+		elsif ignore.include?(rpl.rcode)
+		    return nil
+		else raise ReplyError, rpl.rcode
+		end
+		addrlist
+	    end
 
 	    ##
 	    ## UDP only client
