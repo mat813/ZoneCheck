@@ -28,20 +28,21 @@ class Param
     ## quiet        : don't print extra titles
     ## intro        : display summary about checked domain
     ## explain      : explain the reason behind the test (if test failed)
+    ## details      : give details about the test failure
     ## testdesc     : print a short description of the test being performed
     ## counter      : display a progress bar
     ## stop_on_fatal: stop on the first fatal error
     ##
     ## Corrections are silently made to respect the following constaints:
-    ##  - 'tagonly' doesn't support 'explain' (as displaying a tag
-    ##     for an explanation is meaningless)
+    ##  - 'tagonly' doesn't support 'explain', 'details' (as displaying
+    ##     a tag for an explanation is meaningless)
     ##  - 'testdesc' and 'counter' are exclusive
     ##  - 'counter' can be ignored if the display doesn't suppport 
     ##     progress bar animation
     ##
     class ReportFlag
 	attr_reader :tagonly, :one,     :quiet
-	attr_reader :intro,   :explain, :testdesc, :counter
+	attr_reader :intro,   :explain, :details, :testdesc, :counter
 	attr_reader :stop_on_fatal
 
 	attr_writer :one, :quiet, :intro, :stop_on_fatal
@@ -53,11 +54,15 @@ class Param
 	end
 
 	def tagonly=(val)
-	    @explain  = false if @tagonly = val
+	    @details = @explain  = false if @tagonly = val
 	end
 
 	def explain=(val)
 	    @explain  = val   if !@tagonly
+	end
+	
+	def details=(val)
+	    @details  = val   if !@tagonly
 	end
 
 	def testdesc=(val)
@@ -75,6 +80,7 @@ class Param
 	    flags << "quiet"    if @quiet
 	    flags << "intro"    if @intro
 	    flags << "explain"  if @explain
+	    flags << "details"  if @details
 	    flags << "testdesc" if @testdesc
 	    flags << "counter"  if @counter
 	    flags << "stop"     if @stop_on_fatal
@@ -541,6 +547,8 @@ class Param
 	    case token
 	    when "x", "explain"
 		@rflag.explain	= true
+	    when "d", "details"
+		@rflag.details  = true
 	    when "i", "intro"
 		@rflag.intro	= true
 	    when "t", "testdesc"

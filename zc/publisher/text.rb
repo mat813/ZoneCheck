@@ -163,7 +163,7 @@ module Publisher
 	    
 	    @o.puts msg
 
-	    if desc.dtl
+	    if @rflag.details && desc.dtl
 		txt = ::Text::Format::new
 		txt.width = 72
 		txt.tag   = "  "

@@ -467,9 +467,10 @@ usage: PROGNAME: [-hqV] [-etvo opt] [-46] [-n ns,..] [-c conf] domainname\n\
     -4, --ipv4          Only check the zone with IPv4 connectivity\n\
     -6, --ipv6          Only check the zone with IPv6 connectivity\n\
 \n\
-  verbose:              [intro/explain] [testdesc|counter]\n\
+  verbose:              [intro/explain/details] [testdesc|counter]\n\
     intro          [i]  Print summary for domain and associated nameservers\n\
     explain        [x]  Print an explanation for failed tests\n\
+    details        [d]  Print a detailed description of the failure\n\
     testdesc       [t]  Print the test description before running it\n\
     counter        [c]  Print a test counter\n\
 \n\
