@@ -93,7 +93,7 @@ module CheckNetworkAddress
 	def chk_correct_recursive_flag(ns, ip)
 	    return true unless rec(ip)
 
-	    soa(ip, @domain.name.domain)			&&
+	    soa(ip, @domain.name.tld || NResolv::DNS::Name::Root) &&
 		soa(ip, NResolv::DNS::Name::create(ip.namespace))
 	end
 
