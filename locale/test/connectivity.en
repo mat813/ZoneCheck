@@ -29,7 +29,7 @@ xpl_connectivity_udp_tcp : [ref]: IETF RFC1035 (p.32 4.2. Transport)\nThe DNS as
 
 [chk_icmp]
 testname: ICMP answer
-error   : Host doesn't seem to be alive (firewall?)
+error   : Host doesn't reply to ICMP requests (firewall?)
 ok	: Host replies to ICMP requests
 explain : [none]
 
