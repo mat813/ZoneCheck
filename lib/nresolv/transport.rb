@@ -340,6 +340,7 @@ class NResolv
                         @rawmsg    = msg.to_wire
  			@msgid     = msg.msgid
                         @sock      = requester.handler
+			@thread    = nil
 			@dflttout  = 2
 			UDPRetrySequence.each { |tout| @dflttout += tout }
                     end
@@ -358,7 +359,7 @@ class NResolv
                     end
 
 		    def close
-			thread, @thread = @thread
+			thread, @thread = @thread, nil
 			thread.kill    if thread
 			super()
 		    end

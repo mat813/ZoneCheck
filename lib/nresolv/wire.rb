@@ -143,7 +143,7 @@ class NResolv
 				'foreward name pointer in global14'
 			end
 			
-			origin = decoder.inside(start_idx - idx, idx) {
+			origin = decoder.inside(start_idx - idx, idx, false) {
 			    self.wire_decode(decoder)
 			}
 			return self::new(d, origin)
@@ -247,7 +247,7 @@ class NResolv
 		    @index += size
 		end
 
-		def inside(size, offset=nil)
+		def inside(size, offset=nil, junkwarn=true)
 		    begin
 			saved_offset = @index
 			saved_limit  = @limit
@@ -261,11 +261,14 @@ class NResolv
 			saved_offset += size unless offset
 
 			@limit = @index + size
-			return yield
 
-			if @limit != @index
-			    Dbg.msg(DBG::WIRE, 'junk')
+			rval = yield
+
+			if junkwarn && (@limit != @index)
+			    Dbg.msg(DBG::WIRE, "junk #{@limit} / #{@index}")
 			end
+
+			return rval
 		    ensure
 			@limit = saved_limit
 			@index = saved_offset
