@@ -17,23 +17,12 @@ require 'xtra'
 
 
 module Publisher
-    class PBar < TTY::ProgressBar
-	def unit            ; "T/s"  ; end
-	def unit_cvt(value) ;  value ; end
-    end
-
-    class BlackHole
-	def method_missing(method, *args)
-	end
-    end
-
-
-
     ##
     ##
     ##
     class Template # --> ABSTRACT <--
-	attr_reader :counter
+	attr_reader :progress
+	attr_reader :rflag
 
 	def initialize(rflag, ostream=$stdout)
 	    @rflag	= rflag
@@ -71,26 +60,63 @@ module Publisher
 	Mime		= "text/plain"
 	MaxLineLength	= 79
 
+	class Progress
+	    class PBar < TTY::ProgressBar
+		def unit            ; "T/s"  ; end
+		def unit_cvt(value) ;  value ; end
+	    end
+
+	    def initialize(publisher)
+		@publisher = publisher
+		@counter = PBar::new($stdout, 1, PBar::DisplayNoFinalStatus)
+	    end
+	    
+	    def start(count)
+		return unless @publisher.rflag.counter
+		@counter.start(count)
+	    end
+	    
+	    def done(desc)
+		return unless @publisher.rflag.counter
+		@counter.done(desc)
+	    end
+	    
+	    def failed(desc)
+		return unless @publisher.rflag.counter
+		@counter.failed(desc)
+	    end
+	    
+	    def finish
+		return unless @publisher.rflag.counter
+		@counter.finish
+	    end
+	    
+	    def process(desc, ns, ip)
+		if @publisher.rflag.counter
+		    @counter.processed(1)
+		end
+		if @publisher.rflag.testdesc
+		    xtra = if    ip then " (IP=#{ip})"
+			   elsif ns then " (NS=#{ns})"
+			   else          ""
+			   end
+	    
+		    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
+		end
+	    end
+	end
+
 	#------------------------------------------------------------
 
 	def initialize(rflag, ostream=$stdout)
 	    super(rflag, ostream)
 	    @count_txt	= $mc.get("test_progress")
-	    @counter	= PBar::new($stdout, 1, PBar::DisplayNoFinalStatus)
+	    @progress	= Progress::new(self)
 	end
 
 
 	#------------------------------------------------------------
 
-
-	def testing(desc, ns, ip)
-	    xtra = if    ip then " (IP=#{ip})"
-		   elsif ns then " (NS=#{ns})"
-		   else          ""
-		   end
-	    
-	    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
-	end
 
 	def intro(domain)
 	    puts "ZONE  : #{domain.name}"
@@ -216,11 +242,156 @@ module Publisher
     class HTML < Template
 	Mime		= "text/html"
 
+	class Progress
+	    def initialize(publisher)
+		@publisher = publisher
+	    end
+	    
+	    def start(count)
+		puts "<H2 id=pgr_0>Progress</H2>"
+		print <<"EOT"
+<SCRIPT type="text/javascript">
+zc_pgr_starttime = (new Date()).getTime()
+zc_pgr_lasttime  = zc_pgr_starttime
+zc_pgr_processed = 0
+zc_pgr_totaltime = 0
+zc_pgr_precision = 1000
+zc_pgr_totalsize = #{count}
+
+function zc_sec_to_timestr(sec) {
+  if (sec < 0)
+     return "--:--"
+
+   hrs = Math.floor(sec / 3600); sec %= 3600;
+   min = Math.floor(sec / 60);   sec %= 60;
+            
+   if (sec < 10)
+     sec = "0" + sec
+   
+   if (hrs > 0) {
+     if (min < 10)
+       min = "0" + min
+     return hrs + ":" + min + ":" + sec
+   } else {
+     return min + ":" + sec
+   }
+}
+
+function zc_speed_tostr(speed) {
+  if (speed < 0)
+    return "--.--"
+
+  speed = speed * 100
+  cnt = Math.floor(speed) % 100
+  if (cnt < 10)
+    cnt = "0" + cnt
+  unt = Math.floor(speed / 100)
+
+  return unt + "." + cnt
+}
+
+// switch progress bar element "on"
+function zc_pgr_on(id) {
+  document.getElementById("pgr_" + id).style.display = "inherit"
+}
+
+// switch progress bar element "off"
+function zc_pgr_off(id) {
+  document.getElementById("pgr_" + id).style.display = "none"
+}
+
+// generate new progress bar and switch it
+function zc_progress(desc) {
+  // one more
+  zc_pgr_processed += 1
+
+  // percent done
+  pct = Math.ceil(100 * zc_pgr_processed / zc_pgr_totalsize)
+
+  // compute spent time
+  //  use precision to avoid quick variation in speed and eta
+  nowtime   = (new Date()).getTime()
+  deltatime = nowtime - zc_pgr_lasttime
+  if (deltatime > zc_pgr_precision) {
+    zc_pgr_totaltime = nowtime - zc_pgr_starttime
+    zc_pgr_lasttime  = nowtime
+  }
+
+  // speed
+  speed = zc_pgr_totaltime ? (1000 * zc_pgr_processed / zc_pgr_totaltime) : -1.0
+
+  // estimated time
+  eta   = speed < 0 ? -1.0 : Math.ceil((zc_pgr_totalsize - zc_pgr_processed) / speed)
+
+  // write progress bar
+  document.write("<TABLE style='display: none' id=pgr_" + zc_pgr_processed + ">")
+  document.write("<TR>")
+  document.write("<TD colspan=3>Progression</TD>")
+  document.write("<TD>Tests</TD>")
+  document.write("<TD>Speed</TD>")
+  document.write("<TD>Estimated Time</TD>")
+  document.write("</TR>")
+  document.write("<TR>")
+  document.write("<TD style='text-align: right; width: 4em'>" + pct + "%&nbsp;</TD>")
+  document.write("<TD style='background-color: #123456; width:" + 3 * pct + "px'></TD>")
+  document.write("<TD style='width:" + 3 * (100 - pct) + "px'></TD>")
+  document.write("<TD style='text-align: right; witdh: 4ex;'>" + zc_pgr_processed + "</TD>")
+  document.write("<TD style='text-align: right; width: 6ex;'>" + zc_speed_tostr(speed) + "</TD>")
+  document.write("<TD style='text-align: right; width: 8ex;'>" + zc_sec_to_timestr(eta) + "</TD>")
+  document.write("</TR>")
+  document.write("<TR>")
+  document.write("<TD colspan=5>" + desc + "</TD>")
+  document.write("</TR>")
+  document.write("</TABLE>")
+
+  // switch progress bar content
+  if (zc_pgr_processed != 1) 
+    zc_pgr_off(zc_pgr_processed - 1)
+  zc_pgr_on(zc_pgr_processed)
+
+}
+</SCRIPT>
+EOT
+	    end
+	    
+	    def done(desc)
+	    end
+	    
+	    def failed(desc)
+	    end
+	    
+	    def finish
+		print <<"EOT"
+<SCRIPT type="text/javascript">
+zc_pgr_off(zc_pgr_processed)
+zc_pgr_off(0)
+</SCRIPT>
+EOT
+	    end
+	    
+	    def process(desc, ns, ip)
+		if @publisher.rflag.testdesc
+		    xtra = if    ip then " (IP=#{ip})"
+			   elsif ns then " (NS=#{ns})"
+			   else          ""
+			   end
+		    
+		    
+		    puts "<NOSCRIPT>"
+		    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
+		    puts "</NOSCRIPT>"
+		    puts "<SCRIPT>zc_progress(\"#{desc} #{xtra}\")</SCRIPT>"
+		    $stdout.flush
+		end
+	    end
+	end
+
+
 	#------------------------------------------------------------
 
 	def initialize(rflag, ostream=$stdout)
 	    super(rflag, ostream)
-	    @counter = BlackHole::new
+	    @progress	= Progress::new(self)
 	end
 
 
@@ -235,6 +406,7 @@ module Publisher
     <LINK rel="stylesheet" href="/zc/zc.css" type="text/css">
   </HEAD>
   <BODY>
+<H1>ZoneCheck</H1>
 EOT
 	end
 
@@ -247,21 +419,11 @@ EOT
 	
 	#------------------------------------------------------------
 
-	def testing(desc, ns, ip)
-	    xtra = if    ip then " (IP=#{ip})"
-		   elsif ns then " (NS=#{ns})"
-		   else          ""
-		   end
-	    
-	    printf $mc.get("testing_fmt"), "#{desc}#{xtra}"
-	end
-
 
 	def intro(domain)
-	    tbl_beg   = '<TABLE class="zc_domain">'
+	    tbl_beg   = '<TABLE rules="rows" class="zc_domain">'
 	    tbl_zone  = '<TR class="zc_zone"><TD>%s</TD><TD colspan="4">%s</TD></TR>'
-	    tbl_empty = '<TR><TD colspan="5"></TD></TR>'
-	    tbl_ns    = '<TR class="%s"><TD>%s</TD><TD>%s</TD><TD></TD><TD>%s</TD><TD>%s</TD></TR>'
+	    tbl_ns    = '<TR class="%s"><TD>%s</TD><TD>%s</TD><TD>%s</TD></TR>'
 	    tbl_end   = '</TABLE>'
 
 
@@ -270,7 +432,6 @@ EOT
 
 	    puts tbl_beg
 	    puts tbl_zone % [ "Zone", domain.name ]
-	    puts tbl_empty
 	    domain.ns.each_index { |i| 
 		ns_ip = domain.ns[i]
 		if i == 0
@@ -281,8 +442,7 @@ EOT
 		    desc = "Secondary"
 		end
 
-		puts tbl_ns % [ css, 
-		    desc, ns_ip[0], "IPs", ns_ip[1].join(", ") ]
+		puts tbl_ns % [ css, desc, ns_ip[0], ns_ip[1].join(", ") ]
 	    }
 	    puts tbl_end
 	end
@@ -352,26 +512,29 @@ EOT
 	#------------------------------------------------------------
 
 	def h1(h)
-	    @o.puts "<H1>#{h.capitalize}</H1>"
+	    @o.puts "<H2>#{h.capitalize}</H2>"
 	end
 
 	def h2(h)
-#	    @o.puts "<H2>---- #{h.capitalize} ----</H2>"
-	    @o.puts "<P class=\"warning\">---- #{h.capitalize} ----</P>"
+	    @o.puts "<H3 class=\"warning\">---- #{h.capitalize} ----</H3>"
+#	    @o.puts "<P class=\"warning\">---- #{h.capitalize} ----</P>"
 	end
 
 	def explanation(xpl)
 	    return unless xpl
-	    puts "<pre>"
+	    puts "<UL class=\"zc_ref\">"
 	    xpl.split(/\n/).each { |e|
-		puts " | #{e}"
+		if e =~ /^Ref/
+		    puts "<LI><SPAN class=\"zc_ref\">#{e}</SPAN><BR>"
+		else
+		    puts e
+		end
 	    }
-	    puts " `----- -- -- - -  -"
-	    puts "</pre>"
+	    puts "</UL>"
 	end
 	
 	def msg1(str)
-	    puts str
+	    puts "<H3>#{str}</H3>"
 	end
 
 	def list(l, tag="=>")

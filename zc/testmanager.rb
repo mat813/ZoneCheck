@@ -107,18 +107,13 @@ class TestManager
     def test1(severity, method, testname, ns=nil, ip=nil) 
 	# Publish information about the test being executed
 	@publisher.synchronize {
-	    # Test description
-	    if @param.rflag.testdesc
-		desc = if @param.rflag.tagonly
-		       then testname
-		       else $mc.get("#{testname}_testname")
-		       end
-		@publisher.testing(desc, ns, ip)
-	    end
-	    # Test counter
-	    if @param.rflag.counter
-		@publisher.counter.processed(1) 
-	    end
+	    desc = if @param.rflag.tagonly
+		   then testname
+		   else $mc.get("#{testname}_testname")
+		   end
+	    @publisher.progress.process(desc, ns, ip)
+#	    if @param.rflag.testdesc
+#	    if @param.rflag.counter
 	}
 
 	desc         = Test::Result::Desc::new(testname)
@@ -221,7 +216,7 @@ class TestManager
 	# Perform tests
 	begin
 	    # Counter start
-	    @publisher.counter.start(testcount) if @param.rflag.counter
+	    @publisher.progress.start(testcount)
 	    
 	    # Do CheckGeneric
 	    check_generic.each { |args| test1(*args) }
@@ -252,15 +247,15 @@ class TestManager
 	    check_extra.each { |args| test1(*args) }
 
 	    # Counter end on success
-	    @publisher.counter.done(domainname_s)   if @param.rflag.counter
+	    @publisher.progress.done(domainname_s)
 	rescue Report::FatalError
 	    # Counter end on failure
-	    @publisher.counter.failed(domainname_s) if @param.rflag.counter
+	    @publisher.progress.failed(domainname_s)
 	    # Reraise exception
 	    raise
 	ensure
 	    # Counter cleanup
-	    @publisher.counter.finish if @param.rflag.counter
+	    @publisher.progress.finish
 	end
 
 	# Testdesc spacer
