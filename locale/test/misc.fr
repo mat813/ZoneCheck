@@ -38,4 +38,5 @@ explain : [none]
 [chk_given_ns_vs_ns]
 testname: cohérence avec la liste des serveurs de noms donnée
 error   : La liste des serveurs récupérée ne correspond pas à celle donnée
+details : La liste des serveurs de noms donnée (%{list_from_param}) n'est pas cohérentes avec celle récupéré sur la zone (%{list_from_ns}).
 explain : [none]

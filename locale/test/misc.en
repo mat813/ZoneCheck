@@ -38,4 +38,5 @@ explain : [none]
 [chk_given_ns_vs_ns]
 testname: correctness of given nameserver list
 error   : The nameserver list doesn't match the given one
+details : The given nameserver list (%{list_from_param}) is not coherent with the one retrieved from the zone (#{list_from_ns}).
 explain : [none]
