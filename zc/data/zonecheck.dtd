@@ -1,0 +1,70 @@
+<!--                                                                      -->
+<!-- CONTACT     :                                                        -->
+<!-- AUTHOR      : Stephane D'Alu <sdalu@sdalu.com>                       -->
+<!--                                                                      -->
+<!-- CREATED     : 2003/06/28 00:09:51                                    -->
+<!-- REVISION    : $Revision$                                      -->
+<!-- DATE        : $Date$                           -->
+<!--                                                                      -->
+<!-- CONTRIBUTORS: (see also CREDITS file)                                -->
+<!--                                                                      -->
+<!--                                                                      -->
+<!-- LICENSE     : GPL v2 (or MIT/X11-like after agreement)               -->
+<!-- COPYRIGHT   : Stephane D'Alu (c) 2003                                -->
+<!--                                                                      -->
+<!-- This file is part of ZoneCheck.                                      -->
+<!--                                                                      -->
+<!-- ZoneCheck is free software; you can redistribute it and/or modify it -->
+<!-- under the terms of the GNU General Public License as published by    -->
+<!-- the Free Software Foundation; either version 2 of the License, or    -->
+<!-- (at your option) any later version.                                  -->
+<!--                                                                      -->
+<!-- ZoneCheck is distributed in the hope that it will be useful, but     -->
+<!-- WITHOUT ANY WARRANTY; without even the implied warranty of           -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    -->
+<!-- General Public License for more details.                             -->
+<!--                                                                      -->
+<!-- You should have received a copy of the GNU General Public License    -->
+<!-- along with ZoneCheck; if not, write to the Free Software Foundation, -->
+<!-- Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA          -->
+<!--                                                                      -->
+
+<!ELEMENT zonecheck (intro?, diagnostic*, status)>
+
+
+<!ELEMENT intro     (zone, nameserver*)>
+
+
+<!ELEMENT testid      (#PCDATA)>
+<!ELEMENT testname    (#PCDATA)>
+<!ELEMENT message     (#PCDATA)>
+<!ELEMENT details     (#PCDATA)>
+<!ELEMENT reference   (#PCDATA)>
+<!ELEMENT severity    EMPTY>
+<!ELEMENT element     (#PCDATA)>
+<!ELEMENT hostname    (#PCDATA)>
+
+<!ELEMENT diagnostic  (testid, severity, testname?, message, details?, explanation*, element*)>
+
+<!ELEMENT status     (#PCDATA)>
+<!ELEMENT zcstamp    (#PCDATA)>
+
+<!ELEMENT address (#PCDATA)>
+
+<!ELEMENT excerpt (#PCDATA)>
+
+<!ATTLIST address    type    (ipv4|ipv6)               #REQUIRED>
+<!ATTLIST nameserver type    (primary|secondary)       #REQUIRED>
+<!ATTLIST element    type    (host)                    "host">
+<!ATTLIST message    type    (exception|passed|failed) #REQUIRED>
+<!ATTLIST reference  type    (adv|ref)                 #REQUIRED>
+<!ATTLIST severity   type    (info|fatal|warning)      #REQUIRED>
+<!ATTLIST status     info    CDATA                     #REQUIRED
+                     warning CDATA                     #REQUIRED
+                     fatal   CDATA                     #REQUIRED>
+
+<!ATTLIST zcstamp    release CDATA                     #REQUIRED
+                     date    CDATA                     #REQUIRED>
+
+<!ELEMENT nameserver (hostname, address*)>
+<!ELEMENT explanation (reference, excerpt)>

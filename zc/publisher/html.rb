@@ -386,7 +386,7 @@ EOT
 		@o.puts "<DIV class=\"zc-name\"><IMG src=\"#{@publish_path}/img/gear.png\" alt=\"\"> #{l10n_name}</DIV>"
 	    end
 
-	    # Message
+	    # Severity
 	    severity_tag		= Config.severity2tag(severity)
 	    logo			= severity_tag + ".png"
 	    l10n_severity_shorttag	= if @rflag.tagonly
@@ -394,6 +394,7 @@ EOT
 					  else $mc.get("w_#{severity_tag}_id")
 					  end
 
+	    # Message
 	    msg = if severity.nil?
 		      $mc.get("#{testname}_ok")
 		  else

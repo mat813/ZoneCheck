@@ -771,6 +771,9 @@ class Param
 	    when "h", "html"
 		require 'publisher/html'
 		@publisher.engine = ::Publisher::HTML
+	    when "x", "xml"
+		require 'publisher/xml'
+		@publisher.engine = ::Publisher::XML
 	    when "g", "gtk"
 		require 'publisher/gtk'
 		@publisher.engine = ::Publisher::GTK

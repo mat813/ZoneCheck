@@ -299,13 +299,14 @@ module Publisher
 		@o.puts "[> #{l10n_name}"
 	    end
 
-	    # Message
+	    # Severity
 	    severity_tag		= Config.severity2tag(severity)
 	    l10n_severity_shorttag	= if @rflag.tagonly
 					  then #{severity_tag}
 					  else $mc.get("w_#{severity_tag}_id")
 					  end
 
+	    # Message
 	    msg = if severity.nil?
 		      $mc.get("#{testname}_ok")
 		  else
