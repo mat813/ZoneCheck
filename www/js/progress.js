@@ -149,8 +149,8 @@ function zc_pgr_start(count) {
   zc_pgr_setdesc("...");
   zc_pgr_update();
 
-  // fire updater 4 times per second
-  zc_pgr_timeoutid = setInterval("zc_pgr_updater()", 250);
+  // fire updater 2 times per second
+  zc_pgr_timeoutid = setInterval("zc_pgr_updater()", 500);
 }
 
 

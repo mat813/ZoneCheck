@@ -1,2 +1,4 @@
 # $Id$
 	
+2003-03-18  Stephane D'Alu  <sdalu@nic.fr>
+	* i18n/l10n: UTF-8 output support, locale in UTF8

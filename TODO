@@ -1,23 +1,27 @@
 # $Id$
 
 version = 2.0.0
-	Implement AXFR tests (only framework exists)
-	Test loopback delegation v6
+	Tests:	- Implement AXFR tests (only framework exists)
+		- Test loopback delegation v6
+		- base de donnees reseau (RIPE) 
+		- test connectivite avec plusieurs adresses IP 
 	Check name from_s methode
 
         revoir la presentation des pages html au niveau du formulaire web
-	base de donnees reseau (RIPE) 
- 	test de connectivite pour les serveurs qui ont plusieurs adresses IP 
-	traitement des exceptions
+	form.erb memorize options
+
 	portage sous windows (recuperer le resolver par defaut, ...)
-	pour les sous zones (asso.fr , ....) ne pas faire les tests des MX
 	integration avec la chaine de production
 
 	check for label_xpl defined elsewhere
 
-	check for differences between IE/Mozilla/Konqueror/...
 	reorganize javascript (espetially for localisation)
-	form.erb memorize options
+
+BEURK:
+	pour les sous zones (asso.fr , ....) ne pas faire les tests des MX
+
+	zonecheck.afnic.fr virtual host
+	mail tous
 
 
 version = 2.1.0

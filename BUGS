@@ -4,7 +4,7 @@
 # See TODO before writting a new bug
 #
 
-2002-18-10	sdalu@nic.fr
+2002-10-18	sdalu@nic.fr
 - elements of the HTML progress bar get blank sometimes
 
 2003-12-02	sdalu@nic.fr
@@ -12,3 +12,7 @@
 
 2003-02-27	sdalu@nic.fr
 - When in batch mode, an error in one domain, stop the checking of others
+
+2003-03-18	sdalu@nic.fr
+- Konqueror failed using right click menu
+- Konqueror has problems interpreting the CSS for the "Zone Information"
