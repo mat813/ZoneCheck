@@ -72,7 +72,7 @@ install: install-common install-cli install-cgi install-doc
 install-common:
 	@echo "==> Installing core components"
 	$(INSTALL) -d $(LIBEXEC)/zc
-	$(TAR) xf - zc     | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
+	$(TAR) cf - zc     | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
 	$(RUBY) -p -i \
 		-e "\$$_.gsub!(/^#!.*ruby/, '#!$(RUBY)')" \
 		-e "\$$_.gsub!(/^(ZC_INSTALL_PATH\s*=\s*).*/, '\1\"$(LIBEXEC)/zc\"')" \
@@ -84,15 +84,15 @@ install-common:
 	$(CHMOD) 755 $(LIBEXEC)/zc/zc/zc.rb 
 
 	@echo "==> Installing libraries"
-	$(TAR) xf - lib    | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
+	$(TAR) cf - lib    | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
 	@echo
 
 	@echo "==> Installing tests"
-	$(TAR) xf - test   | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
+	$(TAR) cf - test   | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
 	@echo
 
 	@echo "==> Installing locale"
-	$(TAR) xf - locale | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
+	$(TAR) cf - locale | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
 	@echo
 
 	@echo "==> Installing default configuration file"
@@ -110,7 +110,7 @@ install-common:
 
 install-cgi:
 	@echo "==> Installing HTML pages"
-	$(TAR) xf - www   | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
+	$(TAR) cf - www   | (cd $(LIBEXEC)/zc && $(TAR) xvf -)
 	@echo "==> Patching HTML pages"
 	$(FIND) $(LIBEXEC)/zc/www -name '*.html.*' -exec $(RUBY) -p -i -e "\$$_.gsub!(/HTML_PATH/, '$(HTML_PATH)')" {} \;
 	$(FIND) $(LIBEXEC)/zc/www -name '*.html' -exec $(RUBY) -p -i -e "\$$_.gsub!(/HTML_PATH/, '$(HTML_PATH)')" {} \;
