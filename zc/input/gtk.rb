@@ -21,6 +21,12 @@ require 'data/logo'
 
 Gtk.init
 
+#
+# When busy: @window.window.cursor = Gdk::Cursor::new(Gdk::Cursor::WATCH)
+# Notbook:   set_page_pixmaps(notebook, page_num, @book_open, @book_open_mask)
+# Tooltips
+#
+
 module Input
     ##
     ## Processing parameters from GTK
@@ -347,6 +353,9 @@ module Input
 		zone_f = Gtk::Frame::new(l10n_zone)
 		zone_f.add(hbox)
 
+		main.tooltips.set_tip(@zone, "Enter zone to check",
+				      "input/simple/zone")
+
 		# NS
 		tbl  = Gtk::Table::new(MaxNS, 5, false)
 		tbl.set_col_spacings(5)
@@ -364,6 +373,12 @@ module Input
 		    tbl.attach(@ns[i],  2, 3, i, i+1)
 		    tbl.attach(lbl_ips, 3, 4, i, i+1, Gtk::SHRINK | Gtk::FILL)
 		    tbl.attach(@ips[i], 4, 5, i, i+1)
+
+		    main.tooltips.set_tip(@ns[i], "Enter nameserver name",
+					  "input/simple/nameserver/name")
+		    main.tooltips.set_tip(@ips[i], "Enter nameserver IP addresses (coma separated)",
+					  "input/simple/nameserver/name")
+		    
 		}
 		
 		ns_f = Gtk::Frame::new(l10n_ns.upcase)
@@ -488,8 +503,19 @@ module Input
 		l10n_check		= $mc.get("iface_label_check")
 		l10n_clear		= $mc.get("iface_label_clear")
 		l10n_batch		= $mc.get("ns_batch").capitalize
+		l10n_batch_open		= $mc.get("iface_batch_open")
+		l10n_batch_save		= $mc.get("iface_batch_save")
+		l10n_file_gotdirectory	= $mc.get("iface_file_gotdirectory")
+		l10n_file_overwrite	= $mc.get("iface_file_overwrite")
 
 		# Batch
+		open = Gtk::Button::new(Gtk::Stock::OPEN)
+		save = Gtk::Button::new(Gtk::Stock::SAVE)
+		hbbox = Gtk::HButtonBox::new
+		hbbox.layout_style = Gtk::HButtonBox::START
+		hbbox.pack_start(open)
+		hbbox.pack_start(save)
+
 		@batch = Gtk::TextView::new
 
 		info = Gtk::Label::new($mc.get("iface_batch_example"))
@@ -500,27 +526,32 @@ module Input
 		scroller.add_with_viewport(@batch)
 
 		vbox = Gtk::VBox::new(false, 5)
+		vbox.pack_start(hbbox,    false, true)
 		vbox.pack_start(scroller, true,  true)
 		vbox.pack_start(info,     false, true)
 	    
 		batch_f = Gtk::Frame::new(l10n_batch)
 		batch_f.add(vbox)
 
+		main.tooltips.set_tip(@batch, "Enter the list of Zone that you want to test", "input/batch/data")
+		main.tooltips.set_tip(open, "Set batch data from existing file", "input/batch/open")
+		main.tooltips.set_tip(save, "Save current batch data", "input/batch/save")
+
 		# Buttons
 		@check = Gtk::Button::new(Gtk::Stock::EXECUTE, l10n_check)
 		@clear = Gtk::Button::new(Gtk::Stock::CLEAR,   l10n_clear)
 
-		@hbbox  = Gtk::HButtonBox::new
-		@hbbox.pack_start(@check)
-		@hbbox.pack_start(@clear)
+		hbbox = Gtk::HButtonBox::new
+		hbbox.pack_start(@check)
+		hbbox.pack_start(@clear)
 		
 		# Final packaging
 		pack_start(batch_f, true,  true)
-		pack_start(@hbbox,  false, true)
+		pack_start(hbbox,   false, true)
 
 		# Signal handler
 		@check.signal_connect("clicked") { |w| 
-		    @hbbox.set_sensitive(false)
+		    hbbox.set_sensitive(false)
 		    begin
 			main.set_expert
 			main.set_options
@@ -532,14 +563,94 @@ module Input
 			puts e.backtrace.join("\n")
 			puts "FUCK"
 		    end
-		    @hbbox.set_sensitive(true)
+		    hbbox.set_sensitive(true)
 		}
 
 		@clear.signal_connect("clicked") {
-		    @hbbox.set_sensitive(false)
-		    @batch.buffer.set_text("")
-		    @hbbox.set_sensitive(true)
+		    hbbox.set_sensitive(false)
+		    self.data = ""
+		    hbbox.set_sensitive(true)
 		}
+
+		save.signal_connect("clicked") {
+		    fs = Gtk::FileSelection::new(l10n_batch_save)
+		    fs.set_modal(true)
+		    fs.set_transient_for(main.window)
+		    fs.hide_fileop_buttons
+		    fs.set_filename("batch.txt")
+		    
+		    fs.cancel_button.signal_connect("clicked") {
+			fs.destroy
+		    }
+		    fs.ok_button.signal_connect("clicked") {
+			doit = true
+			doit &= fs.filename[-1] != File::SEPARATOR[0]
+			if doit && File.file?(fs.filename)
+			    txt = l10n_file_overwrite % fs.filename
+			    overwrite = Gtk::MessageDialog::new(fs, 
+				    Gtk::MessageDialog::MODAL,
+				    Gtk::MessageDialog::WARNING,
+				    Gtk::MessageDialog::BUTTONS_YES_NO, txt)
+			    doit &= overwrite.run == 
+				Gtk::MessageDialog::RESPONSE_YES
+			    overwrite.destroy
+			end
+			if doit
+			    begin
+				File::open(fs.filename, 
+					File::CREAT|File::WRONLY, 0644) { |io|
+				    io.write(data)
+				}
+				fs.destroy
+			    rescue SystemCallError => e
+				fs.destroy
+				error = Gtk::MessageDialog::new(main.window, 
+				    Gtk::MessageDialog::MODAL,
+				    Gtk::MessageDialog::ERROR,
+				    Gtk::MessageDialog::BUTTONS_CLOSE,
+				    e.message)
+				error.run
+				error.destroy
+			    end
+			end
+		    }
+		    fs.show
+		}
+
+		open.signal_connect("clicked") {
+		    fs = Gtk::FileSelection::new(l10n_batch_open)
+		    fs.set_modal(true)
+		    fs.set_transient_for(main.window)
+		    fs.hide_fileop_buttons
+		    
+		    fs.cancel_button.signal_connect("clicked") {
+			fs.destroy
+		    }
+		    fs.ok_button.signal_connect("clicked") {
+			if fs.filename[-1] != File::SEPARATOR[0]
+			    if File.directory?(fs.filename)
+				main.statusbar.push(1, l10n_file_gotdirectory)
+			    else
+				begin
+				    txt = ""
+				    File::open(fs.filename) { |io|
+					while not io.eof?
+					    txt << io.read(4096) ; end
+				    }
+				    self.data = txt
+				rescue SystemCallError => e
+				    main.statusbar.push(1, e.message)
+				end
+			    end
+			    fs.destroy
+			end
+		    }
+		    fs.show
+		}
+	    end
+
+	    def data=(txt)
+		@batch.buffer.set_text(txt)
 	    end
 
 	    def data
@@ -549,8 +660,7 @@ module Input
 	end
 
 	class Main
-	    attr_reader :config, :statusbar, :testmanager
-
+	    attr_reader :config, :statusbar, :testmanager, :window, :tooltips
 	    
 
 	    def initialize(param, config, testmanager)
@@ -564,11 +674,12 @@ module Input
 	    def create
 		@window = Gtk::Window::new
 		@window.set_title("ZoneCheck")
-		@window.signal_connect("delete_event") {|*args| delete_event(*args) }
-		@window.signal_connect("destroy") {|*args| Gtk::main_quit }
+		@window.signal_connect("delete_event") { exit EXIT_ABORTED }
 		@window.border_width = 0
-		
-		
+
+		@tooltips = Gtk::Tooltips.new
+		@tooltips.disable
+
 		menubar   = Gtk::MenuBar::new
 		@statusbar = Gtk::Statusbar::new
 		@statusbar.push(1, "Welcome to ZoneCheck #{ZC_VERSION}")
@@ -594,11 +705,15 @@ module Input
 		menu.append(batch_mitem)
 		exp_mitem    = Gtk::CheckMenuItem::new("Expert")
 		menu.append(exp_mitem)
+		tooltips_mitem = Gtk::CheckMenuItem::new("Tooltips")
+		menu.append(tooltips_mitem)
 #		sep = Gtk::SeparatorMenuItem::new
 #		menu.append(sep)
 		quit_mitem   = Gtk::ImageMenuItem::new(Gtk::Stock::QUIT)
 		menu.append(quit_mitem)
 		menubar.append(mode_mitem)
+
+
 		
 		# Help menu
 		menu       = Gtk::Menu::new
@@ -632,11 +747,6 @@ module Input
 		    txt  = "Version: #{$zc_version}\n"
 		    txt += "Maintainer: #{ZC_MAINTAINER}"
 
-#		    about = Gtk::MessageDialog::new(@window, 
-#					 Gtk::MessageDialog::MODAL,
-#					 Gtk::MessageDialog::INFO,
-#					 Gtk::MessageDialog::BUTTONS_OK, txt)
-
 		    about = Gtk::Dialog::new("About", @window,
                          Gtk::Dialog::MODAL | Gtk::Dialog::DESTROY_WITH_PARENT,
                          [Gtk::Stock::OK, Gtk::Dialog::RESPONSE_ACCEPT])
@@ -645,8 +755,6 @@ module Input
 		    about.vbox.pack_start(Gtk::Image::new(*logo), false, true)
 		    about.vbox.pack_start(Gtk::Label::new(txt), false, true)
 		    about.vbox.show_all
-#		    about.child = hb
-#		    about.set_title("About")
 		    about.run
 		    about.destroy
 		}
@@ -667,7 +775,18 @@ module Input
 			notebook.remove_page(notebook.page_num(@expert))
 		    end
 		}
+		
+		quit_mitem.signal_connect("activate") {
+		    exit EXIT_ABORTED
+		}
 
+		tooltips_mitem.signal_connect("toggled") { |w|
+		    if w.active?
+		    then @tooltips.enable
+		    else @tooltips.disable
+		    end
+		}
+		
 
 		#
 		@window.add(vbox)
@@ -688,19 +807,19 @@ module Input
 	    end
 
 	    def set_expert
-		@p.rflag.one	= @expert.one
-		@p.rflag.tagonly= @expert.tagonly
-		@p.rflag.quiet	= @expert.quiet
-		@p.output	= @expert.output
-		@p.test.tests	= @expert.testname
-		@p.resolver.local = @expert.resolver
+		@p.rflag.one		= @expert.one
+		@p.rflag.tagonly	= @expert.tagonly
+		@p.rflag.quiet		= @expert.quiet
+		@p.output		= @expert.output
+		@p.test.tests		= @expert.testname
+		@p.resolver.local	= @expert.resolver
 		@p.resolver.autoconf
 	    end
 
 	    def set_options
-		@p.transp	= @options.transp
-		@p.verbose	= @options.verbose
-		@p.error	= @options.error
+		@p.transp		= @options.transp
+		@p.verbose		= @options.verbose
+		@p.error		= @options.error
 	    end
 
 	    def set_batch
