@@ -55,7 +55,7 @@ install:
 
 	$(RUBY) -p -i.bak \
 		-e "\$$_.gsub!(/^(ZC_INSTALL_PATH\s*=\s*).*/, '\1\"$(LIBEXEC)\"')" \
-		-e "\$$_.gsub!(/^#!.*\/ruby/, '#!$(RUBY)')" \
+		-e "\$$_.gsub!(/^#!.*ruby/, '#!$(RUBY)')" \
 		$(LIBEXEC)/zc/zc.rb
 	$(CHMOD) 755 $(LIBEXEC)/zc/zc.rb 
 	$(LN) -s -f $(LIBEXEC)/zc/zc.rb $(BINDIR)/zc
