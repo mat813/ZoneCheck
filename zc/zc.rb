@@ -62,6 +62,8 @@ ZC_GTK_ENV_KEYS		= [] #[ "DISPLAY" ]
 
 ZC_HTML_PATH		= "/zc" # no trailing /
 
+ZC_CONTACT		= "zonecheck@nic.fr"
+
 ## --> END OF CUSTOMIZATION <-- ######################################
 
 
@@ -463,6 +465,7 @@ end
 if ! $zc_slavemode
     $zc_version	= ZC_VERSION
     $zc_name	= ZC_NAME
+    $zc_contact	= ZC_CONTACT
 
     begin
 	exit ZoneCheck::new.start ? EXIT_OK : EXIT_FAILED
