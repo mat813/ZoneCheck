@@ -45,19 +45,19 @@
   </HEAD>
 
   <BODY>
-    <H1><IMG alt="ZoneCheck (batch mode)" src="HTML_PATH/img/logo.png"></H1>
+    <H1><IMG alt="ZoneCheck (traitement en lots)" src="HTML_PATH/img/logo.png"></H1>
 
-    <P>It is assumed that you are already familiar with <I>ZoneCheck</I>,
-      if not you are advised to try the <A href="form.html">single domain
-	version</A> of the form before using this batch mode.</P>
+    <P>Il est supposé que vous êtes déjà familiarisé avec <I>ZoneCheck</I>,
+      si tel n'est pas le cas essayez d'abord le formulaire pour 
+      <A href="form.html">domaine unique</A>.</P>
 
-    <P>For detailed information on how to fill this form see the 
-      <A href="#help">help</A> section.</P>
+    <P>Pour une information détaillée sur la manière de remplire le 
+      formulaire voyez la section sur l'<A href="#help">aide</A>.</P>
       
     
 
-    <H2>Zone information</H2>
-Examples:
+    <H2>Information sur la zone</H2>
+Exemples:
     <PRE>DOM=afnic.fr
 DOM=nic.fr NS=ns1.nic.fr;ns2.nic.fr
 DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
@@ -76,81 +76,80 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="intro"    value='t'>
-	      zone summary</TD>
+	      résumé sur la zone</TD>
 	    <TD><INPUT type="checkbox" name="explain"  value='t'>
 	      explanations</TD>
 	    <TD><INPUT type="checkbox" name="details"  value='t'>
-	      details</TD>
+	      détails</TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="one"  value='t' checked>
-	      one liner</TD>
+	      1 ligne</TD>
 	    <TD><INPUT type="checkbox" name="quiet"  value='t' checked>
-	      no titles</TD>
+	      sans titres</TD>
 	    <TD>
 	    </TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="radio" name="progress" value='counter' checked>
-	      progress bar</TD>
+	      barre de progression</TD>
 	    <TD><INPUT type="radio" name="progress" value='testdesc'>
 	      description</TD>
 	    <TD><INPUT type="radio" name="progress" value=''>
-	      nothing</TD>
+	      rien</TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
-	    <TD>
+	    <TD>format
 	      <SELECT name="format">
 		<OPTION value="html" SELECTED> HTML
 		<OPTION value="text"         > Text
-	      </SELECT> format
-	    </TD>
-	    <TD>
+	      </SELECT></TD>
+	    <TD>langue
 	      <SELECT name="lang">
-		<OPTION value=""           > Default
+		<OPTION value=""           > Défaut
 		<OPTION value="en" SELECTED> English
 		<OPTION value="fr"         > Fran&ccedil;ais
-	      </SELECT> Language
+	      </SELECT></TD>
 	    </TD>
 	  </TR>	    
 
 	  <TR></TR>
-	  <TR class="zc_title"><TD colspan="4">Error report</TD></TR>
+	  <TR class="zc_title"><TD colspan="4">Rapport d'erreurs</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="radio" name="errorlvl" value="" CHECKED>
-	      default error</TD>
+	      sévérité par défaut</TD>
 	    <TD><INPUT type="radio" name="errorlvl" value="allfatal">
-	      all fatals</TD>
+	      tout fatal</TD>
 	    <TD><INPUT type="radio" name="errorlvl" value="allwarning">
-	      all warnings</TD>
+	      tout avertissement</TD>
 	  </TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="dontstop" value="nostop">
-	      don't stop on fatal</TD>
+	      continue après fatal</TD>
 	    </TD>
 	  </TR>
 
 	  
 	  <TR></TR>
-	  <TR class="zc_title"><TD colspan="4">Extra test performed</TD></TR>
+	  <TR class="zc_title"><TD colspan="4">Tests supplémentaires effectués</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="chkmail" value='t' checked>
-	      mail delivery</TD>
+	      distribution du courrier</TD>
 	    <TD><INPUT type="checkbox" name="chkzone" value='t' checked>
-	      zone content</TD>
+	      transfert de zone</TD>
 	    <TD><INPUT type="checkbox" name="chkripe" value='t' checked>
-	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A></TD>
+	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html">base de donée <ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM></A></TD>
 	  </TR>
 
 
 	  <TR></TR>
-	  <TR class="zc_title"><TD colspan="4">Transport layer</TD></TR>
+	  <TR class="zc_title"><TD colspan="4">Couche de transport</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="transp3" value="ipv4" checked>
@@ -169,153 +168,156 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TR>
       </TABLE>
     </FORM>
-
     
+
     <!-- Propaganda -->
-    <H2 id="benefit">Benefit</H2>
-    <P> Among the tests performed you can find checking for: 
+    <H2 id="benefit">Bénéfices</H2>
+    <P> Parmi les tests effectués on peut trouver: 
     <UL>
-      <LI>authoritative nameserver for your zone, ensuring you will
-	be able to use your domain from outside your network.
-      </LI>
-      <LI>correct list of secondary nameservers, so that if your
-	primary nameserver is temporarily unreachable, you will still
-	be visible on the internet;
-      <LI>check for mail delivery, so that you don't become the 
-	pray of spammer	and be 
-	<A href="http://www.mail-abuse.org/">blacklisted</A>
-      </LI>
+      <LI>serveur autoritaire pour la zone, assurant qu'il est possible
+	d'utiliser le domaine à l'extérieur de votre réseau ;</LI>
+      <LI>liste des serveurs secondaires correctes, de telle manière
+	que si le serveur primaire est temporairement injoingnable, 
+	le domaine reste encore visible depuis l'Internet ;</LI>
+      <LI>vérification de la distribution du courrier, afin de ne pas
+	devenir la proie des spammers et finir en 
+	<A href="http://www.mail-abuse.org/">liste noire</A></LI>
     </UL></P>
 
 
     <!-- Help -->
-    <H2 id="help">Help</H2>
+    <H2 id="help">Aide</H2>
     <TABLE rules="rows" class="zc_help">
-	<TR><TD class="zc_title" colspan="2">Zone Information</TD></TR>
+	<TR><TD class="zc_title" colspan="2">Information sur la zone</TD></TR>
 	<TR>
 	  <TD class="zc_key">Zone</TD>
-	  <TD>The domain (ie: zone) that should be tested (ie: the domain name
-	    that you want to register).</TD>
+	  <TD>Le domaine (ie: zone) qui doit être testée (ie: le nom de
+	    domaine qui doit être enregistré).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Primary</TD>
-	  <TD>The nameserver that is considered as primary (the one in 
-	    the SOA record if it is public).</TD>
+	  <TD class="zc_key">Primaire</TD>
+	  <TD>Le serveur de noms qui est considéré comme primaire (celui qui
+	    figure dans l'enregistrement du SOA, si celui-ci est public).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">Secondary</TD>
-	  <TD>The secondary nameservers (all the NS records associated
-	    with the zone, except for the one listed above).</TD>
+	  <TD>Le serveur de noms secondaire (tous les enregistrement NS
+	    associés avec le domaine, à l'exception de celui listé ci-dessus.
+	  </TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">IPs</TD>
-	  <TD>List of IP addresses associated with the nameserver.
+	  <TD>Liste des addresses IPs associées avec le serveur de noms.
 	    <UL>
-	      <LI>they are only required if they can't be resolved
-		(ie: they are in the zone that you want to register).</LI>
-	      <LI>if you have several addresses you must use a coma as
-		the separator.</LI>
-	      <LI>the form accept IPv4 and IPv6 addresses.</LI>
+	      <LI>elles sont uniquement requises si elles ne peuvent être
+		déduites (ie: elles sont dans la zone qui est actuellement
+		en cours d'enregistrement).</LI>
+	      <LI>si il y a plusieurs addresses, elle doivent être séparées
+		par un espace ou une virgule.</LI>
+	      <LI>le formulaire accepte aussi bien les addresses IPv4
+		qu'IPv6 (à l'exception des compatibles et mappées).</LI>
 	    </UL>
 	  </TD>
 	</TR>
 
-	<TR><TD class="zc_title" colspan="2">Options: Output</TD></TR>
+	<TR><TD class="zc_title" colspan="2">Options: Sortie</TD></TR>
 	<TR>
-	  <TD class="zc_key">zone summary</TD>
-	  <TD>Includes a summary about the zone and its nameservers in 
-	    the generated report</TD>
+	  <TD class="zc_key">résumé sur la zone</TD>
+	  <TD>Inclus un résumé sur la zone et ces serveur de noms dans le 
+	    rapport généré</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">details</TD>
-	  <TD>Includes details (when the test failed) about 
-	    the culprit elements.</TD>
+	  <TD class="zc_key">explications</TD>
+	  <TD>Inclus une explication sur la raison du test et pourquoi
+	    il doit être corrigé (quand le test a échoué).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">explanations</TD>
-	  <TD>Includes an explanation (when the test failed) about 
-	    the purpose of the test and why you should fixed it.</TD>
+	  <TD class="zc_key">détails</TD>
+	  <TD>Inclus des détails sur les éléments coupables 
+	    (quand le test a échoué).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">one liner</TD>
-	  <TD>Report information as a one liner (in fact 3 lines).</TD>
+	  <TD class="zc_key">1 ligne</TD>
+	  <TD>Rapporte l'information en une ligne (en fait 3 lignes).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">no titles</TD>
-	  <TD>Don't use title for the different sections.</TD>
+	  <TD class="zc_key">sans titres</TD>
+	  <TD>N'utilise pas de titres pour les différentes sections.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">progress bar</TD>
-	  <TD>Display information about the test progression 
-	    using a a progress bar (<I>require javascript and
-	    Mozilla or IE5+ for correct rendering</I>).</TD>
+	  <TD class="zc_key">barre de progression</TD>
+	  <TD>Affiche des informations a propos de le déroulement des 
+	    tests en utilisant une barre de progression (<I>nécessite
+	      javascript et Mozilla ou IE5+ pour un rendu correct</I>).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">description</TD>
-	  <TD>Give a short description of the test when it is performed.</TD>
+	  <TD>Donne une courte description sur le test effectué.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">nothing</TD>
-	  <TD>Don't display information about the test progression.</TD>
+	  <TD class="zc_key">rien</TD>
+	  <TD>N'affiche aucune information sur la progression des tests.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">format</TD>
-	  <TD>Select the format in which you want the report
-	    (HTML or plain text).</TD>
+	  <TD>Sélectionne le format dans lequel le rapport doit être généré
+	    (HTML ou texte simple).</TD>
 	</TR> 
 	<TR>
-	  <TD class="zc_key">language</TD>
-	  <TD>Select the language that you want the report generated in.</TD>
+	  <TD class="zc_key">langue</TD>
+	  <TD>Sélectionne la langue dans laquelle le rapport doit être
+	    généré.</TD>
 	</TR> 
 
-	<TR><TD class="zc_title" colspan="2">Options: Error report</TD></TR>
+	<TR><TD class="zc_title" colspan="2">Options: rapport d'erreurs</TD></TR>
 	<TR>
 	  <TD class="zc_key">default error</TD>
-	  <TD>Errors are reported with the default severity associated 
-	    with them.</TD>
+	  <TD>Les erreurs sont rapportés avec le degré de sévérité associé
+	    au test.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">all fatals</TD>
-	  <TD>All errors are considered fatals.</TD>
+	  <TD>Toute erreur est considérée comme fatale.</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">all warnings</TD>
-	  <TD>All errors are considered warnings.</TD>
+	  <TD>Toute erreur est considérée comme un avertissement.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">don't stop on fatal</TD>
-	  <TD>Keep going even after encountering a fatal error
-	    (<I>this could lead to some unexpected results</I>).</TD>
+	  <TD class="zc_key">continue après fatal</TD>
+	  <TD>Continue même après avoir rencontré une erreur fatale
+	    (<I>cela peut conduire à des résultats inattendus</I>).</TD>
 	</TR>
 
-	<TR><TD class="zc_title" colspan="2">Options: Extra tests performed</TD></TR>
+	<TR><TD class="zc_title" colspan="2">Options: tests supplémentaires effectués</TD></TR>
 	<TR>
-	  <TD class="zc_key">mail delivery</TD>
-	  <TD>Perform extra checking on mail delivery for typical 
-	    mail account (hostmaster, postmaster, ...) associated with
-	    domain names.</TD>
+	  <TD class="zc_key">distribution du courrier</TD>
+	  <TD>Effectue des vérifications supplémentaires
+	    sur la distribution du courrier pour des comptes utilisateurs
+	    typiques (hostmaster, postmaster, ...) associé avec les
+	    domaines.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">zone transfer</TD>
-	  <TD>Perform additional tests on the zone retrieved after
-	    a <I>zone transfer</I>.</TD>
+	  <TD class="zc_key">transfert de zone</TD>
+	  <TD>Effectue un <I>transfert de zone</I> sur lequel des tests
+	    supplémentaires sont effectués.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">RIPE database</TD>
-	  <TD>Check that IP addresses used are registered in the RIPE
-	    database (if they belong to RIPE)</TD>
+	  <TD class="zc_key">base de données RIPE</TD>
+	  <TD>Vérifie que les addresses IPs sont bien enregistrée
+	    dans la base RIPE (si elles appartiennent a RIPE)</TD>
 	</TR>
 
 	<TR><TD class="zc_title" colspan="2">Options: Transport layer</TD></TR>
 	<TR>
 	  <TD class="zc_key">IPv4, IPv6</TD>
-	  <TD>Select the routing layer (if none are selected it will
-	    default to IPv4 and IPv6).</TD>
+	  <TD>Sélectionne la couche de routage (si aucune n'est sélectionné
+	    le défaut est de prendre IPv4 et IPv6).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">STD, UDP, TCP</TD>
-	  <TD>Select the transport layer you want for interrogating
-	    your nameservers.</TD>
+	  <TD>Sélectionne la couche de transport à utiliser pour interroger
+	    les serveurs de noms.</TD>
 	</TR>
     </TABLE>
 
@@ -325,7 +327,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Mar 20 17:58:41 CET 2003
+Last modified: Thu Mar 20 18:03:15 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

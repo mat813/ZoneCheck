@@ -1,0 +1,392 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- $Id$ -->
+ 
+<!--                                                                  -->
+<!-- AUTHOR   : Stephane D'Alu <sdalu@nic.fr>                         -->
+<!-- CREATED  : 2002/10/01 13:58:17                                   -->
+<!--                                                                  -->
+<!-- COPYRIGHT: AFNIC (c) 2003                                        -->
+<!-- CONTACT  : zonecheck@nic.fr                                      -->
+<!-- LICENSE  : GPL v2.0 (or MIT/X11-like after agreement)            -->
+<!--                                                                  -->
+<!-- $Revision$                                                -->
+<!-- $Date$                                     -->
+<!--                                                                  -->
+<!-- CONTRIBUTORS: (see also CREDITS file)                            -->
+<!--                                                                  -->
+<!--                                                                  -->
+
+
+<HTML>
+  <HEAD>
+    <LINK rel="stylesheet" href="HTML_PATH/style/zc.css" type="text/css">
+    <LINK rel="start" title="ZoneCheck page principale"
+	  type="text/html"
+	  href="HTML_PATH/">
+    <LINK rel="bookmark" title="formulaire pour traitement en lots"
+	  type="text/html"
+	  href="HTML_PATH/batch.html">
+    <LINK rel="bookmark" title="formulaire pour domaine unique"
+	  type="text/html"
+	  href="HTML_PATH/">
+
+    <LINK rel="help"	
+	  type="text/html"
+	  href="#help">
+
+    <LINK lang="en" title="Zonecheck"
+	  type="text/html"
+	  rel="alternate"
+	  hreflang="en"
+	  href="HTML_PATH/en/">
+
+
+    <SCRIPT src="HTML_PATH/js/formvalidation.js"  type="text/javascript"></SCRIPT>
+    <TITLE>Zone Check</TITLE>
+  </HEAD>
+
+  <BODY>
+    <!-- Logo -->
+    <H1 style="text-align: center;">
+      <IMG alt="ZoneCheck" src="HTML_PATH/img/logo.png"></H1>
+
+    <!-- Propaganda -->
+    <P>Le programme ZoneCheck (librement disponnible 
+      <A href="http://zonecheck.nic.fr/download/v2/">ici</A>
+      en téléchargement) effectue plusieurs tests sur la zone (ie:
+      domaine) afin de s'assurer que celle ci est correctement configurée
+      et peut être délégué sans risques, fournissant un certain degré de
+      qualité à votre domaine (voir la section sur les 
+      <A href="#benefit">bénéfices</A>).</P>
+
+    <P>Pour une information détaillée sur la manière de remplire le 
+      formulaire voyez la section sur l'<A href="#help">aide</A>.</P>
+      
+    <P>Si vous avez besoin d'utiliser <I>ZoneCheck</I> sur plusieurs 
+      domaines, le <A href="batch.html">formulaire de traitement par lot</A>
+      peut se révéler plus pratique.</P>
+
+    <!-- Warning about waiting time -->
+    <BLOCKQUOTE class="zc_warning">
+      <P>Le temps nécessaire à une vérification complète du domaine
+	peut prendre de 30 secondes jusqu'à <B>5 minutes</B> dépendant
+	de la vitesse du réseau pour les serveur étant en train d'être 
+	accédés.
+	Si cela prend plus d'une minute, c'est que des problèmes 
+	réseaux sont généralement rencontrés pour accéder aux serveurs
+	(erreur de configuration, firewall, ...) et que le programme
+	et en attente de timeouts.</P>
+    </BLOCKQUOTE>
+    
+    <!-- Form -->
+    <FORM name="zcform" method="POST" action="HTML_PATH/cgi-bin/zc.cgi">
+      <!-- Basic information -->
+      <H2>Information sur la zone</H2>
+      <TABLE class="zc_domain">
+	  <TR class="zc_zone">
+	    <TD><IMG src="HTML_PATH/img/zone.png" alt="">Zone</TD>
+	    <TD colspan="4">
+	      <INPUT name="zone" type="text" size="65" value=""></TD>
+	  </TR>
+
+	  <TR class="zc_ns_prim">
+	    <TD><IMG src="HTML_PATH/img/primary.png" alt="">Primaire</TD>
+	    <TD><INPUT name="ns0"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips0" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondaire</TD>
+	    <TD><INPUT name="ns1"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips1" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondaire</TD>
+	    <TD><INPUT name="ns2"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips2" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondaire</TD>
+	    <TD><INPUT name="ns3"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips3" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondaire</TD>
+	    <TD><INPUT name="ns4"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips4" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondaire</TD>
+	    <TD><INPUT name="ns5"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips5" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondaire</TD>
+	    <TD><INPUT name="ns6"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips6" type="text" size=35 value=""></TD>
+	  </TR>
+	  <TR class="zc_ns_sec">
+	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondaire</TD>
+	    <TD><INPUT name="ns7"  type="text" size=24 value=""></TD>
+	    <TD></TD>
+	    <TD>IPs</TD>
+	    <TD><INPUT name="ips7" type="text" size=35 value=""></TD>
+	  </TR>
+      </TABLE>
+      <INPUT type="submit" value=" Check! " onClick="zc_formcheck(this.form)">
+      <INPUT type="button" value=" Clear "  onClick="zc_formclear(this.form)">
+
+      <!-- Options -->
+      <H2>Options</H2>
+      <TABLE class="zc_options">
+	<TR class="zc_title"><TD colspan="4">Sortie</TD></TR>
+	  <TR>
+	    <TD></TD>
+	    <TD><INPUT type="checkbox" name="intro"    value='t' checked>
+	      résumé sur la zone</TD>
+	    <TD><INPUT type="checkbox" name="explain"  value='t' checked>
+	      explications</TD>
+	    <TD><INPUT type="checkbox" name="details"  value='t' checked>
+	      détails</TD>
+	  </TR>
+	  <TR>
+	    <TD></TD>
+	    <TD><INPUT type="radio" name="progress" value='counter' checked>
+	      barre de progression</TD>
+	    <TD><INPUT type="radio" name="progress" value='testdesc'>
+	      description</TD>
+	    <TD><INPUT type="radio" name="progress" value=''>
+	      rien</TD>
+	  </TR>
+	  <TR>
+	    <TD></TD>
+	    <TD>format
+	      <SELECT name="format">
+		<OPTION value="html" SELECTED> HTML
+		<OPTION value="text"         > Text
+	      </SELECT></TD>
+	    <TD>langue
+	      <SELECT name="lang">
+		<OPTION value=""           > Défaut
+		<OPTION value="en" SELECTED> English
+		<OPTION value="fr"         > Fran&ccedil;ais
+	      </SELECT></TD>
+	  </TR>	    
+
+	  <TR></TR>
+	  <TR class="zc_title"><TD colspan="4">Rapport d'erreurs</TD></TR>
+	  <TR>
+	    <TD></TD>
+	    <TD><INPUT type="radio" name="errorlvl" value="" CHECKED>
+	      sévérité par défaut</TD>
+	    <TD><INPUT type="radio" name="errorlvl" value="allfatal">
+	      tout fatal</TD>
+	    <TD><INPUT type="radio" name="errorlvl" value="allwarning">
+	      tout avertissement</TD>
+	  </TR>
+	  <TR>
+	    <TD></TD>
+	    <TD><INPUT type="checkbox" name="dontstop" value="nostop">
+	      continue après fatal</TD>
+	  </TR>
+
+	  <TR></TR>
+	  <TR class="zc_title"><TD colspan="4">Tests supplémentaires effectués</TD></TR>
+	  <TR>
+	    <TD></TD>
+	    <TD><INPUT type="checkbox" name="chkmail" value='t' checked>
+	      distribution du courrier</TD>
+	    <TD><INPUT type="checkbox" name="chkzone" value='t' checked>
+	      transfert de zone</TD>
+	    <TD><INPUT type="checkbox" name="chkripe" value='t' checked>
+	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html">base de donée <ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM></A></TD>
+	  </TR>
+
+	  <TR></TR>
+	  <TR class="zc_title"><TD colspan="4">Couche de transport</TD></TR>
+	  <TR>
+	    <TD></TD>
+	    <TD><INPUT type="checkbox" name="transp3" value="ipv4" checked>
+	      <ACRONYM title="Internet Protocol version 4">IPv4</ACRONYM></TD>
+	    <TD><INPUT type="checkbox" name="transp3" value="ipv6" checked>
+	      <A href="http://www.ipv6.org/"><ACRONYM title="Internet Protocol version 6">IPv6</ACRONYM></A></TD>
+	  </TR>
+	  <TR>
+	    <TD></TD>
+	    <TD><INPUT type="radio" name="transp4" value="std" CHECKED>
+	      <ACRONYM title="UDP with fallback on TCP for truncated answers">STD</ACRONYM></TD>
+	    <TD><INPUT type="radio" name="transp4" value="udp">
+	      <ACRONYM title="User Datagram Protocol">UDP</ACRONYM></TD>
+	    <TD><INPUT type="radio" name="transp4" value="tcp">
+	      <ACRONYM title="Transport Control Protocol">TCP</ACRONYM></TD>
+	  </TR>
+      </TABLE>
+    </FORM>
+    
+
+    <!-- Propaganda -->
+    <H2 id="benefit">Bénéfices</H2>
+    <P> Parmi les tests effectués on peut trouver: 
+    <UL>
+      <LI>serveur autoritaire pour la zone, assurant qu'il est possible
+	d'utiliser le domaine à l'extérieur de votre réseau ;</LI>
+      <LI>liste des serveurs secondaires correctes, de telle manière
+	que si le serveur primaire est temporairement injoingnable, 
+	le domaine reste encore visible depuis l'Internet ;</LI>
+      <LI>vérification de la distribution du courrier, afin de ne pas
+	devenir la proie des spammers et finir en 
+	<A href="http://www.mail-abuse.org/">liste noire</A></LI>
+    </UL></P>
+
+
+    <!-- Help -->
+    <H2 id="help">Aide</H2>
+    <TABLE rules="rows" class="zc_help">
+	<TR><TD class="zc_title" colspan="2">Information sur la zone</TD></TR>
+	<TR>
+	  <TD class="zc_key">Zone</TD>
+	  <TD>Le domaine (ie: zone) qui doit être testée (ie: le nom de
+	    domaine qui doit être enregistré).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Primaire</TD>
+	  <TD>Le serveur de noms qui est considéré comme primaire (celui qui
+	    figure dans l'enregistrement du SOA, si celui-ci est public).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">Secondary</TD>
+	  <TD>Le serveur de noms secondaire (tous les enregistrement NS
+	    associés avec le domaine, à l'exception de celui listé ci-dessus.
+	  </TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">IPs</TD>
+	  <TD>Liste des addresses IPs associées avec le serveur de noms.
+	    <UL>
+	      <LI>elles sont uniquement requises si elles ne peuvent être
+		déduites (ie: elles sont dans la zone qui est actuellement
+		en cours d'enregistrement).</LI>
+	      <LI>si il y a plusieurs addresses, elle doivent être séparées
+		par un espace ou une virgule.</LI>
+	      <LI>le formulaire accepte aussi bien les addresses IPv4
+		qu'IPv6 (à l'exception des compatibles et mappées).</LI>
+	    </UL>
+	  </TD>
+	</TR>
+
+	<TR><TD class="zc_title" colspan="2">Options: Sortie</TD></TR>
+	<TR>
+	  <TD class="zc_key">résumé sur la zone</TD>
+	  <TD>Inclus un résumé sur la zone et ces serveur de noms dans le 
+	    rapport généré</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">explications</TD>
+	  <TD>Inclus une explication sur la raison du test et pourquoi
+	    il doit être corrigé (quand le test a échoué).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">détails</TD>
+	  <TD>Inclus des détails sur les éléments coupables 
+	    (quand le test a échoué).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">barre de progression</TD>
+	  <TD>Affiche des informations a propos de le déroulement des 
+	    tests en utilisant une barre de progression (<I>nécessite
+	      javascript et Mozilla ou IE5+ pour un rendu correct</I>).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">description</TD>
+	  <TD>Donne une courte description sur le test effectué.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">rien</TD>
+	  <TD>N'affiche aucune information sur la progression des tests.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">format</TD>
+	  <TD>Sélectionne le format dans lequel le rapport doit être généré
+	    (HTML ou texte simple).</TD>
+	</TR> 
+	<TR>
+	  <TD class="zc_key">langue</TD>
+	  <TD>Sélectionne la langue dans laquelle le rapport doit être
+	    généré.</TD>
+	</TR> 
+
+	<TR><TD class="zc_title" colspan="2">Options: rapport d'erreurs</TD></TR>
+	<TR>
+	  <TD class="zc_key">default error</TD>
+	  <TD>Les erreurs sont rapportés avec le degré de sévérité associé
+	    au test.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">all fatals</TD>
+	  <TD>Toute erreur est considérée comme fatale.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">all warnings</TD>
+	  <TD>Toute erreur est considérée comme un avertissement.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">continue après fatal</TD>
+	  <TD>Continue même après avoir rencontré une erreur fatale
+	    (<I>cela peut conduire à des résultats inattendus</I>).</TD>
+	</TR>
+
+	<TR><TD class="zc_title" colspan="2">Options: tests supplémentaires effectués</TD></TR>
+	<TR>
+	  <TD class="zc_key">distribution du courrier</TD>
+	  <TD>Effectue des vérifications supplémentaires
+	    sur la distribution du courrier pour des comptes utilisateurs
+	    typiques (hostmaster, postmaster, ...) associé avec les
+	    domaines.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">transfert de zone</TD>
+	  <TD>Effectue un <I>transfert de zone</I> sur lequel des tests
+	    supplémentaires sont effectués.</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">base de données RIPE</TD>
+	  <TD>Vérifie que les addresses IPs sont bien enregistrée
+	    dans la base RIPE (si elles appartiennent a RIPE)</TD>
+	</TR>
+
+	<TR><TD class="zc_title" colspan="2">Options: Transport layer</TD></TR>
+	<TR>
+	  <TD class="zc_key">IPv4, IPv6</TD>
+	  <TD>Sélectionne la couche de routage (si aucune n'est sélectionné
+	    le défaut est de prendre IPv4 et IPv6).</TD>
+	</TR>
+	<TR>
+	  <TD class="zc_key">STD, UDP, TCP</TD>
+	  <TD>Sélectionne la couche de transport à utiliser pour interroger
+	    les serveurs de noms.</TD>
+	</TR>
+    </TABLE>
+
+
+    <!-- What / Who / When -->
+    <HR>
+Distribution: $Name$ <BR>
+<!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
+<!-- hhmts start -->
+Last modified: Thu Mar 20 17:55:07 CET 2003
+<!-- hhmts end -->
+  </BODY>
+</HTML>
