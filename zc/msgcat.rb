@@ -246,7 +246,7 @@ class MessageCatalog
 
 		case line
 		# Prefix section
-		when /^\[(#{TagRegex}|\*)]\s*$/
+		when /^\[(#{TagRegex}|\*)\]\s*$/
 		    prefix = $1 == "*" ? nil : $1 
 		    if prefix.nil?
 		    then $dbg.msg(DBG::LOCALE, "removing prefix")
