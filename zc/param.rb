@@ -637,7 +637,7 @@ class Param
 	    @publisher
 	end
 
-	def autoconf(rflag)
+	def autoconf(rflag, option)
 	    # Set publisher class (if not already done)
 	    if @publisher_class.nil?
 		require 'publisher/text'
@@ -645,7 +645,7 @@ class Param
 	    end
 
 	    # Set output publisher
-	    @publisher = @publisher_class::new(rflag, $console.stdout)
+	    @publisher = @publisher_class::new(rflag, option, $console.stdout)
 
 	    $dbg.msg(DBG::AUTOCONF) { "Publish using #{@publisher_class}" }
 	end

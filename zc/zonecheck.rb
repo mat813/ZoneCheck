@@ -246,9 +246,9 @@ class ZoneCheck
     end
 
     def param_config_preamble
-	@param.option.autoconf
 	@param.rflag.autoconf
-	@param.publisher.autoconf(@param.rflag)
+	@param.option.autoconf
+	@param.publisher.autoconf(@param.rflag, @param.option)
 	@param.network.autoconf
 	@param.resolver.autoconf
 	@param.test.autoconf
@@ -257,7 +257,7 @@ class ZoneCheck
     def param_config_data
 	@param.info.clear
 	@param.info.autoconf
-	@param.publisher.engine.info = @param.info
+	@param.publisher.engine.info   = @param.info
 	@param.domain.autoconf(@param.resolver.local)
 	@param.report.autoconf(@param.domain, 
 			       @param.rflag, @param.publisher.engine)

@@ -57,7 +57,7 @@ module Publisher
 	# Shortcut for enclosing noscript
 	def self.nscript
 	    '<noscript>' + yield + '</noscript>'
-	end
+   	end
 
 
 	##
@@ -170,6 +170,7 @@ module Publisher
 	    # Initialization
 	    def initialize(publisher)
 		@publisher	= publisher
+		@jscript_off	= publisher.option['nojavascript']
 		@o		= publisher.output
 		@l10n_testing	= $mc.get('word:testing').capitalize
 	    end
@@ -183,7 +184,7 @@ module Publisher
 			end
 
 		# Counter
-		if @publisher.rflag.counter
+		if @publisher.rflag.counter && !@jscript_off
 		    @o.puts HTML.jscript {
 			pgr_quiet_param  = @publisher.rflag.quiet ? "true" \
 			                                          : "false"
@@ -223,7 +224,7 @@ module Publisher
 	    # Finish (finalize) output
 	    def finish
 		# Counter
-		if @publisher.rflag.counter
+		if @publisher.rflag.counter && !@jscript_off
 		    @o.puts HTML.jscript { "zc_pgr_finish();" }
 		    @o.puts HTML.nscript { "</ul>" }
 		end
@@ -253,7 +254,7 @@ module Publisher
 		msg = "#{desc}#{xtra}"
 
 		# Counter
-		if @publisher.rflag.counter
+		if @publisher.rflag.counter && !@jscript_off
 		    jmsg = msg.gsub(/\"/, '\\"')
 		    @o.puts HTML.jscript { "zc_pgr_process(\"#{jmsg}\")" }
 		    @o.puts HTML.nscript { "<li>#{@l10n_testing}: #{msg}</li>"}
@@ -272,8 +273,8 @@ module Publisher
 
 	#------------------------------------------------------------
 
-	def initialize(rflag, ostream=$stdout)
-	    super(rflag, ostream)
+	def initialize(rflag, option, ostream=$stdout)
+	    super(rflag, option, ostream)
 	    @progress		= Progress::new(self)
 	    @publish_path	= ZC_HTML_PATH.gsub(/\/+$/, '')
 	    @xmltrans		= XMLTransform::new
@@ -289,6 +290,8 @@ module Publisher
 	#------------------------------------------------------------
 
 	def begin
+	    return if @option['ihtml']
+
 	    l10n_form        = $mc.get('word:form').capitalize
 	    l10n_batch_form  = l10n_form+': '+$mc.get('t_batch' ).capitalize
 	    l10n_single_form = l10n_form+': '+$mc.get('t_single').capitalize
@@ -341,28 +344,36 @@ module Publisher
         ul.zc-details li { 
             list-style: url(#{@publish_path}/img/details.png) disc }
     </style>
+EOT
 
+	    unless @option['nojavascript']
+	        @o.print <<"EOT"
     <!-- Javascript -->
     <script type="text/javascript">
       zc_publish_path = "#{@publish_path}"
     </script>
     <script src="#{@publish_path}/js/progress.js"  type="text/javascript">
     </script>
+EOT
+            end
+	    @o.print <<"EOT"
   </head>
   <body>
     <img class="zc-logo" alt="ZoneCheck" src="#{@publish_path}/img/logo.png">
 EOT
-@o.flush
+            @o.flush
 	end
 
 	def end
+	    return if @option['ihtml']
+
 	    profileinfo = if info.profile
 			  then "#{info.profile[0]} (#{info.profile[1]})"
 			  else 'N/A'
 			  end
-	    @o.puts HTML.jscript { 
-		"zc_contextmenu_setlocale(\"#{$mc.get('word:name')}\", \"#{$mc.get('word:details')}\", \"#{$mc.get('word:references')}\", \"#{$mc.get('word:elements')}\");\n" +
-		    "zc_contextmenu_start();" }
+#	    @o.puts @HTML.jscript { 
+#		"zc_contextmenu_setlocale(\"#{$mc.get('word:name')}\", \"#{$mc.get('word:details')}\", \"#{$mc.get('word:references')}\", \"#{$mc.get('word:elements')}\");\n" +
+#		    "zc_contextmenu_start();" }
 	    @o.print <<"EOT"
 
     <hr>

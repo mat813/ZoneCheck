@@ -59,11 +59,12 @@ module Publisher
     ##
     class Template # --> ABSTRACT <--
 	attr_reader :progress, :xmltrans
-	attr_reader :info, :rflag
+	attr_reader :info, :rflag, :option
 	attr_writer :info
 
-	def initialize(rflag, ostream=$stdout)
+	def initialize(rflag, option, ostream=$stdout)
 	    @rflag	= rflag
+	    @option	= option
 	    @o		= ostream
 	    @mutex	= Mutex::new
 	    @info	= nil

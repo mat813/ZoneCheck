@@ -94,8 +94,8 @@ module Publisher
 
 	#------------------------------------------------------------
 
-	def initialize(rflag, info, ostream=$stdout)
-	    super(rflag, info, ostream)
+	def initialize(rflag, option, ostream=$stdout)
+	    super(rflag, option, ostream)
 	    @progress		= Progress::new(self)
 	    @publish_path	= ZC_HTML_PATH.gsub(/\/+$/, "")
 	end

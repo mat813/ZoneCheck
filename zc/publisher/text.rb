@@ -298,8 +298,8 @@ module Publisher
 
 	#------------------------------------------------------------
 
-	def initialize(rflag, ostream=$stdout)
-	    super(rflag, ostream)
+	def initialize(rflag, option, ostream=$stdout)
+	    super(rflag, option, ostream)
 	    @progress	= Progress::new(self)
 	    @xmltrans	= XMLTransform::new
 	end
