@@ -108,20 +108,27 @@ class ZCMail
 	# NOT REACHED
     end
 
-    def banner          ; cmd(nil)                    ; end
-    def helo(host)      ; cmd("HELO #{host}")         ; end
-    def mail_from(from) ; cmd("MAIL FROM: <#{from}>") ; end
-    def rcpt_to(to)     ; cmd("RCPT TO: <#{to}>")     ; end
-    def rset            ; cmd("RSET")                 ; end
-    def quit            ; cmd("QUIT")                 ; end
+    def banner          ; cmd(nil)			; end
+    def helo(host)      ; cmd("HELO #{host}")		; end
+    def vrfy(user)	; cmd("VRFY <#{user}>")		; end
+    def mail_from(from) ; cmd("MAIL FROM: <#{from}>")	; end
+    def rcpt_to(to)     ; cmd("RCPT TO: <#{to}>")	; end
+    def rset            ; cmd("RSET")			; end
+    def quit            ; cmd("QUIT")			; end
 
 
-    def test_userexists(user)
+    def test_userexists(user, use_vrfy=false)
+	if use_vrfy
+	    case vrfy(user)[0]
+	    when 250, 251, 252 then rset ; return true
+	    end
+	end
 	mail_from("#{@user}@#{@mdest}")
 	res = rcpt_to(user)[0] == 250
 	rset
 	res
     end
+
 
     def test_openrelay(count=1)
 	tests = [ @openrelay_testlist[1] ]

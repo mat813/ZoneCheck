@@ -75,7 +75,7 @@ module CheckExtra
 	def testuser(user, mdom, mhost)
 #	    puts "USER = #{user}"
 	    mhosttest(mdom, mhost) { 
-		|mrelay| return mrelay.test_userexists(user) 
+		|mrelay| return mrelay.test_userexists(user, true)
 	    }
 	end
 
