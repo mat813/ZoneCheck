@@ -8,11 +8,9 @@ zc/param.rb
 version = 1.0.0
 	Cleanup input/* pubisher/*
 	Implement AXFR tests (only framework exists)
-	Progress bar for HTML publisher (with support for non ETA)
 	Test loopback delegation v6
 	Cache status is wrong
 	Check for meaningfull exit code
-	Categories
 	Translation in french
 	More checking in is_cname? (framework.rb)
 	Check name from_s methode

@@ -8,3 +8,6 @@
 - cigref.fr, is stuck on the openrelay test
 - elements of the HTML progress bar get blank sometimes
 
+2002-02-06	sdalu@nic.fr
+- lemonde2.fr: [TEST MX is not an alias]: undefined method `name' for nil
+- tf1.fr: [TEST NS is not an alias]: undefined method `name' for nil

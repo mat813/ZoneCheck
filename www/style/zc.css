@@ -101,6 +101,10 @@ TABLE#zc_pgr_pbar_in {
     margin: 5px;
 }
 
+#zc_pgr_pct1 { 
+    background-color: #123456;
+}
+
 
 /*
  */

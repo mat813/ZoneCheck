@@ -72,8 +72,8 @@ module Publisher
 			    $mc.get("pgr_time") ]
 			pgr_start_param  = count
 
-			str  = 'zc_pgr_quiet(%s);' % pgr_quiet_param
-			str += 'zc_pgr_locale("%s", "%s", "%s", "%s", "%s");' % pgr_locale_param
+			str  = 'zc_pgr_setlocale("%s", "%s", "%s", "%s", "%s");' % pgr_locale_param
+			str += 'zc_pgr_quiet(%s);' % pgr_quiet_param
 			str += 'zc_pgr_start(%d);' % pgr_start_param
 			str
 		    }
