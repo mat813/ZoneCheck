@@ -153,13 +153,15 @@ module NResolv
 		end
 
 		def query(msg)
+		    exception = nil
 		    @requester.each { |r|
 			begin
 			    return r.query(msg).send.wait
-			rescue NResolv::TimeoutError, NResolv::NetworkError
+			rescue NResolv::TimeoutError, 
+				NResolv::NetworkError => exception
 			end
 		    }
-		    raise NResolv::NoEntryError
+		    raise exception
 		end
 	    end
 
@@ -177,13 +179,15 @@ module NResolv
 		end
 
 		def query(msg)
+		    exception = nil
 		    @requester.each { |r|
 			begin
 			    return r.query(msg).send.wait
-			rescue NResolv::TimeoutError, NResolv::NetworkError
+			rescue NResolv::TimeoutError, 
+				NResolv::NetworkError => exception
 			end
 		    }
-		    raise NResolv::NoEntryError
+		    raise exception
 		end
 
 	    end
@@ -203,15 +207,17 @@ module NResolv
 		end
 
 		def query(msg)
+		    exception = nil
 		    @requester.each { |udp, tcp|
 			begin
 			    nmsg = udp.query(msg).send.wait
 			    nmsg = tcp.query(msg).send.wait if nmsg.tc
 			    return nmsg
-			rescue NResolv::TimeoutError, NResolv::NetworkError
+			rescue NResolv::TimeoutError, 
+				NResolv::NetworkError => exception
 			end
 		    }
-		    raise NResolv::NoEntryError
+		    raise exception
 		end
 	    end
 	end
