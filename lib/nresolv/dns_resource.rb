@@ -29,7 +29,11 @@ class NResolv
 
 
 	    def self.fetch_class(rclass, rtype)
-		@@hash_resource.fetch([rclass, rtype])
+		begin
+		    @@hash_resource.fetch([rclass, rtype])
+		rescue IndexError
+		    raise IndexError, "unimplemented record #{rclass}/#{rtype}"
+		end
 	    end
 
 	    def self.add_resource(klass)
@@ -131,8 +135,7 @@ class NResolv
 
 		class ANY < Resource
 		    def initialize
-			raise RuntimeError, 
-			    "#{self.class} can't be instanciated"
+			raise "#{self.class} can't be instanciated"
 		    end
 		end
 	    end

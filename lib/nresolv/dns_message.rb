@@ -117,7 +117,7 @@ class NResolv
 		def question=(q)
 		    unless q.nil? || q.class == Section::Q
 			raise ArgumentError,
-			"expected type NResolv::DNS::Section::Q"
+			    "expected type NResolv::DNS::Section::Q"
 		    end
 		    @question = q
 		end
@@ -141,7 +141,7 @@ class NResolv
 		def additional=(a)
 		    unless a.nil? || a.class == Section::A
 			raise ArgumentError,
-			"expected type NResolv::DNS::Section::A"
+			    "expected type NResolv::DNS::Section::A"
 		    end
 		    @additional = a
 		end
@@ -179,8 +179,7 @@ class NResolv
 
 	    def sort!
 		@record.sort! { |x, y|
-		    x[0].to_s <=> y[0].to_s
-		}
+		    x[0].to_s <=> y[0].to_s }
 		self
 	    end
 

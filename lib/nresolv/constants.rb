@@ -29,10 +29,13 @@ class NResolv
 		raise ArgumentError, "Constant name should be a String"
 	    end
 
-	    klass = self.class
-
+	    # Define attributes
 	    @name  = name.frozen? ? name : name.dup.freeze
 	    @value = value
+
+	    # Store itself in class attribute hashes
+	    #  so it can easily be retrieved
+	    klass = self.class
 
 	    @@hash_by_name [klass] = {} unless @@hash_by_name [klass]
 	    @@hash_by_value[klass] = {} unless @@hash_by_value[klass]
