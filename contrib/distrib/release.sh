@@ -26,12 +26,21 @@ tarlatest=$module-latest.tgz
 
 info "Making ZoneCheck release $release"
 
+info "- setting CVSROOT"
+if [ -z "$CVSROOT" ]; then
+    if [ -f CVS/Root ]; then
+	export CVSROOT=`cat CVS/Root`
+    else
+	die "unable to guess CVSROOT, you need to set it"
+    fi
+fi
+
 info "- creating temporary directory $tmp"
 mkdir -p $tmp
 cd $tmp || die "unable to change directory to $tmp"
 
 info "- exporting from CVS with tag $cvstag"
-cvs -q -d subversions.gnu.org:/cvsroot/zonecheck export -r $cvstag $module ||
+cvs -q export -r $cvstag $module ||
     die "unable to export release tagged $cvstag"
 
 info "- generating documentation"
