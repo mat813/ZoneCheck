@@ -20,7 +20,7 @@ module NResolv
     class DNS
 	def self.dump_comment(recv=STDOUT, comment=nil, tag=";; ")
 	    if comment
-		comment.split('\n', -1).each { |line|
+		comment.split(/\n/, -1).each { |line|
 		    recv << "#{tag}#{line.gsub(/\s*$/, "")}\n"
 		}
 	    end
