@@ -41,7 +41,7 @@ explain = label_xpl
 
 [chk_mx_cname]
 testname: l'enregistrement MX n'est pas un alias
-error   : l'enregistrement MX ne peut pas etre un alias (CNAME)
+error   : l'enregistrement MX ne peut pas être un alias (CNAME)
 explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
 
 

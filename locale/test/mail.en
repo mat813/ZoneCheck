@@ -52,3 +52,10 @@ testname: hostmaster email address is valid
 error   : The hostmaster can't be contacted by email
 explain : [none]
 details : The hostmaster address (%{hostmaster}) doesn't exist.
+
+
+[chk_mail_hostmaster_mx_cname]
+testname: hostmaster MX is not an alias
+error   : The hostmaster MX is not allow to point to a CNAME alias
+explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
+

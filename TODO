@@ -14,8 +14,10 @@ version = 2.0.0
 BEURK:
 	pour les sous zones (asso.fr , ....) ne pas faire les tests des MX
 
-
 version = 2.1.0
+	IDN
+
+version = 3.0.0
 	add checking of message catalog and test set
 	fix behaviour in case of test failed
 
@@ -41,5 +43,4 @@ version = 2.1.0
 		
 
 version = 3.0.0
-	IDN
 	DNSSEC

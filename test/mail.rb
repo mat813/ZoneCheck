@@ -120,6 +120,16 @@ module CheckExtra
 	    { "postmaster" => user }
 	end
 
+	# DESC:
+	def chk_mail_hostmaster_mx_cname
+	    rname = soa(bestresolverip).rname
+	    mdom  = rname.domain
+	    mhost = bestmx(mdom)
+	    puts mhost
+	    return true if mhost.nil?	# No MX
+	    ! is_cname?(mhost) 
+	end
+
 	#-- Tests ---------------------------------------------------
 	# 
 	def tst_mail_is_for_tld

@@ -52,3 +52,10 @@ testname: existence de l'adresse mél du 'hostmaster'
 error   : Le 'hostmaster' ne peut pas être contacté par mél
 explain : [none]
 details : L'adresse du 'hostmaster' (%{hostmaster}) n'existe pas.
+
+
+[chk_mail_hostmaster_mx_cname]
+testname: l'enregistrement MX du 'hostmaster' n'est pas un alias
+error   : L'enregistrement MX du 'hostmaster' ne peut pas être un alias (CNAME)
+explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
+

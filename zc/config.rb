@@ -259,7 +259,7 @@ class Config
 	    # Add the new instruction
 	    family = @test_manager.family(checkname)
 	    instr  = Instruction::Node::Check::new(checkname, 
-						   Config::Warning, "none")
+						   Config::Fatal, "none")
 	    @overrideconf[family] << instr
 	}
     end
