@@ -221,7 +221,7 @@ class MessageCatalog
     #       test for fr_CA and next fr
     #
     def filepath(where, lng=@lang)
-	lng   = self.class::normlang(lng) unless lng.id == @lang.id
+	lng   = self.class::normlang(lng) unless lng.object_id==@lang.object_id
         language, country, encoding = self.class::splitlang(lng)
 	where = "#{@directory}/#{where}"  unless where[0] == ?/
 	fp = [ where % [ language ] ]

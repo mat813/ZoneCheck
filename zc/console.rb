@@ -87,6 +87,7 @@ class Console
 	rescue LoadError => e
             @iconv = false
         end
+	@encoding = nil
 
 	#
 	@ctl = {
