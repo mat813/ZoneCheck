@@ -144,6 +144,7 @@ install-cli:
 	$(INSTALL) -d $(BINDIR)
 	$(LN) -f $(LIBEXEC)/zc/zc/zc.rb $(BINDIR)/zc
 	$(LN) -f $(LIBEXEC)/zc/zc/zc.rb $(BINDIR)/zonecheck
+	$(INSTALL) -d $(MANDIR)/man1
 	$(INSTALL) -m 0644 man/zonecheck.1 $(MANDIR)/man1/zc.1
 	$(INSTALL) -m 0644 man/zonecheck.1 $(MANDIR)/man1/zonecheck.1
 	@echo
