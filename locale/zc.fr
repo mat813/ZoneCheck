@@ -35,7 +35,7 @@ w_abort		: interrompt
 w_details	: détails
 w_references	: références
 w_elements	: éléments
-w_formulaire    : formulaire
+w_form          : formulaire
 
 
 #
