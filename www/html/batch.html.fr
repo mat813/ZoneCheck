@@ -78,8 +78,8 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	
       <!-- Options -->
       <H2>Options</H2>
-      <TABLE class="zc_options">
-	<TR class="zc_title"><TD colspan="4">Output</TD></TR>
+      <TABLE class="zc-options">
+	<TR class="zc-title"><TD colspan="4">Output</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="intro"    value='t'>
@@ -123,7 +123,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TR>	    
 
 	  <TR><TD></TD></TR>
-	  <TR class="zc_title"><TD colspan="4">Rapport d'erreurs</TD></TR>
+	  <TR class="zc-title"><TD colspan="4">Rapport d'erreurs</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="radio" name="errorlvl" value="" CHECKED>
@@ -141,7 +141,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
 	  
 	  <TR><TD></TD></TR>
-	  <TR class="zc_title"><TD colspan="4">Tests supplémentaires effectués</TD></TR>
+	  <TR class="zc-title"><TD colspan="4">Tests supplémentaires effectués</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="chkmail" value='t' checked>
@@ -154,7 +154,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
 
 	  <TR><TD></TD></TR>
-	  <TR class="zc_title"><TD colspan="4">Couche de transport</TD></TR>
+	  <TR class="zc-title"><TD colspan="4">Couche de transport</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="transp3" value="ipv4" checked>
@@ -193,26 +193,26 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
     <!-- Help -->
     <H2 id="help">Aide</H2>
     <H3>Formulaires</H3>
-    <TABLE rules="rows" class="zc_help">
-	<TR><TD class="zc_title" colspan="2">Information sur la zone</TD></TR>
+    <TABLE rules="rows" class="zc-help">
+	<TR><TD class="zc-title" colspan="2">Information sur la zone</TD></TR>
 	<TR>
-	  <TD class="zc_key">Zone</TD>
+	  <TD class="zc-key">Zone</TD>
 	  <TD>Le domaine (ie: zone) qui doit être testée (ie: le nom de
 	    domaine qui doit être enregistré).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Primaire</TD>
+	  <TD class="zc-key">Primaire</TD>
 	  <TD>Le serveur de noms qui est considéré comme primaire (celui qui
 	    figure dans l'enregistrement du SOA, si celui-ci est public).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Secondary</TD>
+	  <TD class="zc-key">Secondary</TD>
 	  <TD>Le serveur de noms secondaire (tous les enregistrement NS
 	    associés avec le domaine, à l'exception de celui listé ci-dessus.
 	  </TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">IPs</TD>
+	  <TD class="zc-key">IPs</TD>
 	  <TD>Liste des addresses IPs associées avec le serveur de noms.
 	    <UL>
 	      <LI>elles sont uniquement requises si elles ne peuvent être
@@ -226,102 +226,102 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TD>
 	</TR>
 
-	<TR><TD class="zc_title" colspan="2">Options: Sortie</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Options: Sortie</TD></TR>
 	<TR>
-	  <TD class="zc_key">résumé sur la zone</TD>
+	  <TD class="zc-key">résumé sur la zone</TD>
 	  <TD>Inclus un résumé sur la zone et ces serveur de noms dans le 
 	    rapport généré</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">explications</TD>
+	  <TD class="zc-key">explications</TD>
 	  <TD>Inclus une explication sur la raison du test et pourquoi
 	    il doit être corrigé (quand le test a échoué).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">détails</TD>
+	  <TD class="zc-key">détails</TD>
 	  <TD>Inclus des détails sur les éléments coupables 
 	    (quand le test a échoué).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">1 ligne</TD>
+	  <TD class="zc-key">1 ligne</TD>
 	  <TD>Rapporte l'information en une ligne (en fait 3 lignes).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">sans titres</TD>
+	  <TD class="zc-key">sans titres</TD>
 	  <TD>N'utilise pas de titres pour les différentes sections.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">barre de progression</TD>
+	  <TD class="zc-key">barre de progression</TD>
 	  <TD>Affiche des informations a propos de le déroulement des 
 	    tests en utilisant une barre de progression (<I>nécessite
 	      javascript et Mozilla ou IE5+ pour un rendu correct</I>).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">description</TD>
+	  <TD class="zc-key">description</TD>
 	  <TD>Donne une courte description sur le test effectué.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">rien</TD>
+	  <TD class="zc-key">rien</TD>
 	  <TD>N'affiche aucune information sur la progression des tests.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">format</TD>
+	  <TD class="zc-key">format</TD>
 	  <TD>Sélectionne le format dans lequel le rapport doit être généré
 	    (HTML ou texte simple).</TD>
 	</TR> 
 	<TR>
-	  <TD class="zc_key">langue</TD>
+	  <TD class="zc-key">langue</TD>
 	  <TD>Sélectionne la langue dans laquelle le rapport doit être
 	    généré.</TD>
 	</TR> 
 
-	<TR><TD class="zc_title" colspan="2">Options: rapport d'erreurs</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Options: rapport d'erreurs</TD></TR>
 	<TR>
-	  <TD class="zc_key">sévérité par défaut</TD>
+	  <TD class="zc-key">sévérité par défaut</TD>
 	  <TD>Les erreurs sont rapportés avec le degré de sévérité associé
 	    au test.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">tout fatal</TD>
+	  <TD class="zc-key">tout fatal</TD>
 	  <TD>Toute erreur est considérée comme fatale.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">tout avertissement</TD>
+	  <TD class="zc-key">tout avertissement</TD>
 	  <TD>Toute erreur est considérée comme un avertissement.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">continue après fatal</TD>
+	  <TD class="zc-key">continue après fatal</TD>
 	  <TD>Continue même après avoir rencontré une erreur fatale
 	    (<I>cela peut conduire à des résultats inattendus</I>).</TD>
 	</TR>
 
-	<TR><TD class="zc_title" colspan="2">Options: tests supplémentaires effectués</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Options: tests supplémentaires effectués</TD></TR>
 	<TR>
-	  <TD class="zc_key">distribution du courrier</TD>
+	  <TD class="zc-key">distribution du courrier</TD>
 	  <TD>Effectue des vérifications supplémentaires
 	    sur la distribution du courrier pour des comptes utilisateurs
 	    typiques (hostmaster, postmaster, ...) associé avec les
 	    domaines.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">transfert de zone</TD>
+	  <TD class="zc-key">transfert de zone</TD>
 	  <TD>Effectue un <I>transfert de zone</I> sur lequel des tests
 	    supplémentaires sont effectués.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">bases de données RIR</TD>
+	  <TD class="zc-key">bases de données RIR</TD>
 	  <TD>Vérifie que les addresses IPs sont bien enregistrée
 	    dans la base des RIRs</TD>
 	</TR>
 
-	<TR><TD class="zc_title" colspan="2">Options: Couche de transport</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Options: Couche de transport</TD></TR>
 	<TR>
-	  <TD class="zc_key">IPv4, IPv6</TD>
+	  <TD class="zc-key">IPv4, IPv6</TD>
 	  <TD>Sélectionne la couche de routage (si aucune n'est sélectionné
 	    le défaut est de prendre IPv4 et IPv6).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">STD, UDP, TCP</TD>
+	  <TD class="zc-key">STD, UDP, TCP</TD>
 	  <TD>Sélectionne la couche de transport à utiliser pour interroger
 	    les serveurs de noms.</TD>
 	</TR>
@@ -345,7 +345,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Distribution: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr  3 16:47:45 CEST 2003
+Last modified: Fri Apr  4 10:51:53 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

@@ -76,8 +76,8 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	
       <!-- Options -->
       <H2>Options</H2>
-      <TABLE class="zc_options">
-	<TR class="zc_title"><TD colspan="4">Output</TD></TR>
+      <TABLE class="zc-options">
+	<TR class="zc-title"><TD colspan="4">Output</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="intro"    value='t'>
@@ -122,7 +122,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TR>	    
 
 	  <TR><TD></TD></TR>
-	  <TR class="zc_title"><TD colspan="4">Error report</TD></TR>
+	  <TR class="zc-title"><TD colspan="4">Error report</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="radio" name="errorlvl" value="" CHECKED>
@@ -140,7 +140,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
 	  
 	  <TR><TD></TD></TR>
-	  <TR class="zc_title"><TD colspan="4">Extra test performed</TD></TR>
+	  <TR class="zc-title"><TD colspan="4">Extra test performed</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="chkmail" value='t' checked>
@@ -153,7 +153,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 
 
 	  <TR><TD></TD></TR>
-	  <TR class="zc_title"><TD colspan="4">Transport layer</TD></TR>
+	  <TR class="zc-title"><TD colspan="4">Transport layer</TD></TR>
 	  <TR>
 	    <TD></TD>
 	    <TD><INPUT type="checkbox" name="transp3" value="ipv4" checked>
@@ -194,25 +194,25 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
     <!-- Help -->
     <H2 id="help">Help</H2>
     <H3>Form</H3>
-    <TABLE rules="rows" class="zc_help">
-	<TR><TD class="zc_title" colspan="2">Zone Information</TD></TR>
+    <TABLE rules="rows" class="zc-help">
+	<TR><TD class="zc-title" colspan="2">Zone Information</TD></TR>
 	<TR>
-	  <TD class="zc_key">Zone</TD>
+	  <TD class="zc-key">Zone</TD>
 	  <TD>The domain (ie: zone) that should be tested (ie: the domain name
 	    that you want to register).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Primary</TD>
+	  <TD class="zc-key">Primary</TD>
 	  <TD>The nameserver that is considered as primary (the one in 
 	    the SOA record if it is public).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">Secondary</TD>
+	  <TD class="zc-key">Secondary</TD>
 	  <TD>The secondary nameservers (all the NS records associated
 	    with the zone, except for the one listed above).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">IPs</TD>
+	  <TD class="zc-key">IPs</TD>
 	  <TD>List of IP addresses associated with the nameserver.
 	    <UL>
 	      <LI>they are only required if they can't be resolved
@@ -224,100 +224,100 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 	  </TD>
 	</TR>
 
-	<TR><TD class="zc_title" colspan="2">Options: Output</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Options: Output</TD></TR>
 	<TR>
-	  <TD class="zc_key">zone summary</TD>
+	  <TD class="zc-key">zone summary</TD>
 	  <TD>Includes a summary about the zone and its nameservers in 
 	    the generated report</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">details</TD>
+	  <TD class="zc-key">details</TD>
 	  <TD>Includes details (when the test failed) about 
 	    the culprit elements.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">explanations</TD>
+	  <TD class="zc-key">explanations</TD>
 	  <TD>Includes an explanation (when the test failed) about 
 	    the purpose of the test and why you should fixed it.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">one liner</TD>
+	  <TD class="zc-key">one liner</TD>
 	  <TD>Report information as a one liner (in fact 3 lines).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">no titles</TD>
+	  <TD class="zc-key">no titles</TD>
 	  <TD>Don't use title for the different sections.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">progress bar</TD>
+	  <TD class="zc-key">progress bar</TD>
 	  <TD>Display information about the test progression 
 	    using a a progress bar (<I>require javascript and
 	    Mozilla or IE5+ for correct rendering</I>).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">description</TD>
+	  <TD class="zc-key">description</TD>
 	  <TD>Give a short description of the test when it is performed.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">nothing</TD>
+	  <TD class="zc-key">nothing</TD>
 	  <TD>Don't display information about the test progression.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">format</TD>
+	  <TD class="zc-key">format</TD>
 	  <TD>Select the format in which you want the report
 	    (HTML or plain text).</TD>
 	</TR> 
 	<TR>
-	  <TD class="zc_key">language</TD>
+	  <TD class="zc-key">language</TD>
 	  <TD>Select the language that you want the report generated in.</TD>
 	</TR> 
 
-	<TR><TD class="zc_title" colspan="2">Options: Error report</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Options: Error report</TD></TR>
 	<TR>
-	  <TD class="zc_key">default error</TD>
+	  <TD class="zc-key">default error</TD>
 	  <TD>Errors are reported with the default severity associated 
 	    with them.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">all fatals</TD>
+	  <TD class="zc-key">all fatals</TD>
 	  <TD>All errors are considered fatals.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">all warnings</TD>
+	  <TD class="zc-key">all warnings</TD>
 	  <TD>All errors are considered warnings.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">don't stop on fatal</TD>
+	  <TD class="zc-key">don't stop on fatal</TD>
 	  <TD>Keep going even after encountering a fatal error
 	    (<I>this could lead to some unexpected results</I>).</TD>
 	</TR>
 
-	<TR><TD class="zc_title" colspan="2">Options: Extra tests performed</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Options: Extra tests performed</TD></TR>
 	<TR>
-	  <TD class="zc_key">mail delivery</TD>
+	  <TD class="zc-key">mail delivery</TD>
 	  <TD>Perform extra checking on mail delivery for typical 
 	    mail account (hostmaster, postmaster, ...) associated with
 	    domain names.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">zone transfer</TD>
+	  <TD class="zc-key">zone transfer</TD>
 	  <TD>Perform additional tests on the zone retrieved after
 	    a <I>zone transfer</I>.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">RIR databases</TD>
+	  <TD class="zc-key">RIR databases</TD>
 	  <TD>Check that IP addresses used are registered in the RIR
 	    databases</TD>
 	</TR>
 
-	<TR><TD class="zc_title" colspan="2">Options: Transport layer</TD></TR>
+	<TR><TD class="zc-title" colspan="2">Options: Transport layer</TD></TR>
 	<TR>
-	  <TD class="zc_key">IPv4, IPv6</TD>
+	  <TD class="zc-key">IPv4, IPv6</TD>
 	  <TD>Select the routing layer (if none are selected it will
 	    default to IPv4 and IPv6).</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">STD, UDP, TCP</TD>
+	  <TD class="zc-key">STD, UDP, TCP</TD>
 	  <TD>Select the transport layer you want for interrogating
 	    your nameservers.</TD>
 	</TR>
@@ -341,7 +341,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr  3 17:18:52 CEST 2003
+Last modified: Fri Apr  4 10:51:28 CEST 2003
 <!-- hhmts end -->
   </BODY>
 

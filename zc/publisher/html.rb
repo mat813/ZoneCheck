@@ -88,7 +88,7 @@ module Publisher
 		# Test description
 		if @publisher.rflag.testdesc
 		    @o.puts title
-		    @o.puts "<UL class=\"zc_test\">"
+		    @o.puts "<UL class=\"zc-test\">"
 		end
 	    end
 	    
@@ -154,7 +154,7 @@ module Publisher
 	end
 
 	def error(text)
-	    @o.puts "<BLOCKQUOTE class=\"zc_error\">#{text}</BLOCKQUOTE>"
+	    @o.puts "<BLOCKQUOTE class=\"zc-error\">#{text}</BLOCKQUOTE>"
 	end
 
 	#------------------------------------------------------------
@@ -200,13 +200,13 @@ module Publisher
     <LINK rel="stylesheet" href="#{@publish_path}/style/zc.css"   type="text/css">
 
     <STYLE>
-        UL.zc_ref LI { 
+        UL.zc-ref LI { 
             list-style: url(#{@publish_path}/img/ref.png)     disc }
 
-        UL.zc_element LI { 
+        UL.zc-element LI { 
             list-style: url(#{@publish_path}/img/element.png) disc }
 
-        UL.zc_details LI { 
+        UL.zc-details LI { 
             list-style: url(#{@publish_path}/img/details.png) disc }
     </STYLE>
 
@@ -220,7 +220,7 @@ module Publisher
     </SCRIPT>
   </HEAD>
   <BODY>
-    <IMG class="zc_logo" src="#{@publish_path}/img/logo.png">
+    <IMG class="zc-logo" src="#{@publish_path}/img/logo.png">
 EOT
 @o.flush
 	end
@@ -248,8 +248,8 @@ EOT
 	def intro(domain)
 	    return unless @rflag.intro
 
-	    tbl_beg   = '<TABLE rules="rows" class="zc_domain">'
-	    tbl_zone  = '<TR class="zc_zone"><TD>%s</TD><TD colspan="4">%s</TD></TR>'
+	    tbl_beg   = '<TABLE rules="rows" class="zc-domain">'
+	    tbl_zone  = '<TR class="zc-zone"><TD>%s</TD><TD colspan="4">%s</TD></TR>'
 	    tbl_ns    = '<TR class="%s"><TD>%s</TD><TD>%s</TD><TD>%s</TD></TR>'
 	    tbl_end   = '</TABLE>'
 
@@ -261,17 +261,17 @@ EOT
 
 	    l10n_zone = $mc.get("ns_zone").capitalize
 
-	    @o.puts "<DIV class=\"zc_zinfo\">"
+	    @o.puts "<DIV class=\"zc-zinfo\">"
 	    @o.puts tbl_beg
 	    @o.puts tbl_zone % [ "<IMG src=\"#{@publish_path}/img/zone.png\" alt=\"#{l10n_zone}\">", domain.name ]
 	    domain.ns.each_index { |i| 
 		ns_ip = domain.ns[i]
 		if i == 0
-		    css  = "zc_ns_prim"
+		    css  = "zc-ns-prim"
 		    desc = $mc.get("ns_primary").capitalize
 		    logo = "primary"
 		else
-		    css  = "zc_ns_sec"
+		    css  = "zc-ns-sec"
 		    desc = $mc.get("ns_secondary").capitalize
 		    logo = "secondary"
 		end
@@ -311,9 +311,9 @@ EOT
 		f_tag, f_count ]
 
 
-	    @o.puts "<DIV class=\"zc_diag1\">"
+	    @o.puts "<DIV class=\"zc-diag1\">"
 	    @o.puts "<TABLE width=\"100%\">"
-	    @o.puts "<TR class=\"zc_title\"><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
+	    @o.puts "<TR class=\"zc-title\"><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
 	    if res.nil?
 		l10n_perfect = $mc.get("w_perfect").capitalize
 		@o.puts "<TR><TD colspan=\"2\"><B>#{l10n_perfect}</B></TD></TR>"
@@ -356,15 +356,15 @@ EOT
 		   else raise RuntimError, "XXX: unknown severity: #{severity}"
 		   end
 
-	    @o.puts "<DIV class=\"zc_diag\">"
+	    @o.puts "<DIV class=\"zc-diag\">"
 
 #	    l10n_name = $mc.get("#{testname}_testname")
-#	    @o.puts "<DIV class=\"zc_name\"><IMG src=\"#{@publish_path}/img/element.png\" alt=\"\"> #{l10n_name}</DIV>"
+#	    @o.puts "<DIV class=\"zc-name\"><IMG src=\"#{@publish_path}/img/element.png\" alt=\"\"> #{l10n_name}</DIV>"
 
-	    @o.puts "<DIV class=\"zc_msg\"><IMG src=\"#{@publish_path}/img/#{logo}.png\" alt=\"\"> #{msg}</DIV>"
+	    @o.puts "<DIV class=\"zc-msg\"><IMG src=\"#{@publish_path}/img/#{logo}.png\" alt=\"\"> #{msg}</DIV>"
 
 	    if @rflag.details && desc.dtl
-		@o.puts "<UL class=\"zc_details\">"
+		@o.puts "<UL class=\"zc-details\">"
 		@o.puts "<LI>"
 		@o.puts desc.dtl
 		@o.puts "</LI>"
@@ -372,13 +372,13 @@ EOT
 	    end
 
 	    if xpl_lst
-		@o.puts "<UL class=\"zc_ref\">"
+		@o.puts "<UL class=\"zc-ref\">"
 		xpl_lst.each { |t, h, b|
 		    l10n_tag = $mc.get("tag_#{t}")
 		    h.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>')
 		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>') }
 		    @o.puts "<LI>"
-		    @o.puts "<SPAN class=\"zc_ref\">#{l10n_tag}: #{h}</SPAN>"
+		    @o.puts "<SPAN class=\"zc-ref\">#{l10n_tag}: #{h}</SPAN>"
 		    @o.puts "<BR>"
 		    @o.puts b.join(" ")
 		    @o.puts "</LI>"
@@ -387,7 +387,7 @@ EOT
 	    end
 
 	    if ! lst.empty?
-		@o.puts "<UL class=\"zc_element\">"
+		@o.puts "<UL class=\"zc-element\">"
 		lst.each { |elt| @o.puts "  <LI>#{elt}</LI>" }
 		@o.puts "</UL>"
 	    end
@@ -402,7 +402,7 @@ EOT
 		l10n_title = $mc.get("title_status")
 		@o.puts "<H2 id=\"t_status\">#{l10n_title}</H2>"
 	    end
-	    @o.print "<DIV class=\"zc_status\">", 
+	    @o.print "<DIV class=\"zc-status\">", 
 		super(domainname, i_count, w_count, f_count), "</DIV>"
 	    @o.puts "<BR>"
 	    if @rflag.quiet
@@ -416,7 +416,7 @@ EOT
 	#------------------------------------------------------------
 
 	def h2(h)
-	    @o.puts "<H3 class=\"zc_severity\">---- #{h.capitalize} ----</H3>"
+	    @o.puts "<H3 class=\"zc-severity\">---- #{h.capitalize} ----</H3>"
 	end
     end
 end
