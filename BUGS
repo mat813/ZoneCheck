@@ -1,18 +1,7 @@
 # $Id$
 
-The HTML documentation is in an early stage.
+For information about open bugs and old ones, you should now look 
+at the bug tracking hosted on savannah:
 
+https://savannah.nongnu.org/bugs/?group=zonecheck
 
-#
-# See TODO before writting a new bug
-#
-
-2003-12-02	sdalu@nic.fr
-- HTML progress bar keep updating when page has been stopped
-
-2003-02-27	sdalu@nic.fr
-- When in batch mode, an error in one domain, stop the checking of others
-
-2003-??-??
-- check for oncontextmenu before using it (otherwise js error)
-- problem with progress bar on macosX (ie 5.2)

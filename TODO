@@ -29,8 +29,7 @@ version = 3.0.0
 	fix behaviour in case of test failed
 
 	edns0
-	New configuration file (++++)         \
-	New scheduling engine (++++)          |
+	New scheduling engine (++++)          \
 	New test scheme (ie: tst_*) (++++)    |
 	Have a useconf strict (+++)
 	Detection of failure due to dependencies [doomed]
