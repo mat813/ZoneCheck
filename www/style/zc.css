@@ -269,15 +269,16 @@ TABLE.zc-help TD.zc-title {
  */
 TABLE.zc-popup { 
     background-color: #f0ece5;
+    color: #333333; 
     border: 1px solid #1341af;
 }
 
 TABLE.zc-popup TR.zc-title { 
     background-color: #1341af;
+    color: #f5b13d;
 }
 
 TABLE.zc-popup TR.zc-title TD { 
-    color: #f5b13d;
 }
 
 TABLE.zc-popup TR.zc-title A { 
