@@ -208,8 +208,8 @@
 	      mail delivery</TD>
 	    <TD><INPUT type="checkbox" name="chkzone" value='t' checked>
 	      zone transfer</TD>
-	    <TD><INPUT type="checkbox" name="chkripe" value='t' checked>
-	      <A href="http://www.ripe.net/ripencc/pub-services/db/whois/whois.html"><ACRONYM title="R&eacute;seau IP Europ&eacute;en">RIPE</ACRONYM> database</A></TD>
+	    <TD><INPUT type="checkbox" name="chkrir" value='t' checked>
+	      <ACRONYM title="Regional Internet Registry">RIR</ACRONYM> databases</TD>
 	  </TR>
 
 	  <TR></TR>
@@ -354,9 +354,9 @@
 	    a <I>zone transfer</I>.</TD>
 	</TR>
 	<TR>
-	  <TD class="zc_key">RIPE database</TD>
-	  <TD>Check that IP addresses used are registered in the RIPE
-	    database (if they belong to RIPE)</TD>
+	  <TD class="zc_key">RIR databases</TD>
+	  <TD>Check that IP addresses used are registered in the RIR
+	    databases</TD>
 	</TR>
 
 	<TR><TD class="zc_title" colspan="2">Options: Transport layer</TD></TR>
@@ -378,7 +378,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Mar 20 18:11:06 CET 2003
+Last modified: Mon Mar 24 15:58:22 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

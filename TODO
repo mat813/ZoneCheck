@@ -2,7 +2,7 @@
 
 version = 2.0.0
 	Tests:	- Implement AXFR tests (only framework exists)
-		- base de donnees reseau (RIPE) 
+		- base de donnees reseau (RIR) 
 		- test connectivite avec plusieurs adresses IP 
 
 	integration avec la chaine de production
@@ -17,6 +17,8 @@ version = 2.1.0
 	portage sous windows (recuperer le resolver par defaut, ...)
 	special timeout return code
 	Tests:	- check coherence between parent glue and domain
+	Round robin on dns record in NResolv for address resolution
+	Check for authoritative answer in NResolv
 
 version = 3.0.0
 	add checking of message catalog and test set

@@ -37,7 +37,7 @@ error_allwarnings	: tout avertissment
 error_allfatals		: tout fatal
 test_mail		: mail delivery
 test_zone		: zone content
-test_ripe		: RIPE database
+test_rir		: RIR databases
 output_explain		: explication
 output_details		: détails
 output_zone		: résumé

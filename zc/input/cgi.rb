@@ -48,7 +48,7 @@ module Input
     ##      - transp4   = udp|tcp|std
     ##  - category
     ##      - chkmail   = true|false  -> '!mail'    |
-    ##      - chkripe   = true|false  -> '!ripe'    |
+    ##      - chkrir    = true|false  -> '!rir'     |
     ##      - chkzone   = true|false  -> '!dns:axfr'|
     ##  - ns
     ##      - ns0  .. nsX
@@ -132,7 +132,7 @@ module Input
 	    else
 		cat = [ ]
 		cat << "!mail"		unless @cgi.has_key?("chkmail")
-		cat << "!ripe"		unless @cgi.has_key?("chkripe")
+		cat << "!rir"		unless @cgi.has_key?("chkrir")
 		cat << "!dns:axfr"	unless @cgi.has_key?("chkzone")
 		if ! cat.empty?
 		    cat << "+"

@@ -263,13 +263,13 @@ module Input
 
 		@tst_mail = Gtk::CheckButton::new($mc.get("iface_test_mail"))
 		@tst_axfr = Gtk::CheckButton::new($mc.get("iface_test_zone"))
-		@tst_ripe = Gtk::CheckButton::new($mc.get("iface_test_ripe"))
-		@tst_mail.active = @tst_axfr.active = @tst_ripe.active = true
+		@tst_rir  = Gtk::CheckButton::new($mc.get("iface_test_rir"))
+		@tst_mail.active = @tst_axfr.active = @tst_rir.active = true
 
 		tbl = Gtk::Table::new(1, 3, true)
 		tbl.attach(@tst_mail, 0, 1, 0, 1)
 		tbl.attach(@tst_axfr, 1, 2, 0, 1)
-		tbl.attach(@tst_ripe, 2, 3, 0, 1)
+		tbl.attach(@tst_rir,  2, 3, 0, 1)
 		test_f.add(tbl)
 
 		# Transport
@@ -318,7 +318,7 @@ module Input
 
 	    def categories
 		categories = []
-		categories << "!ripe"		unless @tst_ripe.active?
+		categories << "!rir"		unless @tst_rir.active?
 		categories << "!mail"		unless @tst_mail.active?
 		categories << "!dns:axfr"	unless @tst_axfr.active?
 		categories << "+"		# accept by default
