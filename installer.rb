@@ -101,7 +101,7 @@ class Installer
 	puts "==> Installing documentation"
 	mkdir_p "#{ENV['CHROOT']}#{ENV['DOCDIR']}/#{ENV['PROGNAME']}",
 	    						:verbose => @verbose
-	install ['README', 'TODO', 'INSTALL', 'BUGS'], 
+	install ['README', 'TODO', 'BUGS'], 
 	    "#{ENV['CHROOT']}#{ENV['DOCDIR']}/#{ENV['PROGNAME']}",
 	    :mode => 0644,				:verbose => @verbose
 	puts

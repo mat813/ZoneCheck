@@ -58,7 +58,7 @@ ruby -p -i \
 
 %files
 %defattr(-, root, root, 0755)
-%doc BUGS ChangeLog COPYING CREDITS GPL HISTORY README TODO INSTALL
+%doc BUGS ChangeLog COPYING CREDITS GPL HISTORY README TODO
 %doc doc/html
 %dir %{_sysconfdir}/zonecheck
 %config %{_sysconfdir}/zonecheck/rootservers
