@@ -32,6 +32,7 @@
 #
 
 require 'thread'
+require 'timeout'
 require 'framework'
 require 'report'
 require 'cache'
