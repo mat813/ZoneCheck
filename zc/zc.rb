@@ -232,7 +232,7 @@ class ZoneCheck
 
     def interact
 	begin
-	    @input.interact(@param)
+	    @input.interact(@param, @config, @test_manager)
 	rescue Param::ParamError => e
 	    @input.error(e.to_s, EXIT_ERROR)
 	end

@@ -28,6 +28,7 @@ w_quit		: quit
 w_abort		: abort
 
 xpltag_ref	: Ref
+xpltab_adv	: Adv
 
 res_succeed_but : SUCCEED (but %d warning(s))
 res_succeed	: SUCCEED
@@ -138,6 +139,15 @@ check_exists: check '%s' defined int class '%s' and '%s'
 ##############################################################################
 ##############################################################################
 [iface]
+label_transport		: Transport
+label_error		: Error
+label_extra_tests	: Extra tests
+label_output		: Output
+label_check		: Check
+label_guess		: Guess
+label_clear		: Clear
+label_debug		: Debug
+label_advanced		: Advanced
 stop_on_first		: stop on first fatal
 error_default		: default severity
 error_allwarnings	: all warnings
@@ -145,6 +155,26 @@ error_allfatals		: all fatals
 test_mail		: mail delivery
 test_zone		: zone content
 test_ripe		: RIPE database
+output_explain		: explain
+output_details		: details
+output_zone		: zone summary
+output_progressbar	: progress bar
+output_nothing		: nothing
+output_description	: description
+dbg_loading		: loading
+dbg_locale		: locale
+dbg_config		: config
+dbg_parser		: parser
+dbg_tests		: tests
+dbg_autoconf		: autoconf
+dbg_dbg			: debugger
+dbg_cache_info		: cache information
+dbg_nocache		: no cache
+dbg_dont_rescue		: don't rescue
+dbg_crazydebug		: crazy debug
+
+
+
 
 ##############################################################################
 ##############################################################################

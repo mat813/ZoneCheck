@@ -40,33 +40,13 @@ H3 {
 //}
 
 
-.error { 
+
+.zc_warning { 
     text-decoration: none;
     font-size: 18px;
     color: red; 
     text-indent: 40px;
     font-weight: bold;
-    border: 2px solid #F7AD31
-}
-
-.warning { 
-    text-decoration: none;
-    font-size: 18px;
-    color: red; 
-    text-indent: 40px;
-    font-weight: bold;
-}
-
-.cadre { 
-    text-decoration: none;
-    font-size: 12px;
-    margin-left: 50px;
-    margin-right: 150px;
-    background-color: #f0ece5; 
-    padding:8px; 
-    color: #333333; 
-    font-weight: normal;
-    border: 2px solid #F7AD31
 }
 
 
@@ -181,14 +161,15 @@ TR.zc_ns_prim {
 }
 
 TABLE.zc_options {
-    background-color: #e0ffff;
+    border: solid #f5b13d;
+    background-color: #f0ece5;
 }
 TABLE.zc_options TD {
     padding: 2px 1ex;
 }
 
 TABLE.zc_options TR.zc_title {
-    background-color: #e2eeff;
+    background-color: #e4dcca;
 }
 
 BLOCKQUOTE.zc_warning {
@@ -206,3 +187,11 @@ BLOCKQUOTE.zc_error {
 TABLE.zc_help TD.zc_key {
     vertical-align: top;
 }
+
+// .bleu { color: #0066b2 }
+// .bleuvif { color: #1341AF }
+// .orange { color: #f5b13d }
+// .orangevif { color: #FF5809 }
+// .creme { color: #f0ece5 }
+// .cremefonce { color: #e4dcca }
+

@@ -313,7 +313,8 @@ class TestManager
 				testcount += testseq.preeval(self, args)
 			   })
 		    }
-		rescue Instruction::InstructionError => e
+		rescue Instruction::InstructionError,
+			NResolv::NResolvError => e
 		    $dbg.msg(DBG::TESTS, "disabling preeval: #{e}")
 		    @do_preeval = false
 		    testcount   = 0

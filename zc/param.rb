@@ -138,7 +138,7 @@ class Param
 		if entry =~ /^(.*)=(.*)$/
 		    host_str, ips_str = $1, $2
 		    host = NResolv::DNS::Name::create(host_str, true)
-		    ips_str.split(",").each { |str|
+		    ips_str.split(/\s*,\s*/).each { |str|
 			ips << Address::create(str)
 		    }
 		else
@@ -378,12 +378,11 @@ class Param
 	end
 
 	def local=(resolv)
-	    case resolv
-	    when String
-		@local_name = resolv
-	    else
-		raise ArgumentError, "Wrong type for resolver object"
-	    end
+	    @local_name = if resolv.nil? || resolv =~ /^\s*$/
+			  then nil
+			  else resolv
+			  end
+	    @local = nil
 	end
 
 	def autoconf
@@ -435,8 +434,10 @@ class Param
 
 	
 	def tests=(string)
-	    return if string =~ /^\s*$/
-	    @tests = string.split(/\s*,\s*/)
+	    @tests = if string.nil? || string =~ /^\s*$/
+		     then nil
+		     else string.split(/\s*,\s*/)
+		     end
 	end
 
 	def categories=(string)

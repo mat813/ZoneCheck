@@ -73,6 +73,11 @@ class DBG
     end
 
 
+    def []=(type, enable)
+	self.level = enable ? @lvl | type : @lvl & ~type
+    end
+
+
     #
     # Change debugging level
     #
@@ -81,12 +86,9 @@ class DBG
 
 	# parsing
 	case lvl
-	when String
-	    @lvl = lvl =~ /^0x/ ? lvl.hex : lvl.to_i
-	when Fixnum
-	    @lvl = lvl
-	else
-	    raise ArgumentError, "unable to interprete: #{lvl}"
+	when String then @lvl = lvl =~ /^0x/ ? lvl.hex : lvl.to_i
+	when Fixnum then @lvl = lvl
+	else raise ArgumentError, "unable to interprete: #{lvl}"
 	end
 	
 	# message
