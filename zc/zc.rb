@@ -57,6 +57,7 @@ $LOAD_PATH << ZC_DIR << ZC_LIB
 # Requirement
 #
 require 'getoptlong'
+require 'socket'
 
 require 'nresolv'
 require 'ext'
@@ -100,6 +101,15 @@ $dbg = DBG::new
 }
 raise "Default locale (#{ZC_LANG_DEFAULT}) not found" if $mc.nil?
 
+
+# Test for IPv6 stack
+#  WARN: doesn't implies that we have IPv6 connectivity
+begin
+    UDPSocket::new(Socket::AF_INET6).close
+    $ipv6_stack = true
+rescue SocketError
+    @ipv6_stack = false
+end
 
 
 ##

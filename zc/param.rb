@@ -556,7 +556,7 @@ EOT
 
 
     attr_reader :configfile, :ipv4, :ipv6
-    attr_writer :configfile, :ipv4, :ipv6
+    attr_writer :configfile, :ipv4
 
     attr_reader :resolver, :dns
 
@@ -635,6 +635,16 @@ EOT
 
 
     #
+    # WRITER: ipv6
+    #
+    def ipv6=(bool)
+	if bool && ! $ipv6_stack
+	    raise ParamError, "IPv6 not supported on that host"
+	end
+	@ipv6 = bool
+    end
+
+    #
     # WRITER: category
     #
     def category=(string)
@@ -694,9 +704,9 @@ EOT
 	string.split(/\s*,\s*/).each { |token|
 	    case token
 	    when "4", "ipv4"
-		@ipv4 = true
+		ipv4 = true
 	    when "6", "ipv6"
-		@ipv6 = true
+		ipv6 = true
 	    when "u", "udp"
 		@client = NResolv::DNS::Client::UDP
 	    when "t", "tcp"
@@ -780,7 +790,7 @@ EOT
 	# Select routing protocol
 	@ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
 	@ipv4 = false        if @ipv4.nil?
-	@ipv6 = false        if @ipv6.nil?
+	@ipv6 = false        if @ipv6.nil? || !$ipv6_stack
 
 	# Set report object
 	@report.autoconf(@domain, @rflag, @publisher)
