@@ -77,7 +77,7 @@
       </question>
       <answer>
 	<para>You can define the environment variable
-	  <envar>ZC_INSTALL_PATH</envar> to the initial zonecheck
+	  <envar>ZC_INSTALL_PATH</envar> to the initial ZoneCheck
 	  directory.</para>
       </answer>
     </qandaentry>

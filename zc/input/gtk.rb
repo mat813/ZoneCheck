@@ -503,7 +503,7 @@ module Input
 		
 		menubar   = Gtk::MenuBar::new
 		@statusbar = Gtk::Statusbar::new
-		@statusbar.push(1, "Toto")
+		@statusbar.push(1, "Welcome to ZoneCheck #{ZC_VERSION}")
 		
 		
 		@input   = Input::new(self)

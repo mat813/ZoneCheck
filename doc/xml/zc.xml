@@ -38,15 +38,28 @@
   
       <itemizedlist>
 	<listitem>
-	  <para>Ruby</para>
+	  <para>For the ZoneCheck core components:
+            <itemizedlist>
+	      <listitem>
+		<para>Ruby: <ulink url="http://www.ruby-lang.org/">http://www.ruby-lang.org/</ulink></para>
+	      </listitem>
+	    </itemizedlist>
+          </para>
 	</listitem>
 	
 	<listitem>
-	  <para>GTK binding to Ruby</para>
+	  <para>For the GTK interface
+            <itemizedlist>
+	      <listitem>
+		<para>GTK2 libraries: <ulink url="http://www.gtk.org/">http://www.gtk.org/</ulink></para>
+	      </listitem>
+	      <listitem>
+		<para>Gnome2 ruby binding: <ulink url="http://ruby-gnome2.sourceforge.net/">http://ruby-gnome2.sourceforge.net/</ulink></para>
+	      </listitem>
+	    </itemizedlist>
+          </para>
 	</listitem>
       </itemizedlist>
-  
-      <para><ulink url="http://www.ruby-lang.org/">Ruby</ulink> </para>
     </section>
 
 
@@ -68,7 +81,7 @@
 |      |-- locale               # Localisation files
 |      |-- test                 # test set
 |      |-- lib                  # Extra libraries (NResolv, Address, ...)
-|      `-- zc                   # core component
+|      `-- zc                   # core components
 `-- share
     `-- doc
         `-- zc                  # Documentation</screen>
@@ -122,6 +135,126 @@
       <section>
 	<title>Command Line Interface (CLI)</title>
 
+
+	<itemizedlist>
+	  <listitem>
+	    <para><option>-q</option>, <option>--quiet</option></para>
+            <para>don't display extra titles</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-h</option>, <option>--help</option></para>
+            <para>show an help message and exit</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-V</option>, <option>--version</option></para>
+	    <para>print the <application>ZoneCheck</application>
+            version </para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-B <replaceable>where</replaceable></option>, 
+            <option>--batch <replaceable>where</replaceable></option></para>
+            <para>read data from the file specified by <replaceable>where
+            </replaceable> (<literal>stdin</literal> is used if 
+            '<literal>-</literal>' is specified)</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-c <replaceable>cfgfile</replaceable></option>,
+	    <option>--config <replaceable>cfgfile</replaceable></option></para>
+            <para>specify the location of the configuration file</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>--testdir <replaceable>directory</replaceable></option></para>
+	    <para>specify the <replaceable>directory</replaceable>
+	    where all the tests are located</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-C</option>, <option>--category</option></para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-T <replaceable>testname</replaceable></option>,
+            <option>--test <replaceable>testname</replaceable></option></para>
+	    <para>only the test <replaceable>testname</replaceable> will
+            be performed and its severity will default to 
+            <literal>warning</literal></para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-r <replaceable>host</replaceable></option>,
+            <option>--resolver <replaceable>host</replaceable></option></para>
+	    <para>the nameserver running on <replaceable>host</replaceable>
+            will be used as the local resolver</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-n <replaceable>nameservers</replaceable></option>,
+            <option>--ns <replaceable>nameservers</replaceable></option></para>
+
+	    <para><replaceable>nameservers</replaceable> is a list of
+	    nameserver to use separated by a semicolon, if IP
+	    addresses should be specified the hostname must be
+	    followed by the equal sign and the coma separated list of
+	    IP addresses: <literal>ns1.toto.fr=192.168.1.5,192.168.1.6;ns2.toto.fr</literal> </para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-1</option>, <option>--one</option></para>
+	    <para>only display the most relevant message, particularly 
+            useful for batch mode</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-g</option>, <option>--tagonly</option></para>
+	    <para>display tag instead of sentences, this option should be used
+             when writing scripts</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-e</option>, <option>--error</option></para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-t</option>, <option>--transp</option></para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-v</option>, <option>--verbose</option></para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-o</option>, <option>--output</option></para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-4</option>, <option>--ipv4</option></para>
+	    <para>use IPv4 connectivity only</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>-6</option>, <option>--ipv6</option></para>
+	    <para>use IPv6 connectivity only</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>--testlist</option></para>
+	    <para>list all the available tests</para>
+	  </listitem>
+
+	  <listitem>
+	    <para><option>--testdesc <replaceable>type</replaceable></option></para>
+	    <para><replaceable>type</replaceable>s is one of the keyword
+
+<literal>name</literal> <literal>expl</literal> <literal>error</literal></para>
+	  </listitem>
+
+	</itemizedlist>
+
 	<screen>% <userinput>zc -4 -v c,x,d,i afnic.fr</userinput>
 ZONE  : afnic.fr.
 NS <= : ns1.nic.fr. [192.93.0.1]
@@ -139,7 +272,26 @@ NS    : ns3.nic.fr. [192.134.0.49, 2001:660:1180:1:192:134::49]
       
       <section>
 	<title>Graphical User Interface (GUI)</title>
-      <para>toto</para>
+      <para>toto
+
+
+<figure><title>The Pythagorean Theorum Illustrated</title>
+<graphic scalefit="1" scale="50%" fileref="../pics/gtk_input.png"/>
+</figure>
+
+
+<figure><title>The Pythagorean Theorum Illustrated</title>
+<graphic scalefit="1" scale="50%" fileref="../pics/gtk_option.png"/>
+</figure>
+
+<figure><title>The Pythagorean Theorum Illustrated</title>
+<graphic scalefit="1" scale="50%" fileref="../pics/gtk_expert.png"/>
+</figure>
+
+
+
+
+</para>
       </section>
     </section>
 
