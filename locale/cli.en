@@ -118,8 +118,8 @@ EXAMPLES:
     Work in batch mode, where domains are read from stdin, a progress bar
     indicates how many tests remain, and only short report is written
 
-  PROGNAME --testdesc error -T chk_soa
-    Ask for the 'error' message associated with the test 'chk_soa'
+  PROGNAME --testdesc error -T soa
+    Ask for the 'error' message associated with the test 'soa'
 </tag>
 
   <!-- Local Variables: -->

@@ -120,8 +120,8 @@ EXEMPLES:
     standard, une barre de progression indique combien de tests restent,
     et uniquement un court rapport est rédigé
 
-  PROGNAME --testdesc error -T chk_soa
-    Demande le message 'error' associé avec le test 'chk_soa'
+  PROGNAME --testdesc error -T soa
+    Demande le message 'error' associé avec le test soa'
 </tag>
 
   <!-- Local Variables: -->
