@@ -16,7 +16,7 @@
     <!-- Minimum and maximum for SOA fields -->
     <!--  min: 0  / max: 2147483647         -->
     <const name="soa:expire:min"  value="604800"/>
-    <const name="soa:expire:max"  value="6048000"/>
+    <const name="soa:expire:max"  value="60480000"/>
     <const name="soa:minimum:min" value="180"/>
     <const name="soa:minimum:max" value="604800"/>
     <const name="soa:refresh:min" value="3600"/>
