@@ -37,7 +37,7 @@ explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by 
 
 [chk_mx_wildcard]
 testname: MX wildcard exists
-error   : A wilcard MX is present
+error   : A wilcard MX is not present
 explain : [none]
 
 [chk_mx_ip]

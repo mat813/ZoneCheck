@@ -80,7 +80,8 @@ module NResolv
     class DNS
 	Port		 = 53
 	TCPTimeout	 = 5
-        UDPRetrySequence = [ 5, 10, 20, 40 ]
+#       UDPRetrySequence = [ 5, 10, 20, 40 ]
+	UDPRetrySequence = [ 1, 2, 2, 3 ]
 	UDPSize		 = 512
 
 	DNSThreadGroup   = ThreadGroup::new
