@@ -92,14 +92,18 @@ class ZCMail
 	    @mrelay.write(str) ; @mrelay.write("\r\n") ; @mrelay.flush
 	end
 
-	desc = ""
-	while true
-	    case @mrelay.readline
-	    when NilClass         then raise ZCMailError, "parsing error"
-	    when /^(\d{3}) (.*)$/ then return [ $1.to_i, desc << $2 ]
-	    when /^(\d{3})-(.*)$/ then desc << $2
-	    else raise ZCMailError, "parsing error"
+	begin
+	    desc = ""	
+	    while true
+		case @mrelay.readline
+		when NilClass         then raise ZCMailError, "parsing error"
+		when /^(\d{3}) (.*)$/ then return [ $1.to_i, desc << $2 ]
+		when /^(\d{3})-(.*)$/ then desc << $2
+		else raise ZCMailError, "parsing error"
+		end
 	    end
+	rescue EOFError
+	    raise ZCMailError, "Unexpected closing of connection"
 	end
 	# NOT REACHED
     end
