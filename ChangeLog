@@ -1,4 +1,10 @@
 # $Id$
+2003-09-01  ZoneCheck-2.0.0b7
+	* i18n/l10n: better handling of locale (and encoding)
+	* input: added inetd mode
+	* doc: man page for zonecheck cli
+	* doc: general documentation has been sligthy completed
+	
 2003-08-11  ZoneCheck-2.0.0b6
 	* input: removed excessive sanity check for input parameter
 	* all: changed strings "" to '' when possible

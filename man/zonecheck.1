@@ -88,12 +88,8 @@ It doesn't necessary make sense to combine some options together, it
 that case the most recent option will be taken into account, silently
 discarding the other.
 .TP
-\fB--quiet\fR, \fB-q\fR
-Don't display extra titles.
-.
-.TP
 \fB--lang\fR \fIlang\fR
-Select another language (en, fr, ...), The syntax is the same as for the
+Select another language (en, fr, ...). The syntax is the same as for the
 environment variable \fILANG\fR.
 .
 .TP
@@ -175,6 +171,10 @@ a semicolon, the name can be followed by the equal sign and its
 IP addresses separated by a colon.
 .br
 This can give the following example: ns1;ns2=ip1,ip2;ns3=ip3
+.
+.TP
+\fB--quiet\fR, \fB-q\fR
+Don't display extra titles.
 .
 .TP
 \fB--one\fR, \fB-1\fR
@@ -322,7 +322,7 @@ the program.
 .I ZC_INPUT
 The variable as the same effect as the undocumented \fBINPUT\fR parameter,
 it allows to chose the input interface used by \fIZoneCheck\fR, the currently
-supported values are: \fBcli\fR, \fBcgi\fR, \fBgtk\fR (requires GTK/ruby binding). But other interfaces doesn't accept the same parameters as the one described here.
+supported values are: \fBcli\fR, \fBcgi\fR, \fBinetd\fR and \fBgtk\fR (requires GTK/ruby binding). But other interfaces doesn't accept the same parameters as the one described here.
 .
 .SH "EXIT STATUS"
 The following exit status can be reported by \fIZoneCheck\fR:
