@@ -140,6 +140,8 @@
 	    </TD>
 	    <TD>
 	      <SELECT name="lang">
+		<OPTION value="">
+		  Default
 		<OPTION value="en" SELECTED>
 		  English
 		<OPTION value="fr">
@@ -335,7 +337,7 @@
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Oct  1 23:24:28 CEST 2002
+Last modified: Wed Oct  2 10:24:06 CEST 2002
 <!-- hhmts end -->
   </BODY>
 </HTML>
