@@ -151,7 +151,7 @@ module CheckExtra
 
 	    mxlist = mx(bestresolverip(mdom), mdom)
 	    mxlist = mx(nil, mdom) if mxlist.empty?
-	    mxlist.sort { |a,b|
+	    mxlist.sort! { |a,b|
 		a.preference <=> b.preference }
 
 	    if mxlist.empty?
@@ -160,7 +160,6 @@ module CheckExtra
 		mxlist.each { |m|
 		    begin
 			return true if testuser(user, mdom, m.exchange)
-			break
 		    rescue TimeoutError, Errno::ECONNREFUSED
 		    end
 		}
@@ -182,7 +181,7 @@ module CheckExtra
 
 	    mxlist = mx(bestresolverip(mdom), mdom)
 	    mxlist = mx(nil, mdom) if mxlist.empty?
-	    mxlist.sort { |a,b|
+	    mxlist.sort! { |a,b|
 		a.preference <=> b.preference }
 
 	    if mxlist.empty?
@@ -191,7 +190,6 @@ module CheckExtra
 		mxlist.each { |m|
 		    begin
 			return true if testuser(user, mdom, m.exchange)
-			break
 		    rescue TimeoutError, Errno::ECONNREFUSED
 		    end
 		}
