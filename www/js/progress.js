@@ -123,7 +123,7 @@ function zc_pgr_start(count) {
   if (zc_pgr_totalsize <= 0) {
     // infinit
     s += "<TD id=\"zc_pgr_pct0\"  style='border-style: solid none solid solid;'></TD>";
-    s += "<TD id=\"zc_pgr_pct1\"  style='border-style: solid none; width=" + zc_pgr_tickersize + "px'></TD>";
+    s += "<TD id=\"zc_pgr_pct1\"  style='border-style: solid none; width: " + zc_pgr_tickersize + "px'></TD>";
     s += "<TD id=\"zc_pgr_pct2\"  style='border-style: solid solid solid none;'></TD>";
   } else {
     // limited
