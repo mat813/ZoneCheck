@@ -26,6 +26,13 @@ class Param
     ##
     ## Processing parameters from CGI (Common Gateway Interface)
     ##
+    ## For obvious security reason the following parameters shouldn't
+    ## be set through the CGI:
+    ##  - configfile
+    ##  - testdir
+    ##  - debug
+    ##  - resolver
+    ##
     class CGI
 	def initialize
 	    @p    = Param::new

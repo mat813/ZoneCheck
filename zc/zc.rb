@@ -132,14 +132,27 @@ class ZoneCheck
 
     #
     # Load ruby files implementing tests
+    #  WARN: we are required to untaint for loading
+    #
+    # To minimize risk of choosing a random directory, only files
+    #  that have the ruby extension (.rb) and have the "ZCTEST 1.0"
+    #  magic header are loaded.
     #
     def load_tests_implementation
 	$dbg.msg(DBG::TEST_LOADING, "directory: #{@param.testdir}")
 	Dir::open(@param.testdir) { |dir|
 	    dir.each { |entry|
 		next unless entry =~ /\.rb$/
+		testfile = "#{@param.testdir}/#{entry}".untaint
+		next unless begin
+				File.open(testfile) { |io|
+			           io.gets =~ /^\#\s*ZCTEST\s+1\.0:?\W/
+		                }
+			    rescue # Carefull with rescue all
+				false
+			    end
 		$dbg.msg(DBG::TEST_LOADING, "loading file: #{entry}")
-		load "#{@param.testdir}/#{entry}"
+		load testfile
 	    }
 	}
     end
