@@ -60,13 +60,14 @@ class Param
 	    # Lang
 	    # => The message catalogue need to be replaced
 	    if cgi["lang"].length == 1
-		lang = cgi["lang"][0]
-		if lang =~ ZC_LANG_CHECK	# Security checking
-		    localefile = (ZC_LOCALIZATION_FILE % [ lang ]).untaint
-		    if File.readable?(localefile)
+		begin
+		    lang = cgi["lang"][0]
+		    if $mc.available?(ZC_LANG_FILE, lang)
 			$mc.clear
-			$mc.read(localefile)
+			$mc.lang = lang
+			$mc.read(ZC_LANG_FILE)
 		    end
+		rescue ArgumentError
 		end
 	    end
 

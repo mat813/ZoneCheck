@@ -46,26 +46,90 @@ class MessageCatalog
     end
 
 
+    #
+    # Normalize lang
+    #
+    def self.normlang(lng)
+	unless lng =~ /^\w+(:?\.[\w\-]+)?$/
+	    raise ArgumentError, "Suspicious language selection: #{lng}"
+	end
+	lng
+    end
 
     #
     # Initializer
     #
-    def initialize
+    def initialize(directory)
 	$dbg.msg(DBG::LOCALE, "creating message catalogue")
-	@catalog = {}
+	@directory	= directory
+	@catalog	= {}
+	@loaded		= {}
+	@lang		= nil
     end
+
+    
+    #
+    # READER
+    #
+    attr_reader :lang
+
+
+    #
+    # WRITER: Set lang
+    #
+    def lang=(lng)
+	@lang = MessageCatalog::normlang(lng).clone.untaint
+    end
+
+
+    #
+    # Establish the filepath from the template file
+    #  - %s is replace by lang
+    #  - if not fullpath the default directory is prepend
+    #
+    def filepath(where, lng=@lang)
+	lng   = MessageCatalog::normlang(lng) unless lng == @lang
+	where = "#{@directory}/#{where}"      unless where[0] == ?/
+	where % [ lng ]
+    end
+
+
+    #
+    # Test if a file catalog is available
+    #
+    def available?(where, lng=@lang)
+	File::readable?(filepath(where, lng.clone.untaint))
+    end
+
+
+    #
+    # Read catalog (from the template filename, see 'filepath')
+    #
+    def read(where)
+	readfile(filepath(where))
+    end
+	
 
     #
     # Read catalog file
     #
-    def read(msgfile)
+    def readfile(msgfile)
+	# Check for already loaded catalog
+	file_stat = File::stat(msgfile)
+	file_id   = [ file_stat.dev, file_stat.ino ]
+	if @loaded.has_key?(file_id)
+	    $dbg.msg(DBG::LOCALE, "file already loaded: #{msgfile}")
+	    return
+	end
+
+
+	# Read message catalogue
 	$dbg.msg(DBG::LOCALE, "reading file: #{msgfile}")
 
 	prefix   = nil
 	lineno   = 0
 
-	# Read message catalogue
-	File.open(msgfile) { |io|
+	File::open(msgfile) { |io|
 	    while line = io.gets
 		lineno += 1
 		line.chomp!
@@ -118,15 +182,22 @@ class MessageCatalog
 		end
 	    end
 	}
+
+	# Consider the file loaded
+	@loaded[file_id] = true
     end
 
+
     #
-    #
+    # Clear all messages
     #
     def clear
 	$dbg.msg(DBG::LOCALE, "clearing message catalogue")
 	@catalog = {}
+	@loaded  = {}
+	@lang    = nil
     end
+
 
     #
     # Get message associated with the 'tag'

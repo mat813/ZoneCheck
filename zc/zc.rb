@@ -18,15 +18,14 @@ ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
 ZC_CONFIG_FILE		= "#{ZC_INSTALL_PATH}/etc/zc.conf"
-ZC_LOCALIZATION_FILE	= "#{ZC_INSTALL_PATH}/locale/zc.%s"
+ZC_LOCALIZATION_DIR	= "#{ZC_INSTALL_PATH}/locale"
 ZC_TEST_DIR		= "#{ZC_INSTALL_PATH}/test"
 
+ZC_LANG_FILE		= "zc.%s"
 ZC_LANG_DEFAULT		= "en"
 
 ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
 ZC_CGI_EXT		= "cgi"
-
-ZC_LANG_CHECK		= /^\w+(:?\.[\w\-]+)?$/
 
 #
 # Identification
@@ -97,21 +96,17 @@ $dbg.level=ENV["ZC_DEBUG"] if ENV["ZC_DEBUG"]
 #  WARN: default locale is mandatory as no human messages are
 #        present in the code (except debugging)
 #
-lang = ENV["LANG"]
-if !lang.nil? && ! (lang =~ ZC_LANG_CHECK)
-    raise "Suspicious LANG variable: #{lang}"
-end
-[ lang.untaint, ZC_LANG_DEFAULT ].compact.each { |lang|
-    localefile = ZC_LOCALIZATION_FILE % [ lang ]
-    if File.readable?(localefile)
+$mc = MessageCatalog::new(ZC_LOCALIZATION_DIR)
+[ ENV["LANG"], ZC_LANG_DEFAULT ].compact.each { |lang|
+    if $mc.available?(ZC_LANG_FILE, lang)
 	$dbg.msg(DBG::LOCALE, "Using locale: #{lang}")
-	$mc = MessageCatalog::new
-	$mc.read(localefile)
+	$mc.lang = lang
+	$mc.read(ZC_LANG_FILE)
 	break
     end
     $dbg.msg(DBG::LOCALE, "Unable to find locale for '#{lang}'")
 }
-raise "Default locale (#{ZC_LANG_DEFAULT}) not found" if $mc.nil?
+raise "Default locale (#{ZC_LANG_DEFAULT}) not found" if $mc.lang.nil?
 
 
 # Test for IPv6 stack
