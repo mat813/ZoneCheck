@@ -123,24 +123,24 @@
 
 
   <check name="ip_same_net">
-    <name>serveurs de noms sur le même sous réseau</name>
-    <success>Aucun serveur de nom n'est sous le même sous réseau</success>
-    <failure>Des serveurs sont sur le même sous réseau</failure>
+    <name>serveurs de noms sur le même sous-réseau</name>
+    <success>Aucun serveur de nom n'est sous le même sous-réseau</success>
+    <failure>Des serveurs sont sur le même sous-réseau</failure>
     <explanation sameas="shortcut:rfc2182"/>
-    <details><para>Les sous réseaux suivants sont utilisés par plusieurs
+    <details><para>Les sous-réseaux suivants sont utilisés par plusieurs
       hôtes: <zcvar name="subnets"/>. Essayez de déplacer certains hôtes
-      sur un autre sous réseau.</para></details>
+      sur un autre sous-réseau.</para></details>
   </check>
 
 
   <check name="ip_all_same_net">
-    <name>serveurs de noms tous sur le même sous réseau</name>
-    <success>Les serveurs de noms ne sont pas tous sur le même sous réseau</success>
-    <failure>Les serveurs de noms sont tous sur le même sous réseau</failure>
+    <name>serveurs de noms tous sur le même sous-réseau</name>
+    <success>Les serveurs de noms ne sont probablement pas tous sur le même sous-réseau</success>
+    <failure>Les serveurs de noms semblent être tous sur le même sous-réseau</failure>
     <explanation sameas="shortcut:rfc2182"/>
-    <details><para>Tous les serveurs de noms sont dans le sous réseau
+    <details><para>Tous les serveurs de noms semblent être dans le sous-réseau
       <zcvar name="subnet"/>. Essayez d'en déplacer quelques uns sur un
-      autre sous réseau.</para></details>
+      autre sous-réseau.</para></details>
   </check>
 
 

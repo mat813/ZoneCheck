@@ -48,7 +48,7 @@
     <explanation name="rfc2182">
       <src type="adv" from="zonecheck">
         <title>ZoneCheck</title>
-        <para>To avoid loosing all connectivity with the autoritative DNS
+        <para>To avoid loosing all connectivity with the authoritative DNS
           in case of network outage it is advised to host the DNS on
           different networks.</para>
       </src>
@@ -130,12 +130,12 @@
   </check>
 
   <check name="ip_all_same_net">
-    <name>nameserver addresses are all on the same subnet</name>
-    <success>All IP addresses are not on the same subnet</success>
-    <failure>IP addresses are all on the same subnet</failure>
+    <name>nameserver addresses are likely to be all on the same subnet</name>
+    <success>Not all IP addresses are on the same subnet</success>
+    <failure>IP addresses are likely to be all on the same subnet</failure>
     <explanation sameas="shortcut:rfc2182"/>
-    <details><para>All the servers are in the subnet 
-      <zcvar name="subnet"/>, try moving some of them  to another
+    <details><para>All the servers are likely to be on the subnet 
+      <zcvar name="subnet"/>, try moving some of them to another
       subnet.</para></details>
   </check>
 
@@ -146,7 +146,7 @@
     <explanation>
       <src type="adv" from="zonecheck">
         <title>ZoneCheck</title>
-        <para>To avoid loosing all connectivity with the autoritative DNS
+        <para>To avoid loosing all connectivity with the authoritative DNS
           in case of a routing problem inside your Autonomous System,
           it is advised to host the DNS on different AS.</para>
       </src>
