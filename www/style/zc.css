@@ -64,16 +64,21 @@ H3 {
     font-weight: bold;
 }
 
-// TABLE[rules=rows] TD { border-top: solid }
 
-//TABLE[rules=rows]    { //border-collapse: collapse; 
-//                       border: solid #0066B2; 
-//                       border-color: #0066B2; 
-//}
+/*
+TABLE[rules=rows] TD { border-top: solid }
+
+TABLE[rules=rows]    { //border-collapse: collapse; 
+                       border: solid #0066B2; 
+                       border-color: #0066B2; 
+}
+*/
 
 IMG.zc_logo { 
-//  float: left;
-//  margin-left: 0;
+/*
+    float: left;
+    margin-left: 0;
+*/
 }
 
 .zc_warning { 
@@ -287,10 +292,11 @@ TABLE.zc_popup TR.zc_item:hover {
 }
 
 
-// .bleu { color: #0066b2 }
-// .bleuvif { color: #1341AF }
-// .orange { color: #f5b13d }
-// .orangevif { color: #FF5809 }
-// .creme { color: #f0ece5 }
-// .cremefonce { color: #e4dcca }
-
+/*
+.bleu { color: #0066b2 }
+.bleuvif { color: #1341AF }
+.orange { color: #f5b13d }
+.orangevif { color: #FF5809 }
+.creme { color: #f0ece5 }
+.cremefonce { color: #e4dcca }
+*/

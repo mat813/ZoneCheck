@@ -30,15 +30,25 @@ module CheckNetworkAddress
 	IPv4LoopbackName = NResolv::DNS::Name::create(Address::IPv4::Loopback)
 	IPv6LoopbackName = NResolv::DNS::Name::create(Address::IPv6::Loopback)
 
+	#-- Helper --------------------------------------------------
+	def ipv4_delegated?(ip)
+	    (!soa(ip, IPv4LoopbackName.domain).nil?             ||
+	     !soa(ip, IPv4LoopbackName.domain.domain).nil?      ||
+	     !soa(ip, IPv4LoopbackName.domain.domain.domain).nil? )
+	end
+
+	def ipv6_delegated?(ip)
+	    !soa(ip, IPv6LoopbackName.domain).nil?	    
+	end
+
 	#-- Checks --------------------------------------------------
 	# DESC: loopback network should be delegated
 	def chk_loopback_delegation(ns, ip)
 	    case ip
 	    when Address::IPv4
-		!soa(ip, IPv4LoopbackName.domain).nil?
+		ipv4_delegated?(ip)
 	    when Address::IPv6
-		!soa(ip, IPv4LoopbackName.domain).nil? &&
-		!soa(ip, IPv6LoopbackName.domain).nil?
+		ipv4_delegated?(ip) && ipv6_delegated?(ip)
 	    end
 	end
 
