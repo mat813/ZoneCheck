@@ -162,6 +162,14 @@ explain : [none]
 details : got serial %{serial_this} instead of %{serial_ref} as on %{host_ref}.
 
 
+[chk_soa_coherence_contact]
+testname: coherence of administrative contact with primary nameserver
+error   : The contact is not coherent with primary nameserver
+ok	: The contact is coherent with primary nameserver
+explain : [none]
+details : got contact %{rname_this} instead of %{rname_ref} as on %{host_ref}.
+
+
 [chk_soa_coherence_master]
 testname: coherence of master with primary nameserver
 error   : The master is not coherent with primary nameserver

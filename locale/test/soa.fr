@@ -162,6 +162,14 @@ explain : [none]
 details : Le numéro de série obtenu (%{serial_this}) est différent de celui indiqué sur %{host_ref} (%{serial_ref}).
 
 
+[chk_soa_coherence_contact]
+testname: cohérence du contact administratif avec celui du serveur primaire
+error   : Le contact n'est pas cohérent avec celui du serveur primaire
+ok	: Le contact est cohérent avec celui du serveur primaire
+explain : [none]
+details : Le contact obtenu (%{rname_this}) est différent de celui indiqué sur %{host_ref} (%{rname_ref}).
+
+
 [chk_soa_coherence_master]
 testname: cohérence du champ 'master' du SOA avec celui du serveur primaire
 error   : Le champ 'master' du SOA est incohérent avec celui du serveur primaire

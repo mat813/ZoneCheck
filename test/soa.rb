@@ -138,6 +138,17 @@ module CheckNetworkAddress
 	      "serial_this" => serial_other }
 	end
 
+
+	# DESC: coherence of contact with primary
+	def chk_soa_coherence_contact(ns,ip)
+	    rname_ref   = soa(@domain.ns[0][1][0]).rname
+	    rname_other = soa(ip).rname
+	    return true if rname_ref == rname_other
+	    { "rname_ref"   => rname_ref,
+	      "host_ref"    => "#{@domain.ns[0][0]}/#{@domain.ns[0][1][0]}",
+	      "rname_this"  => rname_other }
+	end
+
 	# DESC: coherence of master with primary
 	def chk_soa_coherence_master(ns,ip)
 	    mname_ref   = soa(@domain.ns[0][1][0]).mname
