@@ -209,7 +209,7 @@ class NResolv
 
 		# receive an answer message
 		def recv(msg)
-		    close
+		    close # XXX shouldn't be close yet if multiple envelops
 		    @queue.push(msg)
 		end
 

@@ -228,6 +228,8 @@ class NResolv
 		end
 
 		def query(msg)
+		    # XXX: should be able to receive multiple envelops
+		    # XXX: not sure for udp
 		    exception = nil
 		    @requester.each { |r|
 			begin
@@ -262,6 +264,7 @@ class NResolv
 		end
 
 		def query(msg)
+		    # XXX: should be able to receive multiple envelops
 		    exception = nil
 		    @requester.each { |r|
 			begin
