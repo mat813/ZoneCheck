@@ -26,9 +26,16 @@
 ## tag    : [a-zA-Z0-9_]
 ##
 class MessageCatalog
+    ##
+    ## Exception: no message for the 'tag'
+    ##
     class EntryNotFound < StandardError
     end
 
+
+
+    #
+    # Initializer
     #
     def initialize(msgfile)
 	@catalog = {}
@@ -63,10 +70,14 @@ class MessageCatalog
 	}
     end
 
+
+
+    #
+    # Get message associated with the 'tag'
     #
     def get(tag)
 	if (str = @catalog[tag]).nil?
-#	    raise EntryNotFound, "Tag '#{tag}' has not been localized"
+	    raise EntryNotFound, "Tag '#{tag}' has not been localized"
 	end
 	str
     end

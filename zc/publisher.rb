@@ -434,7 +434,7 @@ EOT
 
 	    @o.puts "<DIV class=\"zc_diag1\">"
 	    @o.puts "<TABLE width=\"100%\">"
-	    @o.puts "<TR><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
+	    @o.puts "<TR class=\"zc_title\"><TD width=\"100%\">#{domainname}</TD><TD>#{summary}</TD></TR>"
 	    @o.puts "<TR><TD colspan=\"2\">#{severity}: #{res.tag}</TD></TR>"
 	    @o.puts "<TR><TD colspan=\"2\">#{msg}</TD></TR>"
 	    @o.puts "</TABLE>"

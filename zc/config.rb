@@ -17,10 +17,10 @@ require 'framework'
 ## Hold the information about the zc.conf configuration file
 ##
 class Config
-    Warning	= "w"
-    Info	= "i"
-    Fatal	= "f"
-    Skip	= "-"
+    Warning	= "w"	# Warning severity
+    Fatal	= "f"	# Fatal severity
+    Info	= "i"	# Informational
+    Skip	= "-"   # Don't run the test
 
 
     ##
@@ -28,7 +28,6 @@ class Config
     ##
     class SyntaxError < StandardError
     end
-
 
 
     ##
@@ -41,7 +40,6 @@ class Config
 
 
     attr_reader :test_list
-
 
 
     #
@@ -64,24 +62,21 @@ class Config
 
 
     #
-    # Retrieve the action associated to the test
-    #
-    def action(testname)
-	@test_action[testname]
-    end
-
-
-    #
     # Add a new test with its corresponding action
     #
     def newtest(testname, action, category)
 	return if action == Skip
 
+	# Check if test was already listed
+	if @test_action.has_key?(testname)
+	    raise ArgumentError, "test '#{testname}' already listed"
+	end
+
 	# Check if test is currently registered
 	if ! @test_manager.has_test?(testname)
 	    raise ArgumentError, "unknown test '#{testname}'"
 	end
-		
+	
 	# Check for test ordering problems
 	#  (according to their families)
 	order_new = @order_switch[@test_manager.family(testname)]
@@ -103,16 +98,33 @@ class Config
     end
 
 
+    #
+    # Add a new constant
+    #
     def newconst(name, value)
+	if @constants.has_key?(name)
+	    raise ArgumentError, "constant '#{name}' already declared"
+	end
 	@constants[name] = value
     end
 
+
+    #
+    # Retrieve the action associated to the test
+    #
+    def action(testname)
+	@test_action[testname]
+    end
+
+
+    #
+    # Retrieve the constant value
+    #
     def const(name)
 	begin
 	    @constants.fetch(name)
 	rescue IndexError
-	    raise RuntimeError, 
-		"Trying to fetch undefined constant '#{name}'"
+	    raise RuntimeError, "Trying to fetch undefined constant '#{name}'"
 	end
     end
 
@@ -150,7 +162,13 @@ class Config
 	}
     end
 
+
+    ## [private] #########################################################
+
     private
+    #
+    # Test parser
+    #
     def read_tests(line, lineno)
 	# Syntax checker
 	if line !~ /^([#{Warning}#{Info}#{Fatal}#{Skip}])\s+(\w+)\s+(\w+)\s*$/
@@ -166,6 +184,9 @@ class Config
 	end
     end
 
+    #
+    # Constant parser
+    #
     def read_constants(line, lineno)
 	# Syntax checker
 	if line !~ /^(\w+)\s*=\s*\"((?:[^\"]|\\\")*)\"$/
@@ -173,7 +194,7 @@ class Config
 	end
 	name, value = $1, $2
 	
-	# Add test
+	# Add constant
 	begin
 	    newconst(name, value)
 	rescue ArgumentError => e

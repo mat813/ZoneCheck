@@ -22,12 +22,15 @@ require 'report'
 ## attributs: param, classes, cm, config, tests
 class TestManager
     ##
-    ## Error in the test definition
+    ## Exception: error in the test definition
     ##
     class DefinitionError < StandardError
     end
 
 
+    TestSuperclass = Test
+    TestPrefix     = "chk_"
+    
 
     #
     # Initialize a new object.
@@ -42,14 +45,15 @@ class TestManager
     #
     def <<(klass)
 	# Sanity check (all test class should derive from Test)
-	if ! (klass.superclass == Test)
-	    raise ArgumentError, "class '#{klass}' doesn't derive from #{Test}"
+	if ! (klass.superclass == TestSuperclass)
+	    raise ArgumentError, 
+		"class '#{klass}' doesn't derive from #{TestSuperclass}"
 	end
 	
 	# Inspect instance methods for finding check methods (ie: chk_*)
 	klass.public_instance_methods.each { |method| 
 	    # Only deal with methods that represent a test
-	    next unless method =~ /^chk_/
+	    next unless method =~ /^#{TestPrefix}/
 
 	    # Check for name collision
 	    if has_test?(method) then
@@ -106,16 +110,13 @@ class TestManager
 
     def test1(severity, method, testname, ns=nil, ip=nil) 
 	# Publish information about the test being executed
-	@publisher.synchronize {
-	    desc = if @param.rflag.tagonly
-		   then testname
-		   else $mc.get("#{testname}_testname")
-		   end
-	    @publisher.progress.process(desc, ns, ip)
-#	    if @param.rflag.testdesc
-#	    if @param.rflag.counter
-	}
+	desc = if @param.rflag.tagonly
+	       then testname
+	       else $mc.get("#{testname}_testname")
+	       end
+	@publisher.progress.process(desc, ns, ip)
 
+	# Perform the test
 	desc         = Test::Result::Desc::new(testname)
 	result_class = Test::Error
 	args = []
@@ -131,8 +132,10 @@ class TestManager
 	    desc.err = "Resolver error (#{e})"
 	rescue Exception => e
 	    desc.err = "Dependency issue (allwarning flag?)"
-	    raise if $dbg.enable?(DBG::DONT_RESCUE)
+	    raise if $dbg.enabled?(DBG::DONT_RESCUE)
 	end
+
+	# Build result
 	begin
 	    result = result_class::new(testname, desc, ns, ip)
 	    severity.add_result(result)

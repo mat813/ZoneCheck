@@ -247,8 +247,8 @@
 	<TR>
 	  <TD class="zc_key">progress bar</TD>
 	  <TD>Display information about the test progression 
-	    using a kind of progress bar <I>(you won't see it if 
-	    you don't have javascript</I>).</TD>
+	    using a kind of progress bar <I>(require javascript and
+	    Mozilla or IE5+</I>).</TD>
 	</TR>
 	<TR>
 	  <TD class="zc_key">test description</TD>
@@ -301,7 +301,7 @@
     <ADDRESS><A href="mailto:sdalu@nic.fr">St&eacute;phane D'Alu</A></ADDRESS>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Oct  3 22:24:58 CEST 2002
+Last modified: Mon Oct  7 14:10:48 CEST 2002
 <!-- hhmts end -->
   </BODY>
 </HTML>

@@ -346,6 +346,7 @@ EOT
     ##
     ## tagonly      : only print tag or information suitable for parsing
     ## one          : only print 1 message
+    ## quiet        : don't print extra titles
     ## intro        : display summary about checked domain
     ## explain      : explain the reason behind the test (if test failed)
     ## testdesc     : print a short description of the test being performed
@@ -356,6 +357,8 @@ EOT
     ##  - 'tagonly' doesn't support 'explain' (as displaying a tag
     ##     for an explanation is meaningless)
     ##  - 'testdesc' and 'counter' are exclusive
+    ##  - 'counter' can be ignored if the display doesn't suppport 
+    ##     progress bar animation
     ##
     class ReportFlag
 	attr_reader :tagonly, :one,     :quiet

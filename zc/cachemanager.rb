@@ -34,7 +34,7 @@ class CacheManager
     ##
     module CacheAttribute
 	def cache_attribute(attr, args=nil, force=false)
-	    return yield if $dbg.enable?(DBG::NOCACHE)
+	    return yield if $dbg.enabled?(DBG::NOCACHE)
 
 	    attribute = case args
 			when NilClass  then attr

@@ -118,6 +118,13 @@ DIV.zc_diag DIV.zc_title {
 }
 
 
+DIV.zc_diag1 TABLE TR.zc_title { 
+    background-color: #ddeeee;
+}
+
+
+
+
 DIV.zc_status { 
     padding-left: 5ex;
     font-weight: bold;

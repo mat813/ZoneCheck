@@ -16,6 +16,7 @@ module Report
     end
 
 
+
     ##
     ## Straight interpretation of messages.
     ##
@@ -23,6 +24,10 @@ module Report
 	def tagonly_supported? ; true ; end
 	def one_supported?     ; true ; end
 	
+
+	##
+	##
+	##
 	class Processor # --> ABSTRACT <--
 	    def initialize(rflag, publish)
 		@rflag		= rflag
@@ -76,19 +81,32 @@ module Report
 		end
 	    end
 	end
-	
 
 
+
+	##
+	## 
+	##
 	class Fatal   < Processor
 	    def add_result(result)
 		super(result)
 		raise FatalError unless result.ok?
 	    end
 	end
-	
+
+
+
+	##
+	##
+	##
 	class Warning < Processor
 	end
 	
+
+
+	##
+	##
+	##
 	class Info    < Processor
 	end
 
