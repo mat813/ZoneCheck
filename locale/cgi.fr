@@ -1,0 +1,25 @@
+# $Id$
+
+##############################################################################
+#                                                                            #
+#             ===>   Localization files are UTF8 encoded   <===              #
+#                                                                            #
+##############################################################################
+
+# 
+# AUTHOR   : Stephane D'Alu <sdalu@nic.fr>
+# CREATED  : 2003/03/28 19:58:17
+#
+# COPYRIGHT: AFNIC (c) 2003
+# CONTACT  : zonecheck@nic.fr
+# LICENSE  : GPL v2.0 (or MIT/X11-like after agreement)
+#
+# $Revision$ 
+# $Date$
+#
+# CONTRIBUTORS: (see also CREDITS file)
+#
+#
+
+input_cgi_usage: \
+Ce script CGI ne peut pas etre directement invoque

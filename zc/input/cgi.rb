@@ -56,6 +56,8 @@ module Input
     ##  - zone
     ##
     class CGI
+	with_msgcat "cgi.%s"
+
 	MaxNS = 8	# Maximum number of NS taken into account
 
 	def initialize
@@ -173,8 +175,9 @@ module Input
 	    end
 
 	    # Zone/Domain
-	    # XXX: todo check!!!
-	    p.domain.name = @cgi.params["zone"] || ""
+	    zone = @cgi.params["zone"]
+	    return false if zone.nil? || zone.empty?
+	    p.domain.name = zone
 
 	    # Ok
 	    true
@@ -189,8 +192,10 @@ module Input
 	    true
 	end
 
-	def usage(errcode, io=$stderr)
-	    io.print $mc.get("param_usage").gsub("PROGNAME", PROGNAME)
+	def usage(errcode, io=$stdout)
+	    io.puts @cgi.header({ "type"    => "text/plain",
+				  "charset" => "UTF-8" })
+	    io.puts $mc.get("input_cgi_usage")
 	    exit errcode unless errcode.nil?
 	end
 

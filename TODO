@@ -6,7 +6,8 @@ version = 2.0.0
 		- test connectivite avec plusieurs adresses IP 
 
 	integration avec la chaine de production
-
+	display erreur messages when in CGI no zone has been given
+	write help page describing how to interpret zonecheck results
 
 BEURK:
 	pour les sous zones (asso.fr , ....) ne pas faire les tests des MX
