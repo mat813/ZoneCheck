@@ -114,13 +114,6 @@ class MessageCatalog
         @language	= nil
         @country	= nil
         @encoding	= nil
-        @iconv		= nil
-
-	begin
-	    require 'iconv'
-	rescue LoadError => e
-            @iconv = false
-        end
     end
     
     #
@@ -135,7 +128,6 @@ class MessageCatalog
     def lang=(lng)
 	@lang = self.class::normlang(lng).clone.untaint
         @language, @country, @encoding = self.class::splitlang(@lang)
-        @iconv = Iconv::new(@encoding, "utf8") if @encoding && @iconv != false
     end
 
 
@@ -289,14 +281,6 @@ class MessageCatalog
 		    end
 
 		    msg.gsub!(/\\n/, "\n")
-                    if @iconv
-                        begin
-                            msg = @iconv.iconv(msg) 
-                        rescue Iconv::Failure, Iconv::InvalidCharacter => e
-                            raise EncodingError, 
-                                "Can't do full conversion to #{@encoding}"
-                        end
-                    end
 		    @catalog[tag] = msg
 		    $dbg.msg(DBG::LOCALE, "adding locale: #{tag}")
 

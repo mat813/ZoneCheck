@@ -162,7 +162,7 @@ module Publisher
 	    @o.print <<"EOT"
 <HTML>
   <HEAD>
-    <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <META http-equiv="Content-Type" content="text/html; charset=utf8">
     <TITLE>ZoneCheck results</TITLE>
 
     <!-- Navigation -->
