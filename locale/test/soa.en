@@ -41,7 +41,7 @@ explain : [ref]: IETF RFC1034 (p.9), RFC1912 (p.3)\nEmail addresses are converte
 [chk_soa_master_sntx]
 testname: illegal characters in SOA master nameserver
 error   : The SOA master nameserver contains illegal characters
-explain : [none]
+explain : label_xpl
 
 [chk_soa_master_fq]
 testname: fully qualified master nameserver in SOA
