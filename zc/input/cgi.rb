@@ -46,6 +46,7 @@ module Input
     ##      - progress = [ testdesc | counter ]
     ##  - output   = [ straight, consolidation, text, html ]
     ##      - format   = html|text
+    ##      - report   = byseverity|byhost
     ##  - error    = [ af|allfatal, aw|allwarning, std|standard,
     ##                s|stop, ns|nostop ]
     ##      - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]
@@ -118,6 +119,10 @@ module Input
 		p.output = if @cgi.has_key?("format")
 			   then @cgi["format"]
 			   else "html"
+			   end
+		p.output = if @cgi.has_key?("report")
+			   then @cgi["report"]
+			   else "byseverity"
 			   end
 	    end
 

@@ -42,6 +42,7 @@ parameters:\n\
      - progress = [ testdesc | counter ]\n\
  - output   = [ straight, consolidation, text, html ]\n\
      - format   = html|text\n\
+     - report   = byseverity|byhost\n\
  - error    = [ af|allfatal, aw|allwarning, std|standard,\n\
                 s|stop, ns|nostop ]\n\
      - errorlvl  = [ af|allfatal | aw|allwarning | std|standard ]\n\

@@ -182,6 +182,11 @@
 	  </TR>
 	  <TR>
 	    <TD></TD>
+	    <TD><SELECT name="report">
+		<OPTION value="byseverity" SELECTED> by severity
+		<OPTION value="byhost"             > by host
+	      </SELECT>
+	      report</TD>
 	    <TD><SELECT name="format">
 		<OPTION value="html" SELECTED> HTML
 		<OPTION value="text"         > Text
@@ -422,7 +427,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Apr 17 13:32:58 CEST 2003
+Last modified: Thu Apr 17 17:34:00 CEST 2003
 <!-- hhmts end -->
   </BODY>
 
