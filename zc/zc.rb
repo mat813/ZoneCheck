@@ -330,8 +330,8 @@ class ZoneCheck
 	@param.publisher.engine.begin
 	
 	# 
+	success = true
 	begin
-	    success = true
 	    if ! @param.batch
 		cm = CacheManager::create(@param.resolver.local,
 					  @param.network.query_mode)
@@ -363,6 +363,7 @@ class ZoneCheck
 	    end
 	rescue Param::ParamError => e
 	    @param.publisher.engine.error(e.message)
+	    success = false
 	end
 
 	# End formatter
