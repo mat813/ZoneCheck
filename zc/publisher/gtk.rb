@@ -17,79 +17,7 @@
 
 require 'thread'
 require 'gtk'
-
-
-$book_open_xpm = [
-  "16 16 4 1",
-  "       c None s None",
-  ".      c black",
-  "X      c #808080",
-  "o      c white",
-  "                ",
-  "  ..            ",
-  " .Xo.    ...    ",
-  " .Xoo. ..oo.    ",
-  " .Xooo.Xooo...  ",
-  " .Xooo.oooo.X.  ",
-  " .Xooo.Xooo.X.  ",
-  " .Xooo.oooo.X.  ",
-  " .Xooo.Xooo.X.  ",
-  " .Xooo.oooo.X.  ",
-  "  .Xoo.Xoo..X.  ",
-  "   .Xo.o..ooX.  ",
-  "    .X..XXXXX.  ",
-  "    ..X.......  ",
-  "     ..         ",
-  "                " ]
-
-$book_closed_xpm = [
-  "16 16 6 1",
-  "       c None s None",
-  ".      c black",
-  "X      c red",
-  "o      c yellow",
-  "O      c #808080",
-  "#      c white",
-  "                ",
-  "       ..       ",
-  "     ..XX.      ",
-  "   ..XXXXX.     ",
-  " ..XXXXXXXX.    ",
-  ".ooXXXXXXXXX.   ",
-  "..ooXXXXXXXXX.  ",
-  ".X.ooXXXXXXXXX. ",
-  ".XX.ooXXXXXX..  ",
-  " .XX.ooXXX..#O  ",
-  "  .XX.oo..##OO. ",
-  "   .XX..##OO..  ",
-  "    .X.#OO..    ",
-  "     ..O..      ",
-  "      ..        ",
-  "                " ]
-
-$mini_page_xpm = [
-  "16 16 4 1",
-  "       c None s None",
-  ".      c black",
-  "X      c white",
-  "o      c #808080",
-  "                ",
-  "   .......      ",
-  "   .XXXXX..     ",
-  "   .XoooX.X.    ",
-  "   .XXXXX....   ",
-  "   .XooooXoo.o  ",
-  "   .XXXXXXXX.o  ",
-  "   .XooooooX.o  ",
-  "   .XXXXXXXX.o  ",
-  "   .XooooooX.o  ",
-  "   .XXXXXXXX.o  ",
-  "   .XooooooX.o  ",
-  "   .XXXXXXXX.o  ",
-  "   ..........o  ",
-  "    oooooooooo  ",
-  "                " ]
-
+require 'publisher/xpm_data'
 
 module Publisher
     ##
@@ -211,7 +139,6 @@ module Publisher
 
 	    private
 	    def update_bar
-		
 		nowtime      = Time.now
 		totaltime    = nowtime - @starttime
 		
@@ -282,15 +209,53 @@ module Publisher
 
 	    @pixmap1, @mask1 = Gdk::Pixmap::create_from_xpm_d(window.window,
 							      style.white,
-							      $book_closed_xpm)
+							      XPM::Book_closed)
 	    @pixmap2, @mask2 = Gdk::Pixmap::create_from_xpm_d(window.window,
 							      style.white,
-							      $book_open_xpm)
+							      XPM::Book_open)
 	    @pixmap3, @mask3 = Gdk::Pixmap::create_from_xpm_d(window.window,
 							      style.white,
-							      $mini_page_xpm)
+							      XPM::Minipage)
+
+	    @xpm_element = Gdk::Pixmap::create_from_xpm_d(window.window,
+						       style.white,
+						       XPM::Element)
+
+	    @xpm_reference = Gdk::Pixmap::create_from_xpm_d(window.window,
+						       style.white,
+						       XPM::Reference)
+
+	    @xpm_info = Gdk::Pixmap::create_from_xpm_d(window.window,
+						       style.white,
+						       XPM::Info)
+
+	    @xpm_info = Gdk::Pixmap::create_from_xpm_d(window.window,
+						       style.white,
+						       XPM::Info)
+
+	    @xpm_warning = Gdk::Pixmap::create_from_xpm_d(window.window,
+						       style.white,
+						       XPM::Warning)
+
+	    @xpm_fatal = Gdk::Pixmap::create_from_xpm_d(window.window,
+						       style.white,
+						       XPM::Fatal)
+
+	    @xpm_zone = Gdk::Pixmap::create_from_xpm_d(window.window,
+						       style.white,
+						       XPM::Zone)
+
+	    @xpm_primary = Gdk::Pixmap::create_from_xpm_d(window.window,
+							  style.white,
+							  XPM::Primary)
+
+	    @xpm_secondary = Gdk::Pixmap::create_from_xpm_d(window.window,
+							    style.white,
+							    XPM::Secondary)
+
 
 	    @ctree = Gtk::CTree::new([ "Tree" ], 0)
+	    @ctree.set_row_height(18) # XXX: pixmap / font size
 	    @ctree.column_titles_hide
 	    @output.pack_start(@ctree)
 
@@ -330,7 +295,7 @@ module Publisher
 	    l10n_zone  = $mc.get("ns_zone").capitalize
 	    
 	    @ctree.insert_node(parent, nil, [ "#{l10n_zone}: #{domain.name.to_s}"], 5,
-					@pixmap1, @mask1, @pixmap2, @mask2,
+					nil, nil, @xpm_zone[0], @xpm_zone[1],
 					false, true)
 
 
@@ -340,15 +305,16 @@ module Publisher
 		if idx == 0
 		    name = "ns_prim"
 		    desc = $mc.get("ns_primary").capitalize
+		    pxm  = [ nil, nil, *@xpm_primary ]
 		else
 		    name = "ns_sec"
 		    desc = $mc.get("ns_secondary").capitalize
+		    pxm  = [ nil, nil, *@xpm_secondary ]
 		end
 
 		str = "#{desc}: #{ns_ip[0].to_s} (#{ns_ip[1].join(", ")})"
 		@ctree.insert_node(parent, nil, [ str ], 5,
-					@pixmap1, @mask1, @pixmap2, @mask2,
-					false, true)
+				   pxm[0], pxm[1], pxm[2], pxm[3], false, true)
 
 	    }
 	end
@@ -403,8 +369,18 @@ module Publisher
 		xpl_lst = xpl_split(desc.xpl)
 	    end
 	    
+	    case severity
+	    when "Warning"
+		pxm = [ @xpm_warning[0], @xpm_warning[1], @xpm_warning[0], @xpm_warning[1] ]
+	    when "Info"
+		pxm = [ @xpm_info[0], @xpm_info[1], @xpm_info[0], @xpm_info[1] ]
+	    when "Fatal"
+		pxm = [ @xpm_fatal[0], @xpm_fatal[1], @xpm_fatal[0], @xpm_fatal[1] ]
+	    end
+
+
 	    parent = @ctree.insert_node(@parent, nil, [msg], 5,
-					@pixmap1, @mask1, @pixmap2, @mask2,
+					pxm[0], pxm[1], pxm[2], pxm[3],
 					false, true)
 
 
@@ -420,7 +396,7 @@ module Publisher
 		    b.each { |l| l.gsub!(/<URL:([^>]+)>/, '<A href="\1">\1</A>') }
 		    ref_sibling = @ctree.insert_node(xpl_parent, ref_sibling, 
 						     [ "#{l10n_tag}: #{h}" ], 5,
-					@pixmap1, @mask1, @pixmap2, @mask2,
+						     @xpm_reference[0], @xpm_reference[1], @xpm_reference[0], @xpm_reference[1], 
 
 						     false, false)
 		    b.each { |l|
@@ -440,7 +416,7 @@ module Publisher
 		sibling = nil
 		lst.each { |elt| 
 		    @ctree.insert_node(parent, nil, [elt], 5,
-				       @pixmap3, @mask3, nil, nil,
+				       @xpm_element[0], @xpm_element[1], nil, nil,
 				       true, false)
 		}
 	    end
