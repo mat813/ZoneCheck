@@ -8,12 +8,18 @@ will need the Ruby environment.
 Ruby can be found as a package or port in every serious
 Unix. Otherwise, see <URL:http://www.ruby-lang.org/> and
 <URL:http://www.rubycentral.com/>, or if you are a Windows user, you
-can find <URL:http://rubyinstaller.sourceforge.net/> more convenient.
+can find a version of ruby in cygwin <URL:http://www.cygwin.com/>.
 
-WARNING: you need at least the version 1.8 of Ruby.
+WARNING:
+ - you need at least the version 1.8 of Ruby.
+ - it is not advised for now to use 'rubyinstaller'
+    <URL:http://rubyinstaller.sourceforge.net/> as some constantes
+    are not defined.
+
+
 
 If you are reading this file, we can assume that you haven't already
-install ZoneCheck by tipping "make install"; in fact you don't need
+install ZoneCheck by typping "make install"; in fact you don't need
 the 'make' command (but as it is a reflex, a dummy Makefile has been
 created).
 
