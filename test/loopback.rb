@@ -24,6 +24,8 @@ module CheckNetworkAddress
     ## Check for loopback network delegation/resolution
     ## 
     class Loopback < Test
+	ZC_Category = "dns"
+
 	#-- Constants -----------------------------------------------
 	IPv4LoopbackName = NResolv::DNS::Name::create(Address::IPv4::Loopback)
 	IPv6LoopbackName = NResolv::DNS::Name::create(Address::IPv6::Loopback)

@@ -33,6 +33,8 @@ module CheckNetworkAddress
     ##   the tests won't be affected by the transport flags
     ## 
     class Connectivity < Test
+	ZC_Category = "dns"
+
 	#-- Tests ---------------------------------------------------
 	# DESC: Test TCP connectivity with DNS server
 	def chk_tcp(ns, ip)

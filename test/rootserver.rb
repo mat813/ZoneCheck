@@ -15,6 +15,8 @@ require 'framework'
 
 module CheckNetworkAddress
     class RootServer < Test
+	ZC_Category = "dns"
+
 	#-- Tests ---------------------------------------------------
 	# DESC: root server list should be available
 	def chk_root_servers(ns, ip)

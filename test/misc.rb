@@ -24,6 +24,8 @@ module CheckNetworkAddress
     ##
     ##
     class Misc < Test
+	ZC_Category = "dns"
+
 	#-- Tests ---------------------------------------------------
 	# DESC:
 	def chk_ns_reverse(ns, ip)

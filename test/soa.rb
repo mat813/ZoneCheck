@@ -18,6 +18,8 @@ module CheckNetworkAddress
     ## Check domain SOA record
     ##
     class SOA < Test
+	ZC_Category = "dns"
+
 	#-- Tests ---------------------------------------------------
 	# DESC: SOA entries should exists
 	def chk_soa(ns, ip)

@@ -21,6 +21,8 @@ module CheckNameServer
     ##   (see modules CheckNetworkAddress for that)
     ##
     class ServerAccess < Test
+	ZC_Category = "dns"
+
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
 	    super(*args)

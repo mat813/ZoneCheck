@@ -18,6 +18,8 @@ module CheckNetworkAddress
     ## Check domain MX record
     ##
     class MX < Test
+	ZC_Category = "dns"
+
 	#-- Tests ---------------------------------------------------
 	# DESC: MX entries should exists
 	def chk_mx(ns, ip)

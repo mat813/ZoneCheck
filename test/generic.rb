@@ -18,6 +18,8 @@ module CheckGeneric
     ## Check syntax validity of the domain name
     ##
     class DomainNameSyntax < Test
+	ZC_Category = "dns"
+
 	#-- Tests ---------------------------------------------------
 	# DESC: A domainname should only contains A-Z a-Z 0-9 '-' '.'
 	def chk_dn_alpha
@@ -41,6 +43,8 @@ module CheckGeneric
     ## Check basic absurdity with the nameserver IP addresses
     ##
     class ServerAddress < Test
+	ZC_Category = "dns"
+
 	#-- Initialization ------------------------------------------
 	def initialize(*args)
 	    super(*args)
@@ -80,6 +84,8 @@ module CheckGeneric
     ## Check for nameserver!
     ##
     class NameServers < Test
+	ZC_Category = "dns"
+
 	#-- Tests ---------------------------------------------------
 	# DESC: A domain should have a nameserver!
 	def chk_one_ns

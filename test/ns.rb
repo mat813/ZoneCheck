@@ -18,6 +18,8 @@ module CheckNetworkAddress
     ## Check domain NS records
     ##
     class NS < Test
+	ZC_Category = "dns"
+
 	#-- Tests ---------------------------------------------------
 	# DESC: NS entries should exists
 	def chk_ns(ns, ip)

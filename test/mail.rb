@@ -19,6 +19,8 @@ module CheckExtra
     ## Check domain NS records
     ##
     class Mail < Test
+	ZC_Category = "mail"
+
 	def initialize(*args)
 	    super(*args)
 	end
@@ -39,7 +41,7 @@ module CheckExtra
 	    mhost = bestmx(mdom)
 	    mip   = addresses(mhost, bestresolver(mhost))[0]
 
-	    puts "DOM=#{mdom}   HOST=#{mhost}   IP=#{mip}"
+#	    puts "DOM=#{mdom}   HOST=#{mhost}   IP=#{mip}"
 	    # Execute test on mailhost
 	    mrelay = nil
 	    begin
