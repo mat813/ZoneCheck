@@ -12,7 +12,6 @@
 #
 #
 
-
 #
 # Customizable constants
 #  (Only the ZC_INSTALL_PATH really need modification)
@@ -47,6 +46,12 @@ ZC_MAINTAINER   = "Stephane D'Alu <sdalu@nic.fr>"
 PROGNAME	= File.basename($0)
 
 $zc_version	= ZC_VERSION
+
+
+#
+# Run at safe level 1
+#
+$SAFE = 1
 
 
 #
@@ -140,7 +145,7 @@ class ZoneCheck
 		    end
 	    param.usage(EXIT_USAGE) if (@param = param.parse).nil?
 	rescue Param::ParamError => e
-	    $stderr.puts "ERROR: #{e}"
+	    $stderr.puts "ERROR: #{e}"		# XXX: I18N
 	    exit EXIT_ERROR
 	end
     end
