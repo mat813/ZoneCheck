@@ -51,10 +51,12 @@ stop_on_first		: arrête sur le premier fatal
 error_default		: sévérité par défaut
 error_allwarnings	: tout avertissment
 error_allfatals		: tout fatal
+error_reportok		: erport ok
 test_mail		: mail delivery
 test_zone		: zone content
 test_rir		: RIR databases
 output_explain		: explication
+output_testname		: nom du test
 output_details		: détails
 output_zone		: résumé
 output_progressbar	: barre de progression
@@ -66,6 +68,7 @@ dbg_config		: config
 dbg_parser		: parser
 dbg_tests		: tests
 dbg_autoconf		: autoconf
+dbg_testdbg		: debogage des tests
 dbg_dbg			: debugger
 dbg_cache_info		: cache information
 dbg_nocache		: pas de cache
@@ -94,6 +97,7 @@ input/clear: Clear all the input information
 input/check: Start the ZoneCheck verification
 
 option/output/summary: Give summary information about the zone tested
+option/output/testname: Give the name of the test
 option/output/explain: Give explanation and references
 option/output/details: Give detailed information
 option/output/progress: Show a progress bar

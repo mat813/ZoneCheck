@@ -186,6 +186,7 @@ module Input
 		    [ :d_parser,     "iface_dbg_parser",     DBG::PARSER     ],
 		    [ :d_tests,      "iface_dbg_tests",      DBG::TESTS      ],
 		    [ :d_autoconf,   "iface_dbg_autoconf",   DBG::AUTOCONF   ],
+		    [ :d_testdbg,    "iface_dbg_testdbg",    DBG::TESTDBG    ],
 		    [ :d_dbg,        "iface_dbg_dbg",        DBG::DBG        ],
 		    [ :d_cache_info, "iface_dbg_cache_info", DBG::CACHE_INFO ],
 		    [ :d_nocache,    "iface_dbg_nocache",    DBG::NOCACHE    ],
@@ -276,6 +277,7 @@ module Input
 		@o_tag     = Gtk::CheckButton::new("tag only")
 		
 		@o_reportok= Gtk::CheckButton::new("report ok")
+		@o_fatalonly=Gtk::CheckButton::new("fatal only")
 
 		menu = Gtk::Menu::new
 		menu.append(Gtk::MenuItem::new("plain text"))
@@ -305,9 +307,10 @@ module Input
 		tbl.attach(@o_testname,  0, 1, 1, 2)
 		tbl.attach(@o_explain,   1, 2, 1, 2)
 		tbl.attach(@o_details,   2, 3, 1, 2)
-		tbl.attach(@o_one,       0, 1, 2, 3)
-		tbl.attach(@o_reportok,  1, 2, 2, 3)
+		tbl.attach(@o_reportok,  0, 1, 2, 3)
+		tbl.attach(@o_fatalonly, 1, 2, 2, 3)
 		tbl.attach(@o_quiet,     2, 3, 2, 3)
+		tbl.attach(@o_one,       0, 1, 3, 4)
 		output_f.add(tbl)
 
 		main.set_tip(@o_summary,  "option/output/summary")
@@ -409,6 +412,7 @@ module Input
 		verbose << "explain"		if @o_explain.active?
 		verbose << "details"		if @o_details.active?
 		verbose << "reportok"		if @o_reportok.active?
+		verbose << "fatalonly"		if @o_fatalonly.active?
 		verbose.join(",")
 	    end
 
@@ -552,7 +556,7 @@ module Input
 			main.statusbar.push(1, e.message)
 			puts e.message
 			puts e.backtrace.join("\n")
-			puts "FUCK"
+			puts "FUCK check"
 		    end
 		    @hbbox.set_sensitive(true)
 		}
@@ -568,7 +572,7 @@ module Input
 			main.statusbar.push(1, e.message)
 			puts e.message
 			puts e.backtrace.join("\n")
-			puts "FUCK"
+			puts "FUCK guess"
 		    end
 		    
 		    @hbbox.set_sensitive(true)

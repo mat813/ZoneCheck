@@ -422,6 +422,8 @@ class ZoneCheck
     end
 
     def zc(cm)
+	starttime = Time::now
+
 	# Setup publisher (for the domain)
 	@param.publisher.engine.setup(@param.domain.name)
 

@@ -68,6 +68,7 @@ dbg_config		: config
 dbg_parser		: parser
 dbg_tests		: tests
 dbg_autoconf		: autoconf
+dbg_testdbg		: test debugging
 dbg_dbg			: debugger
 dbg_cache_info		: cache information
 dbg_nocache		: no cache
