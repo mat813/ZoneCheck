@@ -248,7 +248,7 @@
 	    <td></td>
 	    <td><select name="profile">
 		<option value="automatic" selected> automatic
-		<option value="fr"                > AFNIC
+		<option value="afnic"             > AFNIC
 		<option value="reverse"           > Reverse
 		<option value="default"           > Default
 	      </select> profile</td>
@@ -467,7 +467,7 @@
 Release: $Name$ <br>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Nov 13 10:54:27 CET 2003
+Last modified: Mon Nov 24 10:51:49 CET 2003
 <!-- hhmts end -->
   </body>
 
