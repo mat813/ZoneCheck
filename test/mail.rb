@@ -127,6 +127,12 @@ module CheckExtra
 	    { "hostmaster" => user }
 	end
 	
+	# DESC: check for MX or A
+	def chk_mail_mx_or_addr
+	    ip = bestresolverip
+	    !mx(ip).empty? && !addresses(@domain.name, ip).empty?
+	end
+
 	# DESC: Check that postmaster address is valid
 	def chk_mail_postmaster
 	    mdom  = @domain.name
@@ -147,8 +153,12 @@ module CheckExtra
 
 	#-- Tests ---------------------------------------------------
 	# 
-	def tst_mail_is_for_tld
-	    @domain.name.depth <= 2 ? "true" : "false"
+	def tst_mail_delivery
+	    ip = bestresolverip
+	    if    !mx(ip).empty?			then "MX"
+	    elsif !addresses(@domain.name, ip).empty?	then "A"
+	    else					     "nodelivery"
+	    end
 	end
     end
 end

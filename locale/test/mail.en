@@ -80,11 +80,17 @@ error   : The hostmaster MX is not allow to point to a CNAME alias
 ok	: The hostmaster MX is not an alias
 explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
 
+[chk_mail_mx_or_addr]
+testname: domain able to receive email (delivery using MX, A, AAAA)
+error   : The domain don't have an MX or an address for mail delivery
+ok      : The domain is able to receive email
+explain	: [none]
+
 
 ### FIXME
 
 
-[tst_mail_is_for_tld]
-testname: test if mail is for a tld
+[tst_mail_delivery]
+testname: test if mail delivery possible
 error	: xxx
 explain	: [none]

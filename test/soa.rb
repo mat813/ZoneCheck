@@ -117,9 +117,9 @@ module CheckNetworkAddress
 	    { "expire"  => soa(ip).expire, "refresh" => soa(ip).refresh }
 	end
 
-	# DESC: recommanded minimum is <= 3h
-	def chk_soa_minimum_3h(ns, ip)
-	    return true if soa(ip).minimum <= 10800
+	# DESC: recommanded minimum is <= 3h, not working > 1d
+	def chk_soa_minimum_1d(ns, ip)
+	    return true if soa(ip).minimum <= 86400
 	    { "minimum" => soa(ip).minimum }
 	end
 

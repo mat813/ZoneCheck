@@ -131,12 +131,12 @@ explain : [none]
 details : The expire (%{expire} sec) is not at least 7 times greater than the refresh (%{refresh} sec), you should correct one of them.
 
 
-[chk_soa_minimum_3h]
-testname: SOA 'minimum' less than 3 hours
-error   : The 'minimum' period should be less than 3 hours
-ok	: The 'minimum' is less than 3 hours
-explain : [ref]: RFC2308 "3 - Negative Answers from Authoritative Servers"
-details : The minimum value is %{minimum} sec, and should be less than 3 hours (10800 sec).
+[chk_soa_minimum_1d]
+testname: SOA 'minimum' less than 1 day
+error   : The 'minimum' period should be less than 1 day
+ok	: The 'minimum' is less than 1 day
+explain : [ref]: RFC2308 (p.9) 5. Caching Negative Answers\nValues of one to three hours have been found to work well\nand would make sensible a default.  Values exceeding one day have\nbeen found to be problematic.
+details : The minimum value is %{minimum} sec, and should be less than 1 day (86400 sec), the recommanded value is between 1 and 3 hours.
 
 
 [chk_soa_ns_cname]

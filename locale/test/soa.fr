@@ -131,12 +131,12 @@ explain : [none]
 details : La valeur du champ 'expire' est de %{expire} sec, et devrait être 7 fois plus grande que celle du 'refresh' (%{refresh} sec).
 
 
-[chk_soa_minimum_3h]
-testname: champ 'minimum' du SOA inférieur à 3 heures
-error   : Le champ 'minimum' doit être inférieur à 3 heures
-ok	: Le champ 'minimum' du SOA est inférieur à 3 heures
-explain : [ref]: RFC2308 "3 - Negative Answers from Authoritative Servers"
-details : La valeur du champ 'minimum' est de %{minimum} sec, et devrait être moins de 3 heures (10800 sec).
+[chk_soa_minimum_1d]
+testname: champ 'minimum' du SOA inférieur à 1 jour
+error   : Le champ 'minimum' doit être inférieur à 1 jour
+ok	: Le champ 'minimum' du SOA est inférieur à 1 jour
+explain : [ref]: RFC2308 (p.9) 5. Caching Negative Answers\nValues of one to three hours have been found to work well\nand would make sensible a default.  Values exceeding one day have\nbeen found to be problematic.
+details : La valeur du champ 'minimum' est de %{minimum} sec, et devrait être moins de 1 jour (86400 sec), la valeur recommandée est entre 1 et 3 heures.
 
 
 [chk_soa_ns_cname]

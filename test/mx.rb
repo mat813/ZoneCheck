@@ -93,7 +93,10 @@ module CheckNetworkAddress
 
 	#-- Tests ---------------------------------------------------
 	def tst_mail_by_mx_or_a(ns, ip)
-	    mx(ip).empty? ? "A" : "MX"
+	    if    !mx(ip).empty?			then "MX"
+	    elsif !addresses(@domain.name, ip).empty?	then "A"
+	    else					     "nodelivery"
+	    end
 	end
     end
 end

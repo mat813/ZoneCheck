@@ -81,10 +81,16 @@ ok	: L'enregistrement MX du 'hostmaster' n'est pas un alias
 explain : [ref]: IETF RFC974\nMX records shall not point to an alias defined by a CNAME.
 
 
+[chk_mail_mx_or_addr]
+testname: domaine capable de recevoir du courrier (MX, A, AAAA)
+error   : Le domaine n'a pas de MX ou d'addresse pour delivrer le courrier
+ok      : Le domaine est capable de recevoir du courrier
+explain	: [none]
+
 ### FIXME
 
 
-[tst_mail_is_for_tld]
-testname: test if mail is for a tld
+[tst_mail_delivery]
+testname: test if mail delivery possible
 error	: xxx
 explain	: [none]
