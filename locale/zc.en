@@ -32,7 +32,7 @@ w_quit		: quit
 w_abort		: abort
 
 xpltag_ref	: Ref
-xpltab_adv	: Adv
+xpltag_adv	: Adv
 
 res_succeed_but : SUCCEED (but %d warning(s))
 res_succeed	: SUCCEED
