@@ -414,7 +414,13 @@ class ZoneCheck
 
 	    # Everything fine?
 	    exit success ? EXIT_OK : EXIT_FAILED
-	rescue Param::ParamError, Config::ConfigError => e
+	rescue Param::ParamError   => e
+	    @input.error(e.to_s, EXIT_ERROR)
+	rescue Config::SyntaxError => e
+	    @input.error("%s %d: %s\n\t(%s)" % [ 
+			     $mc.get("w_line").capitalize, e.pos.y, e.to_s,
+			     e.path ], EXIT_ERROR)
+	rescue Config::ConfigError => e
 	    @input.error(e.to_s, EXIT_ERROR)
 	ensure
 	    # exit() raise an exception ensuring that the following code

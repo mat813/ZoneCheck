@@ -59,12 +59,11 @@ class Config
     ## Syntax error, while parsing the file
     ##
     class SyntaxError < ConfigError
-	def initialize(string=nil, pos=nil)
+	attr_reader :path, :pos
+	def initialize(string=nil, path=nil, pos=nil)
 	    super(string) if string
-	    @pos  = pos
+	    @path, @pos = path, pos
 	end
-	
-	def at ; @pos ; end
     end
 
 

@@ -301,11 +301,11 @@ class Config
 		       else
 			   raise RuntimeError
 		       end
-	    raise  SyntaxError::new(l10n_msg, tk.pos)
+	    raise  SyntaxError::new(l10n_msg, @lex.path, tk.pos)
 	end
 
 	def raise_synerr(tag, pos, *args)
-	    raise SyntaxError::new($mc.get(tag) % args, pos)
+	    raise SyntaxError::new($mc.get(tag) % args, @lex.path, pos)
 	end
     end
 end

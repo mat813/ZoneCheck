@@ -37,6 +37,8 @@ class Config
 	    fetch_tokens
 	end
 
+	def path ; @io.path ; end
+
 	# Retrieve 'count' tokens
 	def token(count=1)
 	    tokens = []
