@@ -7,7 +7,7 @@
 <!--                                                                  -->
 <!-- COPYRIGHT: AFNIC (c) 2003                                        -->
 <!-- CONTACT  : zonecheck@nic.fr                                      -->
-<!-- LICENSE  : GPL v2.0                                              -->
+<!-- LICENSE  : GPL v2.0 (or MIT/X11-like after agreement)            -->
 <!--                                                                  -->
 <!-- $Revision$                                                -->
 <!-- $Date$                                     -->
@@ -399,7 +399,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Tue Mar  4 16:34:25 CET 2003
+Last modified: Tue Mar 11 14:23:56 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

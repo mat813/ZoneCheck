@@ -6,7 +6,7 @@
 #
 # COPYRIGHT: AFNIC (c) 2003
 # CONTACT  : zonecheck@nic.fr
-# LICENSE  : GPL v2.0
+# LICENSE  : GPL v2.0 (or MIT/X11-like after agreement)
 #
 # $Revision$ 
 # $Date$
@@ -32,7 +32,7 @@ class ZCMail
 	@myhostname = Socket::gethostname
 	@mhost      = mhost
 	@mip        = mip
-	@mrelay     = TCPSocket.new(mip, 25)
+	@mrelay     = TCPSocket::new(mip, 25)
     end
 
     def fake_info(user, mdest, mfrom)
