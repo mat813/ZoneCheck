@@ -175,7 +175,7 @@ ns_bad_ips	: Addresses IP donnees pour %s ne corrspondent pas aux enregistrement
 output_support	: La sortie ne supporte pas la classe '%s'
 ip_no_stack	: %s n'est pas supporté sur cette machine
 unknown_modopt	: Modificateur '%s' inconnu pour l'option '%s'
-local_resolver	: Impossible d'utiliser le resolveur local '%s'
+local_resolver	: Addresse IP attendue pour le resolveur local
 
 [xcp_config]
 malformed_cmd	: commande malformée

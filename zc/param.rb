@@ -522,13 +522,10 @@ class Param
 			     # Use default resolver
 			     NResolv::DNS::DefaultResolver
 			 else 
-			     # Check that we can resolv the resolver
+			     # Only accept addresses
 			     unless Address.is_valid(@local_name)
-				 dft = NResolv::DNS::DefaultResolver
-				 if dft.getaddresses(@local_name).empty?
-				     raise ParamError, 
-					 $mc.get('xcp_param_local_resolver') % @local_name
-				 end
+				 raise ParamError, 
+				     $mc.get('xcp_param_local_resolver')
 			     end
 			     # Build new resolver
 			     cfg = NResolv::DNS::Config::new(@local_name)
