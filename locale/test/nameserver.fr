@@ -28,7 +28,7 @@ explain : [ref]: IETF RFC1918 (3. Private Address Space)\nThe Internet Assigned 
 
 
 [chk_bogon]
-testname: addresse ne fait pas parti des 'bogon'
-error   : Addresse listee parmis les 'bogon'
-details : L'addresse %{addresses} appartient a un prefix 'bogon'.
+testname: addresse faisant parti de la liste des 'bogon'
+error   : Présence d'addresses listées parmi les 'bogon'
+details : Classé parmi les 'bogon': %{addresses}.
 explain : [ref]: <URL:http://www.cymru.com/Bogons/>\nA bogon prefix is a route that should never appear in the Internet routing table.\nA packet routed over the public Internet (not including over VPN or other\ntunnels) should never have a source address in a bogon range. These are\ncommonly found as the source addresses of DDoS attacks.
