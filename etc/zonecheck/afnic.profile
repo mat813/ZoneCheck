@@ -120,12 +120,10 @@
       <case test="mail_delivery">
         <when value="nodelivery"/>
         <else>
-          <check name="mail_openrelay_domain"     severity="w" category="mail:openrelay"/>
           <check name="mail_delivery_postmaster"  severity="w" category="mail:delivery"/>
         </else>
       </case>
       <check name="mail_hostmaster_mx_cname"     severity="f" category="mail"/>
-      <check name="mail_openrelay_hostmaster"    severity="w" category="mail:openrelay"/>
       <check name="mail_delivery_hostmaster"     severity="f" category="mail:delivery"/>
     </rules>
   </profile>
