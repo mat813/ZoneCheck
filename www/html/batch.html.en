@@ -19,6 +19,27 @@
 <HTML>
   <HEAD>
     <LINK rel="stylesheet" href="HTML_PATH/style/zc.css" type="text/css">
+    <LINK rel="start" title="ZoneCheck main page"
+	  type="text/html"
+	  href="HTML_PATH/">
+    <LINK rel="bookmark" title="batch form"
+	  type="text/html"
+	  href="HTML_PATH/batch.html">
+    <LINK rel="bookmark" title="single zone form"
+	  type="text/html"
+	  href="HTML_PATH/">
+
+    <LINK rel="help"	
+	  type="text/html"
+	  href="#help">
+
+    <LINK lang="fr" title="Zonecheck"
+	  type="text/html"
+	  rel="alternate"
+	  hreflang="fr"
+	  href="HTML_PATH/fr/">
+
+    <LINK rel="stylesheet" href="HTML_PATH/style/zc.css" type="text/css">
 
     <TITLE>ZoneCheck in batch mode</TITLE>
   </HEAD>
@@ -304,7 +325,7 @@ DOM=nic.fr NS=ns3.nic.fr=2001:660:3006:1::1:1,192.134.0.49;ns2.nic.fr
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Fri Mar 14 19:25:47 CET 2003
+Last modified: Thu Mar 20 16:22:58 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>

@@ -20,7 +20,7 @@
 <HTML>
   <HEAD>
     <LINK rel="stylesheet" href="HTML_PATH/style/zc.css" type="text/css">
-    <LINK rel="start" title="The first page of the manual"
+    <LINK rel="start" title="ZoneCheck main page"
 	  type="text/html"
 	  href="HTML_PATH/">
     <LINK rel="bookmark" title="batch form"
@@ -38,7 +38,7 @@
 	  type="text/html"
 	  rel="alternate"
 	  hreflang="fr"
-	  href="http://someplace.com/manual/dutch.html">
+	  href="HTML_PATH/fr/">
 
 
     <SCRIPT src="HTML_PATH/js/formvalidation.js"  type="text/javascript"></SCRIPT>
@@ -83,81 +83,64 @@
 	  <TR class="zc_zone">
 	    <TD><IMG src="HTML_PATH/img/zone.png" alt="">Zone</TD>
 	    <TD colspan="4">
-	      <INPUT name="zone" type="text" size="65"
-		     value=""></TD>
+	      <INPUT name="zone" type="text" size="65" value=""></TD>
 	  </TR>
 
 	  <TR class="zc_ns_prim">
 	    <TD><IMG src="HTML_PATH/img/primary.png" alt="">Primary</TD>
-	    <TD><INPUT name="ns0"  type="text" size=24 
-		       value=""></TD>
+	    <TD><INPUT name="ns0"  type="text" size=24 value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
-	    <TD><INPUT name="ips0" type="text" size=35
-		       value=""></TD>
+	    <TD><INPUT name="ips0" type="text" size=35 value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns1"  type="text" size=24
-		       value=""></TD>
+	    <TD><INPUT name="ns1"  type="text" size=24 value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
-	    <TD><INPUT name="ips1" type="text" size=35
-		       value=""></TD>
+	    <TD><INPUT name="ips1" type="text" size=35 value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns2"  type="text" size=24
-		       value=""></TD>
+	    <TD><INPUT name="ns2"  type="text" size=24 value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
-	    <TD><INPUT name="ips2" type="text" size=35
-		       value=""></TD>
+	    <TD><INPUT name="ips2" type="text" size=35 value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns3"  type="text" size=24
-		       value=""></TD>
+	    <TD><INPUT name="ns3"  type="text" size=24 value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
-	    <TD><INPUT name="ips3" type="text" size=35
-		       value=""></TD>
+	    <TD><INPUT name="ips3" type="text" size=35 value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns4"  type="text" size=24
-		       value=""></TD>
+	    <TD><INPUT name="ns4"  type="text" size=24 value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
-	    <TD><INPUT name="ips4" type="text" size=35
-		       value=""></TD>
+	    <TD><INPUT name="ips4" type="text" size=35 value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns5"  type="text" size=24
-		       value=""></TD>
+	    <TD><INPUT name="ns5"  type="text" size=24 value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
-	    <TD><INPUT name="ips5" type="text" size=35
-		       value=""></TD>
+	    <TD><INPUT name="ips5" type="text" size=35 value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns6"  type="text" size=24
-		       value=""></TD>
+	    <TD><INPUT name="ns6"  type="text" size=24 value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
-	    <TD><INPUT name="ips6" type="text" size=35
-		       value=""></TD>
+	    <TD><INPUT name="ips6" type="text" size=35 value=""></TD>
 	  </TR>
 	  <TR class="zc_ns_sec">
 	    <TD><IMG src="HTML_PATH/img/secondary.png" alt="">Secondary</TD>
-	    <TD><INPUT name="ns7"  type="text" size=24
-		       value=""></TD>
+	    <TD><INPUT name="ns7"  type="text" size=24 value=""></TD>
 	    <TD></TD>
 	    <TD>IPs</TD>
-	    <TD><INPUT name="ips7" type="text" size=35
-		       value=""></TD>
+	    <TD><INPUT name="ips7" type="text" size=35 value=""></TD>
 	  </TR>
       </TABLE>
       <INPUT type="submit" value=" Check! " onClick="zc_formcheck(this.form)">
@@ -394,7 +377,7 @@
 Release: $Name$ <BR>
 <!-- Created: Fri Sep 27 16:34:31 CEST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Mar 20 14:56:55 CET 2003
+Last modified: Thu Mar 20 16:23:19 CET 2003
 <!-- hhmts end -->
   </BODY>
 </HTML>
