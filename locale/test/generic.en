@@ -16,7 +16,7 @@ label_xpl : [ref]: IETF RFC1034 (p.11)\nLabels are only composed by letters ([A-
 
 chk_several_ns_xpl : [ref]: IETF RFC2182 (Abstract)\nThe Domain Name System requires that multiple servers exist for every\ndelegated domain (zone).  This document discusses the selection of\nsecondary servers for DNS zones.  Both the physical and topological\nlocation of each server are material considerations when selecting\nsecondary servers.  The number of servers appropriate for a zone is\nalso discussed, and some general secondary server maintenance issues\nconsidered.
 
-chk_same_net_xpl : [ref]: AFNIC advise\nTo avoid loosing all connectivity with the autoritative DNS in case\n of network outage it is advised to host the DNS on different networks. See IETF RFC2182.
+chk_same_net_xpl : [ref]: AFNIC advise\nTo avoid loosing all connectivity with the autoritative DNS in case\n of network outage it is advised to host the DNS on different networks. See also [ref]: IETF RFC2182.
 
 
 [chk_dn_sntx]

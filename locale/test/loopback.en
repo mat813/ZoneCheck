@@ -12,7 +12,7 @@
 #
 
 
-loopback_xpl: [ref]: DNS & BIND (2nd edition) (p.61)\nNo one was given responsibility for the loopback network and system\nuse it for a loopback address, so it is the responsibility of everyone.\nIf it wasn't configured the request would eventually reach the root\nname server (increasing network traffic, and adding local delay) and\nthere is no guarantee that the answer would be 'localhost'
+loopback_xpl: [ref]: DNS & BIND (2nd edition) (p.61)\nNo one was given responsibility for the loopback network and system\nuse it for a loopback address, so it is the responsibility of everyone.\nIf it wasn't configured the request would eventually reach the root\nname server (increasing network traffic, and adding local delay) and\nthere is no guarantee that the answer would be 'localhost'.\nSee also [ref]: IETF RFC1537 (p.6 10. Safety measures and specialties).
 
 [chk_loopback_delegation]
 testname: loopback delegation
