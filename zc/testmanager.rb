@@ -123,7 +123,7 @@ class TestManager
 	rescue NResolv::RefusedError
 	    desc.err = "Connection refused"
 	rescue Exception => e
-	    desc.err = e.to_s
+	    desc.err = "Dependency issue (allwarning?)"
 	    raise if $dbg.enable?(DBG::DONT_RESCUE)
 	end
 	begin
