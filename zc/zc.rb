@@ -155,6 +155,15 @@ $ipv6_stack = begin
 		  false
 	      end
 
+# Test for IPv4 stack detection
+#  WARN: doesn't implies that we have IPv4 connectivity
+$ipv4_stack = begin
+		  UDPSocket::new(Socket::AF_INET).close
+		  true
+	      rescue NameError,      # if Socket::AF_INET doesn't exist
+		     SystemCallError # for the Errno::EAFNOSUPPORT error
+		  false
+	      end
 
 #
 # Internationalisation

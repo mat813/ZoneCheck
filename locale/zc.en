@@ -154,7 +154,7 @@ nameservers_ns	: Unable to find nameservers (NS)
 prim_ns_soa	: Unable to identify primary nameserver (NS vs SOA)
 nameserver_ips	: Unable to find nameserver IP address(es) for %s
 output_support	: Selected output class doesn't support '%s'
-ipv6_no_stack	: IPv6 not supported on that host
+ip_no_stack	: %s not supported on that host
 unknown_modopt	: Unknown modifier '%s' for '%s' option
 local_resolver	: Unable to use local resolver '%s'
 

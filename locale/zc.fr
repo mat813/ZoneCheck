@@ -153,7 +153,7 @@ nameservers_ns	: Incapable de trouver les serveurs de noms (NS)
 prim_ns_soa	: Incapable d'identifier le serveur de nom primaire (NS vs SOA)
 nameserver_ips	: Incapable de trouver les adresses IP de %s
 output_support	: La sortie ne supporte pas la classe '%s'
-ipv6_no_stack	: IPv6 n'est pas supporté sur cette machine
+ip_no_stack	: %s n'est pas supporté sur cette machine
 unknown_modopt	: Modificateur '%s' inconnu pour l'option '%s'
 local_resolver	: Incapable d'utiliser le resolveur local '%s'
 

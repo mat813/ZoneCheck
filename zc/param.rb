@@ -343,7 +343,7 @@ class Param
     ##
     class Network
 	attr_reader :ipv4, :ipv6, :query_mode
-	attr_writer :ipv4, :query_mode
+	attr_writer :query_mode
 
 	def initialize
 	    @ipv6		= nil
@@ -353,9 +353,16 @@ class Param
 
 	def ipv6=(bool)
 	    if bool && ! $ipv6_stack
-		raise ParamError, $mc.get("xcp_param_ipv6_no_stack")
+		raise ParamError, $mc.get("xcp_param_ip_no_stack") % "IPv6"
 	    end
 	    @ipv6 = bool
+	end
+
+	def ipv4=(bool)
+	    if bool && ! $ipv4_stack
+		raise ParamError, $mc.get("xcp_param_ip_no_stack") % "IPv4"
+	    end
+	    @ipv4 = bool
 	end
 
 	def address_wanted?(address)
@@ -377,8 +384,10 @@ class Param
 	def autoconf
 	    # Select routing protocol
 	    @ipv4 = @ipv6 = true if @ipv4.nil? && @ipv6.nil?
-	    @ipv4 = false        if @ipv4.nil?
+	    @ipv4 = false        if @ipv4.nil? || !$ipv4_stack
 	    @ipv6 = false        if @ipv6.nil? || !$ipv6_stack
+	    raise "Why are you using this program!" if !@ipv4 && !@ipv6
+	    
 	    $dbg.msg(DBG::AUTOCONF, 
 		     "Routing protocol set to: " +
 		     [ @ipv4 ? "IPv4" : nil, 
