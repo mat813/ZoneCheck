@@ -232,7 +232,7 @@ class NResolv
 		if ipv4 && ipv6 then
 		    list = getaddr(name, NResolv::DNS::Resource::IN::ANY,
 				   [ RType::A, RType::AAAA ],
-				   [ RCode::NOTIMP ], true)
+				   [ RCode::NOTIMP ], false)
 		end
 
 		if list.nil?

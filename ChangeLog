@@ -1,6 +1,11 @@
 # $Id$
 
-2003-03-08  ZoneCheck-2.0.3
+2004-05-??  ZoneCheck-2.0.4
+	* l10n: removed typos
+	* test: added details for 'ns_ip'
+	* nresolv: fixed bug in getaddress
+	
+2004-03-08  ZoneCheck-2.0.3
 	* dbg: fixed debuging output for nresolv
 	* dbg: added smtp transaction as debuging information for mail
 	* doc: fixed apache configuration example
@@ -15,7 +20,7 @@
 	* html: use of option group for the profile selection
 	* test: follow cname chain when checking for reverse
 	
-2003-01-20  ZoneCheck-2.0.2
+2004-01-20  ZoneCheck-2.0.2
 	* test: fixed bugs in mail_delivery_{postmaster,hostmaster}
 	* zc: fixed bugs in XML parsing
 	* zc: fixed --INPUT not working in some cases
@@ -23,7 +28,7 @@
 	* input: gtk interface is still partially broken
 	* input: fixed frozen object in cli
 	
-2003-01-05  ZoneCheck-2.0.1
+2004-01-05  ZoneCheck-2.0.1
 	* test: preeval doesn't report fatal error anymore
 	* locale: removed wrong explanation for ping (french)
 	* zc: automatically use ruby-libxml implementation if available
