@@ -57,4 +57,4 @@ install:
 	$(CHMOD) 755 $(LIBEXEC)/zc/zc.rb 
 	$(LN) -s -f $(LIBEXEC)/zc/zc.rb $(BINDIR)/zc
 
-	$(INSTALL) TODO INSTALL BUGS $(DOCDIR)
+	$(INSTALL) README TODO INSTALL BUGS $(DOCDIR)
