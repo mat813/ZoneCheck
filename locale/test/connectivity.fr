@@ -53,7 +53,7 @@
     <name>réponses aux requêtes ICMP</name>
     <success>L'hôte répond aux requêtes ICMP</success>
     <failure>L'hôte ne répond pas aux requêtes ICMP (présence d'un pare-feu?)</failure>
-    <explanation sameas="shortcut:connectivity_udp_tcp"/>
+    <explanation/>
     <details/>
   </check>
 
