@@ -17,8 +17,8 @@ ZC_INSTALL_PATH		= "/homes/sdalu/ZC.CVS/zc"
 ZC_DIR			= "#{ZC_INSTALL_PATH}/zc"
 ZC_LIB			= "#{ZC_INSTALL_PATH}/lib"
 
-ZC_LOCALIZATION_FILE	= "#{ZC_DIR}/locale/zc.%s"
 ZC_CONFIG_FILE		= "#{ZC_DIR}/zc.conf"
+ZC_LOCALIZATION_FILE	= "#{ZC_DIR}/locale/zc.%s"
 ZC_TEST_DIR		= "#{ZC_DIR}/test"
 
 ZC_LANG_DEFAULT		= "en"
@@ -26,7 +26,7 @@ ZC_LANG_DEFAULT		= "en"
 ZC_CGI_ENV_KEYS		= [ "GATEWAY_INTERFACE", "SERVER_ADDR" ]
 ZC_CGI_EXT		= "cgi"
 
-ZC_LANG_CHECK	= /^\w+(:?\.[\w\-]+)?$/
+ZC_LANG_CHECK		= /^\w+(:?\.[\w\-]+)?$/
 
 #
 # Identification
