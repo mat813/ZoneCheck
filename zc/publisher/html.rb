@@ -169,16 +169,20 @@ EOT
 
 	    @o.puts "<DIV class=\"zc_zinfo\">"
 	    @o.puts tbl_beg
-	    @o.puts tbl_zone % [ $mc.get("ns_zone").capitalize, domain.name ]
+	    @o.puts tbl_zone % [ "<IMG src=\"/zc/img/zone.png\" alt=\"#{$mc.get("ns_zone").capitalize}\">", domain.name ]
 	    domain.ns.each_index { |i| 
 		ns_ip = domain.ns[i]
 		if i == 0
 		    css  = "zc_ns_prim"
 		    desc = $mc.get("ns_primary").capitalize
+		    logo = "primary"
 		else
 		    css  = "zc_ns_sec"
 		    desc = $mc.get("ns_secondary").capitalize
+		    logo = "secondary"
 		end
+
+		desc = "<IMG src=\"/zc/img/#{logo}.png\" alt= \"#{desc}\">"
 
 		@o.puts tbl_ns % [ css, desc, ns_ip[0], ns_ip[1].join(", ") ]
 	    }
@@ -240,10 +244,16 @@ EOT
 	    if @rflag.explain && !@rflag.tagonly
 		xpl_lst = xpl_split(desc.xpl)
 	    end
-	    
+
+	    logo = case severity
+		   when "Info"    then "info"
+		   when "Warning" then "warning"
+		   when "Fatal"   then "fatal"
+		   else raise RuntimError, "XXX: unknown severity: #{severity}"
+		   end
 
 	    @o.puts "<DIV class=\"zc_diag\">"
-	    @o.puts "<DIV class=\"zc_title\">#{msg}</DIV>"
+	    @o.puts "<DIV class=\"zc_title\"><IMG src=\"/zc/img/#{logo}.png\" alt=\"\"> #{msg}</DIV>"
 
 	    if xpl_lst
 		@o.puts "<UL class=\"zc_ref\">"
@@ -260,7 +270,7 @@ EOT
 	    end
 
 	    if ! lst.empty?
-		@o.puts "<UL>"
+		@o.puts "<UL class=\"zc_element\">"
 		lst.each { |elt| @o.puts "  <LI>#{elt}</LI>" }
 		@o.puts "</UL>"
 	    end
