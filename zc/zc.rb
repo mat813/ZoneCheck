@@ -201,6 +201,7 @@ require 'nresolv'
 
 # Modification to standard/core ruby classes
 require 'ext/array'
+require 'ext/file'
 
 # ZoneCheck component
 require 'locale'
