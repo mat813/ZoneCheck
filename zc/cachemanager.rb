@@ -137,7 +137,7 @@ class CacheManager
 
 	    # Sanity check
 	    case ip
-	    when Address::IPv4, Address::IPv6
+	    when Address
 	    else raise "Argument should be an Address"
 	    end
  
@@ -165,7 +165,7 @@ class CacheManager
     def addresses(host, order=Address::OrderDefault)
 	host = NResolv::to_addrname(host)
 	case host
-	when Address::IPv4, Address::IPv6
+	when Address
 	    [ host ]
 	when NResolv::DNS::Name
 	    @cache.use(:address, host) {
