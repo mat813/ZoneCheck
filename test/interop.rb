@@ -43,34 +43,41 @@ module CheckNetworkAddress
 	with_msgcat 'test/interop.%s'
 
 	#-- Shortcuts -----------------------------------------------
-	def dflt_exception(ip, name)
+	def dflt_exception(ip, name=@domain.name)
 	    a_exception = nil
 	    begin
-		a(ip, @domain.name)
+		a(ip, name)
 	    rescue NResolv::NResolvError => a_exception
 	    end
 	    a_exception
 	end
 
+	def validate_record(ns, ip) 
+	    begin
+		yield [ns, ip]
+	    rescue NResolv::DNS::ReplyError => e
+		case e.code
+		when NResolv::DNS::RCode::NOTIMP
+		else
+		    return false if e.class != dflt_exception(ip).class
+		end
+	    rescue NResolv::NResolvError => e
+		return false if e.class != dflt_exception(ip).class
+	    end
+	    true
+	end
+
+
+
 	#-- Checks --------------------------------------------------
 	# DESC: 
 	def chk_cname(ns, ip)
-	    begin
-		cname(ip, @domain.name)
-	    rescue NResolv::NResolvError => cname_exception
-		return false if cname_exception.class != dflt_exception.class
-	    end
 	    true
 	end
 
 	# DESC: 
 	def chk_aaaa(ns, ip)
-	    begin
-		aaaa(ip, @domain.name)
-	    rescue NResolv::NResolvError => aaaa_exception
-		return false if aaaa_exception.class != dflt_exception.class
-	    end
-	    true
+	    validate_record(ns, ip) { aaaa(ip, @domain.name) }
 	end
     end
 end

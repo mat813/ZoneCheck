@@ -39,9 +39,9 @@
 
 
 [chk_aaaa]
-testname: behaviour against AAAA query
-error   : Misbehaviour against AAAA query
-ok	: Correct behaviour against AAAA query
+testname: comportement lors de demande d'un enregistrement AAAA
+error   : Mauvais comportement lors de la demande d'un AAAA
+ok	: Comportement correct lors de la demande d'un AAAA
 explain : [none]
 
 

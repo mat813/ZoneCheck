@@ -1,7 +1,10 @@
 # $Id$
 2003-??-??  ZoneCheck-2.0.0??
-	* dbg: time the execution of tests
-
+	* dbg: time the execution of test
+	* www: form can be submited by pressing enter
+	* test: fix chk_aaaa test
+	* cfg: use -n to disable name resolution for ping commande
+	
 2003-10-02  ZoneCheck-2.0.0b8
 	* test: added chk_soa_coherence
 	* l10n: improved chk_mx_ip description
