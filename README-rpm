@@ -1,0 +1,11 @@
+Unofficial guide of RPM building
+*******************************
+
+
+pushd contrib/release
+sh release.sh $TAG
+
+PREFIX=/usr ruby installer.rb  configure
+cd contrib/distrib/rpm
+rpmbuild zonecheck.spec
+
