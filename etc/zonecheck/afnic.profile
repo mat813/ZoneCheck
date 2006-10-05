@@ -93,6 +93,8 @@
       </case>
 
       <check name="correct_recursive_flag"    severity="f" category="dns"/>
+       
+      <check name="not_recursive"    severity="w" category="dns"/>
 
       <case test="recursive_server">
         <when value="true">

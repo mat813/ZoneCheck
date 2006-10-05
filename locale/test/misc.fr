@@ -67,6 +67,11 @@
           requêtes récursives, cela implique que vous acceptez que 
           n'importe qui l'utilise pour résoudre n'importe quel type
           de requêtes.</para>
+        <para>Cela permet notamment l'utilisation de votre serveur
+        pour amplifier des attaques par déni de service et c'est donc
+        très déconseillé. Voir
+        http://www.afnic.fr/actu/nouvelles/general/NN20060404.
+        </para>
       </src>
     </explanation>
     <details/>

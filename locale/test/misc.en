@@ -65,6 +65,9 @@
         <para>If you configure your nameserver to answer recursive
           queries, it means that you allow your nameserver to be used
           by anyone to resolve any kind of queries.</para>
+        <para>This allows everyone to use your server as an
+        amplifier for a Denial-of-Service attack. See 
+        http://www.us-cert.gov/reading_room/DNS-recursion121605.pdf.</para>
       </src>
     </explanation>
     <details/>
