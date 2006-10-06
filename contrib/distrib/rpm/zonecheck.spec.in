@@ -46,7 +46,8 @@ ruby ./installer.rb common cli cgi	\
 	-DLIBEXEC="%{_libexecdir}"	\
 	-DMANDIR="%{_mandir}"		\
 	-DETCDIST=""			\
-	-DCHROOT="%{buildroot}"
+	-DCHROOT="%{buildroot}"         \
+        -DRUBY=/usr/bin/ruby
 
 case `uname` in
 	OSF1)
