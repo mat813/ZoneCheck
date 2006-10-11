@@ -22,7 +22,7 @@ def file2DOM(filename):
 
 def usage():
     myself = sys.argv[0]
-    return "Usage: %s [-l language] [-s CSS-stylesheet] zonecheck-profile" % myself
+    return "Usage: %s [-p] [-l language] [-s CSS-stylesheet] zonecheck-profile" % myself
 
 def fatal(message):
     sys.stderr.write("%s\n" % message)
@@ -171,8 +171,10 @@ def concat_text_nodes(list):
 
 if __name__ == '__main__':
     try:
-        optlist, args = getopt.getopt (sys.argv[1:], "hl:s:",
-                                       ["help", "version",
+        # Default values
+        partial = False
+        optlist, args = getopt.getopt (sys.argv[1:], "hl:s:p",
+                                       ["help", "version", "partial-html",
                                         "lang=",
                                         "stylesheet="])
         for option, value in optlist:
@@ -182,9 +184,11 @@ if __name__ == '__main__':
             elif option == "--version":
                 print sys.argv[0] + " (CVS $Revision$)\n" + " Python " + sys.version
                 sys.exit(0)
+            elif option == "--partial-html" or option == "-p":
+                partial = True
             elif option == "--lang" or option == "-l": LANG = value
             elif option == "--stylesheet" or option == "-s": stylesheet = value
-            else: error ("Unknown option " + option)
+            else: fatal ("Unknown option " + option)
     except getopt.error, reason:
         fatal (usage() + "\n%s" % reason)
     if len(args) < 1 or len(args) > 1:
@@ -193,43 +197,53 @@ if __name__ == '__main__':
     (messages, explanations) = all_check_messages("%s/AFNIC/zonecheck/locale/test" % \
                                   os.environ['HOME'], LANG)
     profile = file2DOM(profilename)
-    html_result = getDOMImplementation().createDocument(
-        None,
-        "html",
-        getDOMImplementation().createDocumentType(
-           "html",
-           "-//W3C//DTD XHTML 1.0 Strict//EN",
-           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"))
-    head = html_result.documentElement.appendChild(html_result.createElement('head'))
-    body = html_result.documentElement.appendChild(html_result.createElement('body'))
     profilenode = from_xpath("/config/profile", profile, only_one_item=True)
-    if LANG == "en":
-        blurb = "Tests made by Zonecheck at "
-    elif LANG == "fr":
-        blurb = "Tests effectues par Zonecheck a "
-    else:
-        blurb = ""
-    title = head.appendChild(html_result.createElement('title'))
-    title.appendChild(html_result.createTextNode("%s %s (%s)" % \
-                                     (blurb,
-                                      attribute (profilenode, 'name'),
-                                      attribute (profilenode, 'longdesc'))))
-    if stylesheet is not None:
-        css = head.appendChild(html_result.createElement('link'))
-        css_rel = html_result.createAttribute("rel")
-        css_rel.nodeValue = "stylesheet"
-        css.setAttributeNode(css_rel)
-        css_type = html_result.createAttribute("type")
-        css_type.nodeValue = "text/css"
-        css.setAttributeNode(css_type)
-        css_url = html_result.createAttribute("href")
-        css_url.nodeValue = stylesheet
-        css.setAttributeNode(css_url)
-    h1 = body.appendChild(html_result.createElement('h1'))
-    h1.appendChild(html_result.createTextNode("%s %s (%s)" % \
-                                     (blurb,
-                                      attribute (profilenode, 'name'),
-                                      attribute (profilenode, 'longdesc'))))
+    if not partial:
+        html_result = getDOMImplementation().createDocument(
+            None,
+            "html",
+            getDOMImplementation().createDocumentType(
+            "html",
+            "-//W3C//DTD XHTML 1.0 Strict//EN",
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"))
+        head = html_result.documentElement.appendChild(html_result.createElement('head'))
+        body = html_result.documentElement.appendChild(html_result.createElement('body'))
+        if LANG == "en":
+            blurb = "Tests made by Zonecheck at "
+        elif LANG == "fr":
+            blurb = "Tests effectues par Zonecheck a "
+        else:
+            blurb = ""
+        title = head.appendChild(html_result.createElement('title'))
+        title.appendChild(html_result.createTextNode("%s %s (%s)" % \
+                                                     (blurb,
+                                                      attribute (profilenode,
+                                                                 'name'),
+                                                      attribute (profilenode,
+                                                                 'longdesc'))))
+        if stylesheet is not None:
+            css = head.appendChild(html_result.createElement('link'))
+            css_rel = html_result.createAttribute("rel")
+            css_rel.nodeValue = "stylesheet"
+            css.setAttributeNode(css_rel)
+            css_type = html_result.createAttribute("type")
+            css_type.nodeValue = "text/css"
+            css.setAttributeNode(css_type)
+            css_url = html_result.createAttribute("href")
+            css_url.nodeValue = stylesheet
+            css.setAttributeNode(css_url)
+        h1 = body.appendChild(html_result.createElement('h1'))
+        h1.appendChild(html_result.createTextNode("%s %s (%s)" % \
+                                                  (blurb,
+                                                   attribute (profilenode, 'name'),
+                                                   attribute (profilenode,
+                                                              'longdesc'))))
+    else: # Partial HTML
+        html_result = getDOMImplementation().createDocument(
+            None,
+            "div",
+            None)
+        body = html_result.documentElement
     rulenodes = from_xpath("rules", profilenode)
     for rule in rulenodes:
          anchor = body.appendChild(html_result.createElement("a"))
@@ -302,4 +316,4 @@ if __name__ == '__main__':
                                                                         only_one_item=True)))
              else:
                  raise Exception("Test %s not found in the message catalogs")
-    PrettyPrint(html_result)          
+    PrettyPrint(html_result) # TODO: disable the XML declaration if --partial          
