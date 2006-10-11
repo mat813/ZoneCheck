@@ -5,6 +5,7 @@ from xml.dom.ext.reader import Sax2
 from xml.dom.ext import PrettyPrint
 from xml import xpath
 from xml.dom import getDOMImplementation
+import xml.dom
 import sys
 import os
 import re
@@ -62,30 +63,73 @@ def from_xpath(expr, dom, required=True, only_one_item=False):
             return None
 
 def attribute(node, attname):
-    return node.attributes.getNamedItem(attname).nodeValue
+    att_node = node.attributes.getNamedItem(attname)
+    if att_node is not None:
+        return att_node.nodeValue
+    else:
+        return None
 
 def explanation_text(node):
     reference = from_xpath("@sameas", node, required=False)
     if reference is not None:
         (category, ref) = string.split(reference[0].nodeValue, ":")
         details = explanations["%s:%s" % (category, ref)]
-        message = concat_text_nodes(from_xpath("src/title/text()", details)) + ". " + \
-               concat_text_nodes(from_xpath("src/para/text()", details))
+        srcs = from_xpath("src", details)
+        message = ""
+        for src in srcs:
+            message = message + concat_text_nodes(from_xpath("title", src)) + \
+                      " : " + \
+                      concat_text_nodes(from_xpath("para", src))
+            message = message + "\n"
     else:
         source = from_xpath("src", node, required=False, only_one_item=True)
         if source is not None:
-            message = concat_text_nodes(from_xpath("title/text()", source)) + ". " + \
-                   concat_text_nodes(from_xpath("para/text()", source))
+            message = concat_text_nodes(from_xpath("title", source)) + ". " + \
+                   concat_text_nodes(from_xpath("para", source))
         else:
             message = ""
-    # TODO: transform the URLs in <a> elements
-    return mark_rfc(message)
+    return mark_specials(message)
+
+def mark_specials(message):
+    """ Finds in a message (a paragraph) "special" text such as
+    references to RFCs or URLs and turns them into nice hypertext."""
+    result = html_result.createElement("p")
+    nodes = mark_rfc(message)
+    for node in nodes:
+        if node.nodeType == xml.dom.Node.TEXT_NODE:
+            new_nodes = mark_url(node.nodeValue)
+            for new_node in new_nodes:
+                result.appendChild(new_node)
+        else:
+            result.appendChild(node)
+    return result
+
+def mark_url(msg):
+    """ Finds references to URLs and turn them into hypertext """
+    # TODO: may be we whould rely on <uri> elements only but they are not always used.
+    url_text = "((?:https?|ftp)://[A-Za-z0-9\.\-]+[^ ]*)"
+    url_re = re.compile (url_text, re.IGNORECASE)
+    chunks = re.split (url_re, msg)
+    result = []
+    for chunk in chunks:
+        if url_re.match (chunk):
+            link = html_result.createElement("a")
+            url = html_result.createAttribute("href")
+            url.nodeValue = chunk
+            link.setAttributeNode(url)
+            code = html_result.createElement("code")
+            link.appendChild(code)
+            code.appendChild(html_result.createTextNode(chunk))
+            result.append(link)
+        else:
+            result.append(html_result.createTextNode(chunk))
+    return result
 
 def mark_rfc(msg):
     """ Finds references to IETF RFCs and turn them into hypertext """
     chunks = re.split ("RFC-? ?([0-9]+)",
                    msg)
-    result = html_result.createElement("p")
+    result = []
     for chunk in chunks:
         if re.match ("[0-9]+", chunk):
             link = html_result.createElement("a")
@@ -93,15 +137,36 @@ def mark_rfc(msg):
             url.nodeValue = "http://www.ietf.org/rfc/rfc%i.txt" % int(chunk)
             link.setAttributeNode(url)
             link.appendChild(html_result.createTextNode("RFC %i" % int(chunk)))
-            result.appendChild(link)
+            result.append(link)
         else:
-            result.appendChild(html_result.createTextNode(chunk))
+            result.append(html_result.createTextNode(chunk))
     return result
 
 def concat_text_nodes(list):
     result = ""
-    for text in list:
-        result = result + " " + text.nodeValue
+    for node in list:
+        if node.nodeType == xml.dom.Node.TEXT_NODE:
+            result = result + " " + node.nodeValue
+        elif node.nodeType == xml.dom.Node.ELEMENT_NODE:
+            if node.nodeName == "uri":
+                result = result + " " + node.childNodes[0].nodeValue # TODO: transform in
+                # <a> instead, it is quite stupid to produce text from XML elements, to
+                # turn them in XML <a> afterwards, by a regexp!
+            elif node.nodeName == "zcconst":
+                constant_name = from_xpath("@name", node, only_one_item=True).nodeValue,
+                constant = from_xpath("//const[@name=\"%s\"]" % constant_name,
+                                   profile.documentElement, only_one_item=True)
+                print constant
+                value = attribute(constant, "value")
+                display = from_xpath("@display", node, only_one_item=True, required=False)
+                if display is not None:
+                    if display.nodeValue == "duration":
+                        const_value = value + " s"
+                else:
+                    const_value = value
+                result = result + const_value
+            else:
+                result = result + concat_text_nodes(node.childNodes)
     return result
 
 if __name__ == '__main__':
@@ -135,7 +200,6 @@ if __name__ == '__main__':
            "html",
            "-//W3C//DTD XHTML 1.0 Strict//EN",
            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"))
-    # TODO: allow to set a CSS stylesheet
     head = html_result.documentElement.appendChild(html_result.createElement('head'))
     body = html_result.documentElement.appendChild(html_result.createElement('body'))
     profilenode = from_xpath("/config/profile", profile, only_one_item=True)
@@ -167,8 +231,11 @@ if __name__ == '__main__':
                                       attribute (profilenode, 'name'),
                                       attribute (profilenode, 'longdesc'))))
     rulenodes = from_xpath("rules", profilenode)
-    # TODO: add an anchor
     for rule in rulenodes:
+         anchor = body.appendChild(html_result.createElement("a"))
+         anchor_name = html_result.createAttribute("name")
+         anchor_name.nodeValue = attribute(rule, 'class')
+         anchor.setAttributeNode(anchor_name)
          html_rule = body.appendChild(html_result.createElement("h2"))
          if LANG == "en":
              blurb = "Tests of class "
@@ -179,9 +246,12 @@ if __name__ == '__main__':
          html_rule.appendChild(html_result.createTextNode("%s \"%s\"" % (blurb,
                                                                      attribute(rule, 'class'))))
          checknodes = from_xpath("descendant::check", rule)
-         # TODO: add an anchor
          for check in checknodes:
              name = attribute(check, 'name')
+             anchor = body.appendChild(html_result.createElement("a"))
+             anchor_name = html_result.createAttribute("name")
+             anchor_name.nodeValue = name
+             anchor.setAttributeNode(anchor_name)             
              precondition = from_xpath("../../when", check, required=False)
              is_else = not from_xpath("../@value", check, required=False)
              if precondition:
@@ -220,11 +290,9 @@ if __name__ == '__main__':
                                                                                    blurb, name,
                                                                                    severity)))
              if messages.has_key(name):
-                 # TODO: <zcconst>
-                 longname = concat_text_nodes(from_xpath("name/text()",
+                 longname = concat_text_nodes([from_xpath("name",
                                         messages[name],
-                                        # Several text nodes can occur, yes
-                                        only_one_item=False))
+                                        only_one_item=True)])
                  html_check_msg = body.appendChild(
                      html_result.createElement("p"))
                  html_check_msg.appendChild(html_result.createTextNode("%s" % \
