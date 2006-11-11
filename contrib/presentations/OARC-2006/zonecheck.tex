@@ -1,0 +1,141 @@
+\include{parameters}
+\usetheme{AFNIC}
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{bortzmeyer-utils}
+
+\title{Zonecheck, testing a DNS zone}
+\author{Stéphane Bortzmeyer\\AFNIC ("\texttt{.fr}" registry)\\\texttt{bortzmeyer@nic.fr}}
+\date{16 november 2006}
+
+%\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex} 
+% \setlength{\parskip}{15pt} 
+\setlength{\parskip}{15pt plus 10pt minus 10pt} 
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}[fragile]
+ Permission is granted to copy, distribute and/or modify this document
+      under the terms of the GNU Free Documentation License \url{http://www.gnu.org/licenses/licenses.html#FDL}, Version 1.2
+      or any later version published by the Free Software Foundation;
+      with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  
+\end{frame}
+
+\begin{frame}
+\frametitle{Why testing a DNS zone?}
+
+\begin{itemize}
+\item<2->To be sure it works,
+\item<3->To be sure it works fast (no timeouts or retransmissions).
+\end{itemize}
+
+\begin{block}<4>{It is not because ``it works'' that everything is perfect.}{}\end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{The requirments}
+When we started designing the new Zonecheck in 2002 (version 2, a program by
+the same name, but completely different, existed before):
+
+\begin{itemize}
+\item<2->Command-line (so it can be run everywhere) and Web tool,
+\item<3->Free software,
+\item<4->Quite general tool, not a small ad hoc hack,
+\item<5->Separated policy and engine (more on that later).
+\end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+\frametitle{The result}  
+\begin{itemize}
+\item<2->Made by Stéphane d'Alu,
+\item<3->Written in Ruby,
+\item<4->Available under the GPL free licence, a very important point,
+  since it allows people to run it at their site and to do the same
+  tests as AFNIC does,
+\item<5->Hosted at the hosting service Savannah,
+\item<6->Used in daily production at AFNIC since.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Engine, not policy}  
+\begin{block}{Zonecheck is an engine, not a policy}{This is
+    probably the main feature of Zonecheck: unlike all the other
+    similar tools, the policy is not hardwired in the
+    code.}\end{block}
+
+\only<2->{The code defines the tests you \emph{can} run, the
+  configuration file defines the tests you \emph{do} run and their
+  result (fatal error or just a warning).}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example of configuration}  
+\begin{info}
+      <check name="icmp" severity="w" category="connectivity:l3"/>
+      <check name="udp"  severity="f" category="connectivity:l4"/>
+      <check name="tcp"  severity="f" category="connectivity:l4"/>
+\end{info}
+\only<2->{A program can translate this configuration file to HTML, for
+information of the users.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Using it to check delegations from a registry}
+AFNIC uses Zonecheck \emph{prior} to every delegation. One fatal error
+and the domain is not created. (Every name server change triggers a
+Zonecheck, too.)
+
+\only<2-3>{The policy is quite strict. A few examples:
+  \begin{itemize}
+    \item TCP connectivity is mandatory,
+    \item If the server is recursive, a lot of tests occur (such as
+    wether the loopback address is delegated in in-addr.arpa).
+  \end{itemize}
+}
+
+\only<3->{
+  This creates a lot of support tickets when delegating and allow us
+  to measure the current level of knowledge of some registrars :-)
+}
+
+\only<4->{But it makes a much better zone and strongly diminishes the
+  post-registration complaints ``My site does not work''.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Lessons for IANA checks}
+Context: IANA asks for comments about delegation checks
+(\url{http://www.icann.org/announcements/announcement-18aug06.htm}).
+
+\only<2->{Many registries asked that such tests must be clearly
+  described, and executed in a predictable way. An automatic tool,
+  such as Zonecheck, allows to fulfill these requirments.}
+
+\only<3->{Remember that using Zonecheck does not mean using AFNIC policy.}
+  
+\end{frame}
+
+\begin{frame}
+\frametitle{Other users}
+\begin{itemize}
+  \item \url{.de}
+  \item \url{.ch}
+  \item \url{.no}
+\end{itemize}
+
+\begin{block}<2->{Tomorrow, you?}{\url{http://www.zonecheck.fr/}}\end{block}
+
+\end{frame}
+
+\end{document}
