@@ -36,13 +36,17 @@
 \item<3->To be sure it works fast (no timeouts or retransmissions).
 \end{itemize}
 
-\begin{block}<4>{It is not because ``it works'' that everything is perfect.}{}\end{block}
+\begin{block}<4>{It is not because ``it works'' that everything is
+      perfect.}{See Ilya Sukhar's slides about the consequences of bad
+      delegation.}\end{block}
 \end{frame}
 
 \begin{frame}
   \frametitle{The requirments}
 When we started designing the new Zonecheck in 2002 (version 2, a program by
 the same name, but completely different, existed before):
+
+The requirments for the new version:
 
 \begin{itemize}
 \item<2->Command-line (so it can be run everywhere) and Web tool,
@@ -60,9 +64,12 @@ the same name, but completely different, existed before):
 \item<3->Written in Ruby,
 \item<4->Available under the GPL free licence, a very important point,
   since it allows people to run it at their site and to do the same
-  tests as AFNIC does,
+  tests as AFNIC does (administrators of zones under
+  ``.fr'' are encouraged to run ZC before submitting their
+  request for creation/modification),
 \item<5->Hosted at the hosting service Savannah,
-\item<6->Used in daily production at AFNIC since.
+\item<6->Completely IPv4 and IPv6,
+\item<7->Used in daily production at AFNIC since.
 \end{itemize}
 \end{frame}
 
@@ -73,8 +80,8 @@ the same name, but completely different, existed before):
     similar tools, the policy is not hardwired in the
     code.}\end{block}
 
-\only<2->{The code defines the tests you \emph{can} run, the
-  configuration file defines the tests you \emph{do} run and their
+\only<2->{The code defines all the tests you \emph{can} run, the
+  configuration file defines the subset of the tests that you \emph{do} run and their
   result (fatal error or just a warning).}
 
 \end{frame}
@@ -100,14 +107,14 @@ Zonecheck, too.)
   \begin{itemize}
     \item TCP connectivity is mandatory,
     \item If the server is recursive, a lot of tests occur (such as
-    wether the loopback address is delegated in in-addr.arpa).
+    whether the loopback address is delegated in in-addr.arpa).
   \end{itemize}
 }
 
-\only<3->{
-  This creates a lot of support tickets when delegating and allow us
-  to measure the current level of knowledge of some registrars :-)
-}
+\only<3->{As a side effect, this creates a
+  large number of support tickets (that may be used to measure the
+  current skills level of some registrars :-) and (without smiley) the
+  current level of professionalism of many DNS administrators}
 
 \only<4->{But it makes a much better zone and strongly diminishes the
   post-registration complaints ``My site does not work''.}
@@ -118,12 +125,24 @@ Zonecheck, too.)
 Context: IANA asks for comments about delegation checks
 (\url{http://www.icann.org/announcements/announcement-18aug06.htm}).
 
-\only<2->{Many registries asked that such tests must be clearly
+[Generally speaking, the quality of DNS delegation is a very common
+issue today.]
+
+\only<2->{Many registries (CENTR, ccNSO) asked that such tests must be clearly
   described, and executed in a predictable way. An automatic tool,
   such as Zonecheck, allows to fulfill these requirments.}
 
 \only<3->{Remember that using Zonecheck does not mean using AFNIC policy.}
   
+\end{frame}
+
+\begin{frame}
+\frametitle{Future tests?}
+\begin{itemize}
+\item DNSsec tests (see Eric Osterweil's slides)
+\item ``OR'' tests: ``at least M among N nameservers'', ``TCP or
+  EDNS0'', \ldots
+\end{itemize}
 \end{frame}
 
 \begin{frame}
