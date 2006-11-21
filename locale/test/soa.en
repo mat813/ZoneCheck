@@ -50,7 +50,7 @@
     <explanation name="soa_local_policy">
       <src type="adv">
         <title><zcconst name="registry"/> registry policy</title>
-        <para>The registry requieres the SOA fields to be inside
+        <para>The registry requires the SOA fields to be inside
           a defined range: the 'expire' should be between
           <zcconst name="soa:expire:min"  display="duration"/> and
           <zcconst name="soa:expire:max"  display="duration"/>, 

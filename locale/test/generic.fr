@@ -41,7 +41,10 @@
     <explanation name="label">
       <src type="ref" from="rfc" fid="rfc1034#p11">
         <title>IETF RFC1034 (p.11)</title>
-        <para>Labels are only composed by letters ([A-Za-z]), digits ([0-9]) or dashes ('-') (not starting or ending with), and should be less than 63 characters; domain name (labels separated by '.') should be less than 255 characters. See also [ref]: IETF RFC1912 (2.1 Inconsistent, Missing, or Bad Data).</para>
+        <para>Labels are only composed by letters ([A-Za-z]), digits
+        ([0-9]) or dashes ('-') (not starting or ending with), and
+        should be less or equal than 63 characters; domain name
+        (labels separated by '.') should be less or equal than 255 characters. See also [ref]: IETF RFC1912 (2.1 Inconsistent, Missing, or Bad Data).</para>
       </src>
     </explanation>
 
