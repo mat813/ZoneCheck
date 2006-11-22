@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: ISO-8859-1 -*-
 
 # TODO: recode in ElementTree, more Pythonesque than DOM!
 from xml.dom.ext.reader import Sax2
@@ -28,6 +29,16 @@ def fatal(message):
     sys.stderr.write("%s\n" % message)
     sys.exit(1)
 
+def capitalize(thestring):
+    """ Unlike string.capitalize(), we just touch the first letter, never the
+        others. """
+    if len(thestring) == 0:
+        return ""
+    elif len(thestring) == 1:
+        return string.upper(thestring[0])
+    else:
+        return (string.upper(thestring[0]) + thestring[1:])
+    
 def all_check_messages(dir, lang='en'):
     messages = {}
     explanations = {}
@@ -156,7 +167,6 @@ def concat_text_nodes(list):
                 constant_name = from_xpath("@name", node, only_one_item=True).nodeValue,
                 constant = from_xpath("//const[@name=\"%s\"]" % constant_name,
                                    profile.documentElement, only_one_item=True)
-                print constant
                 value = attribute(constant, "value")
                 display = from_xpath("@display", node, only_one_item=True, required=False)
                 if display is not None:
@@ -209,16 +219,17 @@ if __name__ == '__main__':
         head = html_result.documentElement.appendChild(html_result.createElement('head'))
         body = html_result.documentElement.appendChild(html_result.createElement('body'))
         if LANG == "en":
-            blurb = "Tests made by Zonecheck at "
+            blurb = "Tests made by Zonecheck at"
         elif LANG == "fr":
-            blurb = "Tests effectues par Zonecheck a "
+            blurb = u"Tests effectués par Zonecheck à"
         else:
             blurb = ""
         title = head.appendChild(html_result.createElement('title'))
         title.appendChild(html_result.createTextNode("%s %s (%s)" % \
                                                      (blurb,
-                                                      attribute (profilenode,
-                                                                 'name'),
+                                                      string.upper(attribute
+                                                                   (profilenode,
+                                                                    'name')),
                                                       attribute (profilenode,
                                                                  'longdesc'))))
         if stylesheet is not None:
@@ -235,7 +246,7 @@ if __name__ == '__main__':
         h1 = body.appendChild(html_result.createElement('h1'))
         h1.appendChild(html_result.createTextNode("%s %s (%s)" % \
                                                   (blurb,
-                                                   attribute (profilenode, 'name'),
+                                                   string.upper(attribute (profilenode, 'name')),
                                                    attribute (profilenode,
                                                               'longdesc'))))
     else: # Partial HTML
@@ -246,15 +257,16 @@ if __name__ == '__main__':
         body = html_result.documentElement
     rulenodes = from_xpath("rules", profilenode)
     for rule in rulenodes:
-         anchor = body.appendChild(html_result.createElement("a"))
+         body.appendChild(html_result.createElement("hr"))
+         html_rule = body.appendChild(html_result.createElement("h2"))
+         anchor = html_rule.appendChild(html_result.createElement("a"))
          anchor_name = html_result.createAttribute("name")
          anchor_name.nodeValue = attribute(rule, 'class')
          anchor.setAttributeNode(anchor_name)
-         html_rule = body.appendChild(html_result.createElement("h2"))
          if LANG == "en":
              blurb = "Tests of class "
          elif LANG == "fr":
-             blurb = "Tests de la classe "
+             blurb = u"Tests de la classe "
          else:
              blurb = ""
          html_rule.appendChild(html_result.createTextNode("%s \"%s\"" % (blurb,
@@ -262,10 +274,6 @@ if __name__ == '__main__':
          checknodes = from_xpath("descendant::check", rule)
          for check in checknodes:
              name = attribute(check, 'name')
-             anchor = body.appendChild(html_result.createElement("a"))
-             anchor_name = html_result.createAttribute("name")
-             anchor_name.nodeValue = name
-             anchor.setAttributeNode(anchor_name)             
              precondition = from_xpath("../../when", check, required=False)
              is_else = not from_xpath("../@value", check, required=False)
              if precondition:
@@ -286,10 +294,14 @@ if __name__ == '__main__':
                  condition = ""
              html_check = body.appendChild \
                           (html_result.createElement("h3"))
+             anchor = html_check.appendChild(html_result.createElement("a"))
+             anchor_name = html_result.createAttribute("name")
+             anchor_name.nodeValue = name
+             anchor.setAttributeNode(anchor_name)             
              if LANG == "en":
                  blurb = "Test "
              elif LANG == "fr":
-                 blurb = "Test "
+                 blurb = u"Test "
              else:
                  blurb = ""
              severity = from_xpath("@severity", check, only_one_item=True).nodeValue
@@ -310,7 +322,7 @@ if __name__ == '__main__':
                  html_check_msg = body.appendChild(
                      html_result.createElement("p"))
                  html_check_msg.appendChild(html_result.createTextNode("%s" % \
-                                                                       longname.strip().capitalize()))
+                                                                       capitalize(longname.strip())))
                  body.appendChild(explanation_text(from_xpath("explanation",
                                                                         messages[name],
                                                                         only_one_item=True)))
