@@ -29,11 +29,11 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Why testing a DNS zone?}
+\frametitle{Why test a DNS zone?}
 
 \begin{itemize}
-\item<2->To be sure it works,
-\item<3->To be sure it works fast (no timeouts or retransmissions).
+\item<2->To make sure it works,
+\item<3->To make sure it works fast (no timeouts or retransmissions).
 \end{itemize}
 
 \begin{block}<4>{It is not because ``it works'' that everything is
@@ -42,16 +42,16 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{The requirments}
-When we started designing the new Zonecheck in 2002 (version 2, a program by
-the same name, but completely different, existed before):
+  \frametitle{The requirements}
+We started designing the new Zonecheck in 2002 (version 2, a program by
+the same name, but completely different, existed before).
 
-The requirments for the new version:
+The requirements for the new version were:
 
 \begin{itemize}
 \item<2->Command-line (so it can be run everywhere) and Web tool,
 \item<3->Free software,
-\item<4->Quite general tool, not a small ad hoc hack,
+\item<4->General tool, not a small ad-hoc hack,
 \item<5->Separated policy and engine (more on that later).
 \end{itemize}
   
@@ -60,7 +60,7 @@ The requirments for the new version:
 \begin{frame}
 \frametitle{The result}  
 \begin{itemize}
-\item<2->Made by Stéphane d'Alu,
+\item<2->Developed by Stéphane d'Alu,
 \item<3->Written in Ruby,
 \item<4->Available under the GPL free licence, a very important point,
   since it allows people to run it at their site and to do the same
@@ -94,7 +94,7 @@ The requirments for the new version:
       <check name="tcp"  severity="f" category="connectivity:l4"/>
 \end{info}
 \only<2->{A program can translate this configuration file to HTML, for
-information of the users.}
+the information of the users.}
 \end{frame}
 
 \begin{frame}
@@ -114,10 +114,10 @@ Zonecheck, too.)
 \only<3->{As a side effect, this creates a
   large number of support tickets (that may be used to measure the
   current skills level of some registrars :-) and (without smiley) the
-  current level of professionalism of many DNS administrators}
+  current level of competence of many DNS administrators}
 
 \only<4->{But it makes a much better zone and strongly diminishes the
-  post-registration complaints ``My site does not work''.}
+  post-registration complaints of the type ``My site does not work''.}
 \end{frame}
 
 \begin{frame}
@@ -130,7 +130,7 @@ issue today.]
 
 \only<2->{Many registries (CENTR, ccNSO) asked that such tests must be clearly
   described, and executed in a predictable way. An automatic tool,
-  such as Zonecheck, allows to fulfill these requirments.}
+  such as Zonecheck, fulfills these requirements.}
 
 \only<3->{Remember that using Zonecheck does not mean using AFNIC policy.}
   
