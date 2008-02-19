@@ -14,19 +14,18 @@
 #    ips=`(dig +short $ns a; dig +short $ns aaaa) | tr '\n' ',' | sed 's/,$//'`
 #    echo "$ns: [ $ips ]"
 #  done
-#
+# TODO: bad syntax?
 
-a.root-servers.net.: [ 198.41.0.4     ]
+a.root-servers.net.: [ 198.41.0.4 , 2001:503:ba3e::2:30 ]
 b.root-servers.net.: [ 192.228.79.201 ]
-c.root-servers.net.: [ 192.33.4.12    ]
-d.root-servers.net.: [ 128.8.10.90    ]
+c.root-servers.net.: [ 192.33.4.12 ]
+d.root-servers.net.: [ 128.8.10.90 ]
 e.root-servers.net.: [ 192.203.230.10 ]
-f.root-servers.net.: [ 192.5.5.241    ]
-g.root-servers.net.: [ 192.112.36.4   ]
-h.root-servers.net.: [ 128.63.2.53    ]
-i.root-servers.net.: [ 192.36.148.17  ]
-j.root-servers.net.: [ 192.58.128.30  ]
-k.root-servers.net.: [ 193.0.14.129   ]
-l.root-servers.net.: [ 199.7.83.42   ]
-m.root-servers.net.: [ 202.12.27.33   ]
-
+f.root-servers.net.: [ 192.5.5.241 , 2001:500:2f::f ]
+g.root-servers.net.: [ 192.112.36.4 ]
+h.root-servers.net.: [ 128.63.2.53 , 2001:500:1::803f:235 ]
+i.root-servers.net.: [ 192.36.148.17 ]
+j.root-servers.net.: [ 192.58.128.30 , 2001:503:c27::2:30 ]
+k.root-servers.net.: [ 193.0.14.129 , 2001:7fd::1 ]
+l.root-servers.net.: [ 199.7.83.42 ]
+m.root-servers.net.: [ 202.12.27.33 , 2001:dc3::35 ]
