@@ -51,7 +51,7 @@
     <explanation name="rfc2182">
       <src type="adv" from="zonecheck">
         <title>ZoneCheck</title>
-        <para>To avoid loosing all connectivity with the autoritative DNS
+        <para>To avoid losing all connectivity with the autoritative DNS
           in case of network outage it is advised to host the DNS on
           different networks.</para>
       </src>

@@ -51,7 +51,7 @@
     <explanation name="rfc2182">
       <src type="adv" from="zonecheck">
         <title>ZoneCheck</title>
-        <para>To avoid loosing all connectivity with the authoritative DNS
+        <para>To avoid losing all connectivity with the authoritative DNS
           in case of network outage it is advised to host the DNS on
           different networks.</para>
       </src>
@@ -149,7 +149,7 @@
     <explanation>
       <src type="adv" from="zonecheck">
         <title>ZoneCheck</title>
-        <para>To avoid loosing all connectivity with the authoritative DNS
+        <para>To avoid losing all connectivity with the authoritative DNS
           in case of a routing problem inside your Autonomous System,
           it is advised to host the DNS on different AS.</para>
       </src>
