@@ -129,7 +129,7 @@
   <check name="mail_mx_or_addr">
     <name>domaine capable de recevoir du courrier (MX, A, AAAA)</name>
     <success>Le domaine est capable de recevoir du courrier</success>
-    <failure>Le domaine n'a pas de MX ou d'addresse pour delivrer le courrier</failure>
+    <failure>Le domaine n'a pas de MX ou d'adresse pour delivrer le courrier</failure>
     <explanation/>
     <details/>
   </check>

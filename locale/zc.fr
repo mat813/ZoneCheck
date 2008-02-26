@@ -73,10 +73,10 @@
 
 
 <!-- -->
-<tag name="res_success_but">SUCCES (mais %d avertissement(s))</tag>
-<tag name="res_success">SUCCES</tag>
-<tag name="res_failure">ECHEC</tag>
-<tag name="res_failure_and">ECHEC (et %d avertissement(s))</tag>
+<tag name="res_success_but">SUCCÈS (mais %d avertissement(s))</tag>
+<tag name="res_success">SUCCÈS</tag>
+<tag name="res_failure">ÉCHEC</tag>
+<tag name="res_failure_and">ÉCHEC (et %d avertissement(s))</tag>
 
 <tag name="ns_batch">lot</tag>
 <tag name="ns_zone">zone</tag>

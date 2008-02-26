@@ -106,7 +106,7 @@
     <success>L'adresse IP du serveur de noms a été trouvée</success>
     <failure>L'adresse IP du serveur de noms n'existe pas</failure>
     <explanation/>
-    <details><para>L'addresse IP pour <zcvar name="name"/> n'a pas été
+    <details><para>L'adresse IP pour <zcvar name="name"/> n'a pas été
       trouvée.</para></details>
   </check>
 

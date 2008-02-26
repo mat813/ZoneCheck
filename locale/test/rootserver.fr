@@ -78,7 +78,7 @@
     <success>Les adresses des "Root Servers" sont cohérentes avec celles de l'ICANN</success>
     <failure>Les adresses des "Root Servers" sont incohérentes avec celles de l'ICANN</failure>
     <explanation sameas="shortcut:rootserver_vs_icann"/>
-    <details><para>Les addresses (<zcvar name="rs_addr"/>) du 
+    <details><para>Les adresses (<zcvar name="rs_addr"/>) du 
       "Root Server" <zcvar name="rs"/> ne sont pas les même que celles
       de l'ICANN (<zcvar name="ref_addr"/>).</para></details>
   </check>
