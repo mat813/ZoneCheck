@@ -91,7 +91,7 @@
   <check name="mx_no_wildcard">
     <name>absence of wildcard MX</name>
     <success>No wildcard MX found</success>
-    <failure>A wilcard MX is present</failure>
+    <failure>A wildcard MX is present</failure>
     <explanation/>
     <details/>
   </check>
