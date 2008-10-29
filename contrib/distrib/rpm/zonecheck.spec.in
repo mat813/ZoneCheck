@@ -6,7 +6,7 @@ License: GPL
 Group: Applications/Internet
 URL: http://www.zonecheck.fr/
 
-Packager: Jean-Philippe Pick <zonecheck@nic.fr>
+Packager: The ZoneCheck Team <zonecheck@nic.fr>
 Vendor: The ZoneCheck Team
 
 Source: http://savannah.nongnu.org/download/zonecheck/%{name}-%{version}.tgz
@@ -40,29 +40,29 @@ Provide a web service interface for ZoneCheck.
 %{__rm} -rf %{buildroot}
 
 %install
-ruby ./installer.rb common cli cgi	\
-	-DPREFIX="%{_prefix}"		\
-	-DETCDIR="%{_sysconfdir}"	\
-	-DLIBEXEC="%{_libexecdir}"	\
-	-DMANDIR="%{_mandir}"		\
-	-DETCDIST=""			\
-	-DCHROOT="%{buildroot}"         \
-        -DRUBY=/usr/bin/ruby
+ruby ./installer.rb common cli cgi \
+    -DPREFIX="%{_prefix}"          \
+    -DETCDIR="%{_sysconfdir}"      \
+    -DLIBEXEC="%{_libexecdir}"     \
+    -DMANDIR="%{_mandir}"          \
+    -DETCDIST=""                   \
+    -DCHROOT="%{buildroot}"        \
+    -DRUBY=/usr/bin/ruby
 
 case `uname` in
-	OSF1)
+    OSF1)
 ruby -p -i \
-	-e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping4\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/sbin/ping -n -q -t 5 -c 5 %s > /dev/null\2')" \
-	-e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping6\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/sbin/ping -n -q -t 5 -c 5 %s > /dev/null\2')" \
-	%{buildroot}%{_sysconfdir}/zonecheck/zc.conf
-	;;
+    -e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping4\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/sbin/ping -n -q -t 5 -c 5 %s > /dev/null\2')" \
+    -e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping6\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/sbin/ping -n -q -t 5 -c 5 %s > /dev/null\2')" \
+    %{buildroot}%{_sysconfdir}/zonecheck/zc.conf
+    ;;
 
-	*)
+    *)
 ruby -p -i \
-	-e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping4\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/bin/ping -n -q -w 5 -c 5 %s > /dev/null\2')" \
-	-e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping6\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/usr/sbin/ping6 -n -q -w 5 -c 5 %s > /dev/null\2')" \
-	%{buildroot}%{_sysconfdir}/zonecheck/zc.conf
-	;;
+    -e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping4\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/bin/ping -n -q -w 5 -c 5 %s > /dev/null\2')" \
+    -e "\$_.gsub"\!"(/(<const\s+name\s*=\s*\"ping6\"\s+value\s*=\s*\")[^\"]*(\"\s*\/>)/, '\1/usr/sbin/ping6 -n -q -w 5 -c 5 %s > /dev/null\2')" \
+    %{buildroot}%{_sysconfdir}/zonecheck/zc.conf
+    ;;
 esac
 
 %clean
@@ -90,6 +90,9 @@ esac
 %{_libexecdir}/zonecheck/cgi-bin
 
 %changelog
+* Tuesday Oct 28 2008 Eric Redon <redon@nic.fr> - 2.0.7
+- Updated AFNIC Configuration profile.
+
 * Mon Nov 13 2003 Stephane D'Alu <sdalu@nic.fr> - 2.0.0b10
 - Updated for new zone configuration profile.
 
