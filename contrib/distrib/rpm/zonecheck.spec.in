@@ -90,7 +90,7 @@ esac
 %{_libexecdir}/zonecheck/cgi-bin
 
 %changelog
-* Tuesday Oct 28 2008 Eric Redon <redon@nic.fr> - 2.0.7
+* Wed Oct 29 2008 Eric Redon <redon@nic.fr> - 2.0.8
 - Updated AFNIC Configuration profile.
 
 * Mon Nov 13 2003 Stephane D'Alu <sdalu@nic.fr> - 2.0.0b10
