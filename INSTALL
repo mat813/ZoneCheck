@@ -1,9 +1,9 @@
 # $Id$
 
-For the impatient: ruby ./install.rb all
+For the impatient: ruby ./installer.rb all
 should generally works, but it is still a good idea to check
 before that sensible values are correctly defined by calling:
-ruby ./install.rb
+ruby ./installer.rb
 
 You will need Ruby to install ZoneCheck, after the installation the
 executable will be available under the name of 'zonecheck'
