@@ -483,7 +483,7 @@ EOT
 		    source = res.source || 'generic'
 		    msg    = res.testname
 		else
-		    status = Config.severity2tag(severity)
+		    status = ZC_Config.severity2tag(severity)
 		    status = $mc.get("word:#{status}").capitalize
 		    source = res.source || $mc.get('word:generic')
 		    msg    = status_message(res.testname, res.desc, severity)
@@ -512,11 +512,11 @@ EOT
 	    end
 
 	    # Status messsage
-	    status_tag		= Config.severity2tag(severity)
+	    status_tag		= ZC_Config.severity2tag(severity)
 	    logo		= status_tag + ".png"
 
 	    if @rflag.tagonly
-		status_shorttag	= severity || Config::Ok
+		status_shorttag	= severity || ZC_Config::Ok
 		status = desc.error ? "[Unexpected] #{testname}" : testname
 	    else
 		status_shorttag	= $mc.get("word:#{status_tag}_id")

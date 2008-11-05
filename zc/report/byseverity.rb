@@ -65,7 +65,7 @@ module Report
 	    return if list.nil? || list.empty?
 
 	    if !@rflag.tagonly && !@rflag.quiet
-		severity_tag	= Config.severity2tag(severity)
+		severity_tag	= ZC_Config.severity2tag(severity)
 		l10n_severity	= $mc.get("word:#{severity_tag}")
 		@publish.diag_section(l10n_severity)
 	    end

@@ -304,9 +304,9 @@ class TestManager
 	
 	# Retrieve information relative to the test output
 	sev_report = case severity
-		     when Config::Fatal   then @param.report.fatal
-		     when Config::Warning then @param.report.warning
-		     when Config::Info    then @param.report.info
+		     when ZC_Config::Fatal   then @param.report.fatal
+		     when ZC_Config::Warning then @param.report.warning
+		     when ZC_Config::Info    then @param.report.info
 		     end
 
 	# Publish information about the test being executed
@@ -428,7 +428,7 @@ class TestManager
 	    # Do the pre-evaluation
 	    #  => compute the number of checking to perform
 	    begin
-		Config::TestSeqOrder.each { |family|
+		ZC_Config::TestSeqOrder.each { |family|
 		    next unless rules = @config.rules[family]
 		    
 		    @iterer[family].call(proc { |*args|
@@ -448,7 +448,7 @@ class TestManager
 	    @publisher.progress.start(testcount)
 
 	    # Perform the checking
-	    Config::TestSeqOrder.each { |family|
+	    ZC_Config::TestSeqOrder.each { |family|
 		next unless rules = @config.rules[family]
 
 		threadlist	= []

@@ -40,7 +40,7 @@ require 'instructions'
 ##
 ## Hold the information about the zc.conf configuration file
 ##
-class Config
+class ZC_Config
     Warning		= 'w'		# Warning severity
     Fatal		= 'f'		# Fatal severity
     Info		= 'i'		# Informational
@@ -80,9 +80,9 @@ class Config
     def self.severity2tag(severity)
 	case severity
 	when NilClass        then 'ok'
-	when Config::Info    then 'info'
-	when Config::Warning then 'warning'
-	when Config::Fatal   then 'fatal'
+	when ZC_Config::Info    then 'info'
+	when ZC_Config::Warning then 'warning'
+	when ZC_Config::Fatal   then 'fatal'
 	else raise ArgumentError, "unknown severity: #{severity}"
 	end
     end
@@ -376,7 +376,7 @@ class Config
     def load(configfile)
 	clear
 	# Parse the configuration file
-	cfgfile = Config.cfgfile(configfile)
+	cfgfile = ZC_Config.cfgfile(configfile)
 	$dbg.msg(DBG::CONFIG, "loading main configuration: #{configfile}")
 	$dbg.msg(DBG::CONFIG, "reading file: #{cfgfile}")
 
@@ -417,7 +417,7 @@ class Config
 	}
 
 	# Load all the available profiles
-	Dir[Config.cfgfile('*.profile')].each { |cfgfile|
+	Dir[ZC_Config.cfgfile('*.profile')].each { |cfgfile|
 	    filename    = cfgfile.split('/')[-1]
 	    profilename = filename.gsub(/\.profile$/, '')
 	    next if @profiles[profilename]

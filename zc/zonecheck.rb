@@ -116,7 +116,7 @@ class ZoneCheck
 	    @test_manager.add_allclasses
 
 	    # Load configuration
-	    @config = Config::new(@test_manager)
+	    @config = ZC_Config::new(@test_manager)
 	    @config.load(@param.preconf.cfgfile)
 	    @config.validate(@test_manager)
 	    @config.profilename = @param.preconf.profile
@@ -125,10 +125,10 @@ class ZoneCheck
 	    if @input.allow_preset
 		presetname = @param.preconf.preset
 		if !presetname.nil? && @config.presets[presetname].nil?
-		    raise Config::ConfigError,
+		    raise ZC_Config::ConfigError,
 			$mc.get('config:unknown_preset') % presetname
 		end
-		presetname ||= Config::Preset_Default
+		presetname ||= ZC_Config::Preset_Default
 
 		if preset = @config.presets[presetname]
 		    $dbg.msg(DBG::INIT) { 
@@ -149,7 +149,7 @@ class ZoneCheck
 			@param.rflag.quiet = true if preset['quiet']
 			@param.rflag.one   = true if preset['one'  ]
 		    rescue Param::ParamError => e
-			raise Config::ConfigError,
+			raise ZC_Config::ConfigError,
 			    ($mc.get('config:error_in_preset') % presetname) +
 			    " (#{e.message})"
 		    end
@@ -179,11 +179,11 @@ class ZoneCheck
 	    return success
 	rescue Param::ParamError   => e
 	    @input.error(e.to_s, EXIT_ERROR)
-	rescue Config::SyntaxError => e
+	rescue ZC_Config::SyntaxError => e
 	    @input.error("%s %d: %s\n\t(%s)" % [ 
 			     $mc.get('word:line').capitalize, e.line, e.to_s,
 			     e.path ], EXIT_ERROR)
-	rescue Config::ConfigError => e
+	rescue ZC_Config::ConfigError => e
 	    @input.error(e.to_s, EXIT_ERROR)
 	rescue => e
 	    raise if $dbg.enabled?(DBG::DONT_RESCUE)

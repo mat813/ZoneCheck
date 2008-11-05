@@ -89,15 +89,15 @@ module Report
 		super(result)
 		raise FatalError unless result.ok?
 	    end
-	    def severity   ; Config::Fatal        ; end
+	    def severity   ; ZC_Config::Fatal        ; end
 	end
 
 	class Warning	< Processor
-	    def severity   ; Config::Warning      ; end
+	    def severity   ; ZC_Config::Warning      ; end
 	end
 
 	class Info	< Processor
-	    def severity   ; Config::Info         ; end
+	    def severity   ; ZC_Config::Info         ; end
 	end
 
 	class Ok	< Processor

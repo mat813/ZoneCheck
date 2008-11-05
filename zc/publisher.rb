@@ -101,9 +101,9 @@ module Publisher
 
 	def severity_description(i_unexp, w_unexp, f_unexp)
 	    if @rflag.tagonly
-		i_tag = Config::Info
-		w_tag = Config::Warning
-		f_tag = Config::Fatal
+		i_tag = ZC_Config::Info
+		w_tag = ZC_Config::Warning
+		f_tag = ZC_Config::Fatal
 	    else
 		i_tag = $mc.get('word:info_id')
 		w_tag = $mc.get('word:warning_id')

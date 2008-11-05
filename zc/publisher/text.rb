@@ -368,7 +368,7 @@ module Publisher
 		    @o.puts "  #{res.testname}"
 		    @o.puts "  #{severity}: #{res.source || 'generic'}"
 		else
-		    status      = Config.severity2tag(severity)
+		    status      = ZC_Config.severity2tag(severity)
 		    l10n_status = $mc.get("word:#{status}").capitalize
 		    source = res.source || $mc.get('word:generic')
 		    msg    = status_message(res.testname, res.desc, severity)
@@ -389,10 +389,10 @@ module Publisher
 	    end
 
 	    # Status messsage
-	    status_tag		= Config.severity2tag(severity)
+	    status_tag		= ZC_Config.severity2tag(severity)
 
 	    if @rflag.tagonly
-		status_shorttag	= severity || Config::Ok
+		status_shorttag	= severity || ZC_Config::Ok
 		status = desc.error ? "[Unexpected] #{testname}" : testname
 	    else
 		status_shorttag	= $mc.get("word:#{status_tag}_id")

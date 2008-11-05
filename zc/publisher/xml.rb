@@ -204,7 +204,7 @@ EOT
 	    @o.puts "  <testid>#{testname}</testid>"
 
 	    # Severity
-	    @o.puts "  <severity type=\"#{Config.severity2tag(severity)}\"/>"
+	    @o.puts "  <severity type=\"#{ZC_Config.severity2tag(severity)}\"/>"
 
 	    # Testname
 	    if @rflag.testname
